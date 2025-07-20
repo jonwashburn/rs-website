@@ -1,6 +1,6 @@
 # Recognition Science Website
 
-**Live at: [recognitionscience.com](https://recognitionscience.com)**
+**Live at: [recognitionphysics.com](https://recognitionphysics.com)**
 
 A comprehensive presentation of Recognition Science theory - the unified framework that derives all physics, mathematics, biology, and consciousness from a single meta-principle: "Nothing cannot recognize itself."
 
@@ -37,4 +37,4 @@ The theory is formally verified in Lean 4 with zero axioms and zero sorry statem
 
 ## Hosting
 
-This site is hosted via GitHub Pages and available at recognitionscience.com. 
+This site is hosted via GitHub Pages and available at recognitionphysics.com. 
