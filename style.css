@@ -1,12 +1,13 @@
-/* Brutalist Recognition Design */
-:root { --phi: 1.618; --gray: #f0f0f0; --black: #000; --white: #fff; }
-body { font-family: monospace; background: var(--white); color: var(--black); margin: 0; }
-.grid-container { display: grid; grid-template-rows: auto auto 1fr auto; height: 100vh; }
-.meta-principle { background: var(--black); color: var(--white); text-align: center; padding: 2em; border-bottom: 0.5em solid var(--black); }
+/* Hipper Brutalist-Pixel-MSCHF Design */
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+:root { --phi: 1.618; --gray: #f0f0f0; --black: #000; --white: #fff; --accent: #FF00FF; }
+body { font-family: 'VT323', monospace; background: var(--white); color: var(--black); margin: 0; font-size: 18px; image-rendering: pixelated; }
+.grid-container { display: grid; grid-template-rows: auto auto auto auto; height: auto; }
+.meta-principle { background: var(--black); color: var(--accent); text-align: center; padding: 2em; border-bottom: 0.5em solid var(--black); box-shadow: 0 0 0 3px var(--accent); }
 .foundation-nav { display: grid; grid-template-columns: repeat(8, 1fr); background: var(--gray); border-bottom: 0.25em dashed var(--black); }
-.foundation-nav a { text-align: center; padding: 1em; border-right: 1px solid var(--black); text-decoration: none; color: var(--black); }
-.foundation-nav a:hover { background: var(--white); }
-.cascade { padding: 2em; border: 2px solid var(--black); margin: 2em; height: calc(100% / var(--phi)); background: var(--white); }
-.recognized { background: #ffffcc; animation: fade 2s; }
-@keyframes fade { 0% { opacity: 0; } 100% { opacity: 1; } }
-footer { text-align: center; padding: 1em; border-top: 0.25em solid var(--black); background: var(--gray); } 
+.foundation-nav a { text-align: center; padding: 1em; border-right: 1px solid var(--black); text-decoration: none; color: var(--black); transition: color 0.2s, transform 0.2s; }
+.foundation-nav a:hover { color: var(--accent); transform: scale(1.1); }
+.cascade { padding: 2em; border: 2px solid var(--black); margin: 2em; box-shadow: 4px 4px 0 var(--accent); }
+.recognized { background: #ffffcc; animation: pixel-glitch 2s; filter: drop-shadow(2px 2px 0 var(--accent)); }
+@keyframes pixel-glitch { 0% { transform: translate(0); } 25% { transform: translate(2px, 2px); } 50% { transform: translate(-2px, -2px); } 75% { transform: translate(2px, -2px); } 100% { transform: translate(0); } }
+footer { text-align: center; padding: 1em; border-top: 0.25em solid var(--black); background: var(--gray); color: var(--accent); } 
