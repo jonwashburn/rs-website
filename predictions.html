@@ -506,6 +506,8 @@
             border: 2px solid var(--accent);
             border-radius: 8px;
             text-align: center;
+            overflow: hidden; /* Prevent any overflow */
+            max-width: 100%; /* Ensure box doesn't exceed container */
         }
 
         .formula-box h3 {
@@ -515,8 +517,11 @@
 
         .formula-box p {
             margin: 0.5em 0;
-            overflow-wrap: break-word; /* Fix for text bleeding */
-            word-wrap: break-word; /* Legacy support */
+            overflow-wrap: break-word; 
+            word-wrap: break-word; 
+            word-break: break-all; /* More aggressive word breaking */
+            hyphens: auto; /* Add hyphens for better breaks */
+            max-width: 100%;
         }
 
         .stats-grid {
@@ -661,38 +666,38 @@
             }
 
             .predictions-table td {
-                padding: 0.5em 0.2em;
+                padding: 0.5em 0;
                 border: none;
-                text-align: right;
-                padding-left: 50%;
+                text-align: left;
                 position: relative;
-                display: flex;
-                justify-content: flex-end;
-                align-items: center;
+                display: block;
+                width: 100%;
+                padding-left: 0;
             }
 
             .predictions-table td[data-label]::before {
-                content: attr(data-label);
-                position: absolute;
-                left: 0.5em;
-                width: 45%;
-                padding-right: 1em;
+                content: attr(data-label) ": ";
                 font-weight: 600;
-                text-align: left;
                 color: var(--accent);
-                top: 50%;
-                transform: translateY(-50%);
+                display: inline;
             }
 
             .predictions-table td.calculation {
-                flex-wrap: wrap; /* Allow details to wrap to new line */
+                display: block;
+                width: 100%;
             }
 
             .predictions-table td .calculation-details {
-                flex-basis: 100%; /* Make details take full width */
-                text-align: left;
+                width: 100%;
+                margin: 1em 0 0 0;
                 padding: 1em;
-                margin-top: 1em;
+                display: block;
+                clear: both;
+            }
+
+            .expand-btn {
+                display: inline-block;
+                margin-bottom: 0.5em;
             }
         }
 
@@ -709,15 +714,7 @@
             details.style.display = isHidden ? 'block' : 'none';
             button.textContent = isHidden ? 'Hide' : 'Details';
             if (isHidden && window.MathJax) {
-                // Ensure parent has correct alignment when details are visible
-                const parentTd = button.parentElement;
-                if(window.innerWidth <= 900) {
-                    parentTd.style.justifyContent = 'space-between';
-                }
                 MathJax.typesetPromise([details]);
-            } else {
-                const parentTd = button.parentElement;
-                parentTd.style.justifyContent = ''; // Revert on hide
             }
         }
 
