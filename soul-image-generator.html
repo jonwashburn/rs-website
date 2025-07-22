@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soul Image Generator - Recognition Science</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        body {
+            background: #f5f5f7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2em;
+        }
+        
+        h1 {
+            font-family: 'VT323', monospace;
+            font-size: 2.5em;
+            margin-bottom: 1em;
+        }
+        
+        #generateBtn {
+            background: #007AFF;
+            color: white;
+            border: none;
+            padding: 1em 2em;
+            font-size: 1.2em;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 2em;
+            transition: all 0.2s ease;
+        }
+        
+        #generateBtn:hover {
+            background: #0056CC;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 122, 255, 0.3);
+        }
+        
+        #soulCanvas {
+            border: 2px solid #000;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            background: #fff;
+        }
+        
+        #downloadLink {
+            margin-top: 1em;
+            color: #007AFF;
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <h1>🌟 Soul Image Generator</h1>
+    <button id="generateBtn">Generate New Soul Image</button>
+    <canvas id="soulCanvas" width="1024" height="1024"></canvas>
+    <a id="downloadLink" href="#" download="soul-image.png">Download Image</a>
+    
+    <script>
+        // Constants
+        const CANVAS_SIZE = 1024;
+        const PHI = 1.618033988749;
+        const VIRTUES = [
+            'Love', 'Justice', 'Forgiveness', 'Wisdom', 'Courage', 'Temperance', 'Prudence',
+            'Compassion', 'Gratitude', 'Patience', 'Humility', 'Hope', 'Creativity', 'Sacrifice'
+        ];
+        
+        // Improved Perlin Noise (simplified 2D implementation)
+        function perlinNoise(x, y, scale = 0.005) {
+            const p = new Array(512);
+            const permutation = [151,160,137,91,90,15,131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,190,6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,88,237,149,56,87,174,20,125,136,171,168,68,175,74,165,71,134,139,48,27,166,77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,55,46,245,40,244,102,143,54,65,25,63,161,1,216,80,73,209,76,132,187,208,89,18,169,200,196,135,130,116,188,159,86,164,100,109,198,173,186,3,64,52,217,226,250,124,123,5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,189,28,42,223,183,170,213,119,248,152,2,44,154,163,70,221,153,101,155,167,43,172,9,129,22,39,253,19,98,108,110,79,113,224,232,178,185,112,104,218,246,97,228,251,34,242,193,238,210,144,12,191,179,162,241,81,51,145,235,249,14,239,107,49,192,214,31,181,199,106,157,184,84,204,176,115,121,50,45,127,4,150,254,138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180];
+            for (let i = 0; i < 256; i++) p[256 + i] = p[i] = permutation[i];
+            
+            const fade = t => t * t * t * (t * (t * 6 - 15) + 10);
+            const lerp = (t, a, b) => a + t * (b - a);
+            const grad = (hash, x, y) => {
+                switch(hash & 3) {
+                    case 0: return x + y;
+                    case 1: return -x + y;
+                    case 2: return x - y;
+                    case 3: return -x - y;
+                }
+            };
+            
+            const xi = Math.floor(x * scale);
+            const yi = Math.floor(y * scale);
+            const xf = x * scale - xi;
+            const yf = y * scale - yi;
+            
+            const aa = p[p[xi] + yi];
+            const ba = p[p[xi + 1] + yi];
+            const ab = p[p[xi] + yi + 1];
+            const bb = p[p[xi + 1] + yi + 1];
+            
+            const x1 = lerp(fade(xf), grad(aa, xf, yf), grad(ba, xf-1, yf));
+            const x2 = lerp(fade(xf), grad(ab, xf, yf-1), grad(bb, xf-1, yf-1));
+            return (lerp(fade(yf), x1, x2) + 1) / 2; // Normalized to 0-1
+        }
+        
+        function generateSoulImage() {
+            const canvas = document.getElementById('soulCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Randomize parameters
+            const delta = (Math.random() * 8 - 4);
+            const virtueScores = VIRTUES.map(() => Math.random()); // 0-1 scores
+            const rarity = Math.floor(Math.random() * 5); // 0-4 for common to mythic
+            
+            // 1. Draw Mappan-like light sheet (noisy gradient base)
+            for (let x = 0; x < CANVAS_SIZE; x++) {
+                for (let y = 0; y < CANVAS_SIZE; y++) {
+                    const noise = perlinNoise(x, y, 0.005) * 0.8 + perlinNoise(x, y, 0.02) * 0.2;
+                    const gray = Math.floor(noise * 50 + 200); // Soft white-gray
+                    const colorShift = virtueScores[8] * 20; // Gratitude influences subtle color
+                    ctx.fillStyle = `rgb(${gray}, ${gray}, ${gray + colorShift})`;
+                    ctx.fillRect(x, y, 1, 1);
+                }
+            }
+            
+            // 2. Soul cluster shining through (8 eigenvalue squiggles)
+            const centerX = CANVAS_SIZE / 2;
+            const centerY = CANVAS_SIZE / 2;
+            for (let i = 0; i < 8; i++) {
+                ctx.beginPath();
+                const startAngle = (i / 8) * Math.PI * 2 + delta * 0.1; // Delta curves
+                const startX = centerX + Math.cos(startAngle) * (100 + virtueScores[4] * 200); // Courage extends
+                const startY = centerY + Math.sin(startAngle) * (100 + virtueScores[4] * 200);
+                ctx.moveTo(startX, startY);
+                
+                // Chromie Squiggle with virtue modulation
+                const numSegments = 5 + Math.floor(virtueScores[12] * 10); // Creativity adds complexity
+                let currentX = startX;
+                let currentY = startY;
+                for (let j = 0; j < numSegments; j++) {
+                    const controlX = currentX + (Math.random() - 0.5) * 200 * virtueScores[0]; // Love amplifies flow
+                    const controlY = currentY + (Math.random() - 0.5) * 200 * virtueScores[0];
+                    const endX = controlX + (Math.random() - 0.5) * 150 * virtueScores[1]; // Justice balances
+                    const endY = controlY + (Math.random() - 0.5) * 150 * virtueScores[1];
+                    ctx.quadraticCurveTo(controlX, controlY, endX, endY);
+                    currentX = endX;
+                    currentY = endY;
+                }
+                
+                // Styling with virtues
+                const hue = (i * 45 + virtueScores[i % 14] * 180) % 360;
+                ctx.strokeStyle = `hsla(${hue}, 60%, 70%, ${0.3 + virtueScores[2] * 0.5})`; // Forgiveness softens opacity
+                ctx.lineWidth = 1 + virtueScores[3] * 3; // Wisdom thickens
+                ctx.shadowBlur = 10 + virtueScores[5] * 20; // Temperance balances glow
+                ctx.shadowColor = `hsla(${hue}, 80%, 70%, 0.5)`;
+                ctx.stroke();
+            }
+            
+            // 3. Add shines and glows (NDE/DMT effects)
+            for (let i = 0; i < 14; i++) {
+                if (virtueScores[i] > 0.4) {
+                    const shineCount = Math.floor(virtueScores[i] * 5);
+                    for (let j = 0; j < shineCount; j++) {
+                        const shineX = centerX + (Math.random() - 0.5) * CANVAS_SIZE * 0.8;
+                        const shineY = centerY + (Math.random() - 0.5) * CANVAS_SIZE * 0.8 * virtueScores[11]; // Hope directs upward
+                        const shineRadius = 20 + virtueScores[i] * 50;
+                        
+                        const shineGradient = ctx.createRadialGradient(shineX, shineY, 0, shineX, shineY, shineRadius);
+                        shineGradient.addColorStop(0, `hsla(${i*25 % 360}, 80%, 90%, ${virtueScores[6]})`); // Prudence controls intensity
+                        shineGradient.addColorStop(1, `hsla(${i*25 % 360}, 60%, 50%, 0)`);
+                        ctx.fillStyle = shineGradient;
+                        ctx.beginPath();
+                        ctx.arc(shineX, shineY, shineRadius, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+            }
+            
+            // 4. Living light overlay with noise
+            for (let x = 0; x < CANVAS_SIZE; x += 2) {
+                for (let y = 0; y < CANVAS_SIZE; y += 2) {
+                    const noise = perlinNoise(x, y, 0.01);
+                    ctx.fillStyle = `rgba(255,255,255,${noise * 0.1 * virtueScores[7]})`; // Compassion adds resonance
+                    ctx.fillRect(x, y, 2, 2);
+                }
+            }
+            
+            // Update download link
+            const downloadLink = document.getElementById('downloadLink');
+            downloadLink.href = canvas.toDataURL('image/png');
+        }
+        
+        // Event listeners
+        document.getElementById('generateBtn').addEventListener('click', generateSoulImage);
+        
+        // Initial generation
+        generateSoulImage();
+    </script>
+</body>
+</html> 
