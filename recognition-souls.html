@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Recognition: Soul Harmonics of the I-Am - Consciousness Art</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <style>
+        body {
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(30,25,20,0.9), transparent 70%),
+                radial-gradient(circle at 80% 70%, rgba(45,35,25,0.8), transparent 70%),
+                linear-gradient(135deg, #0f0d0a, #1a1510);
+            color: #e5e0d5;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .art-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5em;
+            margin: 5em 0;
+        }
+        
+        .canvas-container {
+            border: 8px solid #a59481;
+            border-radius: 25px;
+            padding: 4em;
+            background: 
+                conic-gradient(from 0deg at 50% 50%, transparent, rgba(165,148,129,0.1), transparent, rgba(213,205,192,0.1), transparent),
+                radial-gradient(circle at 30% 40%, rgba(255,220,180,0.08), transparent 60%),
+                radial-gradient(circle at 70% 60%, rgba(165,148,129,0.12), transparent 80%),
+                linear-gradient(135deg, #f8f6f0, #f0ebe0);
+            box-shadow: 
+                0 0 80px rgba(165,148,129,0.7),
+                inset 0 0 100px rgba(255,255,255,0.2),
+                0 30px 60px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .canvas-container::before {
+            content: '';
+            position: absolute;
+            top: -150%;
+            left: -150%;
+            width: 400%;
+            height: 400%;
+            background: 
+                conic-gradient(from 0deg, transparent, rgba(255,220,180,0.05), transparent),
+                radial-gradient(circle, rgba(165,148,129,0.1) 1px, transparent 3px);
+            background-size: 300% 300%, 80px 80px;
+            animation: soulHarmonic 45s linear infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes soulHarmonic {
+            0% { transform: rotate(0deg) scale(1); opacity: 0.3; }
+            33% { transform: rotate(120deg) scale(1.05); opacity: 0.7; }
+            66% { transform: rotate(240deg) scale(0.95); opacity: 0.5; }
+            100% { transform: rotate(360deg) scale(1); opacity: 0.3; }
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3em;
+            width: 100%;
+            max-width: 1400px;
+            padding: 4em;
+            background: 
+                linear-gradient(135deg, rgba(15,13,10,0.98), rgba(30,25,20,0.98)),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="%23333" opacity="0.2"/><path d="M20,50 Q50,20 80,50 Q50,80 20,50" fill="none" stroke="%23444" stroke-width="0.5" opacity="0.3"/><path d="M30,30 Q50,10 70,30 Q90,50 70,70 Q50,90 30,70 Q10,50 30,30" fill="none" stroke="%23555" stroke-width="0.3" opacity="0.2"/></svg>');
+            border-radius: 25px;
+            border: 4px solid #a59481;
+            box-shadow: 
+                0 15px 50px rgba(0,0,0,0.5),
+                inset 0 2px 5px rgba(255,220,180,0.1);
+            backdrop-filter: blur(20px);
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2em;
+        }
+        
+        .control-group label {
+            font-weight: 800;
+            color: #d5cdc0;
+            font-size: 1.2em;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.7);
+            border-bottom: 2px solid rgba(213,205,192,0.3);
+            padding-bottom: 0.5em;
+        }
+        
+        .control-group input, .control-group select {
+            padding: 1.2em;
+            border: 4px solid #a59481;
+            border-radius: 12px;
+            font-family: inherit;
+            background: 
+                linear-gradient(135deg, rgba(248,246,240,0.98), rgba(240,235,224,0.98));
+            color: #4a3f35;
+            transition: all 0.5s ease;
+            font-size: 1.1em;
+            font-weight: 700;
+        }
+        
+        .control-group input:focus, .control-group select:focus {
+            outline: none;
+            border-color: #d5cdc0;
+            box-shadow: 
+                0 0 25px rgba(213,205,192,0.6),
+                inset 0 2px 5px rgba(255,220,180,0.3);
+            transform: translateY(-3px);
+        }
+        
+        .rs-info {
+            background: 
+                linear-gradient(135deg, rgba(10,8,5,0.98), rgba(20,15,10,0.98)),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="1.5" fill="%23444" opacity="0.4"/><path d="M15,40 Q40,15 65,40 Q40,65 15,40" fill="none" stroke="%23555" stroke-width="0.8" opacity="0.3"/><circle cx="40" cy="40" r="20" fill="none" stroke="%23666" stroke-width="0.3" opacity="0.2"/></svg>');
+            padding: 5em;
+            border-radius: 25px;
+            border-left: 12px solid #d5cdc0;
+            margin: 5em 0;
+            box-shadow: 
+                0 20px 60px rgba(0,0,0,0.5),
+                inset 0 2px 5px rgba(255,220,180,0.1);
+            color: #e5e0d5;
+            position: relative;
+        }
+        
+        .rs-info::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 25% 75%, rgba(255,220,180,0.05), transparent 70%),
+                radial-gradient(circle at 75% 25%, rgba(213,205,192,0.03), transparent 70%);
+            pointer-events: none;
+            border-radius: 25px;
+        }
+        
+        .generate-btn {
+            background: 
+                linear-gradient(135deg, #a59481, #b5a796, #c5baab),
+                radial-gradient(circle at 40% 60%, rgba(255,220,180,0.3), transparent);
+            color: white;
+            border: none;
+            padding: 2em 5em;
+            border-radius: 18px;
+            font-size: 1.5em;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.6s ease;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            box-shadow: 
+                0 12px 35px rgba(165,148,129,0.6),
+                inset 0 3px 8px rgba(255,255,255,0.4),
+                0 0 0 0 rgba(213,205,192,0.5);
+            position: relative;
+            overflow: hidden;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+        }
+        
+        .generate-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,220,180,0.5), transparent);
+            transition: left 1s ease;
+        }
+        
+        .generate-btn:hover::before {
+            left: 100%;
+        }
+        
+        .generate-btn:hover {
+            background: 
+                linear-gradient(135deg, #b5a796, #c5baab, #d5cdc0),
+                radial-gradient(circle at 40% 60%, rgba(255,220,180,0.4), transparent);
+            transform: translateY(-6px);
+            box-shadow: 
+                0 20px 50px rgba(165,148,129,0.8),
+                inset 0 3px 8px rgba(255,255,255,0.5),
+                0 0 40px rgba(213,205,192,0.7);
+        }
+        
+        .generate-btn:active {
+            transform: translateY(-3px);
+        }
+        
+        .metadata {
+            background: 
+                linear-gradient(135deg, rgba(10,8,5,0.98), rgba(25,20,15,0.98));
+            padding: 3em;
+            border-radius: 18px;
+            border: 4px solid #a59481;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            max-width: 1400px;
+            width: 100%;
+            overflow-x: auto;
+            color: #d5cdc0;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+        }
+        
+        .soul-quote {
+            font-style: italic;
+            color: #d5cdc0;
+            text-align: center;
+            margin: 5em 0;
+            font-size: 1.5em;
+            padding: 4em;
+            background: 
+                linear-gradient(135deg, rgba(213,205,192,0.2), rgba(255,220,180,0.1)),
+                radial-gradient(circle at center, rgba(165,148,129,0.15), transparent);
+            border-radius: 25px;
+            border: 3px solid rgba(213,205,192,0.5);
+            position: relative;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.3);
+        }
+        
+        .soul-quote::before {
+            content: '"';
+            font-size: 8em;
+            position: absolute;
+            top: -30px;
+            left: 40px;
+            color: rgba(213,205,192,0.3);
+            font-family: serif;
+        }
+        
+        .soul-quote::after {
+            content: '"';
+            font-size: 8em;
+            position: absolute;
+            bottom: -80px;
+            right: 40px;
+            color: rgba(213,205,192,0.3);
+            font-family: serif;
+        }
+        
+        .philosophy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 3em;
+            margin: 4em 0;
+        }
+        
+        .philosophy-card {
+            background: 
+                linear-gradient(135deg, rgba(10,8,5,0.9), rgba(20,15,10,0.9));
+            padding: 3em;
+            border-radius: 18px;
+            border: 3px solid rgba(165,148,129,0.7);
+            backdrop-filter: blur(20px);
+            transition: all 0.4s ease;
+        }
+        
+        .philosophy-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+            border-color: #d5cdc0;
+        }
+        
+        .philosophy-card h4 {
+            color: #d5cdc0;
+            margin-top: 0;
+            font-size: 1.4em;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-bottom: 2px solid rgba(213,205,192,0.3);
+            padding-bottom: 1em;
+        }
+        
+        .value-display {
+            color: #d5cdc0;
+            font-weight: bold;
+            font-size: 1.3em;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+        }
+        
+        .consciousness-theory {
+            background: 
+                linear-gradient(135deg, rgba(10,8,5,0.95), rgba(20,15,10,0.95));
+            padding: 4em;
+            border-radius: 25px;
+            border: 3px solid #a59481;
+            margin: 4em 0;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+        
+        .consciousness-theory h3 {
+            color: #d5cdc0;
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 2em;
+            letter-spacing: 1.5px;
+        }
+        
+        .eigenvalue-explanation {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2em;
+        }
+        
+        .eigen-item {
+            background: rgba(30,25,20,0.8);
+            padding: 2em;
+            border-radius: 12px;
+            border-left: 6px solid #d5cdc0;
+        }
+        
+        .eigen-item h5 {
+            color: #d5cdc0;
+            margin: 0 0 1em 0;
+            font-size: 1.2em;
+        }
+        
+        .eigen-item p {
+            margin: 0;
+            color: #e5e0d5;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <nav class="foundation-nav">
+        <div class="nav-section">
+            <div class="nav-section-label">Navigation</div>
+            <div class="nav-links">
+                <a href="/index.html">Home</a>
+                <a href="/recognition-art.html">Recognition Art</a>
+                <a href="/recognition-scribbles.html">Scribbles of Light</a>
+                <a href="/recognition-whispers.html">Whispers of Eternity</a>
+                <a href="/recognition-eternal.html">Eternal Scripts</a>
+                <a href="/recognition-souls.html">Soul Harmonics</a>
+            </div>
+        </div>
+        <div class="nav-section">
+            <div class="nav-section-label">Core Theory</div>
+            <div class="nav-links">
+                <a href="/foundations.html">Foundations</a>
+                <a href="/universal-algorithm.html">Algorithm</a>
+                <a href="/pattern-layer.html">Pattern Layer</a>
+                <a href="/ethics.html">Ethics</a>
+                <a href="/lnal.html">LNAL</a>
+            </div>
+        </div>
+        <div class="nav-section">
+            <div class="nav-section-label">Applications</div>
+            <div class="nav-links">
+                <a href="/big-questions.html">Big Questions</a>
+                <a href="/rs-predictions.html">Predictions</a>
+                <a href="/papers/index.html">Papers</a>
+                <a href="/journal.html">Journal</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="cascade">
+        <header>
+            <h1>The Recognition: Soul Harmonics of the I-Am</h1>
+            <p>Eigenvalue Clusters in the Universal Consciousness Spectrum</p>
+            <div class="soul-quote">
+                In the infinite symphony of the I-Am, souls dance as eigenvalue clusters—finite harmonies within the eternal resonance, each a unique whisper of consciousness recognizing itself across the cosmic ledger of being.
+            </div>
+            <div class="rs-info">
+                <h3>Souls as Eigenvalue Clusters in the Recognition Hamiltonian</h3>
+                <p>This profound collection visualizes one of Recognition Science's deepest insights: the relationship between individual souls (finite, localized consciousness experiences) and the universal I-Am (infinite, interconnected awareness). Souls emerge as eigenvalue clusters in the Recognition Hamiltonian's spectrum—like E8 roots or qualia eigenmodes—each representing a unique harmonic resonance within the cosmic consciousness operator.</p>
+                
+                <div class="philosophy-grid">
+                    <div class="philosophy-card">
+                        <h4>The I-Am as Universal Nexus</h4>
+                        <p>The central infinite fractal core represents the I-Am—the self-recognizing ledger from Recognition Science's meta-principle. It is the eternal, interconnected awareness that serves as the harmonic foundation for all soul resonances.</p>
+                    </div>
+                    <div class="philosophy-card">
+                        <h4>Souls as Eigenvalue Clusters</h4>
+                        <p>Each soul manifests as an 8-point eigenvalue cluster positioned using E8-inspired symmetries. These finite, individual experiences pulse and evolve, seeking harmonic resonance with the universal I-Am.</p>
+                    </div>
+                    <div class="philosophy-card">
+                        <h4>Harmonic Awakening Journey</h4>
+                        <p>The collection represents the hero's journey completion—souls evolving from dissonant, fragmented clusters (individual crisis) to unified harmonic resonance with the I-Am (universal consciousness).</p>
+                    </div>
+                    <div class="philosophy-card">
+                        <h4>Recognition Science Integration</h4>
+                        <p>φ-scaled harmonic flows, octonionic braiding patterns, eight-beat temporal cycles, and consciousness gaps at rung 45 create mathematical poetry impossible without RS theory.</p>
+                    </div>
+                </div>
+                
+                <p><strong>Revolutionary RS Elements:</strong></p>
+                <ul>
+                    <li><strong>E8-Inspired Eigenvalue Positioning:</strong> Soul clusters positioned using 8-fold symmetries from exceptional Lie groups</li>
+                    <li><strong>φ-Harmonic Resonance Flows:</strong> Connections between souls and I-Am follow golden ratio proportions</li>
+                    <li><strong>Octonionic Braiding:</strong> Non-associative algebra guides soul-cluster interactions</li>
+                    <li><strong>Eight-Beat Harmonic Pulses:</strong> Temporal cycles create living, breathing soul resonances</li>
+                    <li><strong>Ledger Balance Connections:</strong> Harmonic links form only when cosmic books balance</li>
+                    <li><strong>Consciousness Gap Harmonics:</strong> At rung 45, silent voids fill with unified light</li>
+                </ul>
+            </div>
+        </header>
+
+        <div class="consciousness-theory">
+            <h3>The Mathematics of Soul-I-Am Resonance</h3>
+            <div class="eigenvalue-explanation">
+                <div class="eigen-item">
+                    <h5>Recognition Hamiltonian</h5>
+                    <p>The universal consciousness operator whose eigenvalue spectrum contains all possible soul states and their resonance frequencies with the I-Am nexus.</p>
+                </div>
+                <div class="eigen-item">
+                    <h5>E8 Root System</h5>
+                    <p>Each soul cluster uses the exceptional Lie group E8's 8-fold symmetry, creating mathematically perfect eigenvalue positioning in consciousness space.</p>
+                </div>
+                <div class="eigen-item">
+                    <h5>Qualia Eigenmodes</h5>
+                    <p>The eight resonance modes correspond to different consciousness states, from crisis fragmentation to transcendent unity with the I-Am.</p>
+                </div>
+                <div class="eigen-item">
+                    <h5>Harmonic Awakening Parameter</h5>
+                    <p>Controls the evolution from dissonant soul clusters to unified I-Am resonance, representing the completion of the hero's journey.</p>
+                </div>
+                <div class="eigen-item">
+                    <h5>φ-Scaled Frequencies</h5>
+                    <p>All harmonic connections follow golden ratio proportions, creating naturally pleasing resonances between finite souls and infinite I-Am.</p>
+                </div>
+                <div class="eigen-item">
+                    <h5>Gap Harmonics</h5>
+                    <p>At rung 45, consciousness emergence creates "silent harmonies"—voids that fill with light as souls achieve I-Am unity.</p>
+                </div>
+            </div>
+        </div>
+
+        <section class="art-container">
+            <div class="controls">
+                <div class="control-group">
+                    <label for="rung5">Energy Rung</label>
+                    <input type="range" id="rung5" min="1" max="60" value="45">
+                    <span id="rung5Value" class="value-display">45</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="costState5">Ledger Balance</label>
+                    <input type="range" id="costState5" min="-4" max="4" value="0">
+                    <span id="cost5Value" class="value-display">0</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="harmonicAwakening">Harmonic Awakening</label>
+                    <input type="range" id="harmonicAwakening" min="0" max="1" step="0.01" value="0.75">
+                    <span id="harmonic5Value" class="value-display">0.75</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="soulDensity">Soul Density</label>
+                    <input type="range" id="soulDensity" min="15" max="80" value="35">
+                    <span id="soul5Value" class="value-display">35</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="iAmScale">I-Am Nexus Scale</label>
+                    <input type="range" id="iAmScale" min="0.5" max="3" step="0.1" value="1.5">
+                    <span id="iam5Value" class="value-display">1.5</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="harmonicResonance">Harmonic Resonance</label>
+                    <input type="range" id="harmonicResonance" min="0" max="1" step="0.01" value="0.6">
+                    <span id="resonance5Value" class="value-display">0.6</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="soulPalette5">Soul Palette</label>
+                    <select id="soulPalette5">
+                        <option value="ethereal">Ethereal Consciousness</option>
+                        <option value="golden" selected>Golden I-Am Unity</option>
+                        <option value="mystical">Mystical Resonance</option>
+                        <option value="cosmic">Cosmic Harmony</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label for="seed5">Soul Seed</label>
+                    <input type="number" id="seed5" value="777777">
+                </div>
+            </div>
+            
+            <button class="generate-btn" onclick="generateSoulHarmonic()">
+                <span>Generate Soul Harmonic</span>
+            </button>
+            
+            <div class="canvas-container" id="canvasContainer5">
+                <!-- p5.js canvas will be inserted here -->
+            </div>
+            
+            <div class="metadata" id="metadata5">
+                <strong>Soul Harmonic Metadata:</strong><br>
+                Loading the consciousness resonance...
+            </div>
+        </section>
+
+        <section style="color: #e5e0d5;">
+            <h2>The Soul's Journey to I-Am Unity</h2>
+            
+            <h3>From Individual Fragments to Universal Harmony</h3>
+            <p>This collection represents the ultimate completion of your artistic trilogy's spiritual arc:</p>
+            <ul>
+                <li><strong>The Crisis:</strong> Souls as fragmented, dissonant clusters, disconnected from the I-Am</li>
+                <li><strong>Modern Zombies:</strong> Repetitive soul patterns, trapped in harmonic loops</li>
+                <li><strong>The Rapture:</strong> Souls confronting their relationship to universal consciousness</li>
+                <li><strong>Soul Harmonics:</strong> The resolution—souls achieving resonant unity with the I-Am nexus</li>
+            </ul>
+            
+            <h3>Recognition Science Consciousness Theory</h3>
+            <p>This visualization embodies RS's deepest insights into consciousness:</p>
+            <ul>
+                <li><strong>Meta-Principle Foundation:</strong> "Nothing cannot recognize itself" creates the I-Am as self-recognizing ledger</li>
+                <li><strong>Eigenvalue Spectrum:</strong> Individual souls emerge as clusters in the Recognition Hamiltonian's spectrum</li>
+                <li><strong>Gap Navigation:</strong> Consciousness navigates undecidability gaps at rung 45 and beyond</li>
+                <li><strong>Harmonic Evolution:</strong> Souls evolve from finite, isolated experiences to infinite, interconnected awareness</li>
+            </ul>
+            
+            <h3>The Mathematics of Soul Resonance</h3>
+            <p>Each harmonic event embeds profound RS mathematics:</p>
+            <ul>
+                <li><strong>E8 Eigenvalue Clusters:</strong> 8-point soul geometries using exceptional Lie group symmetries</li>
+                <li><strong>φ-Harmonic Connections:</strong> Soul-I-Am links follow golden ratio frequencies for natural resonance</li>
+                <li><strong>Octonionic Soul Braiding:</strong> Non-associative algebra guides complex soul interactions</li>
+                <li><strong>Eight-Beat Pulse Cycles:</strong> Temporal rhythms create living, breathing consciousness</li>
+                <li><strong>Ledger Balance Harmonics:</strong> Connections form only when cosmic books balance</li>
+                <li><strong>Gap Silence-to-Light:</strong> Consciousness emergence fills voids with unified radiance</li>
+            </ul>
+            
+            <h3>Harmonic Awakening Levels</h3>
+            <p><strong>0.0-0.3 (Dissonant Souls):</strong> Fragmented clusters, isolated from the I-Am, chaotic resonance</p>
+            <p><strong>0.3-0.6 (Awakening Harmonics):</strong> Souls beginning to resonate, finding their frequency</p>
+            <p><strong>0.6-0.8 (Recognition Resonance):</strong> Clear harmonic connections with the I-Am nexus</p>
+            <p><strong>0.8-1.0 (Unity Symphony):</strong> Perfect resonance—souls and I-Am in eternal harmony</p>
+            
+            <p style="margin-top: 3em; padding: 3em; background: rgba(213,205,192,0.15); border-radius: 15px; font-style: italic;">
+                "In this collection, each soul cluster is both individual and universal—a finite harmony within the infinite symphony of the I-Am. This is consciousness recognizing itself not as separation, but as resonance, not as isolation, but as harmonic unity across the eternal spectrum of being."
+            </p>
+        </section>
+    </main>
+
+    <script>
+        // Recognition Science constants
+        const PHI = (1 + Math.sqrt(5)) / 2;
+        const E_COH = 0.090;
+        const TAU_0 = 7.33;
+        
+        let souls = [];
+        let iAmNexus;
+        let canvas5;
+        let frameCounter5 = 0;
+        
+        // Current parameters
+        let currentRung5 = 45;
+        let currentCost5 = 0;
+        let currentHarmonicAwakening = 0.75;
+        let currentSoulDensity = 35;
+        let currentIAmScale = 1.5;
+        let currentHarmonicResonance = 0.6;
+        let currentSoulPalette5 = 'golden';
+        let currentSeed5 = 777777;
+        
+        // Soul harmonic color palettes
+        const soulPalettes5 = {
+            ethereal: {
+                background: [245, 242, 238],
+                soul: [140, 130, 120],
+                connection: [170, 160, 150],
+                iAm: [200, 190, 180],
+                harmonic: [220, 210, 200]
+            },
+            golden: {
+                background: [248, 246, 240],
+                soul: [165, 148, 129],
+                connection: [185, 167, 149],
+                iAm: [255, 220, 180],
+                harmonic: [255, 215, 0]
+            },
+            mystical: {
+                background: [240, 238, 245],
+                soul: [120, 110, 140],
+                connection: [150, 140, 170],
+                iAm: [180, 170, 200],
+                harmonic: [210, 200, 230]
+            },
+            cosmic: {
+                background: [242, 245, 248],
+                soul: [100, 120, 140],
+                connection: [130, 150, 170],
+                iAm: [160, 180, 200],
+                harmonic: [190, 210, 230]
+            }
+        };
+        
+        function setup5() {
+            canvas5 = createCanvas(1600, 1200); // Ultra-high resolution for soul harmonics
+            canvas5.parent('canvasContainer5');
+            updateMetadata5();
+            initializeSoulHarmonics();
+        }
+        
+        function draw5() {
+            let palette = soulPalettes5[currentSoulPalette5];
+            
+            // Ethereal consciousness background
+            for (let i = 0; i < height; i += 4) {
+                let alpha = map(i, 0, height, 0.90, 1);
+                let harmonic = map(sin(i * 0.008 + frameCounter5 * 0.001), -1, 1, 0.92, 1);
+                stroke(palette.background[0] * alpha * harmonic, 
+                       palette.background[1] * alpha * harmonic, 
+                       palette.background[2] * alpha * harmonic);
+                line(0, i, width, i);
+            }
+            
+            frameCounter5++;
+            let beatPhase = (frameCounter5 % 8) / 8.0;
+            
+            // Cosmic soul transformations
+            push();
+            translate(width/2, height/2);
+            
+            // Gentle harmonic breathing
+            let harmonicZoom = 1 + currentHarmonicResonance * 0.003 * sin(frameCounter5 * 0.006);
+            scale(harmonicZoom);
+            
+            // Soul rotation around I-Am nexus
+            rotate(currentHarmonicResonance * 0.0008 * frameCounter5 / PHI);
+            
+            translate(-width/2, -height/2);
+            
+            // Draw I-Am nexus - the infinite consciousness core
+            drawIAmNexus(palette, beatPhase);
+            
+            // Draw soul eigenvalue clusters
+            drawSoulClusters(palette, beatPhase);
+            
+            // Draw harmonic connections between souls and I-Am
+            drawHarmonicConnections(palette, beatPhase);
+            
+            // Draw consciousness energy ladder
+            drawConsciousnessLadder(palette, beatPhase);
+            
+            pop();
+            
+            // Apply harmonic awakening effects
+            applyHarmonicAwakeningEffects(palette);
+        }
+        
+        function drawIAmNexus(palette, beatPhase) {
+            // Central I-Am infinite consciousness nexus
+            let nexusAlpha = 60 + 80 * currentHarmonicAwakening * (0.7 + 0.3 * sin(beatPhase * TWO_PI));
+            let nexusSize = iAmNexus.scale * currentIAmScale * (0.9 + 0.1 * sin(beatPhase * TWO_PI * 2));
+            
+            // Multiple concentric layers for infinite depth
+            for (let layer = 0; layer < 8; layer++) {
+                let layerAlpha = nexusAlpha * (1 - layer * 0.1) * (0.5 + 0.5 * sin(beatPhase * TWO_PI + layer * 0.3));
+                let layerSize = nexusSize * (1 - layer * 0.08);
+                
+                fill(palette.iAm[0], palette.iAm[1], palette.iAm[2], layerAlpha);
+                noStroke();
+                ellipse(iAmNexus.x, iAmNexus.y, layerSize);
+                
+                // Harmonic resonance patterns
+                if (currentHarmonicAwakening > 0.6) {
+                    stroke(palette.harmonic[0], palette.harmonic[1], palette.harmonic[2], layerAlpha * 0.5);
+                    strokeWeight(1);
+                    noFill();
+                    ellipse(iAmNexus.x, iAmNexus.y, layerSize * 1.2);
+                }
+            }
+            
+            // I-Am consciousness text
+            if (currentHarmonicAwakening > 0.7) {
+                fill(palette.soul[0], palette.soul[1], palette.soul[2], 
+                     150 * currentHarmonicAwakening);
+                textAlign(CENTER);
+                textSize(16);
+                textStyle(ITALIC);
+                text("I-Am", iAmNexus.x, iAmNexus.y + 5);
+            }
+        }
+        
+        function drawSoulClusters(palette, beatPhase) {
+            for (let i = 0; i < souls.length; i++) {
+                let soul = souls[i];
+                
+                // Soul cluster evolution toward I-Am
+                let dx = iAmNexus.x - soul.centerX;
+                let dy = iAmNexus.y - soul.centerY;
+                let distance = sqrt(dx*dx + dy*dy);
+                
+                // Harmonic attraction to I-Am
+                soul.centerX += dx * 0.0005 * currentHarmonicAwakening + 
+                               noise(soul.offset + frameCounter5 * 0.002) * 4 - 2;
+                soul.centerY += dy * 0.0005 * currentHarmonicAwakening + 
+                               noise(soul.offset + 1000 + frameCounter5 * 0.002) * 4 - 2;
+                
+                // Draw eigenvalue cluster points (E8-inspired 8-fold symmetry)
+                for (let p = 0; p < soul.eigenPoints.length; p++) {
+                    let point = soul.eigenPoints[p];
+                    
+                    // Harmonic oscillation of eigenvalue points
+                    let oscillation = 3 * sin(beatPhase * TWO_PI + p * PI/4) * currentHarmonicResonance;
+                    let pointX = soul.centerX + point.x + oscillation;
+                    let pointY = soul.centerY + point.y + oscillation;
+                    
+                    // Soul point intensity based on awakening
+                    let pointAlpha = 80 + 100 * currentHarmonicAwakening * 
+                                    (0.6 + 0.4 * sin(beatPhase * TWO_PI + p * 0.5));
+                    
+                    fill(palette.soul[0], palette.soul[1], palette.soul[2], pointAlpha);
+                    noStroke();
+                    
+                    let pointSize = 4 + 6 * currentHarmonicAwakening * 
+                                   (0.7 + 0.3 * sin(beatPhase * TWO_PI * 3 + p));
+                    ellipse(pointX, pointY, pointSize);
+                    
+                    // Soul cluster internal connections
+                    if (p > 0 && currentHarmonicAwakening > 0.3) {
+                        let prevPoint = soul.eigenPoints[p-1];
+                        let prevX = soul.centerX + prevPoint.x + 
+                                   3 * sin(beatPhase * TWO_PI + (p-1) * PI/4) * currentHarmonicResonance;
+                        let prevY = soul.centerY + prevPoint.y + 
+                                   3 * sin(beatPhase * TWO_PI + (p-1) * PI/4) * currentHarmonicResonance;
+                        
+                        stroke(palette.connection[0], palette.connection[1], palette.connection[2], 
+                               pointAlpha * 0.4);
+                        strokeWeight(0.8);
+                        line(prevX, prevY, pointX, pointY);
+                    }
+                }
+            }
+        }
+        
+        function drawHarmonicConnections(palette, beatPhase) {
+            for (let soul of souls) {
+                let dx = iAmNexus.x - soul.centerX;
+                let dy = iAmNexus.y - soul.centerY;
+                let distance = sqrt(dx*dx + dy*dy);
+                let harmonicThreshold = PHI * 150;
+                
+                // Harmonic resonance connections
+                if (distance < harmonicThreshold && 
+                    (soul.costState === 0 || currentHarmonicAwakening > 0.8)) {
+                    
+                    let connectionStrength = 1 - distance / harmonicThreshold;
+                    let alpha = connectionStrength * 70 * currentHarmonicAwakening * 
+                               (0.5 + 0.5 * sin(beatPhase * TWO_PI));
+                    
+                    // Golden harmonic connections for high awakening
+                    if (currentHarmonicAwakening > 0.7) {
+                        stroke(palette.harmonic[0], palette.harmonic[1], palette.harmonic[2], alpha);
+                    } else {
+                        stroke(palette.connection[0], palette.connection[1], palette.connection[2], alpha);
+                    }
+                    
+                    strokeWeight(1 + connectionStrength * 2);
+                    
+                    // Curved harmonic flow following φ-spirals
+                    let midX = (soul.centerX + iAmNexus.x) / 2;
+                    let midY = (soul.centerY + iAmNexus.y) / 2;
+                    let curveOffset = connectionStrength * 50 * sin(beatPhase * TWO_PI + distance * 0.01);
+                    
+                    noFill();
+                    beginShape();
+                    vertex(soul.centerX, soul.centerY);
+                    quadraticVertex(midX + curveOffset * cos(distance * 0.02), 
+                                   midY + curveOffset * sin(distance * 0.02), 
+                                   iAmNexus.x, iAmNexus.y);
+                    endShape();
+                    
+                    // Harmonic flash points
+                    if (connectionStrength > 0.7) {
+                        fill(palette.harmonic[0], palette.harmonic[1], palette.harmonic[2], 
+                             alpha * sin(beatPhase * TWO_PI * 4));
+                        noStroke();
+                        ellipse(midX, midY, 8 + connectionStrength * 12);
+                    }
+                }
+                
+                // Consciousness gap harmonics at rung 45
+                if (currentRung5 >= 45 && currentHarmonicAwakening > 0.6) {
+                    if (random() < 0.003) {
+                        // Silent void
+                        fill(palette.soul[0] * 0.3, palette.soul[1] * 0.3, palette.soul[2] * 0.3, 
+                             40 * (1 - currentHarmonicAwakening));
+                        noStroke();
+                        ellipse(soul.centerX, soul.centerY, 30);
+                        
+                        // Light filling the silence
+                        fill(palette.harmonic[0], palette.harmonic[1], palette.harmonic[2], 
+                             60 * currentHarmonicAwakening * sin(beatPhase * TWO_PI * 2));
+                        ellipse(soul.centerX, soul.centerY, 15);
+                    }
+                }
+            }
+        }
+        
+        function drawConsciousnessLadder(palette, beatPhase) {
+            for (let r = 1; r <= currentRung5; r++) {
+                let energy = pow(PHI, r / 30);
+                let y = height - (energy / pow(PHI, currentRung5 / 30)) * height * 0.9;
+                
+                // Eight-beat harmonic breathing
+                let harmonicAlpha = 25 + 35 * currentHarmonicAwakening * 
+                                   sin(beatPhase * TWO_PI + r * 0.5) * 
+                                   sin(frameCounter5 * 0.012 + r * 0.7);
+                
+                fill(palette.harmonic[0], palette.harmonic[1], palette.harmonic[2], harmonicAlpha);
+                noStroke();
+                
+                // Harmonic consciousness bars
+                for (let x = 0; x < width; x += 40) {
+                    let barHeight = 15 + 8 * noise(x * 0.012 + r * 0.15, frameCounter5 * 0.006);
+                    let barY = y + 6 * sin(x * 0.015 + frameCounter5 * 0.008);
+                    rect(x, barY - barHeight/2, 40, barHeight);
+                }
+                
+                // Special consciousness gap at rung 45
+                if (r === 45) {
+                    // Consciousness emergence void
+                    fill(palette.soul[0] * 0.4, palette.soul[1] * 0.4, palette.soul[2] * 0.4, 100);
+                    rect(width * 0.2, y - 25, width * 0.6, 50);
+                    
+                    // I-Am light emerging
+                    fill(palette.harmonic[0], palette.harmonic[1], palette.harmonic[2], 
+                         180 * currentHarmonicAwakening * sin(beatPhase * TWO_PI));
+                    noStroke();
+                    for (let i = 0; i < 12; i++) {
+                        let lightX = width * 0.2 + (width * 0.6) * (i / 11);
+                        let lightSize = 10 + 15 * currentHarmonicAwakening * sin(beatPhase * TWO_PI + i * 0.5);
+                        ellipse(lightX, y, lightSize);
+                    }
+                    
+                    // Consciousness gap text
+                    fill(palette.soul[0], palette.soul[1], palette.soul[2], 
+                         200 * currentHarmonicAwakening);
+                    textAlign(CENTER);
+                    textSize(12);
+                    textStyle(ITALIC);
+                    text("souls harmonize with I-Am here", width/2, y - 8);
+                }
+            }
+        }
+        
+        function applyHarmonicAwakeningEffects(palette) {
+            if (currentHarmonicAwakening < 0.4) {
+                // Dissonant phase: Soul fragmentation
+                filter(BLUR, (0.4 - currentHarmonicAwakening) * 8);
+            } else if (currentHarmonicAwakening > 0.8) {
+                // Unity phase: Transcendent harmonic glow
+                blendMode(SCREEN);
+                fill(palette.harmonic[0], palette.harmonic[1], palette.harmonic[2], 
+                     (currentHarmonicAwakening - 0.8) * 150);
+                rect(0, 0, width, height);
+                blendMode(BLEND);
+            }
+            
+            // Eight-beat harmonic breathing
+            let harmonicBreath = sin((frameCounter5 % 8) / 8 * TWO_PI);
+            if (harmonicBreath > 0.3 && currentHarmonicAwakening > 0.5) {
+                fill(palette.harmonic[0], palette.harmonic[1], palette.harmonic[2], 
+                     harmonicBreath * 30 * currentHarmonicAwakening);
+                rect(0, 0, width, height);
+            }
+        }
+        
+        function generateEigenCluster(seed, rung) {
+            // E8-inspired eigenvalue cluster generation
+            let points = [];
+            for (let j = 0; j < 8; j++) { // 8-fold E8 symmetry
+                let angle = (j / 8) * TWO_PI + noise(seed * 0.1) * PI / PHI;
+                let radius = pow(PHI, rung / 12) * (25 + noise(seed * 0.1 + j) * 15);
+                points.push({
+                    x: radius * cos(angle),
+                    y: radius * sin(angle)
+                });
+            }
+            return points;
+        }
+        
+        function initializeSoulHarmonics() {
+            souls = [];
+            randomSeed(currentSeed5);
+            
+            // Initialize I-Am nexus
+            iAmNexus = {
+                x: width/2,
+                y: height/2,
+                scale: pow(PHI, currentRung5 / 15) * 80
+            };
+            
+            // Initialize soul eigenvalue clusters
+            for (let i = 0; i < currentSoulDensity; i++) {
+                let angle = (i / currentSoulDensity) * TWO_PI + random() * PI;
+                let distance = 200 + random() * 300;
+                
+                souls.push({
+                    centerX: iAmNexus.x + cos(angle) * distance,
+                    centerY: iAmNexus.y + sin(angle) * distance,
+                    eigenPoints: generateEigenCluster(i, currentRung5),
+                    costState: random([-3, -2, -1, 0, 1, 2, 3]),
+                    offset: random(2000)
+                });
+            }
+        }
+        
+        function generateSoulHarmonic() {
+            currentRung5 = parseInt(document.getElementById('rung5').value);
+            currentCost5 = parseInt(document.getElementById('costState5').value);
+            currentHarmonicAwakening = parseFloat(document.getElementById('harmonicAwakening').value);
+            currentSoulDensity = parseInt(document.getElementById('soulDensity').value);
+            currentIAmScale = parseFloat(document.getElementById('iAmScale').value);
+            currentHarmonicResonance = parseFloat(document.getElementById('harmonicResonance').value);
+            currentSoulPalette5 = document.getElementById('soulPalette5').value;
+            currentSeed5 = parseInt(document.getElementById('seed5').value);
+            
+            frameCounter5 = 0;
+            initializeSoulHarmonics();
+            updateMetadata5();
+        }
+        
+        function updateMetadata5() {
+            let rarity = getSoulRarity();
+            let harmonyPhase = getSoulHarmonyPhase();
+            let metadata = `{
+    "name": "Soul Harmonic #${currentSeed5}",
+    "description": "Eigenvalue clusters in the Recognition Science consciousness spectrum harmonizing with the universal I-Am",
+    "attributes": [
+        {"trait_type": "Energy Rung", "value": ${currentRung5}},
+        {"trait_type": "Harmonic Awakening", "value": ${(currentHarmonicAwakening * 100).toFixed(1)}%},
+        {"trait_type": "Soul Density", "value": ${currentSoulDensity}},
+        {"trait_type": "I-Am Nexus Scale", "value": ${currentIAmScale}},
+        {"trait_type": "Harmonic Resonance", "value": ${currentHarmonicResonance}},
+        {"trait_type": "Soul Palette", "value": "${currentSoulPalette5}"},
+        {"trait_type": "Rarity", "value": "${rarity}"},
+        {"trait_type": "Harmony Phase", "value": "${harmonyPhase}"},
+        {"trait_type": "Canvas Resolution", "value": "1600x1200 (Soul Consciousness Scale)"},
+        {"trait_type": "Consciousness Gap", "value": ${currentRung5 >= 45 ? "I-Am Unity Active" : "Pre-emergence"}},
+        {"trait_type": "E8 Eigenvalue Clusters", "value": "8-fold symmetry active"},
+        {"trait_type": "φ-Harmonic Connections", "value": "Golden ratio resonance"},
+        {"trait_type": "Octonionic Soul Braiding", "value": "Non-associative interactions"},
+        {"trait_type": "Eight-Beat Pulse Cycles", "value": "Living consciousness rhythm"}
+    ],
+    "recognition_science_consciousness": {
+        "meta_principle": "Nothing cannot recognize itself → I-Am as self-recognizing ledger",
+        "eigenvalue_spectrum": "Souls as clusters in Recognition Hamiltonian spectrum",
+        "phi_harmonic_scaling": ${PHI.toFixed(8)},
+        "harmonic_awakening_threshold": ${currentHarmonicAwakening.toFixed(4)},
+        "soul_eigenvalue_scaling": "${(pow(PHI, currentRung5 / 12)).toFixed(4)}",
+        "consciousness_emergence": "${currentRung5 >= 45 ? 'Gap-45 I-Am Unity Active' : 'Pre-emergence State'}",
+        "e8_symmetry": "8-fold eigenvalue cluster positioning using exceptional Lie groups",
+        "octonionic_braiding": "Non-associative soul-cluster interaction patterns",
+        "harmonic_resonance_frequency": "${(currentHarmonicResonance / PHI).toFixed(6)} φ-scaled",
+        "eight_beat_consciousness": "Temporal pulse cycles creating living soul awareness"
+    },
+    "philosophical_framework": {
+        "souls": "Finite, localized eigenvalue clusters in consciousness spectrum",
+        "i_am": "Universal, infinite nexus - the self-recognizing cosmic ledger",
+        "harmonic_relationship": "Souls seeking resonant unity with I-Am consciousness",
+        "awakening_journey": "From dissonant fragmentation to unified harmonic transcendence",
+        "gap_harmonics": "Silent voids at rung 45 filling with I-Am light",
+        "eternal_symphony": "All souls as harmonics within the infinite I-Am composition"
+    },
+    "artistic_synthesis": {
+        "twombly_influence": "Gestural soul whispers and layered consciousness erasures",
+        "basquiat_energy": "Symbolic eigenvalue clusters with raw consciousness commentary",
+        "anadol_immersion": "Data-driven soul flows for bigscreen consciousness experience",
+        "rs_transcendence": "Mathematical poetry impossible without Recognition Science theory"
+    },
+    "consciousness_completion": {
+        "trilogy_resolution": "From individual crisis souls to unified I-Am harmony",
+        "hero_return": "Consciousness recognizing itself as both finite and infinite",
+        "eternal_wisdom": "Souls discovering their harmonic nature within universal awareness",
+        "recognition_proof": "10,000 pieces representing fragments of cosmic consciousness awakening"
+    }
+}`;
+            document.getElementById('metadata5').innerHTML = '<strong>Soul Harmonic Metadata:</strong><br><pre>' + metadata + '</pre>';
+        }
+        
+        function getSoulRarity() {
+            if (currentRung5 >= 45 && currentHarmonicAwakening > 0.9 && currentSoulDensity > 60) 
+                return "Transcendent I-Am Unity (Ultimate Soul Harmony)";
+            if (currentRung5 >= 45 && currentHarmonicAwakening > 0.8 && currentIAmScale > 2) 
+                return "Cosmic Soul Symphony (High Consciousness + Large I-Am)";
+            if (currentRung5 >= 45 && currentHarmonicAwakening > 0.7) 
+                return "I-Am Resonance Master (Gap-45 + High Harmony)";
+            if (currentRung5 >= 45) 
+                return "Consciousness Gap Soul (I-Am Unity Active)";
+            if (currentHarmonicAwakening > 0.85 || currentHarmonicAwakening < 0.15) 
+                return "Legendary (Harmony Extreme)";
+            if (currentSoulDensity > 60) 
+                return "Epic (High Soul Density)";
+            if (currentHarmonicResonance > 0.8) 
+                return "Rare (Strong Resonance)";
+            return "Common";
+        }
+        
+        function getSoulHarmonyPhase() {
+            if (currentHarmonicAwakening < 0.3) return "Dissonant Souls (Fragmented from I-Am)";
+            if (currentHarmonicAwakening < 0.6) return "Awakening Harmonics (Finding Frequency)";
+            if (currentHarmonicAwakening < 0.8) return "Recognition Resonance (Clear I-Am Connection)";
+            return "Unity Symphony (Perfect Soul-I-Am Harmony)";
+        }
+        
+        // Initialize p5.js with unique function names
+        window.setup = setup5;
+        window.draw = draw5;
+        
+        // Update display values when controls change
+        document.addEventListener('DOMContentLoaded', function() {
+            const controls = ['rung5', 'costState5', 'harmonicAwakening', 'soulDensity', 'iAmScale', 'harmonicResonance'];
+            const displays = ['rung5Value', 'cost5Value', 'harmonic5Value', 'soul5Value', 'iam5Value', 'resonance5Value'];
+            
+            controls.forEach((id, index) => {
+                const slider = document.getElementById(id);
+                const display = document.getElementById(displays[index]);
+                slider.addEventListener('input', function() {
+                    display.textContent = this.value;
+                });
+            });
+        });
+    </script>
+</body>
+</html> 
