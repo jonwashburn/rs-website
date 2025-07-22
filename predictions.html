@@ -513,6 +513,12 @@
             color: var(--accent);
         }
 
+        .formula-box p {
+            margin: 0.5em 0;
+            overflow-wrap: break-word; /* Fix for text bleeding */
+            word-wrap: break-word; /* Legacy support */
+        }
+
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -674,6 +680,19 @@
                 font-weight: 600;
                 text-align: left;
                 color: var(--accent);
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+            .predictions-table td.calculation {
+                flex-wrap: wrap; /* Allow details to wrap to new line */
+            }
+
+            .predictions-table td .calculation-details {
+                flex-basis: 100%; /* Make details take full width */
+                text-align: left;
+                padding: 1em;
+                margin-top: 1em;
             }
         }
 
@@ -690,7 +709,15 @@
             details.style.display = isHidden ? 'block' : 'none';
             button.textContent = isHidden ? 'Hide' : 'Details';
             if (isHidden && window.MathJax) {
+                // Ensure parent has correct alignment when details are visible
+                const parentTd = button.parentElement;
+                if(window.innerWidth <= 900) {
+                    parentTd.style.justifyContent = 'space-between';
+                }
                 MathJax.typesetPromise([details]);
+            } else {
+                const parentTd = button.parentElement;
+                parentTd.style.justifyContent = ''; // Revert on hide
             }
         }
 
