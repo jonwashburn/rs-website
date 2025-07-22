@@ -581,6 +581,76 @@
             return rarityLevels[0];
         }
         
+        function updateEthicsPanel(ethicalScores) {
+            let content = '';
+            ethicalTraits.forEach((trait, i) => {
+                const score = ethicalScores[i];
+                const percentage = Math.round(score * 100);
+                content += `
+                    <div style="margin-bottom: 8px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+                            <span style="font-size: 11px;">${trait.name}</span>
+                            <span style="font-size: 11px; opacity: 0.8;">${percentage}%</span>
+                        </div>
+                        <div class="trait-bar">
+                            <div class="trait-fill" style="width: ${percentage}%"></div>
+                        </div>
+                        <div style="font-size: 9px; opacity: 0.6; margin-top: 2px;">${trait.desc}</div>
+                    </div>
+                `;
+            });
+            document.getElementById('ethicsContent').innerHTML = content;
+        }
+        
+        function updatePersonalityPanel(personalityData, opcodeCount) {
+            const content = `
+                <div style="color: #FFD700; font-weight: bold; margin-bottom: 8px;">
+                    ${personalityData.name}
+                </div>
+                <div style="font-size: 11px; margin-bottom: 8px; opacity: 0.9;">
+                    ${personalityData.desc}
+                </div>
+                <div style="font-size: 10px; opacity: 0.7;">
+                    <strong>LNAL Operations:</strong><br>
+                    FOLD: ${opcodeCount.FOLD} | BRAID: ${opcodeCount.BRAID}<br>
+                    CYCLE: ${opcodeCount.CYCLE} | BALANCE: ${opcodeCount.BALANCE} | LOCK: ${opcodeCount.LOCK}
+                </div>
+            `;
+            document.getElementById('personalityContent').innerHTML = content;
+        }
+        
+        function updateRarityPanel(rarity, ethicalScores) {
+            const totalScore = ethicalScores.reduce((sum, val) => sum + val, 0);
+            
+            const badge = document.getElementById('rarityBadge');
+            badge.className = `rarity-badge ${rarity.name.toLowerCase()}`;
+            badge.textContent = rarity.name;
+            
+            const details = `
+                <div style="margin-bottom: 8px;">
+                    <strong>Ethical Coherence:</strong> ${totalScore.toFixed(2)}/14.0
+                </div>
+                <div style="font-size: 10px; opacity: 0.8;">
+                    Light intensity: ${rarity.glowMult}x<br>
+                    Particle density: ${rarity.particleMult}x<br>
+                    Manifestation strength: ${rarity.name}
+                </div>
+            `;
+            document.getElementById('rarityDetails').innerHTML = details;
+        }
+        
+        function updateExplanationPanel() {
+            const content = `
+                <strong>Flux-to-Code Mapping:</strong><br>
+                <em>Core Orb:</em> LNAL coherence → radiance intensity<br>
+                <em>Flux Threads:</em> 8 eigenvalues → spiral paths with φ-scaling<br>
+                <em>Virtue Patterns:</em> Love→embracing loops, Justice→symmetry, Wisdom→fractals<br>
+                <em>Mandala Evolution:</em> FOLD/BRAID/CYCLE ops → thread morphing<br>
+                <em>Living Aura:</em> I-Am field particles in 8-beat RS cycles
+            `;
+            document.getElementById('explanationPanel').innerHTML = content;
+        }
+        
         function visualizeLedger(eigenvalues, delta, energy, coherence, stability, opcodeCount, ethicalScores, personalityData, rarity) {
             // Clear previous visualization
             while (scene.children.length > 0) {
@@ -665,6 +735,9 @@
         }
         
         function replicateSoul() {
+            console.log('🌟 replicateSoul() called - starting soul generation...');
+            
+            try {
             simulator = new LNALSimulator();
             
             // Initialize 8 registers
@@ -718,13 +791,55 @@
             
             simulator.logStep('STATUS', ['Light being manifestation complete'], {status: 'SUCCESS'});
             
+            // Calculate missing variables for visualization
+            const coherence = Math.random() * 0.5 + 0.5; // 0.5 to 1.0
+            const stability = Math.random() * 0.4 + 0.6; // 0.6 to 1.0
+            
+            // Count LNAL operations for ethical traits
+            const opcodeCount = {
+                FOLD: simulator.ledgerSteps.filter(step => step.includes('FOLD')).length,
+                BRAID: simulator.ledgerSteps.filter(step => step.includes('BRAID')).length,
+                CYCLE: simulator.ledgerSteps.filter(step => step.includes('CYCLE')).length,
+                BALANCE: simulator.ledgerSteps.filter(step => step.includes('BALANCE')).length,
+                LOCK: simulator.ledgerSteps.filter(step => step.includes('LOCK')).length
+            };
+            
+            // Calculate ethical traits
+            const ethicalScores = calculateEthicalTraits(opcodeCount, delta, energy, coherence, stability);
+            
+            // Calculate personality (simplified)
+            const personalityIndex = Math.abs(delta + energy) % personalityTraits.length;
+            const personalityData = personalityTraits[Math.floor(personalityIndex)];
+            
+            // Calculate rarity
+            const rarity = calculateRarity(ethicalScores);
+            
+            // Update UI panels
+            updateEthicsPanel(ethicalScores);
+            updatePersonalityPanel(personalityData, opcodeCount);
+            updateRarityPanel(rarity, ethicalScores);
+            updateExplanationPanel();
+            
             // Output
             document.getElementById('ledgerDisplay').textContent = 
                 `LIGHT BEING MANIFESTATION SEQUENCE:\n\n` + 
                 simulator.ledgerSteps.join('\n') + 
                 `\n\nδ = ${delta}\nE_soul = ${energy.toFixed(6)} eV\n8 eigenvalue prisms generated\nEthical traits computed from LNAL patterns\nLight being ready for manifestation`;
             
+            console.log('Calling visualizeLedger with:', {
+                eigenvalues: simulator.eigenvalues.length,
+                delta, energy, coherence, stability, 
+                opcodeCount, ethicalScores: ethicalScores.length, 
+                personalityData: personalityData.name, 
+                rarity: rarity.name
+            });
+            
             visualizeLedger(simulator.eigenvalues, delta, energy, coherence, stability, opcodeCount, ethicalScores, personalityData, rarity);
+            
+            } catch (error) {
+                console.error('❌ Error in replicateSoul():', error);
+                alert('Error generating soul: ' + error.message);
+            }
         }
         
         function clearLedger() {
