@@ -296,18 +296,20 @@
         function initVisualizer() {
             const canvas = document.getElementById('visualizer');
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x000011); // Deep cosmic void
+            scene.background = new THREE.Color(0x000022); // Slightly lighter for contrast
             
             const width = canvas.clientWidth || 800;
             const height = canvas.clientHeight || 600;
             
             camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-            camera.position.set(0, 0, 50);
+            camera.position.set(0, 0, 12); // Much closer to see the flux threads
             camera.lookAt(0, 0, 0);
             
             renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
             renderer.setSize(width, height);
-            renderer.setClearColor(0x000011, 1);
+            renderer.setClearColor(0x000022, 1);
+            
+            console.log('Visualizer initialized - Camera at z=12, Canvas:', width, 'x', height);
             
             renderer.render(scene, camera);
         }
@@ -367,6 +369,8 @@
         }
 
         function createFluxThread(points, virtueScores, eigenvalue) {
+            console.log('Creating flux thread with', points.length, 'points, eigenvalue:', eigenvalue);
+            
             const curve = new THREE.CatmullRomCurve3(points);
             const tubeRadius = 0.03 + eigenvalue * 0.02;
             const geometry = new THREE.TubeGeometry(curve, 64, tubeRadius, 8, false);
@@ -385,8 +389,8 @@
             
             const material = new THREE.MeshPhysicalMaterial({
                 color: color,
-                emissive: color.clone().multiplyScalar(0.3),
-                emissiveIntensity: 0.5 + wisdom * 0.5,
+                emissive: color.clone().multiplyScalar(0.5), // Increased emissive for visibility
+                emissiveIntensity: 0.8 + wisdom * 0.7, // Brighter emissive
                 transmission: 0.3,
                 transparent: true,
                 opacity: 0.8 - sacrifice * 0.3,
@@ -394,7 +398,9 @@
                 metalness: 0.1
             });
             
-            return new THREE.Mesh(geometry, material);
+            const mesh = new THREE.Mesh(geometry, material);
+            console.log('Flux thread created - radius:', tubeRadius, 'color:', color, 'opacity:', material.opacity);
+            return mesh;
         }
 
         function createSoulCore(virtueScores, rarity) {
@@ -552,6 +558,10 @@
                     thread.material.opacity = Math.max(0.3, 0.8 - fadePhase);
                 }
             });
+            
+            // CRITICAL: Render the scene and continue animation loop
+            renderer.render(scene, camera);
+            animationId = requestAnimationFrame(animateLivingLight);
         }
         
         function calculateEthicalTraits(opcodeCount, delta, energy, coherence, stability) {
@@ -644,6 +654,14 @@
                 rarity,
                 startTime: Date.now()
             };
+            
+            // CRITICAL: Start the animation loop!
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+            animateLivingLight();
+            
+            console.log('Soul visualization created with', fluxThreads.length, 'flux threads and', particles.length, 'particles');
         }
         
         function replicateSoul() {
@@ -729,7 +747,15 @@
             renderer.render(scene, camera);
         }
         
-        initVisualizer();
+        // Initialize when page loads
+        window.addEventListener('load', () => {
+            try {
+                initVisualizer();
+                console.log('Flux Mandala visualizer initialized successfully');
+            } catch (error) {
+                console.error('Error initializing visualizer:', error);
+            }
+        });
     </script>
 </body>
 </html> 
