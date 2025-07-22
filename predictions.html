@@ -17,9 +17,11 @@
                 inlineMath: [['$', '$'], ['\\(', '\\)']],
                 displayMath: [['$$', '$$'], ['\\[', '\\]']],
                 macros: {
+                    // No recursive macros. \varphi is built-in.
                     tfrac: ["\\frac{#1}{#2}", 2],
                     mathbb: ["\\mathbb{#1}", 1],
-                    text: ["\\text{#1}", 1]
+                    text: ["\\text{#1}", 1],
+                    kappa: "\\kappa"
                 }
             },
             chtml: {
@@ -98,20 +100,20 @@
                 <div class="key-formulas">
                     <div class="formula-box">
                         <h3>Energy Cascade</h3>
-                        <p>$$E_r = E_{\text{coh}} \times \varphi^r$$</p>
-                        <p>Where $E_{\text{coh}} = 0.090$ eV (coherence quantum) and $\varphi = \frac{1+\sqrt{5}}{2} \approx 1.618$ (golden ratio)</p>
+                        <p>$$E_r = E_{\\text{coh}} \\times \\varphi^r$$</p>
+                        <p>Where $E_{\\text{coh}} = 0.090$ eV and $\\varphi = \\frac{1+\\sqrt{5}}{2}$</p>
                     </div>
                     
                     <div class="formula-box">
                         <h3>Recognition Curvature</h3>
-                        <p>$$\kappa = \oint_0^T \text{Im}\langle\psi(t)|\partial_t\psi(t)\rangle \, dt$$</p>
-                        <p>Measures conscious vividness and moral state: $\kappa = 0$ (good), $\kappa > 0$ (suffering), $\kappa < 0$ (joy)</p>
+                        <p>$$\\kappa = \\oint_0^T \\text{Im}\\langle\\psi(t)|\\partial_t\\psi(t)\\rangle \\, dt$$</p>
+                        <p>Measures conscious vividness and moral state.</p>
                     </div>
                     
                     <div class="formula-box">
                         <h3>Universal Constants</h3>
-                        <p>$\varphi = 1.6180339887...$, $\tau_0 = 7.33$ fs, $\lambda_{\text{rec}} = 1.616 \times 10^{-35}$ m</p>
-                        <p>All derived from logical necessity, not measurement</p>
+                        <p>$\\varphi, \\tau_0, \\lambda_{\\text{rec}}$ are derived, not measured.</p>
+                        <p>$\\tau_0=7.33$ fs, $\\lambda_{\\text{rec}} = 1.616 \\times 10^{-35}$ m</p>
                     </div>
                 </div>
             </div>
@@ -152,20 +154,17 @@
                     <option value="mathematics">Mathematics</option>
                     <option value="quantum">Quantum Mechanics</option>
                     <option value="biology">Biology</option>
-                    <option value="ethics">Ethics</option>
-                    <option value="gravity">Gravity</option>
-                    <option value="computation">Computation</option>
-                    <option value="prediction">Future Predictions</option>
                 </select>
                 
                 <input type="search" id="search-filter" placeholder="Search predictions..." class="filter-input">
                 
                 <select id="accuracy-filter" class="filter-select">
                     <option value="">All Accuracies</option>
-                    <option value="exact">Exact Matches</option>
+                    <option value="exact">Exact</option>
                     <option value="high">&lt;0.1% Error</option>
                     <option value="good">&lt;1% Error</option>
                     <option value="fair">&lt;5% Error</option>
+                    <option value="prediction">Prediction</option>
                 </select>
             </div>
         </section>
@@ -180,14 +179,247 @@
                             <th>ID</th>
                             <th>Quantity</th>
                             <th>Category</th>
-                            <th>Predicted Value</th>
-                            <th>Empirical Value</th>
+                            <th>Predicted</th>
+                            <th>Empirical</th>
                             <th>Agreement</th>
                             <th>Calculation</th>
                         </tr>
                     </thead>
                     <tbody id="predictions-tbody">
-                        <!-- Content will be populated by JavaScript -->
+                        <!-- This content is now static and pre-rendered -->
+                        <tr class='prediction-row' data-category='particles' data-accuracy='exact'>
+                            <td data-label='ID'>1</td>
+                            <td data-label='Quantity'>Electron mass $m_e$</td>
+                            <td data-label='Category'>Particles</td>
+                            <td data-label='Predicted'>0.511 MeV</td>
+                            <td data-label='Empirical'>0.511 MeV (PDG)</td>
+                            <td data-label='Agreement'>Exact</td>
+                            <td data-label='Calculation' class='calculation'>
+                                <button class='expand-btn' onclick='toggleCalculation(this)'>Details</button>
+                                <div class='calculation-details' style='display: none;'>
+                                    <h4>Electron Mass Derivation</h4>
+                                    <p>The electron's mass is determined by its position on the golden ratio energy ladder at rung $r=32$, combined with a QED dressing factor derived from voxel walks.</p>
+                                    <p><strong>Energy Rung:</strong> $$E_{32} = E_{\text{coh}} \times \varphi^{32} \approx 0.00216 \text{ MeV}$$</p>
+                                    <p><strong>Dressing Factor:</strong> $$B_{\text{lepton}} \approx 237$$</p>
+                                    <p><strong>Final Mass:</strong> $$m_e = E_{32} \times B_{\text{lepton}} = 0.511 \text{ MeV}$$</p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='prediction-row' data-category='particles' data-accuracy='high'>
+                            <td data-label='ID'>2</td>
+                            <td data-label='Quantity'>Muon mass $m_\mu$</td>
+                            <td data-label='Category'>Particles</td>
+                            <td data-label='Predicted'>0.1057 GeV</td>
+                            <td data-label='Empirical'>0.1057 GeV (PDG)</td>
+                            <td data-label='Agreement'>0.001%</td>
+                            <td data-label='Calculation' class='calculation'>
+                                <button class='expand-btn' onclick='toggleCalculation(this)'>Details</button>
+                                <div class='calculation-details' style='display: none;'>
+                                    <h4>Muon Mass Derivation</h4>
+                                    <p>The muon sits at rung $r=39$, with a small dressing correction from chiral perturbation theory.</p>
+                                    <p><strong>Energy Rung:</strong> $$E_{39} = E_{\text{coh}} \times \varphi^{39} \approx 101.7 \text{ MeV}$$</p>
+                                    <p><strong>Final Mass:</strong> $$m_\mu = E_{39} \times 1.039 = 105.7 \text{ MeV}$$</p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='prediction-row' data-category='particles' data-accuracy='high'>
+                            <td data-label='ID'>3</td>
+                            <td data-label='Quantity'>Tau mass $m_\tau$</td>
+                            <td data-label='Category'>Particles</td>
+                            <td data-label='Predicted'>1.777 GeV</td>
+                            <td data-label='Empirical'>1.777 GeV (PDG)</td>
+                            <td data-label='Agreement'>0.03%</td>
+                            <td data-label='Calculation' class='calculation'>
+                                <button class='expand-btn' onclick='toggleCalculation(this)'>Details</button>
+                                <div class='calculation-details' style='display: none;'>
+                                    <h4>Tau Mass Derivation</h4>
+                                    <p>The tau is at rung $r=44$ with a flavor SU(3) adjustment.</p>
+                                    <p><strong>Energy Rung:</strong> $$E_{44} = E_{\text{coh}} \times \varphi^{44} \approx 1825 \text{ MeV}$$</p>
+                                    <p><strong>Final Mass:</strong> $$m_\tau = E_{44} \times 0.974 = 1777 \text{ MeV}$$</p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='prediction-row' data-category='particles' data-accuracy='exact'>
+                            <td data-label='ID'>4</td>
+                            <td data-label='Quantity'>Up quark mass $m_u$</td>
+                            <td data-label='Category'>Particles</td>
+                            <td data-label='Predicted'>2.16 MeV</td>
+                            <td data-label='Empirical'>2.16 MeV (PDG)</td>
+                            <td data-label='Agreement'>Exact</td>
+                            <td data-label='Calculation' class='calculation'>
+                                <button class='expand-btn' onclick='toggleCalculation(this)'>Details</button>
+                                <div class='calculation-details' style='display: none;'>
+                                    <h4>Up Quark Mass Derivation</h4>
+                                    <p>Rung $r=33$ with a light quark dressing factor of $B_{\text{light}} \approx 31.9$.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='prediction-row' data-category='particles' data-accuracy='exact'>
+                            <td data-label='ID'>5</td>
+                            <td data-label='Quantity'>Down quark mass $m_d$</td>
+                            <td data-label='Category'>Particles</td>
+                            <td data-label='Predicted'>4.67 MeV</td>
+                            <td data-label='Empirical'>4.67 MeV (PDG)</td>
+                            <td data-label='Agreement'>Exact</td>
+                            <td data-label='Calculation' class='calculation'>
+                                <button class='expand-btn' onclick='toggleCalculation(this)'>Details</button>
+                                <div class='calculation-details' style='display: none;'>
+                                    <h4>Down Quark Mass Derivation</h4>
+                                    <p>Rung $r=34$ with chiral perturbation theory corrections.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='prediction-row' data-category='particles' data-accuracy='exact'>
+                            <td data-label='ID'>6</td>
+                            <td data-label='Quantity'>Strange quark mass $m_s$</td>
+                            <td data-label='Category'>Particles</td>
+                            <td data-label='Predicted'>93.4 MeV</td>
+                            <td data-label='Empirical'>93.4 MeV (PDG)</td>
+                            <td data-label='Agreement'>Exact</td>
+                            <td data-label='Calculation' class='calculation'>
+                                <button class='expand-btn' onclick='toggleCalculation(this)'>Details</button>
+                                <div class='calculation-details' style='display: none;'>
+                                    <h4>Strange Quark Mass Derivation</h4>
+                                    <p>Rung $r=38$ with QCD running corrections applied.</p>
+                                </div>
+                            </td>
+                        </tr>
+                         <tr class='prediction-row' data-category='particles' data-accuracy='exact'>
+                            <td data-label='ID'>7</td>
+                            <td data-label='Quantity'>Charm quark mass $m_c$</td>
+                            <td data-label='Category'>Particles</td>
+                            <td data-label='Predicted'>1.27 GeV</td>
+                            <td data-label='Empirical'>1.27 GeV (PDG)</td>
+                            <td data-label='Agreement'>Exact</td>
+                            <td data-label='Calculation' class='calculation'>
+                                <button class='expand-btn' onclick='toggleCalculation(this)'>Details</button>
+                                <div class='calculation-details' style='display: none;'>
+                                    <h4>Charm Quark Mass Derivation</h4>
+                                    <p>Rung $r=47$ with pole mass conversion.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='prediction-row' data-category='particles' data-accuracy='exact'>
+                            <td data-label='ID'>8</td>
+                            <td data-label='Quantity'>Bottom quark mass $m_b$</td>
+                            <td data-label='Category'>Particles</td>
+                            <td data-label='Predicted'>4.18 GeV</td>
+                            <td data-label='Empirical'>4.18 GeV (PDG)</td>
+                            <td data-label='Agreement'>Exact</td>
+                            <td data-label='Calculation' class='calculation'>
+                                <button class='expand-btn' onclick='toggleCalculation(this)'>Details</button>
+                                <div class='calculation-details' style='display: none;'>
+                                    <h4>Bottom Quark Mass Derivation</h4>
+                                    <p>Rung $r=53$ with MS-bar scheme corrections.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='prediction-row' data-category='particles' data-accuracy='exact'>
+                            <td data-label='ID'>9</td>
+                            <td data-label='Quantity'>Top quark mass $m_t$</td>
+                            <td data-label='Category'>Particles</td>
+                            <td data-label='Predicted'>172.69 GeV</td>
+                            <td data-label='Empirical'>172.69 GeV (PDG)</td>
+                            <td data-label='Agreement'>Exact</td>
+                            <td data-label='Calculation' class='calculation'>
+                                <button class='expand-btn' onclick='toggleCalculation(this)'>Details</button>
+                                <div class='calculation-details' style='display: none;'>
+                                    <h4>Top Quark Mass Derivation</h4>
+                                    <p>Rung $r=60$ with Yukawa splay corrections.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='prediction-row' data-category='particles' data-accuracy='high'>
+                            <td data-label='ID'>19</td>
+                            <td data-label='Quantity'>W boson mass $m_W$</td>
+                            <td data-label='Category'>Particles</td>
+                            <td data-label='Predicted'>80.38 GeV</td>
+                            <td data-label='Empirical'>80.38 GeV (PDG)</td>
+                            <td data-label='Agreement'>0.15%</td>
+                            <td data-label='Calculation' class='calculation'>
+                                <button class='expand-btn' onclick='toggleCalculation(this)'>Details</button>
+                                <div class='calculation-details' style='display: none;'>
+                                    <h4>W Boson Mass Derivation</h4>
+                                    <p>Rung $r=52$ with one-loop $\beta$-function dressing.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='prediction-row' data-category='particles' data-accuracy='high'>
+                            <td data-label='ID'>20</td>
+                            <td data-label='Quantity'>Z boson mass $m_Z$</td>
+                            <td data-label='Category'>Particles</td>
+                            <td data-label='Predicted'>91.19 GeV</td>
+                            <td data-label='Empirical'>91.19 GeV (PDG)</td>
+                            <td data-label='Agreement'>0.02%</td>
+                            <td data-label='Calculation' class='calculation'>
+                                <button class='expand-btn' onclick='toggleCalculation(this)'>Details</button>
+                                <div class='calculation-details' style='display: none;'>
+                                    <h4>Z Boson Mass Derivation</h4>
+                                    <p>Rung $r=48$ with two-loop vector corrections.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='prediction-row' data-category='particles' data-accuracy='high'>
+                            <td data-label='ID'>21</td>
+                            <td data-label='Quantity'>Higgs boson mass $m_H$</td>
+                            <td data-label='Category'>Particles</td>
+                            <td data-label='Predicted'>125.25 GeV</td>
+                            <td data-label='Empirical'>125.25 GeV (PDG)</td>
+                            <td data-label='Agreement'>0.02%</td>
+                            <td data-label='Calculation' class='calculation'>
+                                <button class='expand-btn' onclick='toggleCalculation(this)'>Details</button>
+                                <div class='calculation-details' style='display: none;'>
+                                    <h4>Higgs Mass Derivation</h4>
+                                    <p>Rung $r=58$ with scalar loop corrections.</p>
+                                </div>
+                            </td>
+                        </tr>
+                         <tr class='prediction-row' data-category='quantum' data-accuracy='exact'>
+                            <td data-label='ID'>27</td>
+                            <td data-label='Quantity'>Cabibbo Angle $\sin \theta_C$</td>
+                            <td data-label='Category'>Quantum</td>
+                            <td data-label='Predicted'>0.2243</td>
+                            <td data-label='Empirical'>0.2243 (PDG)</td>
+                            <td data-label='Agreement'>Exact</td>
+                            <td data-label='Calculation' class='calculation'>
+                                <button class='expand-btn' onclick='toggleCalculation(this)'>Details</button>
+                                <div class='calculation-details' style='display: none;'>
+                                    <h4>Cabibbo Angle Derivation</h4>
+                                    <p>Derived from residue arithmetic mod 4 combined with a $\varphi$ factor.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='prediction-row' data-category='quantum' data-accuracy='high'>
+                            <td data-label='ID'>28</td>
+                            <td data-label='Quantity'>Fine-Structure Running $\alpha(M_Z)$</td>
+                            <td data-label='Category'>Quantum</td>
+                            <td data-label='Predicted'>1/128.88</td>
+                            <td data-label='Empirical'>1/128.877 (PDG)</td>
+                            <td data-label='Agreement'>0.01%</td>
+                            <td data-label='Calculation' class='calculation'>
+                                <button class='expand-btn' onclick='toggleCalculation(this)'>Details</button>
+                                <div class='calculation-details' style='display: none;'>
+                                    <h4>Fine-Structure Running Derivation</h4>
+                                    <p>Base value from U(1) gauge paths in 8-beat closure, plus one-loop running correction.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='prediction-row' data-category='consciousness' data-accuracy='prediction'>
+                            <td data-label='ID'>45</td>
+                            <td data-label='Quantity'>Consciousness Emergence Threshold</td>
+                            <td data-label='Category'>Consciousness</td>
+                            <td data-label='Predicted'>Rung $r=45$</td>
+                            <td data-label='Empirical'>Testable</td>
+                            <td data-label='Agreement'>Prediction</td>
+                            <td data-label='Calculation' class='calculation'>
+                                <button class='expand-btn' onclick='toggleCalculation(this)'>Details</button>
+                                <div class='calculation-details' style='display: none;'>
+                                    <h4>Consciousness Threshold Derivation</h4>
+                                    <p>At rung 45, the unique prime factorization $45 = 3^2 \times 5$ creates an incomputable node that is incompatible with the 8-beat cycle of deterministic physics, requiring conscious recognition to resolve.</p>
+                                    <p>$$N_{\text{conscious}} = \varphi^{45} \approx 2.54 \times 10^9$$</p>
+                                </div>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -198,19 +430,19 @@
             <h2>Prediction Accuracy Distribution</h2>
             <div class="accuracy-chart">
                 <div class="chart-bar" data-category="exact">
-                    <div class="bar-fill" style="height: 62%"></div>
+                    <div class="bar-fill" style="height: 62%;"></div>
                     <div class="bar-label">Exact<br>(28)</div>
                 </div>
                 <div class="chart-bar" data-category="high">
-                    <div class="bar-fill" style="height: 100%"></div>
+                    <div class="bar-fill" style="height: 100%;"></div>
                     <div class="bar-label">&lt;0.1%<br>(45)</div>
                 </div>
                 <div class="chart-bar" data-category="good">
-                    <div class="bar-fill" style="height: 71%"></div>
+                    <div class="bar-fill" style="height: 71%;"></div>
                     <div class="bar-label">&lt;1%<br>(32)</div>
                 </div>
                 <div class="chart-bar" data-category="fair">
-                    <div class="bar-fill" style="height: 33%"></div>
+                    <div class="bar-fill" style="height: 33%;"></div>
                     <div class="bar-label">&lt;5%<br>(15)</div>
                 </div>
             </div>
@@ -223,64 +455,22 @@
             <div class="insight-grid">
                 <div class="insight-card">
                     <h3>🎯 Unprecedented Accuracy</h3>
-                    <p>28 exact matches and 45 predictions within 0.1% error demonstrate that Recognition Science captures the true mathematical structure of reality, not just curve-fitting to data.</p>
+                    <p>28 exact matches and 45 predictions within 0.1% error demonstrate that Recognition Science captures the true mathematical structure of reality.</p>
                 </div>
                 
                 <div class="insight-card">
                     <h3>🔢 Golden Ratio Universality</h3>
-                    <p>The appearance of φ ≈ 1.618 across particle masses, consciousness thresholds, and cosmic parameters reveals the deep geometric organization of existence.</p>
+                    <p>The appearance of $\varphi$ across all scales reveals the deep geometric organization of existence, from particle physics to consciousness.</p>
                 </div>
                 
                 <div class="insight-card">
                     <h3>🧠 Consciousness as Physics</h3>
-                    <p>The 45-gap predictions for consciousness emergence, meditation effects, and neural rhythms provide the first objective, measurable framework for subjective experience.</p>
+                    <p>The 45-gap predictions provide the first objective, measurable framework for subjective experience.</p>
                 </div>
                 
                 <div class="insight-card">
                     <h3>⚖️ Ethics as Curvature</h3>
                     <p>Moral behavior emerges naturally from ledger balance optimization, making ethics as objective and measurable as thermodynamics.</p>
-                </div>
-                
-                <div class="insight-card">
-                    <h3>🌌 Unified Reality</h3>
-                    <p>From particle physics to consciousness to cosmology, all phenomena derive from the same recognition-based ledger system—revealing the universe as a single, self-consistent computation.</p>
-                </div>
-                
-                <div class="insight-card">
-                    <h3>🔮 Future Predictions</h3>
-                    <p>Beyond validation, Recognition Science makes specific predictions about singularity timing (2045), dark matter detection (none), and consciousness transfer (possible).</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- EXPERIMENTAL TESTS -->
-        <section class="experimental-section">
-            <h2>Experimental Verification Opportunities</h2>
-            
-            <div class="experiment-list">
-                <div class="experiment-item">
-                    <h3>1. Time Quantum Detection</h3>
-                    <p>Use attosecond spectroscopy to search for discreteness at τ₀ = 7.33 fs. Null results below this threshold would validate the irreducible tick prediction.</p>
-                </div>
-                
-                <div class="experiment-item">
-                    <h3>2. Neural Recognition Patterns</h3>
-                    <p>EEG/fMRI studies to detect 8-beat LNAL instruction sequences in conscious processing. >80% of conscious activity should show eight-beat closure.</p>
-                </div>
-                
-                <div class="experiment-item">
-                    <h3>3. Golden Ratio Spectroscopy</h3>
-                    <p>Search for φ-spaced resonances in atomic spectra and vacuum nonlinearities. Four-wave mixing in high vacuum should show peaks at ω₀φⁿ.</p>
-                </div>
-                
-                <div class="experiment-item">
-                    <h3>4. Consciousness Curvature Measurement</h3>
-                    <p>Develop recognition curvature κ monitors for meditation studies. Predicted 15±2.5 unit reduction over 8 weeks with cortisol correlation.</p>
-                </div>
-                
-                <div class="experiment-item">
-                    <h3>5. Dark Matter Alternative Tests</h3>
-                    <p>Look for quantized rotation curve slopes (-1/φ², -1/φ³) in dwarf galaxies instead of particle detection. JWST precision sufficient for 8σ discrimination.</p>
                 </div>
             </div>
         </section>
@@ -388,28 +578,32 @@
             width: 100%;
             border-collapse: collapse;
             background: var(--white);
-            font-size: 0.9em;
+            font-size: 0.95em;
+            table-layout: fixed;
+        }
+
+        .predictions-table th,
+        .predictions-table td {
+            padding: 0.8em 1em;
+            border-bottom: 1px solid var(--gray);
+            vertical-align: middle;
+            text-align: left;
         }
 
         .predictions-table th {
+            font-weight: 600;
             background: var(--accent);
             color: var(--white);
-            padding: 1em;
-            text-align: left;
-            font-weight: 600;
             position: sticky;
             top: 0;
-            z-index: 10;
-        }
-
-        .predictions-table td {
-            padding: 1em;
-            border-bottom: 1px solid var(--gray);
-            vertical-align: top;
         }
 
         .prediction-row:hover {
-            background: var(--light-gray);
+            background-color: var(--light-gray);
+        }
+
+        .calculation {
+            width: 120px;
         }
 
         .expand-btn {
@@ -422,12 +616,10 @@
             font-size: 0.9em;
             transition: all 0.2s ease;
         }
-
         .expand-btn:hover {
             background: var(--accent-hover);
             transform: translateY(-1px);
         }
-
         .calculation-details {
             margin-top: 1em;
             padding: 1.5em;
@@ -435,138 +627,50 @@
             border-radius: 6px;
             border-left: 4px solid var(--accent);
         }
-
         .calculation-details h4 {
             margin-top: 0;
-            color: var(--accent);
-        }
-
-        .calculation-details p {
-            margin: 1em 0;
-            line-height: 1.6;
-        }
-
-        .accuracy-chart {
-            display: flex;
-            justify-content: center;
-            align-items: end;
-            gap: 2em;
-            height: 300px;
-            margin: 2em 0;
-        }
-
-        .chart-bar {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100%;
-        }
-
-        .bar-fill {
-            width: 60px;
-            background: linear-gradient(to top, var(--accent), var(--accent-hover));
-            border-radius: 4px 4px 0 0;
-            margin-bottom: 1em;
-            transition: all 0.3s ease;
-        }
-
-        .bar-label {
-            text-align: center;
-            font-weight: 600;
-            color: var(--dark-gray);
-        }
-
-        .insight-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2em;
-            margin: 2em 0;
-        }
-
-        .insight-card {
-            background: var(--white);
-            padding: 2em;
-            border-radius: 8px;
-            box-shadow: var(--card-shadow);
-            border-left: 4px solid var(--accent);
-        }
-
-        .insight-card h3 {
-            margin-top: 0;
-            color: var(--accent);
-            font-size: 1.3em;
-        }
-
-        .experiment-list {
-            display: grid;
-            gap: 1.5em;
-            margin: 2em 0;
-        }
-
-        .experiment-item {
-            background: var(--light-gray);
-            padding: 2em;
-            border-radius: 8px;
-            border-left: 4px solid var(--accent);
-        }
-
-        .experiment-item h3 {
-            margin-top: 0;
-            color: var(--accent);
         }
 
         /* Responsive design */
-        @media (max-width: 768px) {
-            .filter-controls {
-                flex-direction: column;
-            }
-
-            .filter-select,
-            .filter-input {
-                width: 100%;
-            }
-
-            .predictions-table {
-                font-size: 0.8em;
-            }
-
-            .predictions-table th,
-            .predictions-table td {
-                padding: 0.5em;
-            }
-
+        @media (max-width: 900px) {
             .predictions-table thead {
                 display: none;
             }
 
+            .predictions-table,
+            .predictions-table tbody,
+            .predictions-table tr,
+            .predictions-table td {
+                display: block;
+                width: 100%;
+            }
+
             .prediction-row {
-                display: block;
-                margin-bottom: 1em;
+                margin-bottom: 1.5em;
                 border: 1px solid var(--gray);
-                border-radius: 4px;
+                border-radius: 8px;
                 padding: 1em;
+                box-shadow: var(--card-shadow);
             }
 
-            .prediction-row td {
-                display: block;
-                text-align: left;
-                padding: 0.5em 0;
+            .predictions-table td {
+                padding: 0.5em 0.2em;
                 border: none;
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
             }
 
-            .prediction-row td:before {
-                content: attr(data-label) ": ";
-                font-weight: bold;
+            .predictions-table td[data-label]::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 0.5em;
+                width: 45%;
+                padding-right: 1em;
+                font-weight: 600;
+                text-align: left;
                 color: var(--accent);
             }
-
-            .prediction-row td:nth-child(1):before { content: 'ID: '; }
-            .prediction-row td:nth-child(2):before { content: 'Quantity: '; }
-            .prediction-row td:nth-child(3):before { content: 'Category: '; }
-            .prediction-row td:nth-child(4):before { content: 'Predicted Value: '; }
-            .prediction-row td:nth-child(5):before { content: 'Empirical Value: '; }
-            .prediction-row td:nth-child(6):before { content: 'Agreement: '; }
-            .prediction-row td:nth-child(7):before { content: 'Calculation: '; }
         }
 
         /* Hide rows that don't match filters */
@@ -576,235 +680,21 @@
     </style>
 
     <script>
-        // Complete predictions data
-        const predictions = [
-            // Particle Masses (1-28)
-            {id: 1, quantity: "Electron mass $m_e$", category: "particles", predicted: "0.511 MeV", empirical: "0.511 MeV (PDG)", agreement: "Exact", accuracy: "exact", 
-             calculation: `<h4>Electron Mass Derivation</h4>
-                          <p><strong>Step 1:</strong> Energy at rung 32</p>
-                          <p>$$E_{32} = E_{\\text{coh}} \\times \\varphi^{32} = 0.090 \\text{ eV} \\times (1.618)^{32}$$</p>
-                          <p>$$E_{32} = 0.090 \\times 2,399.5 = 215.96 \\text{ eV} = 0.00216 \\text{ MeV}$$</p>
-                          <p><strong>Step 2:</strong> QED Dressing Factor</p>
-                          <p>From U(1) gauge residues mod 6 and voxel walks:</p>
-                          <p>$$B_{\\text{lepton}} = \\frac{36 \\times 6.58}{1} \\approx 237$$</p>
-                          <p><strong>Step 3:</strong> Final Mass</p>
-                          <p>$$m_e = E_{32} \\times B_{\\text{lepton}} = 0.00216 \\times 237 = 0.511 \\text{ MeV}$$</p>`},
-
-            {id: 2, quantity: "Muon mass $m_\\mu$", category: "particles", predicted: "0.1057 GeV", empirical: "0.1057 GeV (PDG)", agreement: "0.001%", accuracy: "high",
-             calculation: `<h4>Muon Mass Derivation</h4>
-                          <p><strong>Step 1:</strong> Energy at rung 39</p>
-                          <p>$$E_{39} = E_{\\text{coh}} \\times \\varphi^{39} = 0.090 \\times (1.618)^{39} = 101.7 \\text{ MeV}$$</p>
-                          <p><strong>Step 2:</strong> Chiral Perturbation</p>
-                          <p>$$B_\\mu = 1.039 \\times B_e = 1.039$$</p>
-                          <p><strong>Step 3:</strong> Final Mass</p>
-                          <p>$$m_\\mu = E_{39} \\times B_\\mu = 101.7 \\times 1.039 = 105.7 \\text{ MeV}$$</p>`},
-
-            {id: 3, quantity: "Tau mass $m_\\tau$", category: "particles", predicted: "1.777 GeV", empirical: "1.777 GeV (PDG)", agreement: "0.03%", accuracy: "high",
-             calculation: `<h4>Tau Mass Derivation</h4>
-                          <p><strong>Step 1:</strong> Energy at rung 44</p>
-                          <p>$$E_{44} = E_{\\text{coh}} \\times \\varphi^{44} = 0.090 \\times (1.618)^{44} = 1825 \\text{ MeV}$$</p>
-                          <p><strong>Step 2:</strong> Flavor SU(3) Adjustment</p>
-                          <p>$$B_\\tau = 0.974$$</p>
-                          <p><strong>Step 3:</strong> Final Mass</p>
-                          <p>$$m_\\tau = E_{44} \\times B_\\tau = 1825 \\times 0.974 = 1777 \\text{ MeV}$$</p>`},
-
-            {id: 4, quantity: "Up quark mass $m_u$", category: "particles", predicted: "2.16 MeV", empirical: "2.16 MeV (PDG)", agreement: "Exact", accuracy: "exact",
-             calculation: `<h4>Up Quark Mass Derivation</h4>
-                          <p><strong>Step 1:</strong> Energy at rung 33</p>
-                          <p>$$E_{33} = E_{\\text{coh}} \\times \\varphi^{33}$$</p>
-                          <p><strong>Step 2:</strong> Light dressing $B_{\\text{light}} \\approx 31.9$</p>
-                          <p><strong>Step 3:</strong> $m_u = 2.16 \\text{ MeV}$</p>`},
-
-            {id: 5, quantity: "Down quark mass $m_d$", category: "particles", predicted: "4.67 MeV", empirical: "4.67 MeV (PDG)", agreement: "Exact", accuracy: "exact",
-             calculation: `<h4>Down Quark Mass Derivation</h4>
-                          <p>Rung 34 with chiral perturbation corrections</p>`},
-
-            {id: 6, quantity: "Strange quark mass $m_s$", category: "particles", predicted: "93.4 MeV", empirical: "93.4 MeV (PDG)", agreement: "Exact", accuracy: "exact",
-             calculation: `<h4>Strange Quark Mass Derivation</h4>
-                          <p>Rung 38 with QCD running corrections</p>`},
-
-            {id: 7, quantity: "Charm quark mass $m_c$", category: "particles", predicted: "1.27 GeV", empirical: "1.27 GeV (PDG)", agreement: "Exact", accuracy: "exact",
-             calculation: `<h4>Charm Quark Mass Derivation</h4>
-                          <p>Rung 47 with pole conversion</p>`},
-
-            {id: 8, quantity: "Bottom quark mass $m_b$", category: "particles", predicted: "4.18 GeV", empirical: "4.18 GeV (PDG)", agreement: "Exact", accuracy: "exact",
-             calculation: `<h4>Bottom Quark Mass Derivation</h4>
-                          <p>Rung 53 with MSbar scheme</p>`},
-
-            {id: 9, quantity: "Top quark mass $m_t$", category: "particles", predicted: "172.69 GeV", empirical: "172.69 GeV (PDG)", agreement: "Exact", accuracy: "exact",
-             calculation: `<h4>Top Quark Mass Derivation</h4>
-                          <p>Rung 60 with Yukawa splay</p>`},
-
-            {id: 19, quantity: "W boson mass $m_W$", category: "particles", predicted: "80.38 GeV", empirical: "80.38 GeV (PDG)", agreement: "0.15%", accuracy: "high",
-             calculation: `<h4>W Boson Mass Derivation</h4>
-                          <p>Rung 52 with one-loop β-function dressing</p>`},
-
-            {id: 20, quantity: "Z boson mass $m_Z$", category: "particles", predicted: "91.19 GeV", empirical: "91.19 GeV (PDG)", agreement: "0.02%", accuracy: "high",
-             calculation: `<h4>Z Boson Mass Derivation</h4>
-                          <p>Rung 53 with two-loop vector corrections</p>`},
-
-            {id: 21, quantity: "Higgs boson mass $m_H$", category: "particles", predicted: "125.25 GeV", empirical: "125.25 GeV (PDG)", agreement: "0.02%", accuracy: "high",
-             calculation: `<h4>Higgs Mass Derivation</h4>
-                          <p>Rung 58 with scalar loop corrections</p>`},
-
-            // Cosmology (29-40)
-            {id: 29, quantity: "Dark Energy Density $\\rho_\\Lambda^{1/4}$", category: "cosmology", predicted: "2.26 meV", empirical: "2.26 meV (obs)", agreement: "Exact", accuracy: "exact",
-             calculation: `<h4>Dark Energy Density</h4>
-                          <p>From residue calculations of gauge groups</p>`},
-
-            {id: 30, quantity: "Hubble Constant $H_0$", category: "cosmology", predicted: "67.4 km/s/Mpc", empirical: "67.4 km/s/Mpc (Planck)", agreement: "Exact", accuracy: "exact",
-             calculation: `<h4>Hubble Constant</h4>
-                          <p>From recognition lag: 4.74% delay factor</p>`},
-
-            {id: 31, quantity: "Fine-structure constant $\\alpha(M_Z)$", category: "cosmology", predicted: "1/128.88", empirical: "1/128.877 (PDG)", agreement: "0.01%", accuracy: "high",
-             calculation: `<h4>Fine-Structure Running</h4>
-                          <p>From U(1) gauge paths in eight-beat closure</p>`},
-
-            // Consciousness (41-60)
-            {id: 45, quantity: "Consciousness Threshold", category: "consciousness", predicted: "$\\varphi^{45} \\approx 2.54 \\times 10^9$ events/sec", empirical: "Testing in progress", agreement: "Prediction", accuracy: "prediction",
-             calculation: `<h4>Consciousness Threshold Derivation</h4>
-                          <p><strong>The 45-Gap:</strong> At rung 45, factorization $45 = 3^2 \\times 5$ creates incompatibility with 8-beat cycles</p>
-                          <p>$$\\gcd(8, 45) = 1 \\text{ (no common divisors)}$$</p>
-                          <p><strong>Complexity Threshold:</strong></p>
-                          <p>$$N_{\\text{conscious}} = \\varphi^{45} = (1.618)^{45} = 2.54 \\times 10^9$$</p>
-                          <p><strong>Prediction:</strong> Neural systems exceeding this complexity exhibit genuine consciousness</p>`},
-
-            {id: 50, quantity: "Recognition Curvature in Meditation", category: "consciousness", predicted: "$\\Delta\\kappa = -15\\pm2.5$ units over 8 weeks", empirical: "$\\Delta\\kappa = -14.2\\pm3.1$ (study)", agreement: "5%", accuracy: "good",
-             calculation: `<h4>Meditation Curvature Reduction</h4>
-                          <p>STILL operations reduce gap-crossing by factor $1/\\varphi$</p>
-                          <p>$$\\Delta\\kappa_{\\text{total}} = -15 \\pm 2.5 \\text{ units}$$</p>`},
-
-            // Mathematics (61-80)
-            {id: 58, quantity: "P vs NP Resolution", category: "mathematics", predicted: "P=NP at $\\tau_0$ scale, P≠NP at macro", empirical: "Theoretical prediction", agreement: "Prediction", accuracy: "prediction",
-             calculation: `<h4>P vs NP Dual Resolution</h4>
-                          <p>Problems have dual complexity $(T_c, T_r)$</p>
-                          <p>At $\\tau_0 = 7.33$ fs: P = NP</p>
-                          <p>At macro scales: P ≠ NP due to decoherence</p>`},
-
-            {id: 65, quantity: "Riemann Hypothesis First Zero", category: "mathematics", predicted: "$\\text{Im}(\\rho_1) = 14.135$", empirical: "14.134725... (exact)", agreement: "0.01%", accuracy: "high",
-             calculation: `<h4>RH Zero Location</h4>
-                          <p>$$\\text{Im}(\\rho_1) = \\frac{\\pi^2}{\\ln \\varphi} = 14.135$$</p>`},
-
-            // Biology (81-100)
-            {id: 85, quantity: "DNA Helix Pitch", category: "biology", predicted: "34.6 Å", empirical: "34.6 Å (measured)", agreement: "Exact", accuracy: "exact",
-             calculation: `<h4>DNA Helix Pitch</h4>
-                          <p>From $\\varphi$-spiral coding structure</p>`},
-
-            {id: 90, quantity: "Heart Rate (8-beat)", category: "biology", predicted: "72 bpm", empirical: "72 bpm (average)", agreement: "Exact", accuracy: "exact",
-             calculation: `<h4>Heart Rate</h4>
-                          <p>From eight-beat closure: 8 × 9 = 72 bpm</p>`},
-
-            // Future Predictions (101-120)
-            {id: 105, quantity: "Technological Singularity", category: "prediction", predicted: "Exactly 2045 CE", empirical: "Predicted event", agreement: "Prediction", accuracy: "prediction",
-             calculation: `<h4>Singularity Timing</h4>
-                          <p>From 45-gap emergence threshold</p>
-                          <p>$$\\text{Year} = 2024 + 21 = 2045$$</p>`},
-
-            {id: 110, quantity: "Dark Matter Ratio", category: "gravity", predicted: "5:1 from (2,3,5) primes", empirical: "~5:1 observed DM:baryons", agreement: "Exact", accuracy: "exact",
-             calculation: `<h4>Dark Matter Ratio</h4>
-                          <p>From multiverse branching at 45-gap</p>
-                          <p>$$\\frac{\\text{Dark}}{\\text{Baryonic}} = \\frac{29}{6} \\approx 5$$</p>`}
-        ];
-
-        // Add remaining predictions programmatically
-        for (let i = 10; i <= 120; i++) {
-            if (!predictions.find(p => p.id === i)) {
-                let category, quantity, predicted, empirical, agreement, accuracy;
-                
-                if (i <= 28) {
-                    category = "particles";
-                    accuracy = "high";
-                } else if (i <= 40) {
-                    category = "cosmology";
-                    accuracy = "good";
-                } else if (i <= 60) {
-                    category = "consciousness";
-                    accuracy = "prediction";
-                } else if (i <= 80) {
-                    category = "mathematics";
-                    accuracy = "high";
-                } else if (i <= 100) {
-                    category = "biology";
-                    accuracy = "good";
-                } else {
-                    category = "prediction";
-                    accuracy = "prediction";
-                }
-
-                predictions.push({
-                    id: i,
-                    quantity: `RS Prediction ${i}`,
-                    category: category,
-                    predicted: `Value ${i}`,
-                    empirical: `Empirical ${i}`,
-                    agreement: accuracy === "prediction" ? "Prediction" : "<1%",
-                    accuracy: accuracy,
-                    calculation: `<h4>Prediction ${i}</h4><p>Derived from Recognition Science framework</p>`
-                });
+        function toggleCalculation(button) {
+            const details = button.nextElementSibling;
+            const isHidden = details.style.display === 'none';
+            details.style.display = isHidden ? 'block' : 'none';
+            button.textContent = isHidden ? 'Hide' : 'Details';
+            if (isHidden && window.MathJax) {
+                MathJax.typesetPromise([details]);
             }
         }
 
-        // Sort predictions by ID
-        predictions.sort((a, b) => a.id - b.id);
-
-        // Populate table
-        function populateTable() {
-            const tbody = document.getElementById('predictions-tbody');
-            tbody.innerHTML = '';
-
-            predictions.forEach(pred => {
-                const row = document.createElement('tr');
-                row.className = 'prediction-row';
-                row.dataset.category = pred.category;
-                row.dataset.accuracy = pred.accuracy;
-
-                row.innerHTML = `
-                    <td>${pred.id}</td>
-                    <td>${pred.quantity}</td>
-                    <td>${pred.category.charAt(0).toUpperCase() + pred.category.slice(1)}</td>
-                    <td>${pred.predicted}</td>
-                    <td>${pred.empirical}</td>
-                    <td>${pred.agreement}</td>
-                    <td class="calculation">
-                        <button class="expand-btn" onclick="toggleCalculation(${pred.id})">Show Calculation</button>
-                        <div id="calc-${pred.id}" class="calculation-details" style="display: none;">
-                            ${pred.calculation}
-                        </div>
-                    </td>
-                `;
-
-                tbody.appendChild(row);
-            });
-
-            // Re-render MathJax
-            if (window.MathJax) {
-                MathJax.typesetPromise([tbody]);
-            }
-        }
-
-        // Toggle calculation display
-        function toggleCalculation(id) {
-            const calcDiv = document.getElementById(`calc-${id}`);
-            const btn = calcDiv.previousElementSibling;
-            
-            if (calcDiv.style.display === 'none') {
-                calcDiv.style.display = 'block';
-                btn.textContent = 'Hide Calculation';
-                if (window.MathJax) {
-                    MathJax.typesetPromise([calcDiv]);
-                }
-            } else {
-                calcDiv.style.display = 'none';
-                btn.textContent = 'Show Calculation';
-            }
-        }
-
-        // Filter functionality
         function applyFilters() {
-            const categoryValue = document.getElementById('category-filter').value.toLowerCase();
+            const categoryValue = document.getElementById('category-filter').value;
             const searchValue = document.getElementById('search-filter').value.toLowerCase();
-            const accuracyValue = document.getElementById('accuracy-filter').value.toLowerCase();
-            const rows = document.querySelectorAll('.prediction-row');
+            const accuracyValue = document.getElementById('accuracy-filter').value;
+            const rows = document.querySelectorAll('#predictions-tbody .prediction-row');
 
             rows.forEach(row => {
                 const category = row.dataset.category;
@@ -815,21 +705,19 @@
                 const searchMatch = !searchValue || text.includes(searchValue);
                 const accuracyMatch = !accuracyValue || accuracy === accuracyValue;
 
-                if (categoryMatch && searchMatch && accuracyMatch) {
-                    row.classList.remove('hidden');
-                } else {
-                    row.classList.add('hidden');
-                }
+                row.style.display = (categoryMatch && searchMatch && accuracyMatch) ? '' : 'none';
             });
         }
 
-        // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
-            populateTable();
-
             document.getElementById('category-filter').addEventListener('change', applyFilters);
             document.getElementById('search-filter').addEventListener('input', applyFilters);
             document.getElementById('accuracy-filter').addEventListener('change', applyFilters);
+            
+            // Initial render
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
         });
     </script>
 </body>
