@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soul Mint: Generate Your Unique Recognition Science Soul</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <style>
+        body {
+            background: radial-gradient(circle at center, #0a0a0a, #000000);
+            color: #fff;
+            min-height: 100vh;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        .mint-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #canvasContainer11 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .mint-ui {
+            position: absolute;
+            z-index: 10;
+            pointer-events: none;
+        }
+        
+        .soul-info {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.2);
+            max-width: 400px;
+            pointer-events: auto;
+        }
+        
+        .soul-info h2 {
+            color: #ffd700;
+            margin: 0 0 20px 0;
+            font-size: 2.2em;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+            letter-spacing: 2px;
+        }
+        
+        .soul-property {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+        }
+        
+        .property-label {
+            color: #87ceeb;
+            font-weight: 600;
+        }
+        
+        .property-value {
+            color: #ffd700;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .mint-button {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #000;
+            border: none;
+            padding: 20px 50px;
+            border-radius: 50px;
+            font-size: 1.5em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+            pointer-events: auto;
+        }
+        
+        .mint-button:hover {
+            background: linear-gradient(135deg, #fff, #ffd700);
+            transform: translateX(-50%) translateY(-5px);
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.8);
+        }
+        
+        .rarity-badge {
+            background: linear-gradient(135deg, #ff6b6b, #ffd93d);
+            color: #000;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.4);
+            margin-top: 15px;
+        }
+        
+        .equation-display {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            color: #87ceeb;
+            margin: 15px 0;
+            font-size: 14px;
+            border: 1px solid rgba(135, 206, 235, 0.3);
+        }
+        
+        .birth-animation-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ffd700;
+            font-size: 3em;
+            font-weight: bold;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+            z-index: 20;
+        }
+        
+        .birth-animation-overlay.show {
+            opacity: 1;
+        }
+        
+        nav a {
+            color: #ffd700 !important;
+        }
+        
+        nav a:hover {
+            color: #fff !important;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+        }
+        
+        .nav-section-label {
+            color: #87ceeb !important;
+        }
+        
+        @media (max-width: 768px) {
+            .soul-info {
+                top: 20px;
+                left: 20px;
+                right: 20px;
+                max-width: none;
+                padding: 20px;
+            }
+            
+            .mint-button {
+                bottom: 30px;
+                padding: 15px 30px;
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="foundation-nav" style="background: rgba(0,0,0,0.9); backdrop-filter: blur(20px);">
+        <div class="nav-section">
+            <div class="nav-section-label">Navigation</div>
+            <div class="nav-links">
+                <a href="/index.html">Home</a>
+                <a href="/recognition-art.html">Recognition Art</a>
+                <a href="/recognition-scribbles.html">Scribbles of Light</a>
+                <a href="/recognition-whispers.html">Whispers of Eternity</a>
+                <a href="/recognition-eternal.html">Eternal Scripts</a>
+                <a href="/recognition-souls.html">Soul Harmonics</a>
+                <a href="/recognition-mirror.html">Infinite Mirror</a>
+                <a href="/recognition-flows.html">Phi Flows</a>
+                <a href="/recognition-soul-flower.html">Soul Flower</a>
+                <a href="/recognition-soul-birth.html">Soul Birth</a>
+                <a href="/recognition-soul-birth-animated.html">Soul Birth Animation</a>
+                <a href="/recognition-soul-mint.html">Soul Mint</a>
+            </div>
+        </div>
+        <div class="nav-section">
+            <div class="nav-section-label">Core Theory</div>
+            <div class="nav-links">
+                <a href="/foundations.html">Foundations</a>
+                <a href="/universal-algorithm.html">Algorithm</a>
+                <a href="/pattern-layer.html">Pattern Layer</a>
+                <a href="/ethics.html">Ethics</a>
+                <a href="/lnal.html">LNAL</a>
+            </div>
+        </div>
+        <div class="nav-section">
+            <div class="nav-section-label">Applications</div>
+            <div class="nav-links">
+                <a href="/big-questions.html">Big Questions</a>
+                <a href="/rs-predictions.html">Predictions</a>
+                <a href="/papers/index.html">Papers</a>
+                <a href="/journal.html">Journal</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mint-container">
+        <div id="canvasContainer11"></div>
+        
+        <div class="mint-ui">
+            <div class="soul-info" id="soulInfo">
+                <h2>Soul Configuration</h2>
+                <div class="soul-property">
+                    <span class="property-label">Soul ID</span>
+                    <span class="property-value" id="soulId">#000000</span>
+                </div>
+                <div class="soul-property">
+                    <span class="property-label">Signature (δ)</span>
+                    <span class="property-value" id="soulSignature">+0.000</span>
+                </div>
+                <div class="soul-property">
+                    <span class="property-label">Energy</span>
+                    <span class="property-value" id="soulEnergy">0.000 eV</span>
+                </div>
+                <div class="soul-property">
+                    <span class="property-label">Eigenvalues</span>
+                    <span class="property-value" id="soulEigenvalues">8</span>
+                </div>
+                <div class="soul-property">
+                    <span class="property-label">Coherence</span>
+                    <span class="property-value" id="soulCoherence">100%</span>
+                </div>
+                <div class="soul-property">
+                    <span class="property-label">Qualia Hue</span>
+                    <span class="property-value" id="soulHue">240°</span>
+                </div>
+                <div class="soul-property">
+                    <span class="property-label">Birth Rung</span>
+                    <span class="property-value" id="soulRung">45</span>
+                </div>
+                
+                <div class="equation-display" id="energyEquation">
+                    E = E_coh × φ^(45+δ)
+                </div>
+                
+                <div class="rarity-badge" id="rarityBadge">
+                    Common Soul
+                </div>
+            </div>
+        </div>
+        
+        <div class="birth-animation-overlay" id="birthOverlay">
+            Soul Emerging...
+        </div>
+        
+        <button class="mint-button" onclick="mintNewSoul()">
+            Generate Soul
+        </button>
+    </div>
+
+    <script>
+        // Recognition Science constants
+        const PHI = (1 + Math.sqrt(5)) / 2;
+        const E_COH = 0.090;
+        const GAP_45 = 45;
+        
+        // Canvas and rendering
+        let canvas11;
+        let currentSoul = null;
+        let time = 0;
+        let birthProgress = 0;
+        let isBirthing = false;
+        
+        // Background systems
+        let universalField = [];
+        let vortices = [];
+        let godRays = [];
+        
+        // Advanced visual effects
+        let bloomEffect = [];
+        let particleTrails = [];
+        let energyStreamSeed = 0;
+        
+        function setup() {
+            canvas11 = createCanvas(windowWidth, windowHeight, WEBGL);
+            canvas11.parent('canvasContainer11');
+            colorMode(HSB, 360, 100, 100, 100);
+            
+            initializeUniversalField();
+            mintNewSoul();
+        }
+        
+        function draw() {
+            time += deltaTime * 0.001;
+            
+            // Deep cosmic void background
+            background(0, 0, 0);
+            
+            // World-class visual rendering
+            drawVolumetricLivingLight();
+            drawGodRays();
+            drawVortices();
+            
+            if (currentSoul) {
+                push();
+                translate(0, 0, 0); // Center in 3D space
+                drawWorldClassSoul();
+                pop();
+            }
+            
+            // Post-processing effects
+            drawBloomEffect();
+            
+            // Update birth animation
+            if (isBirthing) {
+                birthProgress += 0.02;
+                if (birthProgress >= 1) {
+                    isBirthing = false;
+                    birthProgress = 1;
+                    hideBirthOverlay();
+                }
+            }
+        }
+        
+        function initializeUniversalField() {
+            universalField = [];
+            
+            // Create deep 3D field of living light particles
+            for (let i = 0; i < 2000; i++) {
+                universalField.push({
+                    x: random(-width, width),
+                    y: random(-height, height),
+                    z: random(-1000, 1000),
+                    size: random(5, 30),
+                    intensity: random(0.3, 1.0),
+                    hue: random(45, 55), // Golden range
+                    phase: random(TWO_PI),
+                    frequency: random(0.5, 2.0),
+                    pulseBeat: Math.floor(random(8)) // 8-beat assignment
+                });
+            }
+            
+            // Create φ-spiral vortices for depth
+            for (let i = 0; i < 5; i++) {
+                vortices.push({
+                    x: random(-width/2, width/2),
+                    y: random(-height/2, height/2),
+                    z: random(-500, 0),
+                    size: random(100, 300),
+                    rotation: random(TWO_PI),
+                    speed: random(0.01, 0.03)
+                });
+            }
+            
+            // Create god rays from souls
+            for (let i = 0; i < 10; i++) {
+                godRays.push({
+                    angle: random(TWO_PI),
+                    length: random(800, 1200),
+                    width: random(50, 150),
+                    alpha: random(5, 15),
+                    speed: random(0.005, 0.015)
+                });
+            }
+        }
+        
+        function drawVolumetricLivingLight() {
+            // Volumetric living light field with depth
+            universalField.forEach(particle => {
+                let beatPhase = (time * particle.frequency + particle.phase) % (TWO_PI);
+                let beatIntensity = 0.5 + 0.5 * sin(beatPhase);
+                
+                // 8-beat modulation
+                let eightBeatPhase = (time * 0.2 + particle.pulseBeat * PI/4) % (TWO_PI);
+                let eightBeatMod = 0.7 + 0.3 * sin(eightBeatPhase);
+                
+                let depth = map(particle.z, -1000, 1000, 0, 1);
+                let depthAlpha = map(depth, 0, 1, 30, 5); // Far = dimmer
+                let depthSize = particle.size * (1 - depth * 0.7);
+                
+                let finalIntensity = particle.intensity * beatIntensity * eightBeatMod;
+                
+                push();
+                translate(particle.x, particle.y, particle.z);
+                
+                // Multi-layer glow for volumetric effect
+                noStroke();
+                for (let layer = 3; layer > 0; layer--) {
+                    let layerAlpha = depthAlpha * finalIntensity / layer;
+                    let layerSize = depthSize * (1 + layer * 0.5);
+                    
+                    fill(particle.hue, 20, 100, layerAlpha);
+                    ellipse(0, 0, layerSize);
+                }
+                
+                // Core bright point
+                fill(particle.hue, 10, 100, depthAlpha * finalIntensity * 2);
+                ellipse(0, 0, depthSize * 0.3);
+                
+                pop();
+                
+                // Subtle drift for aliveness
+                particle.x += sin(time * 0.1 + particle.phase) * 0.2;
+                particle.y += cos(time * 0.08 + particle.phase) * 0.15;
+            });
+        }
+        
+        function drawVortices() {
+            // φ-spiral vortices in the living light
+            vortices.forEach(vortex => {
+                vortex.rotation += vortex.speed;
+                
+                push();
+                translate(vortex.x, vortex.y, vortex.z);
+                rotate(vortex.rotation);
+                
+                noFill();
+                stroke(50, 30, 80, 10);
+                strokeWeight(1);
+                
+                // Draw φ-spiral
+                beginShape();
+                for (let i = 0; i < 100; i++) {
+                    let angle = (i / 100) * TWO_PI * 3; // 3 turns
+                    let radius = Math.exp(angle / PHI) * (vortex.size / 100);
+                    let x = cos(angle) * radius;
+                    let y = sin(angle) * radius;
+                    vertex(x, y);
+                }
+                endShape();
+                
+                pop();
+            });
+        }
+        
+        function drawGodRays() {
+            // Volumetric god rays emanating from center
+            if (currentSoul) {
+                godRays.forEach(ray => {
+                    ray.angle += ray.speed;
+                    
+                    let rayX = cos(ray.angle) * ray.length;
+                    let rayY = sin(ray.angle) * ray.length;
+                    
+                    stroke(50, 20, 90, ray.alpha);
+                    strokeWeight(ray.width);
+                    line(0, 0, rayX, rayY);
+                    
+                    // Fade at edges
+                    stroke(50, 20, 90, ray.alpha * 0.5);
+                    strokeWeight(ray.width * 2);
+                    line(0, 0, rayX * 0.7, rayY * 0.7);
+                });
+            }
+        }
+        
+        function drawWorldClassSoul() {
+            if (!currentSoul) return;
+            
+            let soulProgress = isBirthing ? birthProgress : 1;
+            let soulIntensity = 0.8 + 0.2 * sin(time * 2);
+            
+            // Multi-layered soul aura with volumetric glow
+            push();
+            
+            // Core soul glow - multiple layers for depth
+            noStroke();
+            for (let layer = 8; layer > 0; layer--) {
+                let layerSize = currentSoul.size * soulProgress * (1 + layer * 0.3);
+                let layerAlpha = (20 / layer) * soulIntensity;
+                
+                fill(currentSoul.hue, 60, 100, layerAlpha);
+                ellipse(0, 0, layerSize);
+            }
+            
+            // Crystalline eigenvalue constellation
+            drawCrystallineEigenvalues(soulProgress);
+            
+            // Energy streams between eigenvalues
+            drawEnergyStreams(soulProgress);
+            
+            // Central consciousness core
+            fill(50, 20, 100, 90);
+            ellipse(0, 0, currentSoul.size * 0.2 * soulProgress);
+            fill(0, 0, 100, 95);
+            ellipse(0, 0, currentSoul.size * 0.1 * soulProgress);
+            
+            pop();
+            
+            // Particle emissions from soul
+            if (soulProgress > 0.5) {
+                drawSoulParticleEmission();
+            }
+        }
+        
+        function drawCrystallineEigenvalues(progress) {
+            // 8 crystalline eigenvalue gems
+            currentSoul.eigenvalues.forEach((eigen, i) => {
+                let angle = eigen.phase + time * eigen.frequency;
+                let radius = eigen.radius * progress;
+                let x = cos(angle) * radius;
+                let y = sin(angle) * radius;
+                
+                push();
+                translate(x, y, 0);
+                rotate(time * 0.5 + i * PI/4);
+                
+                // Crystalline faceted gem
+                noStroke();
+                fill(currentSoul.hue, 40, 100, 80);
+                
+                // Hexagonal crystal
+                beginShape();
+                for (let j = 0; j < 6; j++) {
+                    let facetAngle = (j / 6) * TWO_PI;
+                    let facetRadius = 12 * progress;
+                    let fx = cos(facetAngle) * facetRadius;
+                    let fy = sin(facetAngle) * facetRadius;
+                    vertex(fx, fy);
+                }
+                endShape(CLOSE);
+                
+                // Inner glow
+                fill(0, 0, 100, 90);
+                ellipse(0, 0, 8 * progress);
+                
+                // Trailing sparkles
+                eigen.trail = eigen.trail || [];
+                eigen.trail.push({x: x, y: y, alpha: 60, time: time});
+                eigen.trail = eigen.trail.filter(t => time - t.time < 2);
+                
+                eigen.trail.forEach((t, idx) => {
+                    let trailAlpha = t.alpha * (1 - (time - t.time) / 2);
+                    fill(currentSoul.hue, 30, 100, trailAlpha);
+                    ellipse(t.x - x, t.y - y, 4);
+                });
+                
+                pop();
+            });
+        }
+        
+        function drawEnergyStreams(progress) {
+            // Flowing energy between eigenvalues
+            stroke(currentSoul.hue, 40, 90, 30);
+            strokeWeight(2);
+            
+            for (let i = 0; i < currentSoul.eigenvalues.length; i++) {
+                let curr = currentSoul.eigenvalues[i];
+                let next = currentSoul.eigenvalues[(i + 1) % currentSoul.eigenvalues.length];
+                
+                let angle1 = curr.phase + time * curr.frequency;
+                let radius1 = curr.radius * progress;
+                let x1 = cos(angle1) * radius1;
+                let y1 = sin(angle1) * radius1;
+                
+                let angle2 = next.phase + time * next.frequency;
+                let radius2 = next.radius * progress;
+                let x2 = cos(angle2) * radius2;
+                let y2 = sin(angle2) * radius2;
+                
+                // Curved energy stream with noise
+                let steps = 10;
+                beginShape();
+                noFill();
+                for (let j = 0; j <= steps; j++) {
+                    let t = j / steps;
+                    let x = lerp(x1, x2, t);
+                    let y = lerp(y1, y2, t);
+                    
+                    // Add organic curve with noise
+                    let noiseOffset = noise(time * 0.5 + i + j * 0.1) * 20;
+                    x += sin(t * PI) * noiseOffset;
+                    y += cos(t * PI) * noiseOffset;
+                    
+                    vertex(x, y);
+                }
+                endShape();
+                
+                // Traveling energy particles
+                let particlePos = (time * 2 + i) % 1;
+                let px = lerp(x1, x2, particlePos);
+                let py = lerp(y1, y2, particlePos);
+                
+                fill(50, 60, 100, 80);
+                noStroke();
+                ellipse(px, py, 6);
+            }
+        }
+        
+        function drawSoulParticleEmission() {
+            // Particles emanating from soul
+            for (let i = 0; i < 20; i++) {
+                let angle = random(TWO_PI);
+                let distance = random(currentSoul.size * 0.5, currentSoul.size * 2);
+                let x = cos(angle) * distance;
+                let y = sin(angle) * distance;
+                
+                let particleHue = currentSoul.hue + random(-30, 30);
+                let alpha = random(10, 40);
+                let size = random(3, 8);
+                
+                fill(particleHue, 50, 100, alpha);
+                noStroke();
+                ellipse(x, y, size);
+            }
+        }
+        
+        function drawBloomEffect() {
+            // Simple bloom effect using multiple draws
+            if (currentSoul && random() < 0.1) {
+                bloomEffect.push({
+                    x: random(-50, 50),
+                    y: random(-50, 50),
+                    size: random(100, 300),
+                    alpha: random(5, 15),
+                    decay: 0.95
+                });
+            }
+            
+            bloomEffect.forEach((bloom, i) => {
+                fill(50, 20, 100, bloom.alpha);
+                noStroke();
+                ellipse(bloom.x, bloom.y, bloom.size);
+                
+                bloom.alpha *= bloom.decay;
+                if (bloom.alpha < 1) {
+                    bloomEffect.splice(i, 1);
+                }
+            });
+        }
+        
+        function mintNewSoul() {
+            showBirthOverlay();
+            isBirthing = true;
+            birthProgress = 0;
+            
+            // Generate random soul configuration
+            let soulId = Math.floor(random(1000000)).toString().padStart(6, '0');
+            let signature = randomGaussian(0, 1.5);
+            signature = constrain(signature, -4, 4);
+            
+            let energy = E_COH * Math.pow(PHI, GAP_45 + signature);
+            let hue = map(signature, -4, 4, 200, 320); // Blue to magenta spectrum
+            let coherence = random(0.8, 1.0);
+            let rung = GAP_45 + Math.floor(random(-3, 4)); // Near Gap-45
+            
+            // Generate 8 eigenvalues
+            let eigenvalues = [];
+            for (let i = 0; i < 8; i++) {
+                eigenvalues.push({
+                    value: energy * Math.pow(PHI, i/8),
+                    radius: 80 + i * 15,
+                    phase: (TWO_PI / 8) * i + random(-0.2, 0.2),
+                    frequency: 0.02 + random(-0.005, 0.005),
+                    trail: []
+                });
+            }
+            
+            currentSoul = {
+                id: soulId,
+                signature: signature,
+                energy: energy,
+                hue: hue,
+                coherence: coherence,
+                rung: rung,
+                size: 120 + signature * 20,
+                eigenvalues: eigenvalues
+            };
+            
+            // Update UI
+            updateSoulDisplay();
+        }
+        
+        function updateSoulDisplay() {
+            document.getElementById('soulId').textContent = '#' + currentSoul.id;
+            document.getElementById('soulSignature').textContent = (currentSoul.signature >= 0 ? '+' : '') + currentSoul.signature.toFixed(3);
+            document.getElementById('soulEnergy').textContent = (currentSoul.energy * 1000).toFixed(2) + ' meV';
+            document.getElementById('soulEigenvalues').textContent = '8';
+            document.getElementById('soulCoherence').textContent = (currentSoul.coherence * 100).toFixed(1) + '%';
+            document.getElementById('soulHue').textContent = Math.round(currentSoul.hue) + '°';
+            document.getElementById('soulRung').textContent = currentSoul.rung;
+            
+            // Update equation
+            document.getElementById('energyEquation').textContent = 
+                `E = ${E_COH.toFixed(3)} × φ^(${currentSoul.rung}${currentSoul.signature >= 0 ? '+' : ''}${currentSoul.signature.toFixed(3)})`;
+            
+            // Determine rarity
+            let rarity = getSoulRarity();
+            let rarityBadge = document.getElementById('rarityBadge');
+            rarityBadge.textContent = rarity;
+            rarityBadge.style.background = getRarityColor(rarity);
+        }
+        
+        function getSoulRarity() {
+            let sig = Math.abs(currentSoul.signature);
+            let coherence = currentSoul.coherence;
+            let isGap45 = currentSoul.rung === 45;
+            
+            if (sig > 3.5 && coherence > 0.95 && isGap45) return "Legendary Genesis Soul";
+            if (sig > 3.0 && isGap45) return "Epic Consciousness Soul";
+            if (coherence > 0.95) return "Rare Coherent Soul";
+            if (sig > 2.5) return "Uncommon Signature Soul";
+            return "Common Soul";
+        }
+        
+        function getRarityColor(rarity) {
+            switch (rarity) {
+                case "Legendary Genesis Soul": return "linear-gradient(135deg, #ff6b6b, #ffd93d, #4ecdc4)";
+                case "Epic Consciousness Soul": return "linear-gradient(135deg, #a8e6cf, #dcedc8)";
+                case "Rare Coherent Soul": return "linear-gradient(135deg, #81c784, #aed581)";
+                case "Uncommon Signature Soul": return "linear-gradient(135deg, #64b5f6, #90caf9)";
+                default: return "linear-gradient(135deg, #bdbdbd, #e0e0e0)";
+            }
+        }
+        
+        function showBirthOverlay() {
+            document.getElementById('birthOverlay').classList.add('show');
+        }
+        
+        function hideBirthOverlay() {
+            document.getElementById('birthOverlay').classList.remove('show');
+        }
+        
+        function windowResized() {
+            resizeCanvas(windowWidth, windowHeight);
+        }
+        
+        // Auto-generate first soul
+        setTimeout(() => {
+            mintNewSoul();
+        }, 1000);
+    </script>
+</body>
+</html> 
