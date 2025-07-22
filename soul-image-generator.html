@@ -61,132 +61,230 @@
     <a id="downloadLink" href="#" download="soul-image.png">Download Image</a>
     
     <script>
-        // Direct Mapan Sketchbook B replication approach
+        // Murakami/KAWS-style dense soul collage generator
         const CANVAS_SIZE = 1024;
-        
-        // Mapan-style color palettes (based on observed works)
-        const MAPAN_PALETTES = [
-            {
-                background: '#D32F2F', // Deep red like in his example
-                stripes: ['#1976D2', '#FF9800', '#FFC107', '#2196F3'], // Blue, orange, yellow, blue variants
-                accent: '#000000' // Black accents
-            },
-            {
-                background: '#1976D2', // Blue
-                stripes: ['#D32F2F', '#FF5722', '#FFC107', '#E91E63'], // Red, orange, yellow, pink
-                accent: '#000000'
-            },
-            {
-                background: '#4A148C', // Deep purple
-                stripes: ['#FF6F00', '#00C853', '#2196F3', '#E91E63'], // Orange, green, blue, pink
-                accent: '#000000'
-            }
+        const VIRTUES = [
+            "Love", "Justice", "Forgiveness", "Wisdom", "Courage", 
+            "Temperance", "Prudence", "Compassion", "Gratitude", 
+            "Patience", "Humility", "Hope", "Creativity", "Sacrifice"
         ];
         
-        // Simple random seeded function (Mapan uses controlled randomness)
-        function seededRandom(seed) {
-            const x = Math.sin(seed) * 10000;
-            return x - Math.floor(x);
-        }
+        // Vibrant color clusters for soul elements
+        const COLOR_CLUSTERS = [
+            ['#FF1744', '#FF5722', '#FF9800', '#FFC107'], // Red-Orange cluster
+            ['#2196F3', '#03A9F4', '#00BCD4', '#009688'], // Blue-Cyan cluster  
+            ['#E91E63', '#9C27B0', '#673AB7', '#3F51B5'], // Pink-Purple cluster
+            ['#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B'], // Green-Yellow cluster
+            ['#795548', '#607D8B', '#9E9E9E', '#424242'], // Earth tones
+        ];
         
-        // Canvas texture (like Mapan's subtle paper texture)
-        function addCanvasTexture(ctx, intensity = 0.02) {
-            const imageData = ctx.getImageData(0, 0, CANVAS_SIZE, CANVAS_SIZE);
-            const data = imageData.data;
-            
-            for (let i = 0; i < data.length; i += 4) {
-                const noise = (Math.random() - 0.5) * intensity * 255;
-                data[i] = Math.max(0, Math.min(255, data[i] + noise));     // R
-                data[i + 1] = Math.max(0, Math.min(255, data[i + 1] + noise)); // G
-                data[i + 2] = Math.max(0, Math.min(255, data[i + 2] + noise)); // B
-            }
-            
-            ctx.putImageData(imageData, 0, 0);
-        }
+        // Soul element types (inspired by attached image)
+        const SOUL_ELEMENTS = [
+            'skull', 'flower', 'star', 'heart', 'eye', 'smiley', 'triangle', 
+            'circle', 'diamond', 'cross', 'spiral', 'wave', 'lightning', 'crown'
+        ];
         
-        // Draw diagonal stripe (core Mapan technique)
-        function drawDiagonalStripe(ctx, x, y, width, height, color, angle) {
-            ctx.save();
-            ctx.translate(x + width/2, y + height/2);
-            ctx.rotate(angle);
+        // Draw skull (simplified)
+        function drawSkull(ctx, x, y, size, color) {
             ctx.fillStyle = color;
-            ctx.fillRect(-width/2, -height/2, width, height);
-            ctx.restore();
-        }
-        
-        // Draw arrow shape (Mapan signature element)
-        function drawArrow(ctx, x, y, size, color, angle) {
-            ctx.save();
-            ctx.translate(x, y);
-            ctx.rotate(angle);
-            ctx.fillStyle = color;
-            
-            // Arrow body
-            ctx.fillRect(-size/2, -size/6, size, size/3);
-            
-            // Arrow head
             ctx.beginPath();
-            ctx.moveTo(size/2, 0);
-            ctx.lineTo(size/3, -size/4);
-            ctx.lineTo(size/3, size/4);
-            ctx.closePath();
+            ctx.arc(x, y, size, 0, Math.PI * 2);
             ctx.fill();
             
-            ctx.restore();
+            // Eye sockets
+            ctx.fillStyle = '#000';
+            ctx.beginPath();
+            ctx.arc(x - size*0.3, y - size*0.2, size*0.2, 0, Math.PI * 2);
+            ctx.arc(x + size*0.3, y - size*0.2, size*0.2, 0, Math.PI * 2);
+            ctx.fill();
         }
         
-        // Main Mapan-style generation
+        // Draw flower
+        function drawFlower(ctx, x, y, size, color) {
+            ctx.fillStyle = color;
+            for (let i = 0; i < 6; i++) {
+                const angle = (i / 6) * Math.PI * 2;
+                const px = x + Math.cos(angle) * size * 0.7;
+                const py = y + Math.sin(angle) * size * 0.7;
+                ctx.beginPath();
+                ctx.arc(px, py, size * 0.4, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            // Center
+            ctx.fillStyle = '#FFD700';
+            ctx.beginPath();
+            ctx.arc(x, y, size * 0.3, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        // Draw star
+        function drawStar(ctx, x, y, size, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            for (let i = 0; i < 5; i++) {
+                const angle = (i / 5) * Math.PI * 2 - Math.PI/2;
+                const px = x + Math.cos(angle) * size;
+                const py = y + Math.sin(angle) * size;
+                if (i === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+                
+                const innerAngle = ((i + 0.5) / 5) * Math.PI * 2 - Math.PI/2;
+                const ipx = x + Math.cos(innerAngle) * size * 0.5;
+                const ipy = y + Math.sin(innerAngle) * size * 0.5;
+                ctx.lineTo(ipx, ipy);
+            }
+            ctx.closePath();
+            ctx.fill();
+        }
+        
+        // Draw smiley
+        function drawSmiley(ctx, x, y, size, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, size, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Eyes
+            ctx.fillStyle = '#000';
+            ctx.beginPath();
+            ctx.arc(x - size*0.3, y - size*0.3, size*0.15, 0, Math.PI * 2);
+            ctx.arc(x + size*0.3, y - size*0.3, size*0.15, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Smile
+            ctx.beginPath();
+            ctx.arc(x, y, size*0.6, 0, Math.PI);
+            ctx.lineWidth = size*0.1;
+            ctx.strokeStyle = '#000';
+            ctx.stroke();
+        }
+        
+        // Draw heart
+        function drawHeart(ctx, x, y, size, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.moveTo(x, y + size*0.3);
+            ctx.bezierCurveTo(x - size, y - size*0.5, x - size*0.5, y - size, x, y - size*0.3);
+            ctx.bezierCurveTo(x + size*0.5, y - size, x + size, y - size*0.5, x, y + size*0.3);
+            ctx.fill();
+        }
+        
+        // Draw eye
+        function drawEye(ctx, x, y, size, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.ellipse(x, y, size, size*0.6, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Pupil
+            ctx.fillStyle = '#000';
+            ctx.beginPath();
+            ctx.arc(x, y, size*0.4, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Highlight
+            ctx.fillStyle = '#FFF';
+            ctx.beginPath();
+            ctx.arc(x - size*0.2, y - size*0.2, size*0.15, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        // Draw simple shapes
+        function drawCircle(ctx, x, y, size, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        function drawTriangle(ctx, x, y, size, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.moveTo(x, y - size);
+            ctx.lineTo(x - size*0.866, y + size*0.5);
+            ctx.lineTo(x + size*0.866, y + size*0.5);
+            ctx.closePath();
+            ctx.fill();
+        }
+        
+        // Main element drawer
+        function drawSoulElement(ctx, type, x, y, size, color) {
+            switch(type) {
+                case 'skull': drawSkull(ctx, x, y, size, color); break;
+                case 'flower': drawFlower(ctx, x, y, size, color); break;
+                case 'star': drawStar(ctx, x, y, size, color); break;
+                case 'heart': drawHeart(ctx, x, y, size, color); break;
+                case 'eye': drawEye(ctx, x, y, size, color); break;
+                case 'smiley': drawSmiley(ctx, x, y, size, color); break;
+                case 'triangle': drawTriangle(ctx, x, y, size, color); break;
+                case 'circle': drawCircle(ctx, x, y, size, color); break;
+                default: drawCircle(ctx, x, y, size, color); break;
+            }
+        }
+        
+        // Generate soul collage
         function generateSoulImage() {
             const canvas = document.getElementById('soulCanvas');
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
             
-            // Random seed for consistent generation
-            const seed = Math.random() * 1000;
+            // Recognition Science parameters
+            const virtueScores = VIRTUES.map(() => Math.random());
+            const delta = Math.random() * 8 - 4;
             
-            // Select palette
-            const palette = MAPAN_PALETTES[Math.floor(seededRandom(seed) * MAPAN_PALETTES.length)];
-            
-            // 1. SOLID BACKGROUND (Mapan always starts with solid color)
-            ctx.fillStyle = palette.background;
+            // Create gradient background (subtle)
+            const bgGradient = ctx.createRadialGradient(CANVAS_SIZE/2, CANVAS_SIZE/2, 0, CANVAS_SIZE/2, CANVAS_SIZE/2, CANVAS_SIZE);
+            bgGradient.addColorStop(0, '#F0F0F0');
+            bgGradient.addColorStop(1, '#E0E0E0');
+            ctx.fillStyle = bgGradient;
             ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
             
-            // 2. GEOMETRIC COMPOSITION AREA (Mapan puts elements in specific zones)
-            const compX = CANVAS_SIZE * (0.3 + seededRandom(seed + 1) * 0.4); // 30-70% across
-            const compY = CANVAS_SIZE * (0.2 + seededRandom(seed + 2) * 0.6); // 20-80% down
-            const compWidth = CANVAS_SIZE * (0.3 + seededRandom(seed + 3) * 0.4); // 30-70% width
-            const compHeight = CANVAS_SIZE * (0.3 + seededRandom(seed + 4) * 0.4); // 30-70% height
+            // Dense element generation (3000-5000 elements like the reference)
+            const elementCount = 3000 + Math.floor(virtueScores[12] * 2000); // Creativity affects density
             
-            // 3. DIAGONAL STRIPE SYSTEM (core Mapan technique)
-            const stripeCount = 4 + Math.floor(seededRandom(seed + 5) * 4); // 4-7 stripes
-            const baseAngle = seededRandom(seed + 6) * Math.PI * 2; // Random base angle
-            
-            for (let i = 0; i < stripeCount; i++) {
-                const stripeColor = palette.stripes[i % palette.stripes.length];
-                const stripeWidth = compWidth * (0.1 + seededRandom(seed + 10 + i) * 0.15); // 10-25% of comp width
-                const stripeHeight = compHeight + CANVAS_SIZE * 0.2; // Extend beyond comp area
+            for (let i = 0; i < elementCount; i++) {
+                // Position with some clustering bias
+                const clusterBias = virtueScores[7] * 0.3; // Compassion creates clustering
+                const centerPull = 1 - virtueScores[10] * 0.5; // Humility spreads elements
                 
-                // Position stripes with consistent spacing
-                const stripeX = compX + (i - stripeCount/2) * (compWidth / stripeCount) * 1.2;
-                const stripeY = compY - CANVAS_SIZE * 0.1;
+                const x = CANVAS_SIZE * (0.1 + Math.random() * 0.8);
+                const y = CANVAS_SIZE * (0.1 + Math.random() * 0.8);
                 
-                drawDiagonalStripe(ctx, stripeX, stripeY, stripeWidth, stripeHeight, stripeColor, baseAngle);
+                // Size varies by virtue scores
+                const baseSize = 3 + Math.random() * 15;
+                const sizeModifier = 1 + virtueScores[4] * 0.5; // Courage makes bigger elements
+                const size = baseSize * sizeModifier;
+                
+                // Element type influenced by virtue
+                const elementType = SOUL_ELEMENTS[Math.floor((virtueScores[i % 14] + Math.random()) * SOUL_ELEMENTS.length / 2)];
+                
+                // Color cluster selection
+                const clusterIndex = Math.floor(Math.random() * COLOR_CLUSTERS.length);
+                const colorCluster = COLOR_CLUSTERS[clusterIndex];
+                const color = colorCluster[Math.floor(Math.random() * colorCluster.length)];
+                
+                // Add transparency for layering effect
+                const alpha = 0.7 + virtueScores[2] * 0.3; // Forgiveness affects opacity
+                ctx.globalAlpha = alpha;
+                
+                drawSoulElement(ctx, elementType, x, y, size, color);
+                ctx.globalAlpha = 1;
             }
             
-            // 4. DIRECTIONAL ARROW ELEMENTS (Mapan signature)
-            const arrowCount = 1 + Math.floor(seededRandom(seed + 20) * 2); // 1-2 arrows
-            
-            for (let i = 0; i < arrowCount; i++) {
-                const arrowX = compX + seededRandom(seed + 30 + i) * compWidth;
-                const arrowY = compY + seededRandom(seed + 40 + i) * compHeight;
-                const arrowSize = CANVAS_SIZE * (0.05 + seededRandom(seed + 50 + i) * 0.1); // 5-15% of canvas
-                const arrowAngle = baseAngle + seededRandom(seed + 60 + i) * Math.PI/4; // Slight variation from stripe angle
+            // Add some larger focal elements
+            const focalCount = 5 + Math.floor(virtueScores[11] * 10); // Hope adds focal points
+            for (let i = 0; i < focalCount; i++) {
+                const x = CANVAS_SIZE * (0.2 + Math.random() * 0.6);
+                const y = CANVAS_SIZE * (0.2 + Math.random() * 0.6);
+                const size = 20 + Math.random() * 40;
+                const elementType = SOUL_ELEMENTS[Math.floor(Math.random() * SOUL_ELEMENTS.length)];
+                const clusterIndex = Math.floor(Math.random() * COLOR_CLUSTERS.length);
+                const color = COLOR_CLUSTERS[clusterIndex][0]; // Use primary color from cluster
                 
-                drawArrow(ctx, arrowX, arrowY, arrowSize, palette.accent, arrowAngle);
+                ctx.globalAlpha = 0.9;
+                drawSoulElement(ctx, elementType, x, y, size, color);
+                ctx.globalAlpha = 1;
             }
-            
-            // 5. SUBTLE CANVAS TEXTURE (Mapan's finishing touch)
-            addCanvasTexture(ctx, 0.01);
             
             // Update download
             document.getElementById('downloadLink').href = canvas.toDataURL('image/png');
