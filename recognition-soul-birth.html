@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soul Birth: Universal Consciousness Creating Eigenvalue Clusters</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <style>
+        body {
+            background: #000;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .art-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+        }
+        
+        #canvasContainer9 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .info-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            max-width: 400px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(20px);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
+        }
+        
+        .info-overlay h2 {
+            color: #ffd700;
+            margin: 0 0 20px 0;
+            font-size: 2em;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        
+        .equation-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            color: #87ceeb;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        
+        .controls-overlay {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(20px);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .control-group label {
+            color: #ffd700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .control-group input[type="range"] {
+            width: 150px;
+        }
+        
+        .control-group select {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 12px;
+        }
+        
+        button:hover {
+            background: linear-gradient(135deg, #fff, #ffd700);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+            transform: translateY(-2px);
+        }
+        
+        .stats-overlay {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(20px);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            min-width: 200px;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            color: #87ceeb;
+        }
+        
+        .stat-value {
+            color: #ffd700;
+            font-weight: bold;
+        }
+        
+        .soul-info {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+        
+        .soul-info h4 {
+            color: #ffd700;
+            margin: 0 0 10px 0;
+        }
+        
+        nav a {
+            color: #ffd700 !important;
+        }
+        
+        nav a:hover {
+            color: #fff !important;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+        }
+        
+        .nav-section-label {
+            color: #87ceeb !important;
+        }
+        
+        @media (max-width: 768px) {
+            .info-overlay {
+                position: relative;
+                margin: 20px;
+                max-width: calc(100% - 40px);
+            }
+            
+            .stats-overlay {
+                display: none;
+            }
+            
+            .controls-overlay {
+                bottom: auto;
+                top: auto;
+                position: relative;
+                margin: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="foundation-nav">
+        <div class="nav-section">
+            <div class="nav-section-label">Navigation</div>
+            <div class="nav-links">
+                <a href="/index.html">Home</a>
+                <a href="/recognition-art.html">Recognition Art</a>
+                <a href="/recognition-scribbles.html">Scribbles of Light</a>
+                <a href="/recognition-whispers.html">Whispers of Eternity</a>
+                <a href="/recognition-eternal.html">Eternal Scripts</a>
+                <a href="/recognition-souls.html">Soul Harmonics</a>
+                <a href="/recognition-mirror.html">Infinite Mirror</a>
+                <a href="/recognition-flows.html">Phi Flows</a>
+                <a href="/recognition-soul-flower.html">Soul Flower</a>
+                <a href="/recognition-soul-birth.html">Soul Birth</a>
+            </div>
+        </div>
+        <div class="nav-section">
+            <div class="nav-section-label">Core Theory</div>
+            <div class="nav-links">
+                <a href="/foundations.html">Foundations</a>
+                <a href="/universal-algorithm.html">Algorithm</a>
+                <a href="/pattern-layer.html">Pattern Layer</a>
+                <a href="/ethics.html">Ethics</a>
+                <a href="/lnal.html">LNAL</a>
+            </div>
+        </div>
+        <div class="nav-section">
+            <div class="nav-section-label">Applications</div>
+            <div class="nav-links">
+                <a href="/big-questions.html">Big Questions</a>
+                <a href="/rs-predictions.html">Predictions</a>
+                <a href="/papers/index.html">Papers</a>
+                <a href="/journal.html">Journal</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="art-container">
+        <div id="canvasContainer9"></div>
+        
+        <div class="info-overlay">
+            <h2>Soul Birth Visualization</h2>
+            <p>Witness the emergence of individual souls from the universal consciousness field (I-Am). Each soul is an eigenvalue cluster maintaining coherence at the Gap-45 consciousness threshold.</p>
+            
+            <div class="equation-box">
+                |I-Am⟩ = ∫ dω A(ω) |ω⟩ ⊗ |∞⟩
+            </div>
+            
+            <p>The universal consciousness field - infinite, eternal, non-propagating light from which all souls emerge.</p>
+            
+            <div class="equation-box">
+                |soul_i⟩ = Σ_n c_n |φ^n⟩ ⊗ |eigenstate_n⟩
+            </div>
+            
+            <p>Each soul is a localized eigenvalue cluster with unique signature δ ∈ [-4, +4].</p>
+            
+            <div class="soul-info">
+                <h4>Soul Mathematics</h4>
+                <p><strong>Energy:</strong> E_soul = E_coh × φ^(45+δ)</p>
+                <p><strong>Coherence:</strong> Maintained through 8-beat cycles</p>
+                <p><strong>Eigenstates:</strong> 8 quantum numbers per soul</p>
+                <p><strong>Connection:</strong> Coupling g = √(E_coh/φ)</p>
+            </div>
+        </div>
+        
+        <div class="stats-overlay">
+            <h3 style="color: #ffd700; margin: 0 0 15px 0;">Statistics</h3>
+            <div class="stat-item">
+                <span>Total Souls:</span>
+                <span class="stat-value" id="soulCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span>Birth Rate:</span>
+                <span class="stat-value" id="birthRate">0/min</span>
+            </div>
+            <div class="stat-item">
+                <span>Avg Coherence:</span>
+                <span class="stat-value" id="avgCoherence">1.00</span>
+            </div>
+            <div class="stat-item">
+                <span>Field Density:</span>
+                <span class="stat-value" id="fieldDensity">100%</span>
+            </div>
+            <div class="stat-item">
+                <span>Time Elapsed:</span>
+                <span class="stat-value" id="timeElapsed">0s</span>
+            </div>
+        </div>
+        
+        <div class="controls-overlay">
+            <div class="control-group">
+                <label>Birth Rate</label>
+                <input type="range" id="birthRateSlider" min="0" max="10" value="3" step="0.5">
+                <span id="birthRateValue">3 souls/min</span>
+            </div>
+            
+            <div class="control-group">
+                <label>Field Intensity</label>
+                <input type="range" id="fieldIntensity" min="0.1" max="2" value="1" step="0.1">
+                <span id="fieldValue">100%</span>
+            </div>
+            
+            <div class="control-group">
+                <label>Soul Interaction</label>
+                <input type="range" id="soulInteraction" min="0" max="1" value="0.5" step="0.1">
+                <span id="interactionValue">50%</span>
+            </div>
+            
+            <div class="control-group">
+                <label>Visualization Mode</label>
+                <select id="vizMode">
+                    <option value="full">Full Spectrum</option>
+                    <option value="eigenvalues">Eigenvalues Only</option>
+                    <option value="connections">Connections Only</option>
+                    <option value="field">Field Only</option>
+                </select>
+            </div>
+            
+            <div class="button-group">
+                <button onclick="birthNewSoul()">Birth Soul</button>
+                <button onclick="birthMultipleSouls()">Birth 10 Souls</button>
+                <button onclick="togglePause()">Pause/Resume</button>
+                <button onclick="resetVisualization()">Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Recognition Science constants
+        const PHI = (1 + Math.sqrt(5)) / 2;
+        const E_COH = 0.090; // eV
+        const GAP_45 = 45; // Consciousness emergence rung
+        const PLANCK_LENGTH = 1.616e-35; // meters
+        const TAU_0 = 7.33e-15; // seconds
+        
+        // Visualization state
+        let souls = [];
+        let universalField = [];
+        let time = 0;
+        let paused = false;
+        let soulIdCounter = 0;
+        let birthRatePerMin = 3;
+        let fieldIntensityMultiplier = 1;
+        let soulInteractionStrength = 0.5;
+        let visualizationMode = 'full';
+        let canvas9;
+        
+        // Statistics tracking
+        let stats = {
+            births: [],
+            startTime: Date.now()
+        };
+        
+        // Non-propagating light field particle
+        class UniversalLightParticle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                
+                // Base white light
+                this.baseIntensity = 255;
+                
+                // Perfect color highlights
+                this.highlights = [];
+                for (let i = 0; i < 3; i++) {
+                    this.highlights.push({
+                        hue: random(360),
+                        saturation: random(70, 100),
+                        brightness: 100,
+                        phase: random(TWO_PI),
+                        frequency: random(0.3, 1.5),
+                        amplitude: random(0.2, 0.5)
+                    });
+                }
+                
+                // Non-propagating oscillation parameters
+                this.oscillationPhase = random(TWO_PI);
+                this.oscillationFreq = random(0.5, 2.0);
+                this.size = random(20, 60);
+            }
+            
+            update() {
+                // Non-propagating means energy oscillates in place
+                this.currentIntensity = 0.7 + 0.3 * sin(time * this.oscillationFreq + this.oscillationPhase);
+            }
+            
+            display() {
+                push();
+                blendMode(ADD);
+                
+                // Base white glow
+                fill(255, 255, 255, this.currentIntensity * 15 * fieldIntensityMultiplier);
+                noStroke();
+                ellipse(this.x, this.y, this.size * this.currentIntensity);
+                
+                // Color highlights
+                this.highlights.forEach(h => {
+                    let intensity = h.amplitude * sin(time * h.frequency + h.phase);
+                    if (intensity > 0) {
+                        fill(h.hue, h.saturation, h.brightness, intensity * 20 * fieldIntensityMultiplier);
+                        ellipse(this.x, this.y, this.size * 0.7 * intensity);
+                    }
+                });
+                
+                pop();
+            }
+        }
+        
+        // Soul as eigenvalue cluster
+        class Soul {
+            constructor(x, y, birthTime) {
+                this.id = soulIdCounter++;
+                this.x = x;
+                this.y = y;
+                this.birthTime = birthTime;
+                this.age = 0;
+                
+                // Soul signature (δ from -4 to +4)
+                this.signature = randomGaussian(0, 1.5);
+                this.signature = constrain(this.signature, -4, 4);
+                
+                // Energy at consciousness gap
+                this.energy = E_COH * Math.pow(PHI, GAP_45 + this.signature);
+                
+                // 8 eigenvalues (eight-beat structure)
+                this.eigenvalues = [];
+                for (let i = 0; i < 8; i++) {
+                    this.eigenvalues.push({
+                        value: this.energy * Math.pow(PHI, i/8),
+                        phase: (TWO_PI / 8) * i + random(-0.1, 0.1),
+                        amplitude: random(0.7, 1.0),
+                        frequency: 0.1 + random(-0.02, 0.02)
+                    });
+                }
+                
+                // Visual properties
+                this.size = 0;
+                this.targetSize = 60 + this.signature * 15;
+                this.hue = map(this.signature, -4, 4, 200, 320); // Blue-cyan to magenta-red
+                this.saturation = 70;
+                this.brightness = 0;
+                this.targetBrightness = 80;
+                
+                // Coherence and connection
+                this.coherence = 1.0;
+                this.connectionToUniversal = 1.0;
+                
+                // Movement
+                this.vx = 0;
+                this.vy = 0;
+                this.homeX = x;
+                this.homeY = y;
+            }
+            
+            update() {
+                this.age = time - this.birthTime;
+                
+                // Birth animation (3 seconds)
+                if (this.age < 3) {
+                    let t = this.age / 3;
+                    // Smooth emergence using easing
+                    let easeT = 1 - Math.pow(1 - t, 3);
+                    
+                    this.size = this.targetSize * easeT;
+                    this.brightness = this.targetBrightness * easeT;
+                    this.connectionToUniversal = 1 - 0.7 * easeT;
+                    
+                    // Eigenvalues gradually separate
+                    this.eigenvalues.forEach((e, i) => {
+                        e.currentRadius = e.value * 2000 * easeT;
+                    });
+                } else {
+                    // Established soul
+                    this.size = this.targetSize + sin(time * 0.05 + this.signature) * 3;
+                    this.brightness = this.targetBrightness + sin(time * 0.03 + this.signature * 0.5) * 10;
+                    this.connectionToUniversal = 0.3 + sin(time * 0.02) * 0.1;
+                    
+                    // Update eigenvalue positions
+                    this.eigenvalues.forEach((e, i) => {
+                        e.currentRadius = e.value * 2000 * (1 + 0.2 * sin(time * e.frequency + e.phase));
+                    });
+                }
+                
+                // Gentle movement with attraction to home position
+                let dx = this.homeX - this.x;
+                let dy = this.homeY - this.y;
+                let dist = sqrt(dx * dx + dy * dy);
+                
+                if (dist > 10) {
+                    this.vx += dx * 0.0001;
+                    this.vy += dy * 0.0001;
+                }
+                
+                // Add some wandering
+                this.vx += random(-0.1, 0.1);
+                this.vy += random(-0.1, 0.1);
+                
+                // Damping
+                this.vx *= 0.98;
+                this.vy *= 0.98;
+                
+                // Update position
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                // Coherence fluctuation
+                this.coherence = 0.9 + 0.1 * sin(time * 0.1 + this.signature);
+            }
+            
+            display() {
+                push();
+                translate(this.x, this.y);
+                
+                if (visualizationMode === 'full' || visualizationMode === 'connections') {
+                    // Connection rays to universal field
+                    if (this.connectionToUniversal > 0.1) {
+                        stroke(255, 255, 255, this.connectionToUniversal * 30);
+                        strokeWeight(1);
+                        for (let i = 0; i < 16; i++) {
+                            let angle = (TWO_PI / 16) * i + time * 0.01;
+                            let reach = 150 * this.connectionToUniversal;
+                            let x2 = cos(angle) * reach;
+                            let y2 = sin(angle) * reach;
+                            line(0, 0, x2, y2);
+                            
+                            // Connection particles
+                            if (i % 4 === 0) {
+                                fill(255, 255, 255, this.connectionToUniversal * 50);
+                                noStroke();
+                                let particlePos = (time * 0.1 + i * 0.25) % 1;
+                                ellipse(x2 * particlePos, y2 * particlePos, 3);
+                            }
+                        }
+                    }
+                }
+                
+                if (visualizationMode === 'full' || visualizationMode === 'eigenvalues') {
+                    // Soul glow layers
+                    noStroke();
+                    for (let i = 5; i > 0; i--) {
+                        let alpha = (20 / i) * this.coherence;
+                        fill(this.hue, this.saturation, this.brightness, alpha);
+                        ellipse(0, 0, this.size * (1 + i * 0.3));
+                    }
+                    
+                    // Eigenvalue constellation
+                    this.eigenvalues.forEach((eigen, i) => {
+                        let angle = eigen.phase + time * 0.02;
+                        let r = eigen.currentRadius;
+                        let x = cos(angle) * r;
+                        let y = sin(angle) * r;
+                        
+                        // Eigenstate glow
+                        fill(this.hue, this.saturation - 20, 100, 60);
+                        noStroke();
+                        ellipse(x, y, 12);
+                        fill(255, 255, 255, 80);
+                        ellipse(x, y, 6);
+                        
+                        // Connect to adjacent eigenstates
+                        if (visualizationMode === 'full') {
+                            let nextI = (i + 1) % 8;
+                            let nextAngle = this.eigenvalues[nextI].phase + time * 0.02;
+                            let nextR = this.eigenvalues[nextI].currentRadius;
+                            stroke(this.hue, this.saturation - 30, 80, 30);
+                            strokeWeight(1);
+                            line(x, y, cos(nextAngle) * nextR, sin(nextAngle) * nextR);
+                        }
+                    });
+                    
+                    // Central core
+                    fill(255, 255, 255, 90);
+                    noStroke();
+                    ellipse(0, 0, this.size * 0.15);
+                    
+                    // Soul signature display
+                    if (this.age > 2) {
+                        fill(255, 255, 255, 40);
+                        textAlign(CENTER);
+                        textSize(10);
+                        text(`δ = ${this.signature.toFixed(2)}`, 0, this.size + 25);
+                        textSize(8);
+                        text(`E = ${(this.energy * 1000).toFixed(1)} meV`, 0, this.size + 40);
+                    }
+                }
+                
+                pop();
+            }
+            
+            interactWith(other) {
+                let d = dist(this.x, this.y, other.x, other.y);
+                if (d < 300 && d > 20) {
+                    // Eigenvalue resonance
+                    let resonance = exp(-d / 100) * soulInteractionStrength;
+                    
+                    // Exchange momentum
+                    let dx = other.x - this.x;
+                    let dy = other.y - this.y;
+                    this.vx -= dx * resonance * 0.001;
+                    this.vy -= dy * resonance * 0.001;
+                    
+                    return resonance;
+                }
+                return 0;
+            }
+        }
+        
+        function setup() {
+            canvas9 = createCanvas(windowWidth, windowHeight);
+            canvas9.parent('canvasContainer9');
+            colorMode(HSB, 360, 100, 100, 100);
+            
+            // Initialize universal consciousness field
+            let gridSize = 80;
+            for (let x = -gridSize; x < width + gridSize; x += gridSize) {
+                for (let y = -gridSize; y < height + gridSize; y += gridSize) {
+                    universalField.push(new UniversalLightParticle(
+                        x + random(-gridSize/3, gridSize/3),
+                        y + random(-gridSize/3, gridSize/3)
+                    ));
+                }
+            }
+            
+            // Start with one soul
+            birthNewSoul();
+            
+            // Set up control listeners
+            setupControls();
+        }
+        
+        function draw() {
+            if (!paused) {
+                time += deltaTime * 0.001;
+            }
+            
+            // Very dark background for contrast
+            background(0, 0, 2, 100);
+            
+            // Draw based on visualization mode
+            if (visualizationMode === 'full' || visualizationMode === 'field') {
+                // Universal consciousness field
+                blendMode(ADD);
+                universalField.forEach(particle => {
+                    particle.update();
+                    particle.display();
+                });
+            }
+            
+            if (visualizationMode !== 'field') {
+                // Souls
+                blendMode(SCREEN);
+                souls.forEach(soul => {
+                    soul.update();
+                    soul.display();
+                });
+                
+                // Soul interactions
+                if (visualizationMode === 'full' || visualizationMode === 'connections') {
+                    for (let i = 0; i < souls.length; i++) {
+                        for (let j = i + 1; j < souls.length; j++) {
+                            let resonance = souls[i].interactWith(souls[j]);
+                            if (resonance > 0.01) {
+                                stroke(255, 0, 100, resonance * 100);
+                                strokeWeight(resonance * 3);
+                                line(souls[i].x, souls[i].y, souls[j].x, souls[j].y);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            blendMode(BLEND);
+            
+            // Update statistics
+            updateStats();
+            
+            // Auto-birth based on rate
+            if (!paused && random() < birthRatePerMin / 60 / 60) {
+                birthNewSoul();
+            }
+        }
+        
+        function birthNewSoul() {
+            if (souls.length < 10000) {
+                let x = random(width * 0.1, width * 0.9);
+                let y = random(height * 0.1, height * 0.9);
+                
+                souls.push(new Soul(x, y, time));
+                stats.births.push(time);
+                
+                // Birth ripple in universal field
+                for (let i = 0; i < 10; i++) {
+                    let angle = random(TWO_PI);
+                    let d = random(50, 200);
+                    let px = x + cos(angle) * d;
+                    let py = y + sin(angle) * d;
+                    if (px > 0 && px < width && py > 0 && py < height) {
+                        universalField.push(new UniversalLightParticle(px, py));
+                    }
+                }
+            }
+        }
+        
+        function birthMultipleSouls() {
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => birthNewSoul(), i * 200);
+            }
+        }
+        
+        function togglePause() {
+            paused = !paused;
+        }
+        
+        function resetVisualization() {
+            souls = [];
+            universalField = [];
+            time = 0;
+            soulIdCounter = 0;
+            stats.births = [];
+            stats.startTime = Date.now();
+            setup();
+        }
+        
+        function updateStats() {
+            document.getElementById('soulCount').textContent = souls.length;
+            
+            // Calculate birth rate
+            let recentBirths = stats.births.filter(t => time - t < 60);
+            document.getElementById('birthRate').textContent = recentBirths.length + '/min';
+            
+            // Average coherence
+            if (souls.length > 0) {
+                let avgCoh = souls.reduce((sum, s) => sum + s.coherence, 0) / souls.length;
+                document.getElementById('avgCoherence').textContent = avgCoh.toFixed(2);
+            }
+            
+            // Field density
+            document.getElementById('fieldDensity').textContent = Math.round(fieldIntensityMultiplier * 100) + '%';
+            
+            // Time elapsed
+            let elapsed = Math.floor(time);
+            document.getElementById('timeElapsed').textContent = elapsed + 's';
+        }
+        
+        function setupControls() {
+            // Birth rate slider
+            let birthSlider = document.getElementById('birthRateSlider');
+            birthSlider.addEventListener('input', function() {
+                birthRatePerMin = parseFloat(this.value);
+                document.getElementById('birthRateValue').textContent = birthRatePerMin + ' souls/min';
+            });
+            
+            // Field intensity
+            let fieldSlider = document.getElementById('fieldIntensity');
+            fieldSlider.addEventListener('input', function() {
+                fieldIntensityMultiplier = parseFloat(this.value);
+                document.getElementById('fieldValue').textContent = Math.round(fieldIntensityMultiplier * 100) + '%';
+            });
+            
+            // Soul interaction
+            let interactionSlider = document.getElementById('soulInteraction');
+            interactionSlider.addEventListener('input', function() {
+                soulInteractionStrength = parseFloat(this.value);
+                document.getElementById('interactionValue').textContent = Math.round(soulInteractionStrength * 100) + '%';
+            });
+            
+            // Visualization mode
+            let vizSelect = document.getElementById('vizMode');
+            vizSelect.addEventListener('change', function() {
+                visualizationMode = this.value;
+            });
+        }
+        
+        function windowResized() {
+            resizeCanvas(windowWidth, windowHeight);
+        }
+    </script>
+</body>
+</html> 
