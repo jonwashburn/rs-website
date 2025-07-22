@@ -17,11 +17,10 @@
                 inlineMath: [['$', '$'], ['\\(', '\\)']],
                 displayMath: [['$$', '$$'], ['\\[', '\\]']],
                 macros: {
-                    // No recursive macros. \varphi is built-in.
+                    // REMOVED RECURSIVE MACRO: \kappa is a built-in command.
                     tfrac: ["\\frac{#1}{#2}", 2],
                     mathbb: ["\\mathbb{#1}", 1],
-                    text: ["\\text{#1}", 1],
-                    kappa: "\\kappa"
+                    text: ["\\text{#1}", 1]
                 }
             },
             chtml: {
@@ -579,7 +578,7 @@
             border-collapse: collapse;
             background: var(--white);
             font-size: 0.95em;
-            table-layout: fixed;
+            table-layout: auto; /* Changed from fixed to auto for flexibility */
         }
 
         .predictions-table th,
@@ -588,6 +587,7 @@
             border-bottom: 1px solid var(--gray);
             vertical-align: middle;
             text-align: left;
+            word-break: break-word; /* Force long strings to wrap */
         }
 
         .predictions-table th {
@@ -603,7 +603,8 @@
         }
 
         .calculation {
-            width: 120px;
+            width: auto; /* Let the browser determine width */
+            min-width: 100px;
         }
 
         .expand-btn {
@@ -659,6 +660,9 @@
                 text-align: right;
                 padding-left: 50%;
                 position: relative;
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
             }
 
             .predictions-table td[data-label]::before {
