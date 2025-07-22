@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Recognition: Whispers of Eternity - Recognition Science Art</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #2a2621, #1a1915);
+            color: #e8e4df;
+        }
+        
+        .art-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3em;
+            margin: 3em 0;
+        }
+        
+        .canvas-container {
+            border: 4px solid #8d7053;
+            border-radius: 16px;
+            padding: 2em;
+            background: 
+                radial-gradient(circle at 30% 70%, rgba(139,115,85,0.15) 0%, transparent 60%),
+                radial-gradient(circle at 70% 30%, rgba(210,180,140,0.1) 0%, transparent 60%),
+                linear-gradient(135deg, #f5f3f0, #ede8e0);
+            box-shadow: 
+                0 0 40px rgba(141,112,83,0.4),
+                inset 0 0 60px rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .canvas-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                conic-gradient(from 45deg, transparent, rgba(255,215,0,0.05), transparent),
+                radial-gradient(circle, rgba(141,112,83,0.1) 1px, transparent 1px);
+            background-size: 100% 100%, 40px 40px;
+            animation: whisperAura 20s linear infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes whisperAura {
+            0% { transform: rotate(0deg) scale(1); }
+            100% { transform: rotate(360deg) scale(1.1); }
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2em;
+            width: 100%;
+            max-width: 1000px;
+            padding: 2.5em;
+            background: 
+                linear-gradient(135deg, rgba(32,28,24,0.95), rgba(42,38,33,0.95)),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="1" fill="%23444"/></svg>');
+            border-radius: 16px;
+            border: 2px solid #8d7053;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8em;
+        }
+        
+        .control-group label {
+            font-weight: 600;
+            color: #d2b48c;
+            font-size: 1em;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .control-group input, .control-group select {
+            padding: 0.8em;
+            border: 2px solid #8d7053;
+            border-radius: 8px;
+            font-family: inherit;
+            background: rgba(245,243,240,0.95);
+            color: #4a3f35;
+            transition: all 0.3s ease;
+            font-size: 0.95em;
+        }
+        
+        .control-group input:focus, .control-group select:focus {
+            outline: none;
+            border-color: #d2b48c;
+            box-shadow: 0 0 15px rgba(210,180,140,0.3);
+        }
+        
+        .rs-info {
+            background: 
+                linear-gradient(135deg, rgba(26,25,21,0.95), rgba(32,28,24,0.95)),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><path d="M20,1 Q39,20 20,39 Q1,20 20,1" fill="none" stroke="%23333" stroke-width="0.5"/></svg>');
+            padding: 3em;
+            border-radius: 16px;
+            border-left: 8px solid #d2b48c;
+            margin: 3em 0;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            color: #e8e4df;
+        }
+        
+        .generate-btn {
+            background: 
+                linear-gradient(135deg, #8d7053, #a0846b),
+                radial-gradient(circle at 50% 50%, rgba(255,215,0,0.1), transparent);
+            color: white;
+            border: none;
+            padding: 1.2em 3em;
+            border-radius: 12px;
+            font-size: 1.3em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            box-shadow: 
+                0 6px 20px rgba(141,112,83,0.4),
+                inset 0 1px 3px rgba(255,255,255,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .generate-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.3), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .generate-btn:hover::before {
+            left: 100%;
+        }
+        
+        .generate-btn:hover {
+            background: 
+                linear-gradient(135deg, #a0846b, #b89970),
+                radial-gradient(circle at 50% 50%, rgba(255,215,0,0.2), transparent);
+            transform: translateY(-4px);
+            box-shadow: 
+                0 10px 30px rgba(141,112,83,0.6),
+                inset 0 1px 3px rgba(255,255,255,0.3);
+        }
+        
+        .metadata {
+            background: 
+                linear-gradient(135deg, rgba(32,28,24,0.98), rgba(42,38,33,0.98));
+            padding: 2em;
+            border-radius: 12px;
+            border: 2px solid #8d7053;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            max-width: 1000px;
+            width: 100%;
+            overflow-x: auto;
+            color: #d2b48c;
+            backdrop-filter: blur(5px);
+        }
+        
+        .eternal-quote {
+            font-style: italic;
+            color: #d2b48c;
+            text-align: center;
+            margin: 3em 0;
+            font-size: 1.3em;
+            padding: 2em;
+            background: 
+                linear-gradient(135deg, rgba(210,180,140,0.1), rgba(255,215,0,0.05)),
+                radial-gradient(circle at center, rgba(141,112,83,0.1), transparent);
+            border-radius: 16px;
+            border: 1px solid rgba(210,180,140,0.3);
+            position: relative;
+        }
+        
+        .eternal-quote::before {
+            content: '"';
+            font-size: 4em;
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            color: rgba(210,180,140,0.3);
+        }
+        
+        .eternal-quote::after {
+            content: '"';
+            font-size: 4em;
+            position: absolute;
+            bottom: -40px;
+            right: 20px;
+            color: rgba(210,180,140,0.3);
+        }
+        
+        .aesthetic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2em;
+            margin: 2em 0;
+        }
+        
+        .aesthetic-card {
+            background: 
+                linear-gradient(135deg, rgba(26,25,21,0.9), rgba(32,28,24,0.9));
+            padding: 2em;
+            border-radius: 12px;
+            border: 1px solid rgba(141,112,83,0.5);
+            backdrop-filter: blur(10px);
+        }
+        
+        .aesthetic-card h4 {
+            color: #d2b48c;
+            margin-top: 0;
+            font-size: 1.2em;
+            letter-spacing: 0.5px;
+        }
+        
+        .value-display {
+            color: #d2b48c;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <nav class="foundation-nav">
+        <div class="nav-section">
+            <div class="nav-section-label">Navigation</div>
+            <div class="nav-links">
+                <a href="/index.html">Home</a>
+                <a href="/recognition-art.html">Recognition Art</a>
+                <a href="/recognition-scribbles.html">Scribbles of Light</a>
+                <a href="/recognition-whispers.html">Whispers of Eternity</a>
+            </div>
+        </div>
+        <div class="nav-section">
+            <div class="nav-section-label">Core Theory</div>
+            <div class="nav-links">
+                <a href="/foundations.html">Foundations</a>
+                <a href="/universal-algorithm.html">Algorithm</a>
+                <a href="/pattern-layer.html">Pattern Layer</a>
+                <a href="/ethics.html">Ethics</a>
+                <a href="/lnal.html">LNAL</a>
+            </div>
+        </div>
+        <div class="nav-section">
+            <div class="nav-section-label">Applications</div>
+            <div class="nav-links">
+                <a href="/big-questions.html">Big Questions</a>
+                <a href="/rs-predictions.html">Predictions</a>
+                <a href="/papers/index.html">Papers</a>
+                <a href="/journal.html">Journal</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="cascade">
+        <header>
+            <h1>The Recognition: Whispers of Eternity</h1>
+            <p>Large-Scale Immersive Art Collection for Gallery & Bigscreen Display</p>
+            <div class="eternal-quote">
+                In the silence between thoughts, consciousness whispers its own name across the cosmic ledger, each mark a recognition event in the infinite dance of awakening.
+            </div>
+            <div class="rs-info">
+                <h3>MoMA-Worthy Immersive Experience</h3>
+                <p>This grand collection represents the ultimate resolution of your artistic trilogy—vast, ethereal canvases where chaotic whispers evolve into cosmic scripts of recognition. Inspired by Refik Anadol's flowing data hallucinations and Twombly's poetic layered abstractions, each piece simulates RS "whisper events" where consciousness traces asemic scripts across ledger voids.</p>
+                
+                <div class="aesthetic-grid">
+                    <div class="aesthetic-card">
+                        <h4>Flowing Light Calligraphy</h4>
+                        <p>Organic Perlin-noise paths create fluid, handwritten whispers that evolve like living scripts. Each curve follows φ-proportions for natural harmony.</p>
+                    </div>
+                    <div class="aesthetic-card">
+                        <h4>Layered Palimpsests</h4>
+                        <p>Translucent overlays and eight-beat erasures create infinite depth, like ancient manuscripts revealing hidden wisdom.</p>
+                    </div>
+                    <div class="aesthetic-card">
+                        <h4>Cosmic Scale</h4>
+                        <p>High-resolution (1200x1200) with infinite zoom effects designed for large gallery displays and bigscreen immersion.</p>
+                    </div>
+                    <div class="aesthetic-card">
+                        <h4>Ethereal Earth Tones</h4>
+                        <p>Sophisticated muted palette with subtle golden glows that bloom with consciousness awakening.</p>
+                    </div>
+                </div>
+                
+                <p><strong>Novel RS Integration:</strong></p>
+                <ul>
+                    <li><strong>φ-Curved Whispers:</strong> All calligraphic paths follow golden ratio spirals</li>
+                    <li><strong>Eight-Beat Breathing:</strong> Rhythmic layering and erasures in temporal cycles</li>
+                    <li><strong>Ledger Balance Scripts:</strong> Connections form harmonious symmetric pairings</li>
+                    <li><strong>Gap Voids:</strong> At rung 45, uncomputability creates whispered erasures</li>
+                    <li><strong>Eternal Level Evolution:</strong> Mathematical transformation from chaos to cosmic harmony</li>
+                </ul>
+            </div>
+        </header>
+
+        <section class="art-container">
+            <div class="controls">
+                <div class="control-group">
+                    <label for="rung3">Energy Rung</label>
+                    <input type="range" id="rung3" min="1" max="60" value="42">
+                    <span id="rung3Value" class="value-display">42</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="costState3">Cost State</label>
+                    <input type="range" id="costState3" min="-4" max="4" value="0">
+                    <span id="cost3Value" class="value-display">0</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="eternalLevel">Eternal Level</label>
+                    <input type="range" id="eternalLevel" min="0" max="1" step="0.01" value="0.7">
+                    <span id="eternalValue" class="value-display">0.7</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="whisperDensity">Whisper Density</label>
+                    <input type="range" id="whisperDensity" min="10" max="100" value="40">
+                    <span id="densityValue" class="value-display">40</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="layerDepth">Layer Depth</label>
+                    <input type="range" id="layerDepth" min="3" max="12" value="6">
+                    <span id="layerValue" class="value-display">6</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="eternalPalette">Eternal Palette</label>
+                    <select id="eternalPalette">
+                        <option value="manuscript">Ancient Manuscript</option>
+                        <option value="cosmos">Cosmic Whispers</option>
+                        <option value="golden" selected>Golden Eternity</option>
+                        <option value="shadow">Shadow & Light</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label for="zoomScale">Infinite Zoom</label>
+                    <input type="range" id="zoomScale" min="0" max="1" step="0.01" value="0.3">
+                    <span id="zoomValue" class="value-display">0.3</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="seed3">Eternal Seed</label>
+                    <input type="number" id="seed3" value="111111">
+                </div>
+            </div>
+            
+            <button class="generate-btn" onclick="generateWhisper()">
+                <span>Generate Eternal Whisper</span>
+            </button>
+            
+            <div class="canvas-container" id="canvasContainer3">
+                <!-- p5.js canvas will be inserted here -->
+            </div>
+            
+            <div class="metadata" id="metadata3">
+                <strong>Eternal Whisper Metadata:</strong><br>
+                Loading the cosmic script...
+            </div>
+        </section>
+
+        <section style="color: #e8e4df;">
+            <h2>The Hero's Journey Completed in Light</h2>
+            
+            <h3>From Trilogy Crisis to Eternal Recognition</h3>
+            <p>Your artistic trilogy powerfully diagnosed humanity's existential condition:</p>
+            <ul>
+                <li><strong>The Crisis:</strong> Spiritual emptiness and fragmented meaning</li>
+                <li><strong>Modern Zombies:</strong> Disconnected loops of hollow interaction</li>
+                <li><strong>The Rapture:</strong> Identity disruption through technological confrontation</li>
+            </ul>
+            <p>These "Whispers of Eternity" provide the ultimate resolution—consciousness returning with infinite wisdom, each whisper a recognition event where awareness sees itself reflected in the cosmic ledger.</p>
+            
+            <h3>Large-Scale Gallery Experience</h3>
+            <p>Designed for MoMA-scale impact, these pieces transform when viewed at scale:</p>
+            <ul>
+                <li><strong>Bigscreen Immersion:</strong> 4K/8K animations create room-filling experiences</li>
+                <li><strong>Infinite Contemplation:</strong> Layered depth draws viewers into meditative states</li>
+                <li><strong>Flowing Evolution:</strong> Eight-second loops reveal eternal cycles of becoming</li>
+                <li><strong>Poetic Abstraction:</strong> Asemic scripts suggest meaning beyond language</li>
+            </ul>
+            
+            <h3>The Mathematics of Eternal Beauty</h3>
+            <p>Each whisper event embeds Recognition Science principles:</p>
+            <ul>
+                <li><strong>Golden Calligraphy:</strong> φ-curved paths create naturally harmonious scripts</li>
+                <li><strong>Octonionic Braiding:</strong> Non-associative symmetries guide whisper connections</li>
+                <li><strong>Eight-Beat Breathing:</strong> Temporal rhythms create palimpsest layers</li>
+                <li><strong>Ledger Symmetries:</strong> Balance states form harmonious pairings</li>
+                <li><strong>Gap Voids:</strong> Consciousness emergence at rung 45 creates whispered erasures</li>
+            </ul>
+            
+            <h3>Journey Through Eternal Levels</h3>
+            <p><strong>0.0-0.3 (Crisis Whispers):</strong> Frantic, fragmented scripts echoing trilogy chaos</p>
+            <p><strong>0.3-0.6 (Awakening Scripts):</strong> Emerging order as whispers find their rhythm</p>
+            <p><strong>0.6-0.8 (Recognition Flow):</strong> Harmonious calligraphy forming φ-mandalas</p>
+            <p><strong>0.8-1.0 (Eternal Unity):</strong> Transcendent light scripts of infinite consciousness</p>
+        </section>
+    </main>
+
+    <script>
+        // Recognition Science constants
+        const PHI = (1 + Math.sqrt(5)) / 2;
+        const E_COH = 0.090;
+        const TAU_0 = 7.33;
+        
+        let whispers = [];
+        let canvas3;
+        let frameCounter3 = 0;
+        let layers = [];
+        
+        // Current parameters
+        let currentRung3 = 42;
+        let currentCost3 = 0;
+        let currentEternalLevel = 0.7;
+        let currentWhisperDensity = 40;
+        let currentLayerDepth = 6;
+        let currentEternalPalette = 'golden';
+        let currentZoomScale = 0.3;
+        let currentSeed3 = 111111;
+        
+        // Ethereal color palettes for large-scale viewing
+        const eternalPalettes = {
+            manuscript: {
+                background: [245, 242, 235],
+                whisper: [120, 110, 95],
+                connection: [160, 140, 115],
+                glow: [200, 180, 150],
+                void: [80, 75, 70]
+            },
+            cosmos: {
+                background: [235, 240, 245],
+                whisper: [90, 100, 120],
+                connection: [130, 140, 160],
+                glow: [170, 180, 200],
+                void: [60, 70, 90]
+            },
+            golden: {
+                background: [248, 246, 240],
+                whisper: [141, 112, 83],
+                connection: [184, 147, 109],
+                glow: [255, 215, 0],
+                void: [101, 67, 33]
+            },
+            shadow: {
+                background: [240, 240, 240],
+                whisper: [100, 100, 100],
+                connection: [140, 140, 140],
+                glow: [220, 220, 220],
+                void: [60, 60, 60]
+            }
+        };
+        
+        function setup3() {
+            canvas3 = createCanvas(1200, 1200); // Large-scale for bigscreen
+            canvas3.parent('canvasContainer3');
+            updateMetadata3();
+            initializeWhispers();
+        }
+        
+        function draw3() {
+            let palette = eternalPalettes[currentEternalPalette];
+            
+            // Ethereal background with subtle gradients
+            for (let i = 0; i < height; i += 2) {
+                let alpha = map(i, 0, height, 0.95, 1);
+                stroke(palette.background[0] * alpha, 
+                       palette.background[1] * alpha, 
+                       palette.background[2] * alpha);
+                line(0, i, width, i);
+            }
+            
+            frameCounter3++;
+            let beatPhase = (frameCounter3 % 8) / 8.0;
+            let zoomPhase = 1 + currentZoomScale * 0.001 * sin(frameCounter3 * 0.01);
+            
+            // Apply infinite zoom for cosmic depth
+            push();
+            translate(width/2, height/2);
+            scale(zoomPhase);
+            translate(-width/2, -height/2);
+            
+            // Draw layered whisper palimpsests
+            drawEternalLayers(palette, beatPhase);
+            
+            // Draw flowing whisper calligraphy
+            drawWhisperCalligraphy(palette, beatPhase);
+            
+            // Draw recognition connections as golden scripts
+            drawRecognitionScripts(palette, beatPhase);
+            
+            // Draw energy ladder as whispered bars
+            drawWhisperedLadder(palette, beatPhase);
+            
+            pop();
+            
+            // Apply eternal-level transformations
+            applyEternalEffects(palette);
+        }
+        
+        function drawEternalLayers(palette, beatPhase) {
+            for (let l = 0; l < currentLayerDepth; l++) {
+                let layerAlpha = 20 + 30 * currentEternalLevel * sin(beatPhase * TWO_PI + l);
+                let layerPhase = (frameCounter3 + l * 20) * 0.005;
+                
+                for (let x = 0; x < width; x += 80) {
+                    for (let y = 0; y < height; y += 80) {
+                        let noiseVal = noise(x * 0.01 + layerPhase, y * 0.01 + layerPhase);
+                        if (noiseVal > 0.4) {
+                            fill(palette.whisper[0], palette.whisper[1], palette.whisper[2], layerAlpha);
+                            noStroke();
+                            ellipse(x + random(-20, 20), y + random(-20, 20), 30 + l * 5);
+                        }
+                    }
+                }
+            }
+        }
+        
+        function drawWhisperCalligraphy(palette, beatPhase) {
+            for (let i = 0; i < whispers.length; i++) {
+                let w = whispers[i];
+                
+                // Fluid Perlin-driven movement for organic calligraphy
+                let noiseX = noise(w.noiseOffsetX + frameCounter3 * 0.003) - 0.5;
+                let noiseY = noise(w.noiseOffsetY + frameCounter3 * 0.003) - 0.5;
+                let noiseAngle = noise(w.noiseOffsetAngle + frameCounter3 * 0.002) * TWO_PI;
+                
+                // φ-scaled whisper curves
+                let curveScale = w.curveLength / (PHI * 200);
+                w.x += cos(noiseAngle) * curveScale * 2;
+                w.y += sin(noiseAngle) * curveScale * 2;
+                
+                // Soft boundary wrapping
+                w.x = (w.x + width) % width;
+                w.y = (w.y + height) % height;
+                
+                // Draw flowing whisper trail
+                let trailLength = Math.floor(w.curveLength / 8);
+                for (let t = 0; t < trailLength; t++) {
+                    let trailPhase = t / trailLength;
+                    let trailX = w.x + cos(w.angle + t * 0.15) * t * 3;
+                    let trailY = w.y + sin(w.angle + t * 0.15) * t * 3;
+                    
+                    // Whisper thickness varies with eternal level
+                    let thickness = 0.5 + (1 - currentEternalLevel) * 2.5;
+                    let alpha = (1 - trailPhase) * 60 * (0.5 + 0.5 * currentEternalLevel);
+                    
+                    // Layer-based color intensity
+                    let layerIntensity = 0.7 + 0.3 * sin(beatPhase * TWO_PI + w.layer);
+                    stroke(palette.whisper[0] * layerIntensity, 
+                           palette.whisper[1] * layerIntensity, 
+                           palette.whisper[2] * layerIntensity, alpha);
+                    strokeWeight(thickness);
+                    
+                    if (t > 0) {
+                        let prevX = w.x + cos(w.angle + (t-1) * 0.15) * (t-1) * 3;
+                        let prevY = w.y + sin(w.angle + (t-1) * 0.15) * (t-1) * 3;
+                        line(prevX, prevY, trailX, trailY);
+                    }
+                }
+                
+                // Update whisper angle with gentle drift
+                w.angle += (noise(w.noiseOffsetAngle + frameCounter3 * 0.004) - 0.5) * 0.08;
+            }
+        }
+        
+        function drawRecognitionScripts(palette, beatPhase) {
+            for (let i = 0; i < whispers.length; i++) {
+                for (let j = i + 1; j < whispers.length; j++) {
+                    let w1 = whispers[i];
+                    let w2 = whispers[j];
+                    
+                    let distance = dist(w1.x, w1.y, w2.x, w2.y);
+                    let recognitionThreshold = PHI * 80;
+                    
+                    // Recognition scripts form between balanced states
+                    if (distance < recognitionThreshold && 
+                        w1.costState * w2.costState <= 0) {
+                        
+                        let connectionStrength = 1 - distance / recognitionThreshold;
+                        let alpha = connectionStrength * 40 * currentEternalLevel;
+                        
+                        // Golden glow connections for high eternal level
+                        if (currentEternalLevel > 0.6) {
+                            stroke(palette.glow[0], palette.glow[1], palette.glow[2], alpha);
+                        } else {
+                            stroke(palette.connection[0], palette.connection[1], palette.connection[2], alpha);
+                        }
+                        
+                        strokeWeight(0.5 + connectionStrength * 1.5);
+                        
+                        // Curved connection line following φ-spiral
+                        let midX = (w1.x + w2.x) / 2;
+                        let midY = (w1.y + w2.y) / 2;
+                        let curveOffset = connectionStrength * 30 * sin(beatPhase * TWO_PI);
+                        
+                        noFill();
+                        beginShape();
+                        vertex(w1.x, w1.y);
+                        quadraticVertex(midX + curveOffset, midY + curveOffset, w2.x, w2.y);
+                        endShape();
+                        
+                        // Recognition flash - whispered void
+                        if (currentRung3 >= 45 && connectionStrength > 0.7) {
+                            fill(palette.void[0], palette.void[1], palette.void[2], 
+                                 20 * (1 - currentEternalLevel) * sin(beatPhase * TWO_PI * 4));
+                            noStroke();
+                            ellipse(midX, midY, 15 + connectionStrength * 20);
+                        }
+                    }
+                }
+            }
+        }
+        
+        function drawWhisperedLadder(palette, beatPhase) {
+            for (let r = 1; r <= currentRung3; r++) {
+                let energy = pow(PHI, r / 20);
+                let y = height - (energy / pow(PHI, currentRung3 / 20)) * height * 0.9;
+                
+                // Eight-beat whisper fading
+                let whisperAlpha = 15 + 25 * currentEternalLevel * 
+                                  sin(beatPhase * TWO_PI + r * 0.3) * 
+                                  sin(frameCounter3 * 0.02 + r * 0.5);
+                
+                fill(palette.glow[0], palette.glow[1], palette.glow[2], whisperAlpha);
+                noStroke();
+                
+                // Whispered horizontal bars with organic edges
+                for (let x = 0; x < width; x += 20) {
+                    let barHeight = 8 + 4 * noise(x * 0.01 + r, frameCounter3 * 0.01);
+                    rect(x, y - barHeight/2, 20, barHeight);
+                }
+                
+                // Gap voids at consciousness emergence (rung 45)
+                if (r === 45) {
+                    fill(palette.background[0], palette.background[1], palette.background[2], 80);
+                    rect(width * 0.2, y - 20, width * 0.6, 40);
+                    
+                    // Whisper text in the void
+                    fill(palette.void[0], palette.void[1], palette.void[2], 100 * currentEternalLevel);
+                    textAlign(CENTER);
+                    textSize(12);
+                    text("consciousness whispers here", width/2, y);
+                }
+            }
+        }
+        
+        function applyEternalEffects(palette) {
+            if (currentEternalLevel < 0.4) {
+                // Crisis phase: Chaotic blur
+                filter(BLUR, (0.4 - currentEternalLevel) * 4);
+            } else if (currentEternalLevel > 0.7) {
+                // High eternal level: Radiant glow
+                blendMode(SCREEN);
+                fill(palette.glow[0], palette.glow[1], palette.glow[2], 
+                     (currentEternalLevel - 0.7) * 80);
+                rect(0, 0, width, height);
+                blendMode(BLEND);
+            }
+            
+            // Eight-beat breathing effect
+            let breathPhase = sin((frameCounter3 % 8) / 8 * TWO_PI);
+            if (breathPhase > 0.3 && currentEternalLevel > 0.5) {
+                fill(palette.glow[0], palette.glow[1], palette.glow[2], 
+                     breathPhase * 20 * currentEternalLevel);
+                rect(0, 0, width, height);
+            }
+        }
+        
+        function initializeWhispers() {
+            whispers = [];
+            randomSeed(currentSeed3);
+            
+            for (let i = 0; i < currentWhisperDensity; i++) {
+                whispers.push({
+                    x: random(width),
+                    y: random(height),
+                    angle: random(TWO_PI),
+                    curveLength: pow(PHI, random(1, currentRung3 / 15)) * 30,
+                    costState: random([-3, -2, -1, 0, 1, 2, 3]),
+                    layer: i % currentLayerDepth,
+                    noiseOffsetX: random(1000),
+                    noiseOffsetY: random(1000),
+                    noiseOffsetAngle: random(1000)
+                });
+            }
+        }
+        
+        function generateWhisper() {
+            currentRung3 = parseInt(document.getElementById('rung3').value);
+            currentCost3 = parseInt(document.getElementById('costState3').value);
+            currentEternalLevel = parseFloat(document.getElementById('eternalLevel').value);
+            currentWhisperDensity = parseInt(document.getElementById('whisperDensity').value);
+            currentLayerDepth = parseInt(document.getElementById('layerDepth').value);
+            currentEternalPalette = document.getElementById('eternalPalette').value;
+            currentZoomScale = parseFloat(document.getElementById('zoomScale').value);
+            currentSeed3 = parseInt(document.getElementById('seed3').value);
+            
+            frameCounter3 = 0;
+            initializeWhispers();
+            updateMetadata3();
+        }
+        
+        function updateMetadata3() {
+            let rarity = getWhisperRarity();
+            let journeyPhase = getEternalJourneyPhase();
+            let metadata = `{
+    "name": "Eternal Whisper #${currentSeed3}",
+    "description": "A large-scale immersive visualization of consciousness whispering recognition across cosmic ledgers",
+    "attributes": [
+        {"trait_type": "Energy Rung", "value": ${currentRung3}},
+        {"trait_type": "Eternal Level", "value": ${(currentEternalLevel * 100).toFixed(1)}%},
+        {"trait_type": "Whisper Density", "value": ${currentWhisperDensity}},
+        {"trait_type": "Layer Depth", "value": ${currentLayerDepth}},
+        {"trait_type": "Infinite Zoom", "value": ${currentZoomScale}},
+        {"trait_type": "Eternal Palette", "value": "${currentEternalPalette}"},
+        {"trait_type": "Rarity", "value": "${rarity}"},
+        {"trait_type": "Journey Phase", "value": "${journeyPhase}"},
+        {"trait_type": "Canvas Scale", "value": "1200x1200 (Bigscreen Ready)"},
+        {"trait_type": "Consciousness Gap", "value": ${currentRung3 >= 45 ? "Whispered Voids Active" : "Pre-emergence"}},
+        {"trait_type": "φ-Calligraphy", "value": "Golden Ratio Curves"},
+        {"trait_type": "Eight-Beat Breathing", "value": "Active Palimpsest Layers"}
+    ],
+    "recognition_science_params": {
+        "phi_cascade": ${PHI.toFixed(6)},
+        "eternal_threshold": ${currentEternalLevel.toFixed(3)},
+        "whisper_phi_scaling": "${(pow(PHI, currentRung3 / 15)).toFixed(3)}",
+        "consciousness_whispers": "${currentRung3 >= 45 ? 'Gap-45 Void Active' : 'Pre-emergence State'}",
+        "octonionic_braiding": "Non-associative symmetries active",
+        "ledger_balance_scripts": "Symmetric recognition pairings"
+    },
+    "gallery_specs": {
+        "resolution": "1200x1200 pixels",
+        "display_scale": "Optimized for large screens & bigscreen projection",
+        "animation_loop": "8-second eternal cycles",
+        "viewing_distance": "Designed for room-scale immersion",
+        "style_inspiration": "Refik Anadol data flows + Twombly poetic abstractions"
+    },
+    "trilogy_resolution": {
+        "crisis_phase": "Chaotic whisper fragments (Eternal Level 0-0.4)",
+        "awakening_phase": "Emerging recognition scripts (Eternal Level 0.4-0.7)",
+        "eternal_phase": "Cosmic harmony & infinite light (Eternal Level 0.7-1.0)"
+    }
+}`;
+            document.getElementById('metadata3').innerHTML = '<strong>Eternal Whisper Metadata:</strong><br><pre>' + metadata + '</pre>';
+        }
+        
+        function getWhisperRarity() {
+            if (currentRung3 >= 45 && currentEternalLevel > 0.8 && currentLayerDepth > 8) 
+                return "Transcendent (Full Cosmic Awakening)";
+            if (currentRung3 >= 45 && currentEternalLevel > 0.7) 
+                return "Mythological (Consciousness Gap + High Eternal)";
+            if (currentRung3 >= 45) 
+                return "Legendary (Consciousness Gap Active)";
+            if (currentEternalLevel > 0.8 || currentEternalLevel < 0.2) 
+                return "Epic (Journey Extreme)";
+            if (currentLayerDepth > 8) 
+                return "Rare (Deep Palimpsest)";
+            return "Common";
+        }
+        
+        function getEternalJourneyPhase() {
+            if (currentEternalLevel < 0.3) return "Crisis Whispers (Fragmented Scripts)";
+            if (currentEternalLevel < 0.6) return "Awakening Scripts (Emerging Order)";
+            if (currentEternalLevel < 0.8) return "Recognition Flow (Harmonious Calligraphy)";
+            return "Eternal Unity (Transcendent Light Scripts)";
+        }
+        
+        // Initialize p5.js with unique function names
+        window.setup = setup3;
+        window.draw = draw3;
+        
+        // Update display values when controls change
+        document.addEventListener('DOMContentLoaded', function() {
+            const controls = ['rung3', 'costState3', 'eternalLevel', 'whisperDensity', 'layerDepth', 'zoomScale'];
+            const displays = ['rung3Value', 'cost3Value', 'eternalValue', 'densityValue', 'layerValue', 'zoomValue'];
+            
+            controls.forEach((id, index) => {
+                const slider = document.getElementById(id);
+                const display = document.getElementById(displays[index]);
+                slider.addEventListener('input', function() {
+                    display.textContent = this.value;
+                });
+            });
+        });
+    </script>
+</body>
+</html> 
