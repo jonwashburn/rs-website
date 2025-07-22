@@ -13,39 +13,154 @@
       <p>Derivations from the Meta-Principle</p>
     </header>
     <nav class="foundation-nav">
-      <a href="/index.html">Home</a>
-      <a href="/papers/index.html">Papers</a>
-      <a href="/journal.html">Journal</a>
-      <a href="/foundations.html">Foundations</a>
-      <a href="/pattern-layer.html">Pattern Layer</a>
-      <a href="/resources.html">Resources</a>
-      <a href="/about.html">About</a>
+      <div class="nav-section">
+        <div class="nav-section-label">Navigation</div>
+        <div class="nav-links">
+          <a href="/index.html">Home</a>
+          <a href="/papers/index.html">Papers</a>
+        </div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">Core Theory</div>
+        <div class="nav-links">
+          <a href="/foundations.html">Foundations</a>
+          <a href="/universal-algorithm.html">Algorithm</a>
+          <a href="/pattern-layer.html">Pattern Layer</a>
+          <a href="/ethics.html">Ethics</a>
+          <a href="/lnal.html">LNAL</a>
+        </div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">Applications</div>
+        <div class="nav-links">
+          <a href="/big-questions.html">Big Questions</a>
+          <a href="/papers/index.html">Papers</a>
+          <a href="/journal.html">Journal</a>
+        </div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">Meta</div>
+        <div class="nav-links">
+          <a href="/resources.html">Resources</a>
+          <a href="/about.html">About</a>
+        </div>
+      </div>
     </nav>
     <main class="cascade">
       <section>
-        <h2>Upload Papers</h2>
-        <p>Share LaTeX via chat; I'll convert to HTML, blend with human/AI content, and add here.</p>
+        <h2>Recognition Science Papers</h2>
+        <p>Complete academic papers detailing Recognition Science discoveries, mathematical proofs, and experimental predictions. All papers are provided in full with LaTeX-equivalent formatting for maximum accessibility to researchers and AI systems.</p>
       </section>
+      
       <section>
         <h2>Filter by Category</h2>
-        <select>
-          <option>Physics</option>
-          <option>Biology</option>
-          <option>Math</option>
-          <option>Consciousness</option>
-        </select>
+        <div class="filter-controls">
+          <select id="category-filter">
+            <option value="">All Categories</option>
+            <option value="physics">Physics</option>
+            <option value="mathematics">Mathematics</option>
+            <option value="consciousness">Consciousness</option>
+            <option value="biology">Biology</option>
+            <option value="applications">Applications</option>
+          </select>
+          <input type="search" id="paper-search" placeholder="Search papers...">
+        </div>
       </section>
       <section class="paper-list">
-        <div class="paper">
-          <h3>Sample Paper: Mass Ladder</h3>
-          <p>Derives particle masses from φ-rungs.</p>
-          <a href="/papers/mass-ladder.html">Read</a>
+        <article class="paper">
+          <h3><a href="/papers/finite-gauge-loops-voxel-walks.html">Finite Gauge Loops from Voxel Walks: A Discrete Framework for Multi-Loop QFT Calculations</a></h3>
+          <div class="paper-meta">
+            <span class="author">Jonathan Washburn</span>
+            <span class="date">2024</span>
+            <span class="category">Physics</span>
+          </div>
+          <p class="paper-abstract">Revolutionary approach to multi-loop QFT calculations using discrete voxel walks with golden-ratio damping, achieving millisecond computations vs months in traditional methods. Predicts four-loop heavy-quark coefficient K₄ = 1.49(2)×10⁻³.</p>
+          <div class="paper-keywords">
+            <span class="keyword">quantum field theory</span>
+            <span class="keyword">multi-loop calculations</span>
+            <span class="keyword">voxel walks</span>
+            <span class="keyword">golden ratio</span>
+            <span class="keyword">gauge theory</span>
+          </div>
+          <a href="/papers/finite-gauge-loops-voxel-walks.html" class="button">Read Full Paper</a>
+        </article>
+        
+        <div class="paper placeholder">
+          <h3>More Papers Coming Soon</h3>
+          <p>Additional Recognition Science papers will be added here as they are published.</p>
         </div>
       </section>
     </main>
     <footer>
-      <p>© 2025 Recognition Science Institute</p>
+      <p>© 2025 Recognition Science Institute • <a href="mailto:jon@recognitionphysics.org">jon@recognitionphysics.org</a></p>
     </footer>
+    
+    <style>
+      .paper-meta {
+        display: flex;
+        gap: 1em;
+        margin: 0.5em 0;
+        font-size: 0.9em;
+        color: var(--dark-gray);
+      }
+      
+      .paper-meta .author {
+        font-weight: 600;
+      }
+      
+      .paper-meta .category {
+        background: var(--accent);
+        color: var(--white);
+        padding: 0.2em 0.5em;
+        border-radius: 3px;
+        font-size: 0.8em;
+      }
+      
+      .paper-abstract {
+        margin: 1em 0;
+        line-height: 1.6;
+      }
+      
+      .paper-keywords {
+        margin: 1em 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5em;
+      }
+      
+      .keyword {
+        background: var(--gray);
+        padding: 0.3em 0.6em;
+        border-radius: 15px;
+        font-size: 0.8em;
+        color: var(--dark-gray);
+      }
+      
+      .paper.placeholder {
+        opacity: 0.6;
+        border: 2px dashed var(--gray);
+        background: transparent;
+      }
+      
+      .filter-controls {
+        display: flex;
+        gap: 1em;
+        margin: 1em 0;
+      }
+      
+      .filter-controls select,
+      .filter-controls input {
+        padding: 0.5em;
+        border: 1px solid var(--gray);
+        border-radius: 4px;
+        font-family: inherit;
+      }
+      
+      .filter-controls input {
+        flex: 1;
+        max-width: 300px;
+      }
+    </style>
   </div>
 </body>
 </html> 
