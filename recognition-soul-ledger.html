@@ -170,51 +170,185 @@
             // Create soul group
             soulGroup = new THREE.Group();
             
-            // Add central soul core
-            const coreGeometry = new THREE.SphereGeometry(1.5, 16, 16);
+            // Get current soul's unique signature for variation
+            const delta = parseFloat(steps.find(s => s.includes('SET_DELTA')).split(',')[1]);
+            const energy = parseFloat(steps.find(s => s.includes('SOUL_ENERGY')).split(',')[1]);
+            
+            // Create unique visual signature based on δ and eigenvalues
+            const soulSignature = Math.abs(delta * eigenvalues[0] * eigenvalues[7]);
+            const personalityType = Math.floor(soulSignature * 1000) % 6; // 6 distinct personalities
+            
+            // Iconic color palettes based on δ signature
+            const colorPalettes = [
+                // Chromie-style rainbow flow
+                [[0.0, 0.8, 1.0], [0.1, 0.9, 1.0], [0.2, 0.8, 0.9], [0.3, 0.9, 1.0]], // Rainbow
+                // Fidenza-style earth tones  
+                [[0.05, 0.6, 0.8], [0.08, 0.5, 0.7], [0.12, 0.4, 0.6], [0.15, 0.5, 0.8]], // Warm earth
+                // Monochrome elegance
+                [[0.6, 0.0, 1.0], [0.6, 0.1, 0.9], [0.6, 0.0, 0.8], [0.6, 0.1, 1.0]], // Blue mono
+                // Volcanic energy
+                [[0.95, 0.9, 1.0], [0.98, 0.8, 0.9], [0.02, 0.9, 1.0], [0.05, 0.8, 0.8]], // Red-orange
+                // Forest mystique
+                [[0.25, 0.7, 0.6], [0.3, 0.8, 0.7], [0.35, 0.6, 0.5], [0.28, 0.9, 0.8]], // Green
+                // Cosmic void
+                [[0.75, 0.9, 0.9], [0.78, 0.8, 0.7], [0.72, 0.9, 1.0], [0.76, 0.7, 0.8]]  // Purple
+            ];
+            
+            const palette = colorPalettes[Math.floor(Math.abs(delta + 4) / 8 * colorPalettes.length)];
+            
+            // Formation patterns based on eigenvalue ratios
+            const eigenRatio = eigenvalues[7] / eigenvalues[0]; // Ratio gives formation type
+            const formationTypes = ['spiral', 'burst', 'lattice', 'flow', 'cluster', 'web'];
+            const formation = formationTypes[Math.floor(eigenRatio * 1000) % formationTypes.length];
+            
+            // Central core with signature-based properties
+            const coreSize = 1.0 + Math.abs(delta) * 0.3;
+            const coreGeometry = new THREE.SphereGeometry(coreSize, 16, 16);
+            const coreHSL = palette[0];
             const coreMaterial = new THREE.MeshPhongMaterial({
-                color: 0xffffff,
-                emissive: 0x333333,
+                color: new THREE.Color().setHSL(coreHSL[0], coreHSL[1], coreHSL[2]),
+                emissive: new THREE.Color().setHSL(coreHSL[0], coreHSL[1] * 0.3, coreHSL[2] * 0.2),
                 transparent: true,
                 opacity: 0.9
             });
             const core = new THREE.Mesh(coreGeometry, coreMaterial);
             soulGroup.add(core);
             
-            // Visualize eigenvalues as soul crystals
-            const maxLambda = Math.max(...eigenvalues); // Find max for normalization
+            // Generate iconic eigenvalue visualization based on formation type
             eigenvalues.forEach((lambda, k) => {
-                const normalizedSize = (lambda / maxLambda) * 2.0; // Normalize size
-                const size = 0.5 + normalizedSize; 
-                const geometry = new THREE.OctahedronGeometry(size, 1);
-                const hue = k / 8; // Color based on eigenvalue index
+                const normalizedSize = (lambda / Math.max(...eigenvalues)) * 2.0;
+                const size = 0.3 + normalizedSize;
+                
+                // Different geometries for different personalities
+                let geometry;
+                switch(personalityType) {
+                    case 0: geometry = new THREE.OctahedronGeometry(size, 1); break;
+                    case 1: geometry = new THREE.TetrahedronGeometry(size, 0); break;
+                    case 2: geometry = new THREE.IcosahedronGeometry(size, 0); break;
+                    case 3: geometry = new THREE.DodecahedronGeometry(size, 0); break;
+                    case 4: geometry = new THREE.ConeGeometry(size, size * 2, 6); break;
+                    case 5: geometry = new THREE.CylinderGeometry(size, size, size * 1.5, 8); break;
+                }
+                
+                // Color progression through palette
+                const colorIndex = k % palette.length;
+                const hsl = palette[colorIndex];
                 const material = new THREE.MeshPhongMaterial({ 
-                    color: new THREE.Color().setHSL(hue, 0.8, 0.6),
+                    color: new THREE.Color().setHSL(hsl[0], hsl[1], hsl[2]),
                     transparent: true,
-                    opacity: 0.8,
-                    emissive: new THREE.Color().setHSL(hue, 0.5, 0.1)
+                    opacity: 0.7 + (k / eigenvalues.length) * 0.3,
+                    emissive: new THREE.Color().setHSL(hsl[0], hsl[1] * 0.4, hsl[2] * 0.1)
                 });
+                
                 const crystal = new THREE.Mesh(geometry, material);
                 
-                // Position in φ-spiral pattern
-                const radius = 5 + k * 2;
-                const angle = k * (Math.PI * 2 / 8);
-                crystal.position.x = radius * Math.cos(angle);
-                crystal.position.y = radius * Math.sin(angle);
-                crystal.position.z = (k - 4) * 1.5;
+                // Iconic positioning based on formation type
+                let x, y, z;
+                switch(formation) {
+                    case 'spiral':
+                        // Chromie-style flowing spiral
+                        const spiralAngle = k * PHI;
+                        const spiralRadius = 3 + k * 1.8;
+                        x = spiralRadius * Math.cos(spiralAngle);
+                        y = spiralRadius * Math.sin(spiralAngle);
+                        z = k * 1.2 - 4;
+                        break;
+                        
+                    case 'burst':
+                        // Fidenza-style radial burst
+                        const burstAngle = (k / eigenvalues.length) * Math.PI * 2 + Math.sin(k) * 0.5;
+                        const burstRadius = 4 + k * 2.5 + Math.cos(k * PHI) * 3;
+                        x = burstRadius * Math.cos(burstAngle);
+                        y = burstRadius * Math.sin(burstAngle);
+                        z = Math.sin(k * 0.8) * 3;
+                        break;
+                        
+                    case 'lattice':
+                        // Geometric lattice formation
+                        x = (k % 3 - 1) * 6 + Math.sin(k) * 2;
+                        y = (Math.floor(k / 3) % 3 - 1) * 6 + Math.cos(k) * 2;
+                        z = Math.sin(k * PHI) * 4;
+                        break;
+                        
+                    case 'flow':
+                        // Flowing river-like pattern
+                        const flowT = k / eigenvalues.length;
+                        x = Math.sin(flowT * Math.PI * 3) * (5 + flowT * 8);
+                        y = flowT * 12 - 6;
+                        z = Math.cos(flowT * Math.PI * 2) * 3;
+                        break;
+                        
+                    case 'cluster':
+                        // Organic clustering
+                        const clusterAngle = k * 0.8 + Math.sin(k * 1.3) * 0.5;
+                        const clusterDist = 3 + Math.pow(k / eigenvalues.length, 0.7) * 10;
+                        x = clusterDist * Math.cos(clusterAngle) + Math.sin(k * 2) * 2;
+                        y = clusterDist * Math.sin(clusterAngle) + Math.cos(k * 2) * 2;
+                        z = Math.sin(k * PHI) * 2;
+                        break;
+                        
+                    case 'web':
+                        // Web-like interconnected structure
+                        const webAngle = k * (Math.PI * 2 / eigenvalues.length);
+                        const webRadius = 4 + (k % 2) * 4 + Math.sin(k * 1.5) * 2;
+                        x = webRadius * Math.cos(webAngle + Math.sin(k) * 0.3);
+                        y = webRadius * Math.sin(webAngle + Math.cos(k) * 0.3);
+                        z = (k % 2 - 0.5) * 4 + Math.sin(k * PHI) * 1.5;
+                        break;
+                }
                 
+                crystal.position.set(x, y, z);
+                crystal.rotation.set(Math.sin(k), Math.cos(k), Math.sin(k * PHI));
                 soulGroup.add(crystal);
+                
+                // Add connecting trails for flow-like formations
+                if (formation === 'flow' || formation === 'spiral') {
+                    if (k > 0) {
+                        const prevCrystal = soulGroup.children[soulGroup.children.length - 2];
+                        const trailGeometry = new THREE.BufferGeometry().setFromPoints([
+                            prevCrystal.position,
+                            crystal.position
+                        ]);
+                        const trailMaterial = new THREE.LineBasicMaterial({
+                            color: new THREE.Color().setHSL(hsl[0], hsl[1] * 0.6, hsl[2] * 0.8),
+                            transparent: true,
+                            opacity: 0.4
+                        });
+                        const trail = new THREE.Line(trailGeometry, trailMaterial);
+                        soulGroup.add(trail);
+                    }
+                }
             });
             
             scene.add(soulGroup);
             
-            // Start animation loop
+            // Signature-based animation style
             function animate() {
                 animationId = requestAnimationFrame(animate);
                 
-                // Rotate the soul group
-                soulGroup.rotation.y += 0.01;
-                soulGroup.rotation.x += 0.005;
+                // Different rotation styles based on formation
+                switch(formation) {
+                    case 'spiral':
+                    case 'flow':
+                        soulGroup.rotation.y += 0.008;
+                        soulGroup.rotation.x += 0.003;
+                        break;
+                    case 'burst':
+                        soulGroup.rotation.y += 0.015;
+                        soulGroup.rotation.z += 0.005;
+                        break;
+                    case 'lattice':
+                        soulGroup.rotation.x += 0.012;
+                        soulGroup.rotation.z += 0.008;
+                        break;
+                    default:
+                        soulGroup.rotation.y += 0.01;
+                        soulGroup.rotation.x += 0.005;
+                }
+                
+                // Signature-based breathing
+                const breathe = 1.0 + Math.sin(Date.now() * 0.002 * (1 + Math.abs(delta) * 0.1)) * 0.05;
+                soulGroup.scale.setScalar(breathe);
                 
                 renderer.render(scene, camera);
             }
