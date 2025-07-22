@@ -171,8 +171,10 @@
             soulGroup = new THREE.Group();
             
             // Get current soul's unique signature for variation
-            const delta = parseFloat(steps.find(s => s.includes('SET_DELTA')).split(',')[1]);
-            const energy = parseFloat(steps.find(s => s.includes('SOUL_ENERGY')).split(',')[1]);
+            const delta_str = steps.find(s => s.includes('SET_DELTA')).match(/{[^}]+}/)[0];
+            const delta = JSON.parse(delta_str).delta;
+            const energy_str = steps.find(s => s.includes('SOUL_ENERGY')).match(/{[^}]+}/)[0];
+            const energy = JSON.parse(energy_str).energy;
             
             // Create unique visual signature based on δ and eigenvalues
             const soulSignature = Math.abs(delta * eigenvalues[0] * eigenvalues[7]);
