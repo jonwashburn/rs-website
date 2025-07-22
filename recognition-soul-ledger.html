@@ -237,11 +237,11 @@
 
         // Rarity system based on ethical trait scores
         const rarityLevels = [
-            { level: "Common Soul", minScore: 0, color: "#888888", glowMult: 0.8, particleMult: 1.0 },
-            { level: "Rare Soul", minScore: 1.5, color: "#00AAFF", glowMult: 1.2, particleMult: 1.3 },
-            { level: "Epic Soul", minScore: 2.5, color: "#AA00FF", glowMult: 1.5, particleMult: 1.6 },
-            { level: "Legendary Soul", minScore: 3.5, color: "#FFD700", glowMult: 2.0, particleMult: 2.0 },
-            { level: "Mythic Soul", minScore: 4.5, color: "#FF4444", glowMult: 3.0, particleMult: 2.5 }
+            { name: "Common Soul", minScore: 0, color: "#888888", glowMult: 0.8, particleMult: 1.0 },
+            { name: "Rare Soul", minScore: 1.5, color: "#00AAFF", glowMult: 1.2, particleMult: 1.3 },
+            { name: "Epic Soul", minScore: 2.5, color: "#AA00FF", glowMult: 1.5, particleMult: 1.6 },
+            { name: "Legendary Soul", minScore: 3.5, color: "#FFD700", glowMult: 2.0, particleMult: 2.0 },
+            { name: "Mythic Soul", minScore: 4.5, color: "#FF4444", glowMult: 3.0, particleMult: 2.5 }
         ];
         
         // Enhanced LNAL Simulator with more opcodes
@@ -620,10 +620,15 @@
         }
         
         function updateRarityPanel(rarity, ethicalScores) {
+            if (!rarity || !rarity.name) {
+                console.error('Invalid rarity data:', rarity);
+                return;
+            }
+            
             const totalScore = ethicalScores.reduce((sum, val) => sum + val, 0);
             
             const badge = document.getElementById('rarityBadge');
-            badge.className = `rarity-badge ${rarity.name.toLowerCase()}`;
+            badge.className = `rarity-badge ${rarity.name.toLowerCase().replace(' ', '-')}`;
             badge.textContent = rarity.name;
             
             const details = `
@@ -831,7 +836,7 @@
                 delta, energy, coherence, stability, 
                 opcodeCount, ethicalScores: ethicalScores.length, 
                 personalityData: personalityData.name, 
-                rarity: rarity.name
+                rarity: rarity ? rarity.name : 'Undefined'
             });
             
             visualizeLedger(simulator.eigenvalues, delta, energy, coherence, stability, opcodeCount, ethicalScores, personalityData, rarity);
