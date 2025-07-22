@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RS Soul Ledger Simulator</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        body { background: #000; color: #fff; font-family: monospace; padding: 20px; }
+        #ledgerDisplay { white-space: pre; font-size: 14px; }
+        #visualizer { width: 100%; height: 400px; border: 1px solid #333; }
+        button { margin: 10px; padding: 10px 20px; }
+    </style>
+</head>
+<body>
+    <h1>Recognition Science Soul Ledger Simulator</h1>
+    <p>Click to replicate a soul via literal LNAL encoding.</p>
+    <button onclick="replicateSoul()">Replicate Soul</button>
+    <pre id="ledgerDisplay"></pre>
+    <canvas id="visualizer"></canvas>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        const PHI = (1 + Math.sqrt(5)) / 2;
+        const E_COH = 0.090;
+        const GAP_45 = 45;
+        
+        // Simplified LNAL Simulator
+        class LNALSimulator {
+            constructor() {
+                this.registers = [];
+                this.costs = [];
+                this.openTokens = 0;
+                this.ledgerSteps = [];
+                this.eigenvalues = [];
+            }
+            
+            logStep(opcode, args, state) {
+                this.ledgerSteps.push(`${opcode} ${args.join(', ')} | State: ${JSON.stringify(state)}`);
+            }
+            
+            FOLD(n, regIndex) {
+                this.registers[regIndex] += n; // Simplify: adjust frequency
+                this.costs[regIndex] += n;
+                this.logStep('FOLD', [n, regIndex], this.costs);
+            }
+            
+            BRAID(regs) {
+                const maxCost = Math.max(...regs.map(r => this.costs[r]));
+                const newReg = this.registers.length;
+                this.registers.push(maxCost); // Simplified composite
+                this.costs.push(maxCost);
+                this.logStep('BRAID', regs, this.costs);
+                return newReg;
+            }
+            
+            // Add more opcodes as needed (LOCK, BALANCE, etc.)
+        }
+        
+        let simulator, scene, camera, renderer;
+        
+        function initVisualizer() {
+            const canvas = document.getElementById('visualizer');
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+            camera.position.z = 50;
+            renderer = new THREE.WebGLRenderer({ canvas });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+        }
+        
+        function visualizeLedger(steps, eigenvalues) {
+            scene.clear();
+            // Simple visualization: spheres for eigenvalues
+            eigenvalues.forEach((lambda, k) => {
+                const geometry = new THREE.SphereGeometry(1 + lambda / 1000, 16, 16);
+                const material = new THREE.MeshBasicMaterial({ color: new THREE.Color().setHSL(k/8, 0.8, 0.7) });
+                const sphere = new THREE.Mesh(geometry, material);
+                sphere.position.x = k * 5 - 20;
+                scene.add(sphere);
+            });
+            renderer.render(scene, camera);
+        }
+        
+        function replicateSoul() {
+            simulator = new LNALSimulator();
+            
+            // Step 1: Initialize 8 registers
+            for (let i = 0; i < 8; i++) {
+                simulator.registers.push(0);
+                simulator.costs.push(0);
+            }
+            
+            // Step 2: Generate random δ
+            const delta = (Math.random() * 8 - 4).toFixed(2);
+            simulator.logStep('SET_DELTA', [delta], {delta});
+            
+            // Step 3: Climb to Gap-45 + δ (approx, since δ fractional; use micro-FOLDs)
+            simulator.FOLD(GAP_45 + Math.floor(delta), 0); // Base register
+            
+            // Step 4: Encode 8 eigenvalues
+            const energy = E_COH * Math.pow(PHI, GAP_45 + parseFloat(delta));
+            for (let k = 0; k < 8; k++) {
+                const lambda = energy * Math.pow(PHI, k / 8);
+                simulator.eigenvalues.push(lambda.toFixed(4));
+                simulator.FOLD(k/8, k); // Encode in register k
+            }
+            
+            // Step 5: Braid into cluster (simplified triads)
+            simulator.BRAID([0,1,2]);
+            simulator.BRAID([3,4,5]);
+            simulator.BRAID([6,7, simulator.registers.length - 1]);
+            
+            // Step 6: Balance and cycle
+            simulator.logStep('CYCLE', [], simulator.costs);
+            
+            // Output
+            document.getElementById('ledgerDisplay').textContent = simulator.ledgerSteps.join('\n');
+            visualizeLedger(simulator.ledgerSteps, simulator.eigenvalues);
+        }
+        
+        initVisualizer();
+    </script>
+</body>
+</html> 
