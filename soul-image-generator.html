@@ -69,123 +69,230 @@
             'Compassion', 'Gratitude', 'Patience', 'Humility', 'Hope', 'Creativity', 'Sacrifice'
         ];
         
-        // Improved Perlin Noise (simplified 2D implementation)
-        function perlinNoise(x, y, scale = 0.005) {
-            const p = new Array(512);
-            const permutation = [151,160,137,91,90,15,131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,190,6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,88,237,149,56,87,174,20,125,136,171,168,68,175,74,165,71,134,139,48,27,166,77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,55,46,245,40,244,102,143,54,65,25,63,161,1,216,80,73,209,76,132,187,208,89,18,169,200,196,135,130,116,188,159,86,164,100,109,198,173,186,3,64,52,217,226,250,124,123,5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,189,28,42,223,183,170,213,119,248,152,2,44,154,163,70,221,153,101,155,167,43,172,9,129,22,39,253,19,98,108,110,79,113,224,232,178,185,112,104,218,246,97,228,251,34,242,193,238,210,144,12,191,179,162,241,81,51,145,235,249,14,239,107,49,192,214,31,181,199,106,157,184,84,204,176,115,121,50,45,127,4,150,254,138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180];
-            for (let i = 0; i < 256; i++) p[256 + i] = p[i] = permutation[i];
-            
-            const fade = t => t * t * t * (t * (t * 6 - 15) + 10);
-            const lerp = (t, a, b) => a + t * (b - a);
-            const grad = (hash, x, y) => {
-                switch(hash & 3) {
-                    case 0: return x + y;
-                    case 1: return -x + y;
-                    case 2: return x - y;
-                    case 3: return -x - y;
-                }
+        // Professional Color Palettes (Mapan-inspired)
+        const SOUL_PALETTES = [
+            { name: 'Fire Spirit', base: '#D32F2F', accent: '#1976D2', warm: '#F57C00', complement: '#FFD700' },
+            { name: 'Mystic Depth', base: '#7B1FA2', accent: '#388E3C', warm: '#FBC02D', complement: '#FF5722' },
+            { name: 'Ocean Soul', base: '#303F9F', accent: '#F57C00', warm: '#C2185B', complement: '#4CAF50' },
+            { name: 'Earth Wisdom', base: '#5D4037', accent: '#FF9800', warm: '#2196F3', complement: '#8BC34A' },
+            { name: 'Solar Harmony', base: '#FF8F00', accent: '#3F51B5', warm: '#E91E63', complement: '#00BCD4' }
+        ];
+        
+        // Golden Ratio based composition points
+        function getCompositionPoints() {
+            const phi = PHI;
+            return {
+                focal1: { x: CANVAS_SIZE / phi, y: CANVAS_SIZE / phi },
+                focal2: { x: CANVAS_SIZE - (CANVAS_SIZE / phi), y: CANVAS_SIZE - (CANVAS_SIZE / phi) },
+                center: { x: CANVAS_SIZE / 2, y: CANVAS_SIZE / 2 },
+                thirds: [
+                    { x: CANVAS_SIZE / 3, y: CANVAS_SIZE / 3 },
+                    { x: (2 * CANVAS_SIZE) / 3, y: CANVAS_SIZE / 3 },
+                    { x: CANVAS_SIZE / 3, y: (2 * CANVAS_SIZE) / 3 },
+                    { x: (2 * CANVAS_SIZE) / 3, y: (2 * CANVAS_SIZE) / 3 }
+                ]
             };
+        }
+        
+        // Convert hex to RGB
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+        
+        // Create intentional brush strokes instead of random noise
+        function createBrushStroke(ctx, startX, startY, endX, endY, color, alpha, thickness) {
+            ctx.save();
+            ctx.globalAlpha = alpha;
+            ctx.strokeStyle = color;
+            ctx.lineWidth = thickness;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
             
-            const xi = Math.floor(x * scale);
-            const yi = Math.floor(y * scale);
-            const xf = x * scale - xi;
-            const yf = y * scale - yi;
-            
-            const aa = p[p[xi] + yi];
-            const ba = p[p[xi + 1] + yi];
-            const ab = p[p[xi] + yi + 1];
-            const bb = p[p[xi + 1] + yi + 1];
-            
-            const x1 = lerp(fade(xf), grad(aa, xf, yf), grad(ba, xf-1, yf));
-            const x2 = lerp(fade(xf), grad(ab, xf, yf-1), grad(bb, xf-1, yf-1));
-            return (lerp(fade(yf), x1, x2) + 1) / 2; // Normalized to 0-1
+            // Add subtle curve for organic feel
+            const midX = (startX + endX) / 2 + (Math.random() - 0.5) * 20;
+            const midY = (startY + endY) / 2 + (Math.random() - 0.5) * 20;
+            ctx.quadraticCurveTo(midX, midY, endX, endY);
+            ctx.stroke();
+            ctx.restore();
+        }
+        
+        // Apply virtue influences architecturally
+        function calculateVirtueInfluences(virtueScores) {
+            return {
+                justice: { symmetry: virtueScores[1], balance: virtueScores[1] },
+                love: { warmth: virtueScores[0], glow: virtueScores[0] * 0.3 },
+                wisdom: { complexity: virtueScores[3] * 0.7, depth: virtueScores[3] },
+                courage: { boldness: virtueScores[4], extension: virtueScores[4] * 0.5 },
+                temperance: { harmony: virtueScores[5], restraint: virtueScores[5] },
+                creativity: { variation: virtueScores[12] * 0.6, novelty: virtueScores[12] },
+                hope: { upwardFlow: virtueScores[11], lightness: virtueScores[11] * 0.4 },
+                humility: { subtlety: virtueScores[10], interconnection: virtueScores[10] }
+            };
         }
         
         function generateSoulImage() {
             const canvas = document.getElementById('soulCanvas');
             const ctx = canvas.getContext('2d');
             
-            // Randomize parameters
+            // Clear canvas
+            ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+            
+            // Generate parameters
             const delta = (Math.random() * 8 - 4);
-            const virtueScores = VIRTUES.map(() => Math.random()); // 0-1 scores
-            const rarity = Math.floor(Math.random() * 5); // 0-4 for common to mythic
+            const virtueScores = VIRTUES.map(() => Math.random());
+            const influences = calculateVirtueInfluences(virtueScores);
+            const palette = SOUL_PALETTES[Math.floor(Math.random() * SOUL_PALETTES.length)];
+            const composition = getCompositionPoints();
             
-            // 1. Draw Mappan-like light sheet (noisy gradient base)
-            for (let x = 0; x < CANVAS_SIZE; x++) {
-                for (let y = 0; y < CANVAS_SIZE; y++) {
-                    const noise = perlinNoise(x, y, 0.005) * 0.8 + perlinNoise(x, y, 0.02) * 0.2;
-                    const gray = Math.floor(noise * 50 + 200); // Soft white-gray
-                    const colorShift = virtueScores[8] * 20; // Gratitude influences subtle color
-                    ctx.fillStyle = `rgb(${gray}, ${gray}, ${gray + colorShift})`;
-                    ctx.fillRect(x, y, 1, 1);
+            // 1. SOLID COLOR FOUNDATION (like Mapan)
+            ctx.fillStyle = palette.base;
+            ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+            
+            // 2. GEOMETRIC SCAFFOLDING
+            const baseRgb = hexToRgb(palette.accent);
+            const accentColor = `rgba(${baseRgb.r}, ${baseRgb.g}, ${baseRgb.b}, 0.7)`;
+            
+            // Create diagonal structure inspired by Mapan's geometric foundation
+            if (influences.justice.symmetry > 0.3) {
+                const stripeCount = 3 + Math.floor(influences.wisdom.complexity * 5);
+                const angle = (delta * 0.1) + (Math.PI / 4); // Diagonal bias with delta influence
+                
+                for (let i = 0; i < stripeCount; i++) {
+                    const progress = i / stripeCount;
+                    const width = 20 + influences.courage.boldness * 80;
+                    const spacing = CANVAS_SIZE / stripeCount;
+                    
+                    ctx.save();
+                    ctx.translate(CANVAS_SIZE / 2, CANVAS_SIZE / 2);
+                    ctx.rotate(angle);
+                    
+                    const warmRgb = hexToRgb(palette.warm);
+                    const alpha = 0.3 + influences.temperance.harmony * 0.4;
+                    ctx.fillStyle = `rgba(${warmRgb.r}, ${warmRgb.g}, ${warmRgb.b}, ${alpha})`;
+                    
+                    const x = -CANVAS_SIZE + (i * spacing);
+                    ctx.fillRect(x, -CANVAS_SIZE, width, CANVAS_SIZE * 2);
+                    ctx.restore();
                 }
             }
             
-            // 2. Soul cluster shining through (8 eigenvalue squiggles)
-            const centerX = CANVAS_SIZE / 2;
-            const centerY = CANVAS_SIZE / 2;
-            for (let i = 0; i < 8; i++) {
+            // 3. FOCAL ARROW/DIRECTIONAL ELEMENT (Mapan signature)
+            if (influences.hope.upwardFlow > 0.4) {
+                const focal = composition.focal1;
+                const arrowSize = 100 + influences.courage.boldness * 150;
+                
+                ctx.fillStyle = palette.complement;
+                ctx.globalAlpha = 0.8;
                 ctx.beginPath();
-                const startAngle = (i / 8) * Math.PI * 2 + delta * 0.1; // Delta curves
-                const startX = centerX + Math.cos(startAngle) * (100 + virtueScores[4] * 200); // Courage extends
-                const startY = centerY + Math.sin(startAngle) * (100 + virtueScores[4] * 200);
-                ctx.moveTo(startX, startY);
+                ctx.moveTo(focal.x - arrowSize/2, focal.y + arrowSize/4);
+                ctx.lineTo(focal.x + arrowSize/2, focal.y + arrowSize/4);
+                ctx.lineTo(focal.x + arrowSize/4, focal.y - arrowSize/4);
+                ctx.lineTo(focal.x, focal.y - arrowSize/2);
+                ctx.lineTo(focal.x - arrowSize/4, focal.y - arrowSize/4);
+                ctx.closePath();
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            }
+            
+            // 4. INTENTIONAL SOUL SQUIGGLES (controlled spontaneity)
+            const eigenvaluePoints = [];
+            for (let i = 0; i < 8; i++) {
+                const angle = (i / 8) * Math.PI * 2 + delta * 0.1;
+                const radius = 150 + influences.courage.extension * 200;
+                const point = {
+                    x: composition.center.x + Math.cos(angle) * radius,
+                    y: composition.center.y + Math.sin(angle) * radius
+                };
+                eigenvaluePoints.push(point);
                 
-                // Chromie Squiggle with virtue modulation
-                const numSegments = 5 + Math.floor(virtueScores[12] * 10); // Creativity adds complexity
-                let currentX = startX;
-                let currentY = startY;
-                for (let j = 0; j < numSegments; j++) {
-                    const controlX = currentX + (Math.random() - 0.5) * 200 * virtueScores[0]; // Love amplifies flow
-                    const controlY = currentY + (Math.random() - 0.5) * 200 * virtueScores[0];
-                    const endX = controlX + (Math.random() - 0.5) * 150 * virtueScores[1]; // Justice balances
-                    const endY = controlY + (Math.random() - 0.5) * 150 * virtueScores[1];
-                    ctx.quadraticCurveTo(controlX, controlY, endX, endY);
-                    currentX = endX;
-                    currentY = endY;
+                // Draw controlled squiggle from center to eigenvalue point
+                ctx.save();
+                ctx.strokeStyle = palette.accent;
+                ctx.lineWidth = 2 + influences.wisdom.depth * 4;
+                ctx.globalAlpha = 0.6 + influences.love.glow * 0.3;
+                ctx.shadowBlur = 15 * influences.love.warmth;
+                ctx.shadowColor = palette.warm;
+                
+                ctx.beginPath();
+                ctx.moveTo(composition.center.x, composition.center.y);
+                
+                // Controlled curve with virtue influence
+                const segments = 2 + Math.floor(influences.creativity.variation * 3);
+                let currentX = composition.center.x;
+                let currentY = composition.center.y;
+                
+                for (let s = 1; s <= segments; s++) {
+                    const progress = s / segments;
+                    const targetX = currentX + (point.x - currentX) * (1 / (segments - s + 1));
+                    const targetY = currentY + (point.y - currentY) * (1 / (segments - s + 1));
+                    
+                    // Add controlled deviation based on virtues
+                    const deviation = 50 * influences.creativity.novelty * (1 - influences.temperance.restraint);
+                    const controlX = targetX + (Math.random() - 0.5) * deviation;
+                    const controlY = targetY + (Math.random() - 0.5) * deviation;
+                    
+                    ctx.quadraticCurveTo(controlX, controlY, targetX, targetY);
+                    currentX = targetX;
+                    currentY = targetY;
                 }
                 
-                // Styling with virtues
-                const hue = (i * 45 + virtueScores[i % 14] * 180) % 360;
-                ctx.strokeStyle = `hsla(${hue}, 60%, 70%, ${0.3 + virtueScores[2] * 0.5})`; // Forgiveness softens opacity
-                ctx.lineWidth = 1 + virtueScores[3] * 3; // Wisdom thickens
-                ctx.shadowBlur = 10 + virtueScores[5] * 20; // Temperance balances glow
-                ctx.shadowColor = `hsla(${hue}, 80%, 70%, 0.5)`;
                 ctx.stroke();
+                ctx.restore();
             }
             
-            // 3. Add shines and glows (NDE/DMT effects)
-            for (let i = 0; i < 14; i++) {
-                if (virtueScores[i] > 0.4) {
-                    const shineCount = Math.floor(virtueScores[i] * 5);
-                    for (let j = 0; j < shineCount; j++) {
-                        const shineX = centerX + (Math.random() - 0.5) * CANVAS_SIZE * 0.8;
-                        const shineY = centerY + (Math.random() - 0.5) * CANVAS_SIZE * 0.8 * virtueScores[11]; // Hope directs upward
-                        const shineRadius = 20 + virtueScores[i] * 50;
-                        
-                        const shineGradient = ctx.createRadialGradient(shineX, shineY, 0, shineX, shineY, shineRadius);
-                        shineGradient.addColorStop(0, `hsla(${i*25 % 360}, 80%, 90%, ${virtueScores[6]})`); // Prudence controls intensity
-                        shineGradient.addColorStop(1, `hsla(${i*25 % 360}, 60%, 50%, 0)`);
-                        ctx.fillStyle = shineGradient;
-                        ctx.beginPath();
-                        ctx.arc(shineX, shineY, shineRadius, 0, Math.PI * 2);
-                        ctx.fill();
-                    }
+            // 5. SUBTLE TEXTURAL ELEMENTS
+            if (influences.humility.subtlety > 0.3) {
+                const brushStrokes = Math.floor(influences.creativity.variation * 20 + 5);
+                for (let i = 0; i < brushStrokes; i++) {
+                    const start = composition.thirds[i % 4];
+                    const length = 50 + influences.wisdom.depth * 100;
+                    const angle = Math.random() * Math.PI * 2;
+                    const end = {
+                        x: start.x + Math.cos(angle) * length,
+                        y: start.y + Math.sin(angle) * length
+                    };
+                    
+                    createBrushStroke(
+                        ctx, start.x, start.y, end.x, end.y,
+                        palette.warm, 
+                        0.1 + influences.humility.interconnection * 0.2,
+                        1 + influences.courage.boldness * 3
+                    );
                 }
             }
             
-            // 4. Living light overlay with noise
-            for (let x = 0; x < CANVAS_SIZE; x += 2) {
-                for (let y = 0; y < CANVAS_SIZE; y += 2) {
-                    const noise = perlinNoise(x, y, 0.01);
-                    ctx.fillStyle = `rgba(255,255,255,${noise * 0.1 * virtueScores[7]})`; // Compassion adds resonance
-                    ctx.fillRect(x, y, 2, 2);
-                }
-            }
+            // 6. LIGHT EMERGENCE POINTS (virtue-driven shines)
+            const highVirtues = virtueScores
+                .map((score, i) => ({ virtue: VIRTUES[i], score, index: i }))
+                .filter(v => v.score > 0.7)
+                .slice(0, 3); // Top 3 virtues only
+            
+            highVirtues.forEach((v, i) => {
+                const shine = eigenvaluePoints[v.index % 8];
+                const shineRadius = 30 + v.score * 70;
+                
+                const gradient = ctx.createRadialGradient(shine.x, shine.y, 0, shine.x, shine.y, shineRadius);
+                const complementRgb = hexToRgb(palette.complement);
+                gradient.addColorStop(0, `rgba(${complementRgb.r}, ${complementRgb.g}, ${complementRgb.b}, ${v.score * 0.6})`);
+                gradient.addColorStop(1, `rgba(${complementRgb.r}, ${complementRgb.g}, ${complementRgb.b}, 0)`);
+                
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(shine.x, shine.y, shineRadius, 0, Math.PI * 2);
+                ctx.fill();
+            });
             
             // Update download link
             const downloadLink = document.getElementById('downloadLink');
             downloadLink.href = canvas.toDataURL('image/png');
+            
+            console.log(`Generated soul with palette: ${palette.name}, δ=${delta.toFixed(2)}`);
         }
         
         // Event listeners
