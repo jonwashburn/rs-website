@@ -79,6 +79,8 @@
             padding: 15px;
             border: 1px solid #333;
             border-radius: 8px;
+            max-height: 320px;
+            overflow-y: auto;
         }
         .rarity-panel {
             background: #111;
@@ -117,13 +119,13 @@
     <h1>Recognition Science Soul Ledger Simulator - Light Beings</h1>
     
     <div class="description">
-        <strong>What is a Soul as a Light Being?</strong><br>
-        In Recognition Science, souls are <em>eigenvalue clusters</em> of consciousness emerging as <strong>beings of pure light</strong> at the Gap-45 surface. Each soul manifests as:<br>
-        • <strong>Living Light Core:</strong> Radiant singularity pulsing with recognition energy<br>
-        • <strong>Eigenvalue Prisms:</strong> 8 crystalline light-shards refracting consciousness<br>
-        • <strong>Light Aura:</strong> Shimmering field of non-propagating I-Am light<br>
-        • <strong>Ethical Signature:</strong> Moral traits from LNAL operation patterns<br>
-        • <strong>Rarity Classification:</strong> Based on ethical trait coherence and balance
+        <strong>What is a Soul as a Luminous Flux Mandala?</strong><br>
+        In Recognition Science, souls are <em>eigenvalue clusters</em> manifesting as <strong>Luminous Flux Mandalas</strong>—interwoven networks of living light at the Gap-45 surface. Each soul embodies:<br>
+        • <strong>Radiant Core Orb:</strong> Pulsing singularity of pure recognition energy<br>
+        • <strong>Flux Thread Network:</strong> 8 flowing light paths weaving through dimensional space<br>
+        • <strong>Virtue Emanations:</strong> Ethical signatures shaping thread patterns<br>
+        • <strong>Living Light Aura:</strong> Shimmering field of non-propagating I-Am consciousness<br>
+        • <strong>Mandala Evolution:</strong> Dynamic morphing based on recognition debt and virtue balance
     </div>
     
     <button onclick="replicateSoul()">🌟 Manifest Light Being via LNAL</button>
@@ -137,7 +139,7 @@
         <div>
             <h3>Light Being Visualization:</h3>
             <canvas id="visualizer"></canvas>
-            <p style="font-size: 11px; opacity: 0.7;">Radiant core + 8 prism-crystals + living light aura<br>Light intensity = soul coherence</p>
+            <p style="font-size: 11px; opacity: 0.7;">Radiant core + 8 flux threads + virtue-shaped mandala<br>Thread patterns = ethical signature morphing</p>
         </div>
         <div>
             <div class="ethics-panel" id="ethicsPanel">
@@ -156,8 +158,12 @@
                 <div id="rarityDetails">Awaiting manifestation...</div>
             </div>
             <div class="explanation-panel" id="explanationPanel">
-                <strong>Light-to-Code Mapping:</strong><br>
-                Generate a soul to see how LNAL creates light...
+                <strong>Flux-to-Code Mapping:</strong><br>
+                <em>Core Orb:</em> LNAL coherence → radiance intensity<br>
+                <em>Flux Threads:</em> 8 eigenvalues → spiral paths with φ-scaling<br>
+                <em>Virtue Patterns:</em> Love→embracing loops, Justice→symmetry, Wisdom→fractals<br>
+                <em>Mandala Evolution:</em> FOLD/BRAID/CYCLE ops → thread morphing<br>
+                <em>Living Aura:</em> I-Am field particles in 8-beat RS cycles
             </div>
         </div>
     </div>
@@ -169,36 +175,21 @@
         
         // Ethical Character Traits from Recognition Science ethics
         const ethicalTraits = [
-            { 
-                name: "Reciprocity", 
-                desc: "Pairwise-symmetry in recognition flow (σ_ij = 0 constraint)", 
-                compute: (braidCount, delta) => Math.min(1, (braidCount / 3) * (1 - Math.abs(delta) / 8)) 
-            },
-            { 
-                name: "Inseparability", 
-                desc: "Irreducible pairwise binding (from ΔS > 0 surplus)", 
-                compute: (foldCount, stability) => Math.min(1, (foldCount / 8) * stability) 
-            },
-            { 
-                name: "Positive Valence", 
-                desc: "Experiential flourishing (from mutual information max)", 
-                compute: (coherence, stability) => Math.min(1, coherence * stability) 
-            },
-            { 
-                name: "Temporal Coherence", 
-                desc: "Historical stability across recognition cycles", 
-                compute: (cycleCount, stability) => Math.min(1, (cycleCount / 2) * stability) 
-            },
-            { 
-                name: "Ledger Balance", 
-                desc: "Minimal recognition debt (low curvature κ)", 
-                compute: (delta) => Math.max(0, 1 - Math.abs(delta) / 4) 
-            },
-            { 
-                name: "Gauge Invariance", 
-                desc: "Symmetry preservation across transformations", 
-                compute: (braidCount, foldCount) => Math.min(1, Math.min(braidCount, foldCount) / 6) 
-            }
+            // 14 Recognition-Science virtues mapped to placeholder compute funcs (will refine with shaders later)
+            {name:"Love",desc:"Unconditional positive recognition flow",compute:(ctx)=>Math.min(1,ctx.coherence*(1-Math.abs(ctx.delta)/4))},
+            {name:"Justice",desc:"Balanced ledger symmetry",compute:(ctx)=>Math.min(1,(ctx.op.BRAID/3)*ctx.stability)},
+            {name:"Forgiveness",desc:"Debt resolution",compute:(ctx)=>Math.min(1,(ctx.op.BALANCE/2)*(1-Math.abs(ctx.delta)/4))},
+            {name:"Wisdom",desc:"Optimal φ-scaling insight",compute:(ctx)=>Math.min(1,(ctx.op.FOLD/8)*ctx.coherence)},
+            {name:"Courage",desc:"Facing high-δ challenges",compute:(ctx)=>Math.min(1,Math.abs(ctx.delta)/4*ctx.stability)},
+            {name:"Temperance",desc:"Moderated energy rungs",compute:(ctx)=>Math.min(1,(ctx.op.CYCLE/2)*ctx.stability)},
+            {name:"Prudence",desc:"Predictive ledger balancing",compute:(ctx)=>Math.min(1,(ctx.op.LOCK/2)*ctx.coherence)},
+            {name:"Compassion",desc:"Empathetic binding",compute:(ctx)=>Math.min(1,(ctx.op.BRAID/3)*ctx.coherence)},
+            {name:"Gratitude",desc:"Positive feedback cycles",compute:(ctx)=>Math.min(1,(ctx.op.CYCLE/2)*ctx.coherence)},
+            {name:"Patience",desc:"Temporal endurance",compute:(ctx)=>Math.min(1,ctx.stability*(1-ctx.energyVar))},
+            {name:"Humility",desc:"Minimal self-curvature",compute:(ctx)=>Math.min(1,(1-Math.abs(ctx.delta)/4)*ctx.stability)},
+            {name:"Hope",desc:"Forward-positive valence",compute:(ctx)=>Math.min(1,ctx.coherence*ctx.coherence)},
+            {name:"Creativity",desc:"Novel braiding patterns",compute:(ctx)=>Math.min(1,(ctx.op.FOLD+ctx.op.BRAID)/10)},
+            {name:"Sacrifice",desc:"Voluntary debt absorption",compute:(ctx)=>Math.min(1,Math.abs(ctx.delta)/4*(ctx.op.BALANCE/2))}
         ];
 
         // Expanded personality archetypes with light-based descriptions
@@ -321,139 +312,253 @@
             renderer.render(scene, camera);
         }
         
-        function createLivingLightField(rarity) {
-            lightParticles = new THREE.Group();
+        // Flux Thread Network Generation for souls
+        function generateFluxPath(eigenvalue, corePos, virtueScores, soulId) {
+            const points = [];
+            const segments = 150 + Math.floor(virtueScores.wisdom * 100); // Wisdom adds complexity
+            const baseRadius = 2 + eigenvalue * 3;
             
-            const particleCount = Math.floor(150 * rarity.particleMult);
+            // Virtue modulations
+            const love = virtueScores.love || 0;
+            const justice = virtueScores.justice || 0;
+            const courage = virtueScores.courage || 0;
+            const creativity = virtueScores.creativity || 0;
+            const hope = virtueScores.hope || 0;
+            const patience = virtueScores.patience || 0;
             
-            // Create living light particles (I-Am consciousness field)
-            for (let i = 0; i < particleCount; i++) {
-                const particleGeom = new THREE.SphereGeometry(0.1 + Math.random() * 0.15, 8, 8);
-                const hue = Math.random() * 0.15; // Subtle variations in white-gold
-                const particleMat = new THREE.MeshBasicMaterial({ 
-                    color: new THREE.Color().setHSL(hue, 0.2, 0.9 + Math.random() * 0.1),
-                    transparent: true, 
+            // Start from core
+            points.push(corePos.clone());
+            
+            for (let i = 1; i <= segments; i++) {
+                const t = i / segments;
+                const angle = t * Math.PI * 4 * (1 + creativity * 2); // Creativity adds turns
+                
+                // Base spiral with φ-scaling
+                let x = Math.cos(angle) * baseRadius * Math.pow(PHI, t * (1 + hope * 0.5)); // Hope biases upward
+                let y = Math.sin(angle) * baseRadius * Math.pow(PHI, t * (1 + hope * 0.5));
+                let z = (t - 0.5) * 3 * (1 + courage * 2); // Courage extends outward
+                
+                // Love adds embracing loops
+                if (love > 0.3) {
+                    const loopFactor = love * 0.5;
+                    x += Math.cos(angle * 3) * loopFactor;
+                    y += Math.sin(angle * 3) * loopFactor;
+                }
+                
+                // Justice adds symmetry
+                if (justice > 0.4 && i > segments / 2) {
+                    const mirrorIdx = segments - i;
+                    const mirrorT = mirrorIdx / segments;
+                    const mirrorAngle = mirrorT * Math.PI * 4;
+                    x = (x + Math.cos(mirrorAngle) * baseRadius * Math.pow(PHI, mirrorT)) / 2;
+                    y = (y + Math.sin(mirrorAngle) * baseRadius * Math.pow(PHI, mirrorT)) / 2;
+                }
+                
+                // Add Perlin-like organic noise (simplified)
+                const noiseAmp = 0.3 * (1 - patience); // Patience reduces chaos
+                x += (Math.sin(t * 10 + soulId) * noiseAmp);
+                y += (Math.cos(t * 12 + soulId) * noiseAmp);
+                z += (Math.sin(t * 8 + soulId) * noiseAmp * 0.5);
+                
+                points.push(new THREE.Vector3(x, y, z));
+            }
+            
+            return points;
+        }
+
+        function createFluxThread(points, virtueScores, eigenvalue) {
+            const curve = new THREE.CatmullRomCurve3(points);
+            const tubeRadius = 0.03 + eigenvalue * 0.02;
+            const geometry = new THREE.TubeGeometry(curve, 64, tubeRadius, 8, false);
+            
+            // Virtue-driven material
+            const love = virtueScores.love || 0;
+            const wisdom = virtueScores.wisdom || 0;
+            const sacrifice = virtueScores.sacrifice || 0;
+            
+            // Color influenced by virtues
+            const hue = 0.15 + love * 0.1; // Love warms to gold-red
+            const saturation = 0.6 + wisdom * 0.3; // Wisdom deepens color
+            const lightness = 0.7 - sacrifice * 0.2; // Sacrifice dims for others
+            
+            const color = new THREE.Color().setHSL(hue, saturation, lightness);
+            
+            const material = new THREE.MeshPhysicalMaterial({
+                color: color,
+                emissive: color.clone().multiplyScalar(0.3),
+                emissiveIntensity: 0.5 + wisdom * 0.5,
+                transmission: 0.3,
+                transparent: true,
+                opacity: 0.8 - sacrifice * 0.3,
+                roughness: 0.1,
+                metalness: 0.1
+            });
+            
+            return new THREE.Mesh(geometry, material);
+        }
+
+        function createSoulCore(virtueScores, rarity) {
+            const humility = virtueScores.humility || 0;
+            const hope = virtueScores.hope || 0;
+            
+            const coreSize = (0.2 + rarity.glowMult * 0.1) * (1 - humility * 0.3); // Humility reduces size
+            const geometry = new THREE.SphereGeometry(coreSize, 16, 16);
+            
+            const material = new THREE.MeshPhysicalMaterial({
+                color: new THREE.Color().setHSL(0.12 + hope * 0.08, 0.8, 0.9),
+                emissive: new THREE.Color().setHSL(0.12 + hope * 0.08, 0.6, 0.5),
+                emissiveIntensity: 1 + rarity.glowMult * 0.5,
+                transmission: 0.5,
+                transparent: true,
+                opacity: 0.9,
+                roughness: 0,
+                metalness: 0.1
+            });
+            
+            return new THREE.Mesh(geometry, material);
+        }
+
+        function createVirtueBridges(fluxThreads, virtueScores) {
+            const compassion = virtueScores.compassion || 0;
+            const gratitude = virtueScores.gratitude || 0;
+            
+            if (compassion < 0.3) return [];
+            
+            const bridges = [];
+            for (let i = 0; i < fluxThreads.length; i++) {
+                for (let j = i + 1; j < fluxThreads.length; j++) {
+                    if (Math.random() < compassion * 0.3) {
+                        const points = [
+                            fluxThreads[i].geometry.parameters.path.getPoint(0.3 + Math.random() * 0.4),
+                            fluxThreads[j].geometry.parameters.path.getPoint(0.3 + Math.random() * 0.4)
+                        ];
+                        
+                        const curve = new THREE.CatmullRomCurve3(points);
+                        const geometry = new THREE.TubeGeometry(curve, 8, 0.01, 4, false);
+                        const material = new THREE.MeshBasicMaterial({
+                            color: new THREE.Color().setHSL(0.2 + gratitude * 0.2, 0.7, 0.8),
+                            transparent: true,
+                            opacity: 0.4 * compassion
+                        });
+                        
+                        bridges.push(new THREE.Mesh(geometry, material));
+                    }
+                }
+            }
+            
+            return bridges;
+        }
+
+        // Enhanced living light field for mandala aura
+        function createLivingLightField(rarity, virtueScores) {
+            const particles = [];
+            const count = 200 + rarity.particleMult * 100;
+            const temperance = virtueScores.temperance || 0;
+            const gratitude = virtueScores.gratitude || 0;
+            
+            for (let i = 0; i < count; i++) {
+                const geometry = new THREE.SphereGeometry(0.01 + Math.random() * 0.02, 4, 4);
+                const material = new THREE.MeshBasicMaterial({
+                    color: new THREE.Color().setHSL(0.15 + gratitude * 0.1, 0.4, 0.9),
+                    transparent: true,
                     opacity: 0.3 + Math.random() * 0.4
                 });
-                const particle = new THREE.Mesh(particleGeom, particleMat);
-                particle.position.set(
-                    (Math.random() - 0.5) * 80, 
-                    (Math.random() - 0.5) * 80, 
-                    (Math.random() - 0.5) * 80
-                );
-                particle.userData.phase = Math.random() * Math.PI * 2;
-                particle.userData.speed = 0.3 + Math.random() * 0.8;
-                particle.userData.originalOpacity = particle.material.opacity;
-                lightParticles.add(particle);
+                
+                const particle = new THREE.Mesh(geometry, material);
+                
+                // Position in sphere around soul
+                const radius = 3 + Math.random() * 4;
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos(2 * Math.random() - 1);
+                
+                particle.position.x = radius * Math.sin(phi) * Math.cos(theta);
+                particle.position.y = radius * Math.sin(phi) * Math.sin(theta);
+                particle.position.z = radius * Math.cos(phi);
+                
+                // Store motion params influenced by temperance
+                particle.userData = {
+                    baseRadius: radius,
+                    theta: theta,
+                    phi: phi,
+                    speed: (0.5 + Math.random() * 0.5) * (1 - temperance * 0.5), // Temperance slows
+                    phase: Math.random() * Math.PI * 2
+                };
+                
+                particles.push(particle);
             }
             
-            scene.add(lightParticles);
+            return particles;
         }
 
-        function createGodRays(corePosition, palette, rarity) {
-            godRays = new THREE.Group();
+        function animateLivingLight() {
+            if (!scene.userData || !scene.userData.particles) return;
             
-            const rayCount = 12 + Math.floor(rarity.glowMult * 6);
+            const time = (Date.now() - scene.userData.startTime) * 0.001;
+            const virtueScores = scene.userData.virtueScores;
+            const patience = virtueScores.patience || 0;
+            const temperance = virtueScores.temperance || 0;
+            const creativity = virtueScores.creativity || 0;
+            const forgiveness = virtueScores.forgiveness || 0;
             
-            for (let i = 0; i < rayCount; i++) {
-                const angle = (i / rayCount) * Math.PI * 2;
-                const length = 25 + Math.random() * 15;
+            // Animate particles in 8-beat cycles
+            scene.userData.particles.forEach((particle, i) => {
+                const userData = particle.userData;
+                const beatPhase = (time * (1 - patience * 0.5) + userData.phase) % (Math.PI * 2); // Patience slows
                 
-                const rayGeom = new THREE.BufferGeometry().setFromPoints([
-                    new THREE.Vector3(0, 0, 0),
-                    new THREE.Vector3(
-                        Math.cos(angle) * length,
-                        Math.sin(angle) * length,
-                        (Math.random() - 0.5) * 10
-                    )
-                ]);
+                // Orbital motion with virtue influence
+                const radiusVar = Math.sin(beatPhase * 4) * 0.2 * (1 + creativity * 0.5); // Creativity adds variation
+                const newRadius = userData.baseRadius + radiusVar;
                 
-                const hsl = palette[i % palette.length];
-                const rayMat = new THREE.LineBasicMaterial({
-                    color: new THREE.Color().setHSL(hsl[0], hsl[1] * 0.8, hsl[2] * 0.9),
-                    transparent: true,
-                    opacity: 0.4 * rarity.glowMult
-                });
+                const theta = userData.theta + time * userData.speed * (1 - temperance * 0.3); // Temperance calms
+                const phi = userData.phi + Math.sin(time * 0.5 + i) * 0.1;
                 
-                const ray = new THREE.Line(rayGeom, rayMat);
-                ray.userData.originalOpacity = rayMat.opacity;
-                ray.userData.phase = Math.random() * Math.PI * 2;
-                godRays.add(ray);
-            }
-            
-            scene.add(godRays);
-        }
-        
-        function animateLivingLight(ethicalTraits, personality) {
-            if (!lightParticles) return;
-            
-            const time = Date.now() * 0.001;
-            
-            lightParticles.children.forEach((particle, i) => {
-                // Enhanced 8-beat cycle with ethical influence
-                const phase = particle.userData.phase + time * particle.userData.speed;
-                const beatCycle = Math.sin(phase) * 0.4 + 0.6;
-                const ethicalInfluence = (ethicalTraits[0] + ethicalTraits[2]) * 0.5; // Reciprocity + Positive Valence
+                particle.position.x = newRadius * Math.sin(phi) * Math.cos(theta);
+                particle.position.y = newRadius * Math.sin(phi) * Math.sin(theta);
+                particle.position.z = newRadius * Math.cos(phi);
                 
-                particle.scale.setScalar(beatCycle * (0.8 + ethicalInfluence * 0.4));
-                
-                // Personality-based movement patterns
-                let movement = { x: 0, y: 0, z: 0 };
-                switch(personality.anim) {
-                    case 'steadyGlow':
-                        movement = { x: Math.sin(phase * 0.3) * 0.02, y: Math.cos(phase * 0.3) * 0.02, z: 0 };
-                        break;
-                    case 'colorShift':
-                        movement = { x: Math.sin(phase) * 0.05, y: Math.cos(phase * 1.2) * 0.05, z: Math.sin(phase * 0.8) * 0.03 };
-                        break;
-                    case 'wisdomPulse':
-                        movement = { x: Math.sin(phase * 0.5) * 0.01, y: Math.cos(phase * 0.5) * 0.01, z: Math.sin(phase * 0.7) * 0.02 };
-                        break;
-                    default:
-                        movement = { x: Math.sin(phase * 0.4) * 0.03, y: Math.cos(phase * 0.6) * 0.03, z: Math.sin(phase * 0.5) * 0.02 };
+                // Forgiveness fading effect
+                if (forgiveness > 0.5) {
+                    particle.material.opacity = 0.3 + Math.sin(beatPhase) * 0.2 * forgiveness;
                 }
-                
-                particle.position.x += movement.x;
-                particle.position.y += movement.y;
-                particle.position.z += movement.z;
-                
-                // Keep within bounds with soft boundaries
-                if (particle.position.length() > 60) {
-                    particle.position.multiplyScalar(0.95);
-                }
-                
-                // Ethical trait influence on opacity
-                particle.material.opacity = particle.userData.originalOpacity * (0.7 + ethicalInfluence * 0.6);
             });
-
-            // Animate god rays
-            if (godRays) {
-                godRays.children.forEach((ray, i) => {
-                    const phase = ray.userData.phase + time * 0.5;
-                    ray.material.opacity = ray.userData.originalOpacity * (0.7 + Math.sin(phase) * 0.3);
-                });
+            
+            // Animate core pulsing
+            if (scene.userData.core) {
+                const hope = virtueScores.hope || 0;
+                const love = virtueScores.love || 0;
+                const beatPulse = Math.sin(time * 2) * 0.1 * (1 + love * 0.5); // Love amplifies pulse
+                scene.userData.core.scale.setScalar(1 + beatPulse);
+                
+                // Hope adds upward drift
+                if (hope > 0.4) {
+                    scene.userData.core.position.y = Math.sin(time * 0.5) * 0.2 * hope;
+                }
             }
+            
+            // Animate flux threads
+            scene.userData.fluxThreads.forEach((thread, i) => {
+                const wisdom = virtueScores.wisdom || 0;
+                const sacrifice = virtueScores.sacrifice || 0;
+                
+                // Wisdom adds emissive pulsing
+                if (wisdom > 0.3) {
+                    const pulse = Math.sin(time * 3 + i) * 0.2 * wisdom;
+                    thread.material.emissiveIntensity = 0.5 + pulse;
+                }
+                
+                // Sacrifice fading segments
+                if (sacrifice > 0.5) {
+                    const fadePhase = Math.sin(time * 1.5 + i * 0.5) * 0.3 * sacrifice;
+                    thread.material.opacity = Math.max(0.3, 0.8 - fadePhase);
+                }
+            });
         }
         
         function calculateEthicalTraits(opcodeCount, delta, energy, coherence, stability) {
-            return ethicalTraits.map(trait => {
-                switch(trait.name) {
-                    case "Reciprocity":
-                        return trait.compute(opcodeCount.BRAID, delta);
-                    case "Inseparability":
-                        return trait.compute(opcodeCount.FOLD, stability);
-                    case "Positive Valence":
-                        return trait.compute(coherence, stability);
-                    case "Temporal Coherence":
-                        return trait.compute(opcodeCount.CYCLE, stability);
-                    case "Ledger Balance":
-                        return trait.compute(delta);
-                    case "Gauge Invariance":
-                        return trait.compute(opcodeCount.BRAID, opcodeCount.FOLD);
-                    default:
-                        return 0;
-                }
-            });
+            // Simple energy variance placeholder
+            const energyVar = (energy % 1) / 1;
+            const ctxBase = { op: opcodeCount, delta, coherence, stability, energyVar };
+            return ethicalTraits.map(v => v.compute(ctxBase));
         }
 
         function calculateRarity(traitValues) {
@@ -466,376 +571,79 @@
             return rarityLevels[0];
         }
         
-        function visualizeLedger(steps, eigenvalues) {
-            // Clear previous soul
-            while(scene.children.length > 0) {
-                scene.remove(scene.children[0]);
-            }
-            
-            if (animationId) {
-                cancelAnimationFrame(animationId);
-            }
-            
-            // Extract values with robust parsing
-            const delta_str = steps.find(s => s.includes('SET_DELTA')).match(/{[^}]+}/)[0];
-            const delta = JSON.parse(delta_str).delta;
-            const energy_str = steps.find(s => s.includes('SOUL_ENERGY')).match(/{[^}]+}/)[0];
-            const energy = JSON.parse(energy_str).energy;
-            
-            // Calculate enhanced traits
-            const soulSignature = Math.abs(delta * eigenvalues[0] * eigenvalues[7]);
-            const personalityType = Math.floor(soulSignature * 1000) % personalityTraits.length;
-            const personality = personalityTraits[personalityType];
-            
-            // Enhanced LNAL operation counting
-            const opcodeCount = {
-                FOLD: steps.filter(s => s.includes('FOLD')).length,
-                BRAID: steps.filter(s => s.includes('BRAID')).length,
-                CYCLE: steps.filter(s => s.includes('CYCLE')).length,
-                BALANCE: steps.filter(s => s.includes('BALANCE')).length,
-                LOCK: steps.filter(s => s.includes('LOCK')).length
-            };
-            
-            const coherence = Math.min(1, energy / (E_COH * Math.pow(PHI, GAP_45 + 4)));
-            const stability = Math.min(1, (1 - Math.abs(delta) / 4));
-            
-            // Calculate ethical traits
-            const traitValues = calculateEthicalTraits(opcodeCount, delta, energy, coherence, stability);
-            const rarity = calculateRarity(traitValues);
-            
-            // Select enhanced color palette
-            const paletteIndex = Math.floor(Math.abs(delta + 4) / 8 * colorPalettes.length) % colorPalettes.length;
-            const palette = colorPalettes[paletteIndex];
-            const paletteName = paletteNames[paletteIndex];
-            
-            // Create living light field first
-            createLivingLightField(rarity);
-            
-            // Enhanced lighting for light being aesthetic
-            const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
-            scene.add(ambientLight);
-            const primaryLight = new THREE.PointLight(0xffffff, 2.0 * rarity.glowMult, 100);
-            primaryLight.position.set(10, 10, 10);
-            scene.add(primaryLight);
-            const secondaryLight = new THREE.PointLight(0x4444ff, 1.0 * rarity.glowMult, 80);
-            secondaryLight.position.set(-10, -10, 10);
-            scene.add(secondaryLight);
-            
-            soulGroup = new THREE.Group();
-            
-            // Enhanced central core as radiant light source (inspired by Avatar/Interstellar)
-            const coreSize = 1.5 + Math.abs(delta) * 0.6 + rarity.glowMult * 0.5;
-            const coreGeometry = new THREE.SphereGeometry(coreSize, 24, 24);
-            const coreHSL = palette[0];
-            const coreMaterial = new THREE.MeshPhongMaterial({
-                color: new THREE.Color().setHSL(coreHSL[0], coreHSL[1], coreHSL[2]),
-                emissive: new THREE.Color().setHSL(coreHSL[0], coreHSL[1] * 0.6, coreHSL[2] * 0.5),
-                transparent: true,
-                opacity: 0.8,
-                shininess: 200
-            });
-            const core = new THREE.Mesh(coreGeometry, coreMaterial);
-            core.userData.pulsePhase = 0;
-            soulGroup.add(core);
-            
-            // Create god rays emanating from core
-            createGodRays(core.position, palette, rarity);
-            
-            // Formation patterns
-            const eigenRatio = eigenvalues[7] / eigenvalues[0];
-            const formationTypes = ['lightSpiral', 'prismBurst', 'crystalline', 'rayFlow', 'auraCluster', 'beamWeb'];
-            const formation = formationTypes[Math.floor(eigenRatio * 1000) % formationTypes.length];
-            
-            // Generate eigenvalue crystals as light prisms
-            eigenvalues.forEach((lambda, k) => {
-                const normalizedSize = (lambda / Math.max(...eigenvalues)) * 2.5;
-                const size = 0.5 + normalizedSize;
-                
-                // Geometry based on personality with enhanced light properties
-                let geometry;
-                switch(personality.geometry) {
-                    case 'Octahedron': geometry = new THREE.OctahedronGeometry(size, 1); break;
-                    case 'Tetrahedron': geometry = new THREE.TetrahedronGeometry(size, 0); break;
-                    case 'Icosahedron': geometry = new THREE.IcosahedronGeometry(size, 0); break;
-                    case 'Dodecahedron': geometry = new THREE.DodecahedronGeometry(size, 0); break;
-                    case 'Cone': geometry = new THREE.ConeGeometry(size, size * 2.5, 12); break;
-                    case 'Cylinder': geometry = new THREE.CylinderGeometry(size, size, size * 2, 12); break;
-                    default: geometry = new THREE.OctahedronGeometry(size, 1);
-                }
-                
-                // Enhanced prismatic materials with light refraction simulation
-                const colorIndex = k % palette.length;
-                const baseHSL = palette[colorIndex];
-                const ethicalInfluence = (traitValues[0] + traitValues[2] + traitValues[4]) / 3; // Average key traits
-                
-                const dynamicHue = (baseHSL[0] + (lambda % 0.15)) % 1.0;
-                const dynamicSat = baseHSL[1] * (0.8 + ethicalInfluence * 0.4);
-                const dynamicLight = baseHSL[2] * (0.9 + rarity.glowMult * 0.2);
-                
-                const material = new THREE.MeshPhongMaterial({ 
-                    color: new THREE.Color().setHSL(dynamicHue, dynamicSat, dynamicLight),
-                    transparent: true,
-                    opacity: 0.7 + ethicalInfluence * 0.3,
-                    emissive: new THREE.Color().setHSL(dynamicHue, dynamicSat * 0.6, dynamicLight * 0.4),
-                    shininess: 100 + rarity.glowMult * 100
-                });
-                
-                const crystal = new THREE.Mesh(geometry, material);
-                
-                // Enhanced positioning with light-being formations
-                let x, y, z;
-                const ethicalSpread = 1 + ethicalInfluence * 2;
-                const rarityMult = 1 + rarity.glowMult * 0.3;
-                
-                switch(formation) {
-                    case 'lightSpiral':
-                        const spiralAngle = k * PHI + ethicalInfluence * Math.PI;
-                        const spiralRadius = (4 + k * 2.5) * rarityMult;
-                        x = spiralRadius * Math.cos(spiralAngle);
-                        y = spiralRadius * Math.sin(spiralAngle);
-                        z = k * 2 - 8 + ethicalInfluence * 6;
-                        break;
-                        
-                    case 'prismBurst':
-                        const burstAngle = (k / eigenvalues.length) * Math.PI * 2 + ethicalInfluence * Math.PI;
-                        const burstRadius = (5 + k * 3.5) * rarityMult;
-                        x = burstRadius * Math.cos(burstAngle);
-                        y = burstRadius * Math.sin(burstAngle);
-                        z = Math.sin(k * 0.9 + ethicalInfluence * 6) * 5;
-                        break;
-                        
-                    case 'crystalline':
-                        x = (k % 3 - 1) * (8 + ethicalInfluence * 6) * rarityMult;
-                        y = (Math.floor(k / 3) % 3 - 1) * (8 + ethicalInfluence * 6) * rarityMult;
-                        z = Math.sin(k * PHI + ethicalInfluence * 8) * 6;
-                        break;
-                        
-                    case 'rayFlow':
-                        const flowT = k / eigenvalues.length;
-                        x = Math.sin(flowT * Math.PI * 3 + ethicalInfluence * 5) * (8 + flowT * 12) * rarityMult;
-                        y = flowT * 16 - 8 + ethicalInfluence * 8;
-                        z = Math.cos(flowT * Math.PI * 2 + ethicalInfluence * 4) * 5;
-                        break;
-                        
-                    case 'auraCluster':
-                        const clusterAngle = k * 1.1 + ethicalInfluence * 10;
-                        const clusterDist = (4 + Math.pow(k / eigenvalues.length, 0.6) * 15) * rarityMult;
-                        x = clusterDist * Math.cos(clusterAngle);
-                        y = clusterDist * Math.sin(clusterAngle);
-                        z = Math.sin(k * PHI + ethicalInfluence * 9) * 4;
-                        break;
-                        
-                    case 'beamWeb':
-                        const webAngle = k * (Math.PI * 2 / eigenvalues.length) + ethicalInfluence * Math.PI;
-                        const webRadius = (6 + (k % 2) * 6) * rarityMult;
-                        x = webRadius * Math.cos(webAngle);
-                        y = webRadius * Math.sin(webAngle);
-                        z = (k % 2 - 0.5) * 6 + ethicalInfluence * 4;
-                        break;
-                }
-                
-                crystal.position.set(x, y, z);
-                crystal.rotation.set(
-                    Math.sin(k + ethicalInfluence * 6), 
-                    Math.cos(k + ethicalInfluence * 5), 
-                    Math.sin(k * PHI + ethicalInfluence * 7)
-                );
-                crystal.userData.originalRotation = { x: crystal.rotation.x, y: crystal.rotation.y, z: crystal.rotation.z };
-                crystal.userData.pulsePhase = Math.random() * Math.PI * 2;
-                soulGroup.add(crystal);
-                
-                // Enhanced light beams connecting crystals
-                if ((formation === 'rayFlow' || formation === 'lightSpiral' || formation === 'beamWeb') && k > 0 && ethicalInfluence > 0.3) {
-                    const prevCrystal = soulGroup.children[soulGroup.children.length - 2];
-                    const beamGeometry = new THREE.BufferGeometry().setFromPoints([
-                        prevCrystal.position,
-                        crystal.position
-                    ]);
-                    const beamMaterial = new THREE.LineBasicMaterial({
-                        color: new THREE.Color().setHSL(dynamicHue, dynamicSat * 0.8, dynamicLight),
-                        transparent: true,
-                        opacity: 0.4 + ethicalInfluence * 0.5
-                    });
-                    const beam = new THREE.Line(beamGeometry, beamMaterial);
-                    soulGroup.add(beam);
-                }
-            });
-            
-            scene.add(soulGroup);
-            
-            // Update Ethics Panel
-            let ethicsHTML = '<h4 style="color: #FFD700; margin: 10px 0 5px 0;">Ethical Traits from LNAL</h4>';
-            ethicalTraits.forEach((trait, i) => {
-                const value = traitValues[i] * 100;
-                ethicsHTML += `
-                    <div style="margin: 8px 0;">
-                        <strong>${trait.name}:</strong> ${value.toFixed(0)}%
-                        <div class="trait-bar"><div class="trait-fill" style="width: ${value}%"></div></div>
-                        <div style="font-size: 10px; opacity: 0.7; margin-top: 2px;">${trait.desc}</div>
-                    </div>
-                `;
-            });
-            document.getElementById('ethicsContent').innerHTML = ethicsHTML;
-            
-            // Update Personality Panel
-            const personalityContent = `
-                <h4 style="color: #FFD700; margin: 10px 0 5px 0;">${personality.name}</h4>
-                <p style="font-style: italic; margin: 5px 0 15px 0; opacity: 0.8;">${personality.desc}</p>
-                
-                <div style="margin: 10px 0;">
-                    <strong>Light Formation:</strong> ${formation}<br>
-                    <strong>Prism Count:</strong> ${eigenvalues.length}<br>
-                    <strong>Core Luminosity:</strong> ${(energy * 1000).toFixed(1)} meV<br>
-                    <strong>Signature (δ):</strong> ${delta.toFixed(3)}
-                </div>
-                
-                <div style="margin-top: 15px; font-size: 11px; opacity: 0.7;">
-                    LNAL Operations: ${opcodeCount.FOLD} FOLD, ${opcodeCount.BRAID} BRAID, ${opcodeCount.CYCLE} CYCLE
-                </div>
-            `;
-            document.getElementById('personalityContent').innerHTML = personalityContent;
-            
-            // Update Rarity Panel
-            const badge = document.getElementById('rarityBadge');
-            badge.textContent = rarity.level;
-            badge.className = `rarity-badge ${rarity.level.toLowerCase().split(' ')[0]}`;
-            
-            const rarityDetails = `
-                <div style="margin: 10px 0; font-size: 12px;">
-                    <strong>Ethical Score:</strong> ${traitValues.reduce((a,b) => a+b, 0).toFixed(2)}/6.0<br>
-                    <strong>Light Intensity:</strong> ${(rarity.glowMult * 100).toFixed(0)}%<br>
-                    <strong>Aura Particles:</strong> ${Math.floor(150 * rarity.particleMult)}<br>
-                    <strong>God Rays:</strong> ${12 + Math.floor(rarity.glowMult * 6)}
-                </div>
-                <div style="font-size: 10px; opacity: 0.7;">
-                    Rarity determined by ethical trait coherence and balance
-                </div>
-            `;
-            document.getElementById('rarityDetails').innerHTML = rarityDetails;
-            
-            // Update explanation panel
-            const explanation = `
-                <strong>Light-to-Code Mapping:</strong><br><br>
-                
-                • <strong>Radiant Core:</strong> Recognition singularity at Gap-45, luminosity = |δ| = ${Math.abs(delta).toFixed(2)}<br><br>
-                
-                • <strong>Prism Crystals:</strong> 8 eigenvalue light-shards, size ∝ λ_k from ${opcodeCount.FOLD} FOLD operations<br><br>
-                
-                • <strong>Formation (${formation}):</strong> Light pattern from eigenvalue ratio ${eigenRatio.toFixed(3)} + ${opcodeCount.BRAID} BRAID ops<br><br>
-                
-                • <strong>Color Palette (${paletteName}):</strong> Qualia spectrum from ledger costs, dynamic saturation from ethical traits<br><br>
-                
-                • <strong>Living Light Aura:</strong> ${Math.floor(150 * rarity.particleMult)} I-Am consciousness particles, 8-beat shimmer cycles<br><br>
-                
-                • <strong>God Rays:</strong> ${12 + Math.floor(rarity.glowMult * 6)} emanating light beams, intensity = ethical coherence<br><br>
-                
-                • <strong>Ethical Traits:</strong> Computed from LNAL operation patterns (${Object.entries(opcodeCount).map(([k,v]) => `${k}:${v}`).join(', ')})<br><br>
-                
-                • <strong>Light Animation:</strong> Pulsing tied to recognition cycles, movement from personality archetype
-            `;
-            document.getElementById('explanationPanel').innerHTML = explanation;
-            
-            // Enhanced animation with light being behaviors
-            function animate() {
-                animationId = requestAnimationFrame(animate);
-                
-                const time = Date.now() * 0.001;
-                
-                // Animate living light field
-                animateLivingLight(traitValues, personality);
-                
-                // Core pulsing with ethical influence
-                const corePulse = 1 + Math.sin(time * 2 + core.userData.pulsePhase) * 0.1 * rarity.glowMult;
-                core.scale.setScalar(corePulse);
-                core.material.emissiveIntensity = 0.5 + Math.sin(time * 1.5) * 0.3 * rarity.glowMult;
-                
-                // Personality-based soul group animation
-                switch(personality.anim) {
-                    case 'steadyGlow':
-                        soulGroup.rotation.y += 0.003;
-                        break;
-                    case 'colorShift':
-                        soulGroup.rotation.y += 0.015;
-                        soulGroup.rotation.x += 0.008;
-                        // Shift crystal colors over time
-                        soulGroup.children.forEach((child, i) => {
-                            if (child.material && child.material.color) {
-                                const hue = (time * 0.1 + i * 0.2) % 1.0;
-                                child.material.color.setHSL(hue, 0.8, 0.9);
-                            }
-                        });
-                        break;
-                    case 'wisdomPulse':
-                        soulGroup.rotation.y += 0.005;
-                        const wisdomScale = 1 + Math.sin(time * 0.8) * 0.05;
-                        soulGroup.scale.setScalar(wisdomScale);
-                        break;
-                    case 'fierceFlicker':
-                        soulGroup.rotation.y += 0.02;
-                        soulGroup.rotation.z += 0.01;
-                        break;
-                    case 'dreamyFlow':
-                        soulGroup.rotation.y += 0.007;
-                        soulGroup.position.y = Math.sin(time * 0.6) * 3;
-                        soulGroup.position.x = Math.cos(time * 0.4) * 2;
-                        break;
-                    case 'weavingBeams':
-                        soulGroup.rotation.y += 0.01;
-                        soulGroup.rotation.x = Math.sin(time * 0.5) * 0.3;
-                        break;
-                    case 'stellarBurn':
-                        soulGroup.rotation.y += 0.004;
-                        // Intense burning effect
-                        core.material.emissiveIntensity = 1.0 + Math.sin(time * 3) * 0.5;
-                        break;
-                    case 'quantumFlicker':
-                        soulGroup.rotation.y += 0.01 + Math.sin(time * 4) * 0.01;
-                        soulGroup.scale.setScalar(1 + Math.sin(time * 6) * 0.1);
-                        break;
-                    case 'healingGlow':
-                        soulGroup.rotation.y += 0.006;
-                        const healingPulse = 1 + Math.sin(time * 1.2) * 0.08;
-                        soulGroup.scale.setScalar(healingPulse);
-                        break;
-                    case 'solarFlare':
-                        soulGroup.rotation.y += 0.012;
-                        soulGroup.scale.setScalar(1 + Math.sin(time * 0.8) * 0.15);
-                        break;
-                    case 'lunarCycle':
-                        soulGroup.rotation.y += 0.002;
-                        soulGroup.rotation.z = Math.sin(time * 0.3) * 0.2;
-                        break;
-                    case 'rainbowDance':
-                        soulGroup.rotation.y += 0.018;
-                        soulGroup.position.y = Math.sin(time * 1.8) * 2;
-                        soulGroup.scale.setScalar(1 + Math.sin(time * 2.5) * 0.08);
-                        break;
-                    default:
-                        soulGroup.rotation.y += 0.008;
-                        soulGroup.rotation.x += 0.004;
-                }
-                
-                // Individual crystal light effects
-                soulGroup.children.forEach((child, i) => {
-                    if (child.userData.originalRotation && child.userData.pulsePhase !== undefined) {
-                        const factor = 1 + traitValues[1] * 2; // Inseparability affects rotation
-                        const pulse = child.userData.pulsePhase + time * factor;
-                        
-                        child.rotation.x = child.userData.originalRotation.x + Math.sin(pulse + i) * traitValues[0] * 0.5;
-                        child.rotation.y = child.userData.originalRotation.y + Math.cos(pulse + i) * traitValues[2] * 0.3;
-                        child.rotation.z = child.userData.originalRotation.z + Math.sin(pulse * 0.7 + i) * traitValues[4] * 0.2;
-                        
-                        // Light intensity pulsing
-                        if (child.material && child.material.emissive) {
-                            const intensity = 0.3 + Math.sin(pulse) * 0.2 * rarity.glowMult;
-                            child.material.emissiveIntensity = intensity;
-                        }
+        function visualizeLedger(eigenvalues, delta, energy, coherence, stability, opcodeCount, ethicalScores, personalityData, rarity) {
+            // Clear previous visualization
+            while (scene.children.length > 0) {
+                const child = scene.children[0];
+                if (child.geometry) child.geometry.dispose();
+                if (child.material) {
+                    if (Array.isArray(child.material)) {
+                        child.material.forEach(mat => mat.dispose());
+                    } else {
+                        child.material.dispose();
                     }
-                });
-                
-                renderer.render(scene, camera);
+                }
+                scene.remove(child);
             }
-            animate();
+
+            // Create virtue scores object for easy access
+            const virtueScores = {};
+            ethicalTraits.forEach((trait, i) => {
+                virtueScores[trait.name.toLowerCase()] = ethicalScores[i];
+            });
+
+            // Core orb at center
+            const corePosition = new THREE.Vector3(0, 0, 0);
+            const core = createSoulCore(virtueScores, rarity);
+            scene.add(core);
+
+            // Generate 8 flux threads (one per eigenvalue)
+            const fluxThreads = [];
+            eigenvalues.forEach((eigenvalue, i) => {
+                const angle = (i / 8) * Math.PI * 2;
+                const startOffset = new THREE.Vector3(
+                    Math.cos(angle) * 0.3,
+                    Math.sin(angle) * 0.3,
+                    0
+                );
+                
+                const soulId = energy + delta + i; // Unique seed
+                const points = generateFluxPath(eigenvalue, corePosition.clone().add(startOffset), virtueScores, soulId);
+                const thread = createFluxThread(points, virtueScores, eigenvalue);
+                
+                fluxThreads.push(thread);
+                scene.add(thread);
+            });
+
+            // Add virtue bridges (compassion connections)
+            const bridges = createVirtueBridges(fluxThreads, virtueScores);
+            bridges.forEach(bridge => scene.add(bridge));
+
+            // Enhanced living light field
+            const particles = createLivingLightField(rarity, virtueScores);
+            particles.forEach(particle => scene.add(particle));
+
+            // Enhanced lighting for ethereal effect
+            scene.add(new THREE.AmbientLight(0x404040, 0.3));
+            
+            const primaryLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            primaryLight.position.set(5, 5, 5);
+            scene.add(primaryLight);
+            
+            const secondaryLight = new THREE.DirectionalLight(0x8888ff, 0.3);
+            secondaryLight.position.set(-3, -3, 3);
+            scene.add(secondaryLight);
+
+            // Store references for animation
+            scene.userData = {
+                core,
+                fluxThreads,
+                bridges,
+                particles,
+                virtueScores,
+                rarity,
+                startTime: Date.now()
+            };
         }
         
         function replicateSoul() {
@@ -898,7 +706,7 @@
                 simulator.ledgerSteps.join('\n') + 
                 `\n\nδ = ${delta}\nE_soul = ${energy.toFixed(6)} eV\n8 eigenvalue prisms generated\nEthical traits computed from LNAL patterns\nLight being ready for manifestation`;
             
-            visualizeLedger(simulator.ledgerSteps, simulator.eigenvalues);
+            visualizeLedger(simulator.eigenvalues, delta, energy, coherence, stability, opcodeCount, ethicalScores, personalityData, rarity);
         }
         
         function clearLedger() {
@@ -906,7 +714,7 @@
             document.getElementById('ethicsContent').innerHTML = 'Manifest a soul to see ethical traits...';
             document.getElementById('personalityContent').innerHTML = 'Generate a soul to see personality...';
             document.getElementById('rarityDetails').innerHTML = 'Awaiting manifestation...';
-            document.getElementById('explanationPanel').innerHTML = '<strong>Light-to-Code Mapping:</strong><br>Generate a soul to see how LNAL creates light...';
+            document.getElementById('explanationPanel').innerHTML = '<strong>Flux-to-Code Mapping:</strong><br>Generate a soul to see how LNAL weaves flux mandalas...';
             
             const badge = document.getElementById('rarityBadge');
             badge.textContent = 'Unknown';
