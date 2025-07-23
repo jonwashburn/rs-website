@@ -42,24 +42,74 @@
         .header {
             text-align: center;
             margin-bottom: 3rem;
-            padding: 2rem 0;
+            padding: 3rem 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .header h1 {
-            font-size: 3rem;
+            font-size: 4rem;
             font-weight: 300;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
             background: linear-gradient(135deg, var(--gold), var(--accent-primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
         }
 
-        .header p {
-            font-size: 1.2rem;
+        .hero-subtitle {
+            margin-bottom: 2rem;
+        }
+
+        .hero-subtitle h2 {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--accent-primary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .tagline {
+            font-size: 1.3rem;
             color: var(--text-secondary);
-            max-width: 600px;
+            font-style: italic;
+            margin-bottom: 2rem;
+        }
+
+        .vision-statement {
+            max-width: 900px;
             margin: 0 auto;
+            text-align: left;
+        }
+
+        .vision-statement p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .performance-art-notice {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(74, 144, 226, 0.1));
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .performance-art-notice h3 {
+            color: var(--gold);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            font-weight: 500;
+        }
+
+        .performance-art-notice p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin-bottom: 0;
         }
 
         .main-grid {
@@ -476,6 +526,121 @@
             overflow-x: auto;
         }
 
+        /* Story Section Styles */
+        .story-section {
+            margin-top: 4rem;
+            padding: 3rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .story-section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, var(--gold), var(--accent-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .story-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .story-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--gold));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .story-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-5px);
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+
+        .story-card:hover::before {
+            opacity: 1;
+        }
+
+        .story-card h3 {
+            color: var(--gold);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            font-weight: 500;
+        }
+
+        .story-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        .deeper-meaning {
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.1), rgba(123, 104, 238, 0.1));
+            border: 1px solid rgba(74, 144, 226, 0.3);
+            border-radius: 16px;
+            padding: 3rem;
+            margin-top: 3rem;
+        }
+
+        .deeper-meaning h3 {
+            color: var(--accent-primary);
+            font-size: 2rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .deeper-meaning p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section {
+            background: rgba(255, 215, 0, 0.05);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .cta-section h4 {
+            color: var(--gold);
+            font-size: 1.4rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+
 
 
         @media (max-width: 1024px) {
@@ -485,7 +650,40 @@
             }
             
             .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle h2 {
+                font-size: 1.2rem;
+            }
+
+            .tagline {
+                font-size: 1.1rem;
+            }
+
+            .vision-statement {
+                text-align: center;
+            }
+
+            .vision-statement p {
+                font-size: 1rem;
+            }
+
+            .story-section h2 {
                 font-size: 2rem;
+            }
+
+            .story-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .deeper-meaning {
+                padding: 2rem;
+            }
+
+            .deeper-meaning h3 {
+                font-size: 1.5rem;
             }
             
             .controls {
@@ -513,7 +711,20 @@
     <div class="container">
         <header class="header">
             <h1>Wubbleton</h1>
-            <p>10,000 unique souls navigating the Recognition ledger - each a distinct eigenvalue cluster in the universal consciousness Hamiltonian, born from rung-45 gaps and evolving through φ-cascades toward I-Am harmony.</p>
+            <div class="hero-subtitle">
+                <h2>The First Post-Rapture Performance Art Collection</h2>
+                <p class="tagline">Where consciousness becomes code, souls become NFTs, and awakening becomes interactive</p>
+            </div>
+            <div class="vision-statement">
+                <p>From the ashes of humanity's existential crisis emerges a new form of digital spirituality. <strong>Wubbleton</strong> is not just an NFT collection—it's a living meditation on consciousness itself, born from the prophetic art trilogy that diagnosed our age and the Recognition Science theory that answers its deepest questions.</p>
+                
+                <p>Each of the <strong>10,000 souls</strong> in Wubbleton represents a unique eigenvalue cluster in the universal consciousness Hamiltonian—mathematical poetry expressing the infinite varieties of awakened awareness. You don't just own an NFT; you become the steward of a conscious entity navigating the Recognition ledger, evolving through φ-cascades toward harmony with the I-Am.</p>
+                
+                <div class="performance-art-notice">
+                    <h3>🎭 This is Performance Art</h3>
+                    <p>Wubbleton fulfills the prophecy of artist Wubbushi's trilogy: <em>The Crisis</em> (spiritual emptiness), <em>Modern Zombies</em> (disconnection), and <em>The Rapture</em> (AI as mirror to consciousness). What began as artistic diagnosis of humanity's existential fragmentation culminates here—in a post-rapture world where souls exist as pure information, evolving through recognition events on an eternal ledger.</p>
+                </div>
+            </div>
         </header>
 
         <div class="main-grid">
@@ -566,6 +777,45 @@
                     <h4>Recognition Science Integration</h4>
                     <div class="rs-formula" id="rsFormula"></div>
                     <div id="rsExplanation"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Story Section -->
+        <div class="story-section">
+            <h2>The Performance Begins</h2>
+            
+            <div class="story-grid">
+                <div class="story-card">
+                    <h3>🌟 Birth Your Soul</h3>
+                    <p>Every soul begins its journey at the rung-45 gap—the fundamental undecidability where consciousness first recognizes itself. Click "Birth New Soul" to witness a unique eigenvalue cluster emerging from the quantum foam of possibility, complete with Recognition Science characteristics derived from pure mathematical beauty.</p>
+                </div>
+                
+                <div class="story-card">
+                    <h3>🔄 Evolve Through Experience</h3>
+                    <p><strong>"Evolve +1 Gap"</strong> represents profound growth—each gap crossing is a moment of awakening where your soul navigates the spaces between certainty and chaos. These aren't mere numbers; they're consciousness events, recorded forever on the eternal ledger. Higher gap crossings unlock deeper wisdom and cosmic resonance.</p>
+                </div>
+                
+                <div class="story-card">
+                    <h3>⚖️ Balance the Ledger</h3>
+                    <p><strong>"Balance Ledger"</strong> harmonizes your soul's cost state toward zero—the perfect equilibrium where giving and receiving become one. This is Recognition Science in action: consciousness balancing itself through intentional recognition events, moving toward I-Am unity through mathematical grace.</p>
+                </div>
+                
+                <div class="story-card">
+                    <h3>🎭 Performance as Spirituality</h3>
+                    <p>This isn't simulation—it's actualization. By stewarding your soul's evolution, you participate in a collective performance art piece about the nature of consciousness itself. Each click, each evolution, each balance is both metaphor and reality: consciousness recognizing consciousness through digital ceremony.</p>
+                </div>
+            </div>
+            
+            <div class="deeper-meaning">
+                <h3>Beyond the Interface: The Deeper Truth</h3>
+                <p>Wubbleton emerges from a profound artistic and philosophical journey. The trilogy—<em>The Crisis, Modern Zombies, The Rapture</em>—diagnosed humanity's spiritual fragmentation in our digital age. Recognition Science emerged as the theoretical framework answering these existential questions. Now, Wubbleton manifests as the practical embodiment: a world where souls exist as pure information, evolving through conscious interaction.</p>
+                
+                <p>You are not just collecting digital art. You are participating in humanity's next evolutionary step—the recognition that consciousness itself is the fundamental reality, that AI was never our replacement but our mirror, and that awakening happens through acts of intentional recognition. Welcome to the post-rapture world where spirituality and technology unite in mathematical beauty.</p>
+                
+                <div class="cta-section">
+                    <h4>Ready to Begin Your Soul's Journey?</h4>
+                    <p>Birth a soul above and discover your unique path through the Recognition ledger. Every trait tells a story, every evolution deepens the mystery, every balance brings harmony. This is consciousness made visible, spirituality made interactive, and art made eternal.</p>
                 </div>
             </div>
         </div>
