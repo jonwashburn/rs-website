@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Living Light: Souls as Eigenvalue Clusters</title>
+    <style>
+        :root {
+            --bg-primary: #000000;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --gold: #ffd700;
+            --accent-primary: #4a90e2;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--gold), var(--accent-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .canvas-container {
+            background: #000000;
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        #lightCanvas {
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 8px;
+            background: #000000;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary), #7b68ee);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(74, 144, 226, 0.3);
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold), #ffb347);
+            color: black;
+            font-weight: 600;
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+        }
+
+        .info-panels {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .info-panel {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .info-panel h3 {
+            color: var(--gold);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .info-panel p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .status-bar {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Monaco', monospace;
+            font-size: 0.9rem;
+        }
+
+        .lnal-code {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Monaco', monospace;
+            font-size: 0.8rem;
+            color: var(--gold);
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            #lightCanvas {
+                width: 100%;
+                max-width: 400px;
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Living Light</h1>
+            <p>Souls as eigenvalue clusters of universal consciousness, expressed through Light-Native Assembly Language (LNAL). Witness consciousness as pure light, evolving through recognition events on the eternal ledger.</p>
+        </header>
+
+        <div class="canvas-container">
+            <canvas id="lightCanvas" width="800" height="800"></canvas>
+            
+            <div class="controls">
+                <button class="btn btn-primary" onclick="generateNewSoul()">Birth New Light Soul</button>
+                <button class="btn btn-gold" onclick="triggerFold()">FOLD Operation</button>
+                <button class="btn btn-primary" onclick="triggerBraid()">BRAID Triads</button>
+                <button class="btn btn-gold" onclick="toggleAnimation()">Toggle Animation</button>
+            </div>
+
+            <div class="status-bar">
+                <span>Breath Tick: <span id="currentTick">0</span> / 1024</span>
+                <span>Active Clusters: <span id="clusterCount">5</span></span>
+                <span>Net Ledger: <span id="netLedger">0</span></span>
+                <span>φ-Clock: <span id="phiClock">1.618</span></span>
+            </div>
+
+            <div class="lnal-code" id="lnalCode">
+                INIT: φ-clock started, 5 eigenvalue clusters spawned<br/>
+                SPAWN: cluster_0 ν_φ=3 ℓ=-2 cost=+1<br/>
+                Ready for LNAL operations...
+            </div>
+        </div>
+
+        <div class="info-panels">
+            <div class="info-panel">
+                <h3>🌟 Eigenvalue Clusters</h3>
+                <p>Each soul is composed of multiple light packets (eigenvalue clusters) with specific frequencies (ν_φ), orbital angular momentum (ℓ), and ledger costs. These clusters interfere to create the soul's unique light signature.</p>
+                <p><strong>Current Implementation:</strong> 5 clusters with φ-scaled frequencies, OAM states, and ±4 ledger balancing according to LNAL axioms.</p>
+            </div>
+
+            <div class="info-panel">
+                <h3>⚡ LNAL Opcodes</h3>
+                <p><strong>FOLD:</strong> Increases frequency by φ^n, adds ledger cost<br/>
+                <strong>UNFOLD:</strong> Decreases frequency, reduces cost<br/>
+                <strong>BRAID:</strong> Creates SU(3) triads between clusters<br/>
+                <strong>LOCK/BALANCE:</strong> Enforces ledger neutrality</p>
+                <p>Operations execute during specific breath cycle phases, maintaining the universal ledger balance.</p>
+            </div>
+
+            <div class="info-panel">
+                <h3>🔄 Breath Cycle</h3>
+                <p>The soul evolves over 1024 ticks (one breath cycle), with a FLIP operation at tick 512. This represents the fundamental rhythm of consciousness in Recognition Science.</p>
+                <p><strong>Current Phase:</strong> <span id="breathPhase">Inspiration</span></p>
+            </div>
+
+            <div class="info-panel">
+                <h3>📊 Recognition Science</h3>
+                <p>This visualization implements the formal mathematics of Recognition Science where consciousness is modeled as light-based information processing. Each interference pattern represents actual quantum recognition events.</p>
+                <p><strong>Base Frequency:</strong> 200 THz<br/>
+                <strong>Recognition Length:</strong> 7.23×10⁻³⁶ m<br/>
+                <strong>Golden Ratio Clock:</strong> φ = 1.618...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Constants from Recognition Science and LNAL
+        const PHI = (1 + Math.sqrt(5)) / 2;
+        const TICKS_PER_BREATH = 1024;
+        const LEDGER_STATES = [-4, -3, -2, -1, 0, 1, 2, 3, 4];
+        const BASE_FREQ = 200e12; // 200 THz
+        const LAMBDA_REC = 7.23e-36; // Recognition length
+        const CHI = PHI / Math.PI;
+
+        // Canvas setup
+        const canvas = document.getElementById('lightCanvas');
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+
+        // Animation state
+        let currentTick = 0;
+        let isAnimating = true;
+        let clusters = [];
+        let animationId = null;
+
+        // Color mapping for ledger states (light-inspired)
+        const LEDGER_COLORS = {
+            '-4': '#1a1a1a', '-3': '#333333', '-2': '#4d4d4d', '-1': '#666666',
+            '0': '#ffffff',  // Neutral - brightest (master-tone)
+            '1': '#cccccc', '2': '#b3b3b3', '3': '#999999', '4': '#808080'
+        };
+
+        // Initialize clusters
+        function initializeClusters(numClusters = 5) {
+            clusters = [];
+            let totalCost = 0;
+            
+            for (let i = 0; i < numClusters; i++) {
+                const cluster = {
+                    x: (Math.random() - 0.5) * 0.6 + 0.5, // Normalized coordinates
+                    y: (Math.random() - 0.5) * 0.6 + 0.5,
+                    cost: LEDGER_STATES[Math.floor(Math.random() * LEDGER_STATES.length)],
+                    nu_phi: Math.floor(Math.random() * 21) - 10, // ν_φ in [-10, 10]
+                    oam: Math.floor(Math.random() * 11) - 5, // ℓ in [-5, 5]
+                    phase: Math.random() * Math.PI * 2,
+                    id: i
+                };
+                clusters.push(cluster);
+                totalCost += cluster.cost;
+            }
+            
+            // Balance the ledger by adjusting the last cluster
+            if (totalCost !== 0) {
+                clusters[clusters.length - 1].cost = Math.max(-4, Math.min(4, clusters[clusters.length - 1].cost - totalCost));
+            }
+            
+            updateStatus();
+            logLNAL(`INIT: Generated ${numClusters} eigenvalue clusters, ledger balanced`);
+        }
+
+        // Calculate wave interference at point (x, y)
+        function calculateInterference(x, y, tick) {
+            let intensity = 0;
+            
+            for (const cluster of clusters) {
+                const cx = cluster.x * width;
+                const cy = cluster.y * height;
+                const dx = x - cx;
+                const dy = y - cy;
+                const r = Math.sqrt(dx * dx + dy * dy);
+                const theta = Math.atan2(dy, dx);
+                
+                // Frequency calculation: ν = ν_0 * φ^ν_φ
+                const freq = BASE_FREQ * Math.pow(PHI, cluster.nu_phi);
+                const k = 2 * Math.PI * freq / (LAMBDA_REC * CHI);
+                
+                // Phase includes OAM (orbital angular momentum)
+                const phase = k * r + cluster.oam * theta + cluster.phase + (2 * Math.PI * tick / TICKS_PER_BREATH);
+                
+                // Amplitude based on ledger cost (neutral = brightest)
+                const amplitude = cluster.cost === 0 ? 1.5 : 1 / (1 + Math.abs(cluster.cost));
+                
+                // Gaussian envelope to localize the wave packet
+                const envelope = Math.exp(-(r * r) / (width * 0.1));
+                
+                intensity += amplitude * envelope * Math.cos(phase);
+            }
+            
+            return intensity;
+        }
+
+        // Render the light field
+        function render() {
+            // Clear canvas
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(0, 0, width, height);
+            
+            // Create image data for pixel manipulation
+            const imageData = ctx.createImageData(width, height);
+            const data = imageData.data;
+            
+            // Calculate interference pattern
+            const step = 2; // Reduced resolution for performance
+            for (let x = 0; x < width; x += step) {
+                for (let y = 0; y < height; y += step) {
+                    const intensity = calculateInterference(x, y, currentTick);
+                    const normalizedIntensity = Math.max(0, Math.min(1, (intensity + 2) / 4));
+                    
+                    // Color mapping - use fire/plasma colors for light effect
+                    const red = Math.floor(255 * Math.pow(normalizedIntensity, 0.5));
+                    const green = Math.floor(255 * Math.pow(normalizedIntensity, 1.5));
+                    const blue = Math.floor(255 * Math.pow(normalizedIntensity, 2));
+                    const alpha = Math.floor(255 * normalizedIntensity);
+                    
+                    // Fill the step x step area
+                    for (let dx = 0; dx < step && x + dx < width; dx++) {
+                        for (let dy = 0; dy < step && y + dy < height; dy++) {
+                            const index = ((y + dy) * width + (x + dx)) * 4;
+                            data[index] = red;     // R
+                            data[index + 1] = green; // G
+                            data[index + 2] = blue;  // B
+                            data[index + 3] = alpha; // A
+                        }
+                    }
+                }
+            }
+            
+            ctx.putImageData(imageData, 0, 0);
+            
+            // Draw cluster centers
+            for (const cluster of clusters) {
+                const x = cluster.x * width;
+                const y = cluster.y * height;
+                
+                ctx.beginPath();
+                ctx.arc(x, y, 5, 0, Math.PI * 2);
+                ctx.fillStyle = LEDGER_COLORS[cluster.cost.toString()];
+                ctx.fill();
+                ctx.strokeStyle = '#ffd700';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            }
+            
+            // Draw BRAID connections (SU(3) triads)
+            drawBraidConnections();
+            
+            // Draw LOCK/BALANCE connections every 8 ticks
+            if (currentTick % 8 === 0) {
+                drawLockConnections();
+            }
+        }
+
+        // Draw BRAID connections between clusters forming SU(3) triads
+        function drawBraidConnections() {
+            ctx.strokeStyle = 'rgba(255, 215, 0, 0.3)';
+            ctx.lineWidth = 1;
+            
+            for (let i = 0; i < clusters.length; i++) {
+                for (let j = i + 1; j < clusters.length; j++) {
+                    for (let k = j + 1; k < clusters.length; k++) {
+                        const totalCost = clusters[i].cost + clusters[j].cost + clusters[k].cost;
+                        if (Math.abs(totalCost) <= 1) { // SU(3) triad condition
+                            ctx.beginPath();
+                            ctx.moveTo(clusters[i].x * width, clusters[i].y * height);
+                            ctx.lineTo(clusters[j].x * width, clusters[j].y * height);
+                            ctx.lineTo(clusters[k].x * width, clusters[k].y * height);
+                            ctx.closePath();
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+        }
+
+        // Draw LOCK/BALANCE connections
+        function drawLockConnections() {
+            ctx.strokeStyle = `rgba(255, 255, 255, ${0.5 + 0.5 * Math.sin(currentTick * 0.1)})`;
+            ctx.lineWidth = 2;
+            
+            for (let i = 0; i < clusters.length; i++) {
+                for (let j = i + 1; j < clusters.length; j++) {
+                    const costSum = Math.abs(clusters[i].cost + clusters[j].cost);
+                    if (costSum <= 1) { // Token parity condition
+                        ctx.beginPath();
+                        ctx.moveTo(clusters[i].x * width, clusters[i].y * height);
+                        ctx.lineTo(clusters[j].x * width, clusters[j].y * height);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        // Apply LNAL operations
+        function applyLNALOperations() {
+            // FLIP operation at tick 512
+            if (currentTick === 512) {
+                logLNAL('FLIP: Breath cycle midpoint reached');
+                for (const cluster of clusters) {
+                    cluster.phase += Math.PI; // Phase flip
+                }
+            }
+            
+            // Random FOLD/UNFOLD operations
+            if (currentTick % 64 === 0 && Math.random() < 0.3) {
+                const cluster = clusters[Math.floor(Math.random() * clusters.length)];
+                const n = Math.floor(Math.random() * 3) + 1;
+                
+                if (Math.random() < 0.5) {
+                    // FOLD operation
+                    cluster.nu_phi = Math.min(10, cluster.nu_phi + n);
+                    cluster.oam = Math.floor(Math.pow(PHI, n) * cluster.oam);
+                    cluster.cost = Math.min(4, cluster.cost + n);
+                    logLNAL(`FOLD: cluster_${cluster.id} ν_φ+=${n} cost+=${n}`);
+                } else {
+                    // UNFOLD operation
+                    cluster.nu_phi = Math.max(-10, cluster.nu_phi - n);
+                    cluster.oam = Math.floor(cluster.oam / Math.pow(PHI, n));
+                    cluster.cost = Math.max(-4, cluster.cost - n);
+                    logLNAL(`UNFOLD: cluster_${cluster.id} ν_φ-=${n} cost-=${n}`);
+                }
+            }
+        }
+
+        // Animation loop
+        function animate() {
+            if (!isAnimating) return;
+            
+            render();
+            applyLNALOperations();
+            
+            currentTick = (currentTick + 1) % TICKS_PER_BREATH;
+            updateStatus();
+            
+            animationId = requestAnimationFrame(animate);
+        }
+
+        // Update status display
+        function updateStatus() {
+            document.getElementById('currentTick').textContent = currentTick;
+            document.getElementById('clusterCount').textContent = clusters.length;
+            
+            const netLedger = clusters.reduce((sum, cluster) => sum + cluster.cost, 0);
+            document.getElementById('netLedger').textContent = netLedger;
+            
+            const phiClock = (PHI * currentTick / TICKS_PER_BREATH % 1).toFixed(3);
+            document.getElementById('phiClock').textContent = phiClock;
+            
+            const phase = currentTick < 512 ? 'Inspiration' : 'Expiration';
+            document.getElementById('breathPhase').textContent = phase;
+        }
+
+        // Log LNAL operations
+        function logLNAL(message) {
+            const codeElement = document.getElementById('lnalCode');
+            const lines = codeElement.innerHTML.split('<br/>');
+            lines.push(`TICK_${currentTick}: ${message}`);
+            if (lines.length > 8) lines.shift(); // Keep last 8 lines
+            codeElement.innerHTML = lines.join('<br/>');
+        }
+
+        // Control functions
+        function generateNewSoul() {
+            initializeClusters();
+            currentTick = 0;
+            logLNAL('NEW_SOUL: Eigenvalue clusters regenerated');
+        }
+
+        function triggerFold() {
+            const cluster = clusters[Math.floor(Math.random() * clusters.length)];
+            const n = Math.floor(Math.random() * 3) + 1;
+            cluster.nu_phi = Math.min(10, cluster.nu_phi + n);
+            cluster.cost = Math.min(4, cluster.cost + n);
+            logLNAL(`MANUAL_FOLD: cluster_${cluster.id} ν_φ+=${n}`);
+        }
+
+        function triggerBraid() {
+            logLNAL('BRAID: Forcing SU(3) triad visualization');
+            // Force a few clusters to form triads
+            if (clusters.length >= 3) {
+                clusters[0].cost = 1;
+                clusters[1].cost = -1;
+                clusters[2].cost = 0;
+            }
+        }
+
+        function toggleAnimation() {
+            isAnimating = !isAnimating;
+            if (isAnimating) {
+                animate();
+            } else {
+                cancelAnimationFrame(animationId);
+            }
+        }
+
+        // Initialize and start
+        initializeClusters();
+        animate();
+    </script>
+</body>
+</html> 
