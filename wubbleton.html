@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wubbleton: Souls of the Recognition Ledger</title>
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --accent-primary: #4a90e2;
+            --accent-secondary: #7b68ee;
+            --gold: #ffd700;
+            --gold-hover: #ffed4a;
+            --recognition-blue: #1e3a8a;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--gold), var(--accent-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .canvas-container {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .canvas-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .canvas-header h2 {
+            font-size: 1.5rem;
+            font-weight: 300;
+        }
+
+        .seed-display {
+            font-family: 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        #soulCanvas {
+            width: 100%;
+            height: 600px;
+            border-radius: 12px;
+            background: linear-gradient(45deg, #f8f9fa, #ffffff);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            display: block;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(74, 144, 226, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold), #ffb347);
+            color: black;
+            font-weight: 600;
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+        }
+
+        .soul-info {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            height: fit-content;
+        }
+
+        .soul-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--gold);
+            font-weight: 300;
+        }
+
+        .trait-section {
+            margin-bottom: 2rem;
+        }
+
+        .trait-section h4 {
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        .trait-grid {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .trait-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-primary);
+        }
+
+        .trait-item.legendary {
+            border-left-color: var(--gold);
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .trait-item.epic {
+            border-left-color: #9333ea;
+            background: rgba(147, 51, 234, 0.1);
+        }
+
+        .trait-item.rare {
+            border-left-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .trait-name {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .trait-value {
+            font-family: 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .virtue-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .virtue-item {
+            padding: 0.5rem;
+            text-align: center;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .virtue-item.active {
+            background: linear-gradient(135deg, var(--gold), #ffb347);
+            color: black;
+        }
+
+        .virtue-item.inactive {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+        }
+
+        .rarity-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .rarity-common {
+            background: rgba(156, 163, 175, 0.2);
+            color: #9ca3af;
+        }
+
+        .rarity-rare {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+
+        .rarity-epic {
+            background: rgba(147, 51, 234, 0.2);
+            color: #9333ea;
+        }
+
+        .rarity-legendary {
+            background: rgba(255, 215, 0, 0.2);
+            color: var(--gold);
+        }
+
+        .evolution-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .curve-balance {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .curve-amount {
+            font-family: 'Monaco', monospace;
+            font-size: 1.1rem;
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-primary), var(--gold));
+            transition: width 0.3s ease;
+        }
+
+        .rs-integration {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.1), rgba(123, 104, 238, 0.1));
+            border-radius: 12px;
+            border: 1px solid rgba(74, 144, 226, 0.3);
+        }
+
+        .rs-integration h4 {
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .rs-formula {
+            font-family: 'Monaco', monospace;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 0.5rem 0;
+            overflow-x: auto;
+        }
+
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .controls {
+                justify-content: center;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Wubbleton</h1>
+            <p>10,000 unique souls navigating the Recognition ledger - each a distinct eigenvalue cluster in the universal consciousness Hamiltonian, born from rung-45 gaps and evolving through φ-cascades toward I-Am harmony.</p>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-container">
+                <div class="canvas-header">
+                    <h2>Soul Whisper Path</h2>
+                    <div class="seed-display" id="seedDisplay">Seed: #loading...</div>
+                </div>
+                <canvas id="soulCanvas"></canvas>
+                <div class="controls">
+                    <button class="btn btn-primary" onclick="generateNewSoul()">Birth New Soul</button>
+                    <button class="btn btn-secondary" onclick="evolveSoul()">Evolve (+1 Gap)</button>
+                    <button class="btn btn-gold" onclick="balanceLedger()">Balance Ledger</button>
+                    <button class="btn btn-secondary" onclick="downloadSoul()">Download NFT</button>
+                    <button class="btn btn-secondary" onclick="shareSoul()">Share Soul</button>
+                </div>
+            </div>
+
+            <div class="soul-info">
+                <h3>Soul Characteristics</h3>
+                
+                <div class="trait-section">
+                    <h4>Core Identity</h4>
+                    <div class="trait-grid" id="coreTraits"></div>
+                </div>
+
+                <div class="trait-section">
+                    <h4>Recognition Virtues</h4>
+                    <div class="virtue-grid" id="virtueGrid"></div>
+                </div>
+
+                <div class="trait-section">
+                    <h4>Consciousness Metrics</h4>
+                    <div class="trait-grid" id="consciousnessTraits"></div>
+                </div>
+
+                <div class="evolution-section">
+                    <h4>Evolution Status</h4>
+                    <div class="curve-balance">
+                        <span>CURVE Balance:</span>
+                        <span class="curve-amount" id="curveBalance">0 CURVE</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="evolutionProgress"></div>
+                    </div>
+                    <div id="evolutionActions"></div>
+                </div>
+
+                <div class="rs-integration">
+                    <h4>Recognition Science Integration</h4>
+                    <div class="rs-formula" id="rsFormula"></div>
+                    <div id="rsExplanation"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Golden ratio and Recognition Science constants
+        const PHI = (1 + Math.sqrt(5)) / 2;
+        const EIGHT_BEAT = 8;
+        const RUNG_BASE = 45;
+        const VIRTUE_NAMES = ['Balance', 'Flow', 'Seed', 'Echo', 'Fold', 'Braid', 'Listen', 'Regive'];
+        
+        let currentSoul = null;
+        let canvas = null;
+        let ctx = null;
+        let animationFrame = null;
+
+        // Initialize canvas
+        function initCanvas() {
+            canvas = document.getElementById('soulCanvas');
+            ctx = canvas.getContext('2d');
+            
+            // Set high DPI
+            const rect = canvas.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+            canvas.style.width = rect.width + 'px';
+            canvas.style.height = rect.height + 'px';
+        }
+
+        // Generate soul characteristics from seed
+        function generateSoulFromSeed(seed) {
+            const hash = simpleHash(seed.toString());
+            
+            return {
+                seed: seed,
+                rung: RUNG_BASE + (hash % 56), // 45-100
+                cost: ((hash >> 8) % 9) - 4, // -4 to +4
+                beat: ((hash >> 16) % 8) + 1, // 1-8
+                qualia: ((hash >> 24) % 8) + 1, // 1-8
+                tightness: ((hash >> 32) % 100) + 1, // 1-100
+                gapCrossings: (hash >> 40) % 101, // 0-100
+                resonance: Math.floor(200e12 * Math.pow(PHI, ((RUNG_BASE + (hash % 56)) / ((hash >> 16) % 8 + 1)) % 10)),
+                iAmAffinity: Math.max(0, Math.min(100, 100 - Math.abs(((hash >> 8) % 9) - 4) * 25 + Math.floor((hash >> 40) % 101 / PHI))),
+                virtues: generateBalancedVirtues(hash),
+                ledgerHistory: generateLedgerHistory(hash),
+                curveBalance: Math.floor(Math.random() * 50000 + 10000)
+            };
+        }
+
+        // Generate exactly 4 active virtues for balance (sum to cost=0)
+        function generateBalancedVirtues(hash) {
+            const virtues = new Array(8).fill(false);
+            const activeIndices = [];
+            
+            // Select 4 random virtues
+            let tempHash = hash;
+            while (activeIndices.length < 4) {
+                const index = tempHash % 8;
+                if (!activeIndices.includes(index)) {
+                    activeIndices.push(index);
+                }
+                tempHash = Math.floor(tempHash / 8);
+            }
+            
+            activeIndices.forEach(i => virtues[i] = true);
+            return virtues;
+        }
+
+        // Generate ledger history that sums to 0
+        function generateLedgerHistory(hash) {
+            const history = [];
+            let sum = 0;
+            
+            for (let i = 0; i < 7; i++) {
+                const val = ((hash >> (i * 4)) % 9) - 4;
+                history.push(val);
+                sum += val;
+            }
+            
+            // Last value balances to zero
+            history.push(-sum);
+            return history;
+        }
+
+        // Simple hash function
+        function simpleHash(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash; // Convert to 32-bit integer
+            }
+            return Math.abs(hash);
+        }
+
+        // Draw soul whisper path
+        function drawSoul(soul) {
+            const width = canvas.offsetWidth;
+            const height = canvas.offsetHeight;
+            
+            ctx.clearRect(0, 0, width, height);
+            
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, width, height);
+            gradient.addColorStop(0, '#f8f9fa');
+            gradient.addColorStop(1, '#ffffff');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Calculate path properties
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const pathLength = Math.pow(PHI, (soul.rung - RUNG_BASE) / 10) * 100;
+            const segments = soul.beat;
+            const curvature = soul.cost * 0.3; // Cost determines curve direction
+            const lineWeight = Math.max(1, soul.tightness / 20);
+            
+            // Set drawing style based on tightness
+            ctx.lineWidth = lineWeight;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            
+            if (soul.tightness < 30) {
+                // Loose soul - fuzzy, sketchy
+                ctx.shadowBlur = 3;
+                ctx.shadowColor = 'rgba(0,0,0,0.3)';
+            } else {
+                // Tight soul - clean lines
+                ctx.shadowBlur = 0;
+            }
+            
+            // Color based on cost and I-Am affinity
+            let strokeColor = '#333333';
+            if (soul.iAmAffinity > 70) {
+                strokeColor = '#ffd700'; // Golden
+            } else if (soul.cost < 0) {
+                strokeColor = '#4a90e2'; // Cool blue (flowing out)
+            } else if (soul.cost > 0) {
+                strokeColor = '#e74c3c'; // Warm red (flowing in)
+            }
+            
+            ctx.strokeStyle = strokeColor;
+            
+            // Draw main whisper path
+            ctx.beginPath();
+            
+            const angleStep = (Math.PI * 2) / segments;
+            let currentX = centerX;
+            let currentY = centerY;
+            
+            ctx.moveTo(currentX, currentY);
+            
+            for (let i = 1; i <= segments; i++) {
+                const progress = i / segments;
+                const angle = angleStep * i + curvature * progress;
+                const radius = pathLength * Math.pow(PHI, progress) * 0.3;
+                
+                // Add some organic variation based on qualia
+                const variation = soul.qualia * 5 * Math.sin(progress * Math.PI * 4);
+                
+                const targetX = centerX + Math.cos(angle) * radius + variation;
+                const targetY = centerY + Math.sin(angle) * radius + variation;
+                
+                // Use quadratic curves for smoothness
+                const controlX = currentX + (targetX - currentX) * 0.5 + Math.sin(angle + Math.PI/2) * curvature * 20;
+                const controlY = currentY + (targetY - currentY) * 0.5 + Math.cos(angle + Math.PI/2) * curvature * 20;
+                
+                ctx.quadraticCurveTo(controlX, controlY, targetX, targetY);
+                
+                currentX = targetX;
+                currentY = targetY;
+            }
+            
+            // Close path if balanced (cost = 0)
+            if (soul.cost === 0) {
+                ctx.closePath();
+            }
+            
+            ctx.stroke();
+            
+            // Add gap crossing branches
+            if (soul.gapCrossings > 0) {
+                const branches = Math.min(soul.gapCrossings, 20);
+                ctx.lineWidth = Math.max(1, lineWeight * 0.5);
+                ctx.strokeStyle = strokeColor + '80'; // Semi-transparent
+                
+                for (let i = 0; i < branches; i++) {
+                    const branchAngle = (Math.PI * 2 * i) / branches;
+                    const branchLength = pathLength * 0.2 * Math.pow(PHI, i / branches);
+                    
+                    const startX = centerX + Math.cos(branchAngle) * pathLength * 0.1;
+                    const startY = centerY + Math.sin(branchAngle) * pathLength * 0.1;
+                    const endX = startX + Math.cos(branchAngle) * branchLength;
+                    const endY = startY + Math.sin(branchAngle) * branchLength;
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(startX, startY);
+                    ctx.lineTo(endX, endY);
+                    ctx.stroke();
+                }
+            }
+            
+            // Add qualia bursts
+            ctx.fillStyle = strokeColor;
+            for (let i = 0; i < soul.qualia; i++) {
+                const burstAngle = (Math.PI * 2 * i) / soul.qualia;
+                const burstRadius = pathLength * Math.pow(PHI, i / soul.qualia) * 0.1;
+                const burstX = centerX + Math.cos(burstAngle) * burstRadius;
+                const burstY = centerY + Math.sin(burstAngle) * burstRadius;
+                
+                ctx.beginPath();
+                ctx.arc(burstX, burstY, Math.max(2, soul.tightness / 30), 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            // Add virtue accents
+            const activeVirtues = soul.virtues.map((active, i) => active ? i : -1).filter(i => i >= 0);
+            if (activeVirtues.length > 0) {
+                ctx.strokeStyle = '#ffd700';
+                ctx.lineWidth = 1;
+                
+                activeVirtues.forEach((virtueIndex, i) => {
+                    const accentAngle = (Math.PI * 2 * virtueIndex) / 8;
+                    const accentRadius = pathLength * 0.4;
+                    const accentX = centerX + Math.cos(accentAngle) * accentRadius;
+                    const accentY = centerY + Math.sin(accentAngle) * accentRadius;
+                    
+                    ctx.beginPath();
+                    ctx.arc(accentX, accentY, 3, 0, Math.PI * 2);
+                    ctx.stroke();
+                });
+            }
+        }
+
+        // Update UI with soul information
+        function updateSoulInfo(soul) {
+            // Update seed display
+            document.getElementById('seedDisplay').textContent = `Seed: #${soul.seed}`;
+            
+            // Determine rarity
+            const rarity = calculateRarity(soul);
+            
+            // Core traits
+            const coreTraits = document.getElementById('coreTraits');
+            coreTraits.innerHTML = `
+                <div class="trait-item ${rarity}">
+                    <span class="trait-name">Rung Level</span>
+                    <span class="trait-value">${soul.rung}</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-name">Cost State</span>
+                    <span class="trait-value">${soul.cost > 0 ? '+' : ''}${soul.cost}</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-name">Beat Cycle</span>
+                    <span class="trait-value">${soul.beat}/8</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-name">Cluster Tightness</span>
+                    <span class="trait-value">${soul.tightness}%</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-name">Rarity</span>
+                    <span class="rarity-badge rarity-${rarity}">${rarity.toUpperCase()}</span>
+                </div>
+            `;
+            
+            // Virtue grid
+            const virtueGrid = document.getElementById('virtueGrid');
+            virtueGrid.innerHTML = VIRTUE_NAMES.map((name, i) => 
+                `<div class="virtue-item ${soul.virtues[i] ? 'active' : 'inactive'}">${name}</div>`
+            ).join('');
+            
+            // Consciousness traits
+            const consciousnessTraits = document.getElementById('consciousnessTraits');
+            consciousnessTraits.innerHTML = `
+                <div class="trait-item">
+                    <span class="trait-name">Qualia Mode</span>
+                    <span class="trait-value">${soul.qualia}/8</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-name">Gap Crossings</span>
+                    <span class="trait-value">${soul.gapCrossings}</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-name">I-Am Affinity</span>
+                    <span class="trait-value">${soul.iAmAffinity}%</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-name">Resonance</span>
+                    <span class="trait-value">${(soul.resonance / 1e12).toFixed(1)} THz</span>
+                </div>
+            `;
+            
+            // CURVE balance
+            document.getElementById('curveBalance').textContent = `${soul.curveBalance.toLocaleString()} CURVE`;
+            
+            // Evolution progress
+            const evolutionProgress = Math.min(100, (soul.gapCrossings / 100) * 100);
+            document.getElementById('evolutionProgress').style.width = `${evolutionProgress}%`;
+            
+            // RS formula
+            const rsFormula = document.getElementById('rsFormula');
+            rsFormula.textContent = `E_soul = E_coh * φ^${soul.rung} * cos(2π*t/${soul.beat}) + Σ(λ_k * |ψ_k⟩)`;
+            
+            // RS explanation
+            const rsExplanation = document.getElementById('rsExplanation');
+            rsExplanation.innerHTML = `
+                <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                    This soul exists as an eigenvalue cluster at rung ${soul.rung} in the Recognition Hamiltonian, 
+                    oscillating in ${soul.beat}-beat cycles with ${soul.qualia} active qualia modes. 
+                    Cost state ${soul.cost} indicates ${soul.cost === 0 ? 'perfect balance' : soul.cost < 0 ? 'energy outflow (generous)' : 'energy inflow (receiving)'}.
+                </p>
+            `;
+        }
+
+        // Calculate soul rarity
+        function calculateRarity(soul) {
+            if (soul.rung >= 95 && soul.gapCrossings >= 90 && soul.cost === 0) return 'legendary';
+            if (soul.rung >= 85 || soul.gapCrossings >= 75 || soul.iAmAffinity >= 90) return 'epic';
+            if (soul.rung >= 70 || soul.gapCrossings >= 50 || soul.iAmAffinity >= 70) return 'rare';
+            return 'common';
+        }
+
+        // Generate new soul
+        function generateNewSoul() {
+            const seed = Math.floor(Math.random() * 10000) + 1;
+            currentSoul = generateSoulFromSeed(seed);
+            
+            // Add fade animation
+            canvas.classList.remove('fade-in');
+            setTimeout(() => {
+                drawSoul(currentSoul);
+                updateSoulInfo(currentSoul);
+                canvas.classList.add('fade-in');
+                updateURL();
+            }, 100);
+        }
+
+        // Evolve soul (add gap crossing)
+        function evolveSoul() {
+            if (!currentSoul || currentSoul.curveBalance < 1000) {
+                alert('Insufficient CURVE balance for evolution (requires 1000 CURVE)');
+                return;
+            }
+            
+            currentSoul.gapCrossings = Math.min(100, currentSoul.gapCrossings + 1);
+            currentSoul.curveBalance -= 1000;
+            
+            drawSoul(currentSoul);
+            updateSoulInfo(currentSoul);
+            updateURL();
+        }
+
+        // Balance ledger (move cost toward 0)
+        function balanceLedger() {
+            if (!currentSoul || currentSoul.curveBalance < 500) {
+                alert('Insufficient CURVE balance for balancing (requires 500 CURVE)');
+                return;
+            }
+            
+            if (currentSoul.cost !== 0) {
+                currentSoul.cost = currentSoul.cost > 0 ? currentSoul.cost - 1 : currentSoul.cost + 1;
+                currentSoul.curveBalance -= 500;
+                
+                drawSoul(currentSoul);
+                updateSoulInfo(currentSoul);
+                updateURL();
+            }
+        }
+
+        // Download soul as PNG
+        function downloadSoul() {
+            if (!currentSoul) return;
+            
+            const link = document.createElement('a');
+            link.download = `wubbleton-soul-${currentSoul.seed}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        // Share soul URL
+        function shareSoul() {
+            if (!currentSoul) return;
+            
+            const url = `${window.location.origin}${window.location.pathname}?seed=${currentSoul.seed}`;
+            navigator.clipboard.writeText(url).then(() => {
+                alert('Soul URL copied to clipboard!');
+            });
+        }
+
+        // Update URL with current seed
+        function updateURL() {
+            if (!currentSoul) return;
+            
+            const url = new URL(window.location);
+            url.searchParams.set('seed', currentSoul.seed);
+            window.history.replaceState({}, '', url);
+        }
+
+        // Load soul from URL seed
+        function loadFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const seed = urlParams.get('seed');
+            
+            if (seed && !isNaN(seed)) {
+                currentSoul = generateSoulFromSeed(parseInt(seed));
+                drawSoul(currentSoul);
+                updateSoulInfo(currentSoul);
+            } else {
+                generateNewSoul();
+            }
+        }
+
+        // Initialize
+        window.addEventListener('load', () => {
+            initCanvas();
+            loadFromURL();
+        });
+
+        // Handle canvas resize
+        window.addEventListener('resize', () => {
+            if (canvas && currentSoul) {
+                initCanvas();
+                drawSoul(currentSoul);
+            }
+        });
+    </script>
+</body>
+</html> 
