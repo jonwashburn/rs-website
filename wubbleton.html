@@ -209,6 +209,11 @@
             transform: translateX(5px);
         }
 
+        .trait-item.expanded {
+            background: rgba(255, 255, 255, 0.1);
+            border-left-color: var(--gold);
+        }
+
         .trait-item.legendary {
             border-left-color: var(--gold);
             background: rgba(255, 215, 0, 0.1);
@@ -233,16 +238,73 @@
         }
 
         .trait-name::after {
-            content: "ⓘ";
-            font-size: 0.8rem;
+            content: "▼";
+            font-size: 0.7rem;
             color: var(--text-secondary);
             opacity: 0.6;
+            transition: transform 0.3s ease;
+        }
+
+        .trait-item.expanded .trait-name::after {
+            transform: rotate(180deg);
         }
 
         .trait-value {
             font-family: 'Monaco', monospace;
             font-size: 0.9rem;
             color: var(--text-secondary);
+        }
+
+        .trait-expansion {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            background: rgba(0, 0, 0, 0.2);
+            margin: 0 -0.75rem -0.75rem -0.75rem;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .trait-expansion.expanded {
+            max-height: 400px;
+            padding: 1rem 0.75rem;
+        }
+
+        .expansion-content {
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .expansion-content h4 {
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .expansion-content p {
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .expansion-content .formula {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            padding: 0.75rem;
+            border-radius: 6px;
+            font-family: 'Monaco', monospace;
+            font-size: 0.8rem;
+            margin: 0.75rem 0;
+            color: var(--gold);
+        }
+
+        .expansion-content .current-value {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            padding: 0.5rem;
+            border-radius: 6px;
+            font-weight: 500;
+            text-align: center;
+            margin-top: 0.75rem;
         }
 
         .virtue-grid {
@@ -274,6 +336,50 @@
 
         .virtue-item.inactive {
             background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+        }
+
+        .virtue-expansion {
+            grid-column: 1 / -1;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            margin-top: 0.5rem;
+        }
+
+        .virtue-expansion.expanded {
+            max-height: 200px;
+            padding: 1rem;
+        }
+
+        .virtue-expansion .expansion-content {
+            text-align: left;
+        }
+
+        .virtue-expansion h4 {
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .virtue-status {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-top: 0.5rem;
+        }
+
+        .virtue-status.active {
+            background: var(--gold);
+            color: black;
+        }
+
+        .virtue-status.inactive {
+            background: rgba(255, 255, 255, 0.1);
             color: var(--text-secondary);
         }
 
@@ -370,92 +476,7 @@
             overflow-x: auto;
         }
 
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
-        }
 
-        .modal-content {
-            background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
-            margin: 5% auto;
-            padding: 2rem;
-            border-radius: 16px;
-            width: 80%;
-            max-width: 600px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            animation: modalSlideIn 0.3s ease-out;
-        }
-
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .modal-title {
-            font-size: 1.5rem;
-            color: var(--gold);
-            font-weight: 300;
-        }
-
-        .close {
-            color: var(--text-secondary);
-            font-size: 2rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-
-        .close:hover {
-            color: var(--text-primary);
-        }
-
-        .modal-body {
-            line-height: 1.6;
-        }
-
-        .modal-body h4 {
-            color: var(--accent-primary);
-            margin: 1rem 0 0.5rem 0;
-        }
-
-        .modal-body p {
-            margin-bottom: 1rem;
-            color: var(--text-secondary);
-        }
-
-        .modal-body .formula {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 1rem;
-            border-radius: 8px;
-            font-family: 'Monaco', monospace;
-            font-size: 0.9rem;
-            margin: 1rem 0;
-            color: var(--gold);
-        }
 
         @media (max-width: 1024px) {
             .main-grid {
@@ -469,11 +490,6 @@
             
             .controls {
                 justify-content: center;
-            }
-
-            .modal-content {
-                width: 95%;
-                margin: 2% auto;
             }
         }
 
@@ -551,19 +567,6 @@
                     <div class="rs-formula" id="rsFormula"></div>
                     <div id="rsExplanation"></div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal for trait descriptions -->
-    <div id="traitModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="modalTitle">Trait Information</h2>
-                <span class="close" onclick="closeModal()">&times;</span>
-            </div>
-            <div class="modal-body" id="modalBody">
-                <!-- Content will be populated by JavaScript -->
             </div>
         </div>
     </div>
@@ -930,55 +933,101 @@
             }
         }
 
-        // Show trait modal
-        function showTraitModal(traitKey, currentValue = null) {
-            const modal = document.getElementById('traitModal');
-            const title = document.getElementById('modalTitle');
-            const body = document.getElementById('modalBody');
-            
-            const trait = TRAIT_DESCRIPTIONS[traitKey];
-            if (!trait) return;
-            
-            title.textContent = trait.title;
-            
-            let content = `
-                <p><strong>Description:</strong> ${trait.description}</p>
-                <div class="formula">${trait.formula}</div>
-                <p><strong>Meaning:</strong> ${trait.meaning}</p>
-                <p><strong>Rarity:</strong> ${trait.rarity}</p>
-            `;
-            
-            if (currentValue !== null) {
-                content += `<p><strong>Current Value:</strong> ${currentValue}</p>`;
+        // Global variable to track current expansion
+        let currentExpansion = null;
+
+        // Toggle trait expansion
+        function toggleTraitExpansion(traitKey, currentValue, element) {
+            // Close any existing expansion
+            if (currentExpansion && currentExpansion !== element) {
+                const existingExpansion = currentExpansion.querySelector('.trait-expansion');
+                const existingTraitItem = currentExpansion;
+                if (existingExpansion) {
+                    existingExpansion.classList.remove('expanded');
+                    existingTraitItem.classList.remove('expanded');
+                }
             }
-            
-            body.innerHTML = content;
-            modal.style.display = 'block';
+
+            const expansion = element.querySelector('.trait-expansion');
+            const isCurrentlyExpanded = expansion.classList.contains('expanded');
+
+            if (isCurrentlyExpanded) {
+                // Collapse current expansion
+                expansion.classList.remove('expanded');
+                element.classList.remove('expanded');
+                currentExpansion = null;
+            } else {
+                // Expand current trait
+                const trait = TRAIT_DESCRIPTIONS[traitKey];
+                if (!trait) return;
+
+                let content = `
+                    <div class="expansion-content">
+                        <h4>${trait.title}</h4>
+                        <p><strong>Description:</strong> ${trait.description}</p>
+                        <div class="formula">${trait.formula}</div>
+                        <p><strong>Meaning:</strong> ${trait.meaning}</p>
+                        <p><strong>Rarity:</strong> ${trait.rarity}</p>
+                        <div class="current-value">Current Value: ${currentValue}</div>
+                    </div>
+                `;
+
+                expansion.innerHTML = content;
+                expansion.classList.add('expanded');
+                element.classList.add('expanded');
+                currentExpansion = element;
+            }
         }
 
-        // Show virtue modal
-        function showVirtueModal(virtueName) {
-            const modal = document.getElementById('traitModal');
-            const title = document.getElementById('modalTitle');
-            const body = document.getElementById('modalBody');
-            
-            title.textContent = `Virtue: ${virtueName}`;
-            
-            const description = VIRTUE_DESCRIPTIONS[virtueName];
-            const content = `
-                <p><strong>Recognition Science Virtue</strong></p>
-                <p>${description}</p>
-                <p><strong>Active State:</strong> This virtue is ${currentSoul && currentSoul.virtues[VIRTUE_NAMES.indexOf(virtueName)] ? 'ACTIVE' : 'INACTIVE'} in the current soul.</p>
-                <p><strong>Balance Rule:</strong> Exactly 4 virtues must be active to maintain cost=0 ledger balance.</p>
-            `;
-            
-            body.innerHTML = content;
-            modal.style.display = 'block';
-        }
+        // Toggle virtue expansion
+        function toggleVirtueExpansion(virtueName) {
+            // Close any existing trait expansion
+            if (currentExpansion) {
+                const existingExpansion = currentExpansion.querySelector('.trait-expansion');
+                if (existingExpansion) {
+                    existingExpansion.classList.remove('expanded');
+                    currentExpansion.classList.remove('expanded');
+                }
+                currentExpansion = null;
+            }
 
-        // Close modal
-        function closeModal() {
-            document.getElementById('traitModal').style.display = 'none';
+            const virtueGrid = document.getElementById('virtueGrid');
+            let expansion = virtueGrid.querySelector('.virtue-expansion');
+            
+            if (!expansion) {
+                expansion = document.createElement('div');
+                expansion.className = 'virtue-expansion';
+                virtueGrid.appendChild(expansion);
+            }
+
+            const isCurrentlyExpanded = expansion.classList.contains('expanded') && 
+                                      expansion.dataset.currentVirtue === virtueName;
+
+            if (isCurrentlyExpanded) {
+                // Collapse current expansion
+                expansion.classList.remove('expanded');
+                delete expansion.dataset.currentVirtue;
+            } else {
+                // Expand current virtue
+                const description = VIRTUE_DESCRIPTIONS[virtueName];
+                const isActive = currentSoul && currentSoul.virtues[VIRTUE_NAMES.indexOf(virtueName)];
+                
+                const content = `
+                    <div class="expansion-content">
+                        <h4>Virtue: ${virtueName}</h4>
+                        <p><strong>Recognition Science Virtue</strong></p>
+                        <p>${description}</p>
+                        <p><strong>Balance Rule:</strong> Exactly 4 virtues must be active to maintain cost=0 ledger balance.</p>
+                        <div class="virtue-status ${isActive ? 'active' : 'inactive'}">
+                            ${isActive ? 'ACTIVE' : 'INACTIVE'} in current soul
+                        </div>
+                    </div>
+                `;
+
+                expansion.innerHTML = content;
+                expansion.classList.add('expanded');
+                expansion.dataset.currentVirtue = virtueName;
+            }
         }
 
         // Update UI with soul information and clickable traits
@@ -989,24 +1038,28 @@
             // Determine rarity
             const rarity = calculateRarity(soul);
             
-            // Core traits with click handlers
+            // Core traits with click handlers and expansion areas
             const coreTraits = document.getElementById('coreTraits');
             coreTraits.innerHTML = `
-                <div class="trait-item ${rarity}" onclick="showTraitModal('rung', '${soul.rung}')">
+                <div class="trait-item ${rarity}" onclick="toggleTraitExpansion('rung', '${soul.rung}', this)">
                     <span class="trait-name">Rung Level</span>
                     <span class="trait-value">${soul.rung}</span>
+                    <div class="trait-expansion"></div>
                 </div>
-                <div class="trait-item" onclick="showTraitModal('cost', '${soul.cost > 0 ? '+' : ''}${soul.cost}')">
+                <div class="trait-item" onclick="toggleTraitExpansion('cost', '${soul.cost > 0 ? '+' : ''}${soul.cost}', this)">
                     <span class="trait-name">Cost State</span>
                     <span class="trait-value">${soul.cost > 0 ? '+' : ''}${soul.cost}</span>
+                    <div class="trait-expansion"></div>
                 </div>
-                <div class="trait-item" onclick="showTraitModal('beat', '${soul.beat}/8')">
+                <div class="trait-item" onclick="toggleTraitExpansion('beat', '${soul.beat}/8', this)">
                     <span class="trait-name">Beat Cycle</span>
                     <span class="trait-value">${soul.beat}/8</span>
+                    <div class="trait-expansion"></div>
                 </div>
-                <div class="trait-item" onclick="showTraitModal('tightness', '${soul.tightness}%')">
+                <div class="trait-item" onclick="toggleTraitExpansion('tightness', '${soul.tightness}%', this)">
                     <span class="trait-name">Cluster Tightness</span>
                     <span class="trait-value">${soul.tightness}%</span>
+                    <div class="trait-expansion"></div>
                 </div>
                 <div class="trait-item">
                     <span class="trait-name">Rarity</span>
@@ -1017,27 +1070,31 @@
             // Virtue grid with click handlers
             const virtueGrid = document.getElementById('virtueGrid');
             virtueGrid.innerHTML = VIRTUE_NAMES.map((name, i) => 
-                `<div class="virtue-item ${soul.virtues[i] ? 'active' : 'inactive'}" onclick="showVirtueModal('${name}')">${name}</div>`
+                `<div class="virtue-item ${soul.virtues[i] ? 'active' : 'inactive'}" onclick="toggleVirtueExpansion('${name}')">${name}</div>`
             ).join('');
             
-            // Consciousness traits with click handlers
+            // Consciousness traits with click handlers and expansion areas
             const consciousnessTraits = document.getElementById('consciousnessTraits');
             consciousnessTraits.innerHTML = `
-                <div class="trait-item" onclick="showTraitModal('qualia', '${soul.qualia}/8')">
+                <div class="trait-item" onclick="toggleTraitExpansion('qualia', '${soul.qualia}/8', this)">
                     <span class="trait-name">Qualia Mode</span>
                     <span class="trait-value">${soul.qualia}/8</span>
+                    <div class="trait-expansion"></div>
                 </div>
-                <div class="trait-item" onclick="showTraitModal('gaps', '${soul.gapCrossings}')">
+                <div class="trait-item" onclick="toggleTraitExpansion('gaps', '${soul.gapCrossings}', this)">
                     <span class="trait-name">Gap Crossings</span>
                     <span class="trait-value">${soul.gapCrossings}</span>
+                    <div class="trait-expansion"></div>
                 </div>
-                <div class="trait-item" onclick="showTraitModal('affinity', '${soul.iAmAffinity}%')">
+                <div class="trait-item" onclick="toggleTraitExpansion('affinity', '${soul.iAmAffinity}%', this)">
                     <span class="trait-name">I-Am Affinity</span>
                     <span class="trait-value">${soul.iAmAffinity}%</span>
+                    <div class="trait-expansion"></div>
                 </div>
-                <div class="trait-item" onclick="showTraitModal('resonance', '${(soul.resonance / 1e12).toFixed(1)} THz')">
+                <div class="trait-item" onclick="toggleTraitExpansion('resonance', '${(soul.resonance / 1e12).toFixed(1)} THz', this)">
                     <span class="trait-name">Resonance</span>
                     <span class="trait-value">${(soul.resonance / 1e12).toFixed(1)} THz</span>
+                    <div class="trait-expansion"></div>
                 </div>
             `;
             
@@ -1071,10 +1128,36 @@
             return 'common';
         }
 
+        // Close all expansions
+        function closeAllExpansions() {
+            // Close trait expansions
+            if (currentExpansion) {
+                const expansion = currentExpansion.querySelector('.trait-expansion');
+                if (expansion) {
+                    expansion.classList.remove('expanded');
+                    currentExpansion.classList.remove('expanded');
+                }
+                currentExpansion = null;
+            }
+            
+            // Close virtue expansion
+            const virtueGrid = document.getElementById('virtueGrid');
+            if (virtueGrid) {
+                const virtueExpansion = virtueGrid.querySelector('.virtue-expansion');
+                if (virtueExpansion) {
+                    virtueExpansion.classList.remove('expanded');
+                    delete virtueExpansion.dataset.currentVirtue;
+                }
+            }
+        }
+
         // Generate new soul
         function generateNewSoul() {
             const seed = Math.floor(Math.random() * 10000) + 1;
             currentSoul = generateSoulFromSeed(seed);
+            
+            // Close any existing expansions
+            closeAllExpansions();
             
             // Add fade animation
             canvas.classList.remove('fade-in');
@@ -1096,6 +1179,9 @@
             currentSoul.gapCrossings = Math.min(100, currentSoul.gapCrossings + 1);
             currentSoul.curveBalance -= 1000;
             
+            // Close expansions since soul is changing
+            closeAllExpansions();
+            
             drawSoul(currentSoul);
             updateSoulInfo(currentSoul);
             updateURL();
@@ -1111,6 +1197,9 @@
             if (currentSoul.cost !== 0) {
                 currentSoul.cost = currentSoul.cost > 0 ? currentSoul.cost - 1 : currentSoul.cost + 1;
                 currentSoul.curveBalance -= 500;
+                
+                // Close expansions since soul is changing
+                closeAllExpansions();
                 
                 drawSoul(currentSoul);
                 updateSoulInfo(currentSoul);
@@ -1173,6 +1262,7 @@
                 
                 if (seed && !isNaN(seed) && parseInt(seed) > 0) {
                     currentSoul = generateSoulFromSeed(parseInt(seed));
+                    closeAllExpansions();
                     drawSoul(currentSoul);
                     updateSoulInfo(currentSoul);
                 } else {
@@ -1184,13 +1274,7 @@
             }
         }
 
-        // Close modal on outside click
-        window.onclick = function(event) {
-            const modal = document.getElementById('traitModal');
-            if (event.target === modal) {
-                closeModal();
-            }
-        }
+
 
         // Initialize with error handling
         window.addEventListener('load', () => {
