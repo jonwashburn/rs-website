@@ -47,24 +47,30 @@
         
         function generateSketch(p) {
             let agents = [];
-            let numAgents = 30 + Math.floor(seededRand(currentSeed) * 40);
-            let noiseScale = 0.005 + seededRand(currentSeed + 1) * 0.01;
-            let layers = 2 + Math.floor(seededRand(currentSeed + 2) * 3);
-            let palette = ['#e0ded8', '#d2cbc4', '#c4b9ac', '#b6a794', '#a8957c'];
-            let rung = 45;
-            let beat = 8;
-            let qualia = 7;
-            let frames = 100;
             let frame = 0;
-            let virtueScores = VIRTUES.map((_, i) => seededRand(currentSeed + i * 10));
-            let delta = seededRand(currentSeed) * 8 - 4;
+            let maxFrames = 100;
+            let virtueScores, numAgents, noiseScale, layers, palette, delta;
             
             p.setup = function() {
                 p.createCanvas(1024, 1024);
-                p.background('#f0f0f0');
                 p.frameRate(30);
-                p.noLoop();
                 
+                // Set p5.js seeds for consistent randomness
+                p.randomSeed(currentSeed);
+                p.noiseSeed(currentSeed);
+                
+                // Calculate RS parameters
+                virtueScores = VIRTUES.map((_, i) => seededRand(currentSeed + i * 10));
+                numAgents = 30 + Math.floor(seededRand(currentSeed) * 40);
+                noiseScale = 0.005 + seededRand(currentSeed + 1) * 0.01;
+                layers = 2 + Math.floor(seededRand(currentSeed + 2) * 3);
+                palette = ['#e0ded8', '#d2cbc4', '#c4b9ac', '#b6a794', '#a8957c'];
+                delta = seededRand(currentSeed) * 8 - 4;
+                
+                // Reset background
+                p.background('#f0f0f0');
+                
+                // Initialize agents
                 agents = [];
                 for (let i = 0; i < numAgents; i++) {
                     agents.push({
@@ -78,74 +84,91 @@
                         state: Math.round(seededRand(currentSeed + i * 107) * 2 - 1)
                     });
                 }
+                
+                frame = 0;
             };
             
             p.draw = function() {
-                if (frame >= frames) {
-                    p.noLoop();
-                    updateDownload();
-                    return;
+                let progress = frame / maxFrames;
+                
+                // Add subtle grain texture
+                if (frame % 3 === 0) { // Only every few frames for performance
+                    let grainDensity = 50 * (1 - virtueScores[10]) * progress;
+                    for (let i = 0; i < grainDensity; i++) {
+                        let x = p.random(p.width);
+                        let y = p.random(p.height);
+                        p.stroke(0, 15);
+                        p.strokeWeight(1);
+                        p.point(x, y);
+                    }
                 }
                 
-                p.blendMode(p.BLEND);
-                let progress = frame / frames;
-                
-                // Grain texture build-up
-                let grainDensity = 0.001 * (1 - virtueScores[10]);
-                for (let i = 0; i < p.width * p.height * grainDensity * progress; i++) {
-                    let x = seededRand(currentSeed + frame * 1000 + i) * p.width;
-                    let y = seededRand(currentSeed + frame * 1001 + i) * p.height;
-                    p.stroke(0, 10 * virtueScores[10]);
-                    p.point(x, y);
-                }
-                
-                // Layered agents
+                // Draw agents in layers
                 for (let layer = 0; layer < layers; layer++) {
                     for (let agent of agents) {
+                        if (frame === 0) continue; // Skip first frame
+                        
                         let oldX = agent.x;
                         let oldY = agent.y;
                         
-                        // RS phi-scaled path with noise
-                        agent.angle += p.noise(agent.noiseOffset + agent.x * noiseScale, agent.noiseOffset + agent.y * noiseScale) * 0.5 - 0.25 + virtueScores[12] * 0.1;
-                        let step = agent.length / (PHI ** (rung / 10 + delta));
-                        agent.x += p.cos(agent.angle) * step;
-                        agent.y += p.sin(agent.angle) * step;
+                        // Move agent with phi-scaled step and noise
+                        let noiseVal = p.noise(agent.noiseOffset + agent.x * noiseScale, agent.noiseOffset + agent.y * noiseScale);
+                        agent.angle += (noiseVal - 0.5) + virtueScores[12] * 0.1;
                         
+                        let step = agent.length / (PHI ** (45 / 10 + delta));
+                        agent.x += p.cos(agent.angle) * step * 0.5; // Slower movement
+                        agent.y += p.sin(agent.angle) * step * 0.5;
+                        
+                        // Keep agents on canvas
+                        agent.x = p.constrain(agent.x, 50, p.width - 50);
+                        agent.y = p.constrain(agent.y, 50, p.height - 50);
+                        
+                        // Draw line with virtue-influenced style
                         p.stroke(agent.color);
-                        p.strokeWeight(agent.weight * (1 + virtueScores[4]));
+                        p.strokeWeight(agent.weight * (0.5 + virtueScores[4] * 0.5));
                         p.line(oldX, oldY, agent.x, agent.y);
                         
-                        // Rung-45 voids
-                        if (Math.abs(agent.x % rung) < 1 && seededRand(currentSeed + frame + agent.x) < 0.05 * (1 - progress)) {
-                            p.fill('#f0f0f0', 100 * virtueScores[2]);
+                        // Occasional erasures (rung-45 voids)
+                        if (frame % 45 === 0 && p.random() < 0.1) {
+                            p.fill('#f0f0f0', 80 + virtueScores[2] * 40);
                             p.noStroke();
-                            p.ellipse(agent.x, agent.y, 20 + seededRand(currentSeed + agent.y) * 30, 20 + seededRand(currentSeed + agent.x) * 30);
+                            let size = 20 + p.random(30);
+                            p.ellipse(agent.x, agent.y, size, size);
                         }
                         
-                        // Ledger connections if balanced
-                        if (agent.state === 0) {
+                        // Ledger connections (gold lines between balanced agents)
+                        if (agent.state === 0 && frame % 10 === 0) {
                             for (let other of agents) {
-                                let d = p.dist(agent.x, agent.y, other.x, other.y);
-                                if (d < PHI * 50 * virtueScores[1]) {
-                                    p.stroke('gold', 100 * progress);
-                                    p.line(agent.x, agent.y, other.x, other.y);
+                                if (other.state === 0 && other !== agent) {
+                                    let d = p.dist(agent.x, agent.y, other.x, other.y);
+                                    if (d < PHI * 80 * virtueScores[1] && p.random() < 0.05) {
+                                        p.stroke(255, 215, 0, 100 * progress); // Gold with transparency
+                                        p.strokeWeight(1);
+                                        p.line(agent.x, agent.y, other.x, other.y);
+                                    }
                                 }
                             }
                         }
                         
-                        // Qualia bursts
-                        if (seededRand(currentSeed + frame + agent.x + agent.y) < 0.1 * qualia / 10 * virtueScores[11]) {
-                            p.fill('gold', 200);
-                            p.ellipse(agent.x, agent.y - 5 * virtueScores[11], 5, 5);
+                        // Qualia bursts (hope-influenced golden points)
+                        if (p.random() < 0.02 * virtueScores[11]) {
+                            p.fill(255, 215, 0, 200);
+                            p.noStroke();
+                            p.ellipse(agent.x, agent.y - 5 * virtueScores[11], 3, 3);
                         }
                     }
                 }
                 
-                // 8-beat rhythm pulse
-                let pulse = p.sin(frame * 2 * p.PI / beat) * 0.2 * virtueScores[5] + 0.8;
-                p.drawingContext.globalAlpha = pulse;
-                
                 frame++;
+                
+                // Stop animation when complete
+                if (frame >= maxFrames) {
+                    p.noLoop();
+                    setTimeout(() => {
+                        document.getElementById('seedDisplay').textContent = `Seed: ${currentSeed} • Complete`;
+                        updateDownload();
+                    }, 100);
+                }
             };
         }
         
@@ -160,14 +183,14 @@
                 currentSeed = seed;
                 startSketch();
             } else {
-                alert('Valid seed: 1-99999');
+                alert('Please enter a valid seed (1-99999)');
             }
         }
         
         function shareSeed() {
             let url = new URL(window.location);
             url.searchParams.set('seed', currentSeed);
-            navigator.clipboard.writeText(url.href).then(() => alert('URL copied!'));
+            navigator.clipboard.writeText(url.href).then(() => alert('URL copied to clipboard!'));
         }
         
         function updateDownload() {
@@ -178,26 +201,26 @@
             }
         }
         
-        function startSketch(seedOverride = null) {
-            if (seedOverride) currentSeed = seedOverride;
-            if (sketchInstance) sketchInstance.remove();
-            sketchInstance = new p5(generateSketch, 'sketch-container');
-            document.getElementById('seedDisplay').textContent = `Seed: ${currentSeed} • Generating...`;
-            sketchInstance.loop();
-            setTimeout(() => {
-                document.getElementById('seedDisplay').textContent = `Seed: ${currentSeed} • Complete`;
-                updateDownload();
-            }, 4000);
+        function startSketch() {
+            if (sketchInstance) {
+                sketchInstance.remove();
+            }
             
+            document.getElementById('seedDisplay').textContent = `Seed: ${currentSeed} • Generating...`;
+            
+            sketchInstance = new p5(generateSketch, 'sketch-container');
+            
+            // Update URL
             let url = new URL(window.location);
             url.searchParams.set('seed', currentSeed);
             window.history.replaceState({}, '', url);
         }
         
+        // Initialize on page load
         window.addEventListener('load', () => {
             let params = new URLSearchParams(window.location.search);
             let seedParam = params.get('seed');
-            if (seedParam) {
+            if (seedParam && !isNaN(seedParam)) {
                 currentSeed = parseInt(seedParam);
             }
             startSketch();
