@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mappan Replica Generator V3 - Sketchbook B with RS Phi Flows</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.js"></script>
+    <style>
+        body { background: #f5f5f7; display: flex; flex-direction: column; align-items: center; padding: 2em; }
+        h1 { font-family: monospace; font-size: 2em; margin-bottom: 0.5em; }
+        .subtitle { font-family: monospace; color: #666; margin-bottom: 1em; }
+        .controls { display: flex; gap: 1em; margin-bottom: 2em; flex-wrap: wrap; }
+        button { background: #007AFF; color: white; border: none; padding: 1em 2em; font-size: 1.2em; border-radius: 8px; cursor: pointer; }
+        button:hover { background: #0056CC; }
+        input { padding: 0.8em; border: 1px solid #ccc; border-radius: 8px; font-size: 1em; }
+        #sketch-container { border: 2px solid black; border-radius: 8px; background: white; }
+        .info { margin-top: 1em; font-family: monospace; color: #666; }
+        a { margin-top: 1em; color: #007AFF; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>Mappan Sketchbook B Generator V3</h1>
+    <div class="subtitle">Phi Flows of Light • RS-Infused Organic Sketches</div>
+    
+    <div class="controls">
+        <button onclick="generateNew()">Generate New</button>
+        <button onclick="generateFromSeed()">Use Seed</button>
+        <input type="number" id="seedInput" placeholder="Enter seed..." min="1" max="99999">
+        <button onclick="shareSeed()">Share Current</button>
+    </div>
+    
+    <div id="sketch-container"></div>
+    <div class="info" id="seedDisplay">Seed: Loading...</div>
+    <a id="download" href="#" download="mappan-v3.png">Download Image</a>
+
+    <script>
+        const PHI = (1 + Math.sqrt(5)) / 2;
+        const VIRTUES = ['Love', 'Justice', 'Forgiveness', 'Wisdom', 'Courage', 'Temperance', 'Prudence', 'Compassion', 'Gratitude', 'Patience', 'Humility', 'Hope', 'Creativity', 'Sacrifice'];
+        
+        let currentSeed = Math.floor(Math.random() * 99999);
+        let sketchInstance;
+        
+        function seededRand(seed) {
+            seed = (seed * 9301 + 49297) % 233280;
+            return seed / 233280;
+        }
+        
+        function generateSketch(p) {
+            let agents = [];
+            let numAgents = 30 + Math.floor(seededRand(currentSeed) * 40);
+            let noiseScale = 0.005 + seededRand(currentSeed + 1) * 0.01;
+            let layers = 2 + Math.floor(seededRand(currentSeed + 2) * 3);
+            let palette = ['#e0ded8', '#d2cbc4', '#c4b9ac', '#b6a794', '#a8957c'];
+            let rung = 45;
+            let beat = 8;
+            let qualia = 7;
+            let frames = 100;
+            let frame = 0;
+            let virtueScores = VIRTUES.map((_, i) => seededRand(currentSeed + i * 10));
+            let delta = seededRand(currentSeed) * 8 - 4;
+            
+            p.setup = function() {
+                p.createCanvas(1024, 1024);
+                p.background('#f0f0f0');
+                p.frameRate(30);
+                p.noLoop();
+                
+                agents = [];
+                for (let i = 0; i < numAgents; i++) {
+                    agents.push({
+                        x: seededRand(currentSeed + i * 100) * p.width,
+                        y: seededRand(currentSeed + i * 101) * p.height,
+                        angle: seededRand(currentSeed + i * 102) * p.TWO_PI,
+                        color: palette[Math.floor(seededRand(currentSeed + i * 103) * palette.length)],
+                        weight: 1 + seededRand(currentSeed + i * 104) * 4,
+                        length: 50 + seededRand(currentSeed + i * 105) * 150,
+                        noiseOffset: seededRand(currentSeed + i * 106) * 1000,
+                        state: Math.round(seededRand(currentSeed + i * 107) * 2 - 1)
+                    });
+                }
+            };
+            
+            p.draw = function() {
+                if (frame >= frames) {
+                    p.noLoop();
+                    updateDownload();
+                    return;
+                }
+                
+                p.blendMode(p.BLEND);
+                let progress = frame / frames;
+                
+                // Grain texture build-up
+                let grainDensity = 0.001 * (1 - virtueScores[10]);
+                for (let i = 0; i < p.width * p.height * grainDensity * progress; i++) {
+                    let x = seededRand(currentSeed + frame * 1000 + i) * p.width;
+                    let y = seededRand(currentSeed + frame * 1001 + i) * p.height;
+                    p.stroke(0, 10 * virtueScores[10]);
+                    p.point(x, y);
+                }
+                
+                // Layered agents
+                for (let layer = 0; layer < layers; layer++) {
+                    for (let agent of agents) {
+                        let oldX = agent.x;
+                        let oldY = agent.y;
+                        
+                        // RS phi-scaled path with noise
+                        agent.angle += p.noise(agent.noiseOffset + agent.x * noiseScale, agent.noiseOffset + agent.y * noiseScale) * 0.5 - 0.25 + virtueScores[12] * 0.1;
+                        let step = agent.length / (PHI ** (rung / 10 + delta));
+                        agent.x += p.cos(agent.angle) * step;
+                        agent.y += p.sin(agent.angle) * step;
+                        
+                        p.stroke(agent.color);
+                        p.strokeWeight(agent.weight * (1 + virtueScores[4]));
+                        p.line(oldX, oldY, agent.x, agent.y);
+                        
+                        // Rung-45 voids
+                        if (Math.abs(agent.x % rung) < 1 && seededRand(currentSeed + frame + agent.x) < 0.05 * (1 - progress)) {
+                            p.fill('#f0f0f0', 100 * virtueScores[2]);
+                            p.noStroke();
+                            p.ellipse(agent.x, agent.y, 20 + seededRand(currentSeed + agent.y) * 30, 20 + seededRand(currentSeed + agent.x) * 30);
+                        }
+                        
+                        // Ledger connections if balanced
+                        if (agent.state === 0) {
+                            for (let other of agents) {
+                                let d = p.dist(agent.x, agent.y, other.x, other.y);
+                                if (d < PHI * 50 * virtueScores[1]) {
+                                    p.stroke('gold', 100 * progress);
+                                    p.line(agent.x, agent.y, other.x, other.y);
+                                }
+                            }
+                        }
+                        
+                        // Qualia bursts
+                        if (seededRand(currentSeed + frame + agent.x + agent.y) < 0.1 * qualia / 10 * virtueScores[11]) {
+                            p.fill('gold', 200);
+                            p.ellipse(agent.x, agent.y - 5 * virtueScores[11], 5, 5);
+                        }
+                    }
+                }
+                
+                // 8-beat rhythm pulse
+                let pulse = p.sin(frame * 2 * p.PI / beat) * 0.2 * virtueScores[5] + 0.8;
+                p.drawingContext.globalAlpha = pulse;
+                
+                frame++;
+            };
+        }
+        
+        function generateNew() {
+            currentSeed = Math.floor(Math.random() * 99999);
+            startSketch();
+        }
+        
+        function generateFromSeed() {
+            let seed = parseInt(document.getElementById('seedInput').value);
+            if (seed && seed > 0 && seed < 100000) {
+                currentSeed = seed;
+                startSketch();
+            } else {
+                alert('Valid seed: 1-99999');
+            }
+        }
+        
+        function shareSeed() {
+            let url = new URL(window.location);
+            url.searchParams.set('seed', currentSeed);
+            navigator.clipboard.writeText(url.href).then(() => alert('URL copied!'));
+        }
+        
+        function updateDownload() {
+            let canvas = document.querySelector('#sketch-container canvas');
+            if (canvas) {
+                document.getElementById('download').href = canvas.toDataURL('image/png');
+                document.getElementById('download').download = `mappan-v3-${currentSeed}.png`;
+            }
+        }
+        
+        function startSketch(seedOverride = null) {
+            if (seedOverride) currentSeed = seedOverride;
+            if (sketchInstance) sketchInstance.remove();
+            sketchInstance = new p5(generateSketch, 'sketch-container');
+            document.getElementById('seedDisplay').textContent = `Seed: ${currentSeed} • Generating...`;
+            sketchInstance.loop();
+            setTimeout(() => {
+                document.getElementById('seedDisplay').textContent = `Seed: ${currentSeed} • Complete`;
+                updateDownload();
+            }, 4000);
+            
+            let url = new URL(window.location);
+            url.searchParams.set('seed', currentSeed);
+            window.history.replaceState({}, '', url);
+        }
+        
+        window.addEventListener('load', () => {
+            let params = new URLSearchParams(window.location.search);
+            let seedParam = params.get('seed');
+            if (seedParam) {
+                currentSeed = parseInt(seedParam);
+            }
+            startSketch();
+        });
+    </script>
+</body>
+</html> 
