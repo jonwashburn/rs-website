@@ -23,6 +23,16 @@ contract RecognitionSoulsEvolutionary is ERC721, Ownable {
     IERC20 public curveToken;
     uint256 public nurturePrice = 100 * 10**18; // 100 CURVE per nurture
 
+    // LNAL Operation Codes (based on RS docs)
+    uint8 constant LNAL_FOLD = 0;
+    uint8 constant LNAL_BRAID = 1;
+    uint8 constant LNAL_BALANCE = 2;
+    uint8 constant LNAL_FLOW = 3;
+    uint8 constant LNAL_SEED = 4;
+    uint8 constant LNAL_LISTEN = 5;
+    uint8 constant LNAL_REGIVE = 6;
+    uint8 constant LNAL_MERGE = 7;
+
     struct Mode {
         int16 nu_phi;    // Frequency index
         int8 oam;        // Orbital Angular Momentum
@@ -243,8 +253,80 @@ contract RecognitionSoulsEvolutionary is ERC721, Ownable {
     }
 
     /**
-     * @dev Nurture soul with CURVE tokens (accelerates evolution)
+     * @dev Apply LNAL operation to evolve the soul
+     * @param tokenId Soul to evolve
+     * @param opCode LNAL operation (0-7)
+     * @param param1 First parameter (e.g., mode index)
+     * @param param2 Second parameter (e.g., another mode)
      */
+    function applyLNAL(uint256 tokenId, uint8 opCode, uint8 param1, uint8 param2) external {
+        require(ownerOf(tokenId) == msg.sender, "Not owner");
+        Soul storage s = souls[tokenId];
+        require(opCode < 8, "Invalid LNAL op");
+        require(s.virtues[opCode], "Virtue not active for this op"); // Require corresponding virtue
+        
+        Mode storage mode1 = s.currentCluster[param1 % DIM];
+        Mode storage mode2 = s.currentCluster[param2 % DIM];
+        
+        if (opCode == LNAL_FOLD) {
+            // FOLD: Scale by φ
+            mode1.nu_phi = int16((int32(mode1.nu_phi) * int32(PHI)) / int32(PHI_SCALE));
+            mode1.k_perp = uint8((uint16(mode1.k_perp) * uint16(PHI)) / PHI_SCALE);
+            if (mode1.k_perp > 255) mode1.k_perp = 255;
+            mode1.cost += 1;
+            if (mode1.cost > 4) mode1.cost = 4;
+        } else if (opCode == LNAL_BRAID) {
+            require(param1 != param2, "Same mode");
+            if (mode1.cost + mode2.cost == 0) {
+                uint8 newPhase = (mode1.phi_e + mode2.phi_e) / 2;
+                mode1.phi_e = newPhase;
+                mode2.phi_e = newPhase;
+                
+                int8 tempOam = mode1.oam;
+                mode1.oam = mode2.oam;
+                mode2.oam = tempOam;
+            }
+        } else if (opCode == LNAL_BALANCE) {
+            int16 totalCost = 0;
+            for (uint8 i = 0; i < DIM; i++) {
+                totalCost += s.currentCluster[i].cost;
+            }
+            int8 adjustment = int8(totalCost / int16(DIM));
+            for (uint8 i = 0; i < DIM; i++) {
+                s.currentCluster[i].cost -= adjustment;
+            }
+        } else if (opCode == LNAL_FLOW) {
+            // FLOW: Propagate cost to adjacent mode
+            uint8 nextIdx = (param1 + 1) % DIM;
+            s.currentCluster[nextIdx].cost += mode1.cost / 2;
+            mode1.cost /= 2;
+        } else if (opCode == LNAL_SEED) {
+            // SEED: Reset a mode with seed-based value
+            uint256 modeSeed = uint256(keccak256(abi.encodePacked(s.seed, param1)));
+            mode1.nu_phi = int16((modeSeed % 201) - 100);
+        } else if (opCode == LNAL_LISTEN) {
+            // LISTEN: Increase iAmAffinity if gap condition
+            if (s.breathPhase == 5) s.iAmAffinity = s.iAmAffinity + 5 > 100 ? 100 : s.iAmAffinity + 5;
+        } else if (opCode == LNAL_REGIVE) {
+            // REGIVE: Transfer cost between modes
+            mode2.cost += mode1.cost;
+            mode1.cost = 0;
+        } else if (opCode == LNAL_MERGE) {
+            // MERGE: Average two modes
+            mode1.nu_phi = (mode1.nu_phi + mode2.nu_phi) / 2;
+            mode1.cost = (mode1.cost + mode2.cost) / 2;
+        }
+        
+        // Update breath phase and check gap
+        s.breathPhase = (s.breathPhase + 1) % 8;
+        if (s.breathPhase == 5 && s.rung >= 45) {
+            _navigateGap(s, tokenId);
+        }
+        
+        emit SoulEvolved(tokenId, getMonthlyProgress(tokenId));
+    }
+
+    // Update nurtureSoul to use applyLNAL with random op
     function nurtureSoul(uint256 tokenId) external {
         require(ownerOf(tokenId) == msg.sender, "Not owner");
         Soul storage s = souls[tokenId];
@@ -256,22 +338,12 @@ contract RecognitionSoulsEvolutionary is ERC721, Ownable {
         s.lastNurture = block.timestamp;
         s.nurtureCount++;
         
-        // Apply LNAL FOLD operation to current cluster
-        uint8 modeIndex = uint8(uint256(keccak256(abi.encodePacked(block.prevrandao, tokenId))) % DIM);
-        Mode storage mode = s.currentCluster[modeIndex];
+        // Apply random LNAL op (0-7)
+        uint8 randomOp = uint8(uint256(keccak256(abi.encodePacked(block.prevrandao, tokenId))) % 8);
+        uint8 param1 = uint8(uint256(keccak256(abi.encodePacked(block.prevrandao, tokenId, 1))) % DIM);
+        uint8 param2 = uint8(uint256(keccak256(abi.encodePacked(block.prevrandao, tokenId, 2))) % DIM);
         
-        // FOLD: Scale by φ
-        mode.nu_phi = int16((int32(mode.nu_phi) * int32(PHI)) / int32(PHI_SCALE));
-        mode.k_perp = uint8((uint16(mode.k_perp) * uint16(PHI)) / PHI_SCALE);
-        if (mode.k_perp > 255) mode.k_perp = 255;
-        
-        mode.cost += 1;
-        if (mode.cost > 4) mode.cost = 4;
-        
-        // Check for gap navigation
-        if (s.rung >= 45 && (s.nurtureCount % 8) == 5) {
-            _navigateGap(s, tokenId);
-        }
+        applyLNAL(tokenId, randomOp, param1, param2);
         
         emit SoulNurtured(tokenId, s.nurtureCount);
     }

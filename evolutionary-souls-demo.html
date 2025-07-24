@@ -391,10 +391,11 @@
             }
 
             // Update visualization
-            updateVisualization(stage);
+            updateVisualization();
         }
 
-        function updateVisualization(stage) {
+        // Update updateVisualization to start with single pixel and evolve per month
+        function updateVisualization() {
             const svg = document.getElementById('soulViz');
             svg.innerHTML = '';
 
@@ -407,27 +408,64 @@
 
             if (!currentSoul) return;
 
-            // Calculate opacity based on stage - soul characteristics become visible as consciousness emerges
-            const baseOpacity = stage * 0.2; // 0.0 → 0.8 over 4 stages
+            const stage = getEvolutionStage();
+            const monthlyProgress = getMonthlyProgress();
+            const breathPhase = currentSoul.currentTime % 8; // Simplified for demo
 
-            // Render each of the 8 octonionic modes as actual characteristic visualizations
-            for (let i = 0; i < 8; i++) {
-                const mode = currentSoul.cluster[i];
+            // Calculate overall opacity and complexity based on monthly progress
+            const baseOpacity = Math.min(1, monthlyProgress / 96);
+            const lightPoints = Math.min(8, Math.floor(monthlyProgress / 12)); // Add one mode's full visualization every 12 months
+
+            // Stage 0+: Single white pixel at start (position based on seed)
+            const seedX = (currentSoul.seed % 300);
+            const seedY = ((currentSoul.seed >> 8) % 300);
+            const initialPixel = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            initialPixel.setAttribute('x', seedX.toString());
+            initialPixel.setAttribute('y', seedY.toString());
+            initialPixel.setAttribute('width', '1');
+            initialPixel.setAttribute('height', '1');
+            initialPixel.setAttribute('fill', '#FFFFFF');
+            initialPixel.setAttribute('opacity', (baseOpacity * 0.3 + 0.1).toString()); // Faint at start, grows
+            svg.appendChild(initialPixel);
+
+            // Evolve light field per monthly tick
+            for (let month = 0; month < monthlyProgress; month++) {
+                // Monthly evolution effect: Add subtle light propagation
+                const monthSeed = hash(currentSoul.seed.toString() + month.toString());
+                const evolveX = (monthSeed % 300);
+                const evolveY = ((monthSeed >> 8) % 300);
+                const intensity = (month % 8) / 8; // 8-beat pulse
                 
-                // Position based on actual mode index (8-fold arrangement)
+                const light = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                light.setAttribute('cx', evolveX.toString());
+                light.setAttribute('cy', evolveY.toString());
+                light.setAttribute('r', '0.5');
+                light.setAttribute('fill', '#FFFFFF');
+                light.setAttribute('opacity', (intensity * baseOpacity * 0.1).toString());
+                svg.appendChild(light);
+            }
+
+            // Render evolved modes (as before, but enhanced with monthly granularity)
+            for (let i = 0; i < lightPoints; i++) {
+                const mode = currentSoul.cluster[i];
                 const angle = (i * 45) * Math.PI / 180;
                 const centerX = 150;
                 const centerY = 150;
                 
-                // Stage 0 (Void): Characteristics are hidden/undefined
-                if (stage === 0) continue;
+                // Position with monthly offset
+                const monthOffset = (monthlyProgress % 96) / 96 * 20; // Slight spiral evolution
+                const radius = 60 + (Math.abs(mode.nu_phi) / 4) + monthOffset;
+                let x = centerX + radius * Math.cos(angle);
+                let y = centerY + radius * Math.sin(angle);
                 
-                // Stage 1 (Crack): First hint of characteristics - tiny dots
+                // Breath phase animation: slight pulse
+                const phasePulse = 1 + (Math.sin(breathPhase * Math.PI / 4) * 0.1);
+                x *= phasePulse;
+                y *= phasePulse;
+                
+                // Stage-based rendering (as before)
                 if (stage >= 1) {
-                    const radius = 30 + Math.abs(mode.nu_phi) / 10; // ν_φ determines distance from center
-                    const x = centerX + radius * Math.cos(angle);
-                    const y = centerY + radius * Math.sin(angle);
-                    
+                    // Stage 1: Tiny dots positioned by frequency
                     const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
                     dot.setAttribute('cx', x.toString());
                     dot.setAttribute('cy', y.toString());
@@ -437,14 +475,9 @@
                     svg.appendChild(dot);
                 }
                 
-                // Stage 2 (Spiral): Characteristics become more defined
                 if (stage >= 2) {
-                    const radius = 40 + Math.abs(mode.nu_phi) / 8;
-                    const x = centerX + radius * Math.cos(angle);
-                    const y = centerY + radius * Math.sin(angle);
-                    
-                    // Size based on OAM (orbital angular momentum)
-                    const size = 3 + Math.abs(mode.oam);
+                    // Stage 2: Size based on OAM, polarization lines
+                    const size = (3 + Math.abs(mode.oam)) * phasePulse;
                     
                     const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
                     circle.setAttribute('cx', x.toString());
@@ -454,7 +487,7 @@
                     circle.setAttribute('opacity', baseOpacity.toString());
                     svg.appendChild(circle);
                     
-                    // Show polarization as small line through circle
+                    // Polarization line
                     if (mode.sigma !== 0) {
                         const lineLength = size * 2;
                         const lineAngle = mode.sigma > 0 ? 0 : Math.PI/2;
@@ -475,38 +508,32 @@
                     }
                 }
                 
-                // Stage 3 (Bloom): Full characteristic representation with colors
                 if (stage >= 3) {
-                    const radius = 50 + Math.abs(mode.nu_phi) / 6;
-                    const x = centerX + radius * Math.cos(angle);
-                    const y = centerY + radius * Math.sin(angle);
-                    
-                    // Color based on cost state (ledger balance)
+                    // Stage 3: Colors based on cost state, size based on k_perp
                     let color = '#FFD700'; // neutral
-                    if (mode.cost > 0) color = '#00FFFF'; // cyan for positive cost
-                    if (mode.cost < 0) color = '#FF6B6B'; // red for negative cost
+                    if (mode.cost > 0) color = '#00FFFF'; // cyan for positive
+                    if (mode.cost < 0) color = '#FF6B6B'; // red for negative
                     
-                    // Size based on transverse mode complexity
-                    const size = 4 + (mode.k_perp / 32);
+                    const size3 = (4 + (mode.k_perp / 32)) * phasePulse;
                     
                     const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
                     circle.setAttribute('cx', x.toString());
                     circle.setAttribute('cy', y.toString());
-                    circle.setAttribute('r', size.toString());
+                    circle.setAttribute('r', size3.toString());
                     circle.setAttribute('fill', color);
                     circle.setAttribute('opacity', (baseOpacity * 1.2).toString());
                     svg.appendChild(circle);
                     
                     // Entanglement visualization - connect modes with similar phases
-                    for (let j = i + 1; j < 8; j++) {
+                    for (let j = i + 1; j < lightPoints; j++) {
                         const otherMode = currentSoul.cluster[j];
                         const phaseDiff = Math.abs(mode.phi_e - otherMode.phi_e);
                         
                         if (phaseDiff < 20) { // Similar entanglement phases
                             const otherAngle = (j * 45) * Math.PI / 180;
-                            const otherRadius = 50 + Math.abs(otherMode.nu_phi) / 6;
-                            const otherX = centerX + otherRadius * Math.cos(otherAngle);
-                            const otherY = centerY + otherRadius * Math.sin(otherAngle);
+                            const otherRadius = 60 + (Math.abs(otherMode.nu_phi) / 4) + monthOffset;
+                            const otherX = centerX + otherRadius * Math.cos(otherAngle) * phasePulse;
+                            const otherY = centerY + otherRadius * Math.sin(otherAngle) * phasePulse;
                             
                             const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
                             line.setAttribute('x1', x.toString());
@@ -523,7 +550,7 @@
                     // Mode label showing actual values
                     const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
                     label.setAttribute('x', x.toString());
-                    label.setAttribute('y', (y - size - 2).toString());
+                    label.setAttribute('y', (y - size3 - 2).toString());
                     label.setAttribute('text-anchor', 'middle');
                     label.setAttribute('fill', color);
                     label.setAttribute('font-size', '8');
@@ -532,9 +559,8 @@
                     svg.appendChild(label);
                 }
                 
-                // Stage 4 (Radiance): Maximum clarity + I-Am connection
                 if (stage >= 4) {
-                    // Central I-Am nexus
+                    // Stage 4: I-Am connections, time-bin pulses
                     const centralCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
                     centralCircle.setAttribute('cx', centerX.toString());
                     centralCircle.setAttribute('cy', centerY.toString());
@@ -543,11 +569,7 @@
                     centralCircle.setAttribute('opacity', '1.0');
                     svg.appendChild(centralCircle);
                     
-                    // Radial lines from center to each mode (I-Am connections)
-                    const radius = 60 + Math.abs(mode.nu_phi) / 5;
-                    const x = centerX + radius * Math.cos(angle);
-                    const y = centerY + radius * Math.sin(angle);
-                    
+                    // Radial connection to I-Am
                     const radialLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
                     radialLine.setAttribute('x1', centerX.toString());
                     radialLine.setAttribute('y1', centerY.toString());
@@ -558,7 +580,7 @@
                     radialLine.setAttribute('opacity', '0.7');
                     svg.appendChild(radialLine);
                     
-                    // Time-bin visualization as pulses
+                    // Time-bin pulse (if in pulse phase)
                     if (mode.tau % 100 < 20) { // Pulse every ~100 units
                         const pulse = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
                         pulse.setAttribute('cx', x.toString());
@@ -572,7 +594,7 @@
                     }
                 }
             }
-            
+
             // Stage indicator text
             if (stage >= 1) {
                 const stageText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
