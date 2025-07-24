@@ -187,6 +187,22 @@
                     <span class="trait-value" id="animationType">-</span>
                 </div>
                 <div class="trait-item">
+                    <span class="trait-label">Spread:</span>
+                    <span class="trait-value" id="spread">-</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Saturation:</span>
+                    <span class="trait-value" id="saturation">-</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Density:</span>
+                    <span class="trait-value" id="density">-</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Light Count:</span>
+                    <span class="trait-value" id="lightCount">-</span>
+                </div>
+                <div class="trait-item">
                     <span class="trait-label">Connection Style:</span>
                     <span class="trait-value" id="connectionStyle">-</span>
                 </div>
@@ -197,10 +213,6 @@
                 <div class="trait-item">
                     <span class="trait-label">Color Palette:</span>
                     <span class="trait-value" id="colorPalette">-</span>
-                </div>
-                <div class="trait-item">
-                    <span class="trait-label">Texture Style:</span>
-                    <span class="trait-value" id="textureStyle">-</span>
                 </div>
             </div>
 
@@ -350,6 +362,12 @@
                 ['Pulse', 'Flow', 'Rotate', 'Breathe', 'Quantum Flux'][Math.floor(seedRandom(hashNum + 12) * 5)] : 
                 'Static'; // Add innovative Quantum Flux animation
             
+            // New visual traits
+            const spread = seedRandom(hashNum + 21) * 0.8 + 0.2; // 0.2 to 1.0
+            const saturation = seedRandom(hashNum + 22) * 0.7 + 0.3; // 0.3 to 1.0  
+            const density = seedRandom(hashNum + 23) * 0.9 + 0.1; // 0.1 to 1.0
+            const lightCount = Math.floor(seedRandom(hashNum + 24) * 10) + 1; // 1 to 10
+            
             // Generate balanced virtues
             const virtues = generateBalancedVirtues(hashNum);
             
@@ -387,6 +405,10 @@
                 animationType,
                 virtues,
                 palette,
+                spread,
+                saturation,
+                density,
+                lightCount,
                 soulSpecies,
                 soulCluster,
                 soulMovement,
@@ -441,50 +463,61 @@
             return `${base}. Status: ${status}`;
         }
 
-        // Modern and varied color palettes
-        const MODERN_PALETTES = [
-            ['#ff595e','#ffca3a','#8ac926','#1982c4','#6a4c93'], // Vibrant hip
-            ['#f72585','#b5179e','#7209b7','#3a0ca3','#4361ee','#4cc9f0'], // Vaporwave neon
-            ['#06d6a0','#1b9aaa','#ef476f','#ffc43d'], // Modern flat
-            ['#ff9f1c','#ffbf69','#ffffff','#cbf3f0','#2ec4b6'], // Miami pastel
-            ['#e63946','#f1faee','#a8dadc','#457b9d','#1d3557'], // Modern desat
+        // Improved color palettes
+        const PREMIUM_PALETTES = [
+            // Ethereal palettes
+            ['#e8f4fd', '#a8dadc', '#457b9d', '#1d3557', '#f1faee'], // Ocean mist
+            ['#ffecd1', '#ffb3c6', '#fb8500', '#8ecae6', '#023047'], // Sunset glow
+            ['#f7ede2', '#f5cac3', '#84a59d', '#f28482', '#355070'], // Desert bloom
+            ['#264653', '#2a9d8f', '#e9c46a', '#f4a261', '#e76f51'], // Earth tones
+            ['#641220', '#6e1423', '#85182a', '#a11d33', '#a71e34'], // Deep wine
+            
+            // Vibrant energy
+            ['#ff006e', '#8338ec', '#3a86ff', '#06ffa5', '#ffbe0b'], // Electric
+            ['#f72585', '#4cc9f0', '#7209b7', '#560bad', '#480ca8'], // Cosmic
+            ['#f94144', '#f3722c', '#f8961e', '#f9844a', '#90e0ef'], // Fire burst
+            ['#43aa8b', '#90e0ef', '#277da1', '#4d194d', '#f8961e'], // Nature flow
+            ['#ff9f1c', '#ffbf69', '#ffffff', '#cbf3f0', '#2ec4b6'], // Clean modern
         ];
 
         function generateColorPalette(qualiaMode, resonanceFreq, hashNum) {
             const paletteTypeRand = seedRandom(hashNum + 201);
             let colors = [];
 
-            if (paletteTypeRand < 0.2) {
-                // Rainbow (full 360 hue wheel)
+            if (paletteTypeRand < 0.15) {
+                // Rainbow spectrum
                 const steps = Math.max(qualiaMode, 6);
                 for (let i = 0; i < steps; i++) {
-                    colors.push(`hsl(${i * 360 / steps}, 85%, 60%)`);
+                    const hue = i * 360 / steps + seedRandom(hashNum + 250 + i) * 30;
+                    const sat = 75 + seedRandom(hashNum + 260 + i) * 25;
+                    const light = 55 + seedRandom(hashNum + 270 + i) * 25;
+                    colors.push(`hsl(${hue}, ${sat}%, ${light}%)`);
                 }
-            } else if (paletteTypeRand < 0.35) {
-                // Monochromatic random hue
+            } else if (paletteTypeRand < 0.25) {
+                // Monochromatic elegance
                 const hue = Math.floor(seedRandom(hashNum + 202) * 360);
                 for (let i = 0; i < qualiaMode; i++) {
-                    const l = 30 + i * (40/qualiaMode);
-                    colors.push(`hsl(${hue}, 70%, ${l}%)`);
-                }
-            } else if (paletteTypeRand < 0.5) {
-                // Shades of gray / desaturated
-                for (let i = 0; i < qualiaMode; i++) {
-                    const g = 20 + i * (60/qualiaMode);
-                    colors.push(`hsl(0, 0%, ${g}%)`);
-                }
-            } else if (paletteTypeRand < 0.8) {
-                // Pick from hip modern palettes
-                const modern = MODERN_PALETTES[Math.floor(seedRandom(hashNum + 203) * MODERN_PALETTES.length)];
-                colors = modern.slice(0, qualiaMode);
-            } else {
-                // Ed Manning style: random mixed hues with varied saturation/lightness
-                const baseHue = seedRandom(hashNum + 204) * 360;
-                for (let i = 0; i < qualiaMode; i++) {
-                    const hue = (baseHue + seedRandom(hashNum + 300 + i) * 120) % 360;
-                    const sat = 40 + seedRandom(hashNum + 400 + i) * 60;
-                    const light = 35 + seedRandom(hashNum + 500 + i) * 40;
+                    const sat = 60 + i * (30/qualiaMode);
+                    const light = 30 + i * (50/qualiaMode);
                     colors.push(`hsl(${hue}, ${sat}%, ${light}%)`);
+                }
+            } else if (paletteTypeRand < 0.35) {
+                // Sophisticated grays
+                for (let i = 0; i < qualiaMode; i++) {
+                    const warmth = seedRandom(hashNum + 280 + i) * 20; // Add slight warmth
+                    const hue = 200 + warmth;
+                    const sat = 5 + seedRandom(hashNum + 290 + i) * 15;
+                    const light = 15 + i * (70/qualiaMode);
+                    colors.push(`hsl(${hue}, ${sat}%, ${light}%)`);
+                }
+            } else {
+                // Premium curated palettes
+                const palette = PREMIUM_PALETTES[Math.floor(seedRandom(hashNum + 203) * PREMIUM_PALETTES.length)];
+                colors = palette.slice(0, Math.min(qualiaMode, palette.length));
+                
+                // Ensure we have enough colors
+                while (colors.length < qualiaMode) {
+                    colors.push(colors[colors.length % palette.length]);
                 }
             }
 
@@ -564,18 +597,38 @@
         }
 
         function renderBackgroundTexture(soul, canvasSize) {
-            const gradient = ctx.createRadialGradient(
+            // Create light field background
+            const lightFieldGradient = ctx.createRadialGradient(
                 canvasSize/2, canvasSize/2, 0,
-                canvasSize/2, canvasSize/2, canvasSize/2
+                canvasSize/2, canvasSize/2, canvasSize
             );
             
-            const bgIntensity = soul.rungLevel / 45 * 0.3;
-            const rgb = colorToRGB(soul.palette[0]);
-            gradient.addColorStop(0, `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${bgIntensity})`);
-            gradient.addColorStop(1, 'rgba(0,0,0,0)');
+            // Use multiple colors based on lightCount
+            const bgColors = soul.palette.slice(0, soul.lightCount);
+            for (let i = 0; i < bgColors.length; i++) {
+                const position = i / (bgColors.length - 1);
+                const rgb = colorToRGB(bgColors[i]);
+                const alpha = soul.density * 0.1 * (1 - position * 0.7); // Fade outward
+                lightFieldGradient.addColorStop(position, `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${alpha})`);
+            }
+            lightFieldGradient.addColorStop(1, 'rgba(0,0,0,0)');
             
-            ctx.fillStyle = gradient;
+            ctx.fillStyle = lightFieldGradient;
             ctx.fillRect(0, 0, canvasSize, canvasSize);
+
+            // Add subtle light particles in background
+            for (let i = 0; i < soul.lightCount * 3; i++) {
+                const x = seedRandom(soul.hashNum + 400 + i) * canvasSize;
+                const y = seedRandom(soul.hashNum + 500 + i) * canvasSize;
+                const size = seedRandom(soul.hashNum + 600 + i) * 3 + 1;
+                const colorIdx = Math.floor(seedRandom(soul.hashNum + 700 + i) * bgColors.length);
+                const rgb = colorToRGB(bgColors[colorIdx]);
+                
+                ctx.fillStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${soul.density * 0.3})`;
+                ctx.beginPath();
+                ctx.arc(x, y, size, 0, Math.PI * 2);
+                ctx.fill();
+            }
         }
 
         function renderConnections(soul, margin, cellSize) {
@@ -747,8 +800,8 @@
             const offsetX = (seedRandom(soul.hashNum + index * 3) - 0.5) * posVariation;
             const offsetY = (seedRandom(soul.hashNum + index * 5) - 0.5) * posVariation;
             
-            // Size variation based on resonance
-            const sizeVariation = soul.resonanceFreq * 0.4;
+            // Size variation based on resonance and spread
+            const sizeVariation = soul.resonanceFreq * soul.spread * 0.6;
             const actualSize = size * (0.8 + sizeVariation);
             
             // Animation effects
@@ -779,35 +832,32 @@
             ctx.rotate(animRotation);
             ctx.scale(animScale, animScale);
             
-            // Render cell based on texture style
-            ctx.fillStyle = baseColor;
-            ctx.globalAlpha = brightness * (0.8 + soul.iAmAffinity * 0.2); // Vary opacity for depth
+            // Render as light orb instead of solid shape
+            const lightRadius = actualSize/2 * soul.spread;
+            const lightGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, lightRadius);
             
-            switch (soul.textureStyle) {
-                case 'Smooth':
-                    ctx.fillRect(-actualSize/2, -actualSize/2, actualSize, actualSize);
-                    break;
-                case 'Flowing':
-                    renderFlowingCell(actualSize);
-                    break;
-                case 'Granular':
-                    renderGranularCell(actualSize, soul, index);
-                    break;
-                case 'Ethereal': // New: Fading ethereal look
-                    const fadeGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, actualSize/2);
-                    fadeGrad.addColorStop(0, baseColor);
-                    fadeGrad.addColorStop(1, 'transparent');
-                    ctx.fillStyle = fadeGrad;
-                    ctx.fillRect(-actualSize/2, -actualSize/2, actualSize, actualSize);
-                    break;
-                default:
-                    // Use analog square for depth
-                    drawAnalogSquare(ctx, -actualSize/2, -actualSize/2, actualSize, baseColor, soul.resonanceFreq);
-                    break;
-            }
+            const rgb = colorToRGB(baseColor);
+            const centerAlpha = brightness * soul.density * (0.8 + soul.iAmAffinity * 0.2);
+            const edgeAlpha = centerAlpha * 0.1;
             
-            // Add analog grain texture
-            addGrain(ctx, -actualSize/2, -actualSize/2, actualSize, actualSize, soul.resonanceFreq * 0.1);
+            lightGradient.addColorStop(0, `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${centerAlpha})`);
+            lightGradient.addColorStop(0.7, `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${edgeAlpha})`);
+            lightGradient.addColorStop(1, 'rgba(0,0,0,0)');
+            
+            ctx.fillStyle = lightGradient;
+            ctx.beginPath();
+            ctx.arc(0, 0, lightRadius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Add bright center core
+            const coreGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, lightRadius * 0.3);
+            coreGradient.addColorStop(0, `rgba(255, 255, 255, ${centerAlpha * 0.8})`);
+            coreGradient.addColorStop(1, 'transparent');
+            
+            ctx.fillStyle = coreGradient;
+            ctx.beginPath();
+            ctx.arc(0, 0, lightRadius * 0.3, 0, Math.PI * 2);
+            ctx.fill();
             
             ctx.restore();
         }
@@ -893,10 +943,13 @@
             document.getElementById('beatCycle').textContent = `${soul.beatCycle}/8`;
             
             document.getElementById('animationType').textContent = soul.animationType;
+            document.getElementById('spread').textContent = (soul.spread * 100).toFixed(1) + '%';
+            document.getElementById('saturation').textContent = (soul.saturation * 100).toFixed(1) + '%';
+            document.getElementById('density').textContent = (soul.density * 100).toFixed(1) + '%';
+            document.getElementById('lightCount').textContent = soul.lightCount;
             document.getElementById('connectionStyle').textContent = soul.connectionStyle;
             document.getElementById('flowPattern').textContent = soul.flowPattern;
             document.getElementById('colorPalette').textContent = `${soul.palette.length} colors`;
-            document.getElementById('textureStyle').textContent = soul.textureStyle;
             
             document.getElementById('qualiaMode').textContent = `${soul.qualiaMode}/8`;
             document.getElementById('clusterTightness').textContent = (soul.clusterTightness * 100).toFixed(1) + '%';
