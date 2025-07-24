@@ -251,7 +251,7 @@
         const GRID_SIZES = [4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 16];
         const CONNECTION_STYLES = ['Ringers', 'Web', 'Radial', 'Flow', 'Minimal'];
         const FLOW_PATTERNS = ['Fidenza', 'Organic', 'Geometric', 'Spiral', 'Linear'];
-        const TEXTURE_STYLES = ['Smooth', 'Granular', 'Flowing', 'Blocky', 'Ethereal'];
+        const TEXTURE_STYLES = ['Smooth', 'Granular', 'Flowing', 'Blocky', 'Ethereal', 'Analog']; // Add Analog style
 
         function simpleHash(str) {
             let hash = 0;
@@ -596,6 +596,52 @@
             }
         }
 
+        // Analog effect helpers
+        function addGrain(ctx, x, y, w, h, intensity = 0.15) {
+            // Subtle analog grain noise
+            for (let i = 0; i < 100; i++) {
+                const gx = x + Math.random() * w;
+                const gy = y + Math.random() * h;
+                const size = 1 + Math.random() * 2;
+                ctx.fillStyle = `rgba(255,255,255,${intensity * Math.random()})`;
+                ctx.fillRect(gx, gy, size, size);
+                ctx.fillStyle = `rgba(0,0,0,${intensity * Math.random()})`;
+                ctx.fillRect(gx + 1, gy + 1, size, size);
+            }
+        }
+
+        function drawAnalogSquare(ctx, x, y, size, color, depth) {
+            // Gradient for depth
+            const gradient = ctx.createLinearGradient(x, y, x + size, y + size);
+            gradient.addColorStop(0, color);
+            gradient.addColorStop(1, darkenColor(color, 0.7));
+            ctx.fillStyle = gradient;
+            ctx.fillRect(x, y, size, size);
+
+            // Subtle bevel for depth
+            if (depth > 0.5) {
+                ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(x + size, y);
+                ctx.lineTo(x + size, y + size);
+                ctx.stroke();
+
+                ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+                ctx.beginPath();
+                ctx.moveTo(x, y + size);
+                ctx.lineTo(x + size, y + size);
+                ctx.lineTo(x + size, y);
+                ctx.stroke();
+            }
+        }
+
+        function darkenColor(color, factor) {
+            const rgb = colorToRGB(color);
+            return `rgb(${Math.floor(rgb[0] * factor)}, ${Math.floor(rgb[1] * factor)}, ${Math.floor(rgb[2] * factor)})`;
+        }
+
         function renderGridCell(soul, x, y, size, index, row, col) {
             // random mix choose palette index not repeating order for more variety
             const colorIdx = Math.floor(seedRandom(soul.hashNum + index * 7) * soul.palette.length);
@@ -640,7 +686,7 @@
             
             // Render cell based on texture style
             ctx.fillStyle = baseColor;
-            ctx.globalAlpha = brightness;
+            ctx.globalAlpha = brightness * (0.8 + soul.iAmAffinity * 0.2); // Vary opacity for depth
             
             switch (soul.textureStyle) {
                 case 'Smooth':
@@ -652,9 +698,21 @@
                 case 'Granular':
                     renderGranularCell(actualSize, soul, index);
                     break;
-                default:
+                case 'Ethereal': // New: Fading ethereal look
+                    const fadeGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, actualSize/2);
+                    fadeGrad.addColorStop(0, baseColor);
+                    fadeGrad.addColorStop(1, 'transparent');
+                    ctx.fillStyle = fadeGrad;
                     ctx.fillRect(-actualSize/2, -actualSize/2, actualSize, actualSize);
+                    break;
+                default:
+                    // Use analog square for depth
+                    drawAnalogSquare(ctx, -actualSize/2, -actualSize/2, actualSize, baseColor, soul.resonanceFreq);
+                    break;
             }
+            
+            // Add analog grain texture
+            addGrain(ctx, -actualSize/2, -actualSize/2, actualSize, actualSize, soul.resonanceFreq * 0.1);
             
             ctx.restore();
         }
