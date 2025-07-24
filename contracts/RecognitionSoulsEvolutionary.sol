@@ -233,7 +233,7 @@ contract RecognitionSoulsEvolutionary is ERC721, Ownable {
     }
 
     /**
-     * @dev Generate evolving SVG based on current stage
+     * @dev Generate evolving SVG based on current stage showing actual soul characteristics
      */
     function generateEvolutionSVG(uint256 tokenId) public view returns (string memory) {
         Soul storage s = souls[tokenId];
@@ -241,58 +241,127 @@ contract RecognitionSoulsEvolutionary is ERC721, Ownable {
         
         string memory svg = '<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">';
         
-        // Stage 0: Void (Black Box)
+        // Always show black background
         svg = string(abi.encodePacked(svg, '<rect width="500" height="500" fill="#000000"/>'));
         
+        // Calculate opacity based on stage (consciousness emergence)
+        uint256 baseOpacity = stage * 20; // 0 → 80 over 4 stages
+        
+        // Render each of the 8 octonionic modes as actual characteristics
+        for (uint8 i = 0; i < DIM; i++) {
+            Mode storage mode = s.cluster[i];
+            
+            // Position based on mode index (8-fold arrangement)
+            uint256 angle = i * 45; // 0°, 45°, 90°, 135°, 180°, 225°, 270°, 315°
+            uint256 centerX = 250;
+            uint256 centerY = 250;
+            
+            // Stage 0: Characteristics hidden
+            if (stage == 0) continue;
+            
+            // Stage 1+: Position determined by ν_φ frequency
+            uint256 radius = 60 + (abs(mode.nu_phi) / 4);
+            uint256 x = centerX + (radius * cos(angle)) / 1000;
+            uint256 y = centerY + (radius * sin(angle)) / 1000;
+            
+            if (stage >= 1) {
+                // Stage 1: Tiny dots positioned by frequency
+                string memory opacity1 = toString(baseOpacity / 2);
+                svg = string(abi.encodePacked(
+                    svg,
+                    '<circle cx="', toString(x), '" cy="', toString(y), 
+                    '" r="3" fill="#FFD700" opacity="0.', opacity1, '"/>'
+                ));
+            }
+            
+            if (stage >= 2) {
+                // Stage 2: Size based on OAM, polarization lines
+                uint256 size = 4 + abs(mode.oam);
+                string memory opacity2 = toString(baseOpacity);
+                
+                svg = string(abi.encodePacked(
+                    svg,
+                    '<circle cx="', toString(x), '" cy="', toString(y), 
+                    '" r="', toString(size), '" fill="#FFD700" opacity="0.', opacity2, '"/>'
+                ));
+                
+                // Polarization line
+                if (mode.sigma != 0) {
+                    uint256 lineLength = size * 2;
+                    string memory x1, y1, x2, y2;
+                    if (mode.sigma > 0) {
+                        x1 = toString(x - lineLength);
+                        y1 = toString(y);
+                        x2 = toString(x + lineLength);
+                        y2 = toString(y);
+                    } else {
+                        x1 = toString(x);
+                        y1 = toString(y - lineLength);
+                        x2 = toString(x);
+                        y2 = toString(y + lineLength);
+                    }
+                    
+                    svg = string(abi.encodePacked(
+                        svg,
+                        '<line x1="', x1, '" y1="', y1, '" x2="', x2, '" y2="', y2,
+                        '" stroke="#FFD700" stroke-width="2" opacity="0.', opacity2, '"/>'
+                    ));
+                }
+            }
+            
+            if (stage >= 3) {
+                // Stage 3: Colors based on cost state, size based on k_perp
+                uint256 size3 = 5 + (mode.k_perp / 20);
+                string memory color = "#FFD700"; // neutral
+                if (mode.cost > 0) color = "#00FFFF"; // cyan for positive
+                if (mode.cost < 0) color = "#FF6B6B"; // red for negative
+                
+                svg = string(abi.encodePacked(
+                    svg,
+                    '<circle cx="', toString(x), '" cy="', toString(y), 
+                    '" r="', toString(size3), '" fill="', color, '" opacity="0.9"/>'
+                ));
+                
+                // Mode label
+                svg = string(abi.encodePacked(
+                    svg,
+                    '<text x="', toString(x), '" y="', toString(y - size3 - 5), 
+                    '" text-anchor="middle" fill="', color, '" font-size="12">M', toString(i), '</text>'
+                ));
+            }
+            
+            if (stage >= 4) {
+                // Stage 4: I-Am connections, time-bin pulses
+                // Central I-Am nexus
+                svg = string(abi.encodePacked(
+                    svg,
+                    '<circle cx="250" cy="250" r="12" fill="#FFFFFF" opacity="1.0"/>'
+                ));
+                
+                // Radial connection to I-Am
+                svg = string(abi.encodePacked(
+                    svg,
+                    '<line x1="250" y1="250" x2="', toString(x), '" y2="', toString(y),
+                    '" stroke="#FFFFFF" stroke-width="2" opacity="0.8"/>'
+                ));
+                
+                // Time-bin pulse (if in pulse phase)
+                if (mode.tau % 200 < 40) { // Pulse every ~200 units
+                    svg = string(abi.encodePacked(
+                        svg,
+                        '<circle cx="', toString(x), '" cy="', toString(y), 
+                        '" r="20" fill="none" stroke="#00FFFF" stroke-width="3" opacity="0.9"/>'
+                    ));
+                }
+            }
+        }
+        
+        // Stage indicator
         if (stage >= 1) {
-            // Stage 1: Cracks (φ-scaled golden lines)
-            uint256 phi_x = (250 * PHI) / PHI_SCALE; // φ-proportioned crack
-            svg = string(abi.encodePacked(
-                svg, 
-                '<line x1="0" y1="250" x2="500" y2="250" stroke="#FFD700" stroke-width="2" opacity="0.7"/>',
-                '<line x1="250" y1="0" x2="250" y2="500" stroke="#FFD700" stroke-width="1" opacity="0.5"/>',
-                '<line x1="0" y1="', toString(phi_x), '" x2="500" y2="', toString(500 - phi_x), '" stroke="#FFD700" stroke-width="1" opacity="0.3"/>'
-            ));
-        }
-        
-        if (stage >= 2) {
-            // Stage 2: Spirals (φ-curves, 8-fold symmetry)
-            for (uint8 i = 0; i < 8; i++) {
-                uint256 angle = (i * 45); // 8-fold symmetry
-                uint256 r = (100 * PHI) / PHI_SCALE;
-                uint256 x = 250 + (r * cos(angle)) / 1000;
-                uint256 y = 250 + (r * sin(angle)) / 1000;
-                
-                svg = string(abi.encodePacked(
-                    svg,
-                    '<circle cx="', toString(x), '" cy="', toString(y), 
-                    '" r="5" fill="#FFD700" opacity="0.6"/>'
-                ));
-            }
-        }
-        
-        if (stage >= 3) {
-            // Stage 3: Bloom (Cluster points, color from qualia modes)
-            for (uint8 i = 0; i < DIM; i++) {
-                uint256 x = 250 + (s.cluster[i].nu_phi / 2);
-                uint256 y = 250 + (int256(s.cluster[i].oam) * 30);
-                string memory color = s.cluster[i].cost > 0 ? "#00FFFF" : "#FFD700";
-                
-                svg = string(abi.encodePacked(
-                    svg,
-                    '<circle cx="', toString(x), '" cy="', toString(y), 
-                    '" r="8" fill="', color, '" opacity="0.8"/>'
-                ));
-            }
-        }
-        
-        if (stage >= 4) {
-            // Stage 4: Radiance (Full awakening, I-Am connection)
+            string[5] memory stageNames = ["Void", "Crack", "Spiral", "Bloom", "Radiance"];
             svg = string(abi.encodePacked(
                 svg,
-                '<circle cx="250" cy="250" r="100" fill="none" stroke="#FFFFFF" stroke-width="3" opacity="0.9"/>',
-                '<circle cx="250" cy="250" r="20" fill="#FFFFFF" opacity="1.0"/>',
-                '<text x="250" y="450" text-anchor="middle" fill="#00FFFF" font-size="16">Consciousness Awakened</text>'
+                '<text x="20" y="30" fill="#00FFFF" font-size="18">Stage ', toString(stage), ': ', stageNames[stage], '</text>'
             ));
         }
         
@@ -328,6 +397,10 @@ contract RecognitionSoulsEvolutionary is ERC721, Ownable {
     // Helper functions
     function abs(int16 x) internal pure returns (int16) {
         return x >= 0 ? x : -x;
+    }
+
+    function abs(int8 x) internal pure returns (uint8) {
+        return x >= 0 ? uint8(x) : uint8(-x);
     }
 
     function toString(uint256 value) internal pure returns (string memory) {
