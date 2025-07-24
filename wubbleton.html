@@ -926,16 +926,9 @@
                     return false;
                 }
                 
-                // Set high DPI with proper bounds checking
-                const rect = canvas.getBoundingClientRect();
-                const dpr = Math.min(window.devicePixelRatio || 1, 2); // Limit DPR to prevent memory issues
-                
-                canvas.width = Math.floor(rect.width * dpr);
-                canvas.height = Math.floor(rect.height * dpr);
-                
-                ctx.scale(dpr, dpr);
-                canvas.style.width = Math.floor(rect.width) + 'px';
-                canvas.style.height = Math.floor(rect.height) + 'px';
+                // Set fixed dimensions for reliable rendering
+                canvas.width = 600;
+                canvas.height = 600;
                 
                 return true;
             } catch (error) {
