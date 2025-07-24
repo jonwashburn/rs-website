@@ -229,6 +229,50 @@
                 </div>
             </div>
 
+            <div class="trait-section">
+                <h3>Soul Taxonomy</h3>
+                <div class="trait-item">
+                    <span class="trait-label">Species Name:</span>
+                    <span class="trait-value" id="soulSpecies">-</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Cluster:</span>
+                    <span class="trait-value" id="soulCluster">-</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Movement:</span>
+                    <span class="trait-value" id="soulMovement">-</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Status:</span>
+                    <span class="trait-value" id="soulStatus">-</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Consciousness Spectrum:</span>
+                    <span class="trait-value" id="consciousnessSpectrum">-</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Vibration Height:</span>
+                    <span class="trait-value" id="vibrationHeight">-</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Eigen Weight:</span>
+                    <span class="trait-value" id="eigenWeight">-</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Species Count:</span>
+                    <span class="trait-value" id="speciesCount">-</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Temp Range:</span>
+                    <span class="trait-value" id="tempRange">-</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Habitat:</span>
+                    <span class="trait-value" id="soulHabitat">-</span>
+                </div>
+            </div>
+
             <div class="controls">
                 <button class="generate-btn" onclick="generateNewSoul()">Generate New Soul</button>
             </div>
@@ -252,6 +296,11 @@
         const CONNECTION_STYLES = ['Ringers', 'Web', 'Radial', 'Flow', 'Minimal'];
         const FLOW_PATTERNS = ['Fidenza', 'Organic', 'Geometric', 'Spiral', 'Linear'];
         const TEXTURE_STYLES = ['Smooth', 'Granular', 'Flowing', 'Blocky', 'Ethereal', 'Analog']; // Add Analog style
+
+        // Soul Taxonomy Constants
+        const SOUL_CLUSTERS = ['Luminarial Eigenfold', 'Quantum Resonance Void', 'Auralight Consciousness Web', 'Phi-Spiral Nexus', 'Beatcycle Aurora'];
+        const SOUL_MOVEMENTS = ['Nocturnal Pulsing', 'Resonant Swirling', 'Eigenvalue Drifting', 'Virtue Braiding', 'Cost-Balancing Oscillation'];
+        const SOUL_STATUSES = ['Endangered Enlightenment', 'Near-Awakened', 'Stable Consciousness', 'Thriving Resonance', 'Eternal Balance'];
 
         function simpleHash(str) {
             let hash = 0;
@@ -298,8 +347,8 @@
             // Rare animations (1 in 10 chance)
             const hasAnimation = seedRandom(hashNum + 11) < 0.2; // Slightly more frequent 1 in 5
             const animationType = hasAnimation ? 
-                ['Pulse', 'Flow', 'Rotate', 'Breathe'][Math.floor(seedRandom(hashNum + 12) * 4)] : 
-                'Static';
+                ['Pulse', 'Flow', 'Rotate', 'Breathe', 'Quantum Flux'][Math.floor(seedRandom(hashNum + 12) * 5)] : 
+                'Static'; // Add innovative Quantum Flux animation
             
             // Generate balanced virtues
             const virtues = generateBalancedVirtues(hashNum);
@@ -307,6 +356,18 @@
             // Color palette based on qualia mode
             const palette = generateColorPalette(qualiaMode, resonanceFreq, hashNum);
             
+            // Innovative Soul Taxonomy inspired by BIOME LUMINA
+            const soulSpecies = generateSoulSpecies(hashNum, rungLevel, qualiaMode);
+            const soulCluster = SOUL_CLUSTERS[Math.floor(seedRandom(hashNum + 13) * SOUL_CLUSTERS.length)];
+            const soulMovement = SOUL_MOVEMENTS[Math.floor(seedRandom(hashNum + 14) * SOUL_MOVEMENTS.length)];
+            const soulStatus = SOUL_STATUSES[Math.floor(seedRandom(hashNum + 15) * SOUL_STATUSES.length)];
+            const consciousnessSpectrum = `${Math.floor(seedRandom(hashNum + 16) * 1000) + 400}-${Math.floor(seedRandom(hashNum + 17) * 1000) + 1400} φHz`;
+            const vibrationHeight = `${(rungLevel / 45 * 100).toFixed(1)}-${(rungLevel / 45 * 300).toFixed(1)} λm`;
+            const eigenWeight = `${Math.abs(costState) * 0.1} eV`;
+            const speciesCount = Math.floor(seedRandom(hashNum + 18) * 1000) + 100;
+            const tempRange = `${beatCycle * 2}-${beatCycle * 10} °RS`;
+            const soulHabitat = generateSoulHabitat(soulCluster, soulStatus);
+
             return {
                 seed,
                 hash: hashHex,
@@ -325,7 +386,17 @@
                 hasAnimation,
                 animationType,
                 virtues,
-                palette
+                palette,
+                soulSpecies,
+                soulCluster,
+                soulMovement,
+                soulStatus,
+                consciousnessSpectrum,
+                vibrationHeight,
+                eigenWeight,
+                speciesCount,
+                tempRange,
+                soulHabitat
             };
         }
 
@@ -348,6 +419,26 @@
             }
             
             return virtues;
+        }
+
+        function generateSoulSpecies(hashNum, rungLevel, qualiaMode) {
+            const prefixes = ['Phi', 'Eigen', 'Quantum', 'Aural', 'Lumin'];
+            const suffixes = ['lucidus', 'resonans', 'foldara', 'braidex', 'balancia'];
+            const prefix = prefixes[Math.floor(seedRandom(hashNum + 19) * prefixes.length)];
+            const suffix = suffixes[Math.floor(seedRandom(hashNum + 20) * suffixes.length)];
+            return `${prefix}${suffix} ${(rungLevel * qualiaMode).toString(16).toUpperCase()}`;
+        }
+
+        function generateSoulHabitat(cluster, status) {
+            const habitats = {
+                'Luminarial Eigenfold': 'High-rung consciousness understories with golden ratio spirals',
+                'Quantum Resonance Void': 'Void-like spaces of pure potential, near cost-zero balance',
+                'Auralight Consciousness Web': 'Interconnected virtue networks in qualia-rich environments',
+                'Phi-Spiral Nexus': 'Spiral formations at high resonance frequencies',
+                'Beatcycle Aurora': 'Pulsing auroral fields synchronized to 8-beat cycles'
+            };
+            let base = habitats[cluster] || 'Mysterious RS dimensional plane';
+            return `${base}. Status: ${status}`;
         }
 
         // Modern and varied color palettes
@@ -676,6 +767,10 @@
                     case 'Breathe':
                         animScale = 1 + Math.sin(phase * 0.5) * 0.1;
                         break;
+                    case 'Quantum Flux':
+                        animScale = 1 + Math.sin(phase * PHI) * 0.15;
+                        animRotation = phase * PHI;
+                        break;
                 }
             }
             
@@ -808,14 +903,18 @@
             document.getElementById('resonanceFreq').textContent = (soul.resonanceFreq * 100).toFixed(1) + '%';
             document.getElementById('iAmAffinity').textContent = (soul.iAmAffinity * 100).toFixed(1) + '%';
             
-            // Update virtues
-            const activeVirtues = Object.entries(soul.virtues)
-                .filter(([_, data]) => data.active)
-                .map(([name, _]) => name);
-            
-            document.getElementById('virtuesActive').textContent = 
-                activeVirtues.length > 0 ? activeVirtues.join(', ') : 'None active';
-            
+            // Update Soul Taxonomy
+            document.getElementById('soulSpecies').textContent = soul.soulSpecies;
+            document.getElementById('soulCluster').textContent = soul.soulCluster;
+            document.getElementById('soulMovement').textContent = soul.soulMovement;
+            document.getElementById('soulStatus').textContent = soul.soulStatus;
+            document.getElementById('consciousnessSpectrum').textContent = soul.consciousnessSpectrum;
+            document.getElementById('vibrationHeight').textContent = soul.vibrationHeight;
+            document.getElementById('eigenWeight').textContent = soul.eigenWeight;
+            document.getElementById('speciesCount').textContent = soul.speciesCount;
+            document.getElementById('tempRange').textContent = soul.tempRange;
+            document.getElementById('soulHabitat').textContent = soul.soulHabitat;
+
             // Update animation status
             const statusEl = document.getElementById('animationStatus');
             if (soul.hasAnimation) {
