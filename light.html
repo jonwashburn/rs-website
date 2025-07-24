@@ -304,15 +304,6 @@
             <div class="canvas-container">
                 <canvas id="soulCanvas"></canvas>
                 
-                <div class="controls">
-                    <button class="btn btn-primary" onclick="generateNewSoul()">Birth New Vector Soul</button>
-                    <button class="btn btn-gold" onclick="evolveSoul()">Evolve (+1 Gap)</button>
-                    <button class="btn btn-primary" onclick="balanceLedger()">Balance Ledger</button>
-                    <button class="btn btn-gold" onclick="triggerFold()">FOLD Operation</button>
-                    <button class="btn btn-primary" onclick="triggerBraid()">BRAID Triads</button>
-                    <button class="btn btn-gold" onclick="toggleAnimation()">Toggle Animation</button>
-                </div>
-
                 <div class="status-bar">
                     <div class="status-item">
                         <div class="status-label">Breath Tick</div>
@@ -1070,7 +1061,12 @@
                     generateNewSoul();
                     debugLog('Soul generated, starting animation...');
                     
-                    animate();
+                    const STATIC_NFT = true; // Set to true for on-chain static rendering
+                    if (STATIC_NFT) {
+                        render(); // single frame render
+                    } else {
+                        animate();
+                    }
                     debugLog('Animation started');
                 } else {
                     debugLog('FAILED to initialize canvas');
