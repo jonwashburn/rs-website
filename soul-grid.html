@@ -270,12 +270,14 @@
 
         function generateSoul() {
             const seed = Math.floor(Math.random() * 1000000);
-            const hash = simpleHash(seed.toString());
+            const hashNum = simpleHash(seed.toString());
+            const hashHex = hashNum.toString(16).substr(0,8);
             
             // Core RS characteristics
-            const rungLevel = Math.floor(seedRandom(hash + 1) * 45) + 1;
-            const costState = Math.floor((seedRandom(hash + 2) - 0.5) * 200);
-            const beatCycle = Math.floor(seedRandom(hash + 3) * 8) + 1;
+            // Use numeric hash for seedRandom calculations to avoid NaN
+            const rungLevel = Math.floor(seedRandom(hashNum + 1) * 45) + 1;
+            const costState = Math.floor((seedRandom(hashNum + 2) - 0.5) * 200);
+            const beatCycle = Math.floor(seedRandom(hashNum + 3) * 8) + 1;
             
             // Grid size based on consciousness complexity
             const gridComplexity = (rungLevel / 45) * 0.7 + (Math.abs(costState) / 100) * 0.3;
@@ -283,31 +285,32 @@
             const gridSize = GRID_SIZES[Math.min(gridSizeIndex, GRID_SIZES.length - 1)];
             
             // Visual properties
-            const qualiaMode = Math.floor(seedRandom(hash + 4) * 8) + 1;
-            const clusterTightness = seedRandom(hash + 5);
-            const resonanceFreq = seedRandom(hash + 6);
-            const iAmAffinity = seedRandom(hash + 7);
+            const qualiaMode = Math.floor(seedRandom(hashNum + 4) * 8) + 1;
+            const clusterTightness = seedRandom(hashNum + 5);
+            const resonanceFreq = seedRandom(hashNum + 6);
+            const iAmAffinity = seedRandom(hashNum + 7);
             
             // Enhanced properties inspired by Fidenza & Ringers
-            const connectionStyle = CONNECTION_STYLES[Math.floor(seedRandom(hash + 8) * CONNECTION_STYLES.length)];
-            const flowPattern = FLOW_PATTERNS[Math.floor(seedRandom(hash + 9) * FLOW_PATTERNS.length)];
-            const textureStyle = TEXTURE_STYLES[Math.floor(seedRandom(hash + 10) * TEXTURE_STYLES.length)];
+            const connectionStyle = CONNECTION_STYLES[Math.floor(seedRandom(hashNum + 8) * CONNECTION_STYLES.length)];
+            const flowPattern = FLOW_PATTERNS[Math.floor(seedRandom(hashNum + 9) * FLOW_PATTERNS.length)];
+            const textureStyle = TEXTURE_STYLES[Math.floor(seedRandom(hashNum + 10) * TEXTURE_STYLES.length)];
             
             // Rare animations (1 in 10 chance)
-            const hasAnimation = seedRandom(hash + 11) < 0.1;
+            const hasAnimation = seedRandom(hashNum + 11) < 0.2; // Slightly more frequent 1 in 5
             const animationType = hasAnimation ? 
-                ['Pulse', 'Flow', 'Rotate', 'Breathe'][Math.floor(seedRandom(hash + 12) * 4)] : 
+                ['Pulse', 'Flow', 'Rotate', 'Breathe'][Math.floor(seedRandom(hashNum + 12) * 4)] : 
                 'Static';
             
             // Generate balanced virtues
-            const virtues = generateBalancedVirtues(hash);
+            const virtues = generateBalancedVirtues(hashNum);
             
             // Color palette based on qualia mode
-            const palette = generateColorPalette(qualiaMode, resonanceFreq, hash);
+            const palette = generateColorPalette(qualiaMode, resonanceFreq, hashNum);
             
             return {
                 seed,
-                hash: hash.toString(16).substr(0, 8),
+                hash: hashHex,
+                hashNum,
                 gridSize,
                 rungLevel,
                 costState,
@@ -347,17 +350,53 @@
             return virtues;
         }
 
-        function generateColorPalette(qualiaMode, resonanceFreq, hash) {
-            const baseHue = seedRandom(hash + 200) * 360;
-            const saturation = 60 + (resonanceFreq * 40);
-            const lightness = 45 + (resonanceFreq * 30);
-            
-            const colors = [];
-            for (let i = 0; i < qualiaMode; i++) {
-                const hue = (baseHue + (i * 360 / qualiaMode)) % 360;
-                colors.push(`hsl(${hue}, ${saturation}%, ${lightness}%)`);
+        // Modern and varied color palettes
+        const MODERN_PALETTES = [
+            ['#ff595e','#ffca3a','#8ac926','#1982c4','#6a4c93'], // Vibrant hip
+            ['#f72585','#b5179e','#7209b7','#3a0ca3','#4361ee','#4cc9f0'], // Vaporwave neon
+            ['#06d6a0','#1b9aaa','#ef476f','#ffc43d'], // Modern flat
+            ['#ff9f1c','#ffbf69','#ffffff','#cbf3f0','#2ec4b6'], // Miami pastel
+            ['#e63946','#f1faee','#a8dadc','#457b9d','#1d3557'], // Modern desat
+        ];
+
+        function generateColorPalette(qualiaMode, resonanceFreq, hashNum) {
+            const paletteTypeRand = seedRandom(hashNum + 201);
+            let colors = [];
+
+            if (paletteTypeRand < 0.2) {
+                // Rainbow (full 360 hue wheel)
+                const steps = Math.max(qualiaMode, 6);
+                for (let i = 0; i < steps; i++) {
+                    colors.push(`hsl(${i * 360 / steps}, 85%, 60%)`);
+                }
+            } else if (paletteTypeRand < 0.35) {
+                // Monochromatic random hue
+                const hue = Math.floor(seedRandom(hashNum + 202) * 360);
+                for (let i = 0; i < qualiaMode; i++) {
+                    const l = 30 + i * (40/qualiaMode);
+                    colors.push(`hsl(${hue}, 70%, ${l}%)`);
+                }
+            } else if (paletteTypeRand < 0.5) {
+                // Shades of gray / desaturated
+                for (let i = 0; i < qualiaMode; i++) {
+                    const g = 20 + i * (60/qualiaMode);
+                    colors.push(`hsl(0, 0%, ${g}%)`);
+                }
+            } else if (paletteTypeRand < 0.8) {
+                // Pick from hip modern palettes
+                const modern = MODERN_PALETTES[Math.floor(seedRandom(hashNum + 203) * MODERN_PALETTES.length)];
+                colors = modern.slice(0, qualiaMode);
+            } else {
+                // Ed Manning style: random mixed hues with varied saturation/lightness
+                const baseHue = seedRandom(hashNum + 204) * 360;
+                for (let i = 0; i < qualiaMode; i++) {
+                    const hue = (baseHue + seedRandom(hashNum + 300 + i) * 120) % 360;
+                    const sat = 40 + seedRandom(hashNum + 400 + i) * 60;
+                    const light = 35 + seedRandom(hashNum + 500 + i) * 40;
+                    colors.push(`hsl(${hue}, ${sat}%, ${light}%)`);
+                }
             }
-            
+
             return colors;
         }
 
@@ -446,8 +485,8 @@
                 ctx.moveTo(start.x, start.y);
                 
                 // Create curved path like string tension
-                const midX = (start.x + end.x) / 2 + (seedRandom(soul.hash + i) - 0.5) * 50;
-                const midY = (start.y + end.y) / 2 + (seedRandom(soul.hash + i + 100) - 0.5) * 50;
+                const midX = (start.x + end.x) / 2 + (seedRandom(soul.hashNum + i) - 0.5) * 50;
+                const midY = (start.y + end.y) / 2 + (seedRandom(soul.hashNum + i + 100) - 0.5) * 50;
                 
                 ctx.quadraticCurveTo(midX, midY, end.x, end.y);
                 ctx.stroke();
@@ -510,9 +549,9 @@
         }
 
         function renderGridCell(soul, x, y, size, index, row, col) {
-            // Color from palette based on position and traits
-            const colorIndex = index % soul.palette.length;
-            const baseColor = soul.palette[colorIndex];
+            // random mix choose palette index not repeating order for more variety
+            const colorIdx = Math.floor(seedRandom(soul.hashNum + index * 7) * soul.palette.length);
+            const baseColor = soul.palette[colorIdx];
             
             // Cost state affects brightness
             const costFactor = soul.costState / 100;
@@ -520,8 +559,8 @@
             
             // Tightness affects position variation
             const posVariation = (1 - soul.clusterTightness) * 10;
-            const offsetX = (seedRandom(soul.hash + index * 3) - 0.5) * posVariation;
-            const offsetY = (seedRandom(soul.hash + index * 5) - 0.5) * posVariation;
+            const offsetX = (seedRandom(soul.hashNum + index * 3) - 0.5) * posVariation;
+            const offsetY = (seedRandom(soul.hashNum + index * 5) - 0.5) * posVariation;
             
             // Size variation based on resonance
             const sizeVariation = soul.resonanceFreq * 0.4;
@@ -598,7 +637,7 @@
                 for (let j = 0; j < grains; j++) {
                     const gx = -size/2 + i * grainSize;
                     const gy = -size/2 + j * grainSize;
-                    const variation = seedRandom(soul.hash + index + i + j) * 0.5 + 0.5;
+                    const variation = seedRandom(soul.hashNum + index + i + j) * 0.5 + 0.5;
                     
                     ctx.globalAlpha *= variation;
                     ctx.fillRect(gx, gy, grainSize * 0.8, grainSize * 0.8);
@@ -616,10 +655,10 @@
             // Add Fidenza-inspired flowing curves
             const curves = 3 + Math.floor(soul.iAmAffinity * 5);
             for (let i = 0; i < curves; i++) {
-                const startX = margin + seedRandom(soul.hash + i * 20) * gridArea;
-                const startY = margin + seedRandom(soul.hash + i * 21) * gridArea;
-                const endX = margin + seedRandom(soul.hash + i * 22) * gridArea;
-                const endY = margin + seedRandom(soul.hash + i * 23) * gridArea;
+                const startX = margin + seedRandom(soul.hashNum + i * 20) * gridArea;
+                const startY = margin + seedRandom(soul.hashNum + i * 21) * gridArea;
+                const endX = margin + seedRandom(soul.hashNum + i * 22) * gridArea;
+                const endY = margin + seedRandom(soul.hashNum + i * 23) * gridArea;
                 
                 ctx.beginPath();
                 ctx.moveTo(startX, startY);
