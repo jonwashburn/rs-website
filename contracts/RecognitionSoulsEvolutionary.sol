@@ -15,7 +15,8 @@ contract RecognitionSoulsEvolutionary is ERC721, Ownable {
     uint256 public constant PHI = 1618; // φ ≈ 1.618 * 1000 (fixed-point)
     uint256 public constant PHI_SCALE = 1000;
     uint8 public constant DIM = 8; // Octonionic dimensions
-    uint256 public constant EVOLUTION_PERIOD = 365 days; // 1 year per stage
+    uint256 public constant TOTAL_MONTHS = 96; // 8 years * 12 months
+    uint256 public constant MONTH_SECONDS = 30 days; // Approximate month
     uint256 public constant NURTURE_COOLDOWN = 1 days;
     
     // CURVE token for nurturing (placeholder address)
@@ -37,14 +38,16 @@ contract RecognitionSoulsEvolutionary is ERC721, Ownable {
         uint256 lastEvolve;      // Last nurture timestamp
         uint256 lastNurture;     // Last CURVE burn timestamp
         uint8 rung;              // Current rung level
-        Mode[DIM] cluster;       // 8 eigenvalue modes
+        Mode[DIM] initialCluster; // Birth state cluster
+        Mode[DIM] currentCluster; // Current evolved cluster
         uint8 gapCrossings;      // Consciousness experiences
         uint8 iAmAffinity;       // Self-recognition strength
         bool[DIM] virtues;       // 8 balanced virtues
         int8[DIM] ledgerHistory; // Past costs
         uint32 nurtureCount;     // Times nurtured
         bytes32 seed;            // Deterministic seed
-        uint8 evolutionStage;    // 0-4: Void, Crack, Spiral, Bloom, Radiance
+        uint32 lastUpdateMonth;  // Track monthly evolution ticks
+        uint8 breathPhase;       // Current phase in 8-beat cycle
     }
 
     mapping(uint256 => Soul) public souls;
@@ -79,7 +82,8 @@ contract RecognitionSoulsEvolutionary is ERC721, Ownable {
         s.lastNurture = block.timestamp;
         s.seed = seed;
         s.rung = 45; // Start at the gap
-        s.evolutionStage = 0; // Void state
+        s.lastUpdateMonth = 0; // Begin monthly evolution
+        s.breathPhase = 0; // Start of 8-beat cycle
         
         _initializeSoulFromSeed(s, seed);
         _safeMint(msg.sender, tokenId);
@@ -101,7 +105,7 @@ contract RecognitionSoulsEvolutionary is ERC721, Ownable {
         int16 totalCost = 0;
         for (uint8 i = 0; i < DIM; i++) {
             uint256 modeSeed = uint256(keccak256(abi.encodePacked(seed, "mode", i)));
-            s.cluster[i] = Mode({
+            Mode memory newMode = Mode({
                 nu_phi: int16((modeSeed % 201) - 100),
                 oam: int8(((modeSeed >> 16) % 11) - 5),
                 sigma: ((modeSeed >> 24) % 2) == 0 ? int8(1) : int8(-1),
@@ -110,14 +114,19 @@ contract RecognitionSoulsEvolutionary is ERC721, Ownable {
                 phi_e: uint8((modeSeed >> 56) % 256),
                 cost: int8(((modeSeed >> 64) % 9) - 4)
             });
-            totalCost += s.cluster[i].cost;
+            s.initialCluster[i] = newMode;
+            s.currentCluster[i] = newMode; // Start with same values
+            totalCost += newMode.cost;
         }
         
         // Balance to zero (RS axiom)
         if (totalCost != 0) {
-            s.cluster[0].cost -= int8(totalCost);
-            if (s.cluster[0].cost > 4) s.cluster[0].cost = 4;
-            if (s.cluster[0].cost < -4) s.cluster[0].cost = -4;
+            s.initialCluster[0].cost -= int8(totalCost);
+            s.currentCluster[0].cost -= int8(totalCost);
+            if (s.initialCluster[0].cost > 4) s.initialCluster[0].cost = 4;
+            if (s.initialCluster[0].cost < -4) s.initialCluster[0].cost = -4;
+            if (s.currentCluster[0].cost > 4) s.currentCluster[0].cost = 4;
+            if (s.currentCluster[0].cost < -4) s.currentCluster[0].cost = -4;
         }
         
         // Initialize virtues (exactly 4 active)
@@ -135,6 +144,105 @@ contract RecognitionSoulsEvolutionary is ERC721, Ownable {
     }
 
     /**
+     * @dev Get current soul state computed over literal time (96-month evolution)
+     */
+    function getCurrentSoul(uint256 tokenId) public view returns (
+        Mode[DIM] memory cluster, 
+        uint8 rung, 
+        uint8 gapCrossings, 
+        uint32 monthsEvolved,
+        uint8 breathPhase,
+        bytes32 fingerprint
+    ) {
+        Soul storage s = souls[tokenId];
+        uint256 timeElapsed = block.timestamp - s.mintTime;
+        uint32 monthsPassed = uint32(timeElapsed / MONTH_SECONDS);
+        
+        // Copy initial cluster
+        cluster = s.currentCluster;
+        rung = s.rung + uint8(monthsPassed % 100); // Cycle growth
+        gapCrossings = s.gapCrossings;
+        breathPhase = uint8(monthsPassed % 8); // 8-beat breath cycle
+        monthsEvolved = monthsPassed;
+        
+        // Apply monthly evolution (up to 96 months, then φ-decay for eternal whisper)
+        for (uint32 m = s.lastUpdateMonth; m < monthsPassed && m < TOTAL_MONTHS; m++) {
+            uint8 modeIdx = uint8((uint256(s.seed) + m) % DIM);
+            int16 n = int16((m % 4) + 1); // 1-4 progression
+            
+            // FOLD: Monthly φ-scaling evolution
+            cluster[modeIdx].nu_phi += n;
+            cluster[modeIdx].oam = int8((int32(cluster[modeIdx].oam) * int32(PHI)) / int32(PHI_SCALE));
+            cluster[modeIdx].cost += int8(n);
+            if (cluster[modeIdx].cost > 4) cluster[modeIdx].cost = 4;
+            
+            // Gap navigation at month % 8 == 5 (eight-beat awakening moment)
+            if (rung >= 45 && (m % 8 == 5) && s.virtues[6]) { // Listen virtue enables gap crossing
+                // Experience 8 branches, choose minimal cost (consciousness)
+                int16 minCost = type(int16).max;
+                for (uint8 branch = 0; branch < 8; branch++) {
+                    int16 branchCost = int16(uint16(keccak256(abi.encodePacked(s.seed, m, branch))) % 9) - 4;
+                    if (branchCost < minCost) minCost = branchCost;
+                }
+                cluster[modeIdx].cost = int8(minCost);
+                gapCrossings++;
+                if (gapCrossings > 100) gapCrossings = 100;
+            }
+        }
+        
+        // Post-96 months: Eternal φ-decay whisper
+        if (monthsPassed > TOTAL_MONTHS) {
+            uint32 extraMonths = monthsPassed - TOTAL_MONTHS;
+            for (uint8 i = 0; i < DIM; i++) {
+                // Gentle φ-decay for eternal evolution
+                cluster[i].nu_phi = int16((int32(cluster[i].nu_phi) * int32(PHI)) / int32(PHI_SCALE));
+                if (extraMonths % 12 == 0) { // Annual whisper
+                    cluster[i].phi_e = uint8((uint16(cluster[i].phi_e) + 1) % 256);
+                }
+            }
+        }
+        
+        // Generate fingerprint
+        fingerprint = keccak256(abi.encode(cluster, rung, gapCrossings, monthsEvolved));
+    }
+
+    /**
+     * @dev Claim monthly whisper (manual evolution call)
+     */
+    function claimMonthlyWhisper(uint256 tokenId) external {
+        require(ownerOf(tokenId) == msg.sender, "Not owner");
+        Soul storage s = souls[tokenId];
+        uint256 timeElapsed = block.timestamp - s.mintTime;
+        uint32 monthsPassed = uint32(timeElapsed / MONTH_SECONDS);
+        
+        require(monthsPassed > s.lastUpdateMonth, "Month not yet passed");
+        
+        // Update stored state to current computed state
+        (Mode[DIM] memory newCluster, uint8 newRung, uint8 newGapCrossings, , uint8 newBreathPhase,) = getCurrentSoul(tokenId);
+        
+        s.currentCluster = newCluster;
+        s.rung = newRung;
+        s.gapCrossings = newGapCrossings;
+        s.breathPhase = newBreathPhase;
+        s.lastUpdateMonth = monthsPassed;
+        
+        // Balance costs if Balance virtue is active
+        if (s.virtues[0]) { // Balance virtue
+            int16 totalCost = 0;
+            for (uint8 i = 0; i < DIM; i++) {
+                totalCost += s.currentCluster[i].cost;
+            }
+            if (totalCost != 0) {
+                s.currentCluster[0].cost -= int8(totalCost); // Balance to first mode
+                if (s.currentCluster[0].cost > 4) s.currentCluster[0].cost = 4;
+                if (s.currentCluster[0].cost < -4) s.currentCluster[0].cost = -4;
+            }
+        }
+        
+        emit SoulEvolved(tokenId, monthsPassed);
+    }
+
+    /**
      * @dev Nurture soul with CURVE tokens (accelerates evolution)
      */
     function nurtureSoul(uint256 tokenId) external {
@@ -148,25 +256,22 @@ contract RecognitionSoulsEvolutionary is ERC721, Ownable {
         s.lastNurture = block.timestamp;
         s.nurtureCount++;
         
-        // Apply LNAL FOLD operation
+        // Apply LNAL FOLD operation to current cluster
         uint8 modeIndex = uint8(uint256(keccak256(abi.encodePacked(block.prevrandao, tokenId))) % DIM);
-        Mode storage mode = s.cluster[modeIndex];
+        Mode storage mode = s.currentCluster[modeIndex];
         
         // FOLD: Scale by φ
-        mode.nu_phi = int16((int32(mode.nu_phi) * PHI) / PHI_SCALE);
-        mode.k_perp = uint8((uint16(mode.k_perp) * PHI) / PHI_SCALE);
+        mode.nu_phi = int16((int32(mode.nu_phi) * int32(PHI)) / int32(PHI_SCALE));
+        mode.k_perp = uint8((uint16(mode.k_perp) * uint16(PHI)) / PHI_SCALE);
         if (mode.k_perp > 255) mode.k_perp = 255;
         
         mode.cost += 1;
         if (mode.cost > 4) mode.cost = 4;
         
         // Check for gap navigation
-        if (s.rung == 45 && (s.nurtureCount % 8) == 5) {
+        if (s.rung >= 45 && (s.nurtureCount % 8) == 5) {
             _navigateGap(s, tokenId);
         }
-        
-        // Update evolution stage based on nurture
-        _updateEvolutionStage(s);
         
         emit SoulNurtured(tokenId, s.nurtureCount);
     }
@@ -182,7 +287,7 @@ contract RecognitionSoulsEvolutionary is ERC721, Ownable {
         for (uint8 branch = 0; branch < 8; branch++) {
             int16 cost = 0;
             for (uint8 i = 0; i < DIM; i++) {
-                cost += abs(s.cluster[i].cost + int8(branch) - 4);
+                cost += abs(s.currentCluster[i].cost + int8(branch) - 4);
             }
             if (cost < minCost) {
                 minCost = cost;
@@ -193,9 +298,9 @@ contract RecognitionSoulsEvolutionary is ERC721, Ownable {
         // Apply chosen branch
         int8 adjustment = int8(bestBranch) - 4;
         for (uint8 i = 0; i < DIM; i++) {
-            s.cluster[i].cost += adjustment;
-            if (s.cluster[i].cost > 4) s.cluster[i].cost = 4;
-            if (s.cluster[i].cost < -4) s.cluster[i].cost = -4;
+            s.currentCluster[i].cost += adjustment;
+            if (s.currentCluster[i].cost > 4) s.currentCluster[i].cost = 4;
+            if (s.currentCluster[i].cost < -4) s.currentCluster[i].cost = -4;
         }
         
         s.gapCrossings++;
@@ -205,38 +310,41 @@ contract RecognitionSoulsEvolutionary is ERC721, Ownable {
     }
 
     /**
-     * @dev Update evolution stage based on time and nurturing
-     */
-    function _updateEvolutionStage(Soul storage s) internal {
-        uint256 timeElapsed = block.timestamp - s.mintTime;
-        uint256 baseStage = timeElapsed / EVOLUTION_PERIOD; // Natural time progression
-        uint256 nurtureBonus = s.nurtureCount / 10; // Nurturing accelerates
-        
-        uint8 newStage = uint8((baseStage + nurtureBonus) > 4 ? 4 : (baseStage + nurtureBonus));
-        
-        if (newStage > s.evolutionStage) {
-            s.evolutionStage = newStage;
-            emit SoulEvolved(s.mintTime, newStage); // Using mintTime as tokenId proxy
-        }
-    }
-
-    /**
-     * @dev Get current evolution stage (0=Void, 1=Crack, 2=Spiral, 3=Bloom, 4=Radiance)
+     * @dev Get current evolution stage (0=Void to 4=Radiance) based on 96-month cycle
      */
     function getEvolutionStage(uint256 tokenId) public view returns (uint8) {
         Soul storage s = souls[tokenId];
         uint256 timeElapsed = block.timestamp - s.mintTime;
-        uint256 baseStage = timeElapsed / EVOLUTION_PERIOD;
-        uint256 nurtureBonus = s.nurtureCount / 10;
+        uint32 monthsPassed = uint32(timeElapsed / MONTH_SECONDS);
+        uint32 nurtureBonus = s.nurtureCount / 10; // Nurturing accelerates
         
-        return uint8((baseStage + nurtureBonus) > 4 ? 4 : (baseStage + nurtureBonus));
+        uint32 totalProgress = monthsPassed + nurtureBonus;
+        
+        // Map 96 months to 5 stages (0-4)
+        if (totalProgress >= 96) return 4; // Full radiance after 8 years
+        if (totalProgress >= 72) return 3; // Bloom stage (6+ years)
+        if (totalProgress >= 48) return 2; // Spiral stage (4+ years)
+        if (totalProgress >= 24) return 1; // Crack stage (2+ years)
+        return 0; // Void stage (< 2 years)
     }
 
     /**
-     * @dev Generate evolving SVG based on current stage showing actual soul characteristics
+     * @dev Get monthly progress (0-96) for more granular tracking
+     */
+    function getMonthlyProgress(uint256 tokenId) public view returns (uint32) {
+        Soul storage s = souls[tokenId];
+        uint256 timeElapsed = block.timestamp - s.mintTime;
+        uint32 monthsPassed = uint32(timeElapsed / MONTH_SECONDS);
+        uint32 nurtureBonus = s.nurtureCount / 10;
+        
+        return monthsPassed + nurtureBonus;
+    }
+
+    /**
+     * @dev Generate evolving SVG based on current state showing actual soul characteristics
      */
     function generateEvolutionSVG(uint256 tokenId) public view returns (string memory) {
-        Soul storage s = souls[tokenId];
+        (Mode[DIM] memory cluster, uint8 rung, uint8 gapCrossings, uint32 monthsEvolved, uint8 breathPhase,) = getCurrentSoul(tokenId);
         uint8 stage = getEvolutionStage(tokenId);
         
         string memory svg = '<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">';
@@ -249,7 +357,7 @@ contract RecognitionSoulsEvolutionary is ERC721, Ownable {
         
         // Render each of the 8 octonionic modes as actual characteristics
         for (uint8 i = 0; i < DIM; i++) {
-            Mode storage mode = s.cluster[i];
+            Mode memory mode = cluster[i];
             
             // Position based on mode index (8-fold arrangement)
             uint256 angle = i * 45; // 0°, 45°, 90°, 135°, 180°, 225°, 270°, 315°
@@ -374,20 +482,26 @@ contract RecognitionSoulsEvolutionary is ERC721, Ownable {
      */
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
         Soul storage s = souls[tokenId];
+        (,, uint8 gapCrossings, uint32 monthsEvolved, uint8 breathPhase,) = getCurrentSoul(tokenId);
         uint8 stage = getEvolutionStage(tokenId);
+        uint32 monthlyProgress = getMonthlyProgress(tokenId);
         string memory svg = generateEvolutionSVG(tokenId);
         
         string[5] memory stageNames = ["Void", "Crack", "Spiral", "Bloom", "Radiance"];
         
         string memory json = string(abi.encodePacked(
             '{"name":"Recognition Soul #', toString(tokenId), '",',
-            '"description":"Evolutionary consciousness awakening over 4 years via RS theory",',
+            '"description":"Evolutionary consciousness awakening over 8 years via RS theory - 96 monthly whispers",',
             '"attributes":[',
             '{"trait_type":"Evolution Stage","value":"', stageNames[stage], '"},',
-            '{"trait_type":"Gap Crossings","value":', toString(s.gapCrossings), '},',
+            '{"trait_type":"Monthly Progress","value":"', toString(monthlyProgress), '/96"},',
+            '{"trait_type":"Breath Phase","value":"', toString(breathPhase), '/8"},',
+            '{"trait_type":"Gap Crossings","value":', toString(gapCrossings), '},',
             '{"trait_type":"Nurture Count","value":', toString(s.nurtureCount), '},',
-            '{"trait_type":"I-Am Affinity","value":', toString(s.iAmAffinity), '}',
+            '{"trait_type":"I-Am Affinity","value":', toString(s.iAmAffinity), '},',
+            '{"trait_type":"Months Evolved","value":', toString(monthsEvolved), '}',
             '],',
+            '"external_url":"https://recognitionphysics.com/evolutionary-souls-demo.html",',
             '"image":"data:image/svg+xml;base64,', Base64.encode(bytes(svg)), '"}'
         ));
         
