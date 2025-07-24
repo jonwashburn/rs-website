@@ -390,6 +390,15 @@
         let isAnimating = true;
         let animationId = null;
 
+        // Performance optimization state
+        let backgroundCache = null;
+        let interferenceCache = null;
+        let lastInterferenceUpdate = 0;
+        const INTERFERENCE_UPDATE_INTERVAL = 3; // Update every 3 frames instead of every frame
+        let frameSkipCounter = 0;
+        const MAX_FPS = 30; // Limit to 30 FPS for better performance
+        const FRAME_INTERVAL = 1000 / MAX_FPS;
+
         // Complete soul vector with all characteristics
         let currentSoul = null;
 
@@ -507,9 +516,15 @@
             return Math.abs(hash);
         }
 
-        // Create dynamic background based on soul characteristics
+        // Create dynamic background based on soul characteristics (optimized with caching)
         function renderBackground() {
             if (!currentSoul) return;
+            
+            // Use cached background if available and soul hasn't changed
+            if (backgroundCache && backgroundCache.soulSeed === currentSoul.seed) {
+                ctx.putImageData(backgroundCache.imageData, 0, 0);
+                return;
+            }
             
             // Rung → Saturation
             const saturation = Math.min(100, (currentSoul.rung - 45) / 55 * 100);
@@ -549,36 +564,51 @@
                 ctx.fillStyle = glowGradient;
                 ctx.fillRect(0, 0, 800, 800);
             }
+            
+            // Cache the background for reuse
+            backgroundCache = {
+                soulSeed: currentSoul.seed,
+                imageData: ctx.getImageData(0, 0, 800, 800)
+            };
         }
 
-        // Calculate wave interference at point
+        // Calculate wave interference at point (optimized)
         function calculateInterference(x, y) {
             if (!currentSoul) return 0;
             
             let intensity = 0;
+            const tightnessScale = currentSoul.tightness * 0.01; // Pre-compute division
+            const timePhase = 6.28318 * currentTick / TICKS_PER_BREATH; // Pre-compute 2π
             
+            // Use simplified distance calculation when possible
             for (const cluster of currentSoul.clusters) {
                 const cx = cluster.x * 800;
                 const cy = cluster.y * 800;
                 const dx = x - cx;
                 const dy = y - cy;
-                const r = Math.sqrt(dx * dx + dy * dy);
+                const r_squared = dx * dx + dy * dy;
+                
+                // Skip distant clusters to save computation
+                if (r_squared > 90000) continue; // 300px radius cutoff
+                
+                const r = Math.sqrt(r_squared);
+                
+                // Use pre-computed cluster properties for speed
+                if (!cluster._precomputed) {
+                    cluster._k = 6.28318 * BASE_FREQ * Math.pow(PHI, cluster.nu_phi) / (LAMBDA_REC * CHI);
+                    cluster._ampScale = cluster.amplitude;
+                    cluster._precomputed = true;
+                }
+                
+                // Simplified phase calculation
                 const theta = Math.atan2(dy, dx);
+                const phase = cluster._k * r + cluster.oam * theta + cluster.phase + timePhase;
                 
-                // Frequency from nu_phi
-                const freq = BASE_FREQ * Math.pow(PHI, cluster.nu_phi);
-                const k = 2 * Math.PI * freq / (LAMBDA_REC * CHI);
+                // Amplitude based on tightness and cluster properties  
+                const amplitude = cluster._ampScale * tightnessScale;
                 
-                // Phase includes OAM and time evolution
-                const phase = k * r + cluster.oam * theta + cluster.phase + 
-                             (2 * Math.PI * currentTick / TICKS_PER_BREATH);
-                
-                // Amplitude based on tightness and cluster properties
-                const tightnessScale = currentSoul.tightness / 100;
-                const amplitude = cluster.amplitude * tightnessScale;
-                
-                // Gaussian envelope to localize
-                const envelope = Math.exp(-(r * r) / (150 * 150));
+                // Simplified Gaussian envelope (avoid expensive exp when possible)
+                const envelope = r < 300 ? Math.exp(-r_squared / 22500) : 0; // 150*150 = 22500
                 
                 intensity += amplitude * envelope * Math.cos(phase);
             }
@@ -586,61 +616,72 @@
             return intensity;
         }
 
-        // Render eigenvalue clusters
+        // Render eigenvalue clusters (optimized for performance)
         function renderEigenvalueClusters() {
             if (!currentSoul) return;
             
-            // Create interference pattern
-            const imageData = ctx.createImageData(800, 800);
-            const data = imageData.data;
+            // Only update interference pattern every few frames to improve performance
+            const shouldUpdateInterference = (currentTick - lastInterferenceUpdate) >= INTERFERENCE_UPDATE_INTERVAL;
             
-            const step = 3; // Reduced resolution for performance
-            
-            for (let x = 0; x < 800; x += step) {
-                for (let y = 0; y < 800; y += step) {
-                    const intensity = calculateInterference(x, y);
-                    const normalizedIntensity = Math.max(0, Math.min(1, (intensity + 2) / 4));
-                    
-                    // Color based on gap crossings (gradient complexity)
-                    let red, green, blue, alpha;
-                    
-                    if (currentSoul.gapCrossings > 75) {
-                        // High experience - rainbow spectrum
-                        const spectrumPos = (normalizedIntensity + currentTick / TICKS_PER_BREATH) % 1;
-                        red = Math.floor(255 * (0.5 + 0.5 * Math.sin(spectrumPos * Math.PI * 2)));
-                        green = Math.floor(255 * (0.5 + 0.5 * Math.sin(spectrumPos * Math.PI * 2 + Math.PI * 2/3)));
-                        blue = Math.floor(255 * (0.5 + 0.5 * Math.sin(spectrumPos * Math.PI * 2 + Math.PI * 4/3)));
-                    } else if (currentSoul.gapCrossings > 25) {
-                        // Medium experience - fire colors
-                        red = Math.floor(255 * Math.pow(normalizedIntensity, 0.5));
-                        green = Math.floor(255 * Math.pow(normalizedIntensity, 1.5));
-                        blue = Math.floor(255 * Math.pow(normalizedIntensity, 3));
-                    } else {
-                        // Low experience - simple blue-white
-                        const val = Math.floor(255 * normalizedIntensity);
-                        red = val * 0.5;
-                        green = val * 0.7;
-                        blue = val;
-                    }
-                    
-                    alpha = Math.floor(255 * normalizedIntensity * 0.8);
-                    
-                    // Fill the step area
-                    for (let dx = 0; dx < step && x + dx < 800; dx++) {
-                        for (let dy = 0; dy < step && y + dy < 800; dy++) {
-                            const index = ((y + dy) * 800 + (x + dx)) * 4;
-                            data[index] = red;
-                            data[index + 1] = green;
-                            data[index + 2] = blue;
-                            data[index + 3] = alpha;
+            if (shouldUpdateInterference) {
+                // Use lower resolution for better performance
+                const step = 6; // Increased step size for faster calculation
+                const imageData = ctx.createImageData(800, 800);
+                const data = imageData.data;
+                
+                for (let x = 0; x < 800; x += step) {
+                    for (let y = 0; y < 800; y += step) {
+                        const intensity = calculateInterference(x, y);
+                        const normalizedIntensity = Math.max(0, Math.min(1, (intensity + 2) / 4));
+                        
+                        // Color based on gap crossings (gradient complexity)
+                        let red, green, blue, alpha;
+                        
+                        if (currentSoul.gapCrossings > 75) {
+                            // High experience - rainbow spectrum
+                            const spectrumPos = (normalizedIntensity + currentTick / TICKS_PER_BREATH) % 1;
+                            red = Math.floor(255 * (0.5 + 0.5 * Math.sin(spectrumPos * 6.28)));
+                            green = Math.floor(255 * (0.5 + 0.5 * Math.sin(spectrumPos * 6.28 + 2.09)));
+                            blue = Math.floor(255 * (0.5 + 0.5 * Math.sin(spectrumPos * 6.28 + 4.19)));
+                        } else if (currentSoul.gapCrossings > 25) {
+                            // Medium experience - fire colors
+                            red = Math.floor(255 * Math.pow(normalizedIntensity, 0.5));
+                            green = Math.floor(255 * Math.pow(normalizedIntensity, 1.5));
+                            blue = Math.floor(255 * Math.pow(normalizedIntensity, 3));
+                        } else {
+                            // Low experience - simple blue-white
+                            const val = Math.floor(255 * normalizedIntensity);
+                            red = val * 0.5;
+                            green = val * 0.7;
+                            blue = val;
+                        }
+                        
+                        alpha = Math.floor(255 * normalizedIntensity * 0.8);
+                        
+                        // Fill larger blocks to reduce pixel operations
+                        for (let dx = 0; dx < step && x + dx < 800; dx++) {
+                            for (let dy = 0; dy < step && y + dy < 800; dy++) {
+                                const index = ((y + dy) * 800 + (x + dx)) * 4;
+                                data[index] = red;
+                                data[index + 1] = green;
+                                data[index + 2] = blue;
+                                data[index + 3] = alpha;
+                            }
                         }
                     }
                 }
+                
+                // Cache the interference pattern
+                interferenceCache = imageData;
+                lastInterferenceUpdate = currentTick;
             }
             
-            ctx.putImageData(imageData, 0, 0);
+            // Use cached interference pattern if available
+            if (interferenceCache) {
+                ctx.putImageData(interferenceCache, 0, 0);
+            }
             
-            // Draw cluster centers
+            // Draw cluster centers (these can update every frame as they're lightweight)
             for (const cluster of currentSoul.clusters) {
                 const x = cluster.x * 800;
                 const y = cluster.y * 800;
@@ -758,10 +799,19 @@
             updateStatus();
         }
 
-        // Animation loop
-        function animate() {
+        // Animation loop (optimized with frame rate limiting)
+        let lastFrameTime = 0;
+        
+        function animate(currentTime = 0) {
             if (!isAnimating) return;
             
+            // Throttle frame rate for better performance
+            if (currentTime - lastFrameTime < FRAME_INTERVAL) {
+                animationId = requestAnimationFrame(animate);
+                return;
+            }
+            
+            lastFrameTime = currentTime;
             render();
             currentTick = (currentTick + 1) % TICKS_PER_BREATH;
             animationId = requestAnimationFrame(animate);
@@ -893,6 +943,12 @@
         function generateNewSoul() {
             currentSoul = generateSoulFromSeed();
             currentTick = 0;
+            
+            // Clear caches for new soul
+            backgroundCache = null;
+            interferenceCache = null;
+            lastInterferenceUpdate = 0;
+            
             logLNAL('NEW_SOUL: Complete vector soul generated');
             updateStatus();
         }
