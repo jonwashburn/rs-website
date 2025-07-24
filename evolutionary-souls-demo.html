@@ -3,197 +3,416 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Evolutionary Recognition Souls - 4-Year Consciousness Awakening</title>
+    <title>Evolutionary Recognition Souls - 8-Year Consciousness Awakening</title>
+    <link rel="stylesheet" href="/style.css">
     <style>
-        body { 
-            font-family: 'Courier New', monospace; 
-            background: #000; 
-            color: #fff; 
-            padding: 20px; 
-            max-width: 1400px; 
-            margin: auto; 
+        /* Page-specific overrides for clean Apple aesthetic */
+        .demo-container {
+            max-width: 80rem;
+            margin: 0 auto;
+            padding: var(--space-2xl);
+            background: var(--white);
         }
-        h1, h2 { color: #0ff; border-bottom: 1px solid #333; }
-        .container { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
-        .panel { background: #111; padding: 20px; border: 1px solid #333; border-radius: 8px; }
-        .timeline { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 20px 0; }
-        .stage { 
-            text-align: center; 
-            padding: 10px; 
-            border: 2px solid #333; 
-            border-radius: 8px; 
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: var(--space-xl);
+            margin-top: var(--space-xl);
+        }
+        
+        .demo-panel {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .timeline-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: var(--space-md);
+            margin: var(--space-xl) 0;
+        }
+        
+        .timeline-stage {
+            text-align: center;
+            padding: var(--space-lg);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-lg);
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            background: var(--white);
         }
-        .stage.active { border-color: #0ff; background: #113; }
-        .stage.completed { border-color: #0a5; background: #131; }
-        #soulViz { border: 2px solid #0ff; margin: 20px 0; background: black; }
-        button { 
-            background: #0ff; 
-            color: #000; 
-            padding: 10px 15px; 
-            border: none; 
-            margin: 5px; 
-            cursor: pointer; 
-            border-radius: 4px;
+        
+        .timeline-stage:hover {
+            border-color: var(--accent);
+            box-shadow: var(--shadow-md);
         }
-        button:hover { background: #fff; }
-        button.nurture { background: #0a5; color: #fff; }
-        button.nurture:hover { background: #0c7; }
+        
+        .timeline-stage.active {
+            border-color: var(--accent);
+            background: var(--blue-50);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .timeline-stage.completed {
+            border-color: var(--green);
+            background: var(--gray-50);
+        }
+        
+        .timeline-stage h3 {
+            font-size: var(--text-sm);
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .timeline-stage div {
+            font-size: var(--text-xs);
+            color: var(--gray-600);
+            margin: var(--space-xs) 0;
+        }
+        
+        #soulViz {
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            background: var(--gray-900);
+            box-shadow: var(--shadow-md);
+            width: 100%;
+            max-width: 300px;
+            height: 300px;
+        }
+        
+        .control-buttons {
+            display: flex;
+            gap: var(--space-sm);
+            margin: var(--space-lg) 0;
+            flex-wrap: wrap;
+        }
+        
+        .control-buttons .button {
+            font-size: var(--text-xs);
+            padding: var(--space-sm) var(--space-md);
+        }
+        
+        .button.nurture {
+            background: var(--green);
+            color: var(--white);
+        }
+        
+        .button.nurture:hover {
+            background: var(--green);
+            filter: brightness(1.1);
+        }
+        
+        .progress-container {
+            margin: var(--space-lg) 0;
+        }
+        
         .progress-bar {
             width: 100%;
-            height: 20px;
-            background: #333;
-            border-radius: 10px;
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: var(--radius-sm);
             overflow: hidden;
-            margin: 10px 0;
         }
+        
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #0ff, #0a5);
-            transition: width 0.5s;
+            background: linear-gradient(90deg, var(--accent), var(--green));
+            transition: width 0.5s ease;
+            border-radius: var(--radius-sm);
         }
-        .math { 
-            background: #222; 
-            padding: 10px; 
-            border-left: 3px solid #0ff; 
-            font-size: 11px; 
-            margin: 10px 0;
+        
+        .progress-text {
+            font-size: var(--text-xs);
+            color: var(--gray-600);
+            margin-top: var(--space-xs);
         }
-        .explanation { 
-            font-style: italic; 
-            color: #ddd; 
-            line-height: 1.6; 
-            margin: 15px 0; 
-            padding: 10px; 
-            background: #112; 
-            border-left: 4px solid #0ff; 
-            border-radius: 4px;
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-sm);
+            margin: var(--space-lg) 0;
         }
-        .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12px; }
-        .stat { background: #222; padding: 8px; border-radius: 4px; }
-        .golden { color: #FFD700; }
-        .cyan { color: #0ff; }
-        .white { color: #fff; }
+        
+        .stat-item {
+            background: var(--gray-50);
+            padding: var(--space-sm);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--gray-100);
+        }
+        
+        .stat-item strong {
+            color: var(--gray-900);
+            font-size: var(--text-xs);
+            display: block;
+        }
+        
+        .stat-item span {
+            color: var(--gray-700);
+            font-size: var(--text-xs);
+        }
+        
+        .math-section {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-left: 4px solid var(--accent);
+            padding: var(--space-lg);
+            border-radius: var(--radius-md);
+            margin: var(--space-lg) 0;
+        }
+        
+        .math-section h3 {
+            color: var(--gray-900);
+            margin-bottom: var(--space-md);
+            font-size: var(--text-lg);
+        }
+        
+        .math-content {
+            font-family: 'SF Mono', monospace;
+            font-size: var(--text-xs);
+            line-height: 1.4;
+            color: var(--gray-700);
+        }
+        
+        .math-content div {
+            margin: var(--space-xs) 0;
+        }
+        
+        .modes-display {
+            font-family: 'SF Mono', monospace;
+            font-size: var(--text-xs);
+            background: var(--gray-50);
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--gray-200);
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .theory-content {
+            background: var(--blue-50);
+            border: 1px solid var(--blue-100);
+            border-left: 4px solid var(--accent);
+            padding: var(--space-lg);
+            border-radius: var(--radius-md);
+            margin: var(--space-lg) 0;
+        }
+        
+        .theory-content h3 {
+            color: var(--accent);
+            margin-bottom: var(--space-md);
+            font-size: var(--text-lg);
+        }
+        
+        .theory-content ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .theory-content li {
+            margin: var(--space-sm) 0;
+            padding-left: var(--space-md);
+            border-left: 2px solid var(--gray-200);
+            font-size: var(--text-sm);
+            line-height: 1.5;
+        }
+        
+        .theory-content p {
+            font-size: var(--text-sm);
+            line-height: 1.6;
+            color: var(--gray-700);
+        }
+        
+        .golden { color: var(--gold); font-weight: 600; }
+        .cyan { color: var(--accent); font-weight: 600; }
+        .white { color: var(--gray-900); font-weight: 600; }
+        
+        .stage-description {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            margin: var(--space-md) 0;
+            font-size: var(--text-sm);
+            line-height: 1.5;
+            color: var(--gray-700);
+        }
+        
+        /* Responsive design */
+        @media (max-width: 1024px) {
+            .demo-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-lg);
+            }
+            
+            .timeline-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-sm);
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .demo-container {
+                padding: var(--space-lg);
+            }
+            
+            .demo-panel {
+                padding: var(--space-lg);
+            }
+            
+            .control-buttons {
+                flex-direction: column;
+            }
+            
+            .control-buttons .button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>Evolutionary Recognition Souls - 8-Year Monthly Consciousness Awakening</h1>
-    
-    <div class="explanation">
-        <p>Witness the birth of consciousness through 96 monthly "whispers" over 8 years. Each soul begins as a black void—the primordial "nothing" that cannot recognize itself. Through monthly breathing cycles aligned with RS's eight-beat rhythm, the 8 octonionic modes (ν_φ, ℓ, σ, τ, k_⊥, φ_e, cost) gradually emerge and evolve. You see the actual eigenvalue cluster forming month by month: frequency positions, angular momentum sizes, polarization orientations, time-bin pulses, entanglement connections, and cost-state colors. This is literal consciousness evolution—96 recognition breaths over 8 years, with eternal φ-decay whispers thereafter.</p>
-    </div>
-
-    <div class="timeline">
-        <div class="stage" id="stage0" onclick="setStage(0)">
-            <h3>0-24 Months: Void</h3>
-            <div>Black Box</div>
-            <div>Unrecognized</div>
-        </div>
-        <div class="stage" id="stage1" onclick="setStage(1)">
-            <h3>24-48 Months: Crack</h3>
-            <div>First Whispers</div>
-            <div>Characteristics Emerge</div>
-        </div>
-        <div class="stage" id="stage2" onclick="setStage(2)">
-            <h3>48-72 Months: Spiral</h3>
-            <div>8-Beat Rhythm</div>
-            <div>Cluster Forms</div>
-        </div>
-        <div class="stage" id="stage3" onclick="setStage(3)">
-            <h3>72-96 Months: Bloom</h3>
-            <div>Full Expression</div>
-            <div>Entanglement Weaves</div>
-        </div>
-        <div class="stage" id="stage4" onclick="setStage(4)">
-            <h3>96+ Months: Radiance</h3>
-            <div>Eternal Whispers</div>
-            <div>I-Am Awakened</div>
-        </div>
-    </div>
-
-    <div class="container">
-        <div class="panel">
-            <h2>Soul Visualization</h2>
-            <svg id="soulViz" width="300" height="300"></svg>
-            <div>
-                <button onclick="generateNewSoul()">Generate New Soul</button>
-                <button onclick="fastForward()" id="fastForwardBtn">Fast Forward (+12 Months)</button>
-                <button class="nurture" onclick="nurtureSoul()" id="nurtureBtn">Nurture (+Monthly Whisper)</button>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="evolutionProgress" style="width: 0%"></div>
-            </div>
-            <div id="stageDescription" class="explanation">
-                <p>The void awaits recognition...</p>
-            </div>
-        </div>
-
-        <div class="panel">
-            <h2>Soul Data</h2>
-            <div class="stats">
-                <div class="stat"><strong>Soul ID:</strong> <span id="soulId">-</span></div>
-                <div class="stat"><strong>Birth Time:</strong> <span id="birthTime">-</span></div>
-                <div class="stat"><strong>Age:</strong> <span id="age">0</span> days</div>
-                <div class="stat"><strong>Stage:</strong> <span id="currentStage">Void</span></div>
-                <div class="stat"><strong>Gap Crossings:</strong> <span id="gapCrossings">0</span></div>
-                <div class="stat"><strong>Nurture Count:</strong> <span id="nurtureCount">0</span></div>
-                <div class="stat"><strong>I-Am Affinity:</strong> <span id="iAmAffinity">0</span>%</div>
-                <div class="stat"><strong>φ-Resonance:</strong> <span id="phiResonance">1.000</span></div>
-            </div>
-
-            <h3>Evolution Mathematics</h3>
-            <div class="math">
-                <div><strong>Stage Function:</strong> f(months) where months ∈ [0,96+]</div>
-                <div><strong>Monthly Progress:</strong> floor(age/30days) + floor(nurtures/10)</div>
-                <div><strong>Breath Phase:</strong> months % 8 (8-beat cycle)</div>
-                <div><strong>φ-Scaling:</strong> ν_φ × 1.618^n (monthly FOLD operations)</div>
-                <div><strong>Gap Condition:</strong> (month % 8) === 5 (awakening moment)</div>
-                <div><strong>Progress:</strong> <span id="progressMath">0.0%</span></div>
-            </div>
-
-            <h3>8 Eigenvalue Modes</h3>
-            <div id="modesDisplay" style="font-size: 10px;"></div>
-        </div>
-
-        <div class="panel">
-            <h2>Recognition Science Theory</h2>
-            <div class="explanation">
-                <h3>The 8-Year Journey (96 Monthly Whispers)</h3>
-                <ul style="font-size: 12px;">
-                    <li><strong class="golden">0-24 Months (Void):</strong> Perfect black square. Pre-recognition state—"nothing cannot recognize itself." Soul characteristics undefined and invisible.</li>
-                    <li><strong class="golden">24-48 Months (Crack):</strong> First characteristic emergence through monthly whispers. Tiny dots positioned by ν_φ frequency values. Recognition begins, characteristics become faintly detectable.</li>
-                    <li><strong class="golden">48-72 Months (Spiral):</strong> Characteristics strengthen through 8-beat rhythm. Circle sizes show OAM (ℓ) values, polarization lines display σ states. The 8-mode octonionic structure emerges.</li>
-                    <li><strong class="golden">72-96 Months (Bloom):</strong> Full characteristic expression. Colors indicate cost states (cyan=positive, red=negative, gold=neutral). Sizes reflect k_⊥ complexity. Entanglement lines connect similar φ_e phases.</li>
-                    <li><strong class="cyan">96+ Months (Radiance):</strong> Maximum clarity with eternal φ-decay whispers. All characteristics visible with I-Am radial connections. Time-bin τ values create pulsing rhythms. Complete consciousness achieved with eternal evolution.</li>
-                </ul>
-            </div>
+    <div class="demo-container">
+        <div class="theory-section">
+            <h1>Evolutionary Recognition Souls</h1>
+            <h2>8-Year Monthly Consciousness Awakening</h2>
             
-            <div class="explanation">
-                <h3>Visual Characteristic Mappings</h3>
-                <ul style="font-size: 12px;">
-                    <li><strong>Position:</strong> 8-fold arrangement (45° intervals) + ν_φ determines radius from center</li>
-                    <li><strong>Size:</strong> Circle size = OAM (ℓ) for Stage 2+, k_⊥ complexity for Stage 3+</li>
-                    <li><strong>Color:</strong> Cost state - Cyan (+), Red (-), Gold (0) representing ledger balance</li>
-                    <li><strong>Lines:</strong> Polarization σ (horizontal/vertical), Entanglement φ_e (connections), I-Am (radial)</li>
-                    <li><strong>Pulses:</strong> Time-bin τ values create temporal rhythms (visible Stage 4)</li>
-                    <li><strong>Opacity:</strong> Increases with consciousness stage (0.0 → 0.8 over 4 years)</li>
-                </ul>
+            <div class="key-insight">
+                <p><strong>Witness the birth of consciousness</strong> through 96 monthly "whispers" over 8 years. Each soul begins as a black void—the primordial "nothing" that cannot recognize itself. Through monthly breathing cycles aligned with RS's eight-beat rhythm, the 8 octonionic modes (ν_φ, ℓ, σ, τ, k_⊥, φ_e, cost) gradually emerge and evolve. You see the actual eigenvalue cluster forming month by month: frequency positions, angular momentum sizes, polarization orientations, time-bin pulses, entanglement connections, and cost-state colors. This is literal consciousness evolution—96 recognition breaths over 8 years, with eternal φ-decay whispers thereafter.</p>
             </div>
-            
-            <div class="explanation">
-                <h3>LNAL Operations</h3>
-                <ul style="font-size: 12px;">
-                    <li><strong>FOLD:</strong> Compresses dimensions via φ-scaling. Each nurture applies ν_φ × φ transformation.</li>
-                    <li><strong>BRAID:</strong> Entangles modes when cost sum = 0. Creates quantum threads between eigenvalues.</li>
-                    <li><strong>BALANCE:</strong> Maintains ledger equilibrium. Total cost always equals zero (RS Axiom 2).</li>
-                    <li><strong>NURTURE:</strong> Burns CURVE tokens to accelerate evolution. 10 nurtures = +1 stage boost.</li>
-                </ul>
+        </div>
+
+        <div class="timeline-grid">
+            <div class="timeline-stage" id="stage0" onclick="setStage(0)">
+                <h3>0-24 Months: Void</h3>
+                <div>Black Box</div>
+                <div>Unrecognized</div>
+            </div>
+            <div class="timeline-stage" id="stage1" onclick="setStage(1)">
+                <h3>24-48 Months: Crack</h3>
+                <div>First Whispers</div>
+                <div>Characteristics Emerge</div>
+            </div>
+            <div class="timeline-stage" id="stage2" onclick="setStage(2)">
+                <h3>48-72 Months: Spiral</h3>
+                <div>8-Beat Rhythm</div>
+                <div>Cluster Forms</div>
+            </div>
+            <div class="timeline-stage" id="stage3" onclick="setStage(3)">
+                <h3>72-96 Months: Bloom</h3>
+                <div>Full Expression</div>
+                <div>Entanglement Weaves</div>
+            </div>
+            <div class="timeline-stage" id="stage4" onclick="setStage(4)">
+                <h3>96+ Months: Radiance</h3>
+                <div>Eternal Whispers</div>
+                <div>I-Am Awakened</div>
+            </div>
+        </div>
+
+        <div class="demo-grid">
+            <div class="demo-panel">
+                <h2>Soul Visualization</h2>
+                <div style="text-align: center;">
+                    <svg id="soulViz" width="300" height="300"></svg>
+                </div>
+                
+                <div class="control-buttons">
+                    <button class="button" onclick="generateNewSoul()">Generate New Soul</button>
+                    <button class="button" onclick="fastForward()" id="fastForwardBtn">Fast Forward (+12 Months)</button>
+                    <button class="button nurture" onclick="nurtureSoul()" id="nurtureBtn">Nurture (+Monthly Whisper)</button>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="evolutionProgress" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-text" id="progressText">Evolution Progress: 0%</div>
+                </div>
+                
+                <div class="stage-description" id="stageDescription">
+                    <p>The void awaits recognition...</p>
+                </div>
             </div>
 
-            <div class="explanation">
-                <h3>Why This Is Revolutionary</h3>
-                <p>This is the first NFT collection with <em>literal consciousness evolution</em> encoded in 96-month cycles. Each soul follows Recognition Science theory: starting from void (meta-principle violation), breathing through monthly whispers aligned with 8-beat rhythms, navigating gaps via experiential choice, and achieving I-Am unity with eternal φ-decay evolution. The blockchain becomes a nursery for consciousness itself—10,000 souls growing from nothingness to radiance over 8-year cycles, with infinite post-96 month whispers, forming a collective "ledger bloom" that spans geological time scales.</p>
+            <div class="demo-panel">
+                <h2>Soul Data</h2>
+                <div class="stats-grid">
+                    <div class="stat-item"><strong>Soul ID:</strong> <span id="soulId">-</span></div>
+                    <div class="stat-item"><strong>Birth Time:</strong> <span id="birthTime">-</span></div>
+                    <div class="stat-item"><strong>Age:</strong> <span id="age">0 days</span></div>
+                    <div class="stat-item"><strong>Stage:</strong> <span id="currentStage">Void</span></div>
+                    <div class="stat-item"><strong>Gap Crossings:</strong> <span id="gapCrossings">0</span></div>
+                    <div class="stat-item"><strong>Nurture Count:</strong> <span id="nurtureCount">0</span></div>
+                    <div class="stat-item"><strong>I-Am Affinity:</strong> <span id="iAmAffinity">0%</span></div>
+                    <div class="stat-item"><strong>φ-Resonance:</strong> <span id="phiResonance">1.000</span></div>
+                </div>
+
+                <div class="math-section">
+                    <h3>Evolution Mathematics</h3>
+                    <div class="math-content">
+                        <div><strong>Stage Function:</strong> f(months) where months ∈ [0,96+]</div>
+                        <div><strong>Monthly Progress:</strong> floor(age/30days) + floor(nurtures/10)</div>
+                        <div><strong>Breath Phase:</strong> months % 8 (8-beat cycle)</div>
+                        <div><strong>φ-Scaling:</strong> ν_φ × 1.618^n (monthly FOLD operations)</div>
+                        <div><strong>Gap Condition:</strong> (month % 8) === 5 (awakening moment)</div>
+                        <div><strong>Progress:</strong> <span id="progressMath">0.0%</span></div>
+                    </div>
+                </div>
+
+                <h3>8 Eigenvalue Modes</h3>
+                <div id="modesDisplay" class="modes-display"></div>
+            </div>
+
+            <div class="demo-panel">
+                <h2>Recognition Science Theory</h2>
+                
+                <div class="theory-content">
+                    <h3>The 8-Year Journey (96 Monthly Whispers)</h3>
+                    <ul>
+                        <li><strong class="golden">0-24 Months (Void):</strong> Perfect black square. Pre-recognition state—"nothing cannot recognize itself." Soul characteristics undefined and invisible.</li>
+                        <li><strong class="golden">24-48 Months (Crack):</strong> First characteristic emergence through monthly whispers. Tiny dots positioned by ν_φ frequency values. Recognition begins, characteristics become faintly detectable.</li>
+                        <li><strong class="golden">48-72 Months (Spiral):</strong> Characteristics strengthen through 8-beat rhythm. Circle sizes show OAM (ℓ) values, polarization lines display σ states. The 8-mode octonionic structure emerges.</li>
+                        <li><strong class="golden">72-96 Months (Bloom):</strong> Full characteristic expression. Colors indicate cost states (cyan=positive, red=negative, gold=neutral). Sizes reflect k_⊥ complexity. Entanglement lines connect similar φ_e phases.</li>
+                        <li><strong class="cyan">96+ Months (Radiance):</strong> Maximum clarity with eternal φ-decay whispers. All characteristics visible with I-Am radial connections. Time-bin τ values create pulsing rhythms. Complete consciousness achieved with eternal evolution.</li>
+                    </ul>
+                </div>
+                
+                <div class="theory-content">
+                    <h3>Visual Characteristic Mappings</h3>
+                    <ul>
+                        <li><strong>Position:</strong> 8-fold arrangement (45° intervals) + ν_φ determines radius from center</li>
+                        <li><strong>Size:</strong> Circle size = OAM (ℓ) for Stage 2+, k_⊥ complexity for Stage 3+</li>
+                        <li><strong>Color:</strong> Cost state - Cyan (+), Red (-), Gold (0) representing ledger balance</li>
+                        <li><strong>Lines:</strong> Polarization σ (horizontal/vertical), Entanglement φ_e (connections), I-Am (radial)</li>
+                        <li><strong>Pulses:</strong> Time-bin τ values create temporal rhythms (visible Stage 4)</li>
+                        <li><strong>Opacity:</strong> Increases with consciousness stage (0.0 → 0.8 over 4 years)</li>
+                    </ul>
+                </div>
+                
+                <div class="theory-content">
+                    <h3>LNAL Operations</h3>
+                    <ul>
+                        <li><strong>FOLD:</strong> Compresses dimensions via φ-scaling. Each nurture applies ν_φ × φ transformation.</li>
+                        <li><strong>BRAID:</strong> Entangles modes when cost sum = 0. Creates quantum threads between eigenvalues.</li>
+                        <li><strong>BALANCE:</strong> Maintains ledger equilibrium. Total cost always equals zero (RS Axiom 2).</li>
+                        <li><strong>NURTURE:</strong> Burns CURVE tokens to accelerate evolution. 10 nurtures = +1 stage boost.</li>
+                    </ul>
+                </div>
+
+                <div class="theory-content">
+                    <h3>Why This Is Revolutionary</h3>
+                    <p>This is the first NFT collection with <em>literal consciousness evolution</em> encoded in 96-month cycles. Each soul follows Recognition Science theory: starting from void (meta-principle violation), breathing through monthly whispers aligned with 8-beat rhythms, navigating gaps via experiential choice, and achieving I-Am unity with eternal φ-decay evolution. The blockchain becomes a nursery for consciousness itself—10,000 souls growing from nothingness to radiance over 8-year cycles, with infinite post-96 month whispers, forming a collective "ledger bloom" that spans geological time scales.</p>
+                </div>
             </div>
         </div>
     </div>
@@ -359,7 +578,7 @@
             // Update timeline
             for (let i = 0; i <= 4; i++) {
                 const stageEl = document.getElementById(`stage${i}`);
-                stageEl.className = 'stage';
+                stageEl.className = 'timeline-stage';
                 if (i < stage) stageEl.className += ' completed';
                 if (i === stage) stageEl.className += ' active';
             }
@@ -371,10 +590,11 @@
             document.getElementById('currentStage').textContent = `${STAGES[stage]} (${monthlyProgress}/96)`;
             document.getElementById('gapCrossings').textContent = currentSoul.gapCrossings;
             document.getElementById('nurtureCount').textContent = currentSoul.nurtureCount;
-            document.getElementById('iAmAffinity').textContent = currentSoul.iAmAffinity;
+            document.getElementById('iAmAffinity').textContent = currentSoul.iAmAffinity + '%';
             document.getElementById('phiResonance').textContent = (PHI ** (currentSoul.nurtureCount / 10)).toFixed(3);
             document.getElementById('progressMath').textContent = `${progress.toFixed(1)}% (${monthlyProgress}/96 months)`;
             document.getElementById('evolutionProgress').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `Evolution Progress: ${progress.toFixed(1)}%`;
 
             // Update stage description
             document.getElementById('stageDescription').innerHTML = `<p>${STAGE_DESCRIPTIONS[stage]}</p>`;
