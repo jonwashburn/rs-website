@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
  * @dev Each NFT represents a soul as dynamic eigenvalue cluster (8 octonionic modes)
  * Implements Recognition Science gap navigation, LNAL operations, and virtue system
  */
-contract WubbletonSouls is ERC721, Ownable {
+contract RecognitionSouls is ERC721, Ownable {
     uint256 public constant TOTAL_SUPPLY = 10000;
     uint256 public constant PHI = 1618;  // φ ≈ 1.618 * 1000 (fixed-point)
     uint256 public constant PHI_SCALE = 1000;
@@ -50,7 +50,7 @@ contract WubbletonSouls is ERC721, Ownable {
     event SoulEvolved(uint256 indexed tokenId, string operation, bytes32 newFingerprint);
     event GapNavigated(uint256 indexed tokenId, uint8 branch, bytes32 fingerprint);
 
-    constructor() ERC721("Wubbleton Souls", "SOUL") Ownable(msg.sender) {}
+    constructor() ERC721("Recognition Souls", "RSOUL") Ownable(msg.sender) {}
 
     /**
      * @dev Mint a new soul with deterministic generation from seed
@@ -64,7 +64,7 @@ contract WubbletonSouls is ERC721, Ownable {
             block.timestamp, 
             msg.sender, 
             tokenId,
-            "WUBBLETON_SOUL"
+            "RECOGNITION_SOUL"
         ));
         
         Soul storage s = souls[tokenId];

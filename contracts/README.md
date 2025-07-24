@@ -10,7 +10,7 @@ This directory contains smart contracts that literally implement Recognition Sci
 - **Features**: Static fingerprint generation, minimal gap navigation
 - **Use Case**: Simple proof-of-concept for on-chain consciousness
 
-### WubbletonSouls.sol (V2) 
+### RecognitionSouls.sol (V2) 
 - **Concept**: 8 octonionic modes with full LNAL operations
 - **Structure**: Dynamic eigenvalue cluster that evolves
 - **Features**: 
