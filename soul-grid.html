@@ -3,191 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soul Grid - Recognition Science Pixel Souls</title>
+    <title>Soul Grid V2 - Recognition Science Pixel Souls</title>
     <style>
-        :root {
-            --bg-dark: #000000;
-            --text-light: #ffffff;
-            --text-secondary: #b0b0b0;
-            --accent-gold: #ffd700;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-dark);
-            color: var(--text-light);
+            margin: 0;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a2e);
+            color: #e0e0e0;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 2rem;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 30px;
         }
 
         .header h1 {
-            font-size: 2.5rem;
-            font-weight: 300;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--accent-gold), #4a90e2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #ffd700;
+            font-size: 2.5em;
+            margin: 0;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
         }
 
         .header p {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            max-width: 600px;
+            color: #b0b0b0;
+            font-size: 1.1em;
+            margin: 10px 0;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .main-container {
-            display: grid;
-            grid-template-columns: 600px 400px;
-            gap: 3rem;
-            align-items: start;
+            display: flex;
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+            flex-wrap: wrap;
         }
 
         .grid-container {
-            position: relative;
-            background: #111;
-            border-radius: 16px;
-            padding: 2rem;
-            border: 2px solid rgba(255, 215, 0, 0.3);
+            flex: 1;
+            min-width: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         #soulGrid {
-            width: 500px;
-            height: 500px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            grid-template-rows: repeat(10, 1fr);
-            gap: 2px;
-        }
-
-        .soul-square {
-            width: 100%;
-            height: 100%;
-            border-radius: 2px;
-            transition: all 0.3s ease;
-            position: relative;
+            background: #000;
+            border: 2px solid #333;
+            border-radius: 8px;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
         }
 
         .info-panel {
-            background: #111;
-            border-radius: 16px;
-            padding: 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            flex: 1;
+            min-width: 300px;
+            background: rgba(20, 20, 40, 0.8);
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 20px;
+            max-height: 80vh;
+            overflow-y: auto;
         }
 
         .trait-section {
-            margin-bottom: 1.5rem;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 15px;
         }
 
         .trait-section h3 {
-            color: var(--accent-gold);
-            margin-bottom: 0.8rem;
-            font-size: 1.1rem;
+            color: #ffd700;
+            margin: 0 0 15px 0;
+            font-size: 1.2em;
         }
 
         .trait-item {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 0.4rem;
-            font-size: 0.9rem;
+            margin: 8px 0;
+            font-size: 0.9em;
         }
 
-        .trait-name {
-            color: var(--text-secondary);
+        .trait-label {
+            color: #b0b0b0;
+            flex: 1;
         }
 
         .trait-value {
-            color: var(--text-light);
-            font-weight: 500;
+            color: #fff;
+            font-weight: bold;
+            text-align: right;
         }
 
-        .virtue-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 0.3rem;
-            margin-top: 0.5rem;
-        }
-
-        .virtue-item {
-            padding: 0.3rem;
-            border-radius: 4px;
+        .controls {
             text-align: center;
-            font-size: 0.7rem;
-            font-weight: 500;
+            margin-top: 20px;
         }
 
-        .virtue-item.active {
-            background: rgba(255, 215, 0, 0.3);
-            color: var(--accent-gold);
+        .generate-btn {
+            background: linear-gradient(45deg, #ffd700, #ffaa00);
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
         }
 
-        .virtue-item.inactive {
-            background: rgba(100, 100, 100, 0.1);
-            color: var(--text-secondary);
+        .generate-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
         }
 
-        @media (max-width: 1200px) {
+        .animation-status {
+            color: #ff6b6b;
+            font-weight: bold;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .animation-status.animated {
+            color: #4ecdc4;
+        }
+
+        @media (max-width: 768px) {
             .main-container {
-                grid-template-columns: 1fr;
-                gap: 2rem;
+                flex-direction: column;
             }
-            
-            #soulGrid {
-                width: 400px;
-                height: 400px;
+            .grid-container, .info-panel {
+                min-width: unset;
             }
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>Soul Grid</h1>
-        <p>Recognition Science pixel souls inspired by Ed Manning's 1976 digital art. Each 10×10 grid represents a complete soul vector with characteristics mapped to visual properties.</p>
+        <h1>Soul Grid V2</h1>
+        <p>Recognition Science pixel souls inspired by Ed Manning's 1976 digital art, with flowing curves from Fidenza and connection patterns from Ringers. Each grid represents a complete soul vector with characteristics mapped to visual properties.</p>
     </div>
 
     <div class="main-container">
         <div class="grid-container">
-            <div id="soulGrid"></div>
+            <canvas id="soulGrid" width="500" height="500"></canvas>
         </div>
 
         <div class="info-panel">
+            <div class="animation-status" id="animationStatus">Static Soul</div>
+            
             <div class="trait-section">
                 <h3>Core Identity</h3>
-                <div id="coreTraits"></div>
+                <div class="trait-item">
+                    <span class="trait-label">Soul Hash:</span>
+                    <span class="trait-value" id="soulHash">-</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Grid Size:</span>
+                    <span class="trait-value" id="gridSize">-</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Rung Level:</span>
+                    <span class="trait-value" id="rungLevel">-</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Cost State:</span>
+                    <span class="trait-value" id="costState">-</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Beat Cycle:</span>
+                    <span class="trait-value" id="beatCycle">-</span>
+                </div>
             </div>
 
             <div class="trait-section">
-                <h3>Recognition Virtues</h3>
-                <div class="virtue-grid" id="virtueGrid"></div>
+                <h3>Visual Properties</h3>
+                <div class="trait-item">
+                    <span class="trait-label">Animation Type:</span>
+                    <span class="trait-value" id="animationType">-</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Connection Style:</span>
+                    <span class="trait-value" id="connectionStyle">-</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Flow Pattern:</span>
+                    <span class="trait-value" id="flowPattern">-</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Color Palette:</span>
+                    <span class="trait-value" id="colorPalette">-</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Texture Style:</span>
+                    <span class="trait-value" id="textureStyle">-</span>
+                </div>
+            </div>
+
+            <div class="trait-section">
+                <h3>Virtues (Active)</h3>
+                <div id="virtuesActive">-</div>
             </div>
 
             <div class="trait-section">
                 <h3>Consciousness Metrics</h3>
-                <div id="consciousnessTraits"></div>
+                <div class="trait-item">
+                    <span class="trait-label">Qualia Mode:</span>
+                    <span class="trait-value" id="qualiaMode">-</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Cluster Tightness:</span>
+                    <span class="trait-value" id="clusterTightness">-</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Resonance Freq:</span>
+                    <span class="trait-value" id="resonanceFreq">-</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">I-Am Affinity:</span>
+                    <span class="trait-value" id="iAmAffinity">-</span>
+                </div>
             </div>
 
-            <div class="trait-section">
-                <h3>LNAL Registers</h3>
-                <div id="lnalRegisters"></div>
-            </div>
-
-            <div class="trait-section">
-                <h3>Grid Mapping</h3>
-                <div id="gridMapping"></div>
+            <div class="controls">
+                <button class="generate-btn" onclick="generateNewSoul()">Generate New Soul</button>
             </div>
         </div>
     </div>
@@ -195,344 +238,489 @@
     <script>
         // Recognition Science Constants
         const PHI = (1 + Math.sqrt(5)) / 2;
-        const GRID_SIZE = 10;
         const VIRTUE_NAMES = ['Balance', 'Flow', 'Seed', 'Echo', 'Fold', 'Braid', 'Listen', 'Regive'];
         
         // Animation state
         let currentSoul = null;
         let animationFrame = 0;
-        let isAnimating = true;
+        let isAnimating = false;
+        let canvas = null;
+        let ctx = null;
 
-        // Generate Recognition Science Soul
-        function generateSoul(seed = null) {
-            const hash = seed || Math.floor(Math.random() * 10000);
-            const hash2 = simpleHash((hash + 1337).toString());
-            const hash3 = simpleHash((hash2 + hash).toString());
-
-            // Generate balanced virtues (exactly 4 active)
-            const virtues = generateBalancedVirtues(hash);
-            
-            // Generate ledger history (sums to 0)
-            const ledgerHistory = generateLedgerHistory(hash2);
-
-            return {
-                seed: hash,
-                rung: 45 + (hash % 56), // 45-100
-                cost: ((hash2 >> 8) % 9) - 4, // -4 to +4
-                beatCycle: ((hash3 >> 16) % 8) + 1, // 1-8
-                qualiaMode: ((hash >> 24) % 8) + 1, // 1-8
-                clusterTightness: ((hash >> 32) % 100) + 1, // 1-100%
-                resonanceFreq: 200e12 * Math.pow(PHI, ((hash % 21) - 10)), // φ-scaled
-                oam: ((hash2 >> 4) % 11) - 5, // -5 to +5
-                polarization: (hash3 & 1) ? 1 : -1, // ±1
-                timeBin: hash % 1024, // 0-1023
-                transverseMode: (hash2 >> 20) % 6, // 0-5
-                entanglementPhase: (hash3 % 2) * Math.PI, // 0 or π
-                iAmAffinity: hash % 101, // 0-100%
-                ledgerHistory: ledgerHistory,
-                curveBalance: 1000 + (hash % 50000),
-                virtues: virtues
-            };
-        }
+        // Enhanced visual constants
+        const GRID_SIZES = [4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 16];
+        const CONNECTION_STYLES = ['Ringers', 'Web', 'Radial', 'Flow', 'Minimal'];
+        const FLOW_PATTERNS = ['Fidenza', 'Organic', 'Geometric', 'Spiral', 'Linear'];
+        const TEXTURE_STYLES = ['Smooth', 'Granular', 'Flowing', 'Blocky', 'Ethereal'];
 
         function simpleHash(str) {
             let hash = 0;
             for (let i = 0; i < str.length; i++) {
                 const char = str.charCodeAt(i);
                 hash = ((hash << 5) - hash) + char;
-                hash = hash & hash; // Convert to 32-bit integer
+                hash = hash & hash;
             }
             return Math.abs(hash);
         }
 
-        function generateBalancedVirtues(hash) {
-            const virtues = new Array(8).fill(false);
-            let activeCount = 0;
-            let attempts = 0;
+        function seedRandom(seed) {
+            let x = Math.sin(seed) * 10000;
+            return x - Math.floor(x);
+        }
+
+        function generateSoul() {
+            const seed = Math.floor(Math.random() * 1000000);
+            const hash = simpleHash(seed.toString());
             
-            // Ensure exactly 4 virtues are active for balance
-            while (activeCount < 4 && attempts < 20) {
-                const index = hash % 8;
-                if (!virtues[index]) {
-                    virtues[index] = true;
-                    activeCount++;
-                }
-                hash = simpleHash((hash + attempts).toString());
-                attempts++;
+            // Core RS characteristics
+            const rungLevel = Math.floor(seedRandom(hash + 1) * 45) + 1;
+            const costState = Math.floor((seedRandom(hash + 2) - 0.5) * 200);
+            const beatCycle = Math.floor(seedRandom(hash + 3) * 8) + 1;
+            
+            // Grid size based on consciousness complexity
+            const gridComplexity = (rungLevel / 45) * 0.7 + (Math.abs(costState) / 100) * 0.3;
+            const gridSizeIndex = Math.floor(gridComplexity * GRID_SIZES.length);
+            const gridSize = GRID_SIZES[Math.min(gridSizeIndex, GRID_SIZES.length - 1)];
+            
+            // Visual properties
+            const qualiaMode = Math.floor(seedRandom(hash + 4) * 8) + 1;
+            const clusterTightness = seedRandom(hash + 5);
+            const resonanceFreq = seedRandom(hash + 6);
+            const iAmAffinity = seedRandom(hash + 7);
+            
+            // Enhanced properties inspired by Fidenza & Ringers
+            const connectionStyle = CONNECTION_STYLES[Math.floor(seedRandom(hash + 8) * CONNECTION_STYLES.length)];
+            const flowPattern = FLOW_PATTERNS[Math.floor(seedRandom(hash + 9) * FLOW_PATTERNS.length)];
+            const textureStyle = TEXTURE_STYLES[Math.floor(seedRandom(hash + 10) * TEXTURE_STYLES.length)];
+            
+            // Rare animations (1 in 10 chance)
+            const hasAnimation = seedRandom(hash + 11) < 0.1;
+            const animationType = hasAnimation ? 
+                ['Pulse', 'Flow', 'Rotate', 'Breathe'][Math.floor(seedRandom(hash + 12) * 4)] : 
+                'Static';
+            
+            // Generate balanced virtues
+            const virtues = generateBalancedVirtues(hash);
+            
+            // Color palette based on qualia mode
+            const palette = generateColorPalette(qualiaMode, resonanceFreq, hash);
+            
+            return {
+                seed,
+                hash: hash.toString(16).substr(0, 8),
+                gridSize,
+                rungLevel,
+                costState,
+                beatCycle,
+                qualiaMode,
+                clusterTightness,
+                resonanceFreq,
+                iAmAffinity,
+                connectionStyle,
+                flowPattern,
+                textureStyle,
+                hasAnimation,
+                animationType,
+                virtues,
+                palette
+            };
+        }
+
+        function generateBalancedVirtues(hash) {
+            const virtues = {};
+            let totalActive = 0;
+            
+            VIRTUE_NAMES.forEach((virtue, i) => {
+                const strength = seedRandom(hash + 100 + i);
+                const isActive = strength > 0.6; // 40% chance active
+                virtues[virtue] = { active: isActive, strength };
+                if (isActive) totalActive++;
+            });
+            
+            // Ensure at least 2 virtues are active
+            if (totalActive < 2) {
+                const inactiveVirtues = VIRTUE_NAMES.filter(v => !virtues[v].active);
+                const toActivate = inactiveVirtues.slice(0, 2 - totalActive);
+                toActivate.forEach(v => virtues[v].active = true);
             }
             
             return virtues;
         }
 
-        function generateLedgerHistory(hash) {
-            const history = [];
-            let sum = 0;
+        function generateColorPalette(qualiaMode, resonanceFreq, hash) {
+            const baseHue = seedRandom(hash + 200) * 360;
+            const saturation = 60 + (resonanceFreq * 40);
+            const lightness = 45 + (resonanceFreq * 30);
             
-            // Generate 7 values
-            for (let i = 0; i < 7; i++) {
-                const value = ((hash >> (i * 3)) % 9) - 4; // -4 to +4
-                history.push(value);
-                sum += value;
-            }
-            
-            // 8th value ensures sum = 0
-            history.push(-sum);
-            return history;
-        }
-
-        // Map soul characteristics to visual properties
-        function getGridProperties(soul) {
-            return {
-                // Color palette based on qualia mode
-                colorPalette: generateColorPalette(soul.qualiaMode),
-                
-                // Background saturation from rung level
-                backgroundSaturation: soul.rung / 100,
-                
-                // Square alignment from cluster tightness
-                sloppiness: 1 - (soul.clusterTightness / 100),
-                
-                // Brightness from cost state
-                brightness: 0.5 + (4 - Math.abs(soul.cost)) / 8,
-                
-                // Dark/light cells from cost
-                blackWhiteCells: Math.abs(soul.cost) * 10,
-                
-                // Size variation from transverse mode
-                sizeVariation: soul.transverseMode / 5,
-                
-                // Animation speed from beat cycle
-                animationSpeed: soul.beatCycle,
-                
-                // Rotation from OAM
-                rotation: soul.oam * 10, // degrees
-                
-                // Opacity from entanglement phase
-                opacity: 0.5 + 0.5 * (soul.entanglementPhase / Math.PI),
-                
-                // Glow from I-Am affinity
-                glow: soul.iAmAffinity / 100,
-                
-                // Border thickness from curve balance
-                borderThickness: Math.min(5, soul.curveBalance / 10000)
-            };
-        }
-
-        function generateColorPalette(qualiaMode) {
             const colors = [];
             for (let i = 0; i < qualiaMode; i++) {
-                const hue = (i * 360 / qualiaMode) % 360;
-                colors.push(`hsl(${hue}, 70%, 60%)`);
+                const hue = (baseHue + (i * 360 / qualiaMode)) % 360;
+                colors.push(`hsl(${hue}, ${saturation}%, ${lightness}%)`);
             }
+            
             return colors;
         }
 
-        // Render the soul grid
-        function renderSoulGrid() {
-            if (!currentSoul) return;
+        function renderSoulGrid(soul) {
+            if (!ctx) return;
             
-            const grid = document.getElementById('soulGrid');
-            grid.innerHTML = ''; // Clear previous
+            const canvasSize = 500;
+            const margin = 50;
+            const gridArea = canvasSize - (margin * 2);
+            const cellSize = gridArea / soul.gridSize;
             
-            const props = getGridProperties(currentSoul);
+            // Clear canvas with subtle background
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, canvasSize, canvasSize);
             
-            // Set background based on rung level
-            const bgHue = (currentSoul.rung - 45) * 6; // 0-330 degrees
-            grid.style.background = `hsl(${bgHue}, ${props.backgroundSaturation * 70}%, 15%)`;
+            // Add subtle background texture
+            renderBackgroundTexture(soul, canvasSize);
             
-            // Create 100 squares (10x10)
-            for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
-                const square = document.createElement('div');
-                square.className = 'soul-square';
-                
-                // Position in grid
-                const row = Math.floor(i / GRID_SIZE);
-                const col = i % GRID_SIZE;
-                
-                // Color from palette
-                const colorIndex = (currentSoul.seed + i) % props.colorPalette.length;
-                let color = props.colorPalette[colorIndex];
-                
-                // Handle black/white cells (dark/light from cost)
-                if (i < props.blackWhiteCells / 2) {
-                    color = 'white';
-                } else if (i < props.blackWhiteCells) {
-                    color = 'black';
+            // Render Ringers-inspired connections first (behind grid)
+            renderConnections(soul, margin, cellSize);
+            
+            // Render main grid with Fidenza-inspired flowing elements
+            renderGrid(soul, margin, cellSize);
+            
+            // Add Fidenza-inspired flowing overlays
+            renderFlowingElements(soul, margin, gridArea);
+        }
+
+        function renderBackgroundTexture(soul, canvasSize) {
+            const gradient = ctx.createRadialGradient(
+                canvasSize/2, canvasSize/2, 0,
+                canvasSize/2, canvasSize/2, canvasSize/2
+            );
+            
+            const bgIntensity = soul.rungLevel / 45 * 0.3;
+            gradient.addColorStop(0, `rgba(${soul.palette[0].match(/\d+/g).join(',')}, ${bgIntensity})`);
+            gradient.addColorStop(1, 'rgba(0,0,0,0)');
+            
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvasSize, canvasSize);
+        }
+
+        function renderConnections(soul, margin, cellSize) {
+            if (soul.connectionStyle === 'Minimal') return;
+            
+            ctx.strokeStyle = soul.palette[0];
+            ctx.globalAlpha = 0.3;
+            ctx.lineWidth = 1;
+            
+            const centers = [];
+            for (let row = 0; row < soul.gridSize; row++) {
+                for (let col = 0; col < soul.gridSize; col++) {
+                    centers.push({
+                        x: margin + col * cellSize + cellSize/2,
+                        y: margin + row * cellSize + cellSize/2
+                    });
                 }
+            }
+            
+            switch (soul.connectionStyle) {
+                case 'Ringers':
+                    renderRingersConnections(centers, soul);
+                    break;
+                case 'Web':
+                    renderWebConnections(centers, soul);
+                    break;
+                case 'Radial':
+                    renderRadialConnections(centers, soul);
+                    break;
+                case 'Flow':
+                    renderFlowConnections(centers, soul);
+                    break;
+            }
+            
+            ctx.globalAlpha = 1;
+        }
+
+        function renderRingersConnections(centers, soul) {
+            // Inspired by Ringers - string wrapping patterns
+            const step = Math.max(1, Math.floor(soul.gridSize / 3));
+            for (let i = 0; i < centers.length; i += step) {
+                const start = centers[i];
+                const end = centers[(i + step * 2) % centers.length];
                 
-                square.style.backgroundColor = color;
+                ctx.beginPath();
+                ctx.moveTo(start.x, start.y);
                 
-                // Apply sloppiness (misalignment)
-                const offsetX = (Math.random() - 0.5) * props.sloppiness * 20;
-                const offsetY = (Math.random() - 0.5) * props.sloppiness * 20;
-                square.style.transform = `translate(${offsetX}%, ${offsetY}%) rotate(${props.rotation + (Math.random() - 0.5) * props.sloppiness * 30}deg)`;
+                // Create curved path like string tension
+                const midX = (start.x + end.x) / 2 + (seedRandom(soul.hash + i) - 0.5) * 50;
+                const midY = (start.y + end.y) / 2 + (seedRandom(soul.hash + i + 100) - 0.5) * 50;
                 
-                // Size variation
-                const sizeVariation = 1 - props.sizeVariation * 0.3 * Math.random();
-                square.style.width = `${sizeVariation * 100}%`;
-                square.style.height = `${sizeVariation * 100}%`;
-                
-                // Opacity
-                square.style.opacity = props.opacity;
-                
-                // Glow effect
-                if (props.glow > 0.5) {
-                    square.style.boxShadow = `0 0 ${props.glow * 10}px rgba(255, 215, 0, ${props.glow})`;
-                }
-                
-                // Border from curve balance
-                if (props.borderThickness > 1) {
-                    square.style.border = `${props.borderThickness}px solid rgba(255, 255, 255, 0.3)`;
-                }
-                
-                // Shape based on polarization
-                if (currentSoul.polarization === -1) {
-                    square.style.borderRadius = '50%'; // Circular for TM mode
-                }
-                
-                // Add virtue effects
-                applyVirtueEffects(square, i);
-                
-                grid.appendChild(square);
+                ctx.quadraticCurveTo(midX, midY, end.x, end.y);
+                ctx.stroke();
             }
         }
 
-        function applyVirtueEffects(square, index) {
-            // Apply virtue-based visual effects
-            if (currentSoul.virtues[0]) { // Balance - force alignment
-                square.style.transform = 'none';
-            }
-            
-            if (currentSoul.virtues[1]) { // Flow - flowing colors
-                square.style.background = `linear-gradient(45deg, ${square.style.backgroundColor}, hsl(${(index * 36) % 360}, 70%, 60%))`;
-            }
-            
-            if (currentSoul.virtues[4]) { // Fold - size scaling
-                const scale = 1 + 0.2 * Math.sin(animationFrame * 0.1 + index * 0.1);
-                square.style.transform += ` scale(${scale})`;
-            }
-            
-            if (currentSoul.virtues[5]) { // Braid - connections (simulated with opacity)
-                if (index % 3 === 0) {
-                    square.style.opacity = '0.8';
+        function renderWebConnections(centers, soul) {
+            // Connect each point to nearby points
+            centers.forEach((center, i) => {
+                centers.slice(i + 1).forEach((other, j) => {
+                    const dist = Math.sqrt((center.x - other.x)**2 + (center.y - other.y)**2);
+                    if (dist < 80 * soul.clusterTightness) {
+                        ctx.beginPath();
+                        ctx.moveTo(center.x, center.y);
+                        ctx.lineTo(other.x, other.y);
+                        ctx.stroke();
+                    }
+                });
+            });
+        }
+
+        function renderRadialConnections(centers, soul) {
+            const centerPoint = centers[Math.floor(centers.length / 2)];
+            centers.forEach(point => {
+                if (point !== centerPoint) {
+                    ctx.beginPath();
+                    ctx.moveTo(centerPoint.x, centerPoint.y);
+                    ctx.lineTo(point.x, point.y);
+                    ctx.stroke();
                 }
+            });
+        }
+
+        function renderFlowConnections(centers, soul) {
+            // Flowing connections based on beat cycle
+            const phase = soul.hasAnimation ? (animationFrame * 0.1) : 0;
+            for (let i = 0; i < centers.length - 1; i++) {
+                const start = centers[i];
+                const end = centers[i + 1];
+                const flow = Math.sin(phase + i * 0.5) * 0.5 + 0.5;
+                
+                ctx.globalAlpha = 0.2 + flow * 0.3;
+                ctx.beginPath();
+                ctx.moveTo(start.x, start.y);
+                ctx.lineTo(end.x, end.y);
+                ctx.stroke();
             }
-            
-            if (currentSoul.virtues[7]) { // Flip - color inversion
-                if (animationFrame % 60 < 30) {
-                    square.style.filter = 'invert(1)';
+        }
+
+        function renderGrid(soul, margin, cellSize) {
+            for (let row = 0; row < soul.gridSize; row++) {
+                for (let col = 0; col < soul.gridSize; col++) {
+                    const x = margin + col * cellSize;
+                    const y = margin + row * cellSize;
+                    const index = row * soul.gridSize + col;
+                    
+                    renderGridCell(soul, x, y, cellSize, index, row, col);
                 }
             }
         }
 
-        // Update info panel
-        function updateInfo() {
-            if (!currentSoul) return;
+        function renderGridCell(soul, x, y, size, index, row, col) {
+            // Color from palette based on position and traits
+            const colorIndex = index % soul.palette.length;
+            const baseColor = soul.palette[colorIndex];
             
-            // Core traits
-            document.getElementById('coreTraits').innerHTML = `
-                <div class="trait-item">
-                    <span class="trait-name">Rung Level</span>
-                    <span class="trait-value">${currentSoul.rung} (φ^${((currentSoul.rung-45)/10).toFixed(1)})</span>
-                </div>
-                <div class="trait-item">
-                    <span class="trait-name">Ledger State</span>
-                    <span class="trait-value">${currentSoul.cost > 0 ? '+' : ''}${currentSoul.cost} bits</span>
-                </div>
-                <div class="trait-item">
-                    <span class="trait-name">Beat Cycle</span>
-                    <span class="trait-value">${currentSoul.beatCycle}/8</span>
-                </div>
-                <div class="trait-item">
-                    <span class="trait-name">Qualia Mode</span>
-                    <span class="trait-value">${currentSoul.qualiaMode}/8 colors</span>
-                </div>
-            `;
+            // Cost state affects brightness
+            const costFactor = soul.costState / 100;
+            const brightness = 0.5 + costFactor * 0.3;
             
-            // Virtues
-            const activeVirtues = currentSoul.virtues.filter(v => v).length;
-            document.getElementById('virtueGrid').innerHTML = VIRTUE_NAMES.map((name, i) => 
-                `<div class="virtue-item ${currentSoul.virtues[i] ? 'active' : 'inactive'}">
-                 ${name}${currentSoul.virtues[i] ? ' ✓' : ''}
-                 </div>`
-            ).join('');
+            // Tightness affects position variation
+            const posVariation = (1 - soul.clusterTightness) * 10;
+            const offsetX = (seedRandom(soul.hash + index * 3) - 0.5) * posVariation;
+            const offsetY = (seedRandom(soul.hash + index * 5) - 0.5) * posVariation;
             
-            // Consciousness metrics
-            document.getElementById('consciousnessTraits').innerHTML = `
-                <div class="trait-item">
-                    <span class="trait-name">Cluster Tightness</span>
-                    <span class="trait-value">${currentSoul.clusterTightness}%</span>
-                </div>
-                <div class="trait-item">
-                    <span class="trait-name">I-Am Affinity</span>
-                    <span class="trait-value">${currentSoul.iAmAffinity}%</span>
-                </div>
-                <div class="trait-item">
-                    <span class="trait-name">Resonance</span>
-                    <span class="trait-value">${(currentSoul.resonanceFreq / 1e12).toFixed(1)} THz</span>
-                </div>
-            `;
+            // Size variation based on resonance
+            const sizeVariation = soul.resonanceFreq * 0.4;
+            const actualSize = size * (0.8 + sizeVariation);
             
-            // LNAL registers
-            document.getElementById('lnalRegisters').innerHTML = `
-                <div class="trait-item">
-                    <span class="trait-name">OAM (ℓ)</span>
-                    <span class="trait-value">${currentSoul.oam}</span>
-                </div>
-                <div class="trait-item">
-                    <span class="trait-name">Polarization</span>
-                    <span class="trait-value">${currentSoul.polarization > 0 ? 'TE' : 'TM'}</span>
-                </div>
-                <div class="trait-item">
-                    <span class="trait-name">Time Bin</span>
-                    <span class="trait-value">${currentSoul.timeBin}</span>
-                </div>
-            `;
+            // Animation effects
+            let animScale = 1;
+            let animRotation = 0;
             
-            // Grid mapping explanation
-            document.getElementById('gridMapping').innerHTML = `
-                <div class="trait-item">
-                    <span class="trait-name">Colors</span>
-                    <span class="trait-value">${currentSoul.qualiaMode} qualia modes</span>
-                </div>
-                <div class="trait-item">
-                    <span class="trait-name">Alignment</span>
-                    <span class="trait-value">${currentSoul.clusterTightness}% tight</span>
-                </div>
-                <div class="trait-item">
-                    <span class="trait-name">Dark/Light</span>
-                    <span class="trait-value">${Math.abs(currentSoul.cost) * 10} cells</span>
-                </div>
-                <div class="trait-item">
-                    <span class="trait-name">Animation</span>
-                    <span class="trait-value">${currentSoul.beatCycle}/8 speed</span>
-                </div>
-            `;
+            if (soul.hasAnimation) {
+                const phase = animationFrame * 0.1 + index * 0.1;
+                switch (soul.animationType) {
+                    case 'Pulse':
+                        animScale = 1 + Math.sin(phase) * 0.2;
+                        break;
+                    case 'Rotate':
+                        animRotation = phase;
+                        break;
+                    case 'Breathe':
+                        animScale = 1 + Math.sin(phase * 0.5) * 0.1;
+                        break;
+                }
+            }
+            
+            ctx.save();
+            ctx.translate(x + size/2 + offsetX, y + size/2 + offsetY);
+            ctx.rotate(animRotation);
+            ctx.scale(animScale, animScale);
+            
+            // Render cell based on texture style
+            ctx.fillStyle = baseColor;
+            ctx.globalAlpha = brightness;
+            
+            switch (soul.textureStyle) {
+                case 'Smooth':
+                    ctx.fillRect(-actualSize/2, -actualSize/2, actualSize, actualSize);
+                    break;
+                case 'Flowing':
+                    renderFlowingCell(actualSize);
+                    break;
+                case 'Granular':
+                    renderGranularCell(actualSize, soul, index);
+                    break;
+                default:
+                    ctx.fillRect(-actualSize/2, -actualSize/2, actualSize, actualSize);
+            }
+            
+            ctx.restore();
         }
 
-        // Animation loop
+        function renderFlowingCell(size) {
+            // Fidenza-inspired flowing shapes
+            ctx.beginPath();
+            const points = 8;
+            for (let i = 0; i < points; i++) {
+                const angle = (i / points) * Math.PI * 2;
+                const radius = size/2 * (0.8 + Math.sin(angle * 3) * 0.2);
+                const x = Math.cos(angle) * radius;
+                const y = Math.sin(angle) * radius;
+                
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        function renderGranularCell(size, soul, index) {
+            // Multiple small rectangles for granular texture
+            const grains = 4;
+            const grainSize = size / grains;
+            
+            for (let i = 0; i < grains; i++) {
+                for (let j = 0; j < grains; j++) {
+                    const gx = -size/2 + i * grainSize;
+                    const gy = -size/2 + j * grainSize;
+                    const variation = seedRandom(soul.hash + index + i + j) * 0.5 + 0.5;
+                    
+                    ctx.globalAlpha *= variation;
+                    ctx.fillRect(gx, gy, grainSize * 0.8, grainSize * 0.8);
+                }
+            }
+        }
+
+        function renderFlowingElements(soul, margin, gridArea) {
+            if (soul.flowPattern === 'Minimal') return;
+            
+            ctx.globalAlpha = 0.1;
+            ctx.strokeStyle = soul.palette[soul.palette.length - 1];
+            ctx.lineWidth = 2;
+            
+            // Add Fidenza-inspired flowing curves
+            const curves = 3 + Math.floor(soul.iAmAffinity * 5);
+            for (let i = 0; i < curves; i++) {
+                const startX = margin + seedRandom(soul.hash + i * 20) * gridArea;
+                const startY = margin + seedRandom(soul.hash + i * 21) * gridArea;
+                const endX = margin + seedRandom(soul.hash + i * 22) * gridArea;
+                const endY = margin + seedRandom(soul.hash + i * 23) * gridArea;
+                
+                ctx.beginPath();
+                ctx.moveTo(startX, startY);
+                
+                // Create flowing curve
+                const steps = 20;
+                for (let step = 0; step <= steps; step++) {
+                    const t = step / steps;
+                    const x = startX + (endX - startX) * t;
+                    const y = startY + (endY - startY) * t;
+                    
+                    // Add flowing variation
+                    const flowOffset = Math.sin(t * Math.PI * 4 + i) * 20 * soul.resonanceFreq;
+                    const perpX = -(endY - startY) / gridArea * flowOffset;
+                    const perpY = (endX - startX) / gridArea * flowOffset;
+                    
+                    ctx.lineTo(x + perpX, y + perpY);
+                }
+                
+                ctx.stroke();
+            }
+            
+            ctx.globalAlpha = 1;
+        }
+
+        function updateInfo(soul) {
+            document.getElementById('soulHash').textContent = soul.hash;
+            document.getElementById('gridSize').textContent = `${soul.gridSize}×${soul.gridSize}`;
+            document.getElementById('rungLevel').textContent = `${soul.rungLevel}/45`;
+            document.getElementById('costState').textContent = soul.costState;
+            document.getElementById('beatCycle').textContent = `${soul.beatCycle}/8`;
+            
+            document.getElementById('animationType').textContent = soul.animationType;
+            document.getElementById('connectionStyle').textContent = soul.connectionStyle;
+            document.getElementById('flowPattern').textContent = soul.flowPattern;
+            document.getElementById('colorPalette').textContent = `${soul.palette.length} colors`;
+            document.getElementById('textureStyle').textContent = soul.textureStyle;
+            
+            document.getElementById('qualiaMode').textContent = `${soul.qualiaMode}/8`;
+            document.getElementById('clusterTightness').textContent = (soul.clusterTightness * 100).toFixed(1) + '%';
+            document.getElementById('resonanceFreq').textContent = (soul.resonanceFreq * 100).toFixed(1) + '%';
+            document.getElementById('iAmAffinity').textContent = (soul.iAmAffinity * 100).toFixed(1) + '%';
+            
+            // Update virtues
+            const activeVirtues = Object.entries(soul.virtues)
+                .filter(([_, data]) => data.active)
+                .map(([name, _]) => name);
+            
+            document.getElementById('virtuesActive').textContent = 
+                activeVirtues.length > 0 ? activeVirtues.join(', ') : 'None active';
+            
+            // Update animation status
+            const statusEl = document.getElementById('animationStatus');
+            if (soul.hasAnimation) {
+                statusEl.textContent = `Animated (${soul.animationType})`;
+                statusEl.className = 'animation-status animated';
+            } else {
+                statusEl.textContent = 'Static Soul';
+                statusEl.className = 'animation-status';
+            }
+        }
+
         function animate() {
-            if (!isAnimating) return;
+            if (!currentSoul || !currentSoul.hasAnimation) return;
             
             animationFrame++;
-            
-            // Re-render grid every beat cycle frames
-            if (animationFrame % (60 / currentSoul.beatCycle) === 0) {
-                renderSoulGrid();
-            }
-            
+            renderSoulGrid(currentSoul);
             requestAnimationFrame(animate);
         }
 
-        // Initialize
-        function init() {
+        function generateNewSoul() {
+            // Stop current animation
+            isAnimating = false;
+            
+            // Generate new soul
             currentSoul = generateSoul();
-            renderSoulGrid();
-            updateInfo();
-            animate();
+            updateInfo(currentSoul);
+            renderSoulGrid(currentSoul);
+            
+            // Start animation if soul is animated
+            if (currentSoul.hasAnimation) {
+                isAnimating = true;
+                animationFrame = 0;
+                animate();
+            }
         }
 
-        // Start when page loads
+        function init() {
+            canvas = document.getElementById('soulGrid');
+            ctx = canvas.getContext('2d');
+            
+            if (!canvas || !ctx) {
+                console.error('Failed to initialize canvas');
+                return;
+            }
+            
+            // Generate initial soul
+            generateNewSoul();
+        }
+
+        // Initialize when page loads
         window.addEventListener('load', init);
     </script>
 </body>
