@@ -366,6 +366,14 @@
                     <h4>Soul Vector Representation</h4>
                     <div class="vector-code" id="vectorCode"></div>
                 </div>
+
+                <!-- Debug Output Section for troubleshooting -->
+                <div class="vector-display" style="background: rgba(255, 0, 0, 0.1); border-color: #ff6666;">
+                    <h4>🔧 Debug Output</h4>
+                    <div id="debugOutput" style="font-family: 'Monaco', monospace; font-size: 0.7rem; color: #ff6666; max-height: 200px; overflow-y: auto; padding: 0.5rem;">
+                        Waiting for initialization...
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1029,15 +1037,80 @@
             return true;
         }
 
+        // Add comprehensive error handling and debugging
+        function debugLog(message) {
+            console.log(`[LIGHT.HTML DEBUG] ${message}`);
+            // Also show on page for easier debugging
+            const debugElement = document.getElementById('debugOutput');
+            if (debugElement) {
+                debugElement.innerHTML += `<br>${message}`;
+            }
+        }
+
         // Initialize when page is loaded
         window.addEventListener('load', () => {
-            if (initializeCanvas()) {
-                generateNewSoul();
-                animate();
-            } else {
-                console.error('Failed to initialize canvas');
+            debugLog('Page loaded, starting initialization...');
+            
+            try {
+                if (initializeCanvas()) {
+                    debugLog('Canvas initialized successfully');
+                    debugLog(`Canvas dimensions: ${canvas.width}x${canvas.height}`);
+                    
+                    generateNewSoul();
+                    debugLog('Soul generated, starting animation...');
+                    
+                    animate();
+                    debugLog('Animation started');
+                } else {
+                    debugLog('FAILED to initialize canvas');
+                    console.error('Failed to initialize canvas');
+                }
+            } catch (error) {
+                debugLog(`ERROR during initialization: ${error.message}`);
+                console.error('Error during initialization:', error);
             }
         });
+
+        // Add error handling to key functions
+        const originalGenerateNewSoul = generateNewSoul;
+        generateNewSoul = function() {
+            try {
+                debugLog('Generating new soul...');
+                originalGenerateNewSoul();
+                debugLog(`Soul generated: seed=${currentSoul ? currentSoul.seed : 'null'}`);
+            } catch (error) {
+                debugLog(`ERROR generating soul: ${error.message}`);
+                console.error('Error generating soul:', error);
+            }
+        };
+
+        const originalAnimate = animate;
+        animate = function(currentTime = 0) {
+            try {
+                originalAnimate(currentTime);
+            } catch (error) {
+                debugLog(`ERROR in animation: ${error.message}`);
+                console.error('Error in animation:', error);
+                isAnimating = false; // Stop animation loop on error
+            }
+        };
+
+        const originalRender = render;
+        render = function() {
+            try {
+                originalRender();
+            } catch (error) {
+                debugLog(`ERROR in render: ${error.message}`);
+                console.error('Error in render:', error);
+                
+                // Draw error message on canvas
+                if (ctx) {
+                    ctx.fillStyle = '#ff0000';
+                    ctx.font = '16px Arial';
+                    ctx.fillText(`Render Error: ${error.message}`, 10, 30);
+                }
+            }
+        };
     </script>
 </body>
 </html> 
