@@ -705,21 +705,45 @@
             initialPixel.setAttribute('opacity', (baseOpacity * 0.3 + 0.1).toString()); // Faint at start, grows
             svg.appendChild(initialPixel);
 
-            // Evolve light field per monthly tick
-            for (let month = 0; month < monthlyProgress; month++) {
-                // Monthly evolution effect: Add subtle light propagation
-                const monthSeed = hash(currentSoul.seed.toString() + month.toString());
-                const evolveX = (monthSeed % 300);
-                const evolveY = ((monthSeed >> 8) % 300);
-                const intensity = (month % 8) / 8; // 8-beat pulse
-                
-                const light = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-                light.setAttribute('cx', evolveX.toString());
-                light.setAttribute('cy', evolveY.toString());
-                light.setAttribute('r', '0.5');
-                light.setAttribute('fill', '#FFFFFF');
-                light.setAttribute('opacity', (intensity * baseOpacity * 0.1).toString());
-                svg.appendChild(light);
+            // Enhanced light field evolution starting from month 1
+            for (let month = 1; month <= monthlyProgress; month++) {
+                const monthProgress = month / 96;
+                const spiralFactor = PHI ** (monthProgress);
+
+                for (let modeIndex = 0; modeIndex < 8; modeIndex++) {
+                    const mode = currentSoul.cluster[modeIndex];
+                    const baseAngle = (modeIndex * 45) * Math.PI / 180;
+                    const spiralAngle = baseAngle + (month * PHI) * (mode.oam / 5); // Spiral based on OAM
+                    const dist = (10 + Math.abs(mode.nu_phi)) * spiralFactor * monthProgress;
+                    
+                    const px = seedX + dist * Math.cos(spiralAngle);
+                    const py = seedY + dist * Math.sin(spiralAngle);
+                    
+                    // Intensity based on cost and 8-beat phase
+                    const beatPhase = (month % 8) / 8;
+                    const intensity = (1 + Math.sin(beatPhase * 2 * Math.PI + mode.phi_e / 255 * 2 * Math.PI)) / 2;
+                    
+                    // Color based on cost
+                    let color = '#FFFFFF';
+                    if (mode.cost > 0) color = '#00FFFF'; // Cyan positive
+                    if (mode.cost < 0) color = '#FF6B6B'; // Red negative
+                    if (mode.cost === 0) color = '#FFD700'; // Gold neutral
+                    
+                    // Size based on k_perp
+                    const size = 0.5 + (mode.k_perp / 255) * 2;
+                    
+                    // Add some life: slight random perturbation
+                    const perturbX = (Math.random() - 0.5) * 2 * intensity;
+                    const perturbY = (Math.random() - 0.5) * 2 * intensity;
+                    
+                    const light = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    light.setAttribute('cx', (px + perturbX).toString());
+                    light.setAttribute('cy', (py + perturbY).toString());
+                    light.setAttribute('r', size.toString());
+                    light.setAttribute('fill', color);
+                    light.setAttribute('opacity', (intensity * baseOpacity * monthProgress).toString());
+                    svg.appendChild(light);
+                }
             }
 
             // Render evolved modes (as before, but enhanced with monthly granularity)
