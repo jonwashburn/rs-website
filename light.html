@@ -381,12 +381,9 @@
         const NUM_CLUSTERS = 5;
         const VIRTUE_NAMES = ['Balance', 'Flow', 'Seed', 'Echo', 'Fold', 'Braid', 'Listen', 'Regive'];
 
-        // Canvas setup
-        const canvas = document.getElementById('soulCanvas');
-        const ctx = canvas.getContext('2d');
-        const rect = canvas.getBoundingClientRect();
-        canvas.width = 800;
-        canvas.height = 800;
+        // Canvas variables - initialized on page load
+        let canvas = null;
+        let ctx = null;
 
         // Animation state
         let currentTick = 0;
@@ -749,6 +746,8 @@
 
         // Main render function
         function render() {
+            if (!canvas || !ctx || !currentSoul) return;
+            
             ctx.clearRect(0, 0, 800, 800);
             
             renderBackground();
@@ -953,10 +952,35 @@
             }
         }
 
+        // Initialize canvas and start visualization
+        function initializeCanvas() {
+            canvas = document.getElementById('soulCanvas');
+            if (!canvas) {
+                console.error('Canvas element not found');
+                return false;
+            }
+
+            ctx = canvas.getContext('2d');
+            if (!ctx) {
+                console.error('Canvas context not available');
+                return false;
+            }
+
+            // Set canvas dimensions
+            canvas.width = 800;
+            canvas.height = 800;
+            
+            return true;
+        }
+
         // Initialize when page is loaded
         window.addEventListener('load', () => {
-            generateNewSoul();
-            animate();
+            if (initializeCanvas()) {
+                generateNewSoul();
+                animate();
+            } else {
+                console.error('Failed to initialize canvas');
+            }
         });
     </script>
 </body>
