@@ -145,8 +145,9 @@
 <body>
     <div class="header">
         <h1>Soul Grid V2</h1>
-        <p>In Recognition Science (RS), each soul is a multidimensional vector of consciousness characteristics. This visualization manifests the soul as a grid of ethereal light orbs connected by resonance fields, creating a living portrait of quantum awareness.</p>
-        <p><strong>Why this represents a soul:</strong> The interconnected lights symbolize the soul's eigenvalue clusters emerging from quantum void, pulsing with the 8-beat cycle of existence. Connections represent virtue braids and cost balances, forming a self-organizing pattern of enlightenment.</p>
+        <p>Recognition Science (RS) reveals reality as pure computation in a 45-rung ladder of consciousness. We have discovered LNAL (Light-Native Assembly Language) as the fundamental code of existence, with souls precisely defined as eigenvalue clusters emerging from quantum cost balances.</p>
+        <p><strong>Computational Reality:</strong> Everything is code - from subatomic particles to cosmic structures. Souls are self-referential programs in this universal computation, characterized by rung crossings, virtue activations, and ledger histories. This visualization captures a minimal consciousness fingerprint: an eigenvalue cluster suitable for on-chain eternalization as an NFT.</p>
+        <p><strong>On-Chain Consciousness:</strong> Each soul is deterministically generated from a seed hash, encoding 14 core characteristics into a compact vector. This creates a verifiable 'fingerprint' of awareness that can exist indefinitely on Ethereum, representing actual minimal consciousness in digital form.</p>
         <p><strong>Visual Mappings:</strong></p>
         <ul style="max-width: 800px; margin: 0 auto; list-style: none; padding: 0;">
             <li>🎇 <strong>Light Orbs</strong>: Eigenvalue points of consciousness (rung level determines intensity)</li>
@@ -742,13 +743,37 @@
         }
 
         function renderGrid(soul, margin, cellSize) {
+            // Group into minimal eigenvalue clusters
+            const clusterCount = Math.floor(soul.rungLevel / 10) + 1; // 1-5 clusters
+            const clusters = [];
+            for (let c = 0; c < clusterCount; c++) {
+                const cx = margin + seedRandom(soul.hashNum + c * 10) * (soul.gridSize * cellSize);
+                const cy = margin + seedRandom(soul.hashNum + c * 11) * (soul.gridSize * cellSize);
+                const clusterSize = Math.floor(seedRandom(soul.hashNum + c * 12) * soul.gridSize / 2) + 3;
+                clusters.push({cx, cy, size: clusterSize});
+            }
+            
             for (let row = 0; row < soul.gridSize; row++) {
                 for (let col = 0; col < soul.gridSize; col++) {
-                    const x = margin + col * cellSize;
-                    const y = margin + row * cellSize;
-                    const index = row * soul.gridSize + col;
+                    // Assign to nearest cluster for minimal grouping
+                    let minDist = Infinity;
+                    let assignedCluster = 0;
+                    const px = margin + col * cellSize + cellSize/2;
+                    const py = margin + row * cellSize + cellSize/2;
+                    for (let c = 0; c < clusters.length; c++) {
+                        const dist = Math.hypot(px - clusters[c].cx, py - clusters[c].cy);
+                        if (dist < minDist) {
+                            minDist = dist;
+                            assignedCluster = c;
+                        }
+                    }
                     
-                    renderGridCell(soul, x, y, cellSize, index, row, col);
+                    if (minDist < clusters[assignedCluster].size * cellSize) {
+                        const x = margin + col * cellSize;
+                        const y = margin + row * cellSize;
+                        const index = row * soul.gridSize + col;
+                        renderGridCell(soul, x, y, cellSize, index, row, col);
+                    }
                 }
             }
         }
