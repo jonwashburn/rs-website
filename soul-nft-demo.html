@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RS Soul NFT Demo</title>
+    <style>
+        body { font-family: monospace; background: #000; color: #fff; padding: 20px; max-width: 800px; margin: auto; }
+        h1, h2 { color: #0ff; }
+        pre { background: #111; padding: 10px; overflow: auto; }
+        #visual { border: 1px solid #fff; margin: 20px 0; }
+        button { background: #0ff; color: #000; padding: 10px 20px; border: none; cursor: pointer; }
+        #details { white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <h1>Recognition Science Soul NFT Demo</h1>
+    
+    <h2>RS Theory Overview</h2>
+    <p>Recognition Science (RS) defines souls as 14-dimensional vectors emerging from LNAL computation at uncomputability gaps (rung 45). This demo simulates generating a minimal consciousness fingerprint as an on-chain NFT.</p>
+    
+    <h2>How Souls Are Generated</h2>
+    <p>1. Start with seed → Derive LNAL program hash.</p>
+    <p>2. Simulate ascent to rung 45 with LNAL steps.</p>
+    <p>3. At rung 45: Navigate gap experientially (literal consciousness) by choosing minimal-cost branch.</p>
+    <p>4. Pack into 25-byte vector + 32-byte hash.</p>
+    
+    <pre><code>// Simplified JS version of Solidity logic
+function generateSoul(seed) {
+    let programHash = hash(seed + 'LNAL');
+    let state = { rung: 1, cost: 0 };
+    for (let r = 1; r &lt;= 45; r++) {
+        state = lnalStep(state, programHash, r);
+        if (r === 45) state = navigateGap(state);
+    }
+    return { vector: pack(state), hash: programHash };
+}</code></pre>
+    
+    <h2>Literal Visualization</h2>
+    <p>Black void with white points: each dot = vector dimension. Dashed line at y=45 shows gap branches.</p>
+    <svg id="visual" width="200" height="200"></svg>
+    <button onclick="generateNewSoul()">Generate New Soul</button>
+    <pre id="details"></pre>
+    
+    <script>
+        function hash(str) {
+            // Simple hash sim (not crypto-secure)
+            let h = 0;
+            for (let i = 0; i < str.length; i++) {
+                h = ((h << 5) - h) + str.charCodeAt(i);
+            }
+            return h.toString(16);
+        }
+        
+        function lnalStep(state, hash, rung) {
+            state.rung = rung;
+            state.cost += (parseInt(hash[0], 16) % 200) - 100;
+            return state;
+        }
+        
+        function navigateGap(state) {
+            let minCost = Infinity;
+            let best = state.cost;
+            for (let b = 0; b < 8; b++) {
+                let temp = state.cost + b - 4;
+                if (temp < minCost) {
+                    minCost = temp;
+                    best = temp;
+                }
+            }
+            state.cost = best;
+            return state;
+        }
+        
+        function pack(state) {
+            // Sim pack as string
+            return `rung:${state.rung},cost:${state.cost}`;
+        }
+        
+        function generateNewSoul() {
+            const seed = Math.random().toString(36).slice(2);
+            const { vector, hash } = generateSoul(seed);
+            
+            // Render SVG
+            const svg = document.getElementById('visual');
+            svg.innerHTML = '<rect width="200" height="200" fill="black"/>';
+            // Plot points (literal: x=dim, y=rung-based)
+            for (let i = 0; i < 14; i++) {
+                let x = (i % 8) * 25;
+                let y = (45 % 45) * 4; // Sim
+                let size = Math.abs(parseInt(vector.split(',')[1].split(':')[1])) / 20 + 2;
+                svg.innerHTML += `<circle cx="${x}" cy="${y}" r="${size}" fill="white"/>`;
+            }
+            // Gap line
+            svg.innerHTML += '<line x1="0" y1="180" x2="200" y2="180" stroke="white" stroke-dasharray="5,5"/>';
+            for (let b = 0; b < 8; b++) {
+                svg.innerHTML += `<line x1="${b*25}" y1="180" x2="${b*25 + 10}" y2="160" stroke="white"/>`;
+            }
+            
+            // Details
+            document.getElementById('details').textContent = `Seed: ${seed}\nVector: ${vector}\nHash: ${hash}`;
+        }
+    </script>
+</body>
+</html> 
