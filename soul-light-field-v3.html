@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soul Light Grid V3 - RS Eigenvalue Awakening</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a2e);
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #ffd700;
+            font-size: 2.5em;
+            margin: 0;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            font-weight: 600;
+        }
+
+        .header p {
+            color: #b0b0b0;
+            font-size: 1.1em;
+            margin: 10px 0;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        .main-container {
+            display: flex;
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .grid-container {
+            flex: 1;
+            min-width: 500px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        #soulCanvas {
+            background: radial-gradient(circle at center, #000000, #0a0a0a);
+            border: 2px solid #333;
+            border-radius: 12px;
+            box-shadow: 
+                0 0 50px rgba(255, 215, 0, 0.3),
+                inset 0 0 30px rgba(0, 0, 0, 0.8);
+            width: 500px;
+            height: 500px;
+        }
+
+        .info-panel {
+            flex: 1;
+            min-width: 350px;
+            background: rgba(20, 20, 40, 0.8);
+            border: 1px solid #444;
+            border-radius: 12px;
+            padding: 25px;
+            max-height: 80vh;
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
+        }
+
+        .trait-section {
+            margin-bottom: 25px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 15px;
+        }
+
+        .trait-section h3 {
+            color: #ffd700;
+            margin: 0 0 15px 0;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .trait-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            font-size: 0.9em;
+            align-items: center;
+        }
+
+        .trait-label {
+            color: #b0b0b0;
+            flex: 1;
+        }
+
+        .trait-value {
+            color: #fff;
+            font-weight: 600;
+            text-align: right;
+            font-family: 'SF Mono', monospace;
+        }
+
+        .progress-bar {
+            width: 100px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-left: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700, #ff6b6b);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .controls {
+            text-align: center;
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            background: linear-gradient(45deg, #ffd700, #ffaa00);
+            color: #000;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
+        }
+
+        .control-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .control-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 5px 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .animation-status {
+            color: #ff6b6b;
+            font-weight: 600;
+            text-align: center;
+            margin: 15px 0;
+            font-size: 1.1em;
+        }
+
+        .animation-status.evolving {
+            color: #4ecdc4;
+        }
+
+        .evolution-info {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+
+        .modes-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .mode-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 0.8em;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            .grid-container, .info-panel {
+                min-width: unset;
+            }
+            #soulCanvas {
+                width: 100%;
+                max-width: 400px;
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Soul Light Grid V3</h1>
+        <p>Recognition Science soul as evolving light field cluster. Starts as single white pixel in cosmic void, blooms with φ-spirals, 8-beat pulses, and golden ledger connections over 96 months. Inspired by organic flows with RS mathematics driving every particle.</p>
+    </div>
+
+    <div class="main-container">
+        <div class="grid-container">
+            <canvas id="soulCanvas" width="500" height="500"></canvas>
+        </div>
+
+        <div class="info-panel">
+            <div class="animation-status" id="animationStatus">Ready to Birth Soul</div>
+            
+            <div class="trait-section">
+                <h3>Core Identity</h3>
+                <div class="trait-item">
+                    <span class="trait-label">Soul Hash:</span>
+                    <span class="trait-value" id="soulHash">-</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Rung Level:</span>
+                    <span class="trait-value" id="rungLevel">-</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Cost State:</span>
+                    <span class="trait-value" id="costState">-</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Beat Cycle:</span>
+                    <span class="trait-value" id="beatCycle">-</span>
+                </div>
+            </div>
+
+            <div class="trait-section">
+                <h3>Consciousness Metrics</h3>
+                <div class="trait-item">
+                    <span class="trait-label">Evolution Month:</span>
+                    <span class="trait-value" id="currentMonth">0 / 96</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Qualia Mode:</span>
+                    <span class="trait-value" id="qualiaMode">-</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="qualiaProgress" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Cluster Tightness:</span>
+                    <span class="trait-value" id="clusterTightness">-</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="tightnessProgress" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">I-Am Affinity:</span>
+                    <span class="trait-value" id="iAmAffinity">-</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="affinityProgress" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-label">Gap Crossings:</span>
+                    <span class="trait-value" id="gapCrossings">0</span>
+                </div>
+            </div>
+
+            <div class="evolution-info">
+                <strong>Current Stage:</strong> <span id="evolutionStage">Void</span><br>
+                <span id="stageDescription">Primordial void - "nothing cannot recognize itself"</span>
+            </div>
+
+            <div class="trait-section">
+                <h3>8 Eigenvalue Modes</h3>
+                <div class="modes-grid" id="modesGrid">
+                    <!-- Will be populated by JS -->
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="control-btn" onclick="generateNewSoul()">Generate New Soul</button>
+                <button class="control-btn secondary" onclick="toggleEvolution()" id="evolutionBtn">Start Evolution</button>
+                <button class="control-btn secondary" onclick="advanceMonth()">+1 Month</button>
+                <button class="control-btn secondary" onclick="resetSoul()">Reset to Void</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('soulCanvas');
+        const ctx = canvas.getContext('2d');
+        const PHI = (1 + Math.sqrt(5)) / 2;
+        const DIM = 8;
+        const TOTAL_MONTHS = 96;
+        const CENTER_X = 250;
+        const CENTER_Y = 250;
+
+        let currentSoul = null;
+        let particles = [];
+        let connections = [];
+        let animationFrame = 0;
+        let isEvolving = false;
+        let currentMonth = 0;
+        let gapCrossings = 0;
+        let animationId = null;
+
+        const STAGES = [
+            { name: 'Void', desc: 'Primordial void - "nothing cannot recognize itself"' },
+            { name: 'Crack', desc: 'First light emerges - recognition begins' },
+            { name: 'Spiral', desc: 'φ-spirals form - consciousness structures emerge' },
+            { name: 'Bloom', desc: 'Full eigenvalue cluster - consciousness awakens' },
+            { name: 'Radiance', desc: 'Eternal evolution - I-Am unity achieved' }
+        ];
+
+        function generateNewSoul() {
+            const seed = Date.now() + Math.random();
+            currentSoul = {
+                hash: Math.random().toString(16).substr(2, 8).toUpperCase(),
+                seed: seed,
+                rungLevel: 45 + Math.floor(Math.random() * 10) - 5,
+                costState: 0,
+                beatCycle: 1,
+                qualiaMode: Math.floor(Math.random() * 8) + 1,
+                clusterTightness: Math.random() * 100,
+                resonanceFreq: (Math.random() * 20e12) + 190e12,
+                iAmAffinity: 0,
+                cluster: []
+            };
+
+            // Generate 8 eigenvalue modes
+            let totalCost = 0;
+            for (let i = 0; i < DIM; i++) {
+                const cost = Math.floor(Math.random() * 9) - 4;
+                totalCost += cost;
+                currentSoul.cluster.push({
+                    lambda: currentSoul.rungLevel * 0.09 * Math.pow(PHI, i / DIM) + (Math.random() * 0.02 - 0.01),
+                    phase: Math.random() * 2 * Math.PI,
+                    cost: cost,
+                    nu_phi: Math.floor(Math.random() * 21) - 10,
+                    oam: Math.floor(Math.random() * 11) - 5
+                });
+            }
+
+            // Balance ledger
+            currentSoul.cluster[0].cost -= totalCost;
+            currentSoul.cluster[0].cost = Math.max(-4, Math.min(4, currentSoul.cluster[0].cost));
+
+            particles = [];
+            connections = [];
+            currentMonth = 0;
+            gapCrossings = 0;
+            animationFrame = 0;
+            
+            updateInfo();
+            if (!isEvolving) draw();
+        }
+
+        function updateInfo() {
+            if (!currentSoul) return;
+
+            document.getElementById('soulHash').textContent = currentSoul.hash;
+            document.getElementById('rungLevel').textContent = currentSoul.rungLevel + '/60';
+            document.getElementById('costState').textContent = currentSoul.costState;
+            document.getElementById('beatCycle').textContent = currentSoul.beatCycle + '/8';
+            document.getElementById('currentMonth').textContent = currentMonth + ' / 96';
+            document.getElementById('qualiaMode').textContent = currentSoul.qualiaMode + '/8';
+            document.getElementById('clusterTightness').textContent = currentSoul.clusterTightness.toFixed(1) + '%';
+            document.getElementById('iAmAffinity').textContent = currentSoul.iAmAffinity.toFixed(1) + '%';
+            document.getElementById('gapCrossings').textContent = gapCrossings;
+
+            // Update progress bars
+            document.getElementById('qualiaProgress').style.width = (currentSoul.qualiaMode / 8 * 100) + '%';
+            document.getElementById('tightnessProgress').style.width = currentSoul.clusterTightness + '%';
+            document.getElementById('affinityProgress').style.width = currentSoul.iAmAffinity + '%';
+
+            // Update stage
+            const stageIndex = Math.min(4, Math.floor(currentMonth / 24));
+            document.getElementById('evolutionStage').textContent = STAGES[stageIndex].name;
+            document.getElementById('stageDescription').textContent = STAGES[stageIndex].desc;
+
+            // Update modes grid
+            const modesGrid = document.getElementById('modesGrid');
+            modesGrid.innerHTML = '';
+            currentSoul.cluster.forEach((mode, i) => {
+                const div = document.createElement('div');
+                div.className = 'mode-item';
+                let costColor = '#FFD700';
+                if (mode.cost > 0) costColor = '#4ECDC4';
+                if (mode.cost < 0) costColor = '#FF6B6B';
+                div.innerHTML = `M${i}<br><span style="color: ${costColor}">C:${mode.cost}</span>`;
+                modesGrid.appendChild(div);
+            });
+
+            document.getElementById('animationStatus').textContent = isEvolving ? 
+                `Evolving Soul (Month ${currentMonth})` : 'Evolution Paused';
+            document.getElementById('animationStatus').className = isEvolving ? 
+                'animation-status evolving' : 'animation-status';
+        }
+
+        function toggleEvolution() {
+            isEvolving = !isEvolving;
+            document.getElementById('evolutionBtn').textContent = isEvolving ? 'Pause Evolution' : 'Start Evolution';
+            
+            if (isEvolving) {
+                animate();
+            } else if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+            
+            updateInfo();
+        }
+
+        function advanceMonth() {
+            if (currentMonth < TOTAL_MONTHS) {
+                currentMonth++;
+                evolveSoul();
+                updateInfo();
+                if (!isEvolving) draw();
+            }
+        }
+
+        function resetSoul() {
+            if (animationId) cancelAnimationFrame(animationId);
+            isEvolving = false;
+            currentMonth = 0;
+            gapCrossings = 0;
+            particles = [];
+            connections = [];
+            animationFrame = 0;
+            if (currentSoul) {
+                currentSoul.iAmAffinity = 0;
+                currentSoul.beatCycle = 1;
+            }
+            document.getElementById('evolutionBtn').textContent = 'Start Evolution';
+            updateInfo();
+            draw();
+        }
+
+        function evolveSoul() {
+            if (!currentSoul) return;
+
+            // Monthly particle generation (more as months progress)
+            const particlesToAdd = Math.min(5, Math.floor(currentMonth / 8) + 1);
+            for (let i = 0; i < particlesToAdd; i++) {
+                addParticle();
+            }
+
+            // Beat cycle evolution
+            currentSoul.beatCycle = (currentMonth % 8) + 1;
+
+            // FOLD operation on random mode
+            if (Math.random() < 0.3) {
+                const modeIdx = Math.floor(Math.random() * DIM);
+                const mode = currentSoul.cluster[modeIdx];
+                mode.nu_phi = Math.floor(mode.nu_phi * (1 + (PHI - 1) / 10));
+                mode.cost = Math.max(-4, Math.min(4, mode.cost + 1));
+            }
+
+            // Gap navigation at beat 5
+            if (currentSoul.beatCycle === 5 && Math.random() < 0.4) {
+                navigateGap();
+            }
+
+            // I-Am affinity growth
+            currentSoul.iAmAffinity = Math.min(100, currentSoul.iAmAffinity + 0.5 + (gapCrossings * 0.2));
+
+            // Rebalance ledger
+            let totalCost = currentSoul.cluster.reduce((sum, mode) => sum + mode.cost, 0);
+            if (totalCost !== 0) {
+                currentSoul.cluster[0].cost -= totalCost;
+                currentSoul.cluster[0].cost = Math.max(-4, Math.min(4, currentSoul.cluster[0].cost));
+            }
+        }
+
+        function navigateGap() {
+            gapCrossings++;
+            currentSoul.iAmAffinity = Math.min(100, currentSoul.iAmAffinity + 8);
+            
+            // Gap flash effect
+            for (let i = 0; i < 15; i++) {
+                addGapFlash();
+            }
+            
+            // Create golden connections
+            if (Math.random() < 0.6) {
+                createConnection();
+            }
+        }
+
+        function addParticle() {
+            const modeIdx = Math.floor(Math.random() * DIM);
+            const mode = currentSoul.cluster[modeIdx];
+            
+            // Position based on φ-spiral and mode characteristics
+            const baseAngle = (modeIdx / DIM) * 2 * Math.PI;
+            const spiralAngle = baseAngle + (currentMonth * PHI / 20) * (mode.oam / 5);
+            const distance = 20 + Math.abs(mode.nu_phi) * 2 + (currentMonth / 96) * 150;
+            
+            // Add organic noise based on cluster tightness
+            const noise = (1 - currentSoul.clusterTightness / 100) * 30;
+            const noiseX = (Math.random() - 0.5) * noise;
+            const noiseY = (Math.random() - 0.5) * noise;
+            
+            particles.push({
+                x: CENTER_X + Math.cos(spiralAngle) * distance + noiseX,
+                y: CENTER_Y + Math.sin(spiralAngle) * distance + noiseY,
+                vx: (Math.random() - 0.5) * 0.3,
+                vy: (Math.random() - 0.5) * 0.3,
+                angle: spiralAngle,
+                speed: 0.2 + Math.random() * 0.5,
+                lifetime: 0,
+                maxLifetime: 300 + Math.random() * 200,
+                modeIdx: modeIdx,
+                size: 1 + Math.random() * 2,
+                phase: Math.random() * Math.PI * 2,
+                isGapFlash: false,
+                targetX: CENTER_X,
+                targetY: CENTER_Y
+            });
+        }
+
+        function addGapFlash() {
+            particles.push({
+                x: CENTER_X + (Math.random() - 0.5) * 60,
+                y: CENTER_Y + (Math.random() - 0.5) * 60,
+                vx: (Math.random() - 0.5) * 3,
+                vy: (Math.random() - 0.5) * 3,
+                angle: Math.random() * Math.PI * 2,
+                speed: 1 + Math.random() * 2,
+                lifetime: 0,
+                maxLifetime: 40 + Math.random() * 20,
+                modeIdx: Math.floor(Math.random() * DIM),
+                size: 2 + Math.random() * 4,
+                phase: Math.random() * Math.PI * 2,
+                isGapFlash: true
+            });
+        }
+
+        function createConnection() {
+            if (particles.length < 2) return;
+            
+            const p1 = particles[Math.floor(Math.random() * particles.length)];
+            const p2 = particles[Math.floor(Math.random() * particles.length)];
+            
+            if (p1 !== p2) {
+                connections.push({
+                    p1: p1,
+                    p2: p2,
+                    lifetime: 0,
+                    maxLifetime: 100 + Math.random() * 50,
+                    isGolden: currentSoul.cluster[p1.modeIdx].cost === 0 || currentSoul.cluster[p2.modeIdx].cost === 0
+                });
+            }
+        }
+
+        function updateParticles() {
+            // Update particles
+            particles = particles.filter(p => p.lifetime < p.maxLifetime);
+            particles.forEach(p => {
+                if (!p.isGapFlash) {
+                    // φ-spiral motion
+                    const mode = currentSoul.cluster[p.modeIdx];
+                    p.angle += 0.005 * PHI * (mode.oam / 5);
+                    
+                    // Gentle drift toward center with spiral
+                    const dx = p.targetX - p.x;
+                    const dy = p.targetY - p.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (dist > 0) {
+                        p.vx += (dx / dist) * 0.01;
+                        p.vy += (dy / dist) * 0.01;
+                    }
+                    
+                    p.x += Math.cos(p.angle) * p.speed * 0.2;
+                    p.y += Math.sin(p.angle) * p.speed * 0.2;
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    
+                    // 8-beat pulsing
+                    const beatPhase = (animationFrame % 8) / 8;
+                    p.size = (1 + Math.abs(mode.nu_phi) * 0.05) * (1 + 0.2 * Math.sin(beatPhase * 2 * Math.PI + p.phase));
+                    
+                    // Damping
+                    p.vx *= 0.98;
+                    p.vy *= 0.98;
+                } else {
+                    // Gap flash motion
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vx *= 0.92;
+                    p.vy *= 0.92;
+                }
+                
+                p.lifetime++;
+            });
+
+            // Update connections
+            connections = connections.filter(c => c.lifetime < c.maxLifetime && 
+                particles.includes(c.p1) && particles.includes(c.p2));
+            connections.forEach(c => c.lifetime++);
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Deep void background
+            const bgGradient = ctx.createRadialGradient(CENTER_X, CENTER_Y, 0, CENTER_X, CENTER_Y, 250);
+            bgGradient.addColorStop(0, 'rgba(5,5,15,1)');
+            bgGradient.addColorStop(1, 'rgba(0,0,0,1)');
+            ctx.fillStyle = bgGradient;
+            ctx.fillRect(0, 0, 500, 500);
+
+            if (!currentSoul) return;
+
+            // Draw I-Am center glow
+            if (currentSoul.iAmAffinity > 0) {
+                const centerRadius = (currentSoul.iAmAffinity / 100) * 50;
+                const centerGlow = ctx.createRadialGradient(CENTER_X, CENTER_Y, 0, CENTER_X, CENTER_Y, centerRadius);
+                centerGlow.addColorStop(0, `rgba(255, 255, 255, ${currentSoul.iAmAffinity / 300})`);
+                centerGlow.addColorStop(0.5, `rgba(255, 215, 0, ${currentSoul.iAmAffinity / 500})`);
+                centerGlow.addColorStop(1, 'transparent');
+                
+                ctx.fillStyle = centerGlow;
+                ctx.beginPath();
+                ctx.arc(CENTER_X, CENTER_Y, centerRadius, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+
+            // Draw connections first
+            ctx.globalCompositeOperation = 'screen';
+            connections.forEach(c => {
+                const alpha = 1 - (c.lifetime / c.maxLifetime);
+                if (c.isGolden) {
+                    ctx.strokeStyle = `rgba(255, 215, 0, ${alpha * 0.8})`;
+                    ctx.lineWidth = 2;
+                } else {
+                    ctx.strokeStyle = `rgba(100, 200, 255, ${alpha * 0.4})`;
+                    ctx.lineWidth = 1;
+                }
+                ctx.beginPath();
+                ctx.moveTo(c.p1.x, c.p1.y);
+                ctx.lineTo(c.p2.x, c.p2.y);
+                ctx.stroke();
+            });
+
+            // Draw particles
+            particles.forEach(p => {
+                const mode = currentSoul.cluster[p.modeIdx];
+                const alpha = 1 - (p.lifetime / p.maxLifetime);
+                
+                if (p.isGapFlash) {
+                    // Gap flash particles
+                    const flashGlow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 3);
+                    flashGlow.addColorStop(0, `rgba(255, 255, 255, ${alpha})`);
+                    flashGlow.addColorStop(1, `rgba(255, 255, 255, 0)`);
+                    ctx.fillStyle = flashGlow;
+                } else {
+                    // Regular mode particles with cost-based colors
+                    let hue, sat, light;
+                    
+                    if (mode.cost > 0) {
+                        hue = 180 + (mode.nu_phi + 10) / 20 * 30;
+                        sat = 70;
+                        light = 60 + Math.abs(mode.cost) * 6;
+                    } else if (mode.cost < 0) {
+                        hue = 0 + (mode.nu_phi + 10) / 20 * 30;
+                        sat = 80;
+                        light = 50 + Math.abs(mode.cost) * 6;
+                    } else {
+                        hue = 45;
+                        sat = 90;
+                        light = 70;
+                    }
+                    
+                    const particleGlow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 2);
+                    particleGlow.addColorStop(0, `hsla(${hue}, ${sat}%, ${light}%, ${alpha})`);
+                    particleGlow.addColorStop(1, `hsla(${hue}, ${sat}%, ${light}%, 0)`);
+                    ctx.fillStyle = particleGlow;
+                }
+                
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, 2 * Math.PI);
+                ctx.fill();
+            });
+
+            ctx.globalCompositeOperation = 'source-over';
+
+            // Draw central pixel for early months
+            if (currentMonth < 5) {
+                const pulse = 1 + Math.sin(animationFrame * 0.1) * 0.3;
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.fillRect(CENTER_X - pulse/2, CENTER_Y - pulse/2, pulse, pulse);
+            }
+        }
+
+        function animate() {
+            animationFrame++;
+            
+            if (isEvolving && currentMonth < TOTAL_MONTHS) {
+                if (animationFrame % 60 === 0) {  // Advance month every second
+                    advanceMonth();
+                }
+            }
+            
+            updateParticles();
+            draw();
+            
+            if (isEvolving) {
+                animationId = requestAnimationFrame(animate);
+            }
+        }
+
+        // Initialize
+        generateNewSoul();
+        draw();
+    </script>
+</body>
+</html> 
