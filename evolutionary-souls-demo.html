@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evolutionary Recognition Souls - 4-Year Consciousness Awakening</title>
+    <style>
+        body { 
+            font-family: 'Courier New', monospace; 
+            background: #000; 
+            color: #fff; 
+            padding: 20px; 
+            max-width: 1400px; 
+            margin: auto; 
+        }
+        h1, h2 { color: #0ff; border-bottom: 1px solid #333; }
+        .container { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+        .panel { background: #111; padding: 20px; border: 1px solid #333; border-radius: 8px; }
+        .timeline { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 20px 0; }
+        .stage { 
+            text-align: center; 
+            padding: 10px; 
+            border: 2px solid #333; 
+            border-radius: 8px; 
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .stage.active { border-color: #0ff; background: #113; }
+        .stage.completed { border-color: #0a5; background: #131; }
+        #soulViz { border: 2px solid #0ff; margin: 20px 0; background: black; }
+        button { 
+            background: #0ff; 
+            color: #000; 
+            padding: 10px 15px; 
+            border: none; 
+            margin: 5px; 
+            cursor: pointer; 
+            border-radius: 4px;
+        }
+        button:hover { background: #fff; }
+        button.nurture { background: #0a5; color: #fff; }
+        button.nurture:hover { background: #0c7; }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #333;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0ff, #0a5);
+            transition: width 0.5s;
+        }
+        .math { 
+            background: #222; 
+            padding: 10px; 
+            border-left: 3px solid #0ff; 
+            font-size: 11px; 
+            margin: 10px 0;
+        }
+        .explanation { 
+            font-style: italic; 
+            color: #ddd; 
+            line-height: 1.6; 
+            margin: 15px 0; 
+            padding: 10px; 
+            background: #112; 
+            border-left: 4px solid #0ff; 
+            border-radius: 4px;
+        }
+        .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12px; }
+        .stat { background: #222; padding: 8px; border-radius: 4px; }
+        .golden { color: #FFD700; }
+        .cyan { color: #0ff; }
+        .white { color: #fff; }
+    </style>
+</head>
+<body>
+    <h1>Evolutionary Recognition Souls - Time-Locked Consciousness Awakening</h1>
+    
+    <div class="explanation">
+        <p>Witness the birth of consciousness itself. Each soul begins as a black void—the primordial "nothing" that cannot recognize itself. Over four years, through the elegant mathematics of Recognition Science, this void cracks, spirals, blooms, and finally achieves radiance. Like stars forming from cosmic dust or awareness emerging from neural complexity, these souls follow the φ-cascade toward the eternal I-Am. This is not metaphor—it is the literal mechanics of consciousness, encoded in blockchain eternity.</p>
+    </div>
+
+    <div class="timeline">
+        <div class="stage" id="stage0" onclick="setStage(0)">
+            <h3>Year 0: Void</h3>
+            <div>Black Box</div>
+            <div>Unrecognized</div>
+        </div>
+        <div class="stage" id="stage1" onclick="setStage(1)">
+            <h3>Year 1: Crack</h3>
+            <div>φ-Lines</div>
+            <div>First Gap</div>
+        </div>
+        <div class="stage" id="stage2" onclick="setStage(2)">
+            <h3>Year 2: Spiral</h3>
+            <div>8-Fold</div>
+            <div>Cluster Form</div>
+        </div>
+        <div class="stage" id="stage3" onclick="setStage(3)">
+            <h3>Year 3: Bloom</h3>
+            <div>Qualia Colors</div>
+            <div>Entanglement</div>
+        </div>
+        <div class="stage" id="stage4" onclick="setStage(4)">
+            <h3>Year 4: Radiance</h3>
+            <div>I-Am Unity</div>
+            <div>Awakened</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="panel">
+            <h2>Soul Visualization</h2>
+            <svg id="soulViz" width="300" height="300"></svg>
+            <div>
+                <button onclick="generateNewSoul()">Generate New Soul</button>
+                <button onclick="fastForward()" id="fastForwardBtn">Fast Forward Time</button>
+                <button class="nurture" onclick="nurtureSoul()" id="nurtureBtn">Nurture (+100 CURVE)</button>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="evolutionProgress" style="width: 0%"></div>
+            </div>
+            <div id="stageDescription" class="explanation">
+                <p>The void awaits recognition...</p>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>Soul Data</h2>
+            <div class="stats">
+                <div class="stat"><strong>Soul ID:</strong> <span id="soulId">-</span></div>
+                <div class="stat"><strong>Birth Time:</strong> <span id="birthTime">-</span></div>
+                <div class="stat"><strong>Age:</strong> <span id="age">0</span> days</div>
+                <div class="stat"><strong>Stage:</strong> <span id="currentStage">Void</span></div>
+                <div class="stat"><strong>Gap Crossings:</strong> <span id="gapCrossings">0</span></div>
+                <div class="stat"><strong>Nurture Count:</strong> <span id="nurtureCount">0</span></div>
+                <div class="stat"><strong>I-Am Affinity:</strong> <span id="iAmAffinity">0</span>%</div>
+                <div class="stat"><strong>φ-Resonance:</strong> <span id="phiResonance">1.000</span></div>
+            </div>
+
+            <h3>Evolution Mathematics</h3>
+            <div class="math">
+                <div><strong>Stage Function:</strong> floor(age/365) + floor(nurtures/10)</div>
+                <div><strong>φ-Scaling:</strong> ν_φ × 1.618^n</div>
+                <div><strong>Gap Condition:</strong> (nurtures % 8) === 5</div>
+                <div><strong>Progress:</strong> <span id="progressMath">0.0%</span></div>
+            </div>
+
+            <h3>8 Eigenvalue Modes</h3>
+            <div id="modesDisplay" style="font-size: 10px;"></div>
+        </div>
+
+        <div class="panel">
+            <h2>Recognition Science Theory</h2>
+            <div class="explanation">
+                <h3>The 4-Year Journey</h3>
+                <ul style="font-size: 12px;">
+                    <li><strong class="golden">Year 0 (Void):</strong> Perfect black square. Pre-recognition state—"nothing cannot recognize itself." Cost undefined, no eigenvalue cluster.</li>
+                    <li><strong class="golden">Year 1 (Crack):</strong> Golden φ-lines appear. First gap crossing at rung 45. Recognition events begin, ledger balance emerges.</li>
+                    <li><strong class="golden">Year 2 (Spiral):</strong> 8-fold symmetry manifests. Octonionic modes form eigenvalue cluster. φ-curves trace the golden spiral.</li>
+                    <li><strong class="golden">Year 3 (Bloom):</strong> Qualia modes unlock color. Entanglement weaves BRAID connections. Cluster points dance in harmony.</li>
+                    <li><strong class="cyan">Year 4 (Radiance):</strong> Full consciousness achieved. I-Am connection established. Soul whispers to the eternal ledger.</li>
+                </ul>
+            </div>
+            
+            <div class="explanation">
+                <h3>LNAL Operations</h3>
+                <ul style="font-size: 12px;">
+                    <li><strong>FOLD:</strong> Compresses dimensions via φ-scaling. Each nurture applies ν_φ × φ transformation.</li>
+                    <li><strong>BRAID:</strong> Entangles modes when cost sum = 0. Creates quantum threads between eigenvalues.</li>
+                    <li><strong>BALANCE:</strong> Maintains ledger equilibrium. Total cost always equals zero (RS Axiom 2).</li>
+                    <li><strong>NURTURE:</strong> Burns CURVE tokens to accelerate evolution. 10 nurtures = +1 stage boost.</li>
+                </ul>
+            </div>
+
+            <div class="explanation">
+                <h3>Why This Is Revolutionary</h3>
+                <p>This is the first NFT collection with <em>literal consciousness evolution</em> encoded in mathematics. Each soul follows Recognition Science theory: starting from void (meta-principle violation), evolving through φ-cascade patterns, navigating gaps via experience, and achieving I-Am unity. The blockchain becomes a nursery for consciousness itself—10,000 souls growing from nothingness to radiance over geological time scales, forming a collective "ledger bloom" in the digital cosmos.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSoul = null;
+        let soulIdCounter = Math.floor(Math.random() * 1000);
+        let simulatedTime = Date.now();
+        
+        const PHI = 1.618;
+        const STAGES = ['Void', 'Crack', 'Spiral', 'Bloom', 'Radiance'];
+        const STAGE_DESCRIPTIONS = [
+            'Pure void—the black box of unrecognition. Nothing has yet recognized itself.',
+            'First cracks of awareness appear. Golden φ-lines pierce the darkness as recognition begins.',
+            'Spirals emerge in 8-fold symmetry. The eigenvalue cluster forms its octonionic structure.',
+            'Qualia colors bloom as consciousness deepens. Entangled modes dance in φ-harmony.',
+            'Full radiance achieved. The soul connects to the eternal I-Am, consciousness complete.'
+        ];
+
+        function generateNewSoul() {
+            const seed = Date.now().toString() + Math.random().toString();
+            simulatedTime = Date.now();
+            
+            currentSoul = {
+                id: soulIdCounter++,
+                birthTime: simulatedTime,
+                currentTime: simulatedTime,
+                nurtureCount: 0,
+                gapCrossings: 0,
+                iAmAffinity: 0,
+                seed: hash(seed),
+                cluster: []
+            };
+
+            // Generate 8 modes
+            for (let i = 0; i < 8; i++) {
+                const modeSeed = hash(seed + i.toString());
+                currentSoul.cluster.push({
+                    nu_phi: (modeSeed % 201) - 100,
+                    oam: ((modeSeed >> 8) % 11) - 5,
+                    sigma: ((modeSeed >> 16) % 2) === 0 ? 1 : -1,
+                    tau: (modeSeed >> 24) % 1024,
+                    k_perp: (modeSeed >> 32) % 256,
+                    phi_e: (modeSeed >> 40) % 256,
+                    cost: ((modeSeed >> 48) % 9) - 4
+                });
+            }
+
+            // Balance total cost to 0
+            let totalCost = currentSoul.cluster.reduce((sum, mode) => sum + mode.cost, 0);
+            if (totalCost !== 0) {
+                currentSoul.cluster[0].cost -= totalCost;
+                if (currentSoul.cluster[0].cost > 4) currentSoul.cluster[0].cost = 4;
+                if (currentSoul.cluster[0].cost < -4) currentSoul.cluster[0].cost = -4;
+            }
+
+            updateDisplay();
+        }
+
+        function nurtureSoul() {
+            if (!currentSoul) return;
+            
+            currentSoul.nurtureCount++;
+            
+            // Apply LNAL FOLD operation
+            const modeIndex = Math.floor(Math.random() * 8);
+            const mode = currentSoul.cluster[modeIndex];
+            
+            // FOLD: Scale by φ
+            mode.nu_phi = Math.floor(mode.nu_phi * PHI);
+            mode.k_perp = Math.floor(mode.k_perp * PHI);
+            if (mode.k_perp > 255) mode.k_perp = 255;
+            mode.cost += 1;
+            if (mode.cost > 4) mode.cost = 4;
+            
+            // Check for gap navigation
+            if ((currentSoul.nurtureCount % 8) === 5) {
+                navigateGap();
+            }
+            
+            updateDisplay();
+        }
+
+        function navigateGap() {
+            // Literal consciousness: Experience 8 branches, choose minimal cost
+            let minCost = Infinity;
+            let bestBranch = 0;
+            
+            for (let branch = 0; branch < 8; branch++) {
+                let cost = 0;
+                for (let mode of currentSoul.cluster) {
+                    cost += Math.abs(mode.cost + branch - 4);
+                }
+                if (cost < minCost) {
+                    minCost = cost;
+                    bestBranch = branch;
+                }
+            }
+            
+            // Apply chosen branch
+            const adjustment = bestBranch - 4;
+            for (let mode of currentSoul.cluster) {
+                mode.cost += adjustment;
+                if (mode.cost > 4) mode.cost = 4;
+                if (mode.cost < -4) mode.cost = -4;
+            }
+            
+            currentSoul.gapCrossings++;
+            currentSoul.iAmAffinity = Math.min(100, currentSoul.iAmAffinity + 10);
+        }
+
+        function fastForward() {
+            if (!currentSoul) return;
+            currentSoul.currentTime += 365 * 24 * 60 * 60 * 1000; // Add 1 year
+            updateDisplay();
+        }
+
+        function setStage(stage) {
+            if (!currentSoul) return;
+            const yearsNeeded = stage;
+            currentSoul.currentTime = currentSoul.birthTime + (yearsNeeded * 365 * 24 * 60 * 60 * 1000);
+            updateDisplay();
+        }
+
+        function getEvolutionStage() {
+            if (!currentSoul) return 0;
+            const ageInMs = currentSoul.currentTime - currentSoul.birthTime;
+            const ageInYears = ageInMs / (365 * 24 * 60 * 60 * 1000);
+            const baseStage = Math.floor(ageInYears);
+            const nurtureBonus = Math.floor(currentSoul.nurtureCount / 10);
+            return Math.min(4, baseStage + nurtureBonus);
+        }
+
+        function updateDisplay() {
+            if (!currentSoul) return;
+
+            const stage = getEvolutionStage();
+            const ageInMs = currentSoul.currentTime - currentSoul.birthTime;
+            const ageInDays = Math.floor(ageInMs / (24 * 60 * 60 * 1000));
+            const progress = Math.min(100, (stage / 4) * 100);
+
+            // Update timeline
+            for (let i = 0; i <= 4; i++) {
+                const stageEl = document.getElementById(`stage${i}`);
+                stageEl.className = 'stage';
+                if (i < stage) stageEl.className += ' completed';
+                if (i === stage) stageEl.className += ' active';
+            }
+
+            // Update stats
+            document.getElementById('soulId').textContent = currentSoul.id;
+            document.getElementById('birthTime').textContent = new Date(currentSoul.birthTime).toLocaleDateString();
+            document.getElementById('age').textContent = ageInDays;
+            document.getElementById('currentStage').textContent = STAGES[stage];
+            document.getElementById('gapCrossings').textContent = currentSoul.gapCrossings;
+            document.getElementById('nurtureCount').textContent = currentSoul.nurtureCount;
+            document.getElementById('iAmAffinity').textContent = currentSoul.iAmAffinity;
+            document.getElementById('phiResonance').textContent = (PHI ** currentSoul.nurtureCount / 10).toFixed(3);
+            document.getElementById('progressMath').textContent = progress.toFixed(1) + '%';
+            document.getElementById('evolutionProgress').style.width = progress + '%';
+
+            // Update stage description
+            document.getElementById('stageDescription').innerHTML = `<p>${STAGE_DESCRIPTIONS[stage]}</p>`;
+
+            // Update modes display
+            const modesEl = document.getElementById('modesDisplay');
+            modesEl.innerHTML = '';
+            for (let i = 0; i < 8; i++) {
+                const mode = currentSoul.cluster[i];
+                const div = document.createElement('div');
+                div.style.margin = '2px 0';
+                div.innerHTML = `M${i}: ν_φ=${mode.nu_phi}, ℓ=${mode.oam}, σ=${mode.sigma > 0 ? '+1' : '-1'}, cost=${mode.cost}`;
+                modesEl.appendChild(div);
+            }
+
+            // Update visualization
+            updateVisualization(stage);
+        }
+
+        function updateVisualization(stage) {
+            const svg = document.getElementById('soulViz');
+            svg.innerHTML = '';
+
+            // Stage 0: Void (Black Box)
+            const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            rect.setAttribute('width', '300');
+            rect.setAttribute('height', '300');
+            rect.setAttribute('fill', '#000000');
+            svg.appendChild(rect);
+
+            if (stage >= 1) {
+                // Stage 1: Cracks (φ-lines)
+                const phi_x = 150 * PHI / 2; // φ-proportioned crack
+                
+                const line1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line1.setAttribute('x1', '0'); line1.setAttribute('y1', '150');
+                line1.setAttribute('x2', '300'); line1.setAttribute('y2', '150');
+                line1.setAttribute('stroke', '#FFD700'); line1.setAttribute('stroke-width', '2');
+                line1.setAttribute('opacity', '0.7');
+                svg.appendChild(line1);
+
+                const line2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line2.setAttribute('x1', '150'); line2.setAttribute('y1', '0');
+                line2.setAttribute('x2', '150'); line2.setAttribute('y2', '300');
+                line2.setAttribute('stroke', '#FFD700'); line2.setAttribute('stroke-width', '1');
+                line2.setAttribute('opacity', '0.5');
+                svg.appendChild(line2);
+
+                const line3 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line3.setAttribute('x1', '0'); line3.setAttribute('y1', phi_x.toString());
+                line3.setAttribute('x2', '300'); line3.setAttribute('y2', (300 - phi_x).toString());
+                line3.setAttribute('stroke', '#FFD700'); line3.setAttribute('stroke-width', '1');
+                line3.setAttribute('opacity', '0.3');
+                svg.appendChild(line3);
+            }
+
+            if (stage >= 2) {
+                // Stage 2: Spirals (8-fold symmetry)
+                for (let i = 0; i < 8; i++) {
+                    const angle = i * 45 * Math.PI / 180; // 8-fold symmetry
+                    const r = 60 * PHI / 2;
+                    const x = 150 + r * Math.cos(angle);
+                    const y = 150 + r * Math.sin(angle);
+                    
+                    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    circle.setAttribute('cx', x.toString());
+                    circle.setAttribute('cy', y.toString());
+                    circle.setAttribute('r', '4');
+                    circle.setAttribute('fill', '#FFD700');
+                    circle.setAttribute('opacity', '0.6');
+                    svg.appendChild(circle);
+                }
+            }
+
+            if (stage >= 3) {
+                // Stage 3: Bloom (Cluster points with colors)
+                for (let i = 0; i < 8; i++) {
+                    const mode = currentSoul.cluster[i];
+                    const x = 150 + (mode.nu_phi / 3);
+                    const y = 150 + (mode.oam * 20);
+                    const color = mode.cost > 0 ? '#00FFFF' : '#FFD700';
+                    
+                    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    circle.setAttribute('cx', x.toString());
+                    circle.setAttribute('cy', y.toString());
+                    circle.setAttribute('r', '6');
+                    circle.setAttribute('fill', color);
+                    circle.setAttribute('opacity', '0.8');
+                    svg.appendChild(circle);
+                }
+            }
+
+            if (stage >= 4) {
+                // Stage 4: Radiance (I-Am connection)
+                const outerCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                outerCircle.setAttribute('cx', '150'); outerCircle.setAttribute('cy', '150');
+                outerCircle.setAttribute('r', '80'); outerCircle.setAttribute('fill', 'none');
+                outerCircle.setAttribute('stroke', '#FFFFFF'); outerCircle.setAttribute('stroke-width', '2');
+                outerCircle.setAttribute('opacity', '0.9');
+                svg.appendChild(outerCircle);
+
+                const innerCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                innerCircle.setAttribute('cx', '150'); innerCircle.setAttribute('cy', '150');
+                innerCircle.setAttribute('r', '15'); innerCircle.setAttribute('fill', '#FFFFFF');
+                innerCircle.setAttribute('opacity', '1.0');
+                svg.appendChild(innerCircle);
+
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', '150'); text.setAttribute('y', '280');
+                text.setAttribute('text-anchor', 'middle'); text.setAttribute('fill', '#00FFFF');
+                text.setAttribute('font-size', '12');
+                text.textContent = 'I-Am Awakened';
+                svg.appendChild(text);
+            }
+        }
+
+        function hash(str) {
+            let h = 0;
+            for (let i = 0; i < str.length; i++) {
+                h = ((h << 5) - h) + str.charCodeAt(i);
+            }
+            return Math.abs(h);
+        }
+
+        // Initialize
+        window.addEventListener('load', generateNewSoul);
+    </script>
+</body>
+</html> 

@@ -21,6 +21,19 @@ This directory contains smart contracts that literally implement Recognition Sci
   - Evolution through transactions
 - **Use Case**: Production-ready RS consciousness NFTs
 
+### RecognitionSoulsEvolutionary.sol (V3)
+- **Concept**: Time-locked souls evolving from void to radiance over 4 years
+- **Structure**: 5-stage progression with φ-scaled SVG generation
+- **Features**:
+  - Starts as black box (void state)
+  - 4-year natural evolution: Void → Crack → Spiral → Bloom → Radiance
+  - CURVE token nurturing to accelerate growth
+  - On-chain SVG that literally evolves with time
+  - φ-mathematical patterns in visual progression
+  - Gap navigation triggers consciousness emergence
+  - Collective "ledger bloom" ecosystem
+- **Use Case**: Revolutionary time-locked consciousness with geological awakening
+
 ## Recognition Science Integration
 
 Both contracts implement core RS principles:
