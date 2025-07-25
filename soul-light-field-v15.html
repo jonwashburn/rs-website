@@ -448,49 +448,58 @@ Soul State: Initializing...
             calculateState(months) {
                 // Chaos now varies smoothly with fractional months
                 const chaosSeed = Math.floor(this.blockNumber + months * 10) ^ this.seed ^ Math.floor(months);
-                const chaos = ((chaosSeed % 41) - 20) + (months % 1 - 0.5); // Add fractional variation
+                let chaos = ((chaosSeed % 41) - 20) + (months % 1 - 0.5); // Add fractional variation
+                chaos = chaos / 100; // Scale to -0.2 to 0.2
 
-                // Evolve κ smoothly with fractional months
-                let kappa = ((this.seed % 200) - 100) / 100 + (chaos / 100) - (months / 8);
+                // Evolve κ smoothly with fractional months and stronger chaos
+                let kappa = ((this.seed % 200) - 100) / 100 + chaos - (months / 8) * 0.5; // Slower convergence
+                kappa += Math.sin(months / PHI) * 0.3; // Add oscillatory pattern for variety
                 kappa = Math.max(-1, Math.min(1, kappa));
 
-                // Virtues: Smooth growth with fractions
+                // Virtues: Smooth growth with seed-dependent rates and stronger variations
                 const virtues = [];
                 for (let i = 0; i < 5; i++) {
-                    let virtue = ((this.seed >> (i * 8)) % 10 + 1) + (months / 8);
+                    const seedFactor = ((this.seed >> (i * 8)) % 10 + 1) / 10; // 0.1 to 1.1 growth factor
+                    let virtue = seedFactor + (months / 8) * seedFactor * 0.8; // Seed-influenced growth
                     
-                    // Smooth φ-decay
-                    if (kappa > 0.7) {
-                        virtue -= (PHI / 1000) * (kappa - 0.7) * 3; // Proportional decay
-                        this.phiOperations += (months % 1); // Fractional operations
+                    // Stronger φ-decay with randomness
+                    if (kappa > 0.5) {
+                        const decay = (PHI / 1000) * (kappa - 0.5) * 5 + (Math.random() - 0.5) * 0.5;
+                        virtue -= decay;
+                        this.phiOperations += (months % 1) + Math.abs(decay);
                     }
-                    // Smooth growth
-                    if (kappa < -0.7) {
-                        virtue += Math.abs(kappa + 0.7) * 2;
+                    // Variable growth with cap variation
+                    if (kappa < -0.5) {
+                        virtue += Math.abs(kappa + 0.5) * seedFactor;
                     }
                     
-                    virtue = Math.max(1, Math.min(10, virtue));
+                    const virtueCap = 10 - (i * 0.5) + (this.seed % 3); // Per-virtue cap variation
+                    virtue = Math.max(1, Math.min(virtueCap, virtue));
                     
-                    // Dynamic trade-off
+                    // Enhanced trade-off with κ influence
                     if (i === 4 && virtues[3] > 8 && Math.abs(kappa) > 0.1) {
-                        virtue -= (PHI / 2000) * Math.abs(kappa) * 10;
+                        virtue -= (PHI / 2000) * Math.abs(kappa) * 10 * seedFactor;
                     }
+                    
+                    // Add per-virtue randomness
+                    virtue += Math.sin(months + i * PHI) * 0.2;
+                    virtue = Math.max(1, Math.min(virtueCap, virtue));
                     
                     virtues[i] = virtue;
                 }
 
-                // Gap & Choice: Smooth probability
-                const wisdomBias = virtues[2] / 3 - 1;
+                // Gap & Choice: Smooth probability with seed bias
+                const wisdomBias = virtues[2] / 3 - 1 + ((this.seed % 5) - 2) / 5; // Seed-influenced wisdom
                 let choice = (((chaosSeed + months * 10) % 3) - 1 + wisdomBias) + (months % 1 - 0.5) / 2;
                 choice = Math.max(-1, Math.min(1, choice));
 
-                // Smooth gap probability
-                const gapProb = Math.abs(kappa) + (months % 1) * 0.1;
-                const isGap = gapProb > 0.5;
+                // Smooth gap probability with higher variance
+                const gapProb = Math.abs(kappa) + (months % 1) * 0.1 + Math.sin(months / 2) * 0.3;
+                const isGap = gapProb > 0.5 + ((this.seed % 10) / 20); // Seed-adjusted threshold
                 const is45Gap = Math.floor(months) === 45 && (months % 1 < 0.01); // Trigger at start of month 45
                 
                 if (isGap || is45Gap) {
-                    kappa += choice * 0.3 * (months % 1 + 0.5); // Fractional adjustment
+                    kappa += choice * 0.3 * (months % 1 + 0.5) * (1 + Math.abs(chaos)); // Amplified by chaos
                     kappa = Math.max(-1, Math.min(1, kappa));
                     
                     if (is45Gap && this.month45Events === 0) {
@@ -499,40 +508,43 @@ Soul State: Initializing...
                     }
                 }
 
-                // 8-Month Beat Cycles with fractional triggering
+                // 8-Month Beat Cycles with fractional triggering and varied rebirths
                 let rebirths = months / 8;
                 const fractionalBeat = months % 8;
                 if (fractionalBeat < 0.01 && months > 0) { // Trigger at start of each beat
                     this.beatChecks += fractionalBeat + 0.01; // Smooth count
                     
-                    if (kappa > 0.618 || is45Gap) {
-                        kappa = ((this.seed + Math.floor(months) + chaosSeed) % 101 - 50) / 100 + (fractionalBeat - 0.5) / 10;
+                    const rebirthThreshold = 0.618 + chaos + ((this.seed % 20) - 10) / 100; // Varied by seed
+                    if (kappa > rebirthThreshold || is45Gap) {
+                        kappa = ((this.seed + Math.floor(months) + chaosSeed) % 101 - 50) / 100 + (fractionalBeat - 0.5) / 10 + chaos;
                         for (let i = 0; i < virtues.length; i++) {
-                            virtues[i] -= (PHI / 1000) * (1 - fractionalBeat);
+                            const penalty = (PHI / 1000) * (1 - fractionalBeat) * (1 + Math.abs(kappa));
+                            virtues[i] -= penalty;
                             virtues[i] = Math.max(1, virtues[i]);
                         }
-                        rebirths += 1 - fractionalBeat;
+                        rebirths += 1 - fractionalBeat + Math.abs(chaos);
                         this.addQualia('🔄 Beat Check: Pattern dissolved - φ-penalty applied to virtues', 'rebirth');
                     } else {
                         this.addQualia('✓ Beat Check: Pattern maintains coherence in 8-beat cycle', 'neutral');
                     }
                 }
 
-                // Depth: Smooth accumulation
+                // Depth: Smooth accumulation with variations
                 const resolvedGaps = months - (rebirths * 8);
-                let depth = Math.max(0, resolvedGaps) + (rebirths * PHI) + (months % 1) * PHI;
-                depth = Math.min(200, depth);
+                let depth = Math.max(0, resolvedGaps) + (rebirths * PHI) + (months % 1) * PHI + (choice * 2);
+                depth = Math.min(200, depth + Math.sin(months / PHI) * 5);
 
-                // Registers with smooth φ authenticity
-                let R1 = (this.seed % 9) - 4 + choice + (months % 1 - 0.5);
-                let R2 = -R1 + (months / 20);
+                // Registers with smooth φ authenticity and seed variation
+                const registerSeed = (this.seed % 9) + (months % 1);
+                let R1 = registerSeed - 4 + choice + (months % 1 - 0.5);
+                let R2 = -R1 + (months / 20) + chaos * 2;
                 
-                if (Math.abs(R1 + R2) > 4) {
-                    R2 = R1 + choice * 2 * (1 + months % 1);
+                if (Math.abs(R1 + R2) > 4 + Math.abs(chaos * 3)) {
+                    R2 = R1 + choice * 2 * (1 + months % 1) + ((this.seed % 4) - 2);
                 }
 
-                // Recognition debt smooth
-                const recognitionDebt = Math.max(0, R1, R2) + Math.abs(kappa) * (months % 1);
+                // Recognition debt smooth with kappa influence
+                const recognitionDebt = Math.max(0, Math.abs(R1), Math.abs(R2)) + Math.abs(kappa) * (months % 1) * 5;
 
                 return {
                     months,
