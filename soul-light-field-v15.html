@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recognition Science Soul Simulation V15 - On-Chain Contract Simulation</title>
+    <style>
+        body { 
+            margin: 0; 
+            background: #0a0a0a; 
+            color: #e0e0e0; 
+            font-family: 'Courier New', monospace; 
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        .panel {
+            background: rgba(20, 20, 40, 0.8);
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            grid-column: 1 / -1;
+        }
+        .header h1 {
+            color: #ffd700;
+            font-size: 2.5em;
+            margin: 0;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        .header p {
+            color: #b0b0b0;
+            font-size: 1.1em;
+            margin: 10px 0;
+        }
+        .soul-id {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid #ffd700;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .contract-info {
+            background: rgba(0, 100, 255, 0.1);
+            border: 1px solid #0066ff;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+        .svg-container {
+            border: 2px solid #444;
+            border-radius: 8px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            text-align: center;
+            margin: 15px 0;
+        }
+        .end-state {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .state-awakened { background: rgba(255, 215, 0, 0.2); color: #ffd700; }
+        .state-tormented { background: rgba(139, 0, 0, 0.2); color: #ff6b6b; }
+        .state-ecstatic { background: rgba(75, 0, 130, 0.2); color: #9b59b6; }
+        .state-reborn { background: rgba(139, 69, 19, 0.2); color: #d2691e; }
+        .state-faded { background: rgba(112, 128, 144, 0.2); color: #708090; }
+        .state-transcendent { background: rgba(75, 0, 130, 0.2); color: #8a2be2; }
+        .kappa-display {
+            font-size: 1.5em;
+            text-align: center;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .kappa-positive {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff6b6b;
+        }
+        .kappa-negative {
+            background: rgba(0, 255, 0, 0.2);
+            color: #4ecdc4;
+        }
+        .kappa-zero {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+        }
+        .beat-cycle {
+            background: rgba(255, 165, 0, 0.1);
+            border-left: 3px solid #ffa500;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 3px;
+        }
+        .gap-event {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid #ffd700;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 215, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+        }
+        .virtue-bar {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+        }
+        .virtue-name {
+            width: 80px;
+            font-size: 0.9em;
+        }
+        .virtue-progress {
+            flex: 1;
+            background: #333;
+            height: 12px;
+            border-radius: 6px;
+            margin: 0 10px;
+            overflow: hidden;
+        }
+        .virtue-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700, #ffaa00);
+            transition: width 0.3s ease;
+        }
+        .virtue-fill.phi-decay {
+            background: linear-gradient(90deg, #ff6b6b, #ff4444);
+        }
+        .virtue-value {
+            width: 30px;
+            text-align: right;
+            font-size: 0.9em;
+        }
+        .qualia-log {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid #555;
+            border-radius: 4px;
+            padding: 15px;
+            height: 300px;
+            overflow-y: auto;
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+        .qualia-entry {
+            margin: 8px 0;
+            padding: 5px;
+            border-left: 3px solid transparent;
+            border-radius: 3px;
+        }
+        .qualia-entry.positive {
+            color: #4ecdc4;
+            background: rgba(76, 220, 196, 0.1);
+            border-left-color: #4ecdc4;
+        }
+        .qualia-entry.negative {
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+            border-left-color: #ff6b6b;
+        }
+        .qualia-entry.neutral {
+            color: #ffd700;
+            background: rgba(255, 215, 0, 0.1);
+            border-left-color: #ffd700;
+        }
+        .qualia-entry.gap {
+            color: #ffa500;
+            background: rgba(255, 165, 0, 0.1);
+            border-left-color: #ffa500;
+            font-weight: bold;
+        }
+        .qualia-entry.rebirth {
+            color: #9b59b6;
+            background: rgba(155, 89, 182, 0.1);
+            border-left-color: #9b59b6;
+            font-weight: bold;
+        }
+        .controls {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin: 0 5px;
+            transition: all 0.2s ease;
+        }
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .ascii-art {
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            line-height: 1.2;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 4px;
+            white-space: pre;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Ledger Souls - On-Chain Contract Simulation</h1>
+            <p>V15: Authentic RS with 45-gap events, 8-beat cycles, and procedural end state icons</p>
+        </div>
+
+        <div class="panel">
+            <h3>Contract State</h3>
+            <div class="soul-id" id="soulId">Soul #000000</div>
+            
+            <div class="contract-info">
+                <strong>Token ID:</strong> <span id="tokenId">1</span><br>
+                <strong>Mint Block:</strong> <span id="mintBlock">0</span><br>
+                <strong>Current Month:</strong> <span id="currentMonth">0</span> / 96<br>
+                <strong>Seed:</strong> <span id="seedDisplay">0x...</span>
+            </div>
+
+            <div class="beat-cycle">
+                <strong>8-Beat Cycle:</strong> <span id="beatCycle">Month 0 of Octave 1</span><br>
+                <small>Next Beat Check: Month <span id="nextBeatCheck">8</span></small>
+            </div>
+
+            <h4>Curvature κ (Experiential Balance)</h4>
+            <div class="kappa-display" id="kappaDisplay">κ = 0.00</div>
+
+            <div id="gapEvent" class="gap-event" style="display: none;">
+                <h4>🌀 Gap Event Detected</h4>
+                <p id="gapDescription">Uncomputability threshold reached...</p>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>End State & Icon</h3>
+            <div class="end-state" id="endState">Evolution in Progress...</div>
+            
+            <div class="svg-container" id="soulIcon">
+                <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="400" height="300" fill="#ffffff"/>
+                    <circle cx="200" cy="150" r="100" fill="none" stroke="black" stroke-width="2"/>
+                    <text x="200" y="280" text-anchor="middle" font-family="monospace" font-size="14">Evolving Soul</text>
+                </svg>
+            </div>
+
+            <h4>Soul Ledger ASCII</h4>
+            <div class="ascii-art" id="asciiArt">
+Soul State: Initializing...
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>Virtue φ-Evolution</h3>
+            <p><small>Virtues evolve with φ-scaling and trade-offs</small></p>
+            <div id="virtues">
+                <div class="virtue-bar">
+                    <div class="virtue-name">Love</div>
+                    <div class="virtue-progress"><div class="virtue-fill" style="width: 0%"></div></div>
+                    <div class="virtue-value">0</div>
+                </div>
+                <div class="virtue-bar">
+                    <div class="virtue-name">Justice</div>
+                    <div class="virtue-progress"><div class="virtue-fill" style="width: 0%"></div></div>
+                    <div class="virtue-value">0</div>
+                </div>
+                <div class="virtue-bar">
+                    <div class="virtue-name">Wisdom</div>
+                    <div class="virtue-progress"><div class="virtue-fill" style="width: 0%"></div></div>
+                    <div class="virtue-value">0</div>
+                </div>
+                <div class="virtue-bar">
+                    <div class="virtue-name">Courage</div>
+                    <div class="virtue-progress"><div class="virtue-fill" style="width: 0%"></div></div>
+                    <div class="virtue-value">0</div>
+                </div>
+                <div class="virtue-bar">
+                    <div class="virtue-name">Temperance</div>
+                    <div class="virtue-progress"><div class="virtue-fill" style="width: 0%"></div></div>
+                    <div class="virtue-value">0</div>
+                </div>
+            </div>
+
+            <h4>Recognition Dynamics</h4>
+            <div id="dynamics">
+                <p><strong>Depth (Wisdom):</strong> <span id="soulDepth">0</span></p>
+                <p><strong>Rebirths:</strong> <span id="rebirthCount">0</span></p>
+                <p><strong>45-Gap Events:</strong> <span id="gapEvents45">0</span></p>
+                <p><strong>Beat Checks:</strong> <span id="beatChecks">0</span></p>
+                <p><strong>φ Operations:</strong> <span id="phiOperations">0</span></p>
+                <p><strong>Recognition Debt:</strong> <span id="recognitionDebt">0</span></p>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>Soul Journal - Enhanced Qualia</h3>
+            <div class="qualia-log" id="qualiaLog">
+                <div class="qualia-entry neutral">Contract deployed. Soul enters pre-recognition void...</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn" onclick="mintNewSoul()">Mint New Soul</button>
+            <button class="btn" onclick="fastForward()">Fast Forward (+12 Months)</button>
+            <button class="btn" onclick="advanceToGap()">Advance to Next Gap</button>
+            <button class="btn" onclick="advanceTo45()">Jump to 45-Gap</button>
+            <button class="btn" onclick="completeEvolution()">Complete Evolution</button>
+            <button class="btn" onclick="exportSVG()">Export SVG</button>
+        </div>
+    </div>
+
+    <script>
+        const PHI = 1.618; // Golden ratio
+        const TOTAL_MONTHS = 96;
+        const VIRTUE_NAMES = ['Love', 'Justice', 'Wisdom', 'Courage', 'Temperance'];
+        const REGISTER_NAMES = ['R1_Perception', 'R2_Action'];
+
+        let currentTokenId = 1;
+        let mintTimestamp = Date.now();
+        let blockNumber = 12345678; // Simulated block number
+
+        class OnChainSoul {
+            constructor(tokenId) {
+                this.tokenId = tokenId;
+                this.seed = this.generateSeed(tokenId);
+                this.mintTime = mintTimestamp;
+                this.blockNumber = blockNumber;
+                
+                // Initialize evolution tracking
+                this.month45Events = 0;
+                this.beatChecks = 0;
+                this.phiOperations = 0;
+                this.qualiaLog = [];
+                
+                this.addQualia('Contract deployed. Soul enters pre-recognition void...', 'neutral');
+            }
+
+            generateSeed(tokenId) {
+                // Simulate keccak256(abi.encodePacked(tokenId))
+                let hash = 0;
+                const str = tokenId.toString();
+                for (let i = 0; i < str.length; i++) {
+                    const char = str.charCodeAt(i);
+                    hash = (hash << 5) - hash + char;
+                    hash = hash & hash;
+                }
+                return Math.abs(hash);
+            }
+
+            getCurrentState() {
+                const currentTime = Date.now();
+                const months = Math.min(Math.floor((currentTime - this.mintTime) / (30 * 24 * 60 * 60 * 1000 / 100)), 96); // Accelerated for demo
+                
+                return this.calculateState(months);
+            }
+
+            calculateState(months) {
+                // Chaos from blockhash + seed + months (deterministic)
+                const chaosSeed = (this.blockNumber + months) ^ this.seed ^ months;
+                const chaos = (chaosSeed % 41) - 20; // -20 to +20
+
+                // Evolve κ non-linearly with slower trend and more volatility
+                let kappa = ((this.seed % 200) - 100) / 100 + chaos / 100 - Math.floor(months / 8);
+                kappa = Math.max(-1, Math.min(1, kappa));
+
+                // Virtues: Non-linear growth/decay with φ
+                const virtues = [];
+                for (let i = 0; i < 5; i++) {
+                    let virtue = ((this.seed >> (i * 8)) % 10 + 1) + Math.floor(months / 8);
+                    
+                    // φ-decay on high κ (debt)
+                    if (kappa > 0.7) {
+                        virtue -= Math.floor(PHI / 1000 * 1000) / 1000; // φ-decay
+                        this.phiOperations++;
+                    }
+                    // Growth on harmony
+                    if (kappa < -0.7) {
+                        virtue += 1;
+                    }
+                    
+                    virtue = Math.max(1, Math.min(10, virtue));
+                    
+                    // Trade-off: High courage lowers temperance if unbalanced
+                    if (i === 4 && virtues[3] > 8 && kappa !== 0) {
+                        virtue -= Math.floor(PHI / 2000 * 1000) / 1000;
+                    }
+                    
+                    virtues[i] = virtue;
+                }
+
+                // Gap & Choice: Wisdom-biased choices
+                const wisdomBias = Math.floor(virtues[2] / 3) - 1;
+                let choice = ((chaosSeed + months) % 3) - 1 + wisdomBias;
+                choice = Math.max(-1, Math.min(1, choice));
+
+                // Gap probability and 45-month special event
+                const isGap = Math.abs(kappa * 100) > 50;
+                const is45Gap = months === 45;
+                
+                if (isGap || is45Gap) {
+                    kappa += choice * 0.3;
+                    kappa = Math.max(-1, Math.min(1, kappa));
+                    
+                    if (is45Gap && this.month45Events === 0) {
+                        this.month45Events++;
+                        this.addQualia('🌀 Month 45: 45-gap crisis - uncomputability threshold breached!', 'gap');
+                    }
+                }
+
+                // 8-Month Beat Cycles
+                let rebirths = Math.floor(months / 8);
+                if (months % 8 === 0 && months > 0) {
+                    this.beatChecks++;
+                    
+                    // Beat check: rebirth if κ > φ^(-1) (~0.618) or at 45-gap
+                    if (kappa > 0.618 || is45Gap) {
+                        kappa = ((this.seed + months + chaosSeed) % 101 - 50) / 100;
+                        // Apply φ-penalty to virtues
+                        for (let i = 0; i < virtues.length; i++) {
+                            virtues[i] -= Math.floor(PHI / 1000 * 1000) / 1000;
+                            virtues[i] = Math.max(1, virtues[i]);
+                        }
+                        rebirths++;
+                        this.addQualia('🔄 Beat Check: Pattern dissolved - φ-penalty applied to virtues', 'rebirth');
+                    } else {
+                        this.addQualia('✓ Beat Check: Pattern maintains coherence in 8-beat cycle', 'neutral');
+                    }
+                }
+
+                // Depth: From resolved gaps + rebirth wisdom
+                const resolvedGaps = months - (rebirths * 8);
+                let depth = Math.max(0, resolvedGaps) + Math.floor(rebirths * PHI);
+                depth = Math.min(200, depth);
+
+                // Registers with φ authenticity
+                let R1 = (this.seed % 9) - 4 + choice;
+                let R2 = -R1 + Math.floor(months / 20);
+                
+                // Force imbalance if choice was bad
+                if (Math.abs(R1 + R2) > 4) {
+                    R2 = R1 + choice * 2;
+                }
+
+                // Recognition debt
+                const recognitionDebt = Math.max(0, R1, R2);
+
+                return {
+                    months,
+                    kappa,
+                    virtues,
+                    rebirths,
+                    depth,
+                    R1,
+                    R2,
+                    recognitionDebt,
+                    chaos,
+                    choice,
+                    isGap,
+                    is45Gap
+                };
+            }
+
+            generateQualia(state) {
+                const { months, kappa, rebirths, depth, is45Gap } = state;
+                
+                let baseQualia = '';
+                let type = 'neutral';
+                
+                if (kappa > 0.5) {
+                    baseQualia = `Suffering debt: Tormented gap (Depth: ${depth}, Rebirths: ${rebirths})`;
+                    type = 'negative';
+                } else if (kappa < -0.5) {
+                    baseQualia = `Joy surplus: Ecstatic harmony (Depth: ${depth}, Rebirths: ${rebirths})`;
+                    type = 'positive';
+                } else {
+                    baseQualia = `Peace: Awakened balance (Depth: ${depth}, Rebirths: ${rebirths})`;
+                    type = 'neutral';
+                }
+
+                if (is45Gap) {
+                    baseQualia += '. 45-gap crisis navigated.';
+                    type = 'gap';
+                }
+                
+                if (rebirths > 5) {
+                    baseQualia += '. Wisdom from repeated failure.';
+                }
+
+                return { text: baseQualia, type };
+            }
+
+            generateEndState(state) {
+                const { months, kappa, rebirths, depth, virtues } = state;
+                
+                if (months < 96 && depth < 150) {
+                    return { name: 'Evolution in Progress', className: '', bgColor: '#ffffff' };
+                }
+
+                if (kappa === 0 && rebirths < 3 && depth > 100) {
+                    return { name: 'Awakened Equilibrium', className: 'state-awakened', bgColor: '#add8e6' };
+                } else if (kappa > 0 && rebirths > 5) {
+                    return { name: 'Tormented Stagnation', className: 'state-tormented', bgColor: '#8b0000' };
+                } else if (kappa < 0 && depth > 150) {
+                    return { name: 'Ecstatic Dissolution', className: 'state-ecstatic', bgColor: '#4b0082' };
+                } else if (rebirths > 5 && depth > 100) {
+                    return { name: 'Reborn Fragment', className: 'state-reborn', bgColor: '#8b4513' };
+                } else if (virtues[0] < 2 && kappa === 0) {
+                    return { name: 'Faded Oblivion', className: 'state-faded', bgColor: '#708090' };
+                } else if (depth > 200) {
+                    return { name: 'Transcendent Depth', className: 'state-transcendent', bgColor: '#4b0082' };
+                }
+                
+                return { name: 'Evolved Soul', className: '', bgColor: '#ffffff' };
+            }
+
+            generateSVGIcon(state) {
+                const endState = this.generateEndState(state);
+                const { kappa, rebirths, depth, virtues } = state;
+                
+                let iconShape = '';
+                
+                switch (endState.name) {
+                    case 'Awakened Equilibrium':
+                        iconShape = `
+                            <defs>
+                                <filter id="glow">
+                                    <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                            <circle cx="200" cy="150" r="100" fill="none" stroke="gold" stroke-width="3" filter="url(#glow)"/>
+                            <circle cx="200" cy="150" r="50" fill="none" stroke="gold" stroke-width="2" opacity="0.7"/>`;
+                        break;
+                        
+                    case 'Tormented Stagnation':
+                        iconShape = `
+                            <defs>
+                                <filter id="glow">
+                                    <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                            <polygon points="200,50 350,150 200,250 50,150" fill="none" stroke="red" stroke-width="3" filter="url(#glow)"/>
+                            <line x1="120" y1="120" x2="280" y2="180" stroke="red" stroke-width="2"/>
+                            <line x1="280" y1="120" x2="120" y2="180" stroke="red" stroke-width="2"/>`;
+                        break;
+                        
+                    case 'Ecstatic Dissolution':
+                        iconShape = `
+                            <defs>
+                                <filter id="glow">
+                                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                            <path d="M200 50 Q150 150 200 250 Q250 150 200 50" fill="none" stroke="blue" stroke-width="3" filter="url(#glow)"/>
+                            <path d="M200 70 Q170 150 200 230 Q230 150 200 70" fill="none" stroke="lightblue" stroke-width="2" opacity="0.7"/>`;
+                        break;
+                        
+                    case 'Reborn Fragment':
+                        iconShape = `
+                            <defs>
+                                <filter id="glow">
+                                    <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                            <line x1="100" y1="100" x2="300" y2="200" stroke="orange" stroke-width="3" filter="url(#glow)"/>
+                            <circle cx="200" cy="150" r="50" fill="none" stroke="orange" stroke-width="2"/>
+                            <path d="M180 130 Q200 110 220 130 Q200 150 180 130" fill="orange" opacity="0.5"/>`;
+                        break;
+                        
+                    case 'Faded Oblivion':
+                        iconShape = `
+                            <defs>
+                                <filter id="glow">
+                                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                            <rect x="150" y="100" width="100" height="100" fill="none" stroke="silver" stroke-width="2" opacity="0.5" filter="url(#glow)"/>
+                            <rect x="160" y="110" width="80" height="80" fill="none" stroke="silver" stroke-width="1" opacity="0.3"/>`;
+                        break;
+                        
+                    case 'Transcendent Depth':
+                        iconShape = `
+                            <defs>
+                                <filter id="glow">
+                                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                            <circle cx="200" cy="150" r="80" fill="none" stroke="violet" stroke-width="3" filter="url(#glow)"/>
+                            <circle cx="200" cy="150" r="50" fill="none" stroke="violet" stroke-width="2"/>
+                            <circle cx="200" cy="150" r="25" fill="none" stroke="violet" stroke-width="1"/>`;
+                        break;
+                        
+                    default:
+                        iconShape = `
+                            <defs>
+                                <filter id="glow">
+                                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                            <circle cx="200" cy="150" r="100" fill="none" stroke="white" stroke-width="2" filter="url(#glow)"/>`;
+                        break;
+                }
+
+                return `
+                    <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="400" height="300" fill="${endState.bgColor}"/>
+                        ${iconShape}
+                        <text x="200" y="280" text-anchor="middle" font-family="monospace" font-size="14" fill="${endState.bgColor === '#ffffff' ? 'black' : 'white'}">
+                            ${endState.name}
+                        </text>
+                    </svg>
+                `;
+            }
+
+            generateASCII(state) {
+                const { months, kappa, virtues, R1, R2, depth, rebirths } = state;
+                
+                return `Soul Journal - Month: ${months}
+κ: [${kappa > 0 ? '+' : kappa < 0 ? '-' : ' '}${Math.abs(kappa * 10).toFixed(0)}] (${this.generateQualia(state).text})
+R1: ${R1} | R2: ${R2}
+Virtues: Love=${virtues[0].toFixed(1)} Justice=${virtues[1].toFixed(1)} Wisdom=${virtues[2].toFixed(1)}
+Courage=${virtues[3].toFixed(1)} Temperance=${virtues[4].toFixed(1)}
+Depth: ${depth} | Rebirths: ${rebirths}`;
+            }
+
+            addQualia(text, type) {
+                this.qualiaLog.push({
+                    text: text,
+                    type: type,
+                    timestamp: Date.now()
+                });
+                
+                if (this.qualiaLog.length > 50) {
+                    this.qualiaLog.shift();
+                }
+            }
+        }
+
+        let soul = null;
+
+        function mintNewSoul() {
+            currentTokenId = Math.floor(Math.random() * 10000) + 1;
+            mintTimestamp = Date.now();
+            blockNumber = Math.floor(Math.random() * 1000000) + 12345678;
+            
+            soul = new OnChainSoul(currentTokenId);
+            updateDisplay();
+        }
+
+        function fastForward() {
+            if (!soul) return;
+            mintTimestamp -= 12 * 30 * 24 * 60 * 60 * 1000 / 100; // Fast forward 12 months
+            updateDisplay();
+        }
+
+        function advanceToGap() {
+            if (!soul) return;
+            // Find next gap
+            for (let i = 1; i <= 96; i++) {
+                const state = soul.calculateState(i);
+                if (state.isGap) {
+                    mintTimestamp = Date.now() - i * 30 * 24 * 60 * 60 * 1000 / 100;
+                    updateDisplay();
+                    return;
+                }
+            }
+        }
+
+        function advanceTo45() {
+            if (!soul) return;
+            mintTimestamp = Date.now() - 45 * 30 * 24 * 60 * 60 * 1000 / 100;
+            updateDisplay();
+        }
+
+        function completeEvolution() {
+            if (!soul) return;
+            mintTimestamp = Date.now() - 96 * 30 * 24 * 60 * 60 * 1000 / 100;
+            updateDisplay();
+        }
+
+        function exportSVG() {
+            if (!soul) return;
+            const state = soul.getCurrentState();
+            const svg = soul.generateSVGIcon(state);
+            
+            const blob = new Blob([svg], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `soul_${soul.tokenId}_month_${state.months}.svg`;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function updateDisplay() {
+            if (!soul) return;
+            
+            const state = soul.getCurrentState();
+            const endState = soul.generateEndState(state);
+            const qualia = soul.generateQualia(state);
+            
+            // Update basic info
+            document.getElementById('soulId').textContent = `Soul #${soul.tokenId.toString().padStart(6, '0')}`;
+            document.getElementById('tokenId').textContent = soul.tokenId;
+            document.getElementById('mintBlock').textContent = soul.blockNumber;
+            document.getElementById('currentMonth').textContent = state.months;
+            document.getElementById('seedDisplay').textContent = `0x${soul.seed.toString(16).slice(0, 8)}`;
+            
+            // Update beat cycle info
+            const octave = Math.floor(state.months / 8) + 1;
+            const beatInOctave = (state.months % 8) + 1;
+            const nextBeatCheck = Math.ceil((state.months + 1) / 8) * 8;
+            document.getElementById('beatCycle').textContent = `Month ${beatInOctave} of Octave ${octave}`;
+            document.getElementById('nextBeatCheck').textContent = Math.min(nextBeatCheck, 96);
+            
+            // Update kappa display
+            const kappaEl = document.getElementById('kappaDisplay');
+            let kappaClass = 'kappa-display ';
+            if (state.kappa > 0.1) kappaClass += 'kappa-positive';
+            else if (state.kappa < -0.1) kappaClass += 'kappa-negative';
+            else kappaClass += 'kappa-zero';
+            
+            kappaEl.className = kappaClass;
+            kappaEl.textContent = `κ = ${state.kappa.toFixed(3)}`;
+            
+            // Show/hide gap event
+            const gapEl = document.getElementById('gapEvent');
+            if (state.isGap || state.is45Gap) {
+                gapEl.style.display = 'block';
+                const desc = state.is45Gap ? 
+                    '45-gap uncomputability crisis - major choice point!' : 
+                    `Uncomputability threshold (|κ| = ${Math.abs(state.kappa).toFixed(3)}) - gap navigation required`;
+                document.getElementById('gapDescription').textContent = desc;
+            } else {
+                gapEl.style.display = 'none';
+            }
+            
+            // Update end state
+            const endStateEl = document.getElementById('endState');
+            endStateEl.textContent = endState.name;
+            endStateEl.className = `end-state ${endState.className}`;
+            
+            // Update SVG icon
+            document.getElementById('soulIcon').innerHTML = soul.generateSVGIcon(state);
+            
+            // Update virtues
+            const virtueEls = document.querySelectorAll('.virtue-bar');
+            state.virtues.forEach((v, i) => {
+                const fill = virtueEls[i].querySelector('.virtue-fill');
+                const value = virtueEls[i].querySelector('.virtue-value');
+                fill.style.width = `${(v / 10) * 100}%`;
+                fill.className = `virtue-fill ${state.kappa > 0.7 ? 'phi-decay' : ''}`;
+                value.textContent = v.toFixed(1);
+            });
+            
+            // Update dynamics
+            document.getElementById('soulDepth').textContent = state.depth;
+            document.getElementById('rebirthCount').textContent = state.rebirths;
+            document.getElementById('gapEvents45').textContent = soul.month45Events;
+            document.getElementById('beatChecks').textContent = soul.beatChecks;
+            document.getElementById('phiOperations').textContent = soul.phiOperations;
+            document.getElementById('recognitionDebt').textContent = state.recognitionDebt;
+            
+            // Update ASCII art
+            document.getElementById('asciiArt').textContent = soul.generateASCII(state);
+            
+            // Add current qualia to log if it's new
+            if (soul.qualiaLog.length === 0 || soul.qualiaLog[soul.qualiaLog.length - 1].text !== qualia.text) {
+                soul.addQualia(`Month ${state.months}: ${qualia.text}`, qualia.type);
+            }
+            
+            // Update qualia log display
+            const qualiaEl = document.getElementById('qualiaLog');
+            qualiaEl.innerHTML = soul.qualiaLog.slice(-15).reverse().map(entry => {
+                return `<div class="qualia-entry ${entry.type}">${entry.text}</div>`;
+            }).join('');
+            qualiaEl.scrollTop = 0;
+        }
+
+        // Initialize with a new soul
+        mintNewSoul();
+        
+        // Auto-update every 2 seconds to simulate blockchain evolution
+        setInterval(updateDisplay, 2000);
+    </script>
+</body>
+</html> 
