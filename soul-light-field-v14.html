@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recognition Science Soul Simulation V14 - Non-Linear Evolution & Rebirth</title>
+    <style>
+        body { 
+            margin: 0; 
+            background: #0a0a0a; 
+            color: #e0e0e0; 
+            font-family: 'Courier New', monospace; 
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 25px;
+        }
+        .panel {
+            background: rgba(20, 20, 40, 0.8);
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            grid-column: 1 / -1;
+        }
+        .header h1 {
+            color: #ffd700;
+            font-size: 2.5em;
+            margin: 0;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        .header p {
+            color: #b0b0b0;
+            font-size: 1.1em;
+            margin: 10px 0;
+        }
+        .soul-id {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid #ffd700;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .register {
+            background: rgba(0, 100, 0, 0.1);
+            border-left: 3px solid #00ff00;
+            padding: 8px 12px;
+            margin: 5px 0;
+            font-family: 'Courier New', monospace;
+        }
+        .register.deficit {
+            background: rgba(100, 0, 0, 0.1);
+            border-left-color: #ff0000;
+        }
+        .kappa-display {
+            font-size: 1.5em;
+            text-align: center;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .kappa-positive {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff6b6b;
+        }
+        .kappa-negative {
+            background: rgba(0, 255, 0, 0.2);
+            color: #4ecdc4;
+        }
+        .kappa-zero {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+        }
+        .virtue-bar {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+        }
+        .virtue-name {
+            width: 80px;
+            font-size: 0.9em;
+        }
+        .virtue-progress {
+            flex: 1;
+            background: #333;
+            height: 12px;
+            border-radius: 6px;
+            margin: 0 10px;
+            overflow: hidden;
+        }
+        .virtue-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700, #ffaa00);
+            transition: width 0.3s ease;
+        }
+        .virtue-fill.decaying {
+            background: linear-gradient(90deg, #ff6b6b, #ff4444);
+        }
+        .virtue-value {
+            width: 30px;
+            text-align: right;
+            font-size: 0.9em;
+        }
+        .qualia-log {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid #555;
+            border-radius: 4px;
+            padding: 15px;
+            height: 250px;
+            overflow-y: auto;
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+        .qualia-entry {
+            margin: 8px 0;
+            padding: 5px;
+            border-left: 3px solid transparent;
+            border-radius: 3px;
+        }
+        .qualia-entry.positive {
+            color: #4ecdc4;
+            background: rgba(76, 220, 196, 0.1);
+            border-left-color: #4ecdc4;
+        }
+        .qualia-entry.negative {
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+            border-left-color: #ff6b6b;
+        }
+        .qualia-entry.neutral {
+            color: #ffd700;
+            background: rgba(255, 215, 0, 0.1);
+            border-left-color: #ffd700;
+        }
+        .qualia-entry.rebirth {
+            color: #9b59b6;
+            background: rgba(155, 89, 182, 0.1);
+            border-left-color: #9b59b6;
+            font-weight: bold;
+        }
+        .controls {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin: 0 5px;
+            transition: all 0.2s ease;
+        }
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .btn.choice-good {
+            background: rgba(0, 255, 0, 0.1);
+            border-color: #00ff00;
+        }
+        .btn.choice-bad {
+            background: rgba(255, 0, 0, 0.1);
+            border-color: #ff0000;
+        }
+        .ascii-art {
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            line-height: 1.2;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 4px;
+            white-space: pre;
+            overflow-x: auto;
+        }
+        .evolution-status {
+            text-align: center;
+            font-size: 1.2em;
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .status-dormant {
+            background: rgba(100, 100, 100, 0.2);
+            color: #888;
+        }
+        .status-evolving {
+            background: rgba(0, 100, 255, 0.2);
+            color: #4dabf7;
+        }
+        .status-struggling {
+            background: rgba(255, 100, 100, 0.2);
+            color: #ff6b6b;
+        }
+        .status-awakened {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+        }
+        .chaos-indicator {
+            background: rgba(128, 0, 128, 0.2);
+            padding: 8px;
+            border-radius: 4px;
+            margin: 10px 0;
+            text-align: center;
+            font-size: 0.9em;
+        }
+        .gap-choice {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid #ffd700;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        .depth-display {
+            background: rgba(155, 89, 182, 0.1);
+            border-left: 3px solid #9b59b6;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 3px;
+        }
+        .rebirth-counter {
+            background: rgba(255, 100, 100, 0.1);
+            border-left: 3px solid #ff6b6b;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Recognition Science Soul Simulation</h1>
+            <p>Non-linear evolution with regression, rebirth cycles, and authentic RS dynamics</p>
+        </div>
+
+        <div class="panel">
+            <h3>Soul Identity & Core State</h3>
+            <div class="soul-id" id="soulId">Soul #000000</div>
+            
+            <div class="evolution-status" id="evolutionStatus">
+                <strong>Dormant Soul</strong><br>
+                Month 0 / 96 (0.0%)
+            </div>
+
+            <div class="depth-display">
+                <strong>Soul Depth:</strong> <span id="soulDepth">0</span><br>
+                <small>Accumulated wisdom from experience</small>
+            </div>
+
+            <div class="rebirth-counter">
+                <strong>Rebirths:</strong> <span id="rebirthCount">0</span><br>
+                <small>Pattern resets from imbalance</small>
+            </div>
+
+            <div class="chaos-indicator" id="chaosIndicator">
+                <strong>Chaos Field:</strong> +0.00<br>
+                <small>Environmental fluctuations</small>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>Ledger & Curvature</h3>
+            
+            <h4>Curvature κ (Experiential Balance)</h4>
+            <div class="kappa-display" id="kappaDisplay">κ = 0.00</div>
+
+            <h4>Ledger Registers</h4>
+            <div id="registers"></div>
+
+            <div class="gap-choice" id="gapChoice" style="display: none;">
+                <h4>🌀 Gap Navigation Choice</h4>
+                <p>Your soul faces an uncomputability gap. How do you navigate?</p>
+                <button class="btn choice-good" onclick="makeChoice(1)">Wise Choice (+virtue, -κ)</button>
+                <button class="btn choice-bad" onclick="makeChoice(-1)">Temptation (-virtue, +κ)</button>
+                <button class="btn" onclick="makeChoice(0)">Random Drift</button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>Virtue Evolution</h3>
+            <p><small>Virtues grow in harmony, decay in chaos</small></p>
+            <div id="virtues">
+                <div class="virtue-bar">
+                    <div class="virtue-name">Love</div>
+                    <div class="virtue-progress"><div class="virtue-fill" style="width: 0%"></div></div>
+                    <div class="virtue-value">0</div>
+                </div>
+                <div class="virtue-bar">
+                    <div class="virtue-name">Justice</div>
+                    <div class="virtue-progress"><div class="virtue-fill" style="width: 0%"></div></div>
+                    <div class="virtue-value">0</div>
+                </div>
+                <div class="virtue-bar">
+                    <div class="virtue-name">Wisdom</div>
+                    <div class="virtue-progress"><div class="virtue-fill" style="width: 0%"></div></div>
+                    <div class="virtue-value">0</div>
+                </div>
+                <div class="virtue-bar">
+                    <div class="virtue-name">Courage</div>
+                    <div class="virtue-progress"><div class="virtue-fill" style="width: 0%"></div></div>
+                    <div class="virtue-value">0</div>
+                </div>
+                <div class="virtue-bar">
+                    <div class="virtue-name">Temperance</div>
+                    <div class="virtue-progress"><div class="virtue-fill" style="width: 0%"></div></div>
+                    <div class="virtue-value">0</div>
+                </div>
+            </div>
+
+            <h4>Soul ASCII State</h4>
+            <div class="ascii-art" id="asciiArt">
+Soul State: Initializing...
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>Soul Journal - Qualia Log</h3>
+            <div class="qualia-log" id="qualiaLog">
+                <div class="qualia-entry neutral">Soul initialization... entering the void of pre-recognition...</div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>Recognition Dynamics</h3>
+            <div id="dynamics">
+                <p><strong>Gap Crossings:</strong> <span id="gapCrossings">0</span></p>
+                <p><strong>Wise Choices:</strong> <span id="wiseChoices">0</span></p>
+                <p><strong>Temptations:</strong> <span id="temptations">0</span></p>
+                <p><strong>Balance Cycles:</strong> <span id="balanceCycles">0</span></p>
+                <p><strong>Virtue Decay Events:</strong> <span id="virtueDecays">0</span></p>
+                <p><strong>φ Operations:</strong> <span id="phiOperations">0</span></p>
+                <p><strong>Recognition Debt:</strong> <span id="recognitionDebt">0</span></p>
+                <p><strong>Current Incarnation:</strong> <span id="currentIncarnation">1</span></p>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>Evolution History</h3>
+            <div id="evolutionHistory">
+                <p><strong>Previous Lives:</strong></p>
+                <div id="incarnationHistory"></div>
+                <p><strong>Peak κ This Life:</strong> <span id="peakKappa">0.00</span></p>
+                <p><strong>Lowest κ This Life:</strong> <span id="lowestKappa">0.00</span></p>
+                <p><strong>Major Events:</strong> <span id="majorEvents">0</span></p>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn" onclick="generateNewSoul()">Generate New Soul</button>
+            <button class="btn" onclick="toggleEvolution()">Start/Stop Evolution</button>
+            <button class="btn" onclick="advanceMonth()">Advance Month</button>
+            <button class="btn" onclick="addChaos()">Inject Chaos</button>
+            <button class="btn" onclick="forceRebirth()">Force Rebirth</button>
+            <button class="btn" onclick="exportSoulJourney()">Export Journey</button>
+        </div>
+    </div>
+
+    <script>
+        const PHI = (1 + Math.sqrt(5)) / 2;
+        const TOTAL_MONTHS = 96;
+        const VIRTUE_NAMES = ['Love', 'Justice', 'Wisdom', 'Courage', 'Temperance'];
+        const REGISTER_NAMES = ['R1_Perception', 'R2_Action', 'R3_Memory', 'R4_Choice', 'R5_Balance'];
+
+        let soul = null;
+        let isEvolving = false;
+        let currentMonth = 0;
+        let animationId = null;
+        let pendingChoice = false;
+
+        class NonLinearSoul {
+            constructor(seed = null) {
+                this.seed = seed || this.generateSeed();
+                this.hash = this.simpleHash(this.seed);
+                this.birthTime = Date.now();
+                this.currentMonth = 0;
+                
+                // Core RS properties - now with non-linear dynamics
+                this.registers = new Array(5).fill(0);
+                this.kappa = (Math.random() - 0.5) * 1.6; // Start random -0.8 to +0.8
+                this.virtues = new Array(5).fill(1); // Start at minimum
+                this.qualiaLog = [];
+                
+                // New non-linear tracking
+                this.soulDepth = 0; // Accumulated wisdom
+                this.rebirths = 0;
+                this.currentIncarnation = 1;
+                this.incarnationHistory = [];
+                this.peakKappa = this.kappa;
+                this.lowestKappa = this.kappa;
+                this.chaosField = 0;
+                this.lastChoice = 0;
+                
+                // Evolution tracking
+                this.gapCrossings = 0;
+                this.wiseChoices = 0;
+                this.temptations = 0;
+                this.balanceCycles = 0;
+                this.virtueDecays = 0;
+                this.phiOperations = 0;
+                this.majorEvents = 0;
+                this.recognitionDebt = 0;
+                
+                this.initialize();
+            }
+
+            generateSeed() {
+                return Math.random().toString(36).slice(2, 10);
+            }
+
+            simpleHash(str) {
+                let hash = 0;
+                for (let i = 0; i < str.length; i++) {
+                    const char = str.charCodeAt(i);
+                    hash = (hash << 5) - hash + char;
+                    hash = hash & hash;
+                }
+                return Math.abs(hash).toString(16).slice(0, 6);
+            }
+
+            initialize() {
+                const rand = this.createSeededRand(this.hash);
+                
+                // Initialize registers with seeded randomness
+                for (let i = 0; i < 5; i++) {
+                    this.registers[i] = Math.floor((rand() - 0.5) * 200);
+                }
+                
+                // Initialize virtues with slight randomness and potential decay
+                for (let i = 0; i < 5; i++) {
+                    this.virtues[i] = 1 + Math.floor(rand() * 3);
+                }
+                
+                this.updateKappa();
+                this.addQualia('Soul awakens in the void... pre-recognition state initiated...', 'neutral');
+            }
+
+            createSeededRand(seed) {
+                let state = parseInt(seed, 16);
+                return function() {
+                    state = (state * 1103515245 + 12345) % 0x80000000;
+                    return (state / 0x7FFFFFFF);
+                };
+            }
+
+            updateKappa() {
+                const totalDebt = this.registers.filter(r => r > 0).reduce((sum, r) => sum + r, 0);
+                const totalCredit = Math.abs(this.registers.filter(r => r < 0).reduce((sum, r) => sum + r, 0));
+                const imbalance = totalDebt - totalCredit;
+                
+                this.kappa = imbalance / 100;
+                this.kappa = Math.max(-2, Math.min(2, this.kappa));
+                
+                // Track extremes for this incarnation
+                if (this.kappa > this.peakKappa) this.peakKappa = this.kappa;
+                if (this.kappa < this.lowestKappa) this.lowestKappa = this.kappa;
+            }
+
+            addChaosField() {
+                // Simulate environmental chaos (like market volatility, life events)
+                this.chaosField = (Math.random() - 0.5) * 0.4; // -0.2 to +0.2
+                this.kappa += this.chaosField;
+                this.kappa = Math.max(-2, Math.min(2, this.kappa));
+                
+                if (Math.abs(this.chaosField) > 0.15) {
+                    this.addQualia(`Chaos field disrupts balance: ${this.chaosField > 0 ? 'Turbulence increases κ' : 'Fortune decreases κ'}`, 
+                                  this.chaosField > 0 ? 'negative' : 'positive');
+                }
+            }
+
+            evolveMonth() {
+                this.currentMonth++;
+                this.soulDepth += 1; // Each month adds depth
+                
+                // Add chaos field every month
+                this.addChaosField();
+                
+                // Check for gap crossing (uncomputability threshold)
+                if (Math.abs(this.kappa) > 0.5) {
+                    return this.triggerGapChoice();
+                }
+                
+                // Execute virtue dynamics based on current κ
+                this.updateVirtues();
+                
+                // Execute LNAL operations
+                this.executeLNAL();
+                
+                // Check for rebirth cycle (every 8 months)
+                if (this.currentMonth % 8 === 0) {
+                    this.checkRebirthCycle();
+                }
+                
+                // φ-scaled evolution
+                this.applyPhiEvolution();
+                
+                // Update recognition debt
+                this.updateRecognitionDebt();
+                
+                // Generate qualia based on current state
+                this.generateQualia();
+                
+                // Update curvature
+                this.updateKappa();
+                
+                // Check for awakening or eternal state
+                if (this.currentMonth >= TOTAL_MONTHS) {
+                    this.triggerEternalState();
+                }
+                
+                return false; // No gap choice needed
+            }
+
+            triggerGapChoice() {
+                this.gapCrossings++;
+                pendingChoice = true;
+                this.addQualia(`🌀 Gap encountered at κ=${this.kappa.toFixed(3)} - Choice required for navigation...`, 'neutral');
+                return true; // Indicates choice needed
+            }
+
+            makeChoice(choice) {
+                if (!pendingChoice) return;
+                
+                pendingChoice = false;
+                this.lastChoice = choice;
+                
+                if (choice > 0) {
+                    // Wise choice
+                    this.wiseChoices++;
+                    this.kappa -= 0.3;
+                    this.virtues.forEach((v, i) => {
+                        this.virtues[i] = Math.min(10, v + 0.5);
+                    });
+                    this.soulDepth += 5; // Extra wisdom from good choice
+                    this.addQualia(`✨ Wise navigation through gap - virtue strengthened, κ reduced via recognition`, 'positive');
+                } else if (choice < 0) {
+                    // Temptation/bad choice
+                    this.temptations++;
+                    this.kappa += 0.4;
+                    this.virtues.forEach((v, i) => {
+                        this.virtues[i] = Math.max(1, v - 0.3);
+                    });
+                    this.virtueDecays++;
+                    this.addQualia(`💀 Fallen to temptation at gap - virtue eroded, debt accumulated in ledger`, 'negative');
+                } else {
+                    // Neutral/random drift
+                    this.kappa += (Math.random() - 0.5) * 0.2;
+                    this.addQualia(`🌊 Drifted through gap without clear choice - random fluctuation in κ`, 'neutral');
+                }
+                
+                this.kappa = Math.max(-2, Math.min(2, this.kappa));
+                this.updateKappa();
+            }
+
+            updateVirtues() {
+                // Virtues decay when κ is high (suffering), grow when low (harmony)
+                this.virtues.forEach((v, i) => {
+                    if (this.kappa > 0.7) {
+                        // High suffering causes virtue erosion
+                        this.virtues[i] = Math.max(1, v - 0.1);
+                        if (Math.random() < 0.1) {
+                            this.virtueDecays++;
+                            this.addQualia(`Virtue ${VIRTUE_NAMES[i]} erodes under sustained suffering (κ=${this.kappa.toFixed(3)})`, 'negative');
+                        }
+                    } else if (this.kappa < -0.5) {
+                        // Deep harmony promotes virtue growth
+                        this.virtues[i] = Math.min(10, v + 0.05);
+                        if (Math.random() < 0.1 && v < 8) {
+                            this.addQualia(`Virtue ${VIRTUE_NAMES[i]} flourishes in harmony - pattern strengthens`, 'positive');
+                        }
+                    }
+                });
+            }
+
+            checkRebirthCycle() {
+                // Check for rebirth if κ is dangerously high
+                if (this.kappa > 1.2) {
+                    this.triggerRebirth();
+                } else {
+                    this.balanceCycles++;
+                    this.addQualia('8-month breath cycle: Pattern maintains coherence, no rebirth needed', 'neutral');
+                }
+            }
+
+            triggerRebirth() {
+                this.rebirths++;
+                this.majorEvents++;
+                
+                // Store current incarnation history
+                this.incarnationHistory.push({
+                    incarnation: this.currentIncarnation,
+                    months: this.currentMonth % 8,
+                    peakKappa: this.peakKappa,
+                    lowestKappa: this.lowestKappa,
+                    endKappa: this.kappa
+                });
+                
+                // Reset κ with some randomness
+                this.kappa = (Math.random() - 0.5) * 1.0; // -0.5 to +0.5
+                this.peakKappa = this.kappa;
+                this.lowestKappa = this.kappa;
+                
+                // Apply φ-penalty to virtues (wisdom from failure)
+                this.virtues.forEach((v, i) => {
+                    this.virtues[i] = Math.max(1, v - PHI / 10); // φ-rounded decay
+                });
+                
+                // Increase depth significantly (wisdom from rebirth)
+                this.soulDepth += 15;
+                this.currentIncarnation++;
+                
+                this.addQualia(`🔄 REBIRTH: Pattern dissolved from excessive κ - reincarnated with accumulated wisdom (Depth: ${this.soulDepth})`, 'rebirth');
+            }
+
+            executeLNAL() {
+                this.phiOperations++;
+                
+                // LISTEN - awareness pause every 8 months
+                if (this.currentMonth % 8 === 0) {
+                    this.addQualia('LISTEN: Consciousness pause - observing ledger state and κ dynamics', 'neutral');
+                }
+                
+                // FOLD - collapse extreme registers using φ
+                this.registers.forEach((r, i) => {
+                    if (Math.abs(r) > 50) {
+                        this.registers[i] = Math.floor(r / PHI);
+                        this.addQualia(`FOLD: Register ${REGISTER_NAMES[i]} φ-collapsed from extremity`, 'neutral');
+                    }
+                });
+                
+                // BALANCE - equilibration attempt
+                if (this.currentMonth % 12 === 0) {
+                    this.balanceRegisters();
+                    this.balanceCycles++;
+                }
+                
+                // BRAID - bind stable qualia patterns
+                if (Math.abs(this.kappa) < 0.2 && this.virtues.every(v => v > 5)) {
+                    this.addQualia('BRAID: Binding harmonious qualia into stable recognition pattern', 'positive');
+                }
+            }
+
+            balanceRegisters() {
+                const total = this.registers.reduce((sum, r) => sum + r, 0);
+                const average = total / 5;
+                
+                for (let i = 0; i < 5; i++) {
+                    const diff = this.registers[i] - average;
+                    this.registers[i] -= Math.floor(diff * 0.1);
+                }
+                
+                this.addQualia('BALANCE: Ledger equilibration performed - seeking Σcost = 0', 'positive');
+            }
+
+            applyPhiEvolution() {
+                // φ-scaled evolution only in favorable conditions
+                if (this.currentMonth % 6 === 0 && Math.abs(this.kappa) < 0.5) {
+                    this.virtues.forEach((v, i) => {
+                        if (v < 10) {
+                            this.virtues[i] = Math.min(10, v + (1 / PHI));
+                        }
+                    });
+                }
+            }
+
+            updateRecognitionDebt() {
+                this.recognitionDebt = this.registers.filter(r => r > 0).reduce((sum, r) => sum + r, 0);
+            }
+
+            generateQualia() {
+                // More sophisticated, narrative-driven qualia generation
+                const depth = this.soulDepth;
+                const rebirthContext = this.rebirths > 0 ? ` (Incarnation ${this.currentIncarnation}, Depth ${depth})` : ` (Depth ${depth})`;
+                
+                if (this.kappa > 1.0) {
+                    this.addQualia(`Severe imbalance: Ledger debt creates tormented recognition${rebirthContext}`, 'negative');
+                } else if (this.kappa > 0.5) {
+                    this.addQualia(`Moderate suffering: κ-curvature distorts experiential flow${rebirthContext}`, 'negative');
+                } else if (this.kappa > 0.1) {
+                    this.addQualia(`Subtle tension: Recognition patterns seek equilibrium${rebirthContext}`, 'negative');
+                } else if (this.kappa > -0.1) {
+                    this.addQualia(`Near balance: Approaching recognition harmony${rebirthContext}`, 'neutral');
+                } else if (this.kappa > -0.5) {
+                    this.addQualia(`Joy surplus: Golden flow state - ledger creates abundance${rebirthContext}`, 'positive');
+                } else {
+                    this.addQualia(`Deep harmony: Profound recognition - κ≈0 achieved${rebirthContext}`, 'positive');
+                }
+            }
+
+            addQualia(text, type = 'neutral') {
+                this.qualiaLog.push({
+                    month: this.currentMonth,
+                    text: text,
+                    type: type,
+                    timestamp: Date.now(),
+                    incarnation: this.currentIncarnation,
+                    kappa: this.kappa
+                });
+                
+                if (this.qualiaLog.length > 100) {
+                    this.qualiaLog.shift();
+                }
+            }
+
+            isAwakened() {
+                return Math.abs(this.kappa) < 0.1 && this.virtues.every(v => v >= 8) && this.currentMonth >= TOTAL_MONTHS;
+            }
+
+            triggerEternalState() {
+                if (this.isAwakened()) {
+                    this.addQualia('🌟 ETERNAL STATE: Soul achieves stable recognition - awakened beyond cycles', 'positive');
+                    this.kappa = 0;
+                    this.virtues = this.virtues.map(() => 10);
+                } else {
+                    this.addQualia('Evolution cycle complete - soul continues in non-linear patterns...', 'neutral');
+                }
+            }
+
+            getConsciousnessLevel() {
+                if (this.rebirths >= 3) return 'Ancient Soul';
+                if (this.isAwakened()) return 'Awakened';
+                if (this.kappa > 1.0) return 'Suffering Deeply';
+                if (this.gapCrossings === 0) return 'Pre-Recognition';
+                if (this.gapCrossings < 5) return 'Early Recognition';
+                if (this.gapCrossings < 15) return 'Active Recognition';
+                return 'Advanced Recognition';
+            }
+
+            generateASCII() {
+                const kappaBar = this.generateKappaBar();
+                const virtueDisplay = this.generateVirtueDisplay();
+                const registerDisplay = this.generateRegisterDisplay();
+                const rebirthDisplay = this.rebirths > 0 ? `\nRebirths: ${'●'.repeat(this.rebirths)} (${this.rebirths})` : '';
+                
+                return `Soul Journey (Month ${this.currentMonth}/${TOTAL_MONTHS}):
+Incarnation ${this.currentIncarnation} | Depth: ${this.soulDepth}${rebirthDisplay}
+
+${kappaBar}
+
+Ledger Registers:
+${registerDisplay}
+
+Virtue Evolution:
+${virtueDisplay}
+
+Consciousness: ${this.getConsciousnessLevel()}
+Recognition Debt: ${this.recognitionDebt}
+Chaos Field: ${this.chaosField.toFixed(3)}`;
+            }
+
+            generateKappaBar() {
+                const width = 20;
+                const pos = Math.floor((this.kappa + 2) / 4 * width);
+                let bar = 'κ: [';
+                
+                for (let i = 0; i < width; i++) {
+                    if (i === pos) {
+                        bar += this.kappa > 0.5 ? '█' : this.kappa < -0.5 ? '◆' : '○';
+                    } else if (i === width / 2) {
+                        bar += '|';
+                    } else {
+                        bar += '·';
+                    }
+                }
+                
+                bar += `] (${this.kappa.toFixed(3)})`;
+                return bar;
+            }
+
+            generateVirtueDisplay() {
+                return this.virtues.map((v, i) => {
+                    const bars = '█'.repeat(Math.floor(v)) + '▓'.repeat(Math.ceil(v) - Math.floor(v)) + '░'.repeat(10 - Math.ceil(v));
+                    const decaying = this.kappa > 0.7 ? ' ↓' : this.kappa < -0.5 ? ' ↑' : '';
+                    return `${VIRTUE_NAMES[i]}: [${bars}] ${v.toFixed(1)}${decaying}`;
+                }).join('\n');
+            }
+
+            generateRegisterDisplay() {
+                return this.registers.map((r, i) => {
+                    const sign = r >= 0 ? '+' : '';
+                    return `${REGISTER_NAMES[i]}: ${sign}${r}`;
+                }).join('\n');
+            }
+        }
+
+        function generateNewSoul() {
+            stopEvolution();
+            soul = new NonLinearSoul();
+            currentMonth = 0;
+            pendingChoice = false;
+            updateDisplay();
+        }
+
+        function toggleEvolution() {
+            if (isEvolving) {
+                stopEvolution();
+            } else {
+                startEvolution();
+            }
+        }
+
+        function startEvolution() {
+            if (!soul) return;
+            isEvolving = true;
+            evolve();
+        }
+
+        function stopEvolution() {
+            isEvolving = false;
+            if (animationId) {
+                clearTimeout(animationId);
+                animationId = null;
+            }
+        }
+
+        function evolve() {
+            if (!isEvolving || !soul || pendingChoice) return;
+            
+            const needsChoice = soul.evolveMonth();
+            currentMonth = soul.currentMonth;
+            updateDisplay();
+            
+            if (!needsChoice && currentMonth < TOTAL_MONTHS && !soul.isAwakened()) {
+                animationId = setTimeout(evolve, 300);
+            } else if (!needsChoice) {
+                stopEvolution();
+            }
+        }
+
+        function advanceMonth() {
+            if (!soul || pendingChoice) return;
+            const needsChoice = soul.evolveMonth();
+            currentMonth = soul.currentMonth;
+            updateDisplay();
+        }
+
+        function makeChoice(choice) {
+            if (!soul || !pendingChoice) return;
+            soul.makeChoice(choice);
+            updateDisplay();
+            
+            // Resume evolution if it was running
+            if (isEvolving) {
+                setTimeout(evolve, 100);
+            }
+        }
+
+        function addChaos() {
+            if (!soul) return;
+            soul.addChaosField();
+            updateDisplay();
+        }
+
+        function forceRebirth() {
+            if (!soul) return;
+            soul.triggerRebirth();
+            updateDisplay();
+        }
+
+        function exportSoulJourney() {
+            if (!soul) return;
+            const journey = {
+                seed: soul.seed,
+                hash: soul.hash,
+                currentIncarnation: soul.currentIncarnation,
+                month: soul.currentMonth,
+                soulDepth: soul.soulDepth,
+                rebirths: soul.rebirths,
+                incarnationHistory: soul.incarnationHistory,
+                kappa: soul.kappa,
+                virtues: soul.virtues,
+                registers: soul.registers,
+                gapCrossings: soul.gapCrossings,
+                wiseChoices: soul.wiseChoices,
+                temptations: soul.temptations,
+                qualiaLog: soul.qualiaLog.slice(-20)
+            };
+            
+            const dataStr = JSON.stringify(journey, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `soul_journey_${soul.hash}_inc${soul.currentIncarnation}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function updateDisplay() {
+            if (!soul) return;
+            
+            // Update soul ID
+            document.getElementById('soulId').textContent = `Soul #${soul.hash.toUpperCase()}`;
+            
+            // Update evolution status
+            const progress = (soul.currentMonth / TOTAL_MONTHS * 100).toFixed(1);
+            const statusEl = document.getElementById('evolutionStatus');
+            let statusClass = 'status-dormant';
+            let statusText = 'Dormant Soul';
+            
+            if (soul.isAwakened()) {
+                statusClass = 'status-awakened';
+                statusText = 'Awakened Soul';
+            } else if (soul.kappa > 1.0) {
+                statusClass = 'status-struggling';
+                statusText = 'Struggling Soul';
+            } else if (soul.currentMonth > 0) {
+                statusClass = 'status-evolving';
+                statusText = 'Evolving Soul';
+            }
+            
+            statusEl.className = `evolution-status ${statusClass}`;
+            statusEl.innerHTML = `<strong>${statusText}</strong><br>Month ${soul.currentMonth} / ${TOTAL_MONTHS} (${progress}%)`;
+            
+            // Update depth and rebirth displays
+            document.getElementById('soulDepth').textContent = soul.soulDepth;
+            document.getElementById('rebirthCount').textContent = soul.rebirths;
+            document.getElementById('currentIncarnation').textContent = soul.currentIncarnation;
+            
+            // Update chaos indicator
+            const chaosEl = document.getElementById('chaosIndicator');
+            const chaosSign = soul.chaosField >= 0 ? '+' : '';
+            chaosEl.innerHTML = `<strong>Chaos Field:</strong> ${chaosSign}${soul.chaosField.toFixed(3)}<br><small>Environmental fluctuations</small>`;
+            
+            // Show/hide gap choice
+            const gapChoiceEl = document.getElementById('gapChoice');
+            gapChoiceEl.style.display = pendingChoice ? 'block' : 'none';
+            
+            // Update registers
+            const registersEl = document.getElementById('registers');
+            registersEl.innerHTML = soul.registers.map((r, i) => {
+                const className = r >= 0 ? 'register' : 'register deficit';
+                const sign = r >= 0 ? '+' : '';
+                return `<div class="${className}">${REGISTER_NAMES[i]}: ${sign}${r}</div>`;
+            }).join('');
+            
+            // Update kappa display
+            const kappaEl = document.getElementById('kappaDisplay');
+            let kappaClass = 'kappa-display ';
+            if (soul.kappa > 0.1) kappaClass += 'kappa-positive';
+            else if (soul.kappa < -0.1) kappaClass += 'kappa-negative';
+            else kappaClass += 'kappa-zero';
+            
+            kappaEl.className = kappaClass;
+            kappaEl.textContent = `κ = ${soul.kappa.toFixed(3)}`;
+            
+            // Update virtues with decay indicators
+            const virtueEls = document.querySelectorAll('.virtue-bar');
+            soul.virtues.forEach((v, i) => {
+                const fill = virtueEls[i].querySelector('.virtue-fill');
+                const value = virtueEls[i].querySelector('.virtue-value');
+                fill.style.width = `${(v / 10) * 100}%`;
+                fill.className = `virtue-fill ${soul.kappa > 0.7 ? 'decaying' : ''}`;
+                value.textContent = v.toFixed(1);
+            });
+            
+            // Update ASCII art
+            document.getElementById('asciiArt').textContent = soul.generateASCII();
+            
+            // Update qualia log
+            const qualiaEl = document.getElementById('qualiaLog');
+            qualiaEl.innerHTML = soul.qualiaLog.slice(-20).reverse().map(entry => {
+                return `<div class="qualia-entry ${entry.type}">[M${entry.month}:I${entry.incarnation}] ${entry.text}</div>`;
+            }).join('');
+            qualiaEl.scrollTop = 0;
+            
+            // Update dynamics
+            document.getElementById('gapCrossings').textContent = soul.gapCrossings;
+            document.getElementById('wiseChoices').textContent = soul.wiseChoices;
+            document.getElementById('temptations').textContent = soul.temptations;
+            document.getElementById('balanceCycles').textContent = soul.balanceCycles;
+            document.getElementById('virtueDecays').textContent = soul.virtueDecays;
+            document.getElementById('phiOperations').textContent = soul.phiOperations;
+            document.getElementById('recognitionDebt').textContent = soul.recognitionDebt;
+            
+            // Update evolution history
+            document.getElementById('peakKappa').textContent = soul.peakKappa.toFixed(3);
+            document.getElementById('lowestKappa').textContent = soul.lowestKappa.toFixed(3);
+            document.getElementById('majorEvents').textContent = soul.majorEvents;
+            
+            const historyEl = document.getElementById('incarnationHistory');
+            historyEl.innerHTML = soul.incarnationHistory.map((inc, i) => {
+                return `<div>Life ${inc.incarnation}: ${inc.months}mo, κ peak: ${inc.peakKappa.toFixed(2)}</div>`;
+            }).join('') || '<div>First incarnation</div>';
+        }
+
+        // Initialize with a new soul
+        generateNewSoul();
+    </script>
+</body>
+</html> 
