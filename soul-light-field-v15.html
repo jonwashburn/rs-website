@@ -378,6 +378,16 @@ Soul State: Initializing...
                 return Math.abs(hash);
             }
 
+            isPrime(n) {
+                if (n < 2) return false;
+                if (n === 2) return true;
+                if (n % 2 === 0) return false;
+                for (let i = 3; i * i <= n; i += 2) {
+                    if (n % i === 0) return false;
+                }
+                return true;
+            }
+
             getCurrentState() {
                 if (this.isDead) {
                     return this.getDeathState();
@@ -485,86 +495,156 @@ Soul State: Initializing...
                 kappa += Math.sin(months / PHI) * 0.4 + Math.cos(months / (PHI * 2)) * 0.2; // Enhanced oscillatory pattern
                 kappa = Math.max(-1, Math.min(1, kappa));
 
-                // Virtues: Reduced growth with seed-dependent rates and stronger variations
+                // Virtues: Metabolism system with balanced growth/decay drivers
                 const virtues = [];
                 for (let i = 0; i < 5; i++) {
-                    const seedFactor = ((this.seed >> (i * 8)) % 10 + 1) / 20; // Lower to 0.05 to 0.55 for slower growth
-                    let virtue = 3 + seedFactor + (months / 8) * seedFactor * 0.3; // Start at 3, much slower growth
+                    // Start from unique initial virtue (1-5 range)
+                    let virtue = this.initialVirtues[i];
                     
-                    // Stronger φ-decay with randomness and higher multiplier
-                    if (kappa > 0.3) {
-                        const decay = (PHI / 1000) * (kappa - 0.3) * 8 + (Math.random() - 0.5) * 1.0;
-                        virtue -= decay;
-                        this.phiOperations += (months % 1) + Math.abs(decay) * 2;
-                    }
-                    // Modest growth during harmony, with randomness
-                    if (kappa < -0.3) {
-                        virtue += Math.abs(kappa + 0.3) * seedFactor * 0.5 + (Math.random() - 0.5) * 0.3;
-                    }
-                    // Atrophy mechanic: Slight decay in neutral states
-                    if (Math.abs(kappa) < 0.3 && Math.random() < 0.2) {
-                        virtue -= 0.1 + (months % 1) * 0.05;
+                    // Virtue-specific caps: 5-10 based on seed
+                    const virtueCap = 5 + ((this.seed >> (i * 4)) % 6);
+                    
+                    // Universal oxidation (prevents all virtues maxing)
+                    const oxidation = 0.02 + (Math.random() * 0.03); // 0.02-0.05 per tick
+                    
+                    // Virtue-specific metabolism
+                    let growthDriver = 0;
+                    let decayDriver = oxidation;
+                    
+                    switch(i) {
+                        case 0: // Love
+                            growthDriver = Math.max(0, -kappa) * PHI * 0.1; // Grows in harmony
+                            decayDriver += Math.max(0, kappa) * 0.05; // Decays in suffering
+                            break;
+                        case 1: // Justice
+                            const registerBalance = Math.abs(registerSeed - 4) / 4; // 0-1 scale
+                            growthDriver = (1 - registerBalance) * 0.08; // Grows when registers balanced
+                            decayDriver += Math.abs(chaos) * 0.03; // Decays in chaos
+                            break;
+                        case 2: // Wisdom
+                            // Grows after successful gap navigation (low κ after gaps)
+                            if (months > 8 && Math.abs(kappa) < 0.3) {
+                                growthDriver = 0.06 + (depth / 200) * 0.04;
+                            }
+                            decayDriver += (rebirths / 4) * 0.02; // Slight decay from failures
+                            break;
+                        case 3: // Courage
+                            // Spikes during gaps then decays
+                            if (Math.abs(kappa) > 0.5) {
+                                growthDriver = 0.15; // Spike during crisis
+                            } else {
+                                decayDriver += 0.08; // Rapid decay otherwise
+                            }
+                            break;
+                        case 4: // Temperance
+                            // Drifts toward average of other virtues
+                            const avgOthers = (virtues[0] + virtues[1] + virtues[2] + virtues[3]) / 4;
+                            if (virtue < avgOthers) {
+                                growthDriver = (avgOthers - virtue) * 0.05;
+                            } else {
+                                decayDriver += (virtue - avgOthers) * 0.03;
+                            }
+                            decayDriver += Math.abs(chaos) * 0.04; // Extra chaos sensitivity
+                            break;
                     }
                     
-                    // Wider varying caps: 5 to 10 based on seed
-                    const virtueCap = 5 + ((this.seed >> (i * 4)) % 6) + (i % 2); // 5-11 range, per virtue
-                    virtue = Math.max(1, Math.min(virtueCap, virtue));
+                    // Apply metabolism: dV/dt = growth - decay
+                    virtue += (growthDriver - decayDriver) * (months / 96); // Scale by time progress
                     
-                    // Enhanced trade-off with κ influence and randomness
-                    if (i === 4 && virtues[3] > virtueCap * 0.7 && Math.abs(kappa) > 0.05) {
-                        virtue -= (PHI / 2000) * Math.abs(kappa) * 15 * seedFactor + Math.random() * 0.5;
-                    }
-                    
-                    // Stronger per-virtue randomness with seed influence
-                    const randomSeed = (this.seed + i + Math.floor(months)) % 100 / 100 - 0.5;
-                    virtue += Math.sin(months + i * PHI) * 0.3 + randomSeed * 1.5;
+                    // Apply bounds
                     virtue = Math.max(1, Math.min(virtueCap, virtue));
                     
                     virtues[i] = virtue;
                 }
 
-                // Gap & Choice: Smooth probability with seed bias and reduced frequency
-                const wisdomBias = (virtues[2] / 5 - 1) + ((this.seed % 5) - 2) / 5; // Reduced bias
+                // Fluid Gap Field (continuous scalar field)
+                const registerDivergence = Math.abs(R1 + R2) / 8; // 0-1 scale
+                const gapField = Math.abs(kappa) * 0.6 
+                               + registerDivergence * 0.3 
+                               + Math.abs(chaos) * 0.4 
+                               + Math.sin(months / PHI) * 0.2;
+                
+                // Gap threshold varies by seed
+                const gapThreshold = 0.7 + ((this.seed % 10) / 20); // 0.7-1.2 range
+                
+                // Prime rung check for peak intensity events
+                const currentRung = Math.floor(months * 2); // Approximate rung progression
+                const isPrimeRung = this.isPrime(currentRung) && currentRung > 10;
+                
+                // Gap events: continuous based on gapField
+                const isGap = gapField > gapThreshold && Math.random() < 0.5; // 50% chance when field high
+                const isPeakGap = isGap && isPrimeRung && gapField > (gapThreshold + 0.3); // Intense gaps at prime rungs
+                
+                // Special 45-region gap (around months 44-46, not just month 45)
+                const is45Region = months >= 44 && months <= 46;
+                const is45Gap = is45Region && gapField > (gapThreshold - 0.2); // Lower threshold in 45-region
+
+                // Gap & Choice: Wisdom-influenced navigation
+                const wisdomBias = (virtues[2] / 5 - 1) + ((this.seed % 5) - 2) / 5;
                 let choice = (((chaosSeed + months * 10) % 3) - 1 + wisdomBias) + (months % 1 - 0.5) / 2;
                 choice = Math.max(-1, Math.min(1, choice));
-
-                // Smooth gap probability with higher variance but overall lower frequency
-                const gapProb = Math.abs(kappa) * 0.8 + (months % 1) * 0.05 + Math.sin(months / 3) * 0.2;
-                const isGap = gapProb > 0.7 + ((this.seed % 10) / 20) && Math.random() < 0.4; // Higher threshold + 40% rarity
-                const is45Gap = Math.floor(months) === 45 && (months % 1 < 0.01); // Trigger at start of month 45
                 
                 if (isGap || is45Gap) {
-                    kappa += choice * 0.25 * (months % 1 + 0.5) * (1 + Math.abs(chaos) * 0.5); // Reduced amplification
+                    const gapIntensity = isPeakGap ? 0.4 : 0.25; // Peak gaps have more impact
+                    kappa += choice * gapIntensity * (months % 1 + 0.5) * (1 + Math.abs(chaos) * 0.5);
                     kappa = Math.max(-1, Math.min(1, kappa));
                     
-                    if (is45Gap && this.month45Events === 0) {
+                    // Enhanced gap event tracking and qualia
+                    if (isPeakGap) {
+                        this.addQualia(`🌀 Peak Gap at rung ${currentRung}: Prime uncomputability crisis!`, 'gap');
+                    } else if (is45Gap && this.month45Events === 0) {
                         this.month45Events++;
-                        this.addQualia('🌀 Month 45: 45-gap crisis - uncomputability threshold breached!', 'gap');
+                        this.addQualia('🌀 45-Region Gap: Critical recognition threshold!', 'gap');
+                    } else if (isGap) {
+                        this.addQualia(`Gap navigation required (field: ${gapField.toFixed(2)})`, 'gap');
                     }
                 }
 
-                // 8-Month Beat Cycles with fractional triggering and rarer rebirths
-                let rebirths = months / 8;
+                // 8-Month Beat Cycles with very rare rebirths and death mechanics
+                let rebirths = Math.floor(months / 8) * 0.1; // Much lower base rebirth count
                 const fractionalBeat = months % 8;
                 if (fractionalBeat < 0.01 && months > 0) { // Trigger at start of each beat
                     this.beatChecks += fractionalBeat + 0.01; // Smooth count
                     
-                    const rebirthThreshold = 0.8 + chaos * 0.5 + ((this.seed % 20) - 10) / 100; // Higher base threshold 0.8
-                    const rarityFactor = 0.3 + (virtues[4] / 20); // Temperance reduces rarity (max 0.8 chance)
-                    if (kappa > rebirthThreshold && Math.random() < rarityFactor) {
-                        kappa = ((this.seed + Math.floor(months) + chaosSeed) % 101 - 50) / 100 + (fractionalBeat - 0.5) / 10 + chaos;
+                    // Much higher rebirth threshold (0.9+) with quadratic probability
+                    const rebirthThreshold = 0.9 + chaos * 0.3 + ((this.seed % 10) - 5) / 100;
+                    const quadraticProb = Math.max(0, kappa - 0.9) ** 2; // Quadratic: only high κ matters
+                    const rarityFactor = 0.2 + (virtues[4] / 50); // Max 0.4 chance, temperance helps
+                    
+                    // Track consecutive failed gap navigations
+                    if (!this.consecutiveFailures) this.consecutiveFailures = 0;
+                    if (isGap && choice < 0) {
+                        this.consecutiveFailures++;
+                    } else if (choice > 0) {
+                        this.consecutiveFailures = 0; // Reset on good choice
+                    }
+                    
+                    // Rebirth trigger: High κ sustained + very rare
+                    if (kappa > rebirthThreshold && quadraticProb > 0.01 && Math.random() < rarityFactor) {
+                        
+                        // Soul death check: 5% chance + increased by consecutive failures after rebirth
+                        const currentRebirthCount = Math.floor(this.beatChecks);
+                        const deathChance = 0.05 + (this.consecutiveFailures * 0.02) + (currentRebirthCount * 0.01);
+                        
+                        if (Math.random() < deathChance && currentRebirthCount > 0) {
+                            // Permanent soul death
+                            this.isDead = true;
+                            this.addQualia('💀 Pattern permanently dissolved - Soul Death. Cannot maintain coherence.', 'negative');
+                            return this.getDeathState();
+                        }
+                        
+                        // Rebirth (if not dead)
+                        kappa = ((this.seed + Math.floor(months) + chaosSeed) % 81 - 40) / 100; // Reset to -0.4 to +0.4
                         for (let i = 0; i < virtues.length; i++) {
-                            const penalty = (PHI / 1000) * (1 - fractionalBeat) * (1 + Math.abs(kappa)) * 0.5; // Reduced penalty
+                            const penalty = (PHI / 1000) * (1 - fractionalBeat) * (1 + Math.abs(kappa)) * 0.3;
                             virtues[i] -= penalty;
                             virtues[i] = Math.max(1, virtues[i]);
                         }
-                        rebirths += (1 - fractionalBeat + Math.abs(chaos)) * 0.5; // Halved addition
-                        // Diminishing returns: Less impact after 2 rebirths
-                        if (rebirths > 2) rebirths *= (1 / (rebirths - 1));
-                        rebirths = Math.min(4, rebirths); // Hard cap at 4 rebirths
-                        this.addQualia('🔄 Beat Check: Pattern dissolved - φ-penalty applied to virtues', 'rebirth');
+                        rebirths = Math.min(3, rebirths + 0.5); // Hard cap at 3 rebirths
+                        this.consecutiveFailures = 0; // Reset on rebirth
+                        this.addQualia(`🔄 Rebirth ${Math.floor(rebirths * 2)}: Pattern dissolution and reformation`, 'rebirth');
                     } else {
-                        this.addQualia('✓ Beat Check: Pattern maintains coherence in 8-beat cycle', 'neutral');
+                        this.addQualia('✓ Beat Check: Pattern maintains coherence through cycle', 'neutral');
                     }
                 }
 
@@ -597,7 +677,10 @@ Soul State: Initializing...
                     chaos,
                     choice,
                     isGap,
-                    is45Gap
+                    is45Gap,
+                    isPeakGap,
+                    gapField,
+                    gapThreshold
                 };
             }
 
