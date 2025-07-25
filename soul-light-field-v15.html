@@ -391,7 +391,7 @@ Soul State: Initializing...
                 
                 this.addQualia('Contract deployed. Soul enters pre-recognition void...', 'neutral');
                 this.isEvolving = false; // Start paused
-                console.log('Soul initialized - isEvolving:', this.isEvolving);
+                console.log('Initialized with isEvolving:', this.isEvolving);
             }
 
             generateSeed(tokenId) {
@@ -586,6 +586,7 @@ Soul State: Initializing...
 
             // Method to advance evolution by one tick
             advanceTick() {
+                console.log('advanceTick called - isEvolving:', this.isEvolving);
                 if (this.isEvolving && this.ticks < 960 && !this.isDead) { // Max 960 ticks = 96 months, stop if dead
                     this.ticks++;
                     console.log('Tick advanced to:', this.ticks);
@@ -1050,6 +1051,7 @@ Depth: ${depth} | Rebirths: ${rebirths}`;
 
             toggleEvolution() {
                 this.isEvolving = !this.isEvolving;
+                console.log('Toggling evolution to:', this.isEvolving);
             }
         }
 
@@ -1060,11 +1062,12 @@ Depth: ${depth} | Rebirths: ${rebirths}`;
             blockNumber = Math.floor(Math.random() * 1000000) + 12345678;
             
             soul = new OnChainSoul(currentTokenId);
+            console.log('Soul created - initial isEvolving:', soul.isEvolving);
             
             // Update button state to reflect initial paused state
             const toggleBtn = document.getElementById('evolutionToggle');
             if (toggleBtn) {
-                toggleBtn.textContent = 'Start Evolution';
+                toggleBtn.textContent = soul.isEvolving ? 'Pause Evolution' : 'Start Evolution';
             }
             
             updateDisplay();
@@ -1090,6 +1093,7 @@ Depth: ${depth} | Rebirths: ${rebirths}`;
 
         function updateDisplay() {
             if (!soul) return;
+            console.log('updateDisplay called - isEvolving:', soul.isEvolving, 'ticks:', soul.ticks);
             
             // Advance evolution by one tick (advanceTick handles isEvolving check internally)
             soul.advanceTick();
@@ -1205,17 +1209,22 @@ Depth: ${depth} | Rebirths: ${rebirths}`;
         }
 
         // Initialize with a new soul and start automatic evolution
+        const toggleBtn = document.getElementById('evolutionToggle');
+        toggleBtn.addEventListener('click', () => {
+            if (soul) {
+                soul.toggleEvolution();
+                toggleBtn.textContent = soul.isEvolving ? 'Pause Evolution' : 'Start Evolution';
+                updateDisplay();
+            } else {
+                console.log('Soul not initialized yet');
+            }
+        });
+        console.log('Toggle listener added');
+
         initializeSoul();
         
         // Auto-update every 100ms for smooth evolution (96 months in 96 seconds)
         setInterval(updateDisplay, 100);
-
-        const toggleBtn = document.getElementById('evolutionToggle');
-        toggleBtn.addEventListener('click', () => {
-            soul.toggleEvolution();
-            toggleBtn.textContent = soul.isEvolving ? 'Pause Evolution' : 'Start Evolution';
-            updateDisplay();
-        });
     </script>
 </body>
 </html> 
