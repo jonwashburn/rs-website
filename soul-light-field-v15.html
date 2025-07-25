@@ -226,7 +226,7 @@
     <div class="container">
         <div class="header">
             <h1>Ledger Souls - On-Chain Contract Simulation</h1>
-            <p>V15: Automatic 96-month evolution in 96 seconds - Watch a soul's complete journey</p>
+            <p>V15: Tick-based evolution (10 ticks = 1 month) - Watch a soul's complete 96-month journey</p>
             <div id="evolutionProgress" style="width: 100%; background: #333; height: 8px; border-radius: 4px; margin: 10px 0;">
                 <div id="progressBar" style="width: 0%; background: linear-gradient(90deg, #ffd700, #ffaa00); height: 100%; border-radius: 4px; transition: width 0.1s ease;"></div>
             </div>
@@ -241,6 +241,7 @@
                 <strong>Token ID:</strong> <span id="tokenId">1</span><br>
                 <strong>Mint Block:</strong> <span id="mintBlock">0</span><br>
                 <strong>Current Month:</strong> <span id="currentMonth">0</span> / 96<br>
+                <strong>Ticks:</strong> <span id="tickDisplay">0</span> / 960<br>
                 <strong>Seed:</strong> <span id="seedDisplay">0x...</span>
             </div>
 
@@ -344,7 +345,7 @@ Soul State: Initializing...
             constructor(tokenId) {
                 this.tokenId = tokenId;
                 this.seed = this.generateSeed(tokenId);
-                this.startTime = Date.now(); // Evolution starts immediately
+                this.ticks = 0; // Tick-based evolution (10 ticks = 1 month)
                 this.blockNumber = blockNumber;
                 
                 // Initialize evolution tracking
@@ -371,9 +372,8 @@ Soul State: Initializing...
             }
 
             getCurrentState() {
-                const currentTime = Date.now();
-                const elapsedSeconds = (currentTime - this.startTime) / 1000;
-                const months = Math.min(elapsedSeconds, 96); // Fractional months for smooth evolution
+                // Convert ticks to months (10 ticks = 1 month, max 960 ticks = 96 months)
+                const months = Math.min(this.ticks / 10, 96);
                 
                 // Check for integer month transitions
                 const intMonth = Math.floor(months);
@@ -382,7 +382,7 @@ Soul State: Initializing...
                     this.lastIntMonth = intMonth;
                 }
                 
-                // Sub-month updates every 0.25 months
+                // Sub-month updates every 0.25 months (2.5 ticks)
                 const subMonth = Math.floor(months * 4) / 4;
                 if (subMonth > this.lastFractionalMonth) {
                     this.onSubMonthUpdate(subMonth);
@@ -390,6 +390,13 @@ Soul State: Initializing...
                 }
                 
                 return this.calculateState(months);
+            }
+
+            // Method to advance evolution by one tick
+            advanceTick() {
+                if (this.ticks < 960) { // Max 960 ticks = 96 months
+                    this.ticks++;
+                }
             }
 
             onSubMonthUpdate(subMonth) {
@@ -777,6 +784,9 @@ Depth: ${depth} | Rebirths: ${rebirths}`;
         function updateDisplay() {
             if (!soul) return;
             
+            // Advance evolution by one tick
+            soul.advanceTick();
+            
             const state = soul.getCurrentState();
             const endState = soul.generateEndState(state);
             const qualia = soul.generateQualia(state);
@@ -785,7 +795,8 @@ Depth: ${depth} | Rebirths: ${rebirths}`;
             document.getElementById('soulId').textContent = `Soul #${soul.tokenId.toString().padStart(6, '0')}`;
             document.getElementById('tokenId').textContent = soul.tokenId;
             document.getElementById('mintBlock').textContent = soul.blockNumber;
-            document.getElementById('currentMonth').textContent = state.months;
+            document.getElementById('currentMonth').textContent = state.months.toFixed(1);
+            document.getElementById('tickDisplay').textContent = soul.ticks;
             document.getElementById('seedDisplay').textContent = `0x${soul.seed.toString(16).slice(0, 8)}`;
             
             // Update progress bar
@@ -793,12 +804,12 @@ Depth: ${depth} | Rebirths: ${rebirths}`;
             document.getElementById('progressBar').style.width = `${progressPercent}%`;
             
             // Update progress text
-            const elapsedSeconds = Math.floor((Date.now() - soul.startTime) / 1000);
+            const elapsedSeconds = Math.floor(soul.ticks / 10);
             const remainingSeconds = Math.max(0, 96 - elapsedSeconds);
             if (state.months >= 96) {
                 document.getElementById('progressText').textContent = '🎉 Evolution Complete - Soul Fully Awakened!';
             } else {
-                document.getElementById('progressText').textContent = `Month ${state.months}/96 • ${remainingSeconds}s remaining`;
+                document.getElementById('progressText').textContent = `Month ${state.months.toFixed(1)}/96 • ${remainingSeconds}s remaining`;
             }
             
             // Update beat cycle info
