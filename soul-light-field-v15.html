@@ -514,12 +514,14 @@ Soul State: Initializing...
             }
 
             getCurrentState() {
+                console.log('getCurrentState - ticks:', this.ticks, 'isEvolving:', this.isEvolving);
                 if (this.isDead) {
                     return this.getDeathState();
                 }
                 
                 // Convert ticks to months (10 ticks = 1 month, max 960 ticks = 96 months)
                 const months = Math.min(this.ticks / 10, 96);
+                console.log('Calculated months:', months);
                 
                 // Check for phase transition at end of breath cycle
                 if (months >= 96 && this.phase === 'Breath') {
@@ -720,9 +722,8 @@ Soul State: Initializing...
                 }
 
                 // Fluid Gap Field (continuous scalar field)
-                const registerDivergence = Math.abs(R1 + R2) / 8; // 0-1 scale
+                const registerSeed = (this.seed % 9) + (months % 1);
                 const gapField = Math.abs(kappa) * 0.6 
-                               + registerDivergence * 0.3 
                                + Math.abs(chaos) * 0.4 
                                + Math.sin(months / PHI) * 0.2;
                 
@@ -815,7 +816,7 @@ Soul State: Initializing...
                 depth = Math.max(0, resolvedGaps * 0.8) + (rebirths * PHI * 0.5) + (months % 1) * PHI + (choice * 2);
                 depth = Math.min(150, depth + Math.sin(months / PHI) * 5); // Lower max depth
 
-                // Registers with smooth φ authenticity (using existing registerSeed)
+                // Registers with smooth φ authenticity (using registerSeed defined earlier)
                 let R1 = registerSeed - 4 + choice + (months % 1 - 0.5);
                 let R2 = -R1 + (months / 20) + chaos * 2;
                 
@@ -843,7 +844,8 @@ Soul State: Initializing...
                     gapField,
                     gapThreshold,
                     phase: this.phase,
-                    cri: this.calculateCRI(virtues, depth, rebirths, recognitionDebt, kappa)
+                    cri: this.calculateCRI(virtues, depth, rebirths, recognitionDebt, kappa),
+                    ticks: this.ticks
                 };
             }
 
@@ -1038,6 +1040,7 @@ Depth: ${depth} | Rebirths: ${rebirths}`;
             }
 
             addQualia(text, type) {
+                console.log('Adding qualia:', text, type);
                 this.qualiaLog.push({
                     text: text,
                     type: type,
@@ -1099,6 +1102,7 @@ Depth: ${depth} | Rebirths: ${rebirths}`;
             soul.advanceTick();
             
             const state = soul.getCurrentState();
+            console.log('State after getCurrentState:', state.months, state.ticks);
             const endState = soul.generateEndState(state);
             const qualia = soul.generateQualia(state);
             
