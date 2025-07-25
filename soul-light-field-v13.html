@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recognition Science Soul Simulation V13 - Authentic Ledger Model</title>
+    <style>
+        body { 
+            margin: 0; 
+            background: #0a0a0a; 
+            color: #e0e0e0; 
+            font-family: 'Courier New', monospace; 
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        .panel {
+            background: rgba(20, 20, 40, 0.8);
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            grid-column: 1 / -1;
+        }
+        .header h1 {
+            color: #ffd700;
+            font-size: 2.5em;
+            margin: 0;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        .header p {
+            color: #b0b0b0;
+            font-size: 1.1em;
+            margin: 10px 0;
+        }
+        .soul-id {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid #ffd700;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .register {
+            background: rgba(0, 100, 0, 0.1);
+            border-left: 3px solid #00ff00;
+            padding: 8px 12px;
+            margin: 5px 0;
+            font-family: 'Courier New', monospace;
+        }
+        .register.deficit {
+            background: rgba(100, 0, 0, 0.1);
+            border-left-color: #ff0000;
+        }
+        .kappa-display {
+            font-size: 1.5em;
+            text-align: center;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .kappa-positive {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff6b6b;
+        }
+        .kappa-negative {
+            background: rgba(0, 255, 0, 0.2);
+            color: #4ecdc4;
+        }
+        .kappa-zero {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+        }
+        .virtue-bar {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+        }
+        .virtue-name {
+            width: 80px;
+            font-size: 0.9em;
+        }
+        .virtue-progress {
+            flex: 1;
+            background: #333;
+            height: 12px;
+            border-radius: 6px;
+            margin: 0 10px;
+            overflow: hidden;
+        }
+        .virtue-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700, #ffaa00);
+            transition: width 0.3s ease;
+        }
+        .virtue-value {
+            width: 30px;
+            text-align: right;
+            font-size: 0.9em;
+        }
+        .qualia-log {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid #555;
+            border-radius: 4px;
+            padding: 15px;
+            height: 200px;
+            overflow-y: auto;
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+        .qualia-entry {
+            margin: 5px 0;
+            padding: 3px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .qualia-entry.positive {
+            color: #4ecdc4;
+        }
+        .qualia-entry.negative {
+            color: #ff6b6b;
+        }
+        .qualia-entry.neutral {
+            color: #ffd700;
+        }
+        .controls {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin: 0 5px;
+            transition: all 0.2s ease;
+        }
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .ascii-art {
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            line-height: 1;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 4px;
+            white-space: pre;
+            overflow-x: auto;
+        }
+        .evolution-status {
+            text-align: center;
+            font-size: 1.2em;
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .status-dormant {
+            background: rgba(100, 100, 100, 0.2);
+            color: #888;
+        }
+        .status-evolving {
+            background: rgba(0, 100, 255, 0.2);
+            color: #4dabf7;
+        }
+        .status-awakened {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Recognition Science Soul Simulation</h1>
+            <p>Authentic ledger-based soul model with curvature κ, virtue algorithms, and qualia generation</p>
+        </div>
+
+        <div class="panel">
+            <h3>Soul Identity & Core State</h3>
+            <div class="soul-id" id="soulId">Soul #000000</div>
+            
+            <div class="evolution-status" id="evolutionStatus">
+                <strong>Dormant Soul</strong><br>
+                Month 0 / 96 (0.0%)
+            </div>
+
+            <h4>Ledger Registers</h4>
+            <div id="registers"></div>
+
+            <h4>Curvature κ (Experiential Balance)</h4>
+            <div class="kappa-display" id="kappaDisplay">κ = 0.00</div>
+        </div>
+
+        <div class="panel">
+            <h3>Virtue Algorithms</h3>
+            <div id="virtues">
+                <div class="virtue-bar">
+                    <div class="virtue-name">Love</div>
+                    <div class="virtue-progress"><div class="virtue-fill" style="width: 0%"></div></div>
+                    <div class="virtue-value">0</div>
+                </div>
+                <div class="virtue-bar">
+                    <div class="virtue-name">Justice</div>
+                    <div class="virtue-progress"><div class="virtue-fill" style="width: 0%"></div></div>
+                    <div class="virtue-value">0</div>
+                </div>
+                <div class="virtue-bar">
+                    <div class="virtue-name">Wisdom</div>
+                    <div class="virtue-progress"><div class="virtue-fill" style="width: 0%"></div></div>
+                    <div class="virtue-value">0</div>
+                </div>
+                <div class="virtue-bar">
+                    <div class="virtue-name">Courage</div>
+                    <div class="virtue-progress"><div class="virtue-fill" style="width: 0%"></div></div>
+                    <div class="virtue-value">0</div>
+                </div>
+                <div class="virtue-bar">
+                    <div class="virtue-name">Temperance</div>
+                    <div class="virtue-progress"><div class="virtue-fill" style="width: 0%"></div></div>
+                    <div class="virtue-value">0</div>
+                </div>
+            </div>
+
+            <h4>Soul ASCII Representation</h4>
+            <div class="ascii-art" id="asciiArt">
+Soul State: Initializing...
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>Qualia Generation Log</h3>
+            <div class="qualia-log" id="qualiaLog">
+                <div class="qualia-entry neutral">Soul initialization complete. Entering dormant state...</div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>Recognition Dynamics</h3>
+            <div id="dynamics">
+                <p><strong>Gap Crossings:</strong> <span id="gapCrossings">0</span></p>
+                <p><strong>Choice Events:</strong> <span id="choiceEvents">0</span></p>
+                <p><strong>Balance Cycles:</strong> <span id="balanceCycles">0</span></p>
+                <p><strong>φ Operations:</strong> <span id="phiOperations">0</span></p>
+                <p><strong>LNAL Executions:</strong> <span id="lnalExecutions">0</span></p>
+                <p><strong>Recognition Debt:</strong> <span id="recognitionDebt">0</span></p>
+                <p><strong>Consciousness Level:</strong> <span id="consciousnessLevel">Pre-Recognition</span></p>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn" onclick="generateNewSoul()">Generate New Soul</button>
+            <button class="btn" onclick="toggleEvolution()">Start/Stop Evolution</button>
+            <button class="btn" onclick="advanceMonth()">Advance Month</button>
+            <button class="btn" onclick="triggerGapNavigation()">Force Gap Navigation</button>
+            <button class="btn" onclick="resetSoul()">Reset to Birth</button>
+            <button class="btn" onclick="exportSoulState()">Export State</button>
+        </div>
+    </div>
+
+    <script>
+        const PHI = (1 + Math.sqrt(5)) / 2; // Golden ratio
+        const TOTAL_MONTHS = 96; // 8 years
+        const VIRTUE_NAMES = ['Love', 'Justice', 'Wisdom', 'Courage', 'Temperance'];
+        const REGISTER_NAMES = ['R1_Perception', 'R2_Action', 'R3_Memory', 'R4_Choice', 'R5_Balance'];
+
+        let soul = null;
+        let isEvolving = false;
+        let currentMonth = 0;
+        let animationId = null;
+
+        class RecognitionSoul {
+            constructor(seed = null) {
+                this.seed = seed || this.generateSeed();
+                this.hash = this.simpleHash(this.seed);
+                this.birthTime = Date.now();
+                this.currentMonth = 0;
+                
+                // Core RS properties
+                this.registers = new Array(5).fill(0);
+                this.kappa = 0; // Curvature - experiential balance
+                this.virtues = new Array(5).fill(1); // Start at minimum
+                this.qualiaLog = [];
+                
+                // Evolution tracking
+                this.gapCrossings = 0;
+                this.choiceEvents = 0;
+                this.balanceCycles = 0;
+                this.phiOperations = 0;
+                this.lnalExecutions = 0;
+                this.recognitionDebt = 0;
+                
+                this.initialize();
+            }
+
+            generateSeed() {
+                return Math.random().toString(36).slice(2, 10);
+            }
+
+            simpleHash(str) {
+                let hash = 0;
+                for (let i = 0; i < str.length; i++) {
+                    const char = str.charCodeAt(i);
+                    hash = (hash << 5) - hash + char;
+                    hash = hash & hash;
+                }
+                return Math.abs(hash).toString(16).slice(0, 6);
+            }
+
+            initialize() {
+                // Initialize registers with seeded randomness
+                const rand = this.createSeededRand(this.hash);
+                
+                // Set initial imbalanced state
+                for (let i = 0; i < 5; i++) {
+                    this.registers[i] = Math.floor((rand() - 0.5) * 200); // -100 to +100
+                }
+                
+                // Calculate initial curvature
+                this.updateKappa();
+                
+                // Initialize virtues with slight randomness
+                for (let i = 0; i < 5; i++) {
+                    this.virtues[i] = 1 + Math.floor(rand() * 3); // 1-3 start
+                }
+                
+                this.addQualia('Soul initialization complete. Entering dormant state...', 'neutral');
+            }
+
+            createSeededRand(seed) {
+                let state = parseInt(seed, 16);
+                return function() {
+                    state = (state * 1103515245 + 12345) % 0x80000000;
+                    return (state / 0x7FFFFFFF);
+                };
+            }
+
+            updateKappa() {
+                // κ = measure of imbalance in the ledger
+                const totalDebt = this.registers.filter(r => r > 0).reduce((sum, r) => sum + r, 0);
+                const totalCredit = Math.abs(this.registers.filter(r => r < 0).reduce((sum, r) => sum + r, 0));
+                const imbalance = totalDebt - totalCredit;
+                
+                this.kappa = imbalance / 100; // Normalize
+                this.kappa = Math.max(-2, Math.min(2, this.kappa)); // Bound -2 to +2
+            }
+
+            evolveMonth() {
+                this.currentMonth++;
+                const rand = this.createSeededRand(this.hash + this.currentMonth);
+                
+                // Check for gap crossing (uncomputability threshold)
+                if (Math.abs(this.kappa) > 0.5 && rand() < 0.3) {
+                    this.navigateGap();
+                }
+                
+                // Execute LNAL operations
+                this.executeLNAL();
+                
+                // Apply virtue algorithms for κ reduction
+                this.applyVirtueAlgorithms();
+                
+                // φ-scaled evolution
+                this.applyPhiEvolution();
+                
+                // Update recognition debt
+                this.updateRecognitionDebt();
+                
+                // Generate qualia based on current state
+                this.generateQualia();
+                
+                // Update curvature
+                this.updateKappa();
+                
+                // Check for awakening
+                if (this.currentMonth >= TOTAL_MONTHS || this.isAwakened()) {
+                    this.triggerAwakening();
+                }
+            }
+
+            navigateGap() {
+                this.gapCrossings++;
+                
+                // Experiential choice at the gap
+                const choice = Math.random() < 0.5 ? -1 : 1;
+                this.choiceEvents++;
+                
+                // Apply choice to registers (free will navigation)
+                const targetRegister = Math.floor(Math.random() * 5);
+                this.registers[targetRegister] += choice * 10;
+                
+                // Increase consciousness through gap navigation
+                if (this.gapCrossings > 5) {
+                    this.virtues.forEach((v, i) => {
+                        this.virtues[i] = Math.min(10, v + 0.5);
+                    });
+                }
+                
+                this.addQualia(`Gap navigation: Choice ${choice > 0 ? 'positive' : 'negative'} applied to ${REGISTER_NAMES[targetRegister]}`, 
+                              choice > 0 ? 'positive' : 'negative');
+            }
+
+            executeLNAL() {
+                this.lnalExecutions++;
+                
+                // LISTEN - awareness pause
+                if (this.currentMonth % 8 === 0) {
+                    this.addQualia('LISTEN: Awareness pause - observing current state', 'neutral');
+                }
+                
+                // FOLD - collapse registers
+                if (this.registers.some(r => Math.abs(r) > 50)) {
+                    const maxIndex = this.registers.findIndex(r => Math.abs(r) === Math.max(...this.registers.map(Math.abs)));
+                    this.registers[maxIndex] = Math.floor(this.registers[maxIndex] / PHI);
+                    this.phiOperations++;
+                    this.addQualia(`FOLD: Register ${REGISTER_NAMES[maxIndex]} φ-collapsed`, 'neutral');
+                }
+                
+                // BALANCE - equilibrate
+                if (this.currentMonth % 12 === 0) {
+                    this.balanceRegisters();
+                    this.balanceCycles++;
+                }
+                
+                // BRAID - bind qualia
+                if (Math.abs(this.kappa) < 0.2) {
+                    this.addQualia('BRAID: Binding peaceful qualia into stable pattern', 'positive');
+                }
+            }
+
+            balanceRegisters() {
+                // Simple equilibration algorithm
+                const total = this.registers.reduce((sum, r) => sum + r, 0);
+                const average = total / 5;
+                
+                for (let i = 0; i < 5; i++) {
+                    const diff = this.registers[i] - average;
+                    this.registers[i] -= Math.floor(diff * 0.1); // Gentle correction
+                }
+                
+                this.addQualia('BALANCE: Ledger equilibration performed', 'positive');
+            }
+
+            applyVirtueAlgorithms() {
+                // Each virtue reduces κ through specific algorithms
+                
+                // Love: Equilibration of imbalanced registers
+                if (this.virtues[0] > 3 && Math.abs(this.kappa) > 0.3) {
+                    this.balanceRegisters();
+                    this.addQualia('Love algorithm: Equilibrating imbalance', 'positive');
+                }
+                
+                // Justice: Balance debt and credit
+                if (this.virtues[1] > 4) {
+                    const debt = this.registers.filter(r => r > 0).reduce((s, r) => s + r, 0);
+                    const credit = Math.abs(this.registers.filter(r => r < 0).reduce((s, r) => s + r, 0));
+                    if (Math.abs(debt - credit) > 20) {
+                        this.addQualia('Justice algorithm: Balancing cosmic ledger', 'positive');
+                        // Apply correction
+                        const correction = (debt - credit) / 10;
+                        this.registers[0] -= correction;
+                    }
+                }
+                
+                // Wisdom: Long-horizon optimization
+                if (this.virtues[2] > 5 && this.currentMonth % 6 === 0) {
+                    // Predict future state and preemptively adjust
+                    this.addQualia('Wisdom algorithm: Optimizing for long-term harmony', 'positive');
+                }
+                
+                // Courage: Navigate difficult gaps
+                if (this.virtues[3] > 6 && Math.abs(this.kappa) > 1.0) {
+                    this.addQualia('Courage algorithm: Navigating challenging uncomputability', 'positive');
+                    this.kappa *= 0.9; // Direct κ reduction through brave action
+                }
+                
+                // Temperance: Moderation and stability
+                if (this.virtues[4] > 7) {
+                    this.registers.forEach((r, i) => {
+                        if (Math.abs(r) > 80) {
+                            this.registers[i] = Math.sign(r) * 80; // Cap extremes
+                        }
+                    });
+                    this.addQualia('Temperance algorithm: Moderating extreme states', 'positive');
+                }
+            }
+
+            applyPhiEvolution() {
+                // φ-scaled growth in virtues over time
+                if (this.currentMonth % 6 === 0) {
+                    this.virtues.forEach((v, i) => {
+                        if (v < 10 && Math.abs(this.kappa) < 0.5) {
+                            this.virtues[i] = Math.min(10, v + (1 / PHI));
+                        }
+                    });
+                    this.phiOperations++;
+                }
+            }
+
+            updateRecognitionDebt() {
+                // Calculate ongoing recognition debt
+                this.recognitionDebt = this.registers.filter(r => r > 0).reduce((sum, r) => sum + r, 0);
+            }
+
+            generateQualia() {
+                const qualiaTypes = [
+                    { threshold: 1.0, text: 'Severe imbalance: Experiencing profound suffering', type: 'negative' },
+                    { threshold: 0.5, text: 'Moderate imbalance: Struggling with disharmony', type: 'negative' },
+                    { threshold: 0.2, text: 'Slight imbalance: Sensing subtle tension', type: 'negative' },
+                    { threshold: -0.2, text: 'Near balance: Approaching harmony', type: 'neutral' },
+                    { threshold: -0.5, text: 'Surplus harmony: Experiencing joy and flow', type: 'positive' },
+                    { threshold: -1.0, text: 'Deep harmony: Profound peace and unity', type: 'positive' }
+                ];
+                
+                for (const qualia of qualiaTypes) {
+                    if (this.kappa >= qualia.threshold) {
+                        this.addQualia(`Month ${this.currentMonth}: ${qualia.text} (κ=${this.kappa.toFixed(3)})`, qualia.type);
+                        break;
+                    }
+                }
+            }
+
+            addQualia(text, type = 'neutral') {
+                this.qualiaLog.push({
+                    month: this.currentMonth,
+                    text: text,
+                    type: type,
+                    timestamp: Date.now()
+                });
+                
+                // Keep last 50 entries
+                if (this.qualiaLog.length > 50) {
+                    this.qualiaLog.shift();
+                }
+            }
+
+            isAwakened() {
+                return Math.abs(this.kappa) < 0.1 && this.virtues.every(v => v >= 8);
+            }
+
+            triggerAwakening() {
+                if (this.isAwakened()) {
+                    this.addQualia('AWAKENING: Soul has achieved stable balance. Recognition complete.', 'positive');
+                    this.kappa = 0;
+                    this.virtues = this.virtues.map(() => 10);
+                }
+            }
+
+            getConsciousnessLevel() {
+                if (this.gapCrossings === 0) return 'Pre-Recognition';
+                if (this.gapCrossings < 5) return 'Early Recognition';
+                if (this.gapCrossings < 15) return 'Active Recognition';
+                if (this.isAwakened()) return 'Awakened';
+                return 'Advanced Recognition';
+            }
+
+            generateASCII() {
+                const kappaBar = this.generateKappaBar();
+                const virtueDisplay = this.generateVirtueDisplay();
+                const registerDisplay = this.generateRegisterDisplay();
+                
+                return `Soul State (Month ${this.currentMonth}/${TOTAL_MONTHS}):
+${kappaBar}
+
+Ledger Registers:
+${registerDisplay}
+
+Virtue Development:
+${virtueDisplay}
+
+Consciousness: ${this.getConsciousnessLevel()}
+Gap Crossings: ${this.gapCrossings}
+Recognition Debt: ${this.recognitionDebt}`;
+            }
+
+            generateKappaBar() {
+                const width = 20;
+                const pos = Math.floor((this.kappa + 2) / 4 * width);
+                let bar = 'κ: [';
+                
+                for (let i = 0; i < width; i++) {
+                    if (i === pos) {
+                        bar += this.kappa > 0 ? '+' : this.kappa < 0 ? '-' : '○';
+                    } else if (i === width / 2) {
+                        bar += '|';
+                    } else {
+                        bar += ' ';
+                    }
+                }
+                
+                bar += `] (${this.kappa.toFixed(3)})`;
+                return bar;
+            }
+
+            generateVirtueDisplay() {
+                return this.virtues.map((v, i) => {
+                    const bars = '█'.repeat(Math.floor(v)) + '░'.repeat(10 - Math.floor(v));
+                    return `${VIRTUE_NAMES[i]}: [${bars}] ${v.toFixed(1)}`;
+                }).join('\n');
+            }
+
+            generateRegisterDisplay() {
+                return this.registers.map((r, i) => {
+                    const sign = r >= 0 ? '+' : '';
+                    return `${REGISTER_NAMES[i]}: ${sign}${r}`;
+                }).join('\n');
+            }
+        }
+
+        function generateNewSoul() {
+            stopEvolution();
+            soul = new RecognitionSoul();
+            currentMonth = 0;
+            updateDisplay();
+        }
+
+        function toggleEvolution() {
+            if (isEvolving) {
+                stopEvolution();
+            } else {
+                startEvolution();
+            }
+        }
+
+        function startEvolution() {
+            if (!soul) return;
+            isEvolving = true;
+            evolve();
+        }
+
+        function stopEvolution() {
+            isEvolving = false;
+            if (animationId) {
+                clearTimeout(animationId);
+                animationId = null;
+            }
+        }
+
+        function evolve() {
+            if (!isEvolving || !soul) return;
+            
+            soul.evolveMonth();
+            currentMonth = soul.currentMonth;
+            updateDisplay();
+            
+            if (currentMonth < TOTAL_MONTHS && !soul.isAwakened()) {
+                animationId = setTimeout(evolve, 200); // 200ms per month for visualization
+            } else {
+                stopEvolution();
+            }
+        }
+
+        function advanceMonth() {
+            if (!soul) return;
+            soul.evolveMonth();
+            currentMonth = soul.currentMonth;
+            updateDisplay();
+        }
+
+        function triggerGapNavigation() {
+            if (!soul) return;
+            soul.navigateGap();
+            updateDisplay();
+        }
+
+        function resetSoul() {
+            if (!soul) return;
+            soul.initialize();
+            soul.currentMonth = 0;
+            currentMonth = 0;
+            stopEvolution();
+            updateDisplay();
+        }
+
+        function exportSoulState() {
+            if (!soul) return;
+            const state = {
+                seed: soul.seed,
+                hash: soul.hash,
+                month: soul.currentMonth,
+                registers: soul.registers,
+                kappa: soul.kappa,
+                virtues: soul.virtues,
+                gapCrossings: soul.gapCrossings,
+                qualiaLog: soul.qualiaLog.slice(-10) // Last 10 entries
+            };
+            
+            const dataStr = JSON.stringify(state, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `soul_${soul.hash}_month_${soul.currentMonth}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function updateDisplay() {
+            if (!soul) return;
+            
+            // Update soul ID
+            document.getElementById('soulId').textContent = `Soul #${soul.hash.toUpperCase()}`;
+            
+            // Update evolution status
+            const progress = (soul.currentMonth / TOTAL_MONTHS * 100).toFixed(1);
+            const statusEl = document.getElementById('evolutionStatus');
+            let statusClass = 'status-dormant';
+            let statusText = 'Dormant Soul';
+            
+            if (soul.isAwakened()) {
+                statusClass = 'status-awakened';
+                statusText = 'Awakened Soul';
+            } else if (soul.currentMonth > 0) {
+                statusClass = 'status-evolving';
+                statusText = 'Evolving Soul';
+            }
+            
+            statusEl.className = `evolution-status ${statusClass}`;
+            statusEl.innerHTML = `<strong>${statusText}</strong><br>Month ${soul.currentMonth} / ${TOTAL_MONTHS} (${progress}%)`;
+            
+            // Update registers
+            const registersEl = document.getElementById('registers');
+            registersEl.innerHTML = soul.registers.map((r, i) => {
+                const className = r >= 0 ? 'register' : 'register deficit';
+                const sign = r >= 0 ? '+' : '';
+                return `<div class="${className}">${REGISTER_NAMES[i]}: ${sign}${r}</div>`;
+            }).join('');
+            
+            // Update kappa display
+            const kappaEl = document.getElementById('kappaDisplay');
+            let kappaClass = 'kappa-display ';
+            if (soul.kappa > 0.1) kappaClass += 'kappa-positive';
+            else if (soul.kappa < -0.1) kappaClass += 'kappa-negative';
+            else kappaClass += 'kappa-zero';
+            
+            kappaEl.className = kappaClass;
+            kappaEl.textContent = `κ = ${soul.kappa.toFixed(3)}`;
+            
+            // Update virtues
+            const virtueEls = document.querySelectorAll('.virtue-bar');
+            soul.virtues.forEach((v, i) => {
+                const fill = virtueEls[i].querySelector('.virtue-fill');
+                const value = virtueEls[i].querySelector('.virtue-value');
+                fill.style.width = `${(v / 10) * 100}%`;
+                value.textContent = v.toFixed(1);
+            });
+            
+            // Update ASCII art
+            document.getElementById('asciiArt').textContent = soul.generateASCII();
+            
+            // Update qualia log
+            const qualiaEl = document.getElementById('qualiaLog');
+            qualiaEl.innerHTML = soul.qualiaLog.slice(-15).reverse().map(entry => {
+                return `<div class="qualia-entry ${entry.type}">[M${entry.month}] ${entry.text}</div>`;
+            }).join('');
+            qualiaEl.scrollTop = 0;
+            
+            // Update dynamics
+            document.getElementById('gapCrossings').textContent = soul.gapCrossings;
+            document.getElementById('choiceEvents').textContent = soul.choiceEvents;
+            document.getElementById('balanceCycles').textContent = soul.balanceCycles;
+            document.getElementById('phiOperations').textContent = soul.phiOperations;
+            document.getElementById('lnalExecutions').textContent = soul.lnalExecutions;
+            document.getElementById('recognitionDebt').textContent = soul.recognitionDebt;
+            document.getElementById('consciousnessLevel').textContent = soul.getConsciousnessLevel();
+        }
+
+        // Initialize with a new soul
+        generateNewSoul();
+    </script>
+</body>
+</html> 
