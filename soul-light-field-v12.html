@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soul Light Field V12 - Advanced Particle Physics</title>
+    <style>
+        body { 
+            margin: 0; 
+            background: black; 
+            overflow: hidden; 
+            color: white; 
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, monospace; 
+        }
+        canvas { 
+            display: block; 
+        }
+        #info { 
+            position: absolute; 
+            top: 10px; 
+            left: 10px; 
+            font-size: 12px; 
+            opacity: 0.8;
+            background: rgba(0,0,0,0.5);
+            padding: 10px;
+            border-radius: 5px;
+            line-height: 1.4;
+        }
+        #controls { 
+            position: absolute; 
+            bottom: 10px; 
+            left: 10px;
+            display: flex;
+            gap: 8px;
+        }
+        button { 
+            background: rgba(255,255,255,0.1); 
+            color: white; 
+            border: 1px solid rgba(255,255,255,0.2); 
+            padding: 8px 15px; 
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.2s ease;
+        }
+        button:hover { 
+            background: rgba(255,255,255,0.2); 
+        }
+        .status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 11px;
+            opacity: 0.7;
+            text-align: right;
+        }
+        .rarity-badge {
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .rarity-common { color: #ffffff; background: rgba(128,128,128,0.3); }
+        .rarity-uncommon { color: #00ff00; background: rgba(0,128,0,0.3); }
+        .rarity-rare { color: #0000ff; background: rgba(0,0,128,0.3); }
+        .rarity-legendary { color: #ffd700; background: rgba(128,128,0,0.3); }
+        .rarity-mythic { color: #ff00ff; background: rgba(128,0,128,0.3); }
+        .achievement {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            opacity: 0;
+            transition: opacity 1s ease-out;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <div id="info"></div>
+    <div id="controls">
+        <button onclick="generateNewSoul()">Generate New Soul</button>
+        <button onclick="toggleAnimation()">Play/Pause</button>
+        <button onclick="advanceMonth()">+1 Month</button>
+        <button onclick="resetSoul()">Reset to Void</button>
+        <button onclick="toggleTrails()">Toggle Trails</button>
+    </div>
+    <div class="status" id="status">Ready</div>
+    <div id="achievement" class="achievement"></div>
+    
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const PHI = (1 + Math.sqrt(5)) / 2;
+        const DIM = 8;
+        const TOTAL_MONTHS = 96;
+        const BREATH_CYCLE = 8;
+        const RUNG_BASE = 45;
+        const VIRTUE_NAMES = ['Balance', 'Flow', 'Seed', 'Echo', 'Fold', 'Braid', 'Listen', 'Regive'];
+        const PARTICLE_TYPES = ['CORE', 'RESONATOR', 'ANCHOR', 'DRIFTER', 'ECHO'];
+
+        let soul = null;
+        let particles = [];
+        let trailHistory = [];
+        let fieldEffects = [];
+        let animationId = null;
+        let isPlaying = false;
+        let currentMonth = 0;
+        let frameCount = 0;
+        let rarity = { tier: 'Common', score: 0 };
+        let showTrails = true;
+
+        function simpleHash(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = (hash << 5) - hash + char;
+                hash = hash & hash;
+            }
+            return Math.abs(hash).toString(16).slice(0, 8);
+        }
+
+        function createSeededRand(seed) {
+            let state = parseInt(seed, 16);
+            return function() {
+                state = (state * 1103515245 + 12345) % 0x80000000;
+                return (state / 0x7FFFFFFF);
+            };
+        }
+
+        function isPrime(num) {
+            if (num <= 1) return false;
+            for (let i = 2; i <= Math.sqrt(num); i++) {
+                if (num % i === 0) return false;
+            }
+            return true;
+        }
+
+        function generateNewSoul() {
+            resetAnimation();
+            currentMonth = 0;
+            particles = [];
+            trailHistory = [];
+            fieldEffects = [];
+            frameCount = 0;
+            
+            const seed = Math.random().toString(36).slice(2);
+            const rand = createSeededRand(simpleHash(seed));
+            
+            soul = {
+                seed: seed,
+                hash: simpleHash(seed),
+                rung: RUNG_BASE + Math.floor(rand() * 56),
+                cost: Math.floor(rand() * 9) - 4,
+                beat_cycle: Math.floor(rand() * 8) + 1,
+                qualia_mode: Math.floor(rand() * 8) + 1,
+                cluster_tightness: rand(),
+                resonance_frequency: rand(),
+                oam: Math.floor(rand() * 11) - 5,
+                polarization_parity: rand() < 0.5 ? -1 : 1,
+                time_bin_index: Math.floor(rand() * 1024),
+                transverse_mode_index: rand() * 6,
+                entanglement_phase: rand() < 0.5 ? 0 : Math.PI,
+                i_am_affinity: rand(),
+                ledger_history: new Array(8).fill(0).map(() => Math.floor(rand() * 9) - 4),
+                curve_balance: Math.floor(rand() * 1001),
+                gapCrossings: 0,
+                virtues: new Array(8).fill(false).map(() => rand() < 0.5),
+                modes: new Array(DIM).fill(0).map((_, i) => ({
+                    lambda: RUNG_BASE * 0.09 * Math.pow(PHI, i / DIM) + (rand() * 0.02 - 0.01),
+                    phase: rand() * 2 * Math.PI,
+                    cost: Math.floor(rand() * 9) - 4
+                }))
+            };
+
+            let sum = soul.ledger_history.reduce((a, b) => a + b, 0);
+            soul.ledger_history[0] -= sum;
+
+            rarity = calculateRarity(soul);
+            initializeFieldEffects();
+
+            addInitialPixel();
+            updateInfo();
+            updateStatus();
+            draw();
+        }
+
+        function calculateRarity(soul) {
+            let score = 0;
+            
+            if (soul.rung > 80) score += 40;
+            if (Math.abs(soul.cost) === 0) score += 30;
+            const activeVirtuesCount = soul.virtues.filter(v => v).length;
+            if (activeVirtuesCount >= 5) score += 30;
+            if (soul.virtues[4] && soul.virtues[5]) score += 20;
+            if (soul.i_am_affinity > 0.9) score += 40;
+            if (Math.abs(soul.oam) > 3 && soul.entanglement_phase === Math.PI) score += 30;
+            const isSymmetric = soul.ledger_history.every((val, i, arr) => val === arr[arr.length - 1 - i]);
+            if (isSymmetric) score += 40;
+            if (soul.qualia_mode === 8) score += 20;
+            if (isPrime(soul.rung)) score += 25;
+            if (soul.curve_balance > 900) score += 35;
+            if (soul.cluster_tightness < 0.2) score += 30; // Nebula effect
+            if (soul.resonance_frequency > 0.9) score += 25; // High energy
+            
+            let tier = 'Common';
+            if (score > 140) tier = 'Mythic';
+            else if (score > 100) tier = 'Legendary';
+            else if (score > 60) tier = 'Rare';
+            else if (score > 30) tier = 'Uncommon';
+            
+            return { tier, score };
+        }
+
+        function initializeFieldEffects() {
+            fieldEffects = [];
+            
+            // Gravity wells for high I-Am affinity
+            if (soul.i_am_affinity > 0.8) {
+                fieldEffects.push({
+                    type: 'GRAVITY_WELL',
+                    x: canvas.width / 2,
+                    y: canvas.height / 2,
+                    strength: soul.i_am_affinity * 2,
+                    radius: 150
+                });
+            }
+            
+            // Repulsion zones for high OAM
+            if (Math.abs(soul.oam) > 3) {
+                const count = Math.abs(soul.oam) - 2;
+                for (let i = 0; i < count; i++) {
+                    const angle = (i / count) * 2 * Math.PI;
+                    fieldEffects.push({
+                        type: 'REPULSION_ZONE',
+                        x: canvas.width / 2 + Math.cos(angle) * 100,
+                        y: canvas.height / 2 + Math.sin(angle) * 100,
+                        strength: Math.abs(soul.oam) * 0.5,
+                        radius: 80
+                    });
+                }
+            }
+            
+            // Resonance nodes for high resonance frequency
+            if (soul.resonance_frequency > 0.8) {
+                const nodeCount = 3;
+                for (let i = 0; i < nodeCount; i++) {
+                    const angle = (i / nodeCount) * 2 * Math.PI + frameCount * 0.01;
+                    fieldEffects.push({
+                        type: 'RESONANCE_NODE',
+                        x: canvas.width / 2 + Math.cos(angle) * 120,
+                        y: canvas.height / 2 + Math.sin(angle) * 120,
+                        strength: soul.resonance_frequency,
+                        radius: 60,
+                        phase: i * Math.PI / 2
+                    });
+                }
+            }
+        }
+
+        function showAchievement(text) {
+            const ach = document.getElementById('achievement');
+            ach.textContent = text;
+            ach.style.opacity = 1;
+            setTimeout(() => {
+                ach.style.opacity = 0;
+            }, 2000);
+            particles.forEach(p => p.alpha = Math.min(1, p.alpha * 1.5));
+            setTimeout(() => {
+                particles.forEach(p => p.alpha /= 1.5);
+            }, 500);
+        }
+
+        function addInitialPixel() {
+            particles.push({
+                x: canvas.width / 2,
+                y: canvas.height / 2,
+                vx: 0,
+                vy: 0,
+                size: 2,
+                alpha: 1,
+                lifetime: 0,
+                phase: 0,
+                angle: 0,
+                type: 'CORE',
+                isPixel: true,
+                isSplatter: false,
+                birthMonth: 0,
+                trail: []
+            });
+        }
+
+        function resetAnimation() {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+            isPlaying = false;
+        }
+
+        function toggleAnimation() {
+            isPlaying = !isPlaying;
+            if (isPlaying) {
+                animate();
+            } else {
+                resetAnimation();
+            }
+            updateStatus();
+        }
+
+        function toggleTrails() {
+            showTrails = !showTrails;
+        }
+
+        function advanceMonth() {
+            currentMonth = Math.min(currentMonth + 1, TOTAL_MONTHS + 50);
+            evolveSoul();
+            draw();
+            updateInfo();
+            updateStatus();
+        }
+
+        function resetSoul() {
+            currentMonth = 0;
+            particles = [];
+            trailHistory = [];
+            frameCount = 0;
+            if (soul) {
+                soul.gapCrossings = 0;
+                addInitialPixel();
+            }
+            draw();
+            updateInfo();
+            updateStatus();
+        }
+
+        function evolveSoul() {
+            if (!soul) return;
+            
+            const monthProgress = Math.min(currentMonth / TOTAL_MONTHS, 1);
+            const isEternal = currentMonth > TOTAL_MONTHS && (rarity.tier === 'Legendary' || rarity.tier === 'Mythic');
+            
+            const targetParticles = Math.floor(monthProgress * 200) + 1;
+            while (particles.filter(p => !p.isSplatter).length < targetParticles) {
+                addParticle();
+            }
+
+            if (isEternal && frameCount % 120 === 0) {
+                addParticle();
+                particles = particles.filter(p => p.alpha > 0.1);
+            }
+
+            for (let i = 0; i < DIM; i++) {
+                soul.modes[i].lambda *= Math.pow(PHI, monthProgress * 0.01);
+                soul.modes[i].phase += 0.1 * monthProgress;
+            }
+
+            const beat = currentMonth % BREATH_CYCLE;
+            if (soul.rung >= RUNG_BASE && beat === 5) {
+                soul.gapCrossings = Math.min(soul.gapCrossings + 1, 100);
+                soul.i_am_affinity = Math.min(soul.i_am_affinity + 0.05, 1);
+                soul.rung += 1;
+                addGapSplatter();
+                showAchievement('Gap Crossed!');
+                initializeFieldEffects(); // Refresh field effects
+            }
+
+            soul.virtues.forEach((isActive, idx) => {
+                if (isActive && Math.random() < 0.3) {
+                    addVirtueSplatter(idx);
+                    if (Math.random() < 0.1) showAchievement(`${VIRTUE_NAMES[idx]} Activated!`);
+                }
+            });
+
+            updateFieldEffects();
+        }
+
+        function updateFieldEffects() {
+            // Update resonance nodes position
+            fieldEffects.forEach(effect => {
+                if (effect.type === 'RESONANCE_NODE') {
+                    const angle = effect.phase + frameCount * 0.01;
+                    effect.x = canvas.width / 2 + Math.cos(angle) * 120;
+                    effect.y = canvas.height / 2 + Math.sin(angle) * 120;
+                }
+            });
+        }
+
+        function addParticle() {
+            if (!soul) return;
+            
+            const angle = Math.random() * 2 * Math.PI;
+            const r = Math.random() * 150 * (currentMonth / TOTAL_MONTHS);
+            const modeIndex = Math.floor(Math.random() * DIM);
+            
+            // Determine particle type based on soul traits
+            let type = 'CORE';
+            if (soul.resonance_frequency > 0.7 && Math.random() < 0.3) type = 'RESONATOR';
+            else if (soul.cluster_tightness > 0.8 && Math.random() < 0.2) type = 'ANCHOR';
+            else if (soul.cluster_tightness < 0.3 && Math.random() < 0.4) type = 'DRIFTER';
+            else if (rarity.tier === 'Mythic' && Math.random() < 0.15) type = 'ECHO';
+            
+            particles.push({
+                x: canvas.width / 2 + Math.cos(angle) * r,
+                y: canvas.height / 2 + Math.sin(angle) * r,
+                vx: (Math.random() - 0.5) * soul.resonance_frequency * 3,
+                vy: (Math.random() - 0.5) * soul.resonance_frequency * 3,
+                size: getParticleSize(type),
+                alpha: 0,
+                lifetime: 0,
+                phase: Math.random() * 2 * Math.PI,
+                angle: angle,
+                type: type,
+                drift: (1 - soul.cluster_tightness) * 0.05,
+                affinity_pull: soul.i_am_affinity,
+                oam_direction: soul.polarization_parity,
+                isPixel: false,
+                isSplatter: false,
+                modeIndex: modeIndex,
+                birthMonth: currentMonth,
+                trail: []
+            });
+        }
+
+        function getParticleSize(type) {
+            switch (type) {
+                case 'RESONATOR': return 0.8 + Math.random() * 2;
+                case 'ANCHOR': return 2 + Math.random() * 3;
+                case 'DRIFTER': return 0.5 + Math.random() * 1;
+                case 'ECHO': return 1.5 + Math.random() * 2;
+                default: return 1 + Math.random() * soul.transverse_mode_index;
+            }
+        }
+
+        function addGapSplatter() {
+            const splatterCount = 15 + soul.gapCrossings * 2;
+            const isRareGap = soul.gapCrossings > 40 || rarity.tier === 'Rare' || rarity.tier === 'Legendary' || rarity.tier === 'Mythic';
+            for (let i = 0; i < splatterCount; i++) {
+                const angle = Math.random() * 2 * Math.PI;
+                const r = Math.random() * (isRareGap ? 300 : 200);
+                particles.push({
+                    x: canvas.width / 2 + Math.cos(angle) * r,
+                    y: canvas.height / 2 + Math.sin(angle) * r,
+                    vx: Math.cos(angle) * (2 + Math.random() * 4),
+                    vy: Math.sin(angle) * (2 + Math.random() * 4),
+                    size: 0.5 + Math.random() * 3,
+                    alpha: 0.8 + Math.random() * 0.2,
+                    lifetime: 0,
+                    phase: Math.random() * 2 * Math.PI,
+                    angle: angle,
+                    type: 'CORE',
+                    isPixel: false,
+                    isSplatter: true,
+                    maxLifetime: isRareGap ? Infinity : 40 + Math.random() * 20,
+                    birthMonth: currentMonth,
+                    trail: []
+                });
+            }
+
+            if (isRareGap) {
+                addFractalBranches();
+            }
+        }
+
+        function addFractalBranches() {
+            const branchCount = 5 + (rarity.tier === 'Mythic' ? 3 : 0);
+            for (let i = 0; i < branchCount; i++) {
+                const angle = (i / branchCount) * 2 * Math.PI;
+                const branchLength = 100 + Math.random() * 50;
+                particles.push({
+                    x: canvas.width / 2 + Math.cos(angle) * branchLength,
+                    y: canvas.height / 2 + Math.sin(angle) * branchLength,
+                    vx: 0,
+                    vy: 0,
+                    size: 1,
+                    alpha: 0.5,
+                    lifetime: 0,
+                    phase: 0,
+                    angle: angle,
+                    type: 'ANCHOR',
+                    isPixel: false,
+                    isSplatter: false,
+                    isBranch: true,
+                    maxLifetime: Infinity,
+                    trail: []
+                });
+            }
+        }
+
+        function addVirtueSplatter(virtueIndex) {
+            const splatterCount = soul.qualia_mode + virtueIndex + (rarity.tier === 'Mythic' ? 5 : 0);
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const isHybrid = soul.virtues[4] && soul.virtues[5];
+            
+            for (let i = 0; i < splatterCount; i++) {
+                let x, y, vx, vy;
+                let maxLifetime = 100 + Math.random() * 100;
+                
+                if (isHybrid) {
+                    const hybridAngle = (i / splatterCount) * 4 * Math.PI * PHI;
+                    const hybridR = 40 + Math.sin(hybridAngle * 2) * 50;
+                    x = centerX + Math.cos(hybridAngle) * hybridR;
+                    y = centerY + Math.sin(hybridAngle) * hybridR;
+                    vx = Math.cos(hybridAngle + Math.PI/4) * 2.5;
+                    vy = Math.sin(hybridAngle + Math.PI/4) * 2.5;
+                    maxLifetime = rarity.tier !== 'Common' ? Infinity : maxLifetime;
+                } else {
+                    switch (virtueIndex) {
+                        case 4:
+                            const spiralAngle = (i / splatterCount) * 2 * Math.PI * PHI;
+                            const spiralR = 50 + i * 10;
+                            x = centerX + Math.cos(spiralAngle) * spiralR;
+                            y = centerY + Math.sin(spiralAngle) * spiralR;
+                            vx = Math.cos(spiralAngle + Math.PI/2) * 2;
+                            vy = Math.sin(spiralAngle + Math.PI/2) * 2;
+                            break;
+                        case 5:
+                            const braidAngle = (i / splatterCount) * 4 * Math.PI;
+                            const braidR = 30 + Math.sin(braidAngle * 3) * 40;
+                            x = centerX + Math.cos(braidAngle) * braidR;
+                            y = centerY + Math.sin(braidAngle) * braidR;
+                            vx = (Math.random() - 0.5) * 3;
+                            vy = (Math.random() - 0.5) * 3;
+                            break;
+                        default:
+                            const angle = Math.random() * 2 * Math.PI;
+                            const r = Math.random() * soul.cluster_tightness * 150;
+                            x = centerX + Math.cos(angle) * r;
+                            y = centerY + Math.sin(angle) * r;
+                            vx = (Math.random() - 0.5) * soul.resonance_frequency * 4;
+                            vy = (Math.random() - 0.5) * soul.resonance_frequency * 4;
+                            break;
+                    }
+                }
+                
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: vx,
+                    vy: vy,
+                    size: 0.3 + Math.random() * 1.5,
+                    alpha: 0.4 + soul.i_am_affinity * 0.6,
+                    lifetime: 0,
+                    phase: Math.random() * 2 * Math.PI,
+                    angle: Math.random() * 2 * Math.PI,
+                    type: 'CORE',
+                    drift: (1 - soul.cluster_tightness) * 0.03,
+                    affinity_pull: soul.i_am_affinity * 0.5,
+                    oam_direction: soul.polarization_parity,
+                    isPixel: false,
+                    isSplatter: true,
+                    maxLifetime: maxLifetime,
+                    birthMonth: currentMonth,
+                    virtueIndex: virtueIndex,
+                    trail: []
+                });
+            }
+        }
+
+        function applyFieldEffects(particle) {
+            fieldEffects.forEach(effect => {
+                const dx = effect.x - particle.x;
+                const dy = effect.y - particle.y;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                
+                if (dist < effect.radius) {
+                    const strength = effect.strength * (1 - dist / effect.radius);
+                    
+                    switch (effect.type) {
+                        case 'GRAVITY_WELL':
+                            particle.vx += (dx / dist) * strength * 0.1;
+                            particle.vy += (dy / dist) * strength * 0.1;
+                            break;
+                        case 'REPULSION_ZONE':
+                            particle.vx -= (dx / dist) * strength * 0.2;
+                            particle.vy -= (dy / dist) * strength * 0.2;
+                            break;
+                        case 'RESONANCE_NODE':
+                            const resonance = Math.sin(frameCount * 0.1 + effect.phase) * strength;
+                            particle.vx += Math.cos(particle.angle) * resonance * 0.05;
+                            particle.vy += Math.sin(particle.angle) * resonance * 0.05;
+                            break;
+                    }
+                }
+            });
+        }
+
+        function updateParticles() {
+            if (!soul) return;
+            
+            const isLegendary = rarity.tier === 'Legendary' || rarity.tier === 'Mythic';
+            const isVortex = Math.abs(soul.oam) > 3 && soul.entanglement_phase === Math.PI;
+            
+            particles = particles.filter(p => {
+                if (p.isSplatter) {
+                    return p.lifetime < (p.maxLifetime || 120) || isLegendary;
+                }
+                if (isLegendary && p.alpha <= 0.1) {
+                    p.alpha = 0.5;
+                }
+                return p.lifetime < 600 || isLegendary;
+            });
+            
+            particles.forEach(p => {
+                // Store trail history
+                if (showTrails && p.trail) {
+                    p.trail.push({ x: p.x, y: p.y, alpha: p.alpha * 0.5 });
+                    if (p.trail.length > 20) p.trail.shift();
+                }
+                
+                if (p.isPixel) {
+                    const beatPhase = (frameCount % (BREATH_CYCLE * 15)) / (BREATH_CYCLE * 15);
+                    p.size = 2 + Math.sin(beatPhase * 2 * Math.PI + p.phase) * 3 * (soul.beat_cycle / 8);
+                    p.alpha = 0.8 + Math.sin(beatPhase * 2 * Math.PI + p.phase) * 0.2;
+                    p.phase += 0.02;
+                } else if (p.isSplatter) {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vx *= 0.98;
+                    p.vy *= 0.98;
+                    applyFieldEffects(p);
+                    const fadeProgress = p.lifetime / (p.maxLifetime || 120);
+                    p.alpha = Math.max(0, (0.4 + soul.i_am_affinity * 0.6) * (1 - fadeProgress));
+                } else {
+                    // Apply particle type behaviors
+                    switch (p.type) {
+                        case 'RESONATOR':
+                            p.size = getParticleSize('RESONATOR') * (1 + 0.3 * Math.sin(frameCount * 0.1 + p.phase));
+                            break;
+                        case 'ANCHOR':
+                            p.vx *= 0.95; // More stable
+                            p.vy *= 0.95;
+                            break;
+                        case 'DRIFTER':
+                            p.vx += (Math.random() - 0.5) * 0.2; // More chaotic
+                            p.vy += (Math.random() - 0.5) * 0.2;
+                            break;
+                        case 'ECHO':
+                            // Leave echo trails
+                            if (frameCount % 5 === 0) {
+                                particles.push({
+                                    x: p.x,
+                                    y: p.y,
+                                    vx: 0,
+                                    vy: 0,
+                                    size: p.size * 0.5,
+                                    alpha: p.alpha * 0.3,
+                                    lifetime: 0,
+                                    type: 'CORE',
+                                    isPixel: false,
+                                    isSplatter: true,
+                                    maxLifetime: 60,
+                                    trail: []
+                                });
+                            }
+                            break;
+                    }
+                    
+                    const mode = soul.modes[p.modeIndex];
+                    p.angle += p.drift * (soul.time_bin_index / 1024) * p.oam_direction * PHI;
+                    let waveX = Math.cos(p.angle + p.phase) * p.size * 0.8;
+                    let waveY = Math.sin(p.angle + p.phase + soul.oam * 0.1) * p.size * 0.8;
+                    
+                    if (isVortex) {
+                        waveX *= 1.5;
+                        waveY *= 1.5;
+                        p.angle += 0.05 * soul.oam;
+                    }
+                    
+                    p.x += waveX + p.vx;
+                    p.y += waveY + p.vy;
+                    
+                    // Apply field effects
+                    applyFieldEffects(p);
+                    
+                    p.alpha = Math.min(1, p.alpha + 0.02);
+                    
+                    // I-Am affinity pull (reduced for field effect balance)
+                    if (p.affinity_pull > 0 && p.type !== 'DRIFTER') {
+                        const dx = canvas.width / 2 - p.x;
+                        const dy = canvas.height / 2 - p.y;
+                        const dist = Math.sqrt(dx*dx + dy*dy);
+                        if (dist > 0) {
+                            const pullStrength = p.affinity_pull * 0.8;
+                            p.x += (dx / dist) * pullStrength;
+                            p.y += (dy / dist) * pullStrength;
+                        }
+                    }
+                    
+                    if (soul.entanglement_phase !== 0) {
+                        p.angle += soul.entanglement_phase / Math.PI * 0.02;
+                    }
+                    const costEffect = 1 - Math.abs(soul.cost) * 0.02;
+                    p.alpha *= Math.max(0.1, costEffect);
+                    const beatPhase = (frameCount % (BREATH_CYCLE * 10)) / (BREATH_CYCLE * 10);
+                    if (!p.isSplatter) {
+                        p.size = (getParticleSize(p.type) + Math.abs(mode.lambda) * 2) * (1 + 0.2 * Math.sin(beatPhase * 2 * Math.PI + p.phase));
+                    }
+                }
+                
+                p.lifetime++;
+                p.phase += 0.02;
+            });
+        }
+
+        function drawBackground() {
+            // Dynamic background texture based on soul traits
+            ctx.save();
+            ctx.globalAlpha = 0.05;
+            
+            if (soul.cluster_tightness < 0.3) {
+                // Nebula effect for loose clusters
+                const gradient = ctx.createRadialGradient(
+                    canvas.width / 2, canvas.height / 2, 0,
+                    canvas.width / 2, canvas.height / 2, 400
+                );
+                gradient.addColorStop(0, 'rgba(255,255,255,0.1)');
+                gradient.addColorStop(1, 'rgba(0,0,0,0)');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+            
+            if (soul.resonance_frequency > 0.8) {
+                // Resonance grid
+                ctx.strokeStyle = 'rgba(255,255,255,0.02)';
+                ctx.lineWidth = 1;
+                const gridSize = 50;
+                for (let x = 0; x < canvas.width; x += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, canvas.height);
+                    ctx.stroke();
+                }
+                for (let y = 0; y < canvas.height; y += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(canvas.width, y);
+                    ctx.stroke();
+                }
+            }
+            
+            ctx.restore();
+        }
+
+        function draw() {
+            ctx.fillStyle = 'rgba(0,0,0,0.02)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            drawBackground();
+            updateParticles();
+            
+            // Draw field effects
+            fieldEffects.forEach(effect => {
+                ctx.save();
+                ctx.globalAlpha = 0.1;
+                ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.arc(effect.x, effect.y, effect.radius, 0, 2 * Math.PI);
+                ctx.stroke();
+                ctx.restore();
+            });
+            
+            drawConnections();
+            
+            particles.forEach(p => {
+                // Draw trails
+                if (showTrails && p.trail && p.trail.length > 1) {
+                    ctx.save();
+                    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+                    ctx.lineWidth = 0.5;
+                    ctx.beginPath();
+                    ctx.moveTo(p.trail[0].x, p.trail[0].y);
+                    for (let i = 1; i < p.trail.length; i++) {
+                        ctx.lineTo(p.trail[i].x, p.trail[i].y);
+                    }
+                    ctx.stroke();
+                    ctx.restore();
+                }
+                
+                const intensity = Math.floor(255 * p.alpha);
+                let glowMultiplier = 8;
+                
+                // Type-specific rendering
+                switch (p.type) {
+                    case 'RESONATOR':
+                        glowMultiplier = 12 + Math.sin(frameCount * 0.1) * 4;
+                        break;
+                    case 'ANCHOR':
+                        glowMultiplier = 6;
+                        break;
+                    case 'DRIFTER':
+                        glowMultiplier = 4;
+                        break;
+                    case 'ECHO':
+                        glowMultiplier = 10;
+                        break;
+                }
+                
+                if (soul.i_am_affinity > 0.9 && rarity.tier !== 'Common') {
+                    glowMultiplier += 4 + Math.sin(frameCount * 0.05) * 2;
+                }
+                
+                ctx.save();
+                ctx.globalAlpha = p.alpha * 0.3;
+                ctx.shadowBlur = p.size * glowMultiplier;
+                ctx.shadowColor = `rgb(255, 255, 255)`;
+                ctx.fillStyle = `rgb(255, 255, 255)`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size * 2, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.restore();
+                
+                ctx.save();
+                ctx.globalAlpha = p.alpha;
+                ctx.fillStyle = `rgb(${intensity}, ${intensity}, ${intensity})`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.restore();
+            });
+        }
+
+        function drawConnections() {
+            if (!soul || Math.abs(soul.cost) >= 2) return;
+            
+            ctx.globalCompositeOperation = 'screen';
+            
+            const maxConnections = 30 + (rarity.tier === 'Mythic' ? 15 : 0);
+            let connectionCount = 0;
+            
+            const regularParticles = particles.filter(p => !p.isPixel && !p.isSplatter);
+            
+            for (let i = 0; i < regularParticles.length && connectionCount < maxConnections; i++) {
+                const p = regularParticles[i];
+                for (let j = i + 1; j < regularParticles.length && connectionCount < maxConnections; j++) {
+                    const other = regularParticles[j];
+                    const dist = Math.hypot(p.x - other.x, p.y - other.y);
+                    const maxDist = (p.type === 'ANCHOR' || other.type === 'ANCHOR') ? 100 : 70;
+                    
+                    if (dist < maxDist) {
+                        const strength = 1 - (dist / maxDist);
+                        const alpha = strength * p.alpha * other.alpha * 0.4;
+                        
+                        // Connection type based on particle types
+                        let connectionType = 'normal';
+                        if (p.type === 'RESONATOR' || other.type === 'RESONATOR') connectionType = 'resonant';
+                        else if (p.type === 'ANCHOR' || other.type === 'ANCHOR') connectionType = 'stable';
+                        
+                        switch (connectionType) {
+                            case 'resonant':
+                                ctx.strokeStyle = `rgba(255, 255, 255, ${alpha * 1.2})`;
+                                ctx.lineWidth = strength * 2;
+                                break;
+                            case 'stable':
+                                ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+                                ctx.lineWidth = strength * 3;
+                                break;
+                            default:
+                                ctx.strokeStyle = soul.cost === 0 ? `rgba(255, 255, 255, ${alpha})` : `rgba(200, 200, 200, ${alpha * 0.6})`;
+                                ctx.lineWidth = strength * 1.5;
+                                break;
+                        }
+                        
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        const midX = (p.x + other.x) / 2;
+                        const midY = (p.y + other.y) / 2;
+                        const waveOffset = Math.sin(frameCount * 0.02 + i + j) * 15;
+                        ctx.quadraticCurveTo(midX + waveOffset, midY + waveOffset, other.x, other.y);
+                        ctx.stroke();
+                        
+                        connectionCount++;
+                    }
+                }
+            }
+            
+            ctx.globalCompositeOperation = 'source-over';
+        }
+
+        function animate() {
+            if (!isPlaying) return;
+            draw();
+            frameCount++;
+            updateFieldEffects();
+            if (frameCount % 90 === 0 && currentMonth < TOTAL_MONTHS + (rarity.tier === 'Legendary' || rarity.tier === 'Mythic' ? Infinity : 0)) {
+                advanceMonth();
+            }
+            animationId = requestAnimationFrame(animate);
+        }
+
+        function updateInfo() {
+            if (!soul) return;
+            
+            const monthProgress = ((currentMonth + 1) / TOTAL_MONTHS * 100).toFixed(1);
+            const years = Math.floor(currentMonth / 12);
+            const months = currentMonth % 12;
+            
+            const activeVirtues = soul.virtues.map((active, i) => active ? VIRTUE_NAMES[i] : null).filter(v => v !== null).join(', ') || 'None';
+            
+            const rarityClass = `rarity-badge rarity-${rarity.tier.toLowerCase()}`;
+            
+            const particleTypes = particles.reduce((acc, p) => {
+                acc[p.type] = (acc[p.type] || 0) + 1;
+                return acc;
+            }, {});
+            
+            document.getElementById('info').innerHTML = `
+                <div class="${rarityClass}">${rarity.tier} Soul (Score: ${rarity.score})</div>
+                <strong>Soul Hash:</strong> ${soul.hash}<br>
+                <strong>Evolution: ${monthProgress}%</strong><br>
+                Year ${years}, Month ${months + 1} / 96<br>
+                <br>
+                <strong>Core Properties:</strong><br>
+                Rung Level: ${soul.rung} ${isPrime(soul.rung) ? '(Prime)' : ''}<br>
+                Cost State: ${soul.cost}<br>
+                Beat Cycle: ${soul.beat_cycle}/8<br>
+                Qualia Mode: ${soul.qualia_mode}/8<br>
+                <br>
+                <strong>Light Field:</strong><br>
+                I-Am Affinity: ${(soul.i_am_affinity * 100).toFixed(1)}%<br>
+                Cluster Tightness: ${(soul.cluster_tightness * 100).toFixed(1)}%<br>
+                Resonance: ${(soul.resonance_frequency * 100).toFixed(1)}%<br>
+                Gap Crossings: ${soul.gapCrossings}<br>
+                <br>
+                <strong>Particle Types:</strong><br>
+                ${Object.entries(particleTypes).map(([type, count]) => `${type}: ${count}`).join('<br>')}<br>
+                <br>
+                <strong>Field Effects:</strong> ${fieldEffects.length}<br>
+                <strong>Active Virtues:</strong><br>
+                ${activeVirtues}
+            `;
+        }
+
+        function updateStatus() {
+            const status = document.getElementById('status');
+            if (isPlaying) {
+                status.textContent = `Evolving... Frame ${frameCount}`;
+            } else {
+                status.textContent = currentMonth === 0 ? 'Void State' : `Paused - Month ${currentMonth}`;
+            }
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            draw();
+        });
+
+        generateNewSoul();
+        animate();
+    </script>
+</body>
+</html> 
