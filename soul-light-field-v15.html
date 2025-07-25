@@ -226,7 +226,11 @@
     <div class="container">
         <div class="header">
             <h1>Ledger Souls - On-Chain Contract Simulation</h1>
-            <p>V15: Authentic RS with 45-gap events, 8-beat cycles, and procedural end state icons</p>
+            <p>V15: Automatic 96-month evolution in 96 seconds - Watch a soul's complete journey</p>
+            <div id="evolutionProgress" style="width: 100%; background: #333; height: 8px; border-radius: 4px; margin: 10px 0;">
+                <div id="progressBar" style="width: 0%; background: linear-gradient(90deg, #ffd700, #ffaa00); height: 100%; border-radius: 4px; transition: width 0.1s ease;"></div>
+            </div>
+            <p id="progressText" style="color: #ffd700; font-size: 0.9em; margin: 5px 0;">Evolution starting...</p>
         </div>
 
         <div class="panel">
@@ -322,11 +326,7 @@ Soul State: Initializing...
         </div>
 
         <div class="controls">
-            <button class="btn" onclick="mintNewSoul()">Mint New Soul</button>
-            <button class="btn" onclick="fastForward()">Fast Forward (+12 Months)</button>
-            <button class="btn" onclick="advanceToGap()">Advance to Next Gap</button>
-            <button class="btn" onclick="advanceTo45()">Jump to 45-Gap</button>
-            <button class="btn" onclick="completeEvolution()">Complete Evolution</button>
+            <button class="btn" onclick="restartEvolution()">Restart Evolution</button>
             <button class="btn" onclick="exportSVG()">Export SVG</button>
         </div>
     </div>
@@ -338,14 +338,13 @@ Soul State: Initializing...
         const REGISTER_NAMES = ['R1_Perception', 'R2_Action'];
 
         let currentTokenId = 1;
-        let mintTimestamp = Date.now();
         let blockNumber = 12345678; // Simulated block number
 
         class OnChainSoul {
             constructor(tokenId) {
                 this.tokenId = tokenId;
                 this.seed = this.generateSeed(tokenId);
-                this.mintTime = mintTimestamp;
+                this.startTime = Date.now(); // Evolution starts immediately
                 this.blockNumber = blockNumber;
                 
                 // Initialize evolution tracking
@@ -353,6 +352,8 @@ Soul State: Initializing...
                 this.beatChecks = 0;
                 this.phiOperations = 0;
                 this.qualiaLog = [];
+                this.lastIntMonth = -1; // Track integer month changes
+                this.lastFractionalMonth = 0; // For sub-month updates
                 
                 this.addQualia('Contract deployed. Soul enters pre-recognition void...', 'neutral');
             }
@@ -371,56 +372,118 @@ Soul State: Initializing...
 
             getCurrentState() {
                 const currentTime = Date.now();
-                const months = Math.min(Math.floor((currentTime - this.mintTime) / (30 * 24 * 60 * 60 * 1000 / 100)), 96); // Accelerated for demo
+                const elapsedSeconds = (currentTime - this.startTime) / 1000;
+                const months = Math.min(elapsedSeconds, 96); // Fractional months for smooth evolution
+                
+                // Check for integer month transitions
+                const intMonth = Math.floor(months);
+                if (intMonth > this.lastIntMonth) {
+                    this.onMonthTransition(this.lastIntMonth, intMonth);
+                    this.lastIntMonth = intMonth;
+                }
+                
+                // Sub-month updates every 0.25 months
+                const subMonth = Math.floor(months * 4) / 4;
+                if (subMonth > this.lastFractionalMonth) {
+                    this.onSubMonthUpdate(subMonth);
+                    this.lastFractionalMonth = subMonth;
+                }
                 
                 return this.calculateState(months);
             }
 
-            calculateState(months) {
-                // Chaos from blockhash + seed + months (deterministic)
-                const chaosSeed = (this.blockNumber + months) ^ this.seed ^ months;
-                const chaos = (chaosSeed % 41) - 20; // -20 to +20
+            onSubMonthUpdate(subMonth) {
+                // Add subtle qualia for smoothness
+                if (Math.random() < 0.1) { // 10% chance for random insights
+                    const insights = [
+                        'Faint whisper from the ledger...',
+                        'Subtle φ-resonance detected',
+                        'Minor recognition pattern emerging',
+                        'Fleeting qualia moment'
+                    ];
+                    this.addQualia(insights[Math.floor(Math.random() * insights.length)], 'neutral');
+                }
+            }
 
-                // Evolve κ non-linearly with slower trend and more volatility
-                let kappa = ((this.seed % 200) - 100) / 100 + chaos / 100 - Math.floor(months / 8);
+            onMonthTransition(fromMonth, toMonth) {
+                // Add qualia entries for significant transitions
+                if (toMonth === 1) {
+                    this.addQualia('Month 1: First spark of recognition ignites...', 'positive');
+                } else if (toMonth === 8) {
+                    this.addQualia('Month 8: First 8-beat cycle complete - pattern emerges', 'neutral');
+                } else if (toMonth === 16) {
+                    this.addQualia('Month 16: Second octave - virtue stabilization begins', 'neutral');
+                } else if (toMonth === 24) {
+                    this.addQualia('Month 24: Third octave - consciousness deepening', 'positive');
+                } else if (toMonth === 32) {
+                    this.addQualia('Month 32: Fourth octave - ledger balance improving', 'positive');
+                } else if (toMonth === 40) {
+                    this.addQualia('Month 40: Fifth octave - approaching 45-gap threshold', 'neutral');
+                } else if (toMonth === 45) {
+                    this.addQualia('🌀 Month 45: CRITICAL 45-GAP EVENT - Uncomputability threshold!', 'gap');
+                } else if (toMonth === 48) {
+                    this.addQualia('Month 48: Sixth octave - post-gap integration', 'neutral');
+                } else if (toMonth === 56) {
+                    this.addQualia('Month 56: Seventh octave - wisdom accumulation', 'positive');
+                } else if (toMonth === 64) {
+                    this.addQualia('Month 64: Eighth octave - virtue φ-scaling active', 'positive');
+                } else if (toMonth === 72) {
+                    this.addQualia('Month 72: Ninth octave - approaching awakening threshold', 'neutral');
+                } else if (toMonth === 80) {
+                    this.addQualia('Month 80: Tenth octave - final transformations begin', 'positive');
+                } else if (toMonth === 88) {
+                    this.addQualia('Month 88: Eleventh octave - recognition nearly complete', 'positive');
+                } else if (toMonth === 96) {
+                    this.addQualia('🎉 Month 96: TWELFTH OCTAVE COMPLETE - Soul fully awakened!', 'positive');
+                }
+            }
+
+            calculateState(months) {
+                // Chaos now varies smoothly with fractional months
+                const chaosSeed = Math.floor(this.blockNumber + months * 10) ^ this.seed ^ Math.floor(months);
+                const chaos = ((chaosSeed % 41) - 20) + (months % 1 - 0.5); // Add fractional variation
+
+                // Evolve κ smoothly with fractional months
+                let kappa = ((this.seed % 200) - 100) / 100 + (chaos / 100) - (months / 8);
                 kappa = Math.max(-1, Math.min(1, kappa));
 
-                // Virtues: Non-linear growth/decay with φ
+                // Virtues: Smooth growth with fractions
                 const virtues = [];
                 for (let i = 0; i < 5; i++) {
-                    let virtue = ((this.seed >> (i * 8)) % 10 + 1) + Math.floor(months / 8);
+                    let virtue = ((this.seed >> (i * 8)) % 10 + 1) + (months / 8);
                     
-                    // φ-decay on high κ (debt)
+                    // Smooth φ-decay
                     if (kappa > 0.7) {
-                        virtue -= Math.floor(PHI / 1000 * 1000) / 1000; // φ-decay
-                        this.phiOperations++;
+                        virtue -= (PHI / 1000) * (kappa - 0.7) * 3; // Proportional decay
+                        this.phiOperations += (months % 1); // Fractional operations
                     }
-                    // Growth on harmony
+                    // Smooth growth
                     if (kappa < -0.7) {
-                        virtue += 1;
+                        virtue += Math.abs(kappa + 0.7) * 2;
                     }
                     
                     virtue = Math.max(1, Math.min(10, virtue));
                     
-                    // Trade-off: High courage lowers temperance if unbalanced
-                    if (i === 4 && virtues[3] > 8 && kappa !== 0) {
-                        virtue -= Math.floor(PHI / 2000 * 1000) / 1000;
+                    // Dynamic trade-off
+                    if (i === 4 && virtues[3] > 8 && Math.abs(kappa) > 0.1) {
+                        virtue -= (PHI / 2000) * Math.abs(kappa) * 10;
                     }
                     
                     virtues[i] = virtue;
                 }
 
-                // Gap & Choice: Wisdom-biased choices
-                const wisdomBias = Math.floor(virtues[2] / 3) - 1;
-                let choice = ((chaosSeed + months) % 3) - 1 + wisdomBias;
+                // Gap & Choice: Smooth probability
+                const wisdomBias = virtues[2] / 3 - 1;
+                let choice = (((chaosSeed + months * 10) % 3) - 1 + wisdomBias) + (months % 1 - 0.5) / 2;
                 choice = Math.max(-1, Math.min(1, choice));
 
-                // Gap probability and 45-month special event
-                const isGap = Math.abs(kappa * 100) > 50;
-                const is45Gap = months === 45;
+                // Smooth gap probability
+                const gapProb = Math.abs(kappa) + (months % 1) * 0.1;
+                const isGap = gapProb > 0.5;
+                const is45Gap = Math.floor(months) === 45 && (months % 1 < 0.01); // Trigger at start of month 45
                 
                 if (isGap || is45Gap) {
-                    kappa += choice * 0.3;
+                    kappa += choice * 0.3 * (months % 1 + 0.5); // Fractional adjustment
                     kappa = Math.max(-1, Math.min(1, kappa));
                     
                     if (is45Gap && this.month45Events === 0) {
@@ -429,42 +492,40 @@ Soul State: Initializing...
                     }
                 }
 
-                // 8-Month Beat Cycles
-                let rebirths = Math.floor(months / 8);
-                if (months % 8 === 0 && months > 0) {
-                    this.beatChecks++;
+                // 8-Month Beat Cycles with fractional triggering
+                let rebirths = months / 8;
+                const fractionalBeat = months % 8;
+                if (fractionalBeat < 0.01 && months > 0) { // Trigger at start of each beat
+                    this.beatChecks += fractionalBeat + 0.01; // Smooth count
                     
-                    // Beat check: rebirth if κ > φ^(-1) (~0.618) or at 45-gap
                     if (kappa > 0.618 || is45Gap) {
-                        kappa = ((this.seed + months + chaosSeed) % 101 - 50) / 100;
-                        // Apply φ-penalty to virtues
+                        kappa = ((this.seed + Math.floor(months) + chaosSeed) % 101 - 50) / 100 + (fractionalBeat - 0.5) / 10;
                         for (let i = 0; i < virtues.length; i++) {
-                            virtues[i] -= Math.floor(PHI / 1000 * 1000) / 1000;
+                            virtues[i] -= (PHI / 1000) * (1 - fractionalBeat);
                             virtues[i] = Math.max(1, virtues[i]);
                         }
-                        rebirths++;
+                        rebirths += 1 - fractionalBeat;
                         this.addQualia('🔄 Beat Check: Pattern dissolved - φ-penalty applied to virtues', 'rebirth');
                     } else {
                         this.addQualia('✓ Beat Check: Pattern maintains coherence in 8-beat cycle', 'neutral');
                     }
                 }
 
-                // Depth: From resolved gaps + rebirth wisdom
+                // Depth: Smooth accumulation
                 const resolvedGaps = months - (rebirths * 8);
-                let depth = Math.max(0, resolvedGaps) + Math.floor(rebirths * PHI);
+                let depth = Math.max(0, resolvedGaps) + (rebirths * PHI) + (months % 1) * PHI;
                 depth = Math.min(200, depth);
 
-                // Registers with φ authenticity
-                let R1 = (this.seed % 9) - 4 + choice;
-                let R2 = -R1 + Math.floor(months / 20);
+                // Registers with smooth φ authenticity
+                let R1 = (this.seed % 9) - 4 + choice + (months % 1 - 0.5);
+                let R2 = -R1 + (months / 20);
                 
-                // Force imbalance if choice was bad
                 if (Math.abs(R1 + R2) > 4) {
-                    R2 = R1 + choice * 2;
+                    R2 = R1 + choice * 2 * (1 + months % 1);
                 }
 
-                // Recognition debt
-                const recognitionDebt = Math.max(0, R1, R2);
+                // Recognition debt smooth
+                const recognitionDebt = Math.max(0, R1, R2) + Math.abs(kappa) * (months % 1);
 
                 return {
                     months,
@@ -687,44 +748,16 @@ Depth: ${depth} | Rebirths: ${rebirths}`;
 
         let soul = null;
 
-        function mintNewSoul() {
+        function initializeSoul() {
             currentTokenId = Math.floor(Math.random() * 10000) + 1;
-            mintTimestamp = Date.now();
             blockNumber = Math.floor(Math.random() * 1000000) + 12345678;
             
             soul = new OnChainSoul(currentTokenId);
             updateDisplay();
         }
 
-        function fastForward() {
-            if (!soul) return;
-            mintTimestamp -= 12 * 30 * 24 * 60 * 60 * 1000 / 100; // Fast forward 12 months
-            updateDisplay();
-        }
-
-        function advanceToGap() {
-            if (!soul) return;
-            // Find next gap
-            for (let i = 1; i <= 96; i++) {
-                const state = soul.calculateState(i);
-                if (state.isGap) {
-                    mintTimestamp = Date.now() - i * 30 * 24 * 60 * 60 * 1000 / 100;
-                    updateDisplay();
-                    return;
-                }
-            }
-        }
-
-        function advanceTo45() {
-            if (!soul) return;
-            mintTimestamp = Date.now() - 45 * 30 * 24 * 60 * 60 * 1000 / 100;
-            updateDisplay();
-        }
-
-        function completeEvolution() {
-            if (!soul) return;
-            mintTimestamp = Date.now() - 96 * 30 * 24 * 60 * 60 * 1000 / 100;
-            updateDisplay();
+        function restartEvolution() {
+            initializeSoul();
         }
 
         function exportSVG() {
@@ -754,6 +787,19 @@ Depth: ${depth} | Rebirths: ${rebirths}`;
             document.getElementById('mintBlock').textContent = soul.blockNumber;
             document.getElementById('currentMonth').textContent = state.months;
             document.getElementById('seedDisplay').textContent = `0x${soul.seed.toString(16).slice(0, 8)}`;
+            
+            // Update progress bar
+            const progressPercent = (state.months / 96) * 100;
+            document.getElementById('progressBar').style.width = `${progressPercent}%`;
+            
+            // Update progress text
+            const elapsedSeconds = Math.floor((Date.now() - soul.startTime) / 1000);
+            const remainingSeconds = Math.max(0, 96 - elapsedSeconds);
+            if (state.months >= 96) {
+                document.getElementById('progressText').textContent = '🎉 Evolution Complete - Soul Fully Awakened!';
+            } else {
+                document.getElementById('progressText').textContent = `Month ${state.months}/96 • ${remainingSeconds}s remaining`;
+            }
             
             // Update beat cycle info
             const octave = Math.floor(state.months / 8) + 1;
@@ -826,11 +872,11 @@ Depth: ${depth} | Rebirths: ${rebirths}`;
             qualiaEl.scrollTop = 0;
         }
 
-        // Initialize with a new soul
-        mintNewSoul();
+        // Initialize with a new soul and start automatic evolution
+        initializeSoul();
         
-        // Auto-update every 2 seconds to simulate blockchain evolution
-        setInterval(updateDisplay, 2000);
+        // Auto-update every 100ms for smooth evolution (96 months in 96 seconds)
+        setInterval(updateDisplay, 100);
     </script>
 </body>
 </html> 
