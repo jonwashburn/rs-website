@@ -391,6 +391,7 @@ Soul State: Initializing...
                 
                 this.addQualia('Contract deployed. Soul enters pre-recognition void...', 'neutral');
                 this.isEvolving = false; // Start paused
+                console.log('Soul initialized - isEvolving:', this.isEvolving);
             }
 
             generateSeed(tokenId) {
@@ -587,6 +588,9 @@ Soul State: Initializing...
             advanceTick() {
                 if (this.isEvolving && this.ticks < 960 && !this.isDead) { // Max 960 ticks = 96 months, stop if dead
                     this.ticks++;
+                    console.log('Tick advanced to:', this.ticks);
+                } else if (!this.isEvolving && this.ticks === 0) {
+                    console.log('Evolution paused - not advancing tick');
                 }
             }
 
@@ -1056,6 +1060,13 @@ Depth: ${depth} | Rebirths: ${rebirths}`;
             blockNumber = Math.floor(Math.random() * 1000000) + 12345678;
             
             soul = new OnChainSoul(currentTokenId);
+            
+            // Update button state to reflect initial paused state
+            const toggleBtn = document.getElementById('evolutionToggle');
+            if (toggleBtn) {
+                toggleBtn.textContent = 'Start Evolution';
+            }
+            
             updateDisplay();
         }
 
@@ -1080,10 +1091,8 @@ Depth: ${depth} | Rebirths: ${rebirths}`;
         function updateDisplay() {
             if (!soul) return;
             
-            // Advance evolution by one tick only if evolving
-            if (soul.isEvolving) {
-                soul.advanceTick();
-            }
+            // Advance evolution by one tick (advanceTick handles isEvolving check internally)
+            soul.advanceTick();
             
             const state = soul.getCurrentState();
             const endState = soul.generateEndState(state);
