@@ -350,6 +350,7 @@ Soul State: Initializing...
         <div class="controls">
             <button class="btn" onclick="restartEvolution()">Restart Evolution</button>
             <button class="btn" onclick="exportSVG()">Export SVG</button>
+            <button class="btn" id="evolutionToggle">Start Evolution</button>
         </div>
     </div>
 
@@ -389,6 +390,7 @@ Soul State: Initializing...
                 this.fingerprintHash = this.generateFingerprintHash();
                 
                 this.addQualia('Contract deployed. Soul enters pre-recognition void...', 'neutral');
+                this.isEvolving = false; // Start paused
             }
 
             generateSeed(tokenId) {
@@ -583,7 +585,7 @@ Soul State: Initializing...
 
             // Method to advance evolution by one tick
             advanceTick() {
-                if (this.ticks < 960 && !this.isDead) { // Max 960 ticks = 96 months, stop if dead
+                if (this.isEvolving && this.ticks < 960 && !this.isDead) { // Max 960 ticks = 96 months, stop if dead
                     this.ticks++;
                 }
             }
@@ -1041,6 +1043,10 @@ Depth: ${depth} | Rebirths: ${rebirths}`;
                     this.qualiaLog.shift();
                 }
             }
+
+            toggleEvolution() {
+                this.isEvolving = !this.isEvolving;
+            }
         }
 
         let soul = null;
@@ -1074,8 +1080,10 @@ Depth: ${depth} | Rebirths: ${rebirths}`;
         function updateDisplay() {
             if (!soul) return;
             
-            // Advance evolution by one tick
-            soul.advanceTick();
+            // Advance evolution by one tick only if evolving
+            if (soul.isEvolving) {
+                soul.advanceTick();
+            }
             
             const state = soul.getCurrentState();
             const endState = soul.generateEndState(state);
@@ -1192,6 +1200,13 @@ Depth: ${depth} | Rebirths: ${rebirths}`;
         
         // Auto-update every 100ms for smooth evolution (96 months in 96 seconds)
         setInterval(updateDisplay, 100);
+
+        const toggleBtn = document.getElementById('evolutionToggle');
+        toggleBtn.addEventListener('click', () => {
+            soul.toggleEvolution();
+            toggleBtn.textContent = soul.isEvolving ? 'Pause Evolution' : 'Start Evolution';
+            updateDisplay();
+        });
     </script>
 </body>
 </html> 
