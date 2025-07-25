@@ -226,7 +226,7 @@
     <div class="container">
         <div class="header">
             <h1>Ledger Souls - On-Chain Contract Simulation</h1>
-            <p>V17: Debugged Evolution Advancement - Confirmed tick progression and auto-start</p>
+            <p>V17: Fixed Evolution Stalling Bug - Corrected variable definition order</p>
             <div id="evolutionProgress" style="width: 100%; background: #333; height: 8px; border-radius: 4px; margin: 10px 0;">
                 <div id="progressBar" style="width: 0%; background: linear-gradient(90deg, #ffd700, #ffaa00); height: 100%; border-radius: 4px; transition: width 0.1s ease;"></div>
             </div>
@@ -392,7 +392,7 @@ Soul State: Initializing...
                 this.fingerprintHash = this.generateFingerprintHash();
                 
                 this.addQualia('Contract deployed. Soul enters pre-recognition void...', 'neutral');
-                this.isEvolving = true; // Auto-start for testing
+                this.isEvolving = false; // Start paused
                 console.log('Initialized with isEvolving:', this.isEvolving);
             }
 
@@ -590,9 +590,12 @@ Soul State: Initializing...
 
             // Method to advance evolution by one tick
             advanceTick() {
-                if (this.isEvolving && this.ticks < 960 && !this.isDead) {
+                console.log('advanceTick called - isEvolving:', this.isEvolving);
+                if (this.isEvolving && this.ticks < 960 && !this.isDead) { // Max 960 ticks = 96 months, stop if dead
                     this.ticks++;
                     console.log('Tick advanced to:', this.ticks);
+                } else if (!this.isEvolving && this.ticks === 0) {
+                    console.log('Evolution paused - not advancing tick');
                 }
             }
 
@@ -720,9 +723,23 @@ Soul State: Initializing...
                     virtues[i] = virtue;
                 }
 
-                // Fluid Gap Field (continuous scalar field)
+                // First, calculate choice since it's needed for R1/R2
+                const wisdomBias = (virtues[2] / 5 - 1) + ((this.seed % 5) - 2) / 5;
+                let choice = (((chaosSeed + months * 10) % 3) - 1 + wisdomBias) + (months % 1 - 0.5) / 2;
+                choice = Math.max(-1, Math.min(1, choice));
+
+                // Then calculate R1, R2
                 const registerSeed = (this.seed % 9) + (months % 1);
+                let R1 = registerSeed - 4 + choice + (months % 1 - 0.5);
+                let R2 = -R1 + (months / 20) + chaos * 2;
+                if (Math.abs(R1 + R2) > 4 + Math.abs(chaos * 3)) {
+                    R2 = R1 + choice * 2 * (1 + months % 1) + ((this.seed % 4) - 2);
+                }
+
+                // Now calculate gapField using defined R1/R2
+                const registerDivergence = Math.abs(R1 + R2) / 8;
                 const gapField = Math.abs(kappa) * 0.6 
+                               + registerDivergence * 0.3 
                                + Math.abs(chaos) * 0.4 
                                + Math.sin(months / PHI) * 0.2;
                 
@@ -742,10 +759,6 @@ Soul State: Initializing...
                 const is45Gap = is45Region && gapField > (gapThreshold - 0.2); // Lower threshold in 45-region
 
                 // Gap & Choice: Wisdom-influenced navigation
-                const wisdomBias = (virtues[2] / 5 - 1) + ((this.seed % 5) - 2) / 5;
-                let choice = (((chaosSeed + months * 10) % 3) - 1 + wisdomBias) + (months % 1 - 0.5) / 2;
-                choice = Math.max(-1, Math.min(1, choice));
-                
                 if (isGap || is45Gap) {
                     const gapIntensity = isPeakGap ? 0.4 : 0.25; // Peak gaps have more impact
                     kappa += choice * gapIntensity * (months % 1 + 0.5) * (1 + Math.abs(chaos) * 0.5);
@@ -816,13 +829,8 @@ Soul State: Initializing...
                 depth = Math.min(150, depth + Math.sin(months / PHI) * 5); // Lower max depth
 
                 // Registers with smooth φ authenticity (using registerSeed defined earlier)
-                let R1 = registerSeed - 4 + choice + (months % 1 - 0.5);
-                let R2 = -R1 + (months / 20) + chaos * 2;
+                // R1 and R2 are now calculated above
                 
-                if (Math.abs(R1 + R2) > 4 + Math.abs(chaos * 3)) {
-                    R2 = R1 + choice * 2 * (1 + months % 1) + ((this.seed % 4) - 2);
-                }
-
                 // Recognition debt smooth with kappa influence
                 const recognitionDebt = Math.max(0, Math.abs(R1), Math.abs(R2)) + Math.abs(kappa) * (months % 1) * 5;
 
@@ -1095,11 +1103,10 @@ Depth: ${depth} | Rebirths: ${rebirths}`;
 
         function updateDisplay() {
             if (!soul) return;
-            console.log('updateDisplay start - ticks:', soul.ticks);
+            console.log('updateDisplay called - isEvolving:', soul.isEvolving, 'ticks:', soul.ticks);
             
             // Advance evolution by one tick (advanceTick handles isEvolving check internally)
             soul.advanceTick();
-            console.log('updateDisplay after advance - ticks:', soul.ticks);
             
             const state = soul.getCurrentState();
             console.log('State after getCurrentState:', state.months, state.ticks);
@@ -1228,10 +1235,7 @@ Depth: ${depth} | Rebirths: ${rebirths}`;
         initializeSoul();
         
         // Auto-update every 100ms for smooth evolution (96 months in 96 seconds)
-        setInterval(() => {
-            console.log('Interval tick - calling updateDisplay');
-            updateDisplay();
-        }, 100);
+        setInterval(updateDisplay, 100);
     </script>
 </body>
 </html> 
