@@ -383,8 +383,10 @@ Soul State: Initializing...
                 // Unique starting virtues based on seed (1-5 range)
                 this.initialVirtues = [];
                 for (let i = 0; i < 5; i++) {
-                    this.initialVirtues[i] = 1 + ((this.seed >> (i * 8)) % 5);
+                    this.initialVirtues[i] = 1 + ((this.seed >> (i * 8)) % 8); // Expanded to 1-8
                 }
+                this.initialKappa = (((this.seed % 61) - 30) / 100); // -0.3 to 0.3
+                this.initialDepth = (this.seed % 11); // 0-10
                 
                 // Generate unique fingerprint hash
                 this.fingerprintHash = this.generateFingerprintHash();
@@ -478,18 +480,18 @@ Soul State: Initializing...
                 const weightedVirtues = virtues.reduce((sum, virtue, i) => sum + (virtue * virtueWeights[i]), 0);
                 
                 // Component scores
-                const virtueScore = weightedVirtues; // Max ~130 (13*10 weighted avg)
+                const virtueScore = weightedVirtues + (months / 96) * 20; // Growth bonus
                 const depthScore = depth * 0.5; // Depth contribution (max ~75)
                 const balanceScore = Math.max(0, 20 - Math.abs(kappa * 20)); // κ near 0 = bonus points
                 const phaseBonus = this.getPhaseBonus();
                 
                 // Penalties
-                const rebirthPenalty = rebirths ** 2 * 10; // Exponential penalty: 0, 1, 4, 9, 16...
+                const rebirthPenalty = Math.pow(rebirths, 1.5) * 10; // Less severe exponent
                 const debtPenalty = recognitionDebt * 2; // Recognition debt penalty
                 
                 // Final CRI calculation
-                const cri = virtueScore + depthScore + balanceScore + phaseBonus - rebirthPenalty - debtPenalty;
-                return Math.max(0, Math.round(cri));
+                const cri = virtueScore + depthScore + balanceScore + phaseBonus - rebirthPenalty - debtPenalty + (chaos * 10);
+                return Math.max(0, Math.min(300, Math.round(cri))); // Expanded range
             }
 
             getPhaseBonus() {
@@ -506,10 +508,10 @@ Soul State: Initializing...
 
             getRarityTier(cri) {
                 // Rarity tiers based on CRI score
-                if (cri >= 150) return { name: 'Transcendent', color: '#9b59b6', class: 'transcendent' };
-                if (cri >= 100) return { name: 'Legendary', color: '#ffd700', class: 'legendary' };
-                if (cri >= 70) return { name: 'Rare', color: '#3498db', class: 'rare' };
-                if (cri >= 40) return { name: 'Uncommon', color: '#2ecc71', class: 'uncommon' };
+                if (cri >= 250) return { name: 'Transcendent', color: '#9b59b6', class: 'transcendent' };
+                if (cri >= 175) return { name: 'Legendary', color: '#ffd700', class: 'legendary' };
+                if (cri >= 100) return { name: 'Rare', color: '#3498db', class: 'rare' };
+                if (cri >= 50) return { name: 'Uncommon', color: '#2ecc71', class: 'uncommon' };
                 return { name: 'Common', color: '#95a5a6', class: 'common' };
             }
 
@@ -650,7 +652,7 @@ Soul State: Initializing...
                 chaos = chaos / 50; // Scale to -0.4 to 0.4 for stronger influence
 
                 // Evolve κ smoothly with fractional months and stronger chaos
-                let kappa = ((this.seed % 200) - 100) / 100 + chaos - (months / 16); // Even slower convergence
+                let kappa = this.initialKappa + chaos - (months / 16); // Even slower convergence
                 kappa += Math.sin(months / PHI) * 0.4 + Math.cos(months / (PHI * 2)) * 0.2; // Enhanced oscillatory pattern
                 kappa = Math.max(-1, Math.min(1, kappa));
 
@@ -676,8 +678,8 @@ Soul State: Initializing...
                     
                     switch(i) {
                         case 0: // Love
-                            growthDriver = Math.max(0, -kappa) * PHI * 0.1; // Grows in harmony
-                            decayDriver += Math.max(0, kappa) * 0.05; // Decays in suffering
+                            growthDriver = Math.max(0, -kappa) * PHI * 0.15; // Was 0.1
+                            decayDriver += Math.max(0, kappa) * 0.075; // Was 0.05
                             break;
                         case 1: // Justice
                             const tempRegisterSeed = (this.seed % 9) + (months % 1);
@@ -713,7 +715,7 @@ Soul State: Initializing...
                     }
                     
                     // Apply metabolism: dV/dt = growth - decay
-                    virtue += (growthDriver - decayDriver) * (months / 96); // Scale by time progress
+                    virtue += (growthDriver - decayDriver) * (months / 96) * 2; // Accelerated
                     
                     // Apply bounds
                     virtue = Math.max(1, Math.min(virtueCap, virtue));
