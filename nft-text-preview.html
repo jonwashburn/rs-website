@@ -15,10 +15,12 @@
             align-items: center;
             min-height: 100vh;
             padding: 20px;
+            box-sizing: border-box;
         }
         .nft-container {
-            width: 600px;
-            height: 600px;
+            width: 100%;
+            max-width: 600px;
+            min-height: 500px;
             background: black;
             border: 2px solid #444;
             border-radius: 8px;
@@ -26,6 +28,7 @@
             box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
             display: flex;
             flex-direction: column;
+            box-sizing: border-box;
         }
         .header {
             text-align: center;
@@ -34,14 +37,16 @@
         .header h1 {
             color: #ffd700;
             margin: 0;
+            font-size: 1.5em;
         }
         #text-display {
             white-space: pre;
             font-family: 'Courier New', monospace;
             font-size: 14px;
-            line-height: 1.6;
+            line-height: 1.4;
             color: white;
             flex-grow: 1;
+            overflow-x: auto;
         }
         .controls {
             text-align: center;
@@ -59,6 +64,54 @@
         }
         .btn:hover {
             background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .nft-container {
+                padding: 20px;
+                border-radius: 4px;
+            }
+            .header h1 {
+                font-size: 1.2em;
+            }
+            #text-display {
+                font-size: 11px;
+                line-height: 1.3;
+            }
+            .btn {
+                padding: 8px 16px;
+                margin: 5px;
+                font-size: 0.9em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 5px;
+            }
+            .nft-container {
+                padding: 15px;
+                min-height: 400px;
+            }
+            .header h1 {
+                font-size: 1em;
+            }
+            #text-display {
+                font-size: 10px;
+                line-height: 1.2;
+            }
+            .controls {
+                margin-top: 15px;
+            }
+            .btn {
+                display: block;
+                width: 100%;
+                margin: 5px 0;
+            }
         }
     </style>
 </head>
