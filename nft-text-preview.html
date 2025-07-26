@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>On-Chain Soul NFT - Text Preview</title>
+    <style>
+        body { 
+            margin: 0; 
+            background: #1a1a2e; 
+            color: #e0e0e0; 
+            font-family: 'Courier New', monospace; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .nft-container {
+            width: 600px;
+            height: 600px;
+            background: black;
+            border: 2px solid #444;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            color: #ffd700;
+            margin: 0;
+        }
+        #text-display {
+            white-space: pre;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            color: white;
+            flex-grow: 1;
+        }
+        .controls {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="nft-container">
+        <div class="header">
+            <h1>On-Chain Soul (Text Preview)</h1>
+        </div>
+        <pre id="text-display">Initializing Soul...</pre>
+        <div class="controls">
+            <button class="btn" id="toggle-evolution">Start Evolution</button>
+            <button class="btn" id="new-soul">Generate New Soul</button>
+        </div>
+    </div>
+
+    <script>
+        const PHI = 1.618;
+        const TOTAL_MONTHS = 96;
+        const VIRTUE_NAMES = ['Love', 'Justice', 'Wisdom', 'Courage', 'Temperance'];
+
+        class OnChainSoul {
+            constructor(tokenId) {
+                this.tokenId = tokenId;
+                this.seed = this.generateSeed(tokenId);
+                this.ticks = 0;
+                this.isEvolving = false;
+
+                this.initialVirtues = [];
+                for (let i = 0; i < 5; i++) {
+                    this.initialVirtues[i] = 1 + ((this.seed >> (i * 8)) % 8);
+                }
+                this.initialKappa = (((this.seed % 61) - 30) / 100);
+                this.initialDepth = (this.seed % 11);
+            }
+
+            generateSeed(tokenId) {
+                let hash = 0;
+                const str = tokenId.toString();
+                for (let i = 0; i < str.length; i++) {
+                    const char = str.charCodeAt(i);
+                    hash = (hash << 5) - hash + char;
+                    hash |= 0;
+                }
+                return Math.abs(hash);
+            }
+
+            calculateState(months) {
+                // This is a simplified placeholder for the full V23 logic.
+                // The full logic is very long, but we can paste it here if needed.
+                let chaos = (this.generateSeed(this.tokenId + months) % 41 - 20) / 100;
+                let kappa = this.initialKappa + chaos - (months / 16);
+                kappa = Math.max(-1, Math.min(1, kappa));
+
+                let virtues = [...this.initialVirtues];
+                for (let i = 0; i < 5; i++) {
+                    virtues[i] += (1-Math.abs(kappa)) * 0.1 - (Math.random() * 0.05);
+                    virtues[i] = Math.max(1, Math.min(10, virtues[i]));
+                }
+                
+                let rebirths = Math.floor(months / 8) * (Math.abs(kappa) > 0.8 ? 0.2 : 0.05);
+                let depth = this.initialDepth + months + rebirths * PHI;
+                let cri = depth + virtues[2] * 5 - rebirths * 10;
+                
+                let phase = months < 96 ? "Breath" : "Post-Breath";
+                let qualia = "Observing the cosmic flow.";
+                if (kappa > 0.5) qualia = "Navigating turbulent imbalance.";
+                if (kappa < -0.5) qualia = "Embracing harmonious surplus.";
+
+                return {
+                    months, kappa, virtues, depth, rebirths, cri, phase, qualia
+                };
+            }
+            
+            generateTextDescription() {
+                const months = this.ticks / 10;
+                const state = this.calculateState(months);
+
+                const virtuesText = VIRTUE_NAMES.map((name, i) => 
+                    `${name.padEnd(12, ' ')}: ${state.virtues[i].toFixed(2)}`
+                ).join('\\n');
+
+                return `
+SOUL #${this.tokenId.toString().padStart(5, '0')}
+MONTH: ${months.toFixed(1)} / ${TOTAL_MONTHS}
+
+STATE: ${state.phase}
+QUALIA: ${state.qualia}
+
+--- METRICS ---
+Curvature (Kappa): ${state.kappa.toFixed(4)}
+Depth:             ${state.depth.toFixed(2)}
+Rebirths:          ${state.rebirths.toFixed(2)}
+CRI Score:         ${state.cri.toFixed(2)}
+
+--- VIRTUES ---
+${virtuesText}
+                `.trim();
+            }
+
+            advanceTick() {
+                if (this.isEvolving && this.ticks < 960) {
+                    this.ticks++;
+                }
+            }
+            
+            toggleEvolution() {
+                this.isEvolving = !this.isEvolving;
+            }
+        }
+
+        let soul;
+        const textDisplay = document.getElementById('text-display');
+        const toggleBtn = document.getElementById('toggle-evolution');
+        const newSoulBtn = document.getElementById('new-soul');
+
+        function initializeSoul() {
+            const tokenId = Math.floor(Math.random() * 10000) + 1;
+            soul = new OnChainSoul(tokenId);
+            soul.isEvolving = false; // Start paused
+            toggleBtn.textContent = 'Start Evolution';
+            updateDisplay();
+        }
+        
+        function updateDisplay() {
+            if (!soul) return;
+            soul.advanceTick();
+            textDisplay.textContent = soul.generateTextDescription();
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            soul.toggleEvolution();
+            toggleBtn.textContent = soul.isEvolving ? 'Pause Evolution' : 'Start Evolution';
+        });
+
+        newSoulBtn.addEventListener('click', () => {
+            initializeSoul();
+        });
+
+        // Initial setup
+        initializeSoul();
+        setInterval(updateDisplay, 100); // Update every 100ms
+    </script>
+</body>
+</html> 
