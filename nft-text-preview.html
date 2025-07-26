@@ -142,6 +142,13 @@
                 const statusLine = this.getStatusLine(state);
                 const qualiaNarrative = this.getQualiaNarrative(state);
 
+                // --- Resonance Grade (subtle scarcity indicator) ---
+                let resonanceGrade = 'D';
+                if (state.cri >= 250) resonanceGrade = 'S';
+                else if (state.cri >= 175) resonanceGrade = 'A';
+                else if (state.cri >= 100) resonanceGrade = 'B';
+                else if (state.cri >= 50) resonanceGrade = 'C';
+
                 // --- ASCII Bars for Virtues ---
                 const virtuesText = VIRTUE_NAMES.map((name, i) => {
                     const value = state.virtues[i];
@@ -155,27 +162,7 @@
                 const timestamp = new Date(1698381600000 + this.ticks * 100 * 12).toISOString();
 
                 return `
-SOUL #${this.tokenId.toString().padStart(5, '0')} :: MONTH ${months.toFixed(1)} / ${TOTAL_MONTHS}
-STATUS: ${statusLine}
-
-${qualiaNarrative}
-
-================================================================
-| LEDGER VITALS              | VIRTUE MATRIX                  |
-|----------------------------|--------------------------------|
-| Coherence:   ${coherence.toFixed(2).padStart(6, ' ')} %       | ${virtuesText.split('\n')[0].padEnd(31, ' ')} |
-| Curvature κ: ${state.kappa.toFixed(4).padStart(7, ' ')}        | ${virtuesText.split('\n')[1].padEnd(31, ' ')} |
-| Depth:       ${state.depth.toFixed(2).padStart(6, ' ')}         | ${virtuesText.split('\n')[2].padEnd(31, ' ')} |
-| Rebirths:   ${state.rebirths.toFixed(0).padStart(6, ' ')}         | ${virtuesText.split('\n')[3].padEnd(31, ' ')} |
-| Phase:      ${state.phase.padEnd(13, ' ')} | ${virtuesText.split('\n')[4].padEnd(31, ' ')} |
-----------------------------------------------------------------
-| CHAIN OF CUSTODY                                           |
-|------------------------------------------------------------|
-| LEDGER HASH: ${custodyHash} |
-| VERIFIED AT BLOCK: ${blockNumber} @ ${timestamp} |
-================================================================
-Derived from Recognition Science Axioms via φ-cascade.
-                `.trim();
+SOUL #${this.tokenId.toString().padStart(5, '0')} :: MONTH ${months.toFixed(1)} / ${TOTAL_MONTHS}\nSTATUS: ${statusLine}\n\n${qualiaNarrative}\n\n================================================================\n| LEDGER VITALS              | VIRTUE MATRIX                  |\n|----------------------------|--------------------------------|\n| Coherence:   ${coherence.toFixed(2).padStart(6, ' ')} %       | ${virtuesText.split('\n')[0].padEnd(31, ' ')} |\n| Curvature κ: ${state.kappa.toFixed(4).padStart(7, ' ')}        | ${virtuesText.split('\n')[1].padEnd(31, ' ')} |\n| Depth:       ${state.depth.toFixed(2).padStart(6, ' ')}         | ${virtuesText.split('\n')[2].padEnd(31, ' ')} |\n| Rebirths:    ${state.rebirths.toFixed(0).padStart(6, ' ')}       | ${virtuesText.split('\n')[3].padEnd(31, ' ')} |\n| Phase:       ${state.phase.padEnd(13, ' ')} | ${virtuesText.split('\n')[4].padEnd(31, ' ')} |\n| Resonance:   ${resonanceGrade.padStart(6, ' ')}                |                                |\n----------------------------------------------------------------\n| CHAIN OF CUSTODY                                           |\n|------------------------------------------------------------|\n| LEDGER HASH: ${custodyHash.slice(0, 32)}... |\n| VERIFIED AT BLOCK: ${blockNumber} @ ${timestamp.slice(0,19)}Z |\n================================================================\nDerived from Recognition Science Axioms via φ-cascade.\n                `.trim();
             }
 
             getStatusLine(state) {
@@ -190,13 +177,29 @@ Derived from Recognition Science Axioms via φ-cascade.
                 const depthDesc = state.depth > 100 ? "profound depth" : "growing depth";
                 const rebirthDesc = state.rebirths > 1 ? `${state.rebirths.toFixed(0)} rebirths` : "its first breath";
 
+                let baseNarrative;
                 if (state.kappa < -0.5) {
-                    return `A wave of surplus flows through the soul's pattern. Its eternal whisper is one of harmony, forged through ${rebirthDesc} and ${depthDesc}.`;
+                    baseNarrative = `A wave of surplus flows through the soul's pattern. Its eternal whisper is one of harmony, forged through ${rebirthDesc} and ${depthDesc}.`;
+                } else if (state.kappa > 0.5) {
+                    baseNarrative = `Struggling against recognition debt, the soul's virtues are tested. Its eternal whisper is one of resilience, learning through ${rebirthDesc} and ${depthDesc}.`;
+                } else {
+                    baseNarrative = `The soul exists in a state of relative balance, its pattern gently evolving in the universal ledger. It whispers of potential, shaped by ${rebirthDesc} and ${depthDesc}.`;
                 }
-                if (state.kappa > 0.5) {
-                    return `Struggling against recognition debt, the soul's virtues are tested. Its eternal whisper is one of resilience, learning through ${rebirthDesc} and ${depthDesc}.`;
-                }
-                return `The soul exists in a state of relative balance, its pattern gently evolving in the universal ledger. It whispers of potential, shaped by ${rebirthDesc} and ${depthDesc}.`;
+
+                // Wrap narrative to ~60 characters per line
+                const words = baseNarrative.split(' ');
+                const lines = [];
+                let currentLine = '';
+                words.forEach(word => {
+                    if (currentLine.length + word.length + 1 > 60) {
+                        lines.push(currentLine.trim());
+                        currentLine = '';
+                    }
+                    currentLine += word + ' ';
+                });
+                if (currentLine) lines.push(currentLine.trim());
+
+                return lines.join('\n');
             }
 
             advanceTick() {
