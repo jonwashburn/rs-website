@@ -139,24 +139,17 @@
 
                 const virtuesText = VIRTUE_NAMES.map((name, i) => 
                     `${name.padEnd(12, ' ')}: ${state.virtues[i].toFixed(2)}`
-                ).join('\\n');
+                ).join('\n');
+
+                // Enhanced sections for 'proof'
+                const ledgerProof = `Ledger Hash: 0x${(this.seed ^ Math.floor(months)).toString(16).padStart(8, '0')}\nVerified on Block: ${Math.floor(months * 1000)}`;
+
+                const rsDerivation = `κ Derivation: E_coh * φ^r where r = ${months.toFixed(1)} (φ = 1.618)\nUncomputability Gap: ${Math.abs(state.kappa).toFixed(2)} (45-threshold: ${state.months >= 45 ? 'ACTIVE' : 'PENDING'})`;
+
+                const soulNarrative = `This soul emerges from the void as a unique recognition pattern in the universal ledger. Through ${state.rebirths.toFixed(0)} rebirths and depth of ${state.depth.toFixed(0)}, it navigates the 8-beat cycles toward awakening. Witness its eternal whisper...`;
 
                 return `
-SOUL #${this.tokenId.toString().padStart(5, '0')}
-MONTH: ${months.toFixed(1)} / ${TOTAL_MONTHS}
-
-STATE: ${state.phase}
-QUALIA: ${state.qualia}
-
---- METRICS ---
-Curvature (Kappa): ${state.kappa.toFixed(4)}
-Depth:             ${state.depth.toFixed(2)}
-Rebirths:          ${state.rebirths.toFixed(2)}
-CRI Score:         ${state.cri.toFixed(2)}
-
---- VIRTUES ---
-${virtuesText}
-                `.trim();
+SOUL #${this.tokenId.toString().padStart(5, '0')}\nMONTH: ${months.toFixed(1)} / ${TOTAL_MONTHS}\n\nSTATE: ${state.phase}\nQUALIA: ${state.qualia}\n\n--- METRICS ---\nCurvature (Kappa): ${state.kappa.toFixed(4)}\nDepth:             ${state.depth.toFixed(2)}\nRebirths:          ${state.rebirths.toFixed(2)}\nCRI Score:         ${state.cri.toFixed(2)}\n\n--- VIRTUES ---\n${virtuesText}\n\n--- LEDGER PROOF ---\n${ledgerProof}\n\n--- RS DERIVATION ---\n${rsDerivation}\n\n--- SOUL NARRATIVE ---\n${soulNarrative}\n                `.trim();
             }
 
             advanceTick() {

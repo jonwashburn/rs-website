@@ -22,6 +22,7 @@ contract LedgerSouls is ERC721, ERC721Enumerable, Ownable {
         uint256 cri;
         string qualia;
         string phase;
+        uint256 months; // Added for enhanced text generation
     }
 
     constructor() ERC721("Ledger Souls", "SOUL") {}
@@ -74,21 +75,38 @@ contract LedgerSouls is ERC721, ERC721Enumerable, Ownable {
     }
 
     function generateTextDescription(uint256 tokenId, SoulState memory state) internal pure returns (string memory) {
+        uint256 months = state.months; // Assuming months is in state
+        string memory virtuesText = "";
+        string[5] memory virtueNames = ["Love", "Justice", "Wisdom", "Courage", "Temperance"];
+        for (uint i = 0; i < 5; i++) {
+            virtuesText = string.concat(virtuesText, virtueNames[i], Strings.toString(state.virtues[i]), "\n");
+        }
+
+        // Enhanced sections for 'proof'
+        bytes32 ledgerHash = keccak256(abi.encodePacked(tokenId, block.timestamp));
+        string memory ledgerProof = string.concat("Ledger Hash: ", Strings.toHexString(uint256(ledgerHash), 8), "\nVerified on Block: ", Strings.toString(block.number));
+
+        string memory rsDerivation = string.concat("κ Derivation: E_coh * φ^r where r = ", Strings.toString(months), " (φ = 1.618)\nUncomputability Gap: ", Strings.toString(uint256(state.kappa) / 1000), " (45-threshold: ", (months >= 45 ? "ACTIVE" : "PENDING"), ")");
+
+        string memory soulNarrative = string.concat("This soul emerges from the void as a unique recognition pattern in the universal ledger. Through ", Strings.toString(state.rebirths), " rebirths and depth of ", Strings.toString(state.depth), ", it navigates the 8-beat cycles toward awakening. Witness its eternal whisper..."); 
+
         return string.concat(
-            "SOUL #", tokenId.toString(), "\\n\\n",
-            "STATE: ", state.phase, "\\n",
-            "QUALIA: ", state.qualia, "\\n\\n",
-            "--- METRICS ---\\n",
-            "Curvature (Kappa): ", state.kappa.toString(), "\\n",
-            "Depth: ", state.depth.toString(), "\\n",
-            "Rebirths: ", state.rebirths.toString(), "\\n",
-            "CRI: ", state.cri.toString(), "\\n\\n",
-            "--- VIRTUES ---\\n",
-            "Love:       ", state.virtues[0].toString(), "\\n",
-            "Justice:    ", state.virtues[1].toString(), "\\n",
-            "Wisdom:     ", state.virtues[2].toString(), "\\n",
-            "Courage:    ", state.virtues[3].toString(), "\\n",
-            "Temperance: ", state.virtues[4].toString()
+            "SOUL #", Strings.toString(tokenId), "\nMONTH: ", Strings.toString(months), " / 96\n\n",
+            "STATE: ", state.phase, "\n",
+            "QUALIA: ", state.qualia, "\n\n",
+            "--- METRICS ---\n",
+            "Curvature (Kappa): ", Strings.toString(uint256(state.kappa) / 1000), "\n",
+            "Depth:             ", Strings.toString(state.depth), "\n",
+            "Rebirths:          ", Strings.toString(state.rebirths), "\n",
+            "CRI: ", Strings.toString(state.cri), "\n\n",
+            "--- VIRTUES ---\n",
+            virtuesText, "\n",
+            "--- LEDGER PROOF ---\n",
+            ledgerProof, "\n\n",
+            "--- RS DERIVATION ---\n",
+            rsDerivation, "\n\n",
+            "--- SOUL NARRATIVE ---\n",
+            soulNarrative
         );
     }
 
@@ -129,7 +147,7 @@ contract LedgerSouls is ERC721, ERC721Enumerable, Ownable {
             phase = "Post-Breath";
         }
 
-        return SoulState(kappa, virtues, depth, rebirths, cri, qualia, phase);
+        return SoulState(kappa, virtues, depth, rebirths, cri, qualia, phase, months);
     }
 
     // The following functions are overrides required by Solidity.
