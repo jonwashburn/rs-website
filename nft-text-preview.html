@@ -131,7 +131,7 @@
     <script>
         const PHI = 1.618;
         const TOTAL_MONTHS = 96;
-        const VIRTUE_NAMES = ['Love', 'Justice', 'Wisdom', 'Courage', 'Temperance'];
+        const VIRTUE_NAMES = ['Love', 'Justice', 'Prudence', 'Courage', 'Temperance'];
 
         class OnChainSoul {
             constructor(tokenId) {
@@ -176,13 +176,10 @@
                 let depth = this.initialDepth + months + rebirths * PHI;
                 let cri = depth + virtues[2] * 5 - rebirths * 10;
                 
-                let phase = months < 96 ? "Breath" : "Post-Breath";
-                let qualia = "Observing the cosmic flow.";
-                if (kappa > 0.5) qualia = "Navigating turbulent imbalance.";
-                if (kappa < -0.5) qualia = "Embracing harmonious surplus.";
-
+                let phase = months < 96 ? "Recognition Breath" : "Post-Breath";
+                
                 return {
-                    months, kappa, virtues, depth, rebirths, cri, phase, qualia
+                    months, kappa, virtues, depth, rebirths, cri, phase
                 };
             }
             
@@ -190,24 +187,51 @@
                 const months = this.ticks / 10;
                 const state = this.calculateState(months);
 
-                // Core intuitive metrics
-                const balancePercent = (1 - Math.abs(state.kappa)) * 100; // 0-100 harmony
+                // Core metrics based on authentic RS concepts
+                const curvatureValue = state.kappa.toFixed(3);
+                const curvatureType = state.kappa > 0 ? "Recognition Debt" : 
+                                     state.kappa < 0 ? "Recognition Surplus" : "Balanced";
                 const wisdomDepth = state.depth.toFixed(0);
                 const rebirthCycles = state.rebirths.toFixed(0);
                 const resonanceGrade = this.getResonanceGrade(state.cri);
 
-                const statusLine = this.getStatusLine(state);
-                const qualiaNarrative = this.getQualiaNarrative(state);
-                const soulEssence = this.getSoulEssence(state);
-
-                // Virtue bars simplified
+                // Virtue bars with authentic descriptions
                 const virtuesText = VIRTUE_NAMES.map((name, i) => {
                     const value = state.virtues[i];
                     const bar = '█'.repeat(Math.round(value)).padEnd(10, '░');
-                    return `${name.padEnd(12, ' ')}: ${bar} (${value.toFixed(1)})`;
+                    const description = this.getVirtueDescription(name);
+                    return `${name.padEnd(12, ' ')}: ${bar} (${value.toFixed(1)}) ${description}`;
                 }).join('\n');
 
-                return `\nSOUL #${this.tokenId.toString().padStart(5, '0')} :: ${soulEssence}\nSTATUS: ${statusLine}\n\n${qualiaNarrative}\n\n================================================================\n| SOUL VITALS                | VIRTUE HARMONY                 |\n|----------------------------|--------------------------------|\n| Balance:     ${balancePercent.toFixed(0).padStart(3, ' ')}% Harmony | ${virtuesText.split('\n')[0].padEnd(30,' ')} |\n| Wisdom Depth: ${wisdomDepth.padStart(6,' ')}        | ${virtuesText.split('\n')[1].padEnd(30,' ')} |\n| Rebirth Cycles: ${rebirthCycles.padStart(3,' ')}      | ${virtuesText.split('\n')[2].padEnd(30,' ')} |\n| Phase:       ${state.phase.padEnd(10,' ')} | ${virtuesText.split('\n')[3].padEnd(30,' ')} |\n| Resonance:   ${resonanceGrade.padStart(2,' ')}           | ${virtuesText.split('\n')[4].padEnd(30,' ')} |\n================================================================\nA unique pattern in the Recognition Science ledger.\n                `.trim();
+                return `
+SOUL #${this.tokenId.toString().padStart(5, '0')}
+Month ${months.toFixed(1)} / 96 :: ${state.phase}
+
+================================================================
+| LEDGER STATE              | VIRTUE TECHNOLOGIES            |
+|---------------------------|--------------------------------|
+| Curvature κ: ${curvatureValue.padStart(6,' ')}       | ${virtuesText.split('\n')[0].padEnd(30,' ')} |
+| Type:        ${curvatureType.padEnd(10,' ')} | ${virtuesText.split('\n')[1].padEnd(30,' ')} |
+| Depth:       ${wisdomDepth.padStart(6,' ')}       | ${virtuesText.split('\n')[2].padEnd(30,' ')} |
+| Rebirths:    ${rebirthCycles.padStart(6,' ')}       | ${virtuesText.split('\n')[3].padEnd(30,' ')} |
+| Phase:       ${state.phase.padEnd(10,' ')} | ${virtuesText.split('\n')[4].padEnd(30,' ')} |
+| Grade:       ${resonanceGrade.padStart(6,' ')}       |                                |
+================================================================
+
+Recognition debt/surplus represents unpaid recognition costs in the
+universal ledger. Virtues are proven curvature management technologies.
+                `.trim();
+            }
+
+            getVirtueDescription(virtue) {
+                const descriptions = {
+                    'Love': 'κ equilibration',
+                    'Justice': '8-beat posting', 
+                    'Prudence': 'cost optimization',
+                    'Courage': 'coherence maintenance',
+                    'Temperance': 'cascade prevention'
+                };
+                return descriptions[virtue] || '';
             }
 
             getResonanceGrade(cri){
@@ -216,53 +240,6 @@
                 if(cri>=100) return 'B';
                 if(cri>=50) return 'C';
                 return 'D';
-            }
-
-            getStatusLine(state) {
-                if (state.months >= 96) return `Awakened. Phase: ${state.phase}`;
-                if (state.kappa > 0.8) return "Experiencing Critical Imbalance";
-                if (state.kappa < -0.8) return "Embracing Ecstatic Harmony";
-                if (state.months >= 45 && state.months <= 46) return "Navigating the 45-Gap Threshold...";
-                return "Observing the Cosmic Flow...";
-            }
-
-            getQualiaNarrative(state) {
-                const depthDesc = state.depth > 100 ? "profound depth" : "growing depth";
-                const rebirthDesc = state.rebirths > 1 ? `${state.rebirths.toFixed(0)} rebirths` : "its first breath";
-
-                let baseNarrative;
-                if (state.kappa < -0.5) {
-                    baseNarrative = `A wave of surplus flows through the soul's pattern. Its eternal whisper is one of harmony, forged through ${rebirthDesc} and ${depthDesc}.`;
-                } else if (state.kappa > 0.5) {
-                    baseNarrative = `Struggling against recognition debt, the soul's virtues are tested. Its eternal whisper is one of resilience, learning through ${rebirthDesc} and ${depthDesc}.`;
-                } else {
-                    baseNarrative = `The soul exists in a state of relative balance, its pattern gently evolving in the universal ledger. It whispers of potential, shaped by ${rebirthDesc} and ${depthDesc}.`;
-                }
-
-                // Wrap narrative to ~60 characters per line
-                const words = baseNarrative.split(' ');
-                const lines = [];
-                let currentLine = '';
-                words.forEach(word => {
-                    if (currentLine.length + word.length + 1 > 60) {
-                        lines.push(currentLine.trim());
-                        currentLine = '';
-                    }
-                    currentLine += word + ' ';
-                });
-                if (currentLine) lines.push(currentLine.trim());
-
-                return lines.join('\n');
-            }
-
-            getSoulEssence(state) {
-                const maxVirtueIndex = state.virtues.indexOf(Math.max(...state.virtues));
-                const essenceAdjectives = ['Eternal', 'Resonant', 'Transcendent', 'Harmonic', 'Primal'];
-                const essenceNouns = ['Whisper', 'Echo', 'Flame', 'Void', 'Cascade'];
-                const seedMod = this.seed % (essenceAdjectives.length * essenceNouns.length);
-                const adj = essenceAdjectives[seedMod % essenceAdjectives.length];
-                const noun = essenceNouns[Math.floor(seedMod / essenceAdjectives.length)];
-                return `${adj} ${noun} of ${VIRTUE_NAMES[maxVirtueIndex]} Depth`;
             }
 
             advanceTick() {
