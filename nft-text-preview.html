@@ -194,13 +194,7 @@
                 const coherence = (1 - Math.abs(state.kappa)) * 100;
                 const statusLine = this.getStatusLine(state);
                 const qualiaNarrative = this.getQualiaNarrative(state);
-
-                // --- Resonance Grade (subtle scarcity indicator) ---
-                let resonanceGrade = 'D';
-                if (state.cri >= 250) resonanceGrade = 'S';
-                else if (state.cri >= 175) resonanceGrade = 'A';
-                else if (state.cri >= 100) resonanceGrade = 'B';
-                else if (state.cri >= 50) resonanceGrade = 'C';
+                const soulEssence = this.getSoulEssence(state);
 
                 // --- ASCII Bars for Virtues ---
                 const virtuesText = VIRTUE_NAMES.map((name, i) => {
@@ -209,13 +203,15 @@
                     return `${name.padEnd(12, ' ')}: ${bar} (${value.toFixed(2)})`;
                 }).join('\n');
 
-                // --- Chain of Custody ---
-                const custodyHash = `0x${(this.seed ^ Math.floor(months * 100)).toString(16).padEnd(16, '0')}${(this.seed ^ Math.floor(state.kappa * 1000)).toString(16).padEnd(16, '0')}`;
-                const blockNumber = 14830192 + Math.floor(this.ticks * 1.5);
-                const timestamp = new Date(1698381600000 + this.ticks * 100 * 12).toISOString();
+                // --- Resonance Grade (subtle scarcity indicator) ---
+                let resonanceGrade = 'D';
+                if (state.cri >= 250) resonanceGrade = 'S';
+                else if (state.cri >= 175) resonanceGrade = 'A';
+                else if (state.cri >= 100) resonanceGrade = 'B';
+                else if (state.cri >= 50) resonanceGrade = 'C';
 
                 return `
-SOUL #${this.tokenId.toString().padStart(5, '0')} :: ${statusLine}\n\n${qualiaNarrative}\n\n================================================================\n| LEDGER VITALS              | VIRTUE MATRIX                  |\n|----------------------------|--------------------------------|\n| Coherence:   ${coherence.toFixed(2).padStart(6, ' ')} %       | ${virtuesText.split('\n')[0].padEnd(31, ' ')} |\n| Curvature κ: ${state.kappa.toFixed(4).padStart(7, ' ')}        | ${virtuesText.split('\n')[1].padEnd(31, ' ')} |\n| Depth:       ${state.depth.toFixed(2).padStart(6, ' ')}         | ${virtuesText.split('\n')[2].padEnd(31, ' ')} |\n| Rebirths:    ${state.rebirths.toFixed(0).padStart(6, ' ')}       | ${virtuesText.split('\n')[3].padEnd(31, ' ')} |\n| Phase:       ${state.phase.padEnd(13, ' ')} | ${virtuesText.split('\n')[4].padEnd(31, ' ')} |\n| Resonance:   ${resonanceGrade.padStart(6, ' ')}                |                                |\n----------------------------------------------------------------\n| CHAIN OF CUSTODY                                           |\n|------------------------------------------------------------|\n| LEDGER HASH: ${custodyHash.slice(0, 32)}... |\n================================================================\nDerived from Recognition Science Axioms via φ-cascade.\n                `.trim();
+SOUL #${this.tokenId.toString().padStart(5, '0')} :: ${soulEssence}\nSTATUS: ${statusLine}\n\n${qualiaNarrative}\n\n================================================================\n| LEDGER VITALS              | VIRTUE MATRIX                  |\n|----------------------------|--------------------------------|\n| Coherence:   ${coherence.toFixed(2).padStart(6, ' ')} %       | ${virtuesText.split('\n')[0].padEnd(31, ' ')} |\n| Curvature κ: ${state.kappa.toFixed(4).padStart(7, ' ')}        | ${virtuesText.split('\n')[1].padEnd(31, ' ')} |\n| Depth:       ${state.depth.toFixed(2).padStart(6, ' ')}         | ${virtuesText.split('\n')[2].padEnd(31, ' ')} |\n| Rebirths:    ${state.rebirths.toFixed(0).padStart(6, ' ')}       | ${virtuesText.split('\n')[3].padEnd(31, ' ')} |\n| Phase:       ${state.phase.padEnd(13, ' ')} | ${virtuesText.split('\n')[4].padEnd(31, ' ')} |\n| Resonance:   ${resonanceGrade.padStart(6, ' ')}                |                                |\n================================================================\nDerived from Recognition Science Axioms via φ-cascade.\n                `.trim();
             }
 
             getStatusLine(state) {
@@ -253,6 +249,16 @@ SOUL #${this.tokenId.toString().padStart(5, '0')} :: ${statusLine}\n\n${qualiaNa
                 if (currentLine) lines.push(currentLine.trim());
 
                 return lines.join('\n');
+            }
+
+            getSoulEssence(state) {
+                const maxVirtueIndex = state.virtues.indexOf(Math.max(...state.virtues));
+                const essenceAdjectives = ['Eternal', 'Resonant', 'Transcendent', 'Harmonic', 'Primal'];
+                const essenceNouns = ['Whisper', 'Echo', 'Flame', 'Void', 'Cascade'];
+                const seedMod = this.seed % (essenceAdjectives.length * essenceNouns.length);
+                const adj = essenceAdjectives[seedMod % essenceAdjectives.length];
+                const noun = essenceNouns[Math.floor(seedMod / essenceAdjectives.length)];
+                return `${adj} ${noun} of ${VIRTUE_NAMES[maxVirtueIndex]} Depth`;
             }
 
             advanceTick() {
