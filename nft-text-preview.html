@@ -190,28 +190,32 @@
                 const months = this.ticks / 10;
                 const state = this.calculateState(months);
 
-                // --- New Derived Metrics ---
-                const coherence = (1 - Math.abs(state.kappa)) * 100;
+                // Core intuitive metrics
+                const balancePercent = (1 - Math.abs(state.kappa)) * 100; // 0-100 harmony
+                const wisdomDepth = state.depth.toFixed(0);
+                const rebirthCycles = state.rebirths.toFixed(0);
+                const resonanceGrade = this.getResonanceGrade(state.cri);
+
                 const statusLine = this.getStatusLine(state);
                 const qualiaNarrative = this.getQualiaNarrative(state);
                 const soulEssence = this.getSoulEssence(state);
 
-                // --- ASCII Bars for Virtues ---
+                // Virtue bars simplified
                 const virtuesText = VIRTUE_NAMES.map((name, i) => {
                     const value = state.virtues[i];
                     const bar = '█'.repeat(Math.round(value)).padEnd(10, '░');
-                    return `${name.padEnd(12, ' ')}: ${bar} (${value.toFixed(2)})`;
+                    return `${name.padEnd(12, ' ')}: ${bar} (${value.toFixed(1)})`;
                 }).join('\n');
 
-                // --- Resonance Grade (subtle scarcity indicator) ---
-                let resonanceGrade = 'D';
-                if (state.cri >= 250) resonanceGrade = 'S';
-                else if (state.cri >= 175) resonanceGrade = 'A';
-                else if (state.cri >= 100) resonanceGrade = 'B';
-                else if (state.cri >= 50) resonanceGrade = 'C';
+                return `\nSOUL #${this.tokenId.toString().padStart(5, '0')} :: ${soulEssence}\nSTATUS: ${statusLine}\n\n${qualiaNarrative}\n\n================================================================\n| SOUL VITALS                | VIRTUE HARMONY                 |\n|----------------------------|--------------------------------|\n| Balance:     ${balancePercent.toFixed(0).padStart(3, ' ')}% Harmony | ${virtuesText.split('\n')[0].padEnd(30,' ')} |\n| Wisdom Depth: ${wisdomDepth.padStart(6,' ')}        | ${virtuesText.split('\n')[1].padEnd(30,' ')} |\n| Rebirth Cycles: ${rebirthCycles.padStart(3,' ')}      | ${virtuesText.split('\n')[2].padEnd(30,' ')} |\n| Phase:       ${state.phase.padEnd(10,' ')} | ${virtuesText.split('\n')[3].padEnd(30,' ')} |\n| Resonance:   ${resonanceGrade.padStart(2,' ')}           | ${virtuesText.split('\n')[4].padEnd(30,' ')} |\n================================================================\nA unique pattern in the Recognition Science ledger.\n                `.trim();
+            }
 
-                return `
-SOUL #${this.tokenId.toString().padStart(5, '0')} :: ${soulEssence}\nSTATUS: ${statusLine}\n\n${qualiaNarrative}\n\n================================================================\n| LEDGER VITALS              | VIRTUE MATRIX                  |\n|----------------------------|--------------------------------|\n| Coherence:   ${coherence.toFixed(2).padStart(6, ' ')} %       | ${virtuesText.split('\n')[0].padEnd(31, ' ')} |\n| Curvature κ: ${state.kappa.toFixed(4).padStart(7, ' ')}        | ${virtuesText.split('\n')[1].padEnd(31, ' ')} |\n| Depth:       ${state.depth.toFixed(2).padStart(6, ' ')}         | ${virtuesText.split('\n')[2].padEnd(31, ' ')} |\n| Rebirths:    ${state.rebirths.toFixed(0).padStart(6, ' ')}       | ${virtuesText.split('\n')[3].padEnd(31, ' ')} |\n| Phase:       ${state.phase.padEnd(13, ' ')} | ${virtuesText.split('\n')[4].padEnd(31, ' ')} |\n| Resonance:   ${resonanceGrade.padStart(6, ' ')}                |                                |\n================================================================\nDerived from Recognition Science Axioms via φ-cascade.\n                `.trim();
+            getResonanceGrade(cri){
+                if(cri>=250) return 'S';
+                if(cri>=175) return 'A';
+                if(cri>=100) return 'B';
+                if(cri>=50) return 'C';
+                return 'D';
             }
 
             getStatusLine(state) {
