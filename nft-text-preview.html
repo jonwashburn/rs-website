@@ -216,6 +216,8 @@
                                    state.kappa < 0 ? "Recognition Surplus" : "Equilibrium";
                 const coherence = Math.max(0, Math.min(100, (state.energy / 500) * 100)).toFixed(0);
 
+                const cri = this.calculateCRI(state);
+                const rarity = this.getRarity(cri);
 
                 const virtuesText = VIRTUE_NAMES.map((name, i) => {
                     const value = state.virtues[i];
@@ -237,8 +239,32 @@ PHASE: ${state.phase}
 | Rebirths:        ${String(state.rebirths).padStart(7,' ')}          | ${virtuesText.split('\n')[4]} |
 | Energy:          ${state.energy.toFixed(0).padStart(7,' ')}          |                                |
 | Coherence:       ${coherence.padStart(4,' ')}%            |                                |
+|------------------------------|--------------------------------|
+| Recognition Index: ${cri.toFixed(0).padStart(7,' ')}    |                                |
+| Rarity:          ${rarity.padEnd(17, ' ')} |                                |
 ================================================================
                 `.trim();
+            }
+
+            getRarity(cri) {
+                if (cri >= 400) return 'Legendary';
+                if (cri >= 300) return 'Epic';
+                if (cri >= 200) return 'Rare';
+                if (cri >= 100) return 'Uncommon';
+                return 'Common';
+            }
+
+            calculateCRI(state) {
+                if (state.phase === "Decohered (Pattern Dissolved)") return 0;
+
+                const virtueSum = state.virtues.reduce((a, b) => a + b, 0);
+                let score = (state.depth * 2) + (parseFloat(coherence) * 1.5) + virtueSum - (state.rebirths * 25);
+                
+                if (state.phase === "Awakened") {
+                    score *= 1.5;
+                }
+
+                return Math.max(0, score);
             }
 
             getVirtueDescription(virtue) {
