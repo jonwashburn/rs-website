@@ -130,7 +130,7 @@
 
     <script>
         const PHI = 1.618;
-        const TOTAL_MONTHS = 96; // Represents the 960 ticks for a full cycle
+        const TOTAL_TICKS = 960;
         const VIRTUE_NAMES = ['Love', 'Justice', 'Prudence', 'Courage', 'Temperance'];
 
         class OnChainSoul {
@@ -157,6 +157,7 @@
 
                 this.depth = this.seededRandom(0, 11);
                 this.rebirths = 0;
+                this.isEmbodied = this.seededRandom(0, 2) === 1; // 50/50 chance
             }
 
             generateSeed(tokenId) {
@@ -202,16 +203,17 @@
             generateTextDescription() {
                 const state = {
                     kappa: this.ledger.balance,
-                    phase: this.energy.cost <= 0 ? "Decohered" : (this.ticks < 960 ? "Recognition Breath" : "Awakened"),
+                    phase: this.energy.cost <= 0 ? "Decohered (Pattern Dissolved)" : (this.ticks < TOTAL_TICKS ? "Recognition Breath" : "Awakened"),
                     depth: this.depth,
                     rebirths: this.rebirths,
                     energy: this.energy.cost,
-                    virtues: this.virtuePotentials
+                    virtues: this.virtuePotentials,
+                    isEmbodied: this.isEmbodied
                 };
                 
                 const curvatureValue = state.kappa;
-                const curvatureType = state.kappa > 0 ? "Suffering (Debt)" :
-                                   state.kappa < 0 ? "Joy (Surplus)" : "Equilibrium";
+                const curvatureType = state.kappa > 0 ? "Recognition Debt" :
+                                   state.kappa < 0 ? "Recognition Surplus" : "Equilibrium";
                 const coherence = Math.max(0, Math.min(100, (state.energy / 500) * 100)).toFixed(0);
 
 
@@ -228,12 +230,13 @@ PHASE: ${state.phase}
 ================================================================
 | LEDGER STATE                 | VIRTUE TECHNOLOGIES            |
 |------------------------------|--------------------------------|
-| Curvature κ: ${String(curvatureValue).padStart(7,' ')}          | ${virtuesText.split('\n')[0]} |
-| State:       ${curvatureType.padEnd(17,' ')} | ${virtuesText.split('\n')[1]} |
-| Depth:       ${state.depth.toFixed(0).padStart(7,' ')}          | ${virtuesText.split('\n')[2]} |
-| Rebirths:    ${String(state.rebirths).padStart(7,' ')}          | ${virtuesText.split('\n')[3]} |
-| Energy:      ${state.energy.toFixed(0).padStart(7,' ')}          | ${virtuesText.split('\n')[4]} |
-| Coherence:   ${coherence.padStart(4,' ')}%            |                                |
+| Ledger Balance (κ): ${String(curvatureValue).padStart(7,' ')}    | ${virtuesText.split('\n')[0]} |
+| Balance State:   ${curvatureType.padEnd(17,' ')} | ${virtuesText.split('\n')[1]} |
+| Embodiment:      ${(state.isEmbodied ? 'Yes' : 'No').padEnd(17, ' ')} | ${virtuesText.split('\n')[2]} |
+| Depth:           ${state.depth.toFixed(0).padStart(7,' ')}          | ${virtuesText.split('\n')[3]} |
+| Rebirths:        ${String(state.rebirths).padStart(7,' ')}          | ${virtuesText.split('\n')[4]} |
+| Energy:          ${state.energy.toFixed(0).padStart(7,' ')}          |                                |
+| Coherence:       ${coherence.padStart(4,' ')}%            |                                |
 ================================================================
                 `.trim();
             }
@@ -250,7 +253,7 @@ PHASE: ${state.phase}
             }
 
             advanceTick() {
-                if (!this.isEvolving || this.ticks >= 960 || this.energy.cost <= 0) {
+                if (!this.isEvolving || this.ticks >= TOTAL_TICKS || this.energy.cost <= 0) {
                     if (this.energy.cost <= 0) this.isEvolving = false;
                     return;
                 };
@@ -258,9 +261,9 @@ PHASE: ${state.phase}
                 const kappa = this.ledger.balance;
 
                 // Determine event volatility based on Courage
-                let volatility = 100;
+                let volatility = this.isEmbodied ? 150 : 50; // Embodied souls experience more volatility
                 if (Math.abs(kappa) > 300) { // High-gradient region
-                    volatility = 100 - (this.virtuePotentials[3] * 7); // Courage reduces chaos
+                    volatility -= (this.virtuePotentials[3] * 7); // Courage reduces chaos
                 }
 
                 // 1. Generate a new Ledger Entry (a recognition event)
@@ -268,7 +271,7 @@ PHASE: ${state.phase}
                 const credit = this.seededRandom(1, Math.max(5, volatility));
                 this.ledger.debits += debit;
                 this.ledger.credits += credit;
-                this.energy.cost -= (debit + credit) / 1000; // Transitions cost energy
+                this.energy.cost -= (debit + credit) / (this.isEmbodied ? 500 : 1500); // Transitions cost energy, more so when embodied
 
                 // 2. Apply other Virtue Technologies
                 this.applyVirtueTechnologies();
