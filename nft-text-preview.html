@@ -216,8 +216,8 @@
                                    state.kappa < 0 ? "Recognition Surplus" : "Equilibrium";
                 const coherence = Math.max(0, Math.min(100, (state.energy / 500) * 100)).toFixed(0);
 
-                const cri = this.calculateCRI(state);
-                const rarity = this.getRarity(cri);
+                const karmaScore = this.calculateKarmaScore(state);
+                const rarity = this.getRarity(karmaScore);
 
                 const virtuesText = VIRTUE_NAMES.map((name, i) => {
                     const value = state.virtues[i];
@@ -240,21 +240,21 @@ PHASE: ${state.phase}
 | Energy:          ${state.energy.toFixed(0).padStart(7,' ')}          |                                |
 | Coherence:       ${coherence.padStart(4,' ')}%            |                                |
 |------------------------------|--------------------------------|
-| Recognition Index: ${cri.toFixed(0).padStart(7,' ')}    |                                |
+| Karma Score:      ${karmaScore.toFixed(0).padStart(7,' ')}    |                                |
 | Rarity:          ${rarity.padEnd(17, ' ')} |                                |
 ================================================================
                 `.trim();
             }
 
-            getRarity(cri) {
-                if (cri >= 400) return 'Legendary';
-                if (cri >= 300) return 'Epic';
-                if (cri >= 200) return 'Rare';
-                if (cri >= 100) return 'Uncommon';
+            getRarity(karmaScore) {
+                if (karmaScore >= 400) return 'Legendary';
+                if (karmaScore >= 300) return 'Epic';
+                if (karmaScore >= 200) return 'Rare';
+                if (karmaScore >= 100) return 'Uncommon';
                 return 'Common';
             }
 
-            calculateCRI(state) {
+            calculateKarmaScore(state) {
                 if (state.phase === "Decohered (Pattern Dissolved)") return 0;
 
                 const virtueSum = state.virtues.reduce((a, b) => a + b, 0);
