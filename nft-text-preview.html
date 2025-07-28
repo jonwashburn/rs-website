@@ -130,7 +130,7 @@
 
     <script>
         const PHI = 1.618;
-        const TOTAL_MONTHS = 96;
+        const TOTAL_MONTHS = 96; // Represents the 960 ticks for a full cycle
         const VIRTUE_NAMES = ['Love', 'Justice', 'Prudence', 'Courage', 'Temperance'];
 
         class OnChainSoul {
@@ -140,12 +140,23 @@
                 this.ticks = 0;
                 this.isEvolving = false;
 
-                this.initialVirtues = [];
+                // Based on CoreTypes.lean: A MoralState has a ledger and energy
+                this.ledger = {
+                    entries: [], // We'll just track totals for simplicity
+                    debits: 0,
+                    credits: 0,
+                    balance: 0 // This is kappa, an integer
+                };
+                this.energy = { cost: 500.0 }; // Start with sufficient energy
+
+                // Virtues are potentials (1-10) for applying technologies
+                this.virtuePotentials = [];
                 for (let i = 0; i < 5; i++) {
-                    this.initialVirtues[i] = 1 + ((this.seed >> (i * 8)) % 8);
+                    this.virtuePotentials[i] = 1 + (this.seededRandom(0, 1000) >> (i * 2)) % 8;
                 }
-                this.initialKappa = (((this.seed % 61) - 30) / 100);
-                this.initialDepth = (this.seed % 11);
+
+                this.depth = this.seededRandom(0, 11);
+                this.rebirths = 0;
             }
 
             generateSeed(tokenId) {
@@ -158,63 +169,71 @@
                 }
                 return Math.abs(hash);
             }
-
-            calculateState(months) {
-                // This is a simplified placeholder for the full V23 logic.
-                // The full logic is very long, but we can paste it here if needed.
-                let chaos = (this.generateSeed(this.tokenId + months) % 41 - 20) / 100;
-                let kappa = this.initialKappa + chaos - (months / 16);
-                kappa = Math.max(-1, Math.min(1, kappa));
-
-                let virtues = [...this.initialVirtues];
-                for (let i = 0; i < 5; i++) {
-                    virtues[i] += (1-Math.abs(kappa)) * 0.1 - (Math.random() * 0.05);
-                    virtues[i] = Math.max(1, Math.min(10, virtues[i]));
-                }
-                
-                let rebirths = Math.floor(months / 8) * (Math.abs(kappa) > 0.8 ? 0.2 : 0.05);
-                let depth = this.initialDepth + months + rebirths * PHI;
-                let cri = depth + virtues[2] * 5 - rebirths * 10;
-                
-                let phase = months < 96 ? "Recognition Breath" : "Post-Breath";
-                
-                return {
-                    months, kappa, virtues, depth, rebirths, cri, phase
-                };
-            }
             
+            seededRandom(min, max) {
+                 this.seed = (this.seed * 9301 + 49297) % 233280;
+                 const rnd = this.seed / 233280;
+                 return Math.floor(min + rnd * (max - min));
+            }
+
+            applyVirtueTechnologies() {
+                 const kappa = this.ledger.balance;
+
+                 // Love: κ equilibration (strong pull towards zero)
+                 if (this.seededRandom(0, 100) < this.virtuePotentials[0] * 5) { // Love
+                     if (kappa > 0) this.ledger.credits += Math.ceil(kappa * 0.05);
+                     if (kappa < 0) this.ledger.debits -= Math.floor(kappa * 0.05);
+                 }
+
+                 // Justice: Accurate posting (small, consistent rebalancing)
+                 if (this.seededRandom(0, 100) < this.virtuePotentials[1] * 5) { // Justice
+                     if (kappa > 0) this.ledger.credits += this.seededRandom(1, 3);
+                     if (kappa < 0) this.ledger.debits += this.seededRandom(1, 3);
+                 }
+                 
+                 // Temperance: Cascade prevention (forgive debt if extreme)
+                 if (Math.abs(kappa) > 500 && this.seededRandom(0, 100) < this.virtuePotentials[4] * 10) { // Temperance
+                     this.ledger.debits = Math.floor(this.ledger.debits * 0.95);
+                     this.ledger.credits = Math.floor(this.ledger.credits * 0.95);
+                     this.energy.cost -= 10; // Forgiveness is costly
+                 }
+            }
+        
             generateTextDescription() {
-                const months = this.ticks / 10;
-                const state = this.calculateState(months);
+                const state = {
+                    kappa: this.ledger.balance,
+                    phase: this.energy.cost <= 0 ? "Decohered" : (this.ticks < 960 ? "Recognition Breath" : "Awakened"),
+                    depth: this.depth,
+                    rebirths: this.rebirths,
+                    energy: this.energy.cost,
+                    virtues: this.virtuePotentials
+                };
+                
+                const curvatureValue = state.kappa;
+                const curvatureType = state.kappa > 0 ? "Suffering (Debt)" :
+                                   state.kappa < 0 ? "Joy (Surplus)" : "Equilibrium";
+                const coherence = Math.max(0, Math.min(100, (state.energy / 500) * 100)).toFixed(0);
 
-                // Core metrics based on authentic RS concepts
-                const curvatureValue = state.kappa.toFixed(3);
-                const curvatureType = state.kappa > 0 ? "Recognition Debt" : 
-                                     state.kappa < 0 ? "Recognition Surplus" : "Balanced";
-                const wisdomDepth = state.depth.toFixed(0);
-                const rebirthCycles = state.rebirths.toFixed(0);
-                const resonanceGrade = this.getResonanceGrade(state.cri);
 
-                // Virtue bars with authentic descriptions
                 const virtuesText = VIRTUE_NAMES.map((name, i) => {
                     const value = state.virtues[i];
                     const bar = '█'.repeat(Math.round(value)).padEnd(10, '░');
-                    const description = this.getVirtueDescription(name);
-                    return `${name.padEnd(12, ' ')}: ${bar} (${value.toFixed(1)}) ${description}`;
+                    return `${name.padEnd(12, ' ')}: ${bar} (${value.toFixed(0)})`;
                 }).join('\n');
 
                 return `
 SOUL #${this.tokenId.toString().padStart(5, '0')}
-${state.phase}
+PHASE: ${state.phase}
 
 ================================================================
-| LEDGER STATE              | VIRTUE TECHNOLOGIES            |
-|---------------------------|--------------------------------|
-| Curvature κ: ${curvatureValue.padStart(6,' ')}       | ${virtuesText.split('\n')[0]} |
-| Type:        ${curvatureType.padEnd(17,' ')} | ${virtuesText.split('\n')[1]} |
-| Depth:       ${wisdomDepth.padStart(6,' ')}       | ${virtuesText.split('\n')[2]} |
-| Rebirths:    ${rebirthCycles.padStart(6,' ')}       | ${virtuesText.split('\n')[3]} |
-| Grade:       ${resonanceGrade.padStart(6,' ')}       | ${virtuesText.split('\n')[4]} |
+| LEDGER STATE                 | VIRTUE TECHNOLOGIES            |
+|------------------------------|--------------------------------|
+| Curvature κ: ${String(curvatureValue).padStart(7,' ')}          | ${virtuesText.split('\n')[0]} |
+| State:       ${curvatureType.padEnd(17,' ')} | ${virtuesText.split('\n')[1]} |
+| Depth:       ${state.depth.toFixed(0).padStart(7,' ')}          | ${virtuesText.split('\n')[2]} |
+| Rebirths:    ${String(state.rebirths).padStart(7,' ')}          | ${virtuesText.split('\n')[3]} |
+| Energy:      ${state.energy.toFixed(0).padStart(7,' ')}          | ${virtuesText.split('\n')[4]} |
+| Coherence:   ${coherence.padStart(4,' ')}%            |                                |
 ================================================================
                 `.trim();
             }
@@ -230,20 +249,44 @@ ${state.phase}
                 return descriptions[virtue] || '';
             }
 
-            getResonanceGrade(cri){
-                if(cri>=250) return 'S';
-                if(cri>=175) return 'A';
-                if(cri>=100) return 'B';
-                if(cri>=50) return 'C';
-                return 'D';
-            }
-
             advanceTick() {
-                if (this.isEvolving && this.ticks < 960) {
-                    this.ticks++;
+                if (!this.isEvolving || this.ticks >= 960 || this.energy.cost <= 0) {
+                    if (this.energy.cost <= 0) this.isEvolving = false;
+                    return;
+                };
+                this.ticks++;
+                const kappa = this.ledger.balance;
+
+                // Determine event volatility based on Courage
+                let volatility = 100;
+                if (Math.abs(kappa) > 300) { // High-gradient region
+                    volatility = 100 - (this.virtuePotentials[3] * 7); // Courage reduces chaos
+                }
+
+                // 1. Generate a new Ledger Entry (a recognition event)
+                const debit = this.seededRandom(1, Math.max(5, volatility));
+                const credit = this.seededRandom(1, Math.max(5, volatility));
+                this.ledger.debits += debit;
+                this.ledger.credits += credit;
+                this.energy.cost -= (debit + credit) / 1000; // Transitions cost energy
+
+                // 2. Apply other Virtue Technologies
+                this.applyVirtueTechnologies();
+
+                // 3. Update ledger balance (kappa)
+                this.ledger.balance = Math.round(this.ledger.debits - this.ledger.credits);
+
+                // 4. Update Depth from navigating imbalance
+                if (Math.abs(this.ledger.balance) > 50) this.depth += 0.1;
+
+                // 5. Rebirth check (if high debt and sufficient energy)
+                if (Math.abs(this.ledger.balance) > 1000 && this.energy.cost > 50) {
+                    this.rebirths++;
+                    this.ledger = { debits: 0, credits: 0, balance: 0, entries: [] };
+                    this.energy.cost -= 50; // Rebirth is costly
                 }
             }
-            
+        
             toggleEvolution() {
                 this.isEvolving = !this.isEvolving;
             }
