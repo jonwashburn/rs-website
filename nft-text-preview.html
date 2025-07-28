@@ -211,6 +211,9 @@
                     isEmbodied: this.isEmbodied
                 };
                 
+                const curvatureValue = state.kappa;
+                const curvatureType = state.kappa > 0 ? "Recognition Debt" :
+                                   state.kappa < 0 ? "Recognition Surplus" : "Equilibrium";
                 const coherence = Math.max(0, Math.min(100, (state.energy / 500) * 100)).toFixed(0);
 
                 const karmaScore = this.calculateKarmaScore(state, coherence);
