@@ -211,12 +211,9 @@
                     isEmbodied: this.isEmbodied
                 };
                 
-                const curvatureValue = state.kappa;
-                const curvatureType = state.kappa > 0 ? "Recognition Debt" :
-                                   state.kappa < 0 ? "Recognition Surplus" : "Equilibrium";
                 const coherence = Math.max(0, Math.min(100, (state.energy / 500) * 100)).toFixed(0);
 
-                const karmaScore = this.calculateKarmaScore(state);
+                const karmaScore = this.calculateKarmaScore(state, coherence);
                 const rarity = this.getRarity(karmaScore);
 
                 const virtuesText = VIRTUE_NAMES.map((name, i) => {
@@ -254,7 +251,7 @@ PHASE: ${state.phase}
                 return 'Common';
             }
 
-            calculateKarmaScore(state) {
+            calculateKarmaScore(state, coherence) {
                 if (state.phase === "Decohered (Pattern Dissolved)") return 0;
 
                 const virtueSum = state.virtues.reduce((a, b) => a + b, 0);
