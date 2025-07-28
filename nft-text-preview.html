@@ -143,11 +143,12 @@
                 // Based on CoreTypes.lean: A MoralState has a ledger and energy
                 this.ledger = {
                     entries: [], // We'll just track totals for simplicity
-                    debits: 0,
-                    credits: 0,
+                    debits: this.seededRandom(0, 100),
+                    credits: this.seededRandom(0, 100),
                     balance: 0 // This is kappa, an integer
                 };
-                this.energy = { cost: 500.0 }; // Start with sufficient energy
+                this.ledger.balance = this.ledger.debits - this.ledger.credits;
+                this.energy = { cost: this.seededRandom(400, 600) }; // Start with varied sufficient energy
 
                 // Virtues are potentials (1-10) for applying technologies
                 this.virtuePotentials = [];
@@ -155,8 +156,8 @@
                     this.virtuePotentials[i] = 1 + (this.seededRandom(0, 1000) >> (i * 2)) % 8;
                 }
 
-                this.depth = this.seededRandom(0, 11);
-                this.rebirths = 0;
+                this.depth = this.seededRandom(0, 20);
+                this.rebirths = this.seededRandom(0, 2);
                 this.isEmbodied = this.seededRandom(0, 2) === 1; // 50/50 chance
             }
 
@@ -258,7 +259,9 @@ PHASE: ${state.phase}
                 if (state.phase === "Decohered (Pattern Dissolved)") return 0;
 
                 const virtueSum = state.virtues.reduce((a, b) => a + b, 0);
-                let score = (state.depth * 2) + (parseFloat(coherence) * 1.5) + virtueSum - (state.rebirths * 25);
+                const depthDecay = state.depth * 0.01 * Math.abs(state.kappa); // Counterbalance: Depth decays with current imbalance
+                const effectiveDepth = Math.max(0, state.depth - depthDecay);
+                let score = (effectiveDepth * 2) + (parseFloat(coherence) * 1.5) + virtueSum - (state.rebirths * 25);
                 
                 if (state.phase === "Awakened") {
                     score *= 1.5;
