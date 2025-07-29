@@ -161,6 +161,7 @@
                 this.rebirths = this.seededRandom(0, 2);
                 this.isEmbodied = this.seededRandom(0, 2) === 1; // 50/50 chance
                 this.ticksInBalance = 0; // For training Justice
+                this.recognitionFlow = 0; // For LNAL Give/Regive
             }
 
             generateSeed(tokenId) {
@@ -208,12 +209,13 @@
             generateTextDescription() {
                 const state = {
                     kappa: this.ledger.balance,
-                    phase: this.energy.cost <= 0 ? "Decohered (Pattern Dissolved)" : (this.ticks < TOTAL_TICKS ? "Recognition Breath" : "Awakened"),
+                    phase: this.energy.cost <= 0 ? "Decohered (Pattern Dissolved)" : (this.ticks < TOTAL_TICKS ? `Recognition Breath (Beat ${Math.floor(this.ticks / 80) + 1}/12)` : "Awakened"),
                     depth: this.depth,
                     rebirths: this.rebirths,
                     energy: this.energy.cost,
                     virtues: this.virtuePotentials,
-                    isEmbodied: this.isEmbodied
+                    isEmbodied: this.isEmbodied,
+                    recognitionFlow: this.recognitionFlow
                 };
                 
                 const curvatureValue = state.kappa;
@@ -228,7 +230,7 @@
                 const virtueLines = VIRTUE_NAMES.map((name, i) => {
                     const value = state.virtues[i];
                     const bar = '█'.repeat(Math.round(value)).padEnd(10, '░');
-                    return `${name.padEnd(11, ' ')}: ${bar} (${value.toFixed(0)})`;
+                    return `${name.padEnd(11, ' ')}: ${bar} (${value.toFixed(1)})`;
                 });
 
                 return `
@@ -241,9 +243,9 @@ LEDGER STATE
 Ledger Balance (κ): ${String(curvatureValue).padStart(7,' ')}
 Balance State:      ${curvatureType}
 Embodiment:         ${state.isEmbodied ? 'Yes' : 'No'}
-Depth:              ${state.depth.toFixed(0)}
+Depth:              ${state.depth.toFixed(1)}
 Rebirths:           ${String(state.rebirths)}
-Energy:             ${state.energy.toFixed(0)}
+Energy:             ${state.energy.toFixed(1)}
 Coherence:          ${coherence}%
 
 ================================================================
@@ -274,7 +276,7 @@ Rarity:             ${rarity}
                 const virtueSum = state.virtues.reduce((a, b) => a + b, 0);
                 const depthDecay = state.depth * 0.01 * Math.abs(state.kappa); // Counterbalance: Depth decays with current imbalance
                 const effectiveDepth = Math.max(0, state.depth - depthDecay);
-                let score = (effectiveDepth * 2) + (parseFloat(coherence) * 1.5) + virtueSum - (state.rebirths * 25);
+                let score = (effectiveDepth * 2) + (parseFloat(coherence) * 1.5) + virtueSum - (state.rebirths * 25) + (state.recognitionFlow * 5);
                 
                 if (state.phase === "Awakened") {
                     score *= 1.5;
@@ -325,30 +327,48 @@ Rarity:             ${rarity}
                 // 4. Update Depth from navigating imbalance
                 if (Math.abs(newKappa) > 50) this.depth += 0.1;
 
-                // 5. Rebirth check
+                // 5. Rebirth & Beat Check
                 let hadRebirth = false;
-                if (Math.abs(newKappa) > 1000 && this.energy.cost > 50) {
+                if (this.ticks > 0 && this.ticks % 80 === 0) { // Beat Check
+                    if (Math.abs(newKappa) > 100) { // Failed the cycle
+                        this.energy.cost -= 20; // Energy penalty
+                        // Virtue Atrophy
+                        this.virtuePotentials = this.virtuePotentials.map(v => Math.max(1, v - 0.1));
+                    } else { // Succeeded
+                        this.depth += 5; // Depth bonus
+                        this.energy.cost = Math.min(500, this.energy.cost + 20); // Energy reward
+                    }
+                }
+                if (Math.abs(newKappa) > 1000 && this.energy.cost > 50) { // Rebirth
                     this.rebirths++;
                     this.ledger = { debits: 0, credits: 0, balance: 0, entries: [] };
                     this.energy.cost -= 50; // Rebirth is costly
                     hadRebirth = true;
                 }
 
-                // 6. VIRTUE TRAINING LOGIC
+                // 6. VIRTUE TRAINING & LNAL LOGIC
                 const train = (virtueIndex, amount) => {
                     this.virtuePotentials[virtueIndex] = Math.min(10, this.virtuePotentials[virtueIndex] + amount);
                 };
 
+                // LNAL Give/Regive -> Recognition Flow
+                if (oldKappa < -500) { // High Surplus -> GIVE
+                    this.recognitionFlow++;
+                    this.energy.cost -= 1; // Giving costs a little energy
+                } else if (oldKappa > 500) { // High Debt -> REGIVE
+                    this.recognitionFlow--;
+                }
+
                 // Train Love: successful equilibration (reducing imbalance)
                 if (Math.abs(newKappa) < Math.abs(oldKappa)) {
-                    train(0, 0.05); // Train Love
+                    train(0, 0.2); // Train Love - increased for visibility
                 }
 
                 // Train Justice: maintaining balance
                 if (Math.abs(newKappa) < 50) {
                     this.ticksInBalance++;
                     if (this.ticksInBalance >= 50) {
-                        train(1, 0.5); // Train Justice
+                        train(1, 1.0); // Train Justice - increased for visibility
                         this.ticksInBalance = 0;
                     }
                 } else {
@@ -357,11 +377,16 @@ Rarity:             ${rarity}
 
                 // Train Courage: surviving high stress without rebirth
                 if (Math.abs(oldKappa) > 500 && Math.abs(newKappa) < Math.abs(oldKappa) && !hadRebirth) {
-                    train(3, 0.1); // Train Courage
+                    train(3, 0.3); // Train Courage - increased for visibility
                 }
                 
                 // Train Prudence (Wisdom): tied to depth
-                this.virtuePotentials[2] = Math.min(10, 1 + Math.floor(this.depth / 15));
+                this.virtuePotentials[2] = Math.min(10, 1 + Math.floor(this.depth / 10));
+
+                // Train Temperance: already increased in applyVirtueTechnologies to 0.2
+                if (Math.abs(oldKappa) > 500 && Math.abs(newKappa) < oldKappa) {
+                    train(4, 0.2);
+                }
             }
         
             toggleEvolution() {
