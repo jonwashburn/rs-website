@@ -154,10 +154,10 @@
                 this.virtuePotentials = [];
                 for (let i = 0; i < 5; i++) {
                     // Virtues are now floats to allow for gradual training
-                    this.virtuePotentials[i] = (this.seededRandom(1, 60) / 10).toFixed(1); // Starting range 0.1 to 6.0 for more variance
+                    this.virtuePotentials[i] = this.seededRandom(1, 60) / 10; // Starting range 0.1 to 6.0 for more variance
                 }
 
-                this.depth = this.seededRandom(0, 30).toFixed(1);
+                this.depth = this.seededRandom(0, 30) + (this.seededRandom(0, 10) / 10);
                 this.rebirths = this.seededRandom(0, 3);
                 this.isEmbodied = this.seededRandom(0, 2) === 1; // 50/50 chance
                 this.ticksInBalance = 0; // For training Justice
@@ -333,7 +333,7 @@ Rarity:             ${rarity}
                     if (Math.abs(newKappa) > 100) { // Failed the cycle
                         this.energy.cost -= 20; // Energy penalty
                         // Virtue Atrophy
-                        this.virtuePotentials = this.virtuePotentials.map(v => Math.max(1, parseFloat(v) - 0.1));
+                        this.virtuePotentials = this.virtuePotentials.map(v => Math.max(1, v - 0.1));
                     } else { // Succeeded
                         this.depth += 5; // Depth bonus
                         this.energy.cost = Math.min(500, this.energy.cost + 20); // Energy reward
@@ -348,13 +348,13 @@ Rarity:             ${rarity}
 
                 // 6. VIRTUE TRAINING & LNAL LOGIC & RANDOM FLUCTUATION
                 const train = (virtueIndex, amount) => {
-                    this.virtuePotentials[virtueIndex] = Math.min(10, Math.max(1, parseFloat(this.virtuePotentials[virtueIndex]) + amount)).toFixed(1);
+                    this.virtuePotentials[virtueIndex] = Math.min(10, Math.max(1, this.virtuePotentials[virtueIndex] + amount));
                 };
 
                 // Random fluctuation for variance
                 this.virtuePotentials = this.virtuePotentials.map(v => {
-                    const fluctuation = (this.seededRandom(-10, 10) / 100).toFixed(2);
-                    return Math.min(10, Math.max(1, parseFloat(v) + parseFloat(fluctuation))).toFixed(1);
+                    const fluctuation = this.seededRandom(-10, 10) / 100;
+                    return Math.min(10, Math.max(1, v + fluctuation));
                 });
 
                 // LNAL Give/Regive -> Recognition Flow
@@ -396,7 +396,7 @@ Rarity:             ${rarity}
 
                 // Atrophy during Beat Check failure
                 if (this.ticks > 0 && this.ticks % 80 === 0 && Math.abs(newKappa) > 100) {
-                    this.virtuePotentials = this.virtuePotentials.map(v => Math.max(1, parseFloat(v) - 0.2));
+                    this.virtuePotentials = this.virtuePotentials.map(v => Math.max(1, v - 0.2));
                 }
             }
         
@@ -420,7 +420,9 @@ Rarity:             ${rarity}
         
         function updateDisplay() {
             if (!soul) return;
-            soul.advanceTick();
+            if (soul.isEvolving) {
+                soul.advanceTick();
+            }
             textDisplay.textContent = soul.generateTextDescription();
         }
 
