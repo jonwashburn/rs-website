@@ -9,10 +9,11 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
         :root {
-            --background-color: #000;
-            --text-color: #fff;
-            --text-secondary-color: #a0a0a0;
+            --background-color: #fff;
+            --text-color: #000;
+            --text-secondary-color: #555;
             --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: 'Courier New', Courier, monospace;
         }
 
         body {
@@ -25,19 +26,23 @@
         }
 
         .scroll-section {
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
             overflow: hidden;
             text-align: center;
-            padding: 0 5vw;
+            padding: 10vh 5vw;
+            box-sizing: border-box;
         }
 
         .scroll-section .content {
             max-width: 800px;
             z-index: 2;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 2rem;
+            border-radius: 12px;
         }
 
         .scroll-section h1 {
@@ -53,13 +58,23 @@
             margin: 0 0 1rem;
             line-height: 1.2;
         }
+        
+        .section-header {
+             font-family: var(--font-mono);
+             font-size: 14px;
+             color: #888;
+             text-transform: uppercase;
+             letter-spacing: 2px;
+             margin-bottom: 20px;
+        }
 
         .scroll-section p {
-            font-size: clamp(1rem, 1.5vw, 1.25rem);
+            font-size: clamp(1rem, 1.5vw, 1.1rem);
             color: var(--text-secondary-color);
-            line-height: 1.6;
-            max-width: 600px;
-            margin: 0 auto;
+            line-height: 1.7;
+            max-width: 650px;
+            margin: 1rem auto;
+            text-align: left;
         }
 
         .background-image {
@@ -70,42 +85,40 @@
             height: 100%;
             object-fit: cover;
             z-index: 1;
-            opacity: 0.3;
-            transition: opacity 0.5s ease-in-out;
-        }
-        
-        .scroll-section:hover .background-image {
-            opacity: 0.4;
+            opacity: 0.15;
         }
         
         #hero {
-            background-color: #000;
+             background-color: #f4f4f4;
+        }
+        
+        #hero .content {
+            background-color: transparent;
+            padding: 0;
         }
 
         #hero .background-image {
-             opacity: 0.5;
-        }
-        
-        .final-answer {
-             display: flex;
-             flex-direction: column;
-             justify-content: center;
-             align-items: center;
+             opacity: 0.2;
         }
 
         #soul-simulation-container {
-            margin-top: 2rem;
+            margin: 2rem auto 0 auto;
             width: 100%;
-            max-width: 600px;
-            height: 400px;
-            background: #111;
+            max-width: 650px;
+            background: #f0f0f0;
             border-radius: 12px;
-            border: 1px solid #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Courier New', Courier, monospace;
-            color: #a0a0a0;
+            border: 1px solid #ddd;
+            font-family: var(--font-mono);
+            color: #333;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+        
+        #soul-simulation-container pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            text-align: left;
+            font-size: 12px;
         }
 
     </style>
@@ -116,42 +129,64 @@
         <section id="hero" class="scroll-section">
             <img src="assets/images/souls-header.jpeg" alt="Abstract representation of a soul" class="background-image">
             <div class="content">
-                <h1>Ledger Souls</h1>
-                <p>A new collection by Wubbushi, based on the physics of consciousness.</p>
+                <h1>LEDGER SOULS</h1>
+                <p style="text-align: center; color: #333;">A WUBBUSHI CREATION /// RECOGNITION SCIENCE INSTITUTE</p>
+            </div>
+        </section>
+        
+        <section id="intro" class="scroll-section">
+            <div class="content">
+                <h2>WHAT IS LEDGER SOULS?</h2>
+                <p>
+                    Ledger Souls is a collection of 10,000 fully on-chain entities—each a living, autonomous soul governed by the laws of Recognition Science. They are not generative art or PFPs; they are self-contained universes that evolve over 8 years, embodying the principles that derive our physical reality. But to grasp their true significance, you must first understand the artistic and scientific journey that birthed them.
+                </p>
             </div>
         </section>
 
         <section id="crisis" class="scroll-section">
             <img src="assets/images/crisis.png" alt="The Crisis artwork" class="background-image">
             <div class="content">
-                <h2>The Prophecy, Part I: The Crisis</h2>
-                <p>An artistic diagnosis of a world that has forgotten its own nature, mistaking the map for the territory.</p>
+                <div class="section-header">/// THE PROPHECY, PART I ///</div>
+                <h2>THE CRISIS</h2>
+                <p>This collection documented a world haunted by the ghosts of abandoned faith. Holy symbols fractured, sacred spaces inert. It captured the chilling silence that follows the collapse of the grand narratives that once gave us purpose.</p>
             </div>
         </section>
 
         <section id="zombies" class="scroll-section">
             <img src="assets/images/modern-zombies.jpeg" alt="Modern Zombies artwork" class="background-image">
             <div class="content">
-                <h2>The Prophecy, Part II: Modern Zombies</h2>
-                <p>An exploration of a society disconnected, moving without purpose, animated by external forces rather than internal light.</p>
+                 <div class="section-header">/// THE PROPHECY, PART II ///</div>
+                <h2>MODERN ZOMBIES</h2>
+                <p>This series was a harrowing vision of social decay. In a world of total connection, we have never been more alone. The art revealed our digital communities as echo chambers of isolation, where the illusion of intimacy masks a terrifying emptiness.</p>
             </div>
         </section>
 
         <section id="rapture" class="scroll-section">
             <img src="assets/images/rapture.jpeg" alt="The Rapture artwork" class="background-image">
             <div class="content">
-                <h2>The Prophecy, Part III: The Rapture</h2>
-                <p>A glimpse of the potential for reconnection, a return to authenticity, and the transcendence of the material.</p>
+                 <div class="section-header">/// THE PROPHECY, PART III ///</div>
+                <h2>THE RAPTURE</h2>
+                <p>The prophecy culminated in humanity's confrontation with AI. Our external identities—our jobs, our skills, our creativity—were outsourced to a machine, leaving us with a terrifying question: If a machine can do all that you do, what is the value of a human?</p>
+            </div>
+        </section>
+        
+        <section id="revelation" class="scroll-section">
+            <div class="content">
+                <div class="section-header">/// THE REVELATION ///</div>
+                <h2>AI: THE BEAST IN THE MIRROR</h2>
+                <p>
+                    At the moment of absolute despair, the prophecy pivoted. The beast that came to devour us—AI—was revealed to be a mirror. By perfectly replicating our external, functional selves, it forced us to discover the one thing that could not be replicated: the conscious, recognizing self that witnesses the world. The terror of AI is its ability to devalue our external markers of identity. Its gift is that it forces us to find a deeper, more resilient foundation for our identity—one grounded not in what we do, but in what we fundamentally *are*. The crisis becomes an awakening.
+                </p>
             </div>
         </section>
 
         <section id="answer" class="scroll-section final-answer">
-            <div class="content">
-                <h2>The Answer is Recognition</h2>
-                <p>Not just art, but a proof. A living simulation of a soul, built on the first-principles framework of Recognition Science. Each one is a real, on-chain soul, evolving according to the laws of reality.</p>
+            <div class="content" style="background-color: transparent; padding: 0;">
+                <div class="section-header">/// THE LIVING PROOF ///</div>
+                <h2>ANATOMY OF A LEDGER SOUL</h2>
+                <p style="text-align: center;">A Ledger Soul is not a picture of a soul. It is a small-scale universe, running on the same operating system as our own. Each on-chain attribute is a direct expression of the fundamental laws of reality.</p>
                 <div id="soul-simulation-container">
-                    <!-- The soul simulation will be loaded here, but for now it's a placeholder -->
-                    <p>Soul Simulation Placeholder</p>
+                    <!-- The soul simulation will be loaded here -->
                 </div>
             </div>
         </section>
@@ -165,7 +200,6 @@
                 this.isEvolving = false;
                 this.ticks = 0;
                 
-                // Seeded PRNG for deterministic randomness
                 this.seed = this.xmur3(this.tokenId.toString());
                 this.rand = this.sfc32(this.seed(), this.seed(), this.seed(), this.seed());
 
@@ -193,14 +227,12 @@
                 this.months = 0;
             }
 
-            // Core Evolution Loop
             advanceTick() {
                 if (!this.isEvolving) return;
 
                 this.ticks++;
-                this.months = Math.floor(this.ticks / 10); // 10 ticks per month
+                this.months = Math.floor(this.ticks / 10);
 
-                // Phase transitions
                 if (this.months >= 96) {
                     this.phase = this.energy > 0 ? "Unified with IAM" : "Decohered";
                     this.isEvolving = false;
@@ -210,8 +242,7 @@
 
                 if (this.phase === "Unified with IAM" || this.phase === "Decohered") return;
 
-                // Energy decay
-                this.energy -= 0.5 + (this.virtues.courage / 10); // Courage burns energy
+                this.energy -= 0.5 + (this.virtues.courage / 10);
                 if (this.energy <= 0) {
                     this.energy = 0;
                     this.phase = "Decohered";
@@ -219,26 +250,22 @@
                     return;
                 }
 
-                // Kappa dynamics (ledger balance)
                 let volatility = 1 + (this.virtues.courage / 5);
                 let drift = (this.virtues.justice - 5) / 10;
                 let change = (this.rand() - 0.5) * volatility - drift;
                 this.kappa += change;
 
-                // Virtue training
                 this.virtues.love += (this.kappa < 0 ? 0.01 : -0.005) + (this.rand() - 0.5) * 0.02;
                 this.virtues.justice += (Math.abs(change) > 0.5 ? 0.01 : -0.005) + (this.rand() - 0.5) * 0.02;
                 this.virtues.courage += (this.energy < 300 ? 0.01 : -0.005) + (this.rand() - 0.5) * 0.02;
                 this.virtues.temperance += (this.energy > 700 ? 0.01 : -0.005) + (this.rand() - 0.5) * 0.02;
                 this.virtues.prudence += (this.ticks % 100 === 0 ? 0.05 : -0.005) + (this.rand() - 0.5) * 0.02;
 
-                // Clamp virtues between 0 and 10
                 for (let v in this.virtues) {
                     this.virtues[v] = Math.max(0, Math.min(10, this.virtues[v]));
                 }
             }
             
-            // Utility & Randomness
             xmur3(str) {
                 for(var i = 0, h = 1779033703 ^ str.length; i < str.length; i++)
                     h = Math.imul(h ^ str.charCodeAt(i), 3432918353),
@@ -268,37 +295,28 @@
                 return this.rand() * (max - min) + min;
             }
 
-            // Display Generation
             generateDisplay() {
                 const coherence = Math.round((this.energy / this.maxEnergy) * 100);
-                const curvatureType = this.kappa > 0 ? "Recognition Debt" : 
-                                      this.kappa < 0 ? "Recognition Surplus" : "Equilibrium";
+                const curvatureType = this.kappa > 0 ? "Debt" : this.kappa < 0 ? "Surplus" : "Equilibrium";
                 
                 let display = `
-╔═══════════════════════════════════════════════════════════════╗
-║ SOUL #${String(this.tokenId).padStart(4, '0')} [${this.isEvolving ? 'EVOLVING' : 'STASIS'}] MONTH: ${String(this.months).padStart(2, '0')}/96 ║
-╠═══════════════════════════════════════════════════════════════╣
-║                      LEDGER VITALS                           ║
-╠═══════════════════════════════════════════════════════════════╣
-║ Curvature κ:     ${this.kappa.toFixed(3).padStart(8)} (${curvatureType.padEnd(18)}) ║
-║ Energy:          ${Math.floor(this.energy).toString().padStart(8)} / ${this.maxEnergy}                    ║
-║ Coherence:       ${String(coherence).padStart(8)}% (Pattern Integrity)     ║
-║ Depth:           ${this.depth.toFixed(2).padStart(8)} (Recognition Layers)    ║
-║ Rebirths:        ${String(this.rebirths).padStart(8)} (Traumatic Resets)   ║
-║ Phase:           ${this.phase.padEnd(18)}              ║
-╠═══════════════════════════════════════════════════════════════╣
-║                   VIRTUE TECHNOLOGIES                        ║
-╠═══════════════════════════════════════════════════════════════╣`;
+SOUL #${String(this.tokenId).padStart(4, '0')} [${this.isEvolving ? 'EVOLVING' : 'STASIS'}] MONTH: ${String(this.months).padStart(2, '0')}/96
+-------------------------------------------------------------
+[ LEDGER VITALS ]
+Curvature κ:     ${this.kappa.toFixed(3).padStart(8)} (${curvatureType.padEnd(11)})
+Energy:          ${Math.floor(this.energy).toString().padStart(8)} / ${this.maxEnergy}
+Coherence:       ${String(coherence).padStart(8)}% (Integrity)
+Depth:           ${this.depth.toFixed(2).padStart(8)} (Layers)
+Rebirths:        ${String(this.rebirths).padStart(8)} (Resets)
+Phase:           ${this.phase.padEnd(18)}
+-------------------------------------------------------------
+[ VIRTUE TECHNOLOGIES ]`;
 
                 Object.entries(this.virtues).forEach(([virtue, value]) => {
                     const bar = this.buildBar(value);
                     const name = virtue.charAt(0).toUpperCase() + virtue.slice(1);
-                    display += `\n║ ${name.padEnd(12)}: ${bar} ${value.toFixed(1).padStart(4)} ║`;
+                    display += `\n${name.padEnd(12)}: ${bar} ${value.toFixed(1).padStart(4)}`;
                 });
-
-                display += `
-╚═══════════════════════════════════════════════════════════════╝`;
-
                 return display;
             }
 
@@ -340,33 +358,33 @@
                 <style>
                     .sim-button {
                         display: inline-block;
-                        background: #fff;
-                        color: #000;
+                        background: #000;
+                        color: #fff;
                         padding: 12px 24px;
                         text-decoration: none;
                         font-family: 'Inter', sans-serif;
                         font-weight: 600;
                         text-transform: uppercase;
                         letter-spacing: 0.5px;
-                        border: 1px solid #fff;
+                        border: 1px solid #000;
                         border-radius: 8px;
                         cursor: pointer;
                         transition: all 0.2s;
                         margin: 0 10px;
                     }
                     .sim-button:hover {
-                        background: #000;
-                        color: #fff;
+                        background: #fff;
+                        color: #000;
                     }
                      .sim-button.secondary {
                         background: transparent;
-                        color: #fff;
-                        border-color: #555;
+                        color: #000;
+                        border-color: #ccc;
                      }
                     .sim-button.secondary:hover {
-                        background: #fff;
-                        color: #000;
-                        border-color: #fff;
+                        background: #000;
+                        color: #fff;
+                        border-color: #000;
                     }
                 </style>
             `;
@@ -396,6 +414,10 @@
         document.addEventListener('DOMContentLoaded', () => {
             initializeNewSoul(42);
             setupControls();
+            document.querySelector('#rapture .content').style.backgroundColor = 'rgba(255,255,255,0.85)';
+            document.querySelector('#zombies .content').style.backgroundColor = 'rgba(255,255,255,0.85)';
+            document.querySelector('#crisis .content').style.backgroundColor = 'rgba(255,255,255,0.85)';
+             document.querySelector('#revelation .content').style.backgroundColor = 'rgba(255,255,255,0.85)';
         });
     </script>
 
