@@ -150,15 +150,17 @@
                 this.ledger.balance = this.ledger.debits - this.ledger.credits;
                 this.energy = { cost: this.seededRandom(400, 600) }; // Start with varied sufficient energy
 
-                // Virtues are potentials (1-10) for applying technologies
+                // Virtues are potentials (1-10) for applying technologies, now dynamic
                 this.virtuePotentials = [];
                 for (let i = 0; i < 5; i++) {
-                    this.virtuePotentials[i] = 1 + (this.seededRandom(0, 1000) >> (i * 2)) % 8;
+                    // Virtues are now floats to allow for gradual training
+                    this.virtuePotentials[i] = 1.0 + (this.seededRandom(0, 1000) >> (i * 2)) % 8;
                 }
 
                 this.depth = this.seededRandom(0, 20);
                 this.rebirths = this.seededRandom(0, 2);
                 this.isEmbodied = this.seededRandom(0, 2) === 1; // 50/50 chance
+                this.ticksInBalance = 0; // For training Justice
             }
 
             generateSeed(tokenId) {
@@ -198,6 +200,8 @@
                      this.ledger.debits = Math.floor(this.ledger.debits * 0.95);
                      this.ledger.credits = Math.floor(this.ledger.credits * 0.95);
                      this.energy.cost -= 10; // Forgiveness is costly
+                     // Train Temperance for successful application
+                     this.virtuePotentials[4] = Math.min(10, this.virtuePotentials[4] + 0.1);
                  }
             }
         
@@ -296,7 +300,7 @@ Rarity:             ${rarity}
                     return;
                 };
                 this.ticks++;
-                const kappa = this.ledger.balance;
+                const oldKappa = this.ledger.balance;
 
                 // Determine event volatility based on Courage
                 let volatility = this.isEmbodied ? 150 : 50; // Embodied souls experience more volatility
@@ -316,16 +320,48 @@ Rarity:             ${rarity}
 
                 // 3. Update ledger balance (kappa)
                 this.ledger.balance = Math.round(this.ledger.debits - this.ledger.credits);
+                const newKappa = this.ledger.balance;
 
                 // 4. Update Depth from navigating imbalance
-                if (Math.abs(this.ledger.balance) > 50) this.depth += 0.1;
+                if (Math.abs(newKappa) > 50) this.depth += 0.1;
 
-                // 5. Rebirth check (if high debt and sufficient energy)
-                if (Math.abs(this.ledger.balance) > 1000 && this.energy.cost > 50) {
+                // 5. Rebirth check
+                let hadRebirth = false;
+                if (Math.abs(newKappa) > 1000 && this.energy.cost > 50) {
                     this.rebirths++;
                     this.ledger = { debits: 0, credits: 0, balance: 0, entries: [] };
                     this.energy.cost -= 50; // Rebirth is costly
+                    hadRebirth = true;
                 }
+
+                // 6. VIRTUE TRAINING LOGIC
+                const train = (virtueIndex, amount) => {
+                    this.virtuePotentials[virtueIndex] = Math.min(10, this.virtuePotentials[virtueIndex] + amount);
+                };
+
+                // Train Love: successful equilibration (reducing imbalance)
+                if (Math.abs(newKappa) < Math.abs(oldKappa)) {
+                    train(0, 0.05); // Train Love
+                }
+
+                // Train Justice: maintaining balance
+                if (Math.abs(newKappa) < 50) {
+                    this.ticksInBalance++;
+                    if (this.ticksInBalance >= 50) {
+                        train(1, 0.5); // Train Justice
+                        this.ticksInBalance = 0;
+                    }
+                } else {
+                    this.ticksInBalance = 0;
+                }
+
+                // Train Courage: surviving high stress without rebirth
+                if (Math.abs(oldKappa) > 500 && Math.abs(newKappa) < Math.abs(oldKappa) && !hadRebirth) {
+                    train(3, 0.1); // Train Courage
+                }
+                
+                // Train Prudence (Wisdom): tied to depth
+                this.virtuePotentials[2] = Math.min(10, 1 + Math.floor(this.depth / 15));
             }
         
             toggleEvolution() {
