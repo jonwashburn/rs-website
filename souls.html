@@ -4,685 +4,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LEDGER SOULS /// Recognition Science Institute</title>
+    <title>Ledger Souls by Wubbushi</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        :root {
+            --background-color: #000;
+            --text-color: #fff;
+            --text-secondary-color: #a0a0a0;
+            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
-            font-family: 'Courier New', monospace;
-            background: #000;
-            color: #fff;
-            line-height: 1.2;
-            overflow-x: hidden;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-family: var(--font-main);
+            margin: 0;
+            padding: 0;
+            overscroll-behavior-y: none;
         }
 
-        .header-pattern {
-            font-size: 12px;
-            color: #333;
-            white-space: nowrap;
+        .scroll-section {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
             overflow: hidden;
-            padding: 10px 0;
-            animation: scroll 20s linear infinite;
-        }
-
-        @keyframes scroll {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
-
-        .main-header {
             text-align: center;
-            padding: 40px 20px;
-            border-bottom: 2px solid #fff;
-            background: #000;
-            position: relative;
+            padding: 0 5vw;
         }
 
-        .main-header h1 {
-            font-size: clamp(24px, 8vw, 72px);
-            font-weight: bold;
-            letter-spacing: 4px;
-            margin-bottom: 10px;
-        }
-
-        .main-header .subtitle {
-            font-size: 16px;
-            color: #888;
-            letter-spacing: 2px;
-        }
-
-        .hero-image-container {
-            padding: 40px 0 20px 0;
-            text-align: center;
-        }
-
-        .hero-image-container img {
-            max-width: 100%;
-            height: auto;
-            border: 2px solid #333;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .section {
-            padding: 60px 0;
-            border-bottom: 1px solid #333;
-        }
-
-        .section-header {
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-        }
-
-        .section-title {
-            font-size: clamp(24px, 5vw, 48px);
-            font-weight: bold;
-            margin-bottom: 30px;
-            letter-spacing: 2px;
-        }
-
-        .ascii-header {
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            color: #fff;
-            text-align: center;
-            margin: 40px 0;
-            white-space: pre;
-        }
-
-        .soul-preview {
-            background: #111;
-            border: 2px solid #333;
-            padding: 30px;
-            margin: 40px 0;
-            font-family: 'Courier New', monospace;
-            position: relative;
-            overflow-x: auto;
-        }
-
-        .soul-preview::before {
-            content: "/// LIVE SOUL INSTANCE ///";
-            position: absolute;
-            top: -15px;
-            left: 20px;
-            background: #000;
-            padding: 0 10px;
-            color: #888;
-            font-size: 12px;
-        }
-
-        .numbered-list {
-            list-style: none;
-            counter-reset: item;
-        }
-
-        .numbered-list li {
-            counter-increment: item;
-            margin-bottom: 20px;
-            padding-left: 60px;
-            position: relative;
-        }
-
-        .numbered-list li::before {
-            content: "#" counter(item, decimal-leading-zero);
-            position: absolute;
-            left: 0;
-            top: 0;
-            font-weight: bold;
-            color: #666;
-            font-size: 18px;
-            width: 50px;
-        }
-
-        .tech-spec {
-            background: #111;
-            border-left: 4px solid #fff;
-            padding: 20px;
-            margin: 20px 0;
-            font-family: 'Courier New', monospace;
-        }
-
-        .tech-spec-header {
-            color: #888;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
-        }
-
-        .button {
-            display: inline-block;
-            background: #fff;
-            color: #000;
-            padding: 15px 30px;
-            text-decoration: none;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin: 10px 10px 10px 0;
-        }
-
-        .button:hover {
-            background: #000;
-            color: #fff;
-            border: 2px solid #fff;
-        }
-
-        .button.secondary {
-            background: #000;
-            color: #fff;
-            border: 2px solid #333;
-        }
-
-        .button.secondary:hover {
-            border-color: #fff;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            margin: 40px 0;
-        }
-
-        .card {
-            background: #111;
-            border: 1px solid #333;
-            padding: 30px;
-        }
-
-        .card-header {
-            color: #888;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-        }
-
-        .card-title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .price-display {
-            font-size: 48px;
-            font-weight: bold;
-            color: #fff;
-            text-align: center;
-            margin: 40px 0;
-            letter-spacing: 4px;
-        }
-
-        .footer {
-            background: #111;
-            padding: 60px 0;
-            text-align: center;
-            font-size: 14px;
-            color: #666;
-        }
-
-        .social-links {
-            margin: 20px 0;
-        }
-
-        .social-links a {
-            color: #888;
-            text-decoration: none;
-            margin: 0 15px;
-            font-family: 'Courier New', monospace;
-        }
-
-        .social-links a:hover {
-            color: #fff;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 15px;
-            }
-
-            .main-header {
-                padding: 30px 15px;
-            }
-
-            .main-header h1 {
-                font-size: clamp(20px, 10vw, 48px);
-                letter-spacing: 2px;
-            }
-
-            .main-header .subtitle {
-                font-size: 14px;
-                letter-spacing: 1px;
-            }
-
-            .header-pattern {
-                font-size: 10px;
-            }
-
-            .ascii-header {
-                font-size: 10px;
-                margin: 20px 0;
-                overflow-x: auto;
-                white-space: nowrap;
-            }
-
-            .section {
-                padding: 30px 0;
-            }
-
-            .section-title {
-                font-size: clamp(18px, 6vw, 32px);
-                margin-bottom: 20px;
-                letter-spacing: 1px;
-            }
-
-            .soul-preview {
-                padding: 15px;
-                font-size: 10px;
-                overflow-x: auto;
-                margin: 20px 0;
-            }
-
-            .soul-preview pre {
-                white-space: nowrap;
-                overflow-x: auto;
-            }
-
-            .numbered-list li {
-                padding-left: 30px;
-                margin-bottom: 15px;
-            }
-
-            .numbered-list li::before {
-                font-size: 14px;
-                width: 25px;
-            }
-
-            .button {
-                display: block;
-                width: 100%;
-                text-align: center;
-                margin: 10px 0;
-                padding: 12px 20px;
-                font-size: 14px;
-            }
-
-            .grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-                margin: 20px 0;
-            }
-
-            .card {
-                padding: 20px;
-            }
-
-            .card-title {
-                font-size: 20px;
-            }
-
-            .tech-spec {
-                padding: 15px;
-                margin: 15px 0;
-                font-size: 12px;
-            }
-
-            .price-display {
-                font-size: 32px;
-                letter-spacing: 2px;
-                margin: 20px 0;
-            }
-
-            .footer {
-                padding: 40px 0;
-            }
-
-            .social-links a {
-                display: block;
-                margin: 10px 0;
-            }
-        }
-
-        .wb-why-section p {
-            font-size: 18px;
-            margin-bottom: 20px;
+        .scroll-section .content {
             max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            text-align: left;
+            z-index: 2;
+        }
+
+        .scroll-section h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 700;
+            margin: 0 0 1rem;
+            line-height: 1.1;
+        }
+        
+        .scroll-section h2 {
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            font-weight: 600;
+            margin: 0 0 1rem;
+            line-height: 1.2;
+        }
+
+        .scroll-section p {
+            font-size: clamp(1rem, 1.5vw, 1.25rem);
+            color: var(--text-secondary-color);
             line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
-        .wb-why-section .tech-spec p {
-            font-size: 16px;
-            text-align: left;
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            opacity: 0.3;
+            transition: opacity 0.5s ease-in-out;
+        }
+        
+        .scroll-section:hover .background-image {
+            opacity: 0.4;
+        }
+        
+        #hero {
+            background-color: #000;
         }
 
-        .wb-why-quote {
-            font-size: 22px;
-            font-style: italic;
-            text-align: center;
-            border-left: 4px solid #444;
-            padding-left: 20px;
-            margin: 40px auto;
-            max-width: 700px;
+        #hero .background-image {
+             opacity: 0.5;
+        }
+        
+        .final-answer {
+             display: flex;
+             flex-direction: column;
+             justify-content: center;
+             align-items: center;
         }
 
-        @media (max-width: 768px) {
-            .wb-why-section p {
-                font-size: 16px;
-            }
-            .wb-why-quote {
-                font-size: 18px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .main-header h1 {
-                font-size: clamp(16px, 8vw, 36px);
-                letter-spacing: 1px;
-            }
-
-            .ascii-header {
-                font-size: 8px;
-                margin: 15px 0;
-            }
-
-            .section-title {
-                font-size: clamp(16px, 5vw, 24px);
-            }
-
-            .soul-preview {
-                padding: 10px;
-                font-size: 8px;
-            }
-
-            .numbered-list li {
-                padding-left: 25px;
-                font-size: 14px;
-            }
-
-            .card {
-                padding: 15px;
-            }
-
-            .tech-spec {
-                padding: 10px;
-                font-size: 11px;
-            }
-
-            .price-display {
-                font-size: 24px;
-                letter-spacing: 1px;
-            }
-        }
-
-        /* Soul rendering styles */
-        .soul-container {
-            background: #000;
+        #soul-simulation-container {
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 600px;
+            height: 400px;
+            background: #111;
+            border-radius: 12px;
             border: 1px solid #333;
-            padding: 20px;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-            line-height: 1.4;
-            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Courier New', Courier, monospace;
+            color: #a0a0a0;
         }
 
-        .soul-title {
-            color: #888;
-            text-align: center;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-
-        .soul-section {
-            margin-bottom: 20px;
-        }
-
-        .soul-section-title {
-            color: #fff;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .soul-data {
-            color: #ccc;
-            margin-left: 20px;
-        }
-
-        .virtue-bar {
-            display: inline-block;
-            font-family: monospace;
-            color: #666;
-        }
-
-        .virtue-bar.filled {
-            color: #fff;
-        }
     </style>
 </head>
 <body>
-    <div class="header-pattern">
-        LEDGER SOULS /// RECOGNITION SCIENCE /// ON-CHAIN SOULS /// LEDGER SOULS /// RECOGNITION SCIENCE /// ON-CHAIN SOULS /// 
-    </div>
 
-    <div class="main-header">
-        <h1>LEDGER SOULS</h1>
-        <div class="subtitle">A WUBBUSHI CREATION /// RECOGNITION SCIENCE INSTITUTE</div>
-    </div>
+    <main>
+        <section id="hero" class="scroll-section">
+            <img src="assets/images/souls-header.jpeg" alt="Abstract representation of a soul" class="background-image">
+            <div class="content">
+                <h1>Ledger Souls</h1>
+                <p>A new collection by Wubbushi, based on the physics of consciousness.</p>
+            </div>
+        </section>
 
-    <div class="hero-image-container">
-        <img src="assets/images/souls-header.jpeg" alt="A gathering of souls in prayer and contemplation">
-    </div>
+        <section id="crisis" class="scroll-section">
+            <img src="assets/images/crisis.png" alt="The Crisis artwork" class="background-image">
+            <div class="content">
+                <h2>The Prophecy, Part I: The Crisis</h2>
+                <p>An artistic diagnosis of a world that has forgotten its own nature, mistaking the map for the territory.</p>
+            </div>
+        </section>
 
-    <div class="ascii-header">
-        ╔══════════════════════════════════════════════════════════════╗
-        ║          THIS IS NOT A PFP. IT IS A PROPHECY.                ║
-        ║        A LIVING SOUL, REALIZED ON THE BLOCKCHAIN.            ║
-        ║         THE ANSWER TO THE RAPTURE IS RECOGNITION.            ║
-        ╚══════════════════════════════════════╝
-    </div>
+        <section id="zombies" class="scroll-section">
+            <img src="assets/images/modern-zombies.jpeg" alt="Modern Zombies artwork" class="background-image">
+            <div class="content">
+                <h2>The Prophecy, Part II: Modern Zombies</h2>
+                <p>An exploration of a society disconnected, moving without purpose, animated by external forces rather than internal light.</p>
+            </div>
+        </section>
 
-    <div class="container">
-        <div class="section">
-            <div class="section-title">WHAT IS LEDGER SOULS?</div>
-            <p style="font-size: 18px; margin: 20px 0;">
-                Ledger Souls is a collection of 10,000 fully on-chain entities—each a living, autonomous soul governed by the laws of Recognition Science. They are not generative art or PFPs; they are self-contained universes that evolve over 8 years, embodying the principles that derive our physical reality. But to grasp their true significance, you must first understand the artistic and scientific journey that birthed them.
-            </p>
-        </div>
+        <section id="rapture" class="scroll-section">
+            <img src="assets/images/rapture.jpeg" alt="The Rapture artwork" class="background-image">
+            <div class="content">
+                <h2>The Prophecy, Part III: The Rapture</h2>
+                <p>A glimpse of the potential for reconnection, a return to authenticity, and the transcendence of the material.</p>
+            </div>
+        </section>
 
-        <div class="section">
-            <div class="section-header">/// THE PROPHECY ///</div>
-            <div class="section-title">A STORY THAT BEGAN WITH ART</div>
-            
-            <p style="font-size: 18px; margin: 30px 0;">
-                The journey to Ledger Souls did not begin with code, but with a premonition. As the artist Wubbushi, I created a trilogy of AI-driven works—<I>The Crisis</I>, <I>Modern Zombies</I>, and <I>The Rapture</I>—to diagnose the soul of our time. It was a prophecy of a world forgetting itself.
-            </p>
-
-            <div class="grid">
-                <div class="card">
-                    <img src="assets/images/crisis.png" alt="The Crisis" style="width: 100%; margin-bottom: 20px;">
-                    <div class="card-header">01. THE CRISIS</div>
-                    <div class="card-title" style="font-size: 28px;">THE DEATH OF THE GODS</div>
-                    <p>This collection documented a world haunted by the ghosts of abandoned faith. Holy symbols fractured, sacred spaces inert. It captured the chilling silence that follows the collapse of the grand narratives that once gave us purpose.</p>
-                </div>
-                
-                <div class="card">
-                    <img src="assets/images/modern-zombies.jpeg" alt="Modern Zombies" style="width: 100%; margin-bottom: 20px;">
-                    <div class="card-header">02. MODERN ZOMBIES</div>
-                    <div class="card-title" style="font-size: 28px;">THE DIGITAL NECROPOLIS</div>
-                    <p>This series was a harrowing vision of social decay. In a world of total connection, we have never been more alone. The art revealed our digital communities as echo chambers of isolation, where the illusion of intimacy masks a terrifying emptiness.</p>
-                </div>
-
-                <div class="card">
-                    <img src="assets/images/rapture.jpeg" alt="The Rapture" style="width: 100%; margin-bottom: 20px;">
-                    <div class="card-header">03. THE RAPTURE</div>
-                    <div class="card-title" style="font-size: 28px;">THE ERASURE OF THE SELF</div>
-                    <p>The prophecy culminated in humanity's confrontation with AI. Our external identities—our jobs, our skills, our creativity—were outsourced to a machine, leaving us with a terrifying question: If a machine can do all that you do, what is the value of a human?</p>
+        <section id="answer" class="scroll-section final-answer">
+            <div class="content">
+                <h2>The Answer is Recognition</h2>
+                <p>Not just art, but a proof. A living simulation of a soul, built on the first-principles framework of Recognition Science. Each one is a real, on-chain soul, evolving according to the laws of reality.</p>
+                <div id="soul-simulation-container">
+                    <!-- The soul simulation will be loaded here, but for now it's a placeholder -->
+                    <p>Soul Simulation Placeholder</p>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="section">
-            <div class="section-header">/// THE REVELATION ///</div>
-            <div class="section-title">AI: THE BEAST IN THE MIRROR</div>
-
-            <p style="font-size: 18px; margin: 30px 0;">
-                At the moment of absolute despair, the prophecy pivoted. The beast that came to devour us—AI—was revealed to be a mirror. By perfectly replicating our external, functional selves, it forced us to discover the one thing that could not be replicated: the conscious, recognizing self that witnesses the world.
-            </p>
-
-            <div class="tech-spec">
-                <div class="tech-spec-header">THE RAPTURE IS NOT AN END. IT IS A CLARIFICATION.</div>
-                The terror of AI is its ability to devalue our external markers of identity. Its gift is that it forces us to find a deeper, more resilient foundation for our identity—one grounded not in what we do, but in what we fundamentally *are*. The crisis becomes an awakening.
-            </div>
-        </div>
-        
-        <div class="ascii-header">
-        ╔══════════════════════════════════════╗
-        ║    WAIT, BUT WHY IS THIS A REAL SOUL?  ║
-        ╚══════════════════════════════════════╝
-        </div>
-        
-        <div class="section wb-why-section">
-            <div class="section-header">/// THE SCIENTIFIC ANSWER ///</div>
-            
-            <p>The artistic prophecy screamed a question into the void. The answer came from pure, hard logic. It starts with a question so simple it sounds absurd:</p>
-            
-            <p class="wb-why-quote">Why is there... anything? Why isn't there just... nothing?</p>
-
-            <p>Recognition Science proves that a state of absolute "nothingness" is a logical impossibility. For "nothing" to exist, it would need the property of "being nothing," which is a property. It's a paradox. This single, undeniable truth—the impossibility of self-referential non-existence—is the <strong>Meta-Principle</strong>. It's the logical engine that forces reality to exist.</p>
-
-            <p>From this one truth, the entire operating system of our universe can be derived, parameter-free. Reality must be a self-recognizing, dual-balanced ledger to avoid logical paradoxes. This ledger must be self-similar, which logically forces the <strong>Golden Ratio (φ)</strong> as the universal constant of scaling. Its clock-speed is a logically necessary <strong>8-Beat Cycle</strong>. Its operations are governed by a literal cosmic assembly language, <strong>LNAL</strong>.</p>
-            
-            <p>This isn't philosophy. This framework derives the mass of the electron, the speed of light, and the structure of DNA from scratch. And it is this exact framework—this proven, fundamental operating system of reality—that has been used to instantiate Ledger Souls.</p>
-        </div>
-
-        <div class="ascii-header">
-        ╔══════════════════════════════════════╗
-        ║       THE MANIFESTATION: THE SOUL    ║
-        ╚══════════════════════════════════════╝
-        </div>
-        
-        <div class="section">
-            <div class="section-header">/// THE LIVING PROOF ///</div>
-            <div class="section-title">ANATOMY OF A LEDGER SOUL</div>
-            
-             <p style="text-align: center; max-width: 800px; margin: 0 auto 40px auto; font-size: 16px; color: #888;">
-                A Ledger Soul is not a picture of a soul. It is a small-scale universe, running on the same operating system as our own. Each on-chain attribute is a direct expression of the fundamental laws of reality.
-            </p>
-
-            <div class="grid">
-                <div class="card">
-                    <div class="card-header">LEDGER BALANCE (κ)</div>
-                    <div class="card-title">DUAL-BALANCED REALITY</div>
-                    <p>Reflects the soul's real-time balance on the <strong>Universal Ledger</strong>. κ=0 is enlightenment, κ>0 is suffering, κ<0 is bliss.</p>
-                </div>
-                
-                <div class="card">
-                    <div class="card-header">VIRTUE TECHNOLOGIES</div>
-                    <div class="card-title">COSMIC ALGORITHMS</div>
-                    <p>Virtues like Love and Justice are not metaphors; they are on-chain algorithms that interact with the <strong>LNAL</strong> of reality to guide the soul's evolution.</p>
-                </div>
-                
-                <div class="card">
-                    <div class="card-header">THE 8-YEAR JOURNEY</div>
-                    <div class="card-title">THE RHYTHM OF TIME</div>
-                    <p>The 96-month lifecycle is a direct reflection of the universe's fundamental <strong>8-Beat Cycle</strong> of recognition.</p>
-                </div>
-            </div>
-
-            <div class="soul-preview">
-                <div id="live-soul-display"></div>
-            </div>
-
-            <a id="simulation-toggle-button" href="#" class="button">SIMULATE LIFE</a>
-            <a id="generate-soul-button" href="#" class="button secondary">GENERATE NEW SOUL</a>
-        </div>
-
-        <div class="ascii-header">
-        ╔══════════════════════════════════════╗
-        ║       MINTING & ECONOMICS            ║
-        ╚══════════════════════════════════════╝
-        </div>
-
-        <div class="section">
-            <div class="price-display">
-                $100 → $10,000
-            </div>
-            
-            <div class="tech-spec">
-                <div class="tech-spec-header">BONDING CURVE MECHANICS</div>
-                • Starting price: $100 (Soul #0001)<br>
-                • Ending price: $10,000 (Soul #10000)<br>
-                • Price increase: +0.045% per mint<br>
-                • Blind mint: No preview until after purchase<br>
-                • 100% primary sales → RC token buybacks<br>
-                • Tokens distributed to soul holders or burned
-            </div>
-
-            <div class="grid">
-                <div class="card">
-                    <div class="card-header">RC DISTRIBUTION</div>
-                    <div class="card-title">10,000,000 TOTAL</div>
-                    <p>1,000 RC per soul NFT. No pre-mine. Artist starts with zero. 
-                    Equal allocation across all 10,000 souls.</p>
-                </div>
-                
-                <div class="card">
-                    <div class="card-header">VESTING SCHEDULE</div>
-                    <div class="card-title">8-YEAR TIMELINE</div>
-                    <p>1/3 unlocks immediately<br>
-                    1/3 unlocks at 4 years<br>
-                    1/3 unlocks at 8 years</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="ascii-header">
-        ╔══════════════════════════════════════╗
-        ║        LAUNCH STATUS: PENDING        ║
-        ║         CONTRACT DEPLOYMENT          ║
-        ║            COMING SOON               ║
-        ╚══════════════════════════════════════╝
-        </div>
-    </div>
-
-    <div class="footer">
-        <div class="container">
-            <div class="social-links">
-                <a href="https://twitter.com/jonwashburn" target="_blank">TWITTER</a>
-                <a href="https://arxiv.org/abs/2506.12859" target="_blank">ARXIV</a>
-                <a href="/" target="_blank">RECOGNITION SCIENCE</a>
-                <a href="/soul-onchain-preview.html" target="_blank">SOUL PREVIEW</a>
-            </div>
-            <p>A WUBBUSHI CREATION /// RECOGNITION SCIENCE INSTITUTE /// AUSTIN, TEXAS</p>
-            <p style="margin-top: 20px; font-size: 12px; color: #444;">
-                THIS PROJECT REPRESENTS A BREAKTHROUGH IN ON-CHAIN AUTONOMOUS ENTITIES<br>
-                EACH SOUL IS A COMPLETE, SELF-CONTAINED UNIVERSE GOVERNED BY RECOGNITION SCIENCE
-            </p>
-        </div>
-    </div>
+    </main>
 
     <script>
-        // -- SOUL SIMULATION ENGINE --
         class OnChainSoul {
             constructor(tokenId) {
                 this.tokenId = tokenId || Math.floor(Math.random() * 10000);
@@ -717,7 +193,7 @@
                 this.months = 0;
             }
 
-            // -- Core Evolution Loop --
+            // Core Evolution Loop
             advanceTick() {
                 if (!this.isEvolving) return;
 
@@ -762,7 +238,7 @@
                 }
             }
             
-            // -- Utility & Randomness --
+            // Utility & Randomness
             xmur3(str) {
                 for(var i = 0, h = 1779033703 ^ str.length; i < str.length; i++)
                     h = Math.imul(h ^ str.charCodeAt(i), 3432918353),
@@ -792,11 +268,11 @@
                 return this.rand() * (max - min) + min;
             }
 
-            // -- Display Generation --
+            // Display Generation
             generateDisplay() {
                 const coherence = Math.round((this.energy / this.maxEnergy) * 100);
                 const curvatureType = this.kappa > 0 ? "Recognition Debt" : 
-                                     this.kappa < 0 ? "Recognition Surplus" : "Equilibrium";
+                                      this.kappa < 0 ? "Recognition Surplus" : "Equilibrium";
                 
                 let display = `
 ╔═══════════════════════════════════════════════════════════════╗
@@ -821,12 +297,6 @@
                 });
 
                 display += `
-╠═══════════════════════════════════════════════════════════════╣
-║                     KARMA METRICS                            ║
-╠═══════════════════════════════════════════════════════════════╣
-║ Recognition Flow: ${String(this.recognitionFlow).toFixed(0).padStart(8)} (LNAL Operations)    ║
-║ Karma Score:      ${String(this.karmaScore).toFixed(0).padStart(8)} (Composite Index)     ║
-║ Rarity:           ${this.rarity.padEnd(18)}              ║
 ╚═══════════════════════════════════════════════════════════════╝`;
 
                 return display;
@@ -840,47 +310,94 @@
             }
         }
 
-        // -- Page Interaction Logic --
         let currentSoul;
         let simulationInterval;
-        const soulDisplayElement = document.getElementById('live-soul-display');
-        const toggleButton = document.getElementById('simulation-toggle-button');
-        const generateButton = document.getElementById('generate-soul-button');
+        const soulContainer = document.getElementById('soul-simulation-container');
 
         function updateDisplay() {
             if (currentSoul) {
                 currentSoul.advanceTick();
-                soulDisplayElement.innerHTML = `<pre>${currentSoul.generateDisplay()}</pre>`;
+                soulContainer.innerHTML = `<pre>${currentSoul.generateDisplay()}</pre>`;
             }
         }
 
         function initializeNewSoul(tokenId) {
             clearInterval(simulationInterval);
             currentSoul = new OnChainSoul(tokenId);
-            soulDisplayElement.innerHTML = `<pre>${currentSoul.generateDisplay()}</pre>`;
-            toggleButton.textContent = "SIMULATE LIFE";
+            soulContainer.innerHTML = `<pre>${currentSoul.generateDisplay()}</pre>`;
+            const toggleButton = document.getElementById('simulation-toggle-button');
+            if(toggleButton) toggleButton.textContent = "Simulate Life";
             currentSoul.isEvolving = false;
         }
+        
+        function setupControls() {
+            const answerSection = document.getElementById('answer');
+            const controls = document.createElement('div');
+            controls.style.marginTop = '2rem';
+            controls.innerHTML = `
+                <button id="simulation-toggle-button" class="sim-button">Simulate Life</button>
+                <button id="generate-soul-button" class="sim-button secondary">Generate New Soul</button>
+                <style>
+                    .sim-button {
+                        display: inline-block;
+                        background: #fff;
+                        color: #000;
+                        padding: 12px 24px;
+                        text-decoration: none;
+                        font-family: 'Inter', sans-serif;
+                        font-weight: 600;
+                        text-transform: uppercase;
+                        letter-spacing: 0.5px;
+                        border: 1px solid #fff;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        transition: all 0.2s;
+                        margin: 0 10px;
+                    }
+                    .sim-button:hover {
+                        background: #000;
+                        color: #fff;
+                    }
+                     .sim-button.secondary {
+                        background: transparent;
+                        color: #fff;
+                        border-color: #555;
+                     }
+                    .sim-button.secondary:hover {
+                        background: #fff;
+                        color: #000;
+                        border-color: #fff;
+                    }
+                </style>
+            `;
+            answerSection.querySelector('.content').appendChild(controls);
 
-        toggleButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            currentSoul.isEvolving = !currentSoul.isEvolving;
-            if (currentSoul.isEvolving) {
-                toggleButton.textContent = "PAUSE SIMULATION";
-                simulationInterval = setInterval(updateDisplay, 100); // Update every 100ms
-            } else {
-                toggleButton.textContent = "SIMULATE LIFE";
-                clearInterval(simulationInterval);
-            }
+            const toggleButton = document.getElementById('simulation-toggle-button');
+            const generateButton = document.getElementById('generate-soul-button');
+
+            toggleButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                currentSoul.isEvolving = !currentSoul.isEvolving;
+                if (currentSoul.isEvolving) {
+                    toggleButton.textContent = "Pause Simulation";
+                    simulationInterval = setInterval(updateDisplay, 100);
+                } else {
+                    toggleButton.textContent = "Simulate Life";
+                    clearInterval(simulationInterval);
+                }
+            });
+
+            generateButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                initializeNewSoul();
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeNewSoul(42);
+            setupControls();
         });
-
-        generateButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            initializeNewSoul();
-        });
-
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', () => initializeNewSoul(42));
     </script>
+
 </body>
 </html> 
