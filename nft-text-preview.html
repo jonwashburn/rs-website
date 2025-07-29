@@ -232,18 +232,26 @@ SOUL #${this.tokenId.toString().padStart(5, '0')}
 PHASE: ${state.phase}
 
 ================================================================
-| LEDGER STATE                 | VIRTUE TECHNOLOGIES            |
-|------------------------------|--------------------------------|
-| Ledger Balance (κ): ${String(curvatureValue).padStart(7,' ')}    | ${virtueLines[0]} |
-| Balance State:   ${curvatureType.padEnd(17,' ')} | ${virtueLines[1]} |
-| Embodiment:      ${(state.isEmbodied ? 'Yes' : 'No').padEnd(17, ' ')} | ${virtueLines[2]} |
-| Depth:           ${state.depth.toFixed(0).padStart(7,' ')}          | ${virtueLines[3]} |
-| Rebirths:        ${String(state.rebirths).padStart(7,' ')}          | ${virtueLines[4]} |
-| Energy:          ${state.energy.toFixed(0).padStart(7,' ')}          |                                |
-| Coherence:       ${coherence.padStart(4,' ')}%            |                                |
-|------------------------------|--------------------------------|
-| Karma Score:      ${karmaScore.toFixed(0).padStart(7,' ')}    |                                |
-| Rarity:          ${rarity.padEnd(17, ' ')} |                                |
+LEDGER STATE
+================================================================
+Ledger Balance (κ): ${String(curvatureValue).padStart(7,' ')}
+Balance State:      ${curvatureType}
+Embodiment:         ${state.isEmbodied ? 'Yes' : 'No'}
+Depth:              ${state.depth.toFixed(0)}
+Rebirths:           ${String(state.rebirths)}
+Energy:             ${state.energy.toFixed(0)}
+Coherence:          ${coherence}%
+
+================================================================
+VIRTUE TECHNOLOGIES
+================================================================
+${virtueLines.join('\n')}
+
+================================================================
+KARMA METRICS
+================================================================
+Karma Score:        ${karmaScore.toFixed(0)}
+Rarity:             ${rarity}
 ================================================================
                 `.trim();
             }
