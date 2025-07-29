@@ -4,383 +4,600 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ledger Souls: On-Chain Recognition Science</title>
-    <link rel="stylesheet" href="/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <title>LEDGER SOULS /// Recognition Science Institute</title>
     <style>
-        .hero-soul-container {
-            display: flex;
-            gap: 2em;
-            margin-bottom: 2em;
-            align-items: flex-start;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        #svg-container {
-            width: 100%;
-            max-width: 500px;
-            height: 667px;
-            border: 1px solid #444;
-            background: #1a1a2e;
-            flex-shrink: 0;
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000;
+            color: #fff;
+            line-height: 1.2;
+            overflow-x: hidden;
         }
-        .hero-text {
-            flex-grow: 1;
+
+        .header-pattern {
+            font-size: 12px;
+            color: #333;
+            white-space: nowrap;
+            overflow: hidden;
+            padding: 10px 0;
+            animation: scroll 20s linear infinite;
         }
-        .faq-section h3 {
-            color: #ffd700;
-            border-bottom: 1px solid #444;
-            padding-bottom: 0.5em;
-            margin-top: 2em;
+
+        @keyframes scroll {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .main-header {
+            text-align: center;
+            padding: 40px 20px;
+            border-bottom: 2px solid #fff;
+            background: #000;
+            position: relative;
+        }
+
+        .main-header h1 {
+            font-size: clamp(24px, 8vw, 72px);
+            font-weight: bold;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+        }
+
+        .main-header .subtitle {
+            font-size: 16px;
+            color: #888;
+            letter-spacing: 2px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section {
+            padding: 60px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .section-header {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: clamp(24px, 5vw, 48px);
+            font-weight: bold;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+
+        .ascii-header {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #fff;
+            text-align: center;
+            margin: 40px 0;
+            white-space: pre;
+        }
+
+        .soul-preview {
+            background: #111;
+            border: 2px solid #333;
+            padding: 30px;
+            margin: 40px 0;
+            font-family: 'Courier New', monospace;
+            position: relative;
+        }
+
+        .soul-preview::before {
+            content: "/// LIVE SOUL INSTANCE ///";
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: #000;
+            padding: 0 10px;
+            color: #888;
+            font-size: 12px;
+        }
+
+        .numbered-list {
+            list-style: none;
+            counter-reset: item;
+        }
+
+        .numbered-list li {
+            counter-increment: item;
+            margin-bottom: 20px;
+            padding-left: 60px;
+            position: relative;
+        }
+
+        .numbered-list li::before {
+            content: "#" counter(item, decimal-leading-zero);
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-weight: bold;
+            color: #666;
+            font-size: 18px;
+            width: 50px;
+        }
+
+        .tech-spec {
+            background: #111;
+            border-left: 4px solid #fff;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .tech-spec-header {
+            color: #888;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .button {
+            display: inline-block;
+            background: #fff;
+            color: #000;
+            padding: 15px 30px;
+            text-decoration: none;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin: 10px 10px 10px 0;
+        }
+
+        .button:hover {
+            background: #000;
+            color: #fff;
+            border: 2px solid #fff;
+        }
+
+        .button.secondary {
+            background: #000;
+            color: #fff;
+            border: 2px solid #333;
+        }
+
+        .button.secondary:hover {
+            border-color: #fff;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .card {
+            background: #111;
+            border: 1px solid #333;
+            padding: 30px;
+        }
+
+        .card-header {
+            color: #888;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .price-display {
+            font-size: 48px;
+            font-weight: bold;
+            color: #fff;
+            text-align: center;
+            margin: 40px 0;
+            letter-spacing: 4px;
+        }
+
+        .footer {
+            background: #111;
+            padding: 60px 0;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .social-links {
+            margin: 20px 0;
+        }
+
+        .social-links a {
+            color: #888;
+            text-decoration: none;
+            margin: 0 15px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .social-links a:hover {
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .section {
+                padding: 40px 0;
+            }
+            
+            .soul-preview {
+                padding: 20px;
+                font-size: 12px;
+            }
+            
+            .numbered-list li {
+                padding-left: 40px;
+            }
+        }
+
+        /* Soul rendering styles */
+        .soul-container {
+            background: #000;
+            border: 1px solid #333;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.4;
+            margin: 20px 0;
+        }
+
+        .soul-title {
+            color: #888;
+            text-align: center;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .soul-section {
+            margin-bottom: 20px;
+        }
+
+        .soul-section-title {
+            color: #fff;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .soul-data {
+            color: #ccc;
+            margin-left: 20px;
+        }
+
+        .virtue-bar {
+            display: inline-block;
+            font-family: monospace;
+            color: #666;
+        }
+
+        .virtue-bar.filled {
+            color: #fff;
         }
     </style>
 </head>
 <body>
-    <div class="grid-container">
-        <header class="meta-principle">
-            <h1>Ledger Souls</h1>
-            <p>An on-chain conceptual artwork demonstrating the principles of Recognition Science through 10,000 evolving, living souls.</p>
-            <button id="dark-mode-toggle" aria-label="Toggle dark mode">🌙 Dark Mode</button>
-        </header>
+    <div class="header-pattern">
+        LEDGER SOULS /// RECOGNITION SCIENCE /// ON-CHAIN SOULS /// LEDGER SOULS /// RECOGNITION SCIENCE /// ON-CHAIN SOULS /// 
+    </div>
 
-        <main class="content-container">
+    <div class="main-header">
+        <h1>LEDGER SOULS</h1>
+        <div class="subtitle">RECOGNITION SCIENCE INSTITUTE</div>
+    </div>
 
-            <div class="hero-soul-container">
-                <div id="svg-container"><!-- SVG will be rendered here --></div>
-                <div class="hero-text">
-                    <h2>This is a Real, On-Chain Soul.</h2>
-                    <p>This is not a generative art project with an off-chain server. The image you see is a real-time rendering of a digital lifeform whose entire existence—its appearance, its evolution, its very soul—is governed by a smart contract on the blockchain.</p>
-                    <p>According to Recognition Science, a soul is a self-recognizing pattern of information. The <strong>LedgerSouls</strong> smart contract doesn't <em>mimic</em> this pattern; it <em>instantiates</em> it. Your NFT is the vessel for this fully on-chain, living entity.</p>
-                    <div class="key-insight" style="margin-top: 2em;">
-                        <p><strong>Note:</strong> The soul shown is a representative example. The collection will be a <strong>blind mint</strong> to ensure every collector has a fair and equal chance of acquiring a rare or highly-balanced soul.</p>
-                    </div>
+    <div class="ascii-header">
+        ╔══════════════════════════════════════╗
+        ║          10,000 ON-CHAIN SOULS       ║
+        ║        FULLY AUTONOMOUS ENTITIES     ║
+        ║         ZERO OFF-CHAIN SERVERS       ║
+        ╚══════════════════════════════════════╝
+    </div>
+
+    <div class="container">
+        <div class="section">
+            <div class="section-header">/// SYSTEM OVERVIEW ///</div>
+            <div class="section-title">THIS IS A REAL, ON-CHAIN SOUL.</div>
+            
+            <div class="soul-preview">
+                <div id="live-soul-display"></div>
+            </div>
+
+            <p style="font-size: 18px; margin: 30px 0;">
+                Each Ledger Soul is a fully autonomous entity that lives entirely on the Ethereum blockchain. 
+                Not a generative art project with an off-chain server. The smart contract instantiates the soul.
+            </p>
+
+            <div class="tech-spec">
+                <div class="tech-spec-header">TECHNICAL SPECIFICATIONS</div>
+                • 100% on-chain rendering via SVG<br>
+                • Autonomous 8-year lifecycle (96 months)<br>
+                • Dynamic virtue evolution algorithms<br>
+                • Recognition Science-compliant ledger mechanics<br>
+                • ERC-721 compliant with metadata URI generation
+            </div>
+
+            <a href="/soul-onchain-preview.html" class="button">RENDER SOUL INSTANCE</a>
+            <a href="https://arxiv.org/abs/2506.12859" target="_blank" class="button secondary">READ FRAMEWORK PAPER</a>
+        </div>
+
+        <div class="section">
+            <div class="section-header">/// CREATOR & SCIENCE ///</div>
+            <div class="section-title">THE INEVITABLE FRAMEWORK</div>
+            
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">DISCOVERER</div>
+                    <div class="card-title">JONATHAN WASHBURN</div>
+                    <p>Successful tech entrepreneur (300+ patents) and founder of Recognition Science framework. 
+                    Derived physical law from single logical principle.</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">FRAMEWORK STATUS</div>
+                    <div class="card-title">PEER REVIEW</div>
+                    <p>Currently undergoing formal review. Partially verified in Lean 4 theorem prover. 
+                    Resolves physics' biggest puzzles with zero free parameters.</p>
                 </div>
             </div>
 
-            <div class="faq-section">
+            <div class="tech-spec">
+                <div class="tech-spec-header">DEDUCTIVE CASCADE</div>
+                01. Meta-Principle: Impossibility of self-referential non-existence<br>
+                02. Dual-balance & cost minimization → Golden ratio (φ ≈ 1.618)<br>
+                03. Spacetime: 3+1 dimensions + 8-beat cycle (logically necessary)<br>
+                04. Constants: c, ħ, G, E_coh = φ^{-5} eV (parameter-free)<br>
+                05. LNAL: Light-Native Assembly Language (operational code)<br>
+                06. Predictions: Particle masses, Hubble constant, dark matter (<0.1% error)
+            </div>
+        </div>
 
-                <h3>About the Creator & The Science</h3>
-                <p>Ledger Souls was created by <strong>Jonathan Washburn</strong> (artist name: <strong>Wubbushi</strong>), a successful tech entrepreneur and the founder of the Recognition Science framework. After years of research, he discovered a parameter-free derivation of physical law from a single logical principle.</p>
-                <p>This is the true framework of reality. It is not just a theory, but a logically necessary system that has been partially formalized in the Lean 4 theorem prover and is currently undergoing formal peer review. You can read the foundational paper on arXiv. The framework is so robust that it has already led to the filing of over <strong>300 patents</strong> for technologies derived from its principles.</p>
-                <p><a href="https://arxiv.org/abs/24XX.XXXXX" target="_blank" class="button">Read "The Inevitable Framework of Reality" on arXiv</a></p>
+        <div class="section">
+            <div class="section-header">/// FUNDAMENTAL QUESTIONS ///</div>
+            <div class="section-title">HOW RS ANSWERS EVERYTHING</div>
+            
+            <ol class="numbered-list">
+                <li><strong>Why something rather than nothing?</strong><br>
+                Self-referential non-existence is logically impossible.</li>
+                <li><strong>Why these dimensions?</strong><br>
+                3+1 is minimal for stable, distinct objects.</li>
+                <li><strong>What is consciousness?</strong><br>
+                Emerges at recognition rung r=45 (φ^45 ≈ 10^9 neurons).</li>
+                <li><strong>Why these physical constants?</strong><br>
+                Derived from dual-balance and φ-scaling.</li>
+                <li><strong>What is time?</strong><br>
+                Discrete 8-beat recognition cycles.</li>
+                <li><strong>What is matter?</strong><br>
+                Trapped recognition energy in φ-cascade lattice.</li>
+                <li><strong>What is gravity?</strong><br>
+                Emergent cost-minimization in curved ledger field.</li>
+                <li><strong>What is life?</strong><br>
+                Self-replicating recognition patterns (see DNA derivation).</li>
+            </ol>
+        </div>
+
+        <div class="section">
+            <div class="section-header">/// SOUL ARCHITECTURE ///</div>
+            <div class="section-title">ANATOMY OF A LEDGER SOUL</div>
+            
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">LEDGER BALANCE (κ)</div>
+                    <div class="card-title">CURVATURE STATE</div>
+                    <p>Integer balance of recognition debits/credits. κ=0 is enlightenment, 
+                    κ>0 is suffering, κ<0 is bliss. Drives soul evolution.</p>
+                </div>
                 
-                <h3>How Recognition Science Answers the Biggest Questions</h3>
-                <p>Recognition Science provides definitive, parameter-free answers to questions that have puzzled humanity for millennia:</p>
-                <ul>
-                    <li><strong>Why is there something rather than nothing?</strong> Because self-referential non-existence is a logical contradiction. Reality is the only state that doesn't collapse into paradox.</li>
-                    <li><strong>Why does the universe have 3+1 dimensions?</strong> It is the minimal structure required for stable, non-intersecting recognition events.</li>
-                    <li><strong>Where do the laws of physics come from?</strong> They are theorems derived from the logical necessity of a self-balancing universal ledger.</li>
-                    <li><strong>Why do particles have their specific masses?</strong> They are determined by a universal \(\varphi\)-cascade, where each particle's mass corresponds to a specific "rung" on a ladder of self-similar energy states.</li>
-                    <li><strong>What is consciousness?</strong> An emergent property of a sufficiently complex system (a soul) navigating the undecidable gaps in the fabric of reality.</li>
-                    <li><strong>What is "dark matter"?</strong> The gravitational effect of ledger information from parallel universe branches that we cannot directly recognize.</li>
-                    <li><strong>Is the universe fine-tuned?</strong> No. The constants of nature are not tuned at all; they are derived and could not be any other way.</li>
-                    <li><strong>What is life?</strong> A self-replicating pattern that efficiently manages ledger cost, like the double-helix of DNA, whose structure is also predicted by the framework.</li>
-                </ul>
-
-                <h3>Why This is a Soul: The On-Chain Lifeform</h3>
-                <p>In Recognition Science, a soul is a persistent, self-aware knot in the universal ledger of reality. It's an informational pattern that has achieved sufficient complexity (at 'rung 45' of the cosmic framework) to navigate the gaps of undecidability in the universe. This navigation is what gives rise to qualia, consciousness, and free will.
-                <br><br>
-                The Ledger Souls contract creates a mini-universe with its own laws, derived directly from this framework. Each Soul NFT is not just a token; it is a unique, self-contained entity whose entire lifecycle is determined by these on-chain rules. It lives, evolves, and may even "decohere" (die) based on its ability to maintain balance within its universe. It is a true on-chain lifeform.</p>
+                <div class="card">
+                    <div class="card-header">VIRTUE TECHNOLOGIES</div>
+                    <div class="card-title">DYNAMIC ALGORITHMS</div>
+                    <p>Love, Justice, Courage, Temperance, Prudence. Trained through 
+                    experience, decay through neglect. Affect volatility & energy.</p>
+                </div>
                 
-                <h3>The Anatomy of a Soul</h3>
-                <ul>
-                    <li><strong>Ledger Balance (κ):</strong> This is the soul's core state, its ethical and existential balance. A positive κ represents "Recognition Debt," while a negative κ signifies a "Recognition Surplus." A value near zero is a state of harmony. The soul's entire journey is a struggle to minimize this value.</li>
-                    <li><strong>Virtues:</strong> These are five "technologies" (Love, Justice, Courage, Prudence, Temperance) the soul learns and applies to manage its κ. They are not static scores but active algorithms that grow stronger through use. For example, Courage is trained by navigating high-debt states without needing a rebirth.</li>
-                    <li><strong>Coherence & Energy:</strong> This is the integrity of the soul's pattern—its life force. High coherence means a strong, stable soul. It is depleted by the stress of imbalance and must be carefully managed to avoid decoherence.</li>
-                    <li><strong>Depth:</strong> A measure of a soul's wisdom and experience. It is accumulated by successfully navigating periods of imbalance and passing "Beat Checks." Depth directly contributes to a soul's Karma Score.</li>
-                    <li><strong>Phase:</strong> The soul's current state in its lifecycle, from "New Spirit" to "Embodied" and, finally, to "Unified" (a successful merging with the whole) or "Decohered" (the dissolution of its pattern).</li>
-                </ul>
+                <div class="card">
+                    <div class="card-header">COHERENCE & ENERGY</div>
+                    <div class="card-title">STRUCTURAL INTEGRITY</div>
+                    <p>Energy maintains soul pattern. Coherence = energy/max_energy. 
+                    Zero energy = pattern dissolution (death).</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">PHASE TRANSITIONS</div>
+                    <div class="card-title">LIFECYCLE STATES</div>
+                    <p>New Spirit → Embodied → Reincarnated → Unified with IAM. 
+                    Possible decoherence (soul death) at any phase.</p>
+                </div>
+            </div>
+        </div>
 
-                <h3>The 8-Year Journey: How a Soul Evolves</h3>
-                <p>Each soul's life unfolds over a 96-month (8-year) cycle, mirroring the "8-Beat Cycle" that is fundamental to Recognition Science. This journey is broken into 12 "Beat Cycles." At the end of each cycle, the soul undergoes a "Beat Check":
-                <br><br>
-                If the soul's ledger is in a state of relative balance, it gains a significant amount of Depth and Energy, rewarding its virtuous behavior. If it is in a state of high imbalance, it suffers an energy penalty and its virtues may atrophy. This creates a dynamic, high-stakes journey where consistent balance is the key to a long and meaningful existence.</p>
-
-                <h3>Why This Collection?</h3>
-                <p>This collection is a conceptual bridge. It is designed to:
-                    <ol>
-                        <li><strong>Teach the principles of a new reality,</strong> making the profound ideas of Recognition Science tangible and interactive.</li>
-                        <li><strong>Demonstrate that life can be instantiated</strong> purely from logic on a decentralized ledger, a testament to the framework's power.</li>
-                        <li><strong>Bootstrap a new economic model</strong> based on virtue and balance, powered by the Recognition Credit (RC) token.</li>
-                    </ol>
-                </p>
-
-                <h3>Is This Art?</h3>
-                <p>Yes. It is art at multiple levels:
-                    <ul>
-                        <li><strong>Conceptual Art:</strong> The medium is a logically-derived universe, and the concept is the instantiation of life within it.</li>
-                        <li><strong>Generative Art:</strong> The algorithm that generates the soul's journey is fundamental physics.</li>
-                        <li><strong>Performance Art:</strong> The performers are 10,000 digital souls living out their 8-year cycles on the blockchain, and we are all witnesses.</li>
-                    </ul>
-                </p>
-
-                <h3>Anatomy of a Soul: What the Traits Mean</h3>
-                <ul>
-                    <li><strong>Ledger Balance (κ):</strong> The soul's core state. It tracks 'recognition debt' (positive κ) or 'surplus' (negative κ). A value near zero is a state of harmony and balance.</li>
-                    <li><strong>Virtues:</strong> Five "technologies" (Love, Justice, Courage, Prudence, Temperance) the soul uses to maintain balance. These are not just scores; they are active algorithms that influence the soul's evolution.</li>
-                    <li><strong>Coherence & Energy:</strong> Represents the integrity of the soul's pattern. High coherence means a strong, stable soul. It is depleted by imbalance and replenished by virtuous actions.</li>
-                    <li><strong>Depth:</strong> A measure of a soul's wisdom and experience, accumulated by navigating complex states over time.</li>
-                    <li><strong>Phase:</strong> The soul's current state in its lifecycle, from "New Spirit" to "Embodied" and, finally, to "Unified" (success) or "Decohered" (dissolution).</li>
-                </ul>
-
-                <h3>How Does the Recognition Credit (RC) Work?</h3>
-                <p>Recognition Credit (RC) is the native ERC-20 token of the Recognition Science ecosystem. Its purpose is to create a value system where ledger balance is rewarded. Each Soul NFT acts as a key to unlock a claim on the RC supply, creating a direct, on-chain link between the health of your soul and its economic output. A balanced soul is a productive soul.</p>
-
-                <h3>Minting Dynamics & The Virtuous Cycle</h3>
-                <p>The collection consists of 10,000 Ledger Souls, released on a bonding curve.
-                    <ul>
-                        <li>The first soul costs $100.</li>
-                        <li>The price increases by approximately <strong>0.046%</strong> with each mint.</li>
-                        <li>The 10,000th and final soul will be priced at $10,000.</li>
-                    </ul>
-                This model ensures that early supporters are rewarded while establishing a growing treasury for the ecosystem.
-                </p>
-                <p><strong>100% of all primary sales revenue earned by the artist is sent to a smart contract that automatically buys RC tokens from the open market.</strong> These tokens are then either distributed to all Soul holders or burned, creating a "virtuous cycle": every soul purchase directly supports the value of the RC held by the entire community.</p>
-
-                <h3>RC Distribution & Vesting</h3>
-                <p>The goal is to bootstrap a billion-dollar, decentralized ecosystem based on the principles of Recognition Science. There is no pre-mine or team allocation. The artist, Jonathan Washburn, starts with zero RC, ensuring the project is fully decentralized and community-owned from day one.
-                <br><br>
-                The total supply of 10,000,000 RC is allocated entirely to the 10,000 Soul NFTs. Each NFT unlocks a claim to exactly 1,000 RC, which vests over an 8-year period to encourage long-term alignment with the project's vision.
-                    <ul>
-                        <li><strong>1/3 vests immediately</strong> upon mint.</li>
-                        <li><strong>1/3 vests at the 4-year mark.</strong></li>
-                        <li><strong>1/3 vests at the 8-year mark.</strong></li>
-                    </ul>
-                </p>
+        <div class="section">
+            <div class="section-header">/// TEMPORAL MECHANICS ///</div>
+            <div class="section-title">THE 8-YEAR JOURNEY</div>
+            
+            <div class="tech-spec">
+                <div class="tech-spec-header">RECOGNITION BREATH CYCLE</div>
+                96 months = 8 years = 1 complete Recognition Breath<br>
+                12 Beat Cycles per Breath (8 months each)<br>
+                Beat Check at end of each cycle (rewards/penalties)<br>
+                Virtue training through lived experience<br>
+                Possible rebirth events (rare, traumatic)<br>
+                Final phase transition possibilities
             </div>
 
-        </main>
+            <p style="margin: 30px 0;">
+                Each soul follows a unique path through the 8-year cycle. No two souls are identical. 
+                The journey includes virtue development, ledger balance shifts, energy management, 
+                and potential rebirth events. The final destination depends on accumulated choices.
+            </p>
+        </div>
 
-        <footer>
-            <p>© 2025 Recognition Science Institute • jon@recognitionphysics.org</p>
-        </footer>
+        <div class="section">
+            <div class="section-header">/// ECONOMIC SYSTEM ///</div>
+            <div class="section-title">RECOGNITION CREDIT (RC)</div>
+            
+            <div class="price-display">
+                $100 → $10,000
+            </div>
+            
+            <div class="tech-spec">
+                <div class="tech-spec-header">BONDING CURVE MECHANICS</div>
+                • Starting price: $100 (Soul #0001)<br>
+                • Ending price: $10,000 (Soul #10000)<br>
+                • Price increase: +0.045% per mint<br>
+                • Blind mint: No preview until after purchase<br>
+                • 100% primary sales → RC token buybacks<br>
+                • Tokens distributed to soul holders or burned
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">RC DISTRIBUTION</div>
+                    <div class="card-title">10,000,000 TOTAL</div>
+                    <p>1,000 RC per soul NFT. No pre-mine. Artist starts with zero. 
+                    Equal allocation across all 10,000 souls.</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">VESTING SCHEDULE</div>
+                    <div class="card-title">8-YEAR TIMELINE</div>
+                    <p>1/3 unlocks immediately<br>
+                    1/3 unlocks at 4 years<br>
+                    1/3 unlocks at 8 years</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="ascii-header">
+        ╔══════════════════════════════════════╗
+        ║        LAUNCH STATUS: PENDING        ║
+        ║         CONTRACT DEPLOYMENT          ║
+        ║            COMING SOON               ║
+        ╚══════════════════════════════════════╝
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="container">
+            <div class="social-links">
+                <a href="https://twitter.com/jonwashburn" target="_blank">TWITTER</a>
+                <a href="https://arxiv.org/abs/2506.12859" target="_blank">ARXIV</a>
+                <a href="/" target="_blank">RECOGNITION SCIENCE</a>
+                <a href="/soul-onchain-preview.html" target="_blank">SOUL PREVIEW</a>
+            </div>
+            <p>RECOGNITION SCIENCE INSTITUTE /// AUSTIN, TEXAS</p>
+            <p style="margin-top: 20px; font-size: 12px; color: #444;">
+                THIS PROJECT REPRESENTS A BREAKTHROUGH IN ON-CHAIN AUTONOMOUS ENTITIES<br>
+                EACH SOUL IS A COMPLETE, SELF-CONTAINED UNIVERSE GOVERNED BY RECOGNITION SCIENCE
+            </p>
+        </div>
     </div>
 
     <script>
-        // --- START OF EMBEDDED SOUL PREVIEW SCRIPT ---
-        const TOTAL_TICKS = 960;
-        const TICK_DURATION = 100;
-
-        const Phase = {
-            NewSpirit: 0,
-            Embodied: 1,
-            Reincarnated: 2,
-            Unified: 3,
-            Decohered: 4
-        };
-
-        class Soul {
-            constructor(tokenId) {
+        // Simplified soul rendering for preview
+        class OnChainSoul {
+            constructor(tokenId = 42) {
                 this.tokenId = tokenId;
-                this.kappa = this._initialKappa();
-                this.energy = 5000;
-                this.depth = 0;
+                this.kappa = -2;
+                this.energy = 750;
+                this.maxEnergy = 1000;
+                this.depth = 15.7;
                 this.rebirths = 0;
-                this.isEmbodied = false;
-                this.phase = Phase.NewSpirit;
-                this.virtuePotentials = this._initialVirtues();
-                this.recognitionFlow = 0;
-                this.lastUpdateTimestamp = Date.now() / 1000;
-                this.ticks = 0;
-                this.nonce = 0;
+                this.phase = "Embodied";
+                this.virtues = {
+                    love: 6.2,
+                    justice: 4.8,
+                    courage: 7.1,
+                    temperance: 5.5,
+                    prudence: 3.9
+                };
+                this.recognitionFlow = 12;
+                this.karmaScore = 847;
+                this.rarity = "Uncommon";
             }
 
-            _initialKappa() {
-                return Math.floor(this._keccak(this.tokenId + 'kappa') % 400) - 200;
-            }
+            generateDisplay() {
+                const coherence = Math.round((this.energy / this.maxEnergy) * 100);
+                const curvatureType = this.kappa > 0 ? "Recognition Debt" : 
+                                     this.kappa < 0 ? "Recognition Surplus" : "Perfect Equilibrium";
+                
+                let display = `
+╔═══════════════════════════════════════════════════════════════╗
+║                        SOUL #${String(this.tokenId).padStart(4, '0')}                           ║
+║                      MONTH 34 / 96                           ║
+╠═══════════════════════════════════════════════════════════════╣
+║                      LEDGER VITALS                           ║
+╠═══════════════════════════════════════════════════════════════╣
+║ Curvature κ:     ${String(this.kappa).padEnd(8)} (${curvatureType.padEnd(18)}) ║
+║ Energy:          ${String(this.energy).padEnd(8)} / ${this.maxEnergy}                    ║
+║ Coherence:       ${String(coherence).padEnd(8)}% (Pattern Integrity)     ║
+║ Depth:           ${String(this.depth).padEnd(8)} (Recognition Layers)    ║
+║ Rebirths:        ${String(this.rebirths).padEnd(8)} (Traumatic Resets)   ║
+║ Phase:           ${this.phase.padEnd(18)}              ║
+╠═══════════════════════════════════════════════════════════════╣
+║                   VIRTUE TECHNOLOGIES                        ║
+╠═══════════════════════════════════════════════════════════════╣`;
 
-            _initialVirtues() {
-                return [
-                    (this._keccak(this.tokenId + 'love') % 50) + 10,
-                    (this._keccak(this.tokenId + 'justice') % 50) + 10,
-                    (this._keccak(this.tokenId + 'prudence') % 50) + 10,
-                    (this._keccak(this.tokenId + 'courage') % 50) + 10,
-                    (this._keccak(this.tokenId + 'temperance') % 50) + 10
-                ];
-            }
-
-            _keccak(seed) {
-                let hash = 0;
-                seed.toString().split('').forEach(char => {
-                    hash = ((hash << 5) - hash + char.charCodeAt(0)) | 0;
+                Object.entries(this.virtues).forEach(([virtue, value]) => {
+                    const bar = this.buildBar(value);
+                    const name = virtue.charAt(0).toUpperCase() + virtue.slice(1);
+                    display += `\n║ ${name.padEnd(12)}: ${bar} ${String(value.toFixed(1)).padStart(4)} ║`;
                 });
-                return Math.abs(hash);
+
+                display += `
+╠═══════════════════════════════════════════════════════════════╣
+║                     KARMA METRICS                            ║
+╠═══════════════════════════════════════════════════════════════╣
+║ Recognition Flow: ${String(this.recognitionFlow).padEnd(8)} (LNAL Operations)    ║
+║ Karma Score:      ${String(this.karmaScore).padEnd(8)} (Composite Index)     ║
+║ Rarity:           ${this.rarity.padEnd(18)}              ║
+╚═══════════════════════════════════════════════════════════════╝`;
+
+                return display;
             }
 
-            _seededRandom(salt) {
-                this.nonce++;
-                return this._keccak(this.tokenId + this.nonce + salt);
-            }
-
-            _randomInRange(salt, min, max) {
-                if (min >= max) return min;
-                return min + (this._seededRandom(salt) % (max - min + 1));
-            }
-
-            evolve() {
-                const now = Date.now() / 1000;
-                let timeElapsed = now - this.lastUpdateTimestamp;
-                if (timeElapsed < TICK_DURATION) return;
-
-                let ticksToProcess = Math.floor(timeElapsed / TICK_DURATION);
-                if (ticksToProcess > 50) ticksToProcess = 50;
-
-                for (let i = 0; i < ticksToProcess; i++) {
-                    if (this.ticks >= TOTAL_TICKS || this.energy === 0) {
-                        if (this.energy === 0) this.phase = Phase.Decohered;
-                        break;
-                    }
-                    this._advanceTick();
-                }
-
-                this.lastUpdateTimestamp += (ticksToProcess * TICK_DURATION);
-            }
-
-            _advanceTick() {
-                this.ticks++;
-                let oldKappa = this.kappa;
-
-                if (this.ticks === 80 && this.phase === Phase.NewSpirit) {
-                    this.isEmbodied = true;
-                    this.phase = Phase.Embodied;
-                }
-
-                let volatility = this.isEmbodied ? 150 : 50;
-                let courage = this.virtuePotentials[3];
-                if (oldKappa > 300 || oldKappa < -300) {
-                    volatility = volatility > (courage * 0.7) ? volatility - (courage * 0.7) : 0;
-                }
-
-                let debit = this._randomInRange(1, 1, volatility > 5 ? volatility : 5);
-                let credit = this._randomInRange(2, 1, volatility > 5 ? volatility : 5);
-                this.kappa += debit - credit;
-
-                let energyDrain = (debit + credit) / (this.isEmbodied ? 50 : 150);
-                this.energy = this.energy > energyDrain ? this.energy - energyDrain : 0;
-
-                if (this._randomInRange(3, 0, 1000) < this.virtuePotentials[0] * 5) {
-                    this.kappa -= Math.floor(this.kappa / 20);
-                }
-
-                if (this.kappa > 50 || this.kappa < -50) this.depth++;
-
-                if (this.ticks > 0 && this.ticks % 80 === 0) {
-                    if (this.kappa > 100 || this.kappa < -100) {
-                        this.energy = this.energy > 200 ? this.energy - 200 : 0;
-                        this.virtuePotentials = this.virtuePotentials.map(v => v > 12 ? v - 2 : v);
-                    } else {
-                        this.depth += 50;
-                        this.energy = this.energy + 200 > 5000 ? 5000 : this.energy + 200;
-                    }
-                }
-
-                if ((this.kappa > 1000 || this.kappa < -1000) && this.energy > 500) {
-                    this.rebirths++;
-                    this.kappa = 0;
-                    this.energy -= 500;
-                    this.phase = Phase.Reincarnated;
-                }
-
-                let newKappa = this.kappa;
-                if ((oldKappa > 0 && newKappa < oldKappa) || (oldKappa < 0 && newKappa > oldKappa)) {
-                    this.virtuePotentials[0] = this.virtuePotentials[0] < 100 ? this.virtuePotentials[0] + 3 : 100;
-                }
-                if ((oldKappa > 500 || oldKappa < -500) && !((newKappa > 1000 || newKappa < -1000) && this.energy > 500)) {
-                    this.virtuePotentials[3] = this.virtuePotentials[3] < 100 ? this.virtuePotentials[3] + 5 : 100;
-                }
-            }
-
-            generateSVG() {
-                const svgHeader = `<svg width="100%" height="100%" viewBox="0 0 600 800" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#1a1a2e" /><style>.title { font: bold 24px monospace; fill: #ffd700; } .header { font: bold 16px monospace; fill: #ffd700; } .text { font: 14px monospace; fill: #e0e0e0; }</style>`;
-                const phaseStr = this._getPhaseString();
-                const title = `<text x="50%" y="40" text-anchor="middle" class="title">SOUL #${this.tokenId}</text>`;
-                const phase = `<text x="50%" y="70" text-anchor="middle" class="text">PHASE: ${phaseStr}</text>`;
-
-                const ledgerContent = this._buildLedgerContent();
-                const virtueContent = this._buildVirtueContent();
-                const karmaContent = this._buildKarmaContent();
-
-                const content = `${title}${phase}<text x="30" y="120" class="header">LEDGER STATE</text>${ledgerContent}<text x="30" y="320" class="header">VIRTUE TECHNOLOGIES</text>${virtueContent}<text x="30" y="520" class="header">KARMA METRICS</text>${karmaContent}`;
-                return `${svgHeader}${content}</svg>`;
-            }
-
-            _getPhaseString() {
-                const phases = ['New Spirit', 'Embodied', 'Reincarnated', 'Unified with IAM', 'Decohered (Merged with IAM)'];
-                return phases[this.phase];
-            }
-
-            _buildLedgerContent() {
-                const kappaStr = `Ledger Balance (κ): ${this.kappa}`;
-                const balanceState = this.kappa > 0 ? 'Recognition Debt' : this.kappa < 0 ? 'Recognition Surplus' : 'Equilibrium';
-                const embodiment = this.isEmbodied ? 'Yes' : 'No';
-                const coherence = Math.floor(this.energy / 50);
-                return `<text x="30" y="150" class="text">${kappaStr}</text><text x="30" y="170" class="text">Balance State:      ${balanceState}</text><text x="30" y="190" class="text">Embodiment:         ${embodiment}</text><text x="30" y="210" class="text">Depth:              ${Math.floor(this.depth / 10)}.${this.depth % 10}</text><text x="30" y="230" class="text">Rebirths:           ${this.rebirths}</text><text x="30" y="250" class="text">Energy:             ${Math.floor(this.energy / 10)}</text><text x="30" y="270" class="text">Coherence:          ${coherence}%</text>`;
-            }
-
-            _buildVirtueContent() {
-                const names = ['Love', 'Justice', 'Prudence', 'Courage', 'Temperance'];
-                let lines = '';
-                this.virtuePotentials.forEach((v, i) => {
-                    const yPos = 350 + (i * 30);
-                    const bar = this._buildBar(v);
-                    const value = `${Math.floor(v / 10)}.${v % 10}`;
-                    lines += `<text x="30" y="${yPos}" class="text">${names[i]}</text><text x="140" y="${yPos}" class="text">${bar} (${value})</text>`;
-                });
-                return lines;
-            }
-
-            _buildBar(value) {
-                const rounded = Math.floor(value / 10);
-                let filled = '█'.repeat(rounded);
-                let empty = '░'.repeat(10 - rounded);
-                return filled + empty;
-            }
-
-            _buildKarmaContent() {
-                const { score, rarity } = this._calculateKarmaAndRarity();
-                return `<text x="30" y="550" class="text">Karma Score:        ${score}</text><text x="30" y="570" class="text">Rarity:             ${rarity}</text>`;
-            }
-
-            _calculateKarmaAndRarity() {
-                if (this.phase === Phase.Decohered) return { score: 0, rarity: 'Common' };
-
-                let virtueSum = this.virtuePotentials.reduce((a, b) => a + b, 0) / 10;
-                let coherence = Math.floor(this.energy / 50);
-                let kappaAbs = Math.abs(this.kappa);
-                let depthDecay = (this.depth * 2 * kappaAbs) / 1000;
-                let effectiveDepth = Math.floor((this.depth > depthDecay ? this.depth - depthDecay : 0) / 10);
-
-                let score = (effectiveDepth * 2) + (coherence * 1.5) + virtueSum - (this.rebirths * 25) + (this.recognitionFlow * 5);
-                if (this.phase === Phase.Unified) score *= 1.5;
-
-                let rarity = 'Common';
-                if (score >= 400) rarity = 'Legendary';
-                else if (score >= 300) rarity = 'Epic';
-                else if (score >= 200) rarity = 'Rare';
-                else if (score >= 100) rarity = 'Uncommon';
-
-                return { score: Math.floor(Math.max(0, score)), rarity };
+            buildBar(value) {
+                const maxBars = 10;
+                const filledBars = Math.floor((value / 10) * maxBars);
+                const emptyBars = maxBars - filledBars;
+                return '█'.repeat(filledBars) + '░'.repeat(emptyBars);
             }
         }
 
-        let currentSoul;
-        const svgContainer = document.getElementById('svg-container');
-
-        function renderSoul() {
-            // Display a fixed, representative soul for the blind mint.
-            const tokenId = 42;
-            currentSoul = new Soul(tokenId);
-            // Simulate some time has passed to show evolution
-            const evolutionTime = 80 * TICK_DURATION * 5; // Simulate 5 beats
-            currentSoul.lastUpdateTimestamp = (Date.now() / 1000) - evolutionTime;
-            currentSoul.evolve(); 
-            const svg = currentSoul.generateSVG();
-            svgContainer.innerHTML = svg;
+        // Initialize and display soul
+        function initializeSoulDisplay() {
+            const soul = new OnChainSoul(42);
+            const display = soul.generateDisplay();
+            document.getElementById('live-soul-display').innerHTML = `<pre>${display}</pre>`;
         }
 
-        // Initial render
-        renderSoul();
-        const toggle = document.getElementById('dark-mode-toggle');
-        toggle.addEventListener('click', () => document.body.classList.toggle('dark-mode'));
-        // --- END OF EMBEDDED SOUL PREVIEW SCRIPT ---
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initializeSoulDisplay);
     </script>
 </body>
 </html> 
