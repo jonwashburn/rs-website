@@ -454,6 +454,13 @@
 
     <div class="container">
         <div class="section">
+            <div class="section-title">WHAT IS LEDGER SOULS?</div>
+            <p style="font-size: 18px; margin: 20px 0;">
+                Ledger Souls is a collection of 10,000 fully on-chain entities—each a living, autonomous soul governed by the laws of Recognition Science. They are not generative art or PFPs; they are self-contained universes that evolve over 8 years, embodying the principles that derive our physical reality. But to grasp their true significance, you must first understand the artistic and scientific journey that birthed them.
+            </p>
+        </div>
+
+        <div class="section">
             <div class="section-header">/// THE PROPHECY ///</div>
             <div class="section-title">A STORY THAT BEGAN WITH ART</div>
             
@@ -512,8 +519,8 @@
                 Ledger Souls are the answer to <I>The Rapture</I>. They are not art *about* the new human; they are a template for the new human. Each is a living entity on the blockchain, operating according to the fundamental laws of recognition. They are the first artifacts of an awakened age, a testament to humanity's bigger purpose: to serve as the vehicle through which the universe recognizes itself.
             </p>
 
-            <a href="/soul-onchain-preview.html" class="button">RENDER A SOUL INSTANCE</a>
-            <a href="https://arxiv.org/abs/2506.12859" target="_blank" class="button secondary">READ THE SCIENTIFIC FRAMEWORK</a>
+            <a id="simulation-toggle-button" href="#" class="button">SIMULATE LIFE</a>
+            <a id="generate-soul-button" href="#" class="button secondary">GENERATE NEW SOUL</a>
         </div>
 
         <div class="ascii-header">
@@ -675,45 +682,133 @@
     </div>
 
     <script>
-        // Simplified soul rendering for preview
+        // -- SOUL SIMULATION ENGINE --
         class OnChainSoul {
-            constructor(tokenId = 42) {
-                this.tokenId = tokenId;
-                this.kappa = -2;
-                this.energy = 750;
-                this.maxEnergy = 1000;
-                this.depth = 15.7;
-                this.rebirths = 0;
-                this.phase = "Embodied";
-                this.virtues = {
-                    love: 6.2,
-                    justice: 4.8,
-                    courage: 7.1,
-                    temperance: 5.5,
-                    prudence: 3.9
-                };
-                this.recognitionFlow = 12;
-                this.karmaScore = 847;
-                this.rarity = "Uncommon";
+            constructor(tokenId) {
+                this.tokenId = tokenId || Math.floor(Math.random() * 10000);
+                this.isEvolving = false;
+                this.ticks = 0;
+                
+                // Seeded PRNG for deterministic randomness
+                this.seed = this.xmur3(this.tokenId.toString());
+                this.rand = this.sfc32(this.seed(), this.seed(), this.seed(), this.seed());
+
+                this.initializeState();
             }
 
+            initializeState() {
+                this.kappa = this.randomInRange(-10, 10);
+                this.energy = this.randomInRange(500, 900);
+                this.maxEnergy = 1000;
+                this.depth = this.randomInRange(10, 20);
+                this.rebirths = 0;
+                this.phase = "New Spirit";
+                this.virtues = {
+                    love: this.randomInRange(1, 8),
+                    justice: this.randomInRange(1, 8),
+                    courage: this.randomInRange(1, 8),
+                    temperance: this.randomInRange(1, 8),
+                    prudence: this.randomInRange(1, 8)
+                };
+                this.recognitionFlow = 0;
+                this.karmaScore = 0;
+                this.rarity = "Common";
+                this.ticks = 0;
+                this.months = 0;
+            }
+
+            // -- Core Evolution Loop --
+            advanceTick() {
+                if (!this.isEvolving) return;
+
+                this.ticks++;
+                this.months = Math.floor(this.ticks / 10); // 10 ticks per month
+
+                // Phase transitions
+                if (this.months >= 96) {
+                    this.phase = this.energy > 0 ? "Unified with IAM" : "Decohered";
+                    this.isEvolving = false;
+                } else if (this.months > 1) {
+                    this.phase = "Embodied";
+                }
+
+                if (this.phase === "Unified with IAM" || this.phase === "Decohered") return;
+
+                // Energy decay
+                this.energy -= 0.5 + (this.virtues.courage / 10); // Courage burns energy
+                if (this.energy <= 0) {
+                    this.energy = 0;
+                    this.phase = "Decohered";
+                    this.isEvolving = false;
+                    return;
+                }
+
+                // Kappa dynamics (ledger balance)
+                let volatility = 1 + (this.virtues.courage / 5);
+                let drift = (this.virtues.justice - 5) / 10;
+                let change = (this.rand() - 0.5) * volatility - drift;
+                this.kappa += change;
+
+                // Virtue training
+                this.virtues.love += (this.kappa < 0 ? 0.01 : -0.005) + (this.rand() - 0.5) * 0.02;
+                this.virtues.justice += (Math.abs(change) > 0.5 ? 0.01 : -0.005) + (this.rand() - 0.5) * 0.02;
+                this.virtues.courage += (this.energy < 300 ? 0.01 : -0.005) + (this.rand() - 0.5) * 0.02;
+                this.virtues.temperance += (this.energy > 700 ? 0.01 : -0.005) + (this.rand() - 0.5) * 0.02;
+                this.virtues.prudence += (this.ticks % 100 === 0 ? 0.05 : -0.005) + (this.rand() - 0.5) * 0.02;
+
+                // Clamp virtues between 0 and 10
+                for (let v in this.virtues) {
+                    this.virtues[v] = Math.max(0, Math.min(10, this.virtues[v]));
+                }
+            }
+            
+            // -- Utility & Randomness --
+            xmur3(str) {
+                for(var i = 0, h = 1779033703 ^ str.length; i < str.length; i++)
+                    h = Math.imul(h ^ str.charCodeAt(i), 3432918353),
+                    h = h << 13 | h >>> 19;
+                return function() {
+                    h = Math.imul(h ^ h >>> 16, 2246822507);
+                    h = Math.imul(h ^ h >>> 13, 3266489909);
+                    return (h ^= h >>> 16) >>> 0;
+                }
+            }
+
+            sfc32(a, b, c, d) {
+                return function() {
+                  a >>>= 0; b >>>= 0; c >>>= 0; d >>>= 0; 
+                  var t = (a + b) | 0;
+                  a = b ^ b >>> 9;
+                  b = c + (c << 3) | 0;
+                  c = (c << 21 | c >>> 11);
+                  d = d + 1 | 0;
+                  t = t + d | 0;
+                  c = c + t | 0;
+                  return (t >>> 0) / 4294967296;
+                }
+            }
+            
+            randomInRange(min, max) {
+                return this.rand() * (max - min) + min;
+            }
+
+            // -- Display Generation --
             generateDisplay() {
                 const coherence = Math.round((this.energy / this.maxEnergy) * 100);
                 const curvatureType = this.kappa > 0 ? "Recognition Debt" : 
-                                     this.kappa < 0 ? "Recognition Surplus" : "Perfect Equilibrium";
+                                     this.kappa < 0 ? "Recognition Surplus" : "Equilibrium";
                 
                 let display = `
 ╔═══════════════════════════════════════════════════════════════╗
-║                        SOUL #${String(this.tokenId).padStart(4, '0')}                           ║
-║                      MONTH 34 / 96                           ║
+║ SOUL #${String(this.tokenId).padStart(4, '0')} [${this.isEvolving ? 'EVOLVING' : 'STASIS'}] MONTH: ${String(this.months).padStart(2, '0')}/96 ║
 ╠═══════════════════════════════════════════════════════════════╣
 ║                      LEDGER VITALS                           ║
 ╠═══════════════════════════════════════════════════════════════╣
-║ Curvature κ:     ${String(this.kappa).padEnd(8)} (${curvatureType.padEnd(18)}) ║
-║ Energy:          ${String(this.energy).padEnd(8)} / ${this.maxEnergy}                    ║
-║ Coherence:       ${String(coherence).padEnd(8)}% (Pattern Integrity)     ║
-║ Depth:           ${String(this.depth).padEnd(8)} (Recognition Layers)    ║
-║ Rebirths:        ${String(this.rebirths).padEnd(8)} (Traumatic Resets)   ║
+║ Curvature κ:     ${this.kappa.toFixed(3).padStart(8)} (${curvatureType.padEnd(18)}) ║
+║ Energy:          ${Math.floor(this.energy).toString().padStart(8)} / ${this.maxEnergy}                    ║
+║ Coherence:       ${String(coherence).padStart(8)}% (Pattern Integrity)     ║
+║ Depth:           ${this.depth.toFixed(2).padStart(8)} (Recognition Layers)    ║
+║ Rebirths:        ${String(this.rebirths).padStart(8)} (Traumatic Resets)   ║
 ║ Phase:           ${this.phase.padEnd(18)}              ║
 ╠═══════════════════════════════════════════════════════════════╣
 ║                   VIRTUE TECHNOLOGIES                        ║
@@ -722,15 +817,15 @@
                 Object.entries(this.virtues).forEach(([virtue, value]) => {
                     const bar = this.buildBar(value);
                     const name = virtue.charAt(0).toUpperCase() + virtue.slice(1);
-                    display += `\n║ ${name.padEnd(12)}: ${bar} ${String(value.toFixed(1)).padStart(4)} ║`;
+                    display += `\n║ ${name.padEnd(12)}: ${bar} ${value.toFixed(1).padStart(4)} ║`;
                 });
 
                 display += `
 ╠═══════════════════════════════════════════════════════════════╣
 ║                     KARMA METRICS                            ║
 ╠═══════════════════════════════════════════════════════════════╣
-║ Recognition Flow: ${String(this.recognitionFlow).padEnd(8)} (LNAL Operations)    ║
-║ Karma Score:      ${String(this.karmaScore).padEnd(8)} (Composite Index)     ║
+║ Recognition Flow: ${String(this.recognitionFlow).toFixed(0).padStart(8)} (LNAL Operations)    ║
+║ Karma Score:      ${String(this.karmaScore).toFixed(0).padStart(8)} (Composite Index)     ║
 ║ Rarity:           ${this.rarity.padEnd(18)}              ║
 ╚═══════════════════════════════════════════════════════════════╝`;
 
@@ -745,15 +840,47 @@
             }
         }
 
-        // Initialize and display soul
-        function initializeSoulDisplay() {
-            const soul = new OnChainSoul(42);
-            const display = soul.generateDisplay();
-            document.getElementById('live-soul-display').innerHTML = `<pre>${display}</pre>`;
+        // -- Page Interaction Logic --
+        let currentSoul;
+        let simulationInterval;
+        const soulDisplayElement = document.getElementById('live-soul-display');
+        const toggleButton = document.getElementById('simulation-toggle-button');
+        const generateButton = document.getElementById('generate-soul-button');
+
+        function updateDisplay() {
+            if (currentSoul) {
+                currentSoul.advanceTick();
+                soulDisplayElement.innerHTML = `<pre>${currentSoul.generateDisplay()}</pre>`;
+            }
         }
 
+        function initializeNewSoul(tokenId) {
+            clearInterval(simulationInterval);
+            currentSoul = new OnChainSoul(tokenId);
+            soulDisplayElement.innerHTML = `<pre>${currentSoul.generateDisplay()}</pre>`;
+            toggleButton.textContent = "SIMULATE LIFE";
+            currentSoul.isEvolving = false;
+        }
+
+        toggleButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            currentSoul.isEvolving = !currentSoul.isEvolving;
+            if (currentSoul.isEvolving) {
+                toggleButton.textContent = "PAUSE SIMULATION";
+                simulationInterval = setInterval(updateDisplay, 100); // Update every 100ms
+            } else {
+                toggleButton.textContent = "SIMULATE LIFE";
+                clearInterval(simulationInterval);
+            }
+        });
+
+        generateButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            initializeNewSoul();
+        });
+
         // Initialize on page load
-        document.addEventListener('DOMContentLoaded', initializeSoulDisplay);
+        document.addEventListener('DOMContentLoaded', () => initializeNewSoul(42));
     </script>
 </body>
 </html> 
