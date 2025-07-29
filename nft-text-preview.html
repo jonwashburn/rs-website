@@ -220,11 +220,12 @@
                 const karmaScore = this.calculateKarmaScore(state, coherence);
                 const rarity = this.getRarity(karmaScore);
 
-                const virtuesText = VIRTUE_NAMES.map((name, i) => {
+                // Format virtues for display
+                const virtueLines = VIRTUE_NAMES.map((name, i) => {
                     const value = state.virtues[i];
                     const bar = '█'.repeat(Math.round(value)).padEnd(10, '░');
-                    return `${name.padEnd(12, ' ')}: ${bar} (${value.toFixed(0)})`;
-                }).join('\n');
+                    return `${name.padEnd(11, ' ')}: ${bar} (${value.toFixed(0)})`;
+                });
 
                 return `
 SOUL #${this.tokenId.toString().padStart(5, '0')}
@@ -233,11 +234,11 @@ PHASE: ${state.phase}
 ================================================================
 | LEDGER STATE                 | VIRTUE TECHNOLOGIES            |
 |------------------------------|--------------------------------|
-| Ledger Balance (κ): ${String(curvatureValue).padStart(7,' ')}    | ${virtuesText.split('\n')[0]} |
-| Balance State:   ${curvatureType.padEnd(17,' ')} | ${virtuesText.split('\n')[1]} |
-| Embodiment:      ${(state.isEmbodied ? 'Yes' : 'No').padEnd(17, ' ')} | ${virtuesText.split('\n')[2]} |
-| Depth:           ${state.depth.toFixed(0).padStart(7,' ')}          | ${virtuesText.split('\n')[3]} |
-| Rebirths:        ${String(state.rebirths).padStart(7,' ')}          | ${virtuesText.split('\n')[4]} |
+| Ledger Balance (κ): ${String(curvatureValue).padStart(7,' ')}    | ${virtueLines[0]} |
+| Balance State:   ${curvatureType.padEnd(17,' ')} | ${virtueLines[1]} |
+| Embodiment:      ${(state.isEmbodied ? 'Yes' : 'No').padEnd(17, ' ')} | ${virtueLines[2]} |
+| Depth:           ${state.depth.toFixed(0).padStart(7,' ')}          | ${virtueLines[3]} |
+| Rebirths:        ${String(state.rebirths).padStart(7,' ')}          | ${virtueLines[4]} |
 | Energy:          ${state.energy.toFixed(0).padStart(7,' ')}          |                                |
 | Coherence:       ${coherence.padStart(4,' ')}%            |                                |
 |------------------------------|--------------------------------|
