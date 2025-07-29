@@ -273,8 +273,8 @@ Rarity:             ${rarity}
             calculateKarmaScore(state, coherence) {
                 if (state.phase === "Decohered (Pattern Dissolved)") return 0;
 
-                const virtueSum = state.virtues.reduce((a, b) => a + b, 0);
-                const depthDecay = state.depth * 0.01 * Math.abs(state.kappa); // Counterbalance: Depth decays with current imbalance
+                const virtueSum = state.virtues.reduce((a, b) => a + parseFloat(b), 0);
+                const depthDecay = state.depth * 0.002 * Math.abs(state.kappa); // Reduced decay from 0.01 to 0.002
                 const effectiveDepth = Math.max(0, state.depth - depthDecay);
                 let score = (effectiveDepth * 2) + (parseFloat(coherence) * 1.5) + virtueSum - (state.rebirths * 25) + (state.recognitionFlow * 5);
                 
