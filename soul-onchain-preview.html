@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>On-Chain Soul Preview</title>
+    <style>
+        body { margin: 0; background: #000; color: #fff; font-family: monospace; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        #svg-container { width: 600px; height: 800px; border: 1px solid #444; background: #1a1a2e; }
+        #controls { margin-top: 20px; }
+        input, button { margin: 0 10px; padding: 5px; }
+    </style>
+</head>
+<body>
+    <div id="svg-container"></div>
+    <div id="controls">
+        <input type="number" id="tokenId" value="1" min="1" max="10000">
+        <button onclick="renderSoul()">Render Soul</button>
+    </div>
+    <script>
+        const TOTAL_TICKS = 960;
+        const TICK_DURATION = 100;
+
+        const Phase = {
+            NewSpirit: 0,
+            Embodied: 1,
+            Reincarnated: 2,
+            Unified: 3,
+            Decohered: 4
+        };
+
+        class Soul {
+            constructor(tokenId) {
+                this.tokenId = tokenId;
+                this.kappa = this._initialKappa();
+                this.energy = 5000;
+                this.depth = 0;
+                this.rebirths = 0;
+                this.isEmbodied = false;
+                this.phase = Phase.NewSpirit;
+                this.virtuePotentials = this._initialVirtues();
+                this.recognitionFlow = 0;
+                this.lastUpdateTimestamp = Date.now() / 1000;
+                this.ticks = 0;
+                this.nonce = 0;
+            }
+
+            _initialKappa() {
+                return Math.floor(this._keccak(this.tokenId + 'kappa') % 400) - 200;
+            }
+
+            _initialVirtues() {
+                return [
+                    (this._keccak(this.tokenId + 'love') % 50) + 10,
+                    (this._keccak(this.tokenId + 'justice') % 50) + 10,
+                    (this._keccak(this.tokenId + 'prudence') % 50) + 10,
+                    (this._keccak(this.tokenId + 'courage') % 50) + 10,
+                    (this._keccak(this.tokenId + 'temperance') % 50) + 10
+                ];
+            }
+
+            _keccak(seed) {
+                // Simple hash simulation
+                let hash = 0;
+                seed.toString().split('').forEach(char => {
+                    hash = ((hash << 5) - hash + char.charCodeAt(0)) | 0;
+                });
+                return Math.abs(hash);
+            }
+
+            _seededRandom(salt) {
+                this.nonce++;
+                return this._keccak(this.tokenId + this.nonce + salt);
+            }
+
+            _randomInRange(salt, min, max) {
+                if (min >= max) return min;
+                return min + (this._seededRandom(salt) % (max - min + 1));
+            }
+
+            evolve() {
+                const now = Date.now() / 1000;
+                let timeElapsed = now - this.lastUpdateTimestamp;
+                if (timeElapsed < TICK_DURATION) return;
+
+                let ticksToProcess = Math.floor(timeElapsed / TICK_DURATION);
+                if (ticksToProcess > 50) ticksToProcess = 50;
+
+                for (let i = 0; i < ticksToProcess; i++) {
+                    if (this.ticks >= TOTAL_TICKS || this.energy === 0) {
+                        if (this.energy === 0) this.phase = Phase.Decohered;
+                        break;
+                    }
+                    this._advanceTick();
+                }
+
+                this.lastUpdateTimestamp += (ticksToProcess * TICK_DURATION);
+            }
+
+            _advanceTick() {
+                this.ticks++;
+                let oldKappa = this.kappa;
+
+                if (this.ticks === 80 && this.phase === Phase.NewSpirit) {
+                    this.isEmbodied = true;
+                    this.phase = Phase.Embodied;
+                }
+
+                let volatility = this.isEmbodied ? 150 : 50;
+                let courage = this.virtuePotentials[3];
+                if (oldKappa > 300 || oldKappa < -300) {
+                    volatility = volatility > (courage * 0.7) ? volatility - (courage * 0.7) : 0;
+                }
+
+                let debit = this._randomInRange(1, 1, volatility > 5 ? volatility : 5);
+                let credit = this._randomInRange(2, 1, volatility > 5 ? volatility : 5);
+                this.kappa += debit - credit;
+
+                let energyDrain = (debit + credit) / (this.isEmbodied ? 50 : 150);
+                this.energy = this.energy > energyDrain ? this.energy - energyDrain : 0;
+
+                if (this._randomInRange(3, 0, 1000) < this.virtuePotentials[0] * 5) {
+                    this.kappa -= Math.floor(this.kappa / 20);
+                }
+
+                if (this.kappa > 50 || this.kappa < -50) this.depth++;
+
+                if (this.ticks > 0 && this.ticks % 80 === 0) {
+                    if (this.kappa > 100 || this.kappa < -100) {
+                        this.energy = this.energy > 200 ? this.energy - 200 : 0;
+                        this.virtuePotentials = this.virtuePotentials.map(v => v > 12 ? v - 2 : v);
+                    } else {
+                        this.depth += 50;
+                        this.energy = this.energy + 200 > 5000 ? 5000 : this.energy + 200;
+                    }
+                }
+
+                if ((this.kappa > 1000 || this.kappa < -1000) && this.energy > 500) {
+                    this.rebirths++;
+                    this.kappa = 0;
+                    this.energy -= 500;
+                    this.phase = Phase.Reincarnated;
+                }
+
+                let newKappa = this.kappa;
+                if ((oldKappa > 0 && newKappa < oldKappa) || (oldKappa < 0 && newKappa > oldKappa)) {
+                    this.virtuePotentials[0] = this.virtuePotentials[0] < 100 ? this.virtuePotentials[0] + 3 : 100;
+                }
+                if ((oldKappa > 500 || oldKappa < -500) && !((newKappa > 1000 || newKappa < -1000) && this.energy > 500)) {
+                    this.virtuePotentials[3] = this.virtuePotentials[3] < 100 ? this.virtuePotentials[3] + 5 : 100;
+                }
+            }
+
+            generateSVG() {
+                const svgHeader = `<svg width="600" height="800" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#1a1a2e" /><style>.title { font: bold 24px monospace; fill: #ffd700; } .header { font: bold 16px monospace; fill: #ffd700; } .text { font: 14px monospace; fill: #e0e0e0; }</style>`;
+                const phaseStr = this._getPhaseString();
+                const title = `<text x="50%" y="40" text-anchor="middle" class="title">SOUL #${this.tokenId}</text>`;
+                const phase = `<text x="50%" y="70" text-anchor="middle" class="text">PHASE: ${phaseStr}</text>`;
+
+                const ledgerContent = this._buildLedgerContent();
+                const virtueContent = this._buildVirtueContent();
+                const karmaContent = this._buildKarmaContent();
+
+                const content = `${title}${phase}<text x="30" y="120" class="header">LEDGER STATE</text>${ledgerContent}<text x="30" y="320" class="header">VIRTUE TECHNOLOGIES</text>${virtueContent}<text x="30" y="520" class="header">KARMA METRICS</text>${karmaContent}`;
+                return `${svgHeader}${content}</svg>`;
+            }
+
+            _getPhaseString() {
+                const phases = ['New Spirit', 'Embodied', 'Reincarnated', 'Unified with IAM', 'Decohered (Merged with IAM)'];
+                return phases[this.phase];
+            }
+
+            _buildLedgerContent() {
+                const kappaStr = `Ledger Balance (κ): ${this.kappa}`;
+                const balanceState = this.kappa > 0 ? 'Recognition Debt' : this.kappa < 0 ? 'Recognition Surplus' : 'Equilibrium';
+                const embodiment = this.isEmbodied ? 'Yes' : 'No';
+                const coherence = Math.floor(this.energy / 50);
+                return `<text x="30" y="150" class="text">${kappaStr}</text><text x="30" y="170" class="text">Balance State:      ${balanceState}</text><text x="30" y="190" class="text">Embodiment:         ${embodiment}</text><text x="30" y="210" class="text">Depth:              ${Math.floor(this.depth / 10)}.${this.depth % 10}</text><text x="30" y="230" class="text">Rebirths:           ${this.rebirths}</text><text x="30" y="250" class="text">Energy:             ${Math.floor(this.energy / 10)}</text><text x="30" y="270" class="text">Coherence:          ${coherence}%</text>`;
+            }
+
+            _buildVirtueContent() {
+                const names = ['Love', 'Justice', 'Prudence', 'Courage', 'Temperance'];
+                let lines = '';
+                this.virtuePotentials.forEach((v, i) => {
+                    const yPos = 350 + (i * 30);
+                    const bar = this._buildBar(v);
+                    const value = `${Math.floor(v / 10)}.${v % 10}`;
+                    lines += `<text x="30" y="${yPos}" class="text">${names[i]}</text><text x="140" y="${yPos}" class="text">${bar} (${value})</text>`;
+                });
+                return lines;
+            }
+
+            _buildBar(value) {
+                const rounded = Math.floor(value / 10);
+                let filled = '█'.repeat(rounded);
+                let empty = '░'.repeat(10 - rounded);
+                return filled + empty;
+            }
+
+            _buildKarmaContent() {
+                const { score, rarity } = this._calculateKarmaAndRarity();
+                return `<text x="30" y="550" class="text">Karma Score:        ${score}</text><text x="30" y="570" class="text">Rarity:             ${rarity}</text>`;
+            }
+
+            _calculateKarmaAndRarity() {
+                if (this.phase === Phase.Decohered) return { score: 0, rarity: 'Common' };
+
+                let virtueSum = this.virtuePotentials.reduce((a, b) => a + b, 0) / 10;
+                let coherence = Math.floor(this.energy / 50);
+                let kappaAbs = Math.abs(this.kappa);
+                let depthDecay = (this.depth * 2 * kappaAbs) / 1000;
+                let effectiveDepth = Math.floor((this.depth > depthDecay ? this.depth - depthDecay : 0) / 10);
+
+                let score = (effectiveDepth * 2) + (coherence * 1.5) + virtueSum - (this.rebirths * 25) + (this.recognitionFlow * 5);
+                if (this.phase === Phase.Unified) score *= 1.5;
+
+                let rarity = 'Common';
+                if (score >= 400) rarity = 'Legendary';
+                else if (score >= 300) rarity = 'Epic';
+                else if (score >= 200) rarity = 'Rare';
+                else if (score >= 100) rarity = 'Uncommon';
+
+                return { score: Math.floor(score), rarity };
+            }
+        }
+
+        let currentSoul;
+
+        function renderSoul() {
+            const tokenId = parseInt(document.getElementById('tokenId').value);
+            currentSoul = new Soul(tokenId);
+            currentSoul.evolve(); // Simulate some evolution
+            const svg = currentSoul.generateSVG();
+            document.getElementById('svg-container').innerHTML = svg;
+        }
+
+        // Initial render
+        renderSoul();
+    </script>
+</body>
+</html> 
