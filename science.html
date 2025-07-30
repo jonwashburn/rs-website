@@ -279,39 +279,8 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            initializePhiDerivation();
             initializeHubbleVisualizer();
         });
-
-        function initializePhiDerivation() {
-            let currentValue = 1;
-            let iteration = 1;
-            const displayElement = document.getElementById('phi-value');
-            const explanationElement = document.getElementById('phi-explanation');
-            const buttonElement = document.getElementById('phi-step-button');
-
-            if (!buttonElement) return; // Guard against running on pages without the module
-
-            buttonElement.addEventListener('click', (e) => {
-                e.preventDefault();
-                if (iteration > 20) { 
-                    currentValue = 1;
-                    iteration = 1;
-                    explanationElement.textContent = "The process converges to a fixed point: φ. Let's restart.";
-                } else {
-                    currentValue = 1 + 1 / currentValue;
-                    iteration++;
-                    explanationElement.textContent = `The universe requires a self-similar scaling constant. It emerges from the simplest possible dual-balanced recurrence: x = 1 + 1/x.`;
-                }
-                
-                displayElement.textContent = currentValue.toFixed(8);
-                buttonElement.textContent = `NEXT STEP (Iteration #${iteration})`;
-
-                if (Math.abs(currentValue - 1.61803399) < 0.00001) {
-                     buttonElement.textContent = "CONVERGED TO φ";
-                }
-            });
-        }
 
         function initializeHubbleVisualizer() {
             const button = document.getElementById('hubble-button');

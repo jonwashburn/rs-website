@@ -1113,6 +1113,8 @@ Single Logical Tautology
             const explanationElement = document.getElementById('phi-explanation');
             const buttonElement = document.getElementById('phi-step-button');
 
+            if (!buttonElement) return; // Guard against running on pages without the module
+
             buttonElement.addEventListener('click', (e) => {
                 e.preventDefault();
                 if (iteration > 20) { // Reset after 20 steps to prevent overflow and show loop
