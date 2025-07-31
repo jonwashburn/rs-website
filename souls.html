@@ -441,6 +441,23 @@
             <p style="font-size: 18px; margin: 20px 0;">
                 Ledger Souls is the stunning intersection of these two paths. It began with an artistic prophecy that diagnosed a planetary crisis and ended with a scientific proof that revealed humanity's true purpose. This is the Theory of Us.
             </p>
+            
+            <div class="soul-interface-container">
+                <div class="soul-svg-wrapper">
+                    <svg id="soul-svg-container" viewBox="0 0 500 500"></svg>
+                </div>
+                <div class="soul-data-wrapper">
+                <div id="live-soul-display"></div>
+                    <div class="lnal-feed">
+                        <div class="lnal-header">LNAL FEED</div>
+                        <pre id="lnal-history-display"></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <a id="nurture-soul-button" href="#" class="button secondary">NURTURE SOUL</a>
+            </div>
         </div>
 
         <div class="section">
@@ -602,22 +619,6 @@ Single Logical Tautology
                 </div>
             </div>
 
-            <div class="soul-interface-container">
-                <div class="soul-svg-wrapper">
-                    <svg id="soul-svg-container" viewBox="0 0 500 500"></svg>
-                </div>
-                <div class="soul-data-wrapper">
-                <div id="live-soul-display"></div>
-                    <div class="lnal-feed">
-                        <div class="lnal-header">LNAL FEED</div>
-                        <pre id="lnal-history-display"></pre>
-                    </div>
-                </div>
-            </div>
-
-            <div style="text-align: center; margin-top: 20px;">
-                <a id="nurture-soul-button" href="#" class="button secondary">NURTURE SOUL</a>
-            </div>
         </div>
 
         <div class="ascii-header">
@@ -765,59 +766,58 @@ Single Logical Tautology
         }
 
         function renderSoulSVG(soul) {
-            let svgContent = `<rect width="500" height="500" fill="#000000"/>`;
-            
-            if (soul.stage === 0) { // Void
-                // Just the black background
-            } else {
-                const centerX = 250;
-                const centerY = 250;
+            let svgContent = `<rect width="500" height="500" fill="#FFFFFF"/>`;
+            const centerX = 250;
+            const centerY = 250;
+
+            if (soul.stage > 0) {
+                // Base color on kappa (blue for negative, gold for positive)
+                const hue = soul.kappa < 0 ? 200 : 45;
+                const saturation = 80;
+                const lightness = 50 + soul.kappa * 2; // More κ = brighter
+                const baseColor = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+
+                // Central Core
+                const coreRadius = 10 + soul.iAmAffinity / 5;
+                const coreOpacity = 0.5 + soul.iAmAffinity / 200;
+                svgContent += `<circle cx="${centerX}" cy="${centerY}" r="${coreRadius}" fill="${baseColor}" opacity="${coreOpacity}" />`;
+
+                // 8-Pointed Star representing 8-beat cycle
+                const points = 8;
+                const outerRadius = 80 + soul.stage * 30 + (soul.virtues.courage * 5);
+                const innerRadius = 40 + soul.stage * 15 + (soul.virtues.love * 3);
                 
-                for (let i = 0; i < 8; i++) {
-                    const angle = i * 45 * (Math.PI / 180);
-                    const virtueName = Object.keys(soul.virtues)[i % 5];
-                    const virtueValue = soul.virtues[virtueName];
-                    
-                    // Stage 1: Crack
-                    if (soul.stage >= 1) {
-                        const radius = 60 + (virtueValue * 5);
-                        const x = centerX + radius * Math.cos(angle);
-                        const y = centerY + radius * Math.sin(angle);
-                        const opacity = (soul.stage * 0.2).toFixed(2);
-                        svgContent += `<circle cx="${x}" cy="${y}" r="3" fill="#FFD700" opacity="${opacity}"/>`;
-                    }
-                    
-                    // Stage 2: Spiral
-                    if (soul.stage >= 2) {
-                        const radius2 = 100 + (soul.kappa * 2);
-                        const x2 = centerX + radius2 * Math.cos(angle + soul.months * 0.05);
-                        const y2 = centerY + radius2 * Math.sin(angle + soul.months * 0.05);
-                        svgContent += `<line x1="${centerX}" y1="${centerY}" x2="${x2}" y2="${y2}" stroke="#555" stroke-width="1"/>`;
-                    }
+                let starPoints = "";
+                for (let i = 0; i < points * 2; i++) {
+                    const radius = (i % 2 === 0) ? outerRadius : innerRadius;
+                    const angle = (i * Math.PI / points) - (Math.PI / 2);
+                    const x = centerX + radius * Math.cos(angle);
+                    const y = centerY + radius * Math.sin(angle);
+                    starPoints += `${x},${y} `;
+                }
+                
+                svgContent += `<polygon points="${starPoints.trim()}" fill="${baseColor}" opacity="0.6" />`;
 
-                    // Stage 3: Bloom
-                    if (soul.stage >= 3) {
-                         const radius3 = 60 + (virtueValue * 10);
-                        const x3 = centerX + radius3 * Math.cos(angle);
-                        const y3 = centerY + radius3 * Math.sin(angle);
-                        const size = 5 + soul.iAmAffinity/10;
-                        const color = soul.kappa > 0 ? "#FF6B6B" : "#00FFFF";
-                        svgContent += `<circle cx="${x3}" cy="${y3}" r="${size}" fill="${color}" opacity="0.8"/>`;
-                    }
-
-                    // Stage 4: Radiance
-                    if (soul.stage >= 4) {
-                        const radius4 = 150 + Math.sin(soul.ticks * 0.1 + i) * 20;
-                        const x4 = centerX + radius4 * Math.cos(angle);
-                        const y4 = centerY + radius4 * Math.sin(angle);
-                        svgContent += `<line x1="${centerX}" y1="${centerY}" x2="${x4}" y2="${y4}" stroke="white" stroke-width="2" opacity="0.9"/>`;
+                // Radiating lines for Temperance and Prudence
+                if (soul.stage >= 3) {
+                    for (let i = 0; i < points; i++) {
+                        const angle = (i * 2 * Math.PI / points);
+                        const startRadius = outerRadius;
+                        const endRadius = startRadius + soul.virtues.prudence * 5;
+                        
+                        const x1 = centerX + startRadius * Math.cos(angle);
+                        const y1 = centerY + startRadius * Math.sin(angle);
+                        const x2 = centerX + endRadius * Math.cos(angle);
+                        const y2 = centerY + endRadius * Math.sin(angle);
+                        
+                        svgContent += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${baseColor}" stroke-width="2" opacity="${soul.virtues.temperance / 10}" />`;
                     }
                 }
             }
-
-             // Gap Crossing Flash
+            
+            // Gap Crossing Flash
             if(soul.lnalHistory.length > 0 && soul.lnalHistory[0].includes("LISTEN")) {
-                svgContent += `<rect width="500" height="500" fill="white" opacity="0.5"><animate attributeName="opacity" from="0.5" to="0" dur="0.2s" /></rect>`;
+                svgContent += `<rect width="500" height="500" fill="gold" opacity="0.4"><animate attributeName="opacity" from="0.4" to="0" dur="0.3s" /></rect>`;
             }
 
             svgContainer.innerHTML = svgContent;
