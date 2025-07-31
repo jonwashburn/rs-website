@@ -767,6 +767,13 @@ Single Logical Tautology
         function initializeNewSoul(tokenId) {
             clearInterval(simulationInterval);
             currentSoul = new OnChainSoul(tokenId);
+            
+            // Update the header with the new Soul ID
+            const soulPreviewHeader = document.querySelector('.soul-preview-header');
+            if (soulPreviewHeader) {
+                soulPreviewHeader.textContent = `LIVE LEDGER DATA FEED: SOUL #${currentSoul.tokenId}`;
+            }
+
             soulDisplayElement.innerHTML = `<pre>${currentSoul.generateDisplay()}</pre>`;
             toggleButton.textContent = "SIMULATE LIFE";
             currentSoul.isEvolving = false;
@@ -786,7 +793,8 @@ Single Logical Tautology
 
         generateButton.addEventListener('click', (e) => {
             e.preventDefault();
-            initializeNewSoul();
+            const newTokenId = Math.floor(Math.random() * 10000);
+            initializeNewSoul(newTokenId);
         });
 
         // Initialize on page load
