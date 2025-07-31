@@ -356,6 +356,54 @@
                 text-align: center;
             }
         }
+        .soul-interface-container {
+            display: flex;
+            gap: 20px;
+            margin: 40px 0;
+            background: #111;
+            border: 2px solid #333;
+            padding: 20px;
+            animation: heartbeat 5s infinite ease-in-out;
+        }
+        .soul-svg-wrapper {
+            flex: 1;
+            min-width: 300px;
+        }
+        #soul-svg-container {
+            width: 100%;
+            height: auto;
+            background: #000;
+        }
+        .soul-data-wrapper {
+            flex: 1;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .lnal-feed {
+            margin-top: 20px;
+            border-top: 1px solid #333;
+            padding-top: 10px;
+        }
+        .lnal-header {
+            color: #888;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        #lnal-history-display {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #aaa;
+            height: 100px; /* Show roughly 5 lines */
+            overflow: hidden;
+            white-space: pre;
+        }
+        @media (max-width: 768px) {
+            .soul-interface-container {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
@@ -552,15 +600,22 @@ Single Logical Tautology
                 </div>
             </div>
 
-            <div class="soul-preview">
-                 <div class="soul-preview-header" style="text-align: center; color: #888; margin-bottom: 20px;">
-                    LIVE LEDGER DATA FEED: SOUL #42
+            <div class="soul-interface-container">
+                <div class="soul-svg-wrapper">
+                    <svg id="soul-svg-container" viewBox="0 0 500 500"></svg>
                 </div>
-                <div id="live-soul-display"></div>
+                <div class="soul-data-wrapper">
+                    <div id="live-soul-display"></div>
+                    <div class="lnal-feed">
+                        <div class="lnal-header">LNAL FEED</div>
+                        <pre id="lnal-history-display"></pre>
+                    </div>
+                </div>
             </div>
 
-            <a id="simulation-toggle-button" href="#" class="button">SIMULATE LIFE</a>
-            <a id="generate-soul-button" href="#" class="button secondary">GENERATE NEW SOUL</a>
+            <div style="text-align: center; margin-top: 20px;">
+                <a id="nurture-soul-button" href="#" class="button secondary">NURTURE SOUL</a>
+            </div>
         </div>
 
         <div class="ascii-header">
@@ -646,13 +701,16 @@ Single Logical Tautology
         let currentSoul;
         let simulationInterval;
         const soulDisplayElement = document.getElementById('live-soul-display');
-        const toggleButton = document.getElementById('simulation-toggle-button');
-        const generateButton = document.getElementById('generate-soul-button');
+        const svgContainer = document.getElementById('soul-svg-container');
+        const lnalHistoryDisplay = document.getElementById('lnal-history-display');
+        const nurtureButton = document.getElementById('nurture-soul-button');
 
         function updateDisplay() {
             if (currentSoul) {
                 currentSoul.advanceTick();
-                soulDisplayElement.innerHTML = `<pre>${generateDisplay(currentSoul)}</pre>`;
+                soulDisplayElement.innerHTML = `<pre>${generateStatusDisplay(currentSoul)}</pre>`;
+                lnalHistoryDisplay.textContent = currentSoul.lnalHistory.join('\n');
+                renderSoulSVG(currentSoul);
             }
         }
 
@@ -660,78 +718,112 @@ Single Logical Tautology
             clearInterval(simulationInterval);
             currentSoul = new UnifiedSoul(tokenId);
             
-            const soulPreviewHeader = document.querySelector('.soul-preview-header');
-            if (soulPreviewHeader) {
-                soulPreviewHeader.textContent = `LIVE LEDGER DATA FEED: SOUL #${currentSoul.tokenId}`;
-            }
+            // Auto-start simulation
+            currentSoul.isEvolving = true;
+            simulationInterval = setInterval(updateDisplay, 100); 
 
-            soulDisplayElement.innerHTML = `<pre>${generateDisplay(currentSoul)}</pre>`;
-            toggleButton.textContent = "SIMULATE LIFE";
-            currentSoul.isEvolving = false;
+            updateDisplay(); // Initial render
         }
 
-        toggleButton.addEventListener('click', (e) => {
+        nurtureButton.addEventListener('click', (e) => {
             e.preventDefault();
-            if (!currentSoul) return;
-            currentSoul.isEvolving = !currentSoul.isEvolving;
-            if (currentSoul.isEvolving) {
-                toggleButton.textContent = "PAUSE SIMULATION";
-                simulationInterval = setInterval(updateDisplay, 100);
-            } else {
-                toggleButton.textContent = "SIMULATE LIFE";
-                clearInterval(simulationInterval);
+            if (currentSoul) {
+                currentSoul.nurture();
+                // If simulation isn't running, do a single refresh
+                if (!currentSoul.isEvolving) {
+                    updateDisplay();
+                }
             }
-        });
-
-        generateButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            const newTokenId = Math.floor(Math.random() * 10000);
-            initializeNewSoul(newTokenId);
         });
 
         // -- Display Generation --
-        function generateDisplay(soul) {
-            const title = `         -- VIRTUE TECHNOLOGY ON-CHAIN SOUL --`;
-            const state = `[ SOUL #${soul.tokenId.toString().padStart(4, '0')} | ${soul.phase.toUpperCase()} | ${soul.months}/96 months ]`;
+        function generateStatusDisplay(soul) {
+            const state = `[ SOUL #${soul.tokenId.toString().padStart(4, '0')} | ${soul.phase.toUpperCase()} | ${soul.months}/96 months | STAGE ${soul.stage} ]`;
             
-            let display = `${title}\n${state}\n\n`;
-            display += `      <span class="tooltip">κ-CURVATURE: ${soul.kappa.toFixed(4)}<span class="tooltip-text">Recognition Curvature (κ) is the core metric of a soul's interaction with the universal ledger. Positive κ indicates recognition surplus (Love), negative indicates debt (Fear).</span></span>\n`;
-            display += `         ENERGY: ${buildBar(soul.energy / 100)} [${(soul.energy / 100).toFixed(1)}%]\n`;
-            display += `          DEPTH: ${soul.depth.toFixed(2)} (Rebirths: ${soul.rebirths})\n\n`;
+            let display = `${state}\n\n`;
+            display += `  κ-CURVATURE: ${soul.kappa.toFixed(4)}\n`;
+            display += `  I-AM AFFINITY: ${buildBar(soul.iAmAffinity, 10, 'blue')} [${soul.iAmAffinity}%]\n`;
+            display += `  GAP CROSSINGS: ${soul.gapCrossings}\n\n`;
 
-            display += `VIRTUE TECHS:\n`;
-            display += `    <span class="tooltip">Love:     ${buildBar(soul.virtues.love * 10)}<span class="tooltip-text">${getVirtueTooltip('Love')}</span></span>\n`;
-            display += `    <span class="tooltip">Justice:  ${buildBar(soul.virtues.justice * 10)}<span class="tooltip-text">${getVirtueTooltip('Justice')}</span></span>\n`;
-            display += `    <span class="tooltip">Courage:  ${buildBar(soul.virtues.courage * 10)}<span class="tooltip-text">${getVirtueTooltip('Courage')}</span></span>\n`;
-            display += `    <span class="tooltip">Temperance: ${buildBar(soul.virtues.temperance * 10)}<span class="tooltip-text">${getVirtueTooltip('Temperance')}</span></span>\n`;
-            display += `    <span class="tooltip">Prudence: ${buildBar(soul.virtues.prudence * 10)}<span class="tooltip-text">${getVirtueTooltip('Prudence')}</span></span>\n\n`;
-
-            display += `RECOGNITION FLOW: ${soul.recognitionFlow} events\n`;
+            display += `VIRTUE TECHS (8-BEAT PULSE: ${soul.breathPhase}):\n`;
+            display += `    Love:     ${buildBar(soul.virtues.love * 10)}\n`;
+            display += `    Justice:  ${buildBar(soul.virtues.justice * 10)}\n`;
+            display += `    Courage:  ${buildBar(soul.virtues.courage * 10)}\n`;
+            display += `    Temperance: ${buildBar(soul.virtues.temperance * 10)}\n`;
+            display += `    Prudence: ${buildBar(soul.virtues.prudence * 10)}\n`;
             
             return display;
         }
 
-        function getVirtueTooltip(virtue) {
-            const tooltips = {
-                'Love': 'The on-chain algorithm for minimizing recognition debt (κ>0). Governs empathy and connection.',
-                'Justice': 'The algorithm for maintaining ledger equilibrium. Responds to volatility and imbalance.',
-                'Courage': 'The algorithm for expending energy to overcome high-cost recognition events.',
-                'Temperance': 'The algorithm for conserving energy and maintaining stability. Responds to high energy states.',
-                'Prudence': 'The algorithm for long-term pattern recognition and wisdom. Grows with time and experience.'
-            };
-            return tooltips[virtue] || 'A fundamental cosmic algorithm.';
-        }
-
-        function buildBar(value) {
-            const maxBars = 10;
-            const filledBars = Math.floor((value / 10) * maxBars);
+        function buildBar(value, max = 10, color = 'white') {
+            const maxBars = max;
+            const filledBars = Math.floor((value / (max*10)) * maxBars);
             const emptyBars = maxBars - filledBars;
             return '█'.repeat(filledBars) + '░'.repeat(emptyBars);
         }
 
+        function renderSoulSVG(soul) {
+            let svgContent = `<rect width="500" height="500" fill="#000000"/>`;
+            
+            if (soul.stage === 0) { // Void
+                // Just the black background
+            } else {
+                const centerX = 250;
+                const centerY = 250;
+                
+                for (let i = 0; i < 8; i++) {
+                    const angle = i * 45 * (Math.PI / 180);
+                    const virtueName = Object.keys(soul.virtues)[i % 5];
+                    const virtueValue = soul.virtues[virtueName];
+                    
+                    // Stage 1: Crack
+                    if (soul.stage >= 1) {
+                        const radius = 60 + (virtueValue * 5);
+                        const x = centerX + radius * Math.cos(angle);
+                        const y = centerY + radius * Math.sin(angle);
+                        const opacity = (soul.stage * 0.2).toFixed(2);
+                        svgContent += `<circle cx="${x}" cy="${y}" r="3" fill="#FFD700" opacity="${opacity}"/>`;
+                    }
+                    
+                    // Stage 2: Spiral
+                    if (soul.stage >= 2) {
+                        const radius2 = 100 + (soul.kappa * 2);
+                        const x2 = centerX + radius2 * Math.cos(angle + soul.months * 0.05);
+                        const y2 = centerY + radius2 * Math.sin(angle + soul.months * 0.05);
+                        svgContent += `<line x1="${centerX}" y1="${centerY}" x2="${x2}" y2="${y2}" stroke="#555" stroke-width="1"/>`;
+                    }
+
+                    // Stage 3: Bloom
+                    if (soul.stage >= 3) {
+                         const radius3 = 60 + (virtueValue * 10);
+                        const x3 = centerX + radius3 * Math.cos(angle);
+                        const y3 = centerY + radius3 * Math.sin(angle);
+                        const size = 5 + soul.iAmAffinity/10;
+                        const color = soul.kappa > 0 ? "#FF6B6B" : "#00FFFF";
+                        svgContent += `<circle cx="${x3}" cy="${y3}" r="${size}" fill="${color}" opacity="0.8"/>`;
+                    }
+
+                    // Stage 4: Radiance
+                    if (soul.stage >= 4) {
+                        const radius4 = 150 + Math.sin(soul.ticks * 0.1 + i) * 20;
+                        const x4 = centerX + radius4 * Math.cos(angle);
+                        const y4 = centerY + radius4 * Math.sin(angle);
+                        svgContent += `<line x1="${centerX}" y1="${centerY}" x2="${x4}" y2="${y4}" stroke="white" stroke-width="2" opacity="0.9"/>`;
+                    }
+                }
+            }
+
+             // Gap Crossing Flash
+            if(soul.lnalHistory.length > 0 && soul.lnalHistory[0].includes("LISTEN")) {
+                svgContent += `<rect width="500" height="500" fill="white" opacity="0.5"><animate attributeName="opacity" from="0.5" to="0" dur="0.2s" /></rect>`;
+            }
+
+            svgContainer.innerHTML = svgContent;
+        }
+
         // -- Initialization --
         document.addEventListener('DOMContentLoaded', () => {
-            initializeNewSoul(42);
+            initializeNewSoul(Math.floor(Math.random() * 10000));
             initializePhiDerivation();
         });
 
