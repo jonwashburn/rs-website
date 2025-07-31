@@ -37,4 +37,4 @@ The theory is formally verified in Lean 4 with zero axioms and zero sorry statem
 
 ## Hosting
 
-This site is hosted via GitHub Pages and available at recognitionphysics.com. 
+This site is hosted via GitHub Pages and available at recognitionphysics.com. # trigger rebuild
