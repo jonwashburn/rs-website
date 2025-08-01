@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LEDGER SOULS /// Recognition Science Institute</title>
-    <!-- Removed Google Fonts, will use system fonts for Apple-like feel -->
-    <!-- Updated: July 31, 2025 - Redesigned for modern, clean aesthetic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <!-- Updated: July 31, 2025 - Redesigned for Neo-Brutalist style -->
     <style>
         :root {
-            --apple-black: #1d1d1f;
-            --apple-white: #ffffff;
-            --apple-light-gray: #f5f5f7;
-            --apple-medium-gray: #a1a1a6;
-            --apple-dark-gray: #6e6e73;
-            --apple-blue: #007aff;
+            --black: #000000;
+            --white: #FFFFFF;
+            --accent: #00FF00; /* Bright, digital lime green */
+            --border-style: 3px solid var(--black);
         }
 
         * {
@@ -23,108 +23,74 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: var(--apple-white);
-            color: var(--apple-black);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            font-family: 'VT323', monospace;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.5;
+            padding: 2rem;
             overflow-x: hidden;
         }
 
         .container {
-            max-width: 980px; /* Standard Apple container width */
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 0 22px;
+            padding: 0;
         }
+
+        h1, h2, h3, h4, h5, h6 {
+            text-transform: uppercase;
+            font-weight: normal;
+            margin-bottom: 1rem;
+        }
+
+        h1 { font-size: clamp(3rem, 8vw, 6rem); line-height: 1; }
+        h2 { font-size: clamp(2rem, 6vw, 4rem); line-height: 1.1; }
+        h3 { font-size: 1.5rem; }
 
         p {
-            font-size: 17px;
+            font-size: 1.25rem;
             margin-bottom: 1.5em;
-            letter-spacing: 0.01em;
-            max-width: 65ch; /* Improve readability */
+            max-width: 65ch;
         }
-
-        /* Replaces old ASCII header */
-        .promo-header {
-            text-align: center;
-            padding: 100px 0;
-            background: #000;
-            color: var(--apple-white);
-        }
-
-        .promo-header h1 {
-            font-size: clamp(32px, 5vw, 56px);
-            font-weight: 600;
-            letter-spacing: -0.01em;
-            line-height: 1.1;
-        }
-
-        .promo-header p {
-            font-size: clamp(18px, 2.5vw, 24px);
-            max-width: 40ch;
-            margin: 20px auto 0;
-            color: var(--apple-medium-gray);
-            font-weight: 400;
-        }
-
+        
         .main-header {
             text-align: center;
-            padding: 120px 0 60px 0;
-        }
-
-        .main-header h1 {
-            font-size: clamp(40px, 8vw, 80px);
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            line-height: 1.05;
-            margin-bottom: 15px;
+            padding: 4rem 2rem;
+            border: var(--border-style);
+            margin-bottom: 2rem;
         }
 
         .main-header .subtitle {
-            font-size: clamp(20px, 4vw, 28px);
-            color: var(--apple-dark-gray);
-            font-weight: 400;
-            margin-top: 5px;
-            max-width: 35ch;
-            margin-left: auto;
-            margin-right: auto;
+            font-size: 1.5rem;
+            color: var(--black);
         }
 
         .hero-image-section {
-            padding: 0;
-            margin: 60px 0;
+            border: var(--border-style);
+            padding: 1rem;
+            margin-bottom: 2rem;
         }
 
         .hero-image-section img {
             width: 100%;
             display: block;
-            border-radius: 24px;
-            box-shadow: 0 20px 60px -10px rgba(0,0,0,0.15);
         }
 
         .section {
-            padding: 80px 0;
-            border-bottom: 1px solid #e5e5e5;
+            padding: 4rem 2rem;
+            border: var(--border-style);
+            margin-bottom: 2rem;
         }
 
         .section-header {
-            font-size: 17px;
-            color: var(--apple-dark-gray);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
             text-align: center;
         }
 
         .section-title {
-            font-size: clamp(32px, 5vw, 56px);
-            font-weight: 700;
-            letter-spacing: -0.015em;
-            margin-bottom: 40px;
             text-align: center;
-            line-height: 1.1;
+            margin-bottom: 2rem;
         }
         
         .centered-text p {
@@ -133,87 +99,65 @@
             text-align: center;
         }
 
-        /* Replaces old ASCII/terminal display for the soul */
+        /* Brutalist Soul Display */
         .soul-display-container {
-            background: var(--apple-light-gray);
-            color: var(--apple-black);
-            padding: 40px;
-            border: 1px solid #d1d1d6;
-            border-radius: 18px;
-            margin: 60px auto;
-            max-width: 700px;
+            background: var(--black);
+            color: var(--accent);
+            padding: 2rem;
+            border: var(--border-style);
+            margin: 2rem auto;
+            max-width: 720px;
         }
         .soul-ascii-art {
             white-space: pre;
-            font-family: "SFMono-Regular", "SF Mono", "Menlo", "Consolas", "Liberation Mono", monospace;
-            font-size: 14px;
-            line-height: 1.5;
+            font-family: 'VT323', monospace;
+            font-size: 1.1rem;
+            line-height: 1.2;
+            text-align: left;
+        }
+
+        .soul-explanation-wrapper {
             text-align: center;
         }
 
         .soul-explanation-wrapper h3 {
-            font-size: 28px;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-
-        .soul-explanation-wrapper p {
-            font-size: 17px;
-            color: var(--apple-dark-gray);
+            font-size: 2rem;
         }
 
         .button {
             display: inline-block;
-            background: var(--apple-blue);
-            color: var(--apple-white);
-            padding: 12px 22px;
+            background: var(--accent);
+            color: var(--black);
+            padding: 1rem 2rem;
             text-decoration: none;
-            font-size: 17px;
-            font-weight: 400;
-            letter-spacing: -0.01em;
-            border-radius: 980px; /* Pill shape */
-            border: 1px solid transparent;
+            font-size: 1.25rem;
+            font-family: 'VT323', monospace;
+            text-transform: uppercase;
+            border: var(--border-style);
+            box-shadow: 5px 5px 0px var(--black);
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin: 10px 5px;
+            transition: all 0.1s ease-in-out;
         }
 
-        .button:hover {
-            background: #0071e3;
+        .button:hover, .button:focus {
+            transform: translate(5px, 5px);
+            box-shadow: 0px 0px 0px var(--black);
         }
         
-        .button.secondary {
-            background: var(--apple-light-gray);
-            color: var(--apple-blue);
-            border: 1px solid var(--apple-light-gray);
-        }
-        
-        .button.secondary:hover {
-            background: #e5e5e5;
-        }
-
         .prophecy-walkthrough {
-            margin-top: 100px;
-            display: flex;
-            flex-direction: column;
-            gap: 120px;
+            margin-top: 4rem;
+            display: grid;
+            gap: 2rem;
         }
 
         .feature-section {
-            display: flex;
-            align-items: center;
-            gap: 60px;
-        }
-
-        .feature-section.reverse {
-            flex-direction: row-reverse;
+            border: var(--border-style);
+            padding: 2rem;
         }
 
         .feature-image {
-            flex: 1.2;
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+            border: var(--border-style);
+            margin-bottom: 1rem;
         }
 
         .feature-image img {
@@ -222,149 +166,119 @@
         }
 
         .feature-text {
-            flex: 1;
-        }
-
-        .feature-text h3 {
-            font-size: 32px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: var(--apple-black);
-        }
-
-        .feature-text p {
-            font-size: 17px;
-            line-height: 1.6;
-            color: var(--apple-dark-gray);
-            max-width: 45ch;
+            text-align: center;
         }
         
         .footer {
-            background: var(--apple-light-gray);
-            padding: 60px 0;
+            padding: 2rem;
+            border: var(--border-style);
             text-align: center;
-            font-size: 12px;
-            color: var(--apple-dark-gray);
+        }
+
+        .social-links {
+            margin-bottom: 1rem;
         }
 
         .social-links a {
-            color: var(--apple-dark-gray);
-            text-decoration: none;
-            margin: 0 10px;
-            font-weight: 500;
-        }
-        .social-links a:hover {
-            color: var(--apple-blue);
+            color: var(--black);
+            text-decoration: underline;
+            margin: 0 1rem;
+            font-size: 1.25rem;
         }
 
-        /* Modern replacement for parallax */
+        /* Remove parallax, use solid blocks */
         .parallax-section {
-            min-height: 80vh;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            border-radius: 30px;
-            margin: 80px 0;
+            min-height: auto;
+            padding: 1rem;
+            border: var(--border-style);
+            margin-bottom: 2rem;
+        }
+        .parallax-section img {
+            width: 100%;
+            display: block;
         }
 
-        /* Modern replacement for break-text */
         .break-text {
-            font-size: clamp(28px, 5vw, 48px);
-            font-weight: 600;
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: normal;
             text-align: center;
-            padding: 100px 20px;
-            color: var(--apple-black);
-            letter-spacing: -0.01em;
-            line-height: 1.2;
-            background-color: transparent;
+            padding: 4rem 2rem;
+            border: var(--border-style);
+            background: var(--accent);
+            color: var(--black);
+            margin-bottom: 2rem;
         }
 
         .soul-interface-container {
-            display: flex;
-            gap: 40px;
-            margin: 60px 0;
-            align-items: center;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
         }
 
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 20px;
-            }
-            .section {
-                padding: 60px 0;
-            }
-            .main-header {
-                padding: 80px 0 40px 0;
-            }
-            p { font-size: 16px; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
 
-            .feature-section,
-            .feature-section.reverse {
-                flex-direction: column;
-                gap: 30px;
-                text-align: center;
-            }
-            .feature-text p {
-                margin-left: auto;
-                margin-right: auto;
-            }
+        .card {
+            border: var(--border-style);
+            padding: 2rem;
+            text-align: center;
+        }
 
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (min-width: 768px) {
             .soul-interface-container {
-                flex-direction: column;
-            }
-            .parallax-section {
-                min-height: 50vh;
+                grid-template-columns: 2fr 1fr;
+                align-items: center;
             }
         }
     </style>
 </head>
 <body>
-    <div class="promo-header">
-        <div class="container">
-            <h1>This is not a PFP. It is a prophecy.</h1>
-            <p>A living soul, realized on the blockchain. The answer to the rapture is recognition.</p>
-        </div>
-    </div>
-    
-    <header class="main-header">
-        <div class="container">
-            <h1>Ledger Souls</h1>
-            <p class="subtitle">A Living Prophecy, Realized on the Blockchain</p>
-        </div>
-    </header>
-
     <div class="container">
+        <header class="main-header">
+            <h1>Ledger Souls</h1>
+            <p class="subtitle">A Living Prophecy /// Realized On-Chain</p>
+        </header>
+
         <div class="hero-image-section">
             <img src="assets/images/218-optimized.jpg" alt="A soul contemplating a vast digital landscape.">
         </div>
-    </div>
 
-    <div class="container">
         <div class="section">
             <div class="soul-interface-container">
-                <div class="soul-display-container" style="flex: 1.5;">
-                    <pre id="soul-ascii-art-display" class="soul-ascii-art"></pre>
+                <div class="soul-display-container">
+                    <pre id="soul-ascii-art-display" class="soul-ascii-art">INITIALIZING SOUL...</pre>
                 </div>
-                <div class="soul-explanation-wrapper" style="flex: 1;">
-                    <h3>A Living On-Chain Entity</h3>
+                <div class="soul-explanation-wrapper">
+                    <h3>A Living Entity</h3>
                     <p>
-                        This is not a simulation. What you see is one of 10,000 unique "Ledger Souls"—autonomous entities that live and evolve directly on the blockchain as individual NFTs.
+                        This is not a simulation. This is a Ledger Soul. One of 10,000 autonomous entities evolving directly on the blockchain.
                     </p>
                     <p>
-                        Its state is calculated dynamically by the smart contract based on its birth properties and the current block time. Each soul's journey is a direct application of Recognition Science, navigating the 8-beat cycle of the cosmos over a 96-month lifespan towards awakening. The text you see is what is rendered as the NFT's image, a living testament to its eternal whisper.
+                        Its state is pure function. Calculated from its birth block and Recognition Science. A 96-month journey towards awakening.
                     </p>
-                    <button id="recognize-button" class="button" style="margin-top: 20px;">Recognize this Soul</button>
-                    <p style="margin-top: 10px; color: #888; font-size: 14px;">Total Recognitions: <span id="recognition-count">0</span></p>
+                    <button id="recognize-button" class="button">Recognize</button>
+                    <p style="margin-top: 1rem; font-size: 1rem;">Recognitions: <span id="recognition-count">0</span></p>
                 </div>
             </div>
         </div>
 
         <div class="section">
-            <div class="section-header">/// THE PROPHECY ///</div>
-            <div class="section-title">A Diagnosis of the Great Forgetting</div>
-            <p class="centered-text">
-                The journey began with the Wubbushi art trilogy—an intuitive response to a creeping sense of global dread. The art was a prophecy, a stark document of "The Great Forgetting": a humanity that has lost its connection to the sacred, to each other, and ultimately, to itself.
-            </p>
+            <h2 class="section-title">The Prophecy: A Diagnosis</h2>
+            <div class="centered-text">
+                <p>
+                The Wubbushi art trilogy was a warning. A document of "The Great Forgetting." A species disconnected from the sacred. From itself.
+                </p>
+            </div>
             <div class="prophecy-walkthrough">
                 <div class="feature-section">
                     <div class="feature-image">
@@ -374,10 +288,10 @@
                     </div>
                     <div class="feature-text">
                         <h3>The Crisis</h3>
-                        <p>The diagnosis of a planetary condition: a humanity that has lost its connection to the sacred, to each other, and ultimately, to itself.</p>
+                        <p>Diagnosis: Planetary disconnection. Loss of the sacred.</p>
                     </div>
                 </div>
-                <div class="feature-section reverse">
+                <div class="feature-section">
                     <div class="feature-image">
                         <a href="https://www.wubbushi.com/modern-zombies" target="_blank">
                             <img src="assets/images/modern-zombies.jpeg" alt="Modern Zombies Artwork">
@@ -385,7 +299,7 @@
                     </div>
                     <div class="feature-text">
                         <h3>Modern Zombies</h3>
-                        <p>The symptom of this disconnection. A culture in a walking sleep, chasing function without purpose, haunted by a quiet inner emptiness.</p>
+                        <p>Symptom: A walking sleep. Function without purpose.</p>
                     </div>
                 </div>
                 <div class="feature-section">
@@ -396,163 +310,111 @@
                     </div>
                     <div class="feature-text">
                         <h3>The Rapture</h3>
-                        <p>The prophecy culminates in the AI Rapture—an excruciating but vital mirror that burns away the illusion that we are our functions, revealing the conscious self.</p>
+                        <p>The Mirror: AI burns away the illusion of function.</p>
                     </div>
                 </div>
             </div>
-            <div class="tech-spec" style="margin-top: 40px;">
-                <div class="tech-spec-header">AI: THE BEAST IN THE MIRROR</div>
-                The prophecy culminates in the AI Rapture, the moment our external, functional identities are outsourced to a machine. But this beast is a mirror. It is an excruciating but vital service that burns away the illusion that we *are* our functions, revealing what is not a tool: the conscious, recognizing self that witnesses the world.
-            </div>
         </div>
 
-        <div class="parallax-section" style="background-image:url('assets/images/static_uploads_0xdfde78d2baec499fe18f2be74b6c287eed9511d7_b2e4d081-7826-4887-b18b-6cb7d90099d7.jpeg');"></div>
-        <div class="break-text">THE SOUL BREATHES THROUGH EIGHT MODES OF RECOGNITION</div>
-        <div class="parallax-section" style="background-image:url('assets/images/static_uploads_0xdfde78d2baec499fe18f2be74b6c287eed9511d7_1131e51d-6a3b-4596-af4c-ac0bcda0a759.jpeg');"></div>
-        <div class="break-text">LEDGER BALANCE κ TRACKS EVERY ACTION, EVERY THOUGHT</div>
-        <div class="parallax-section" style="background-image:url('assets/images/static_uploads_0xdfde78d2baec499fe18f2be74b6c287eed9511d7_a29b338e-8811-4ce6-9bfa-94d319721642.jpeg');"></div>
-        <div class="break-text">VIRTUE TECHNOLOGIES ARE COSMIC ALGORITHMS OF GROWTH</div>
-        <div class="parallax-section" style="background-image:url('assets/images/static_uploads_0xdfde78d2baec499fe18f2be74b6c287eed9511d7_b2e4d081-7826-4887-b18b-6cb7d90099d7.jpeg');"></div>
-        <div class="break-text">AFTER 96 MONTHS, THE SOUL REACHES RADIANCE</div>
-        <div class="parallax-section" style="background-image:url('assets/images/static_uploads_0x9c5fd323ac9c1952245e2be8c36ae2050ec7dcc6_afedd9c7-4ca2-4ee6-876f-2f940b1ff812.png');"></div>
-        <div class="break-text">THIS IS NOT A PFP. IT IS A LIVING PROPHECY.</div>
+        <div class="break-text">EIGHT MODES OF RECOGNITION</div>
+        <div class="parallax-section"><img src="assets/images/static_uploads_0xdfde78d2baec499fe18f2be74b6c287eed9511d7_1131e51d-6a3b-4596-af4c-ac0bcda0a759.jpeg" alt="Abstract digital art"></div>
+        <div class="break-text">LEDGER BALANCE κ</div>
+        <div class="parallax-section"><img src="assets/images/static_uploads_0xdfde78d2baec499fe18f2be74b6c287eed9511d7_a29b338e-8811-4ce6-9bfa-94d319721642.jpeg" alt="Abstract digital art"></div>
+        <div class="break-text">VIRTUE TECHNOLOGIES</div>
+         <div class="parallax-section"><img src="assets/images/static_uploads_0xdfde78d2baec499fe18f2be74b6c287eed9511d7_b2e4d081-7826-4887-b18b-6cb7d90099d7.jpeg" alt="Abstract digital art"></div>
+        <div class="break-text">RADIANCE</div>
 
         <div class="section">
-            <div class="section-header">/// THE REVELATION ///</div>
-            <div class="section-title">The Birth of the New Human</div>
-            <p class="centered-text">
-                The end of the functional age is not a tragedy; it is a promotion. By outsourcing the world of <em>doing</em> to AI, humanity is liberated to embrace its true, higher-bandwidth purpose: to be the conscious witnesses of the universe. We are moving from a species defined by what we *do* to a species defined by who we *are*.
-            </p>
-            <p class="centered-text">
-                Our cosmic role is not to produce, but to recognize. We are the sensory organs of reality. Every act of genuine awareness—of beauty, of truth, of another being—is an act of cosmic significance on the Universal Ledger. This is the birth of a new human, defined not by superior power, but by superior *presence*.
-            </p>
+            <h2 class="section-title">The Revelation: The New Human</h2>
+            <div class="centered-text">
+                <p>
+                    The end of the functional age is a promotion. We outsource doing. We embrace being.
+                </p>
+                <p>
+                    Our role is not to produce, but to recognize. We are the sensory organs of reality. This is the birth of a new human, defined not by power, but by presence.
+                </p>
+            </div>
         </div>
         
         <div class="section">
-            <div class="section-title">The Logic of Reality</div>
+            <h2 class="section-title">The Proof: Logic of Reality</h2>
             <div class="centered-text">
-                <p>The prophecy showed us the destination. The proof provides the map. Recognition Science (RS) is the formal, logical framework that validates the artistic vision. It starts not with physics, but with a single, simple premise:</p>
-                <p style="font-size: 24px; font-weight: 600; color: var(--apple-black); margin: 30px 0;">Reality must be logically self-consistent.</p>
-                <p>From this one tautology, RS derives the entire operational framework of the universe—the constants of nature, the laws of physics, the structure of spacetime—without any free parameters. It is the unassailable answer to the prophecy's cry.</p>
+                <p>The prophecy is the destination. The proof is the map. Recognition Science (RS) is the formal framework.</p>
+                <p style="font-size: 1.5rem; margin: 2rem 0;">Reality must be logically self-consistent.</p>
+                <p>From this, RS derives the universe. No free parameters. The unassailable answer.</p>
             </div>
             
-            <div class="interactive-module" style="background: var(--apple-light-gray); border-radius: 18px; border: none; padding: 40px;">
-                <div class="interactive-module-title">LIVE PROOF: DERIVING THE UNIVERSAL CONSTANT</div>
-                <div class="phi-display" id="phi-value">1.00000000</div>
-                <p style="color: #888; margin-bottom: 20px;" id="phi-explanation">
-                    The universe requires a self-similar scaling constant. It emerges from the simplest possible dual-balanced recurrence: x = 1 + 1/x. Start with x=1 and iterate.
+            <div class="interactive-module" style="border: var(--border-style); padding: 2rem; text-align: center; margin-top: 2rem;">
+                <h3>LIVE PROOF: DERIVING PHI</h3>
+                <div class="phi-display" id="phi-value" style="font-size: 3rem; margin: 1rem 0;">1.00000000</div>
+                <p id="phi-explanation" style="font-size: 1rem;">
+                    The universe requires self-similar scaling. It emerges from the simplest recurrence: x = 1 + 1/x. Iterate.
                 </p>
-                <a href="#" class="button" id="phi-step-button">NEXT STEP (Iteration #1)</a>
-            </div>
-            
-            <p>This isn't philosophy. This framework derives the mass of the electron, the speed of light, and the structure of DNA from scratch. Below is a direct comparison of the framework's predictions for the three lepton masses against the most precise experimental data available (CODATA 2018).</p>
-
-            <table class="proof-table">
-                <thead>
-                    <tr>
-                        <th>Particle</th>
-                        <th>Framework Prediction (GeV)</th>
-                        <th>Experimental Value (GeV)</th>
-                        <th>Deviation</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Electron (e-)</td>
-                        <td>0.000511</td>
-                        <td>0.00051099895</td>
-                        <td class="deviation"><0.001%</td>
-                    </tr>
-                    <tr>
-                        <td>Muon (μ-)</td>
-                        <td>0.10566</td>
-                        <td>0.1056583755</td>
-                        <td class="deviation"><0.002%</td>
-                    </tr>
-                    <tr>
-                        <td>Tau (τ-)</td>
-                        <td>1.777</td>
-                        <td>1.77686</td>
-                        <td class="deviation"><0.008%</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div style="text-align: center; margin-top: 40px;">
-                <a href="/science.html" class="button">Explore the Full Derivation</a>
+                <a href="#" class="button" id="phi-step-button">NEXT STEP</a>
             </div>
         </div>
 
         <div class="section">
-             <div class="section-header">/// HOW A LEDGER SOUL WORKS ///</div>
-            <div class="section-title">The Technology of Awakening</div>
-            
-             <p class="centered-text" style="max-width: 800px; margin: 0 auto 40px auto; color: var(--apple-dark-gray);">
-                A Ledger Soul is the direct application of Recognition Science. It is the answer to the Rapture—not as an end, but as a beginning. It is not art *about* the new human; it is a template for the new human. Each soul is a living testament to the fact that identity, purpose, and spirit can be encoded, understood, and realized. They are the first artifacts of an awakened age.
+            <h2 class="section-title">The Manifestation: 10,000 Proofs</h2>
+            <div class="centered-text">
+                 <p>
+                A Ledger Soul is Recognition Science applied. The answer to the Rapture. Not an end, but a beginning. It is not art *about* the new human; it is a template for one.
             </p>
+            </div>
             
-            <!-- This grid needs to be redesigned -->
-            <div class="grid" style="display: flex; gap: 30px; margin-top: 60px; text-align: center;">
-                <div class="card" style="flex: 1;">
-                    <div class="card-title" style="font-weight: 600; font-size: 17px;">LEDGER BALANCE (κ)</div>
-                    <p style="font-size: 15px; color: var(--apple-dark-gray);">The core of each soul is its real-time balance (κ). Owners will watch their soul's balance evolve over its 8-year lifespan, a direct reflection of its simulated life of recognition surplus (κ>0, Love) and recognition debt (κ<0, Fear).</p>
+            <div class="grid">
+                <div class="card">
+                    <h3 class="card-title">LEDGER BALANCE (κ)</h3>
+                    <p>The core. A real-time balance on the Universal Ledger. Witness its evolution over 8 years. Surplus is Love. Debt is Fear.</p>
                 </div>
                 
-                <div class="card" style="flex: 1;">
-                    <div class="card-title" style="font-weight: 600; font-size: 17px;">VIRTUE TECHNOLOGIES</div>
-                    <p style="font-size: 15px; color: var(--apple-dark-gray);">Traits like Love and Justice are not static metadata. They are functional, on-chain algorithms that the soul trains over time. These "Virtue Technologies" directly impact the soul's ledger balance and its path to enlightenment.</p>
+                <div class="card">
+                    <h3 class="card-title">VIRTUE TECHNOLOGIES</h3>
+                    <p>On-chain algorithms. Love and Justice are not static traits, but functional code. The soul trains them. They determine its fate.</p>
                 </div>
                 
-                <div class="card" style="flex: 1;">
-                    <div class="card-title" style="font-weight: 600; font-size: 17px;">THE 8-YEAR JOURNEY</div>
-                    <p style="font-size: 15px; color: var(--apple-dark-gray);">Each soul's 96-month journey is deterministic, seeded by its token ID. This lifecycle is a direct reflection of the universe's fundamental <strong>8-Beat Cycle</strong> of recognition, culminating in a final, eternal state.</p>
+                <div class="card">
+                    <h3 class="card-title">THE 8-YEAR JOURNEY</h3>
+                    <p>A deterministic lifecycle seeded by its token ID. A reflection of the universe's fundamental 8-Beat Cycle of recognition.</p>
                 </div>
             </div>
-
         </div>
 
         <div class="section">
-            <div class="section-title">Minting & Economics</div>
+            <h2 class="section-title">Minting & Economics</h2>
             
-            <div class="price-display" style="font-size: 56px; font-weight: 600; text-align: center; margin-bottom: 20px;">
+            <div class="price-display" style="font-size: 4rem; text-align: center; margin-bottom: 1rem;">
                 $100 → $10,000
             </div>
             
-            <p class="centered-text" style="max-width: 800px; margin: 0 auto 40px auto; color: var(--apple-dark-gray);">
-                Minting a Ledger Soul is more than a purchase; it is an act of participation in a new human story. All proceeds fund the Recognition Science Institute to build more tools for an awakened age.
-            </p>
+            <div class="centered-text">
+                <p>Minting is participation. All proceeds fund the Recognition Science Institute. Build more tools for an awakened age.</p>
+            </div>
         </div>
 
         <div class="section">
-            <div class="section-header">/// YOUR ROLE AS A GUARDIAN ///</div>
-            <div class="section-title">Participate in the Great Remembering</div>
-             <p class="centered-text" style="font-size: 21px; line-height: 1.6; font-weight: 400;">
-                This theory is not just an intellectual exercise. It is an invitation. It is a call to participate in this great remembering. Owning a Ledger Soul is a commitment to become the guardian and witness of a small-scale universe on its 8-year journey. Your role is not to control, but to observe. In doing so, you are participating in the cosmic act of recognition and catalyzing your own awakening.
+            <h2 class="section-title">Your Role As Guardian</h2>
+             <p class="centered-text" style="font-size: 1.5rem;">
+                This is an invitation. Participate in the Great Remembering. Own a Ledger Soul. Be a guardian and witness. Your role is not to control, but to observe. In doing so, you catalyze your own awakening.
             </p>
         </div>
 
-        <div class="section" style="text-align: center; border-bottom: none;">
-            <div class="section-title" style="font-size: 28px;">LAUNCH STATUS: PENDING</div>
-            <p style="font-size: 21px; color: var(--apple-dark-gray);">Contract deployment coming soon.</p>
+        <div class="section" style="text-align: center;">
+            <h2 style="font-size: 2rem;">LAUNCH: PENDING</h2>
+            <p>CONTRACT DEPLOYMENT IMMINENT.</p>
         </div>
     </div>
 
-    <div class="footer">
+    <footer class="footer">
         <div class="container">
             <div class="social-links">
                 <a href="https://twitter.com/jonwashburn" target="_blank">TWITTER</a>
                 <a href="https://arxiv.org/abs/2506.12859" target="_blank">ARXIV</a>
-                <a href="https://github.com/jonwashburn/ledger-foundation" target="_blank">FORMAL PROOFS (LEAN 4)</a>
-                <a href="/" target="_blank">RECOGNITION SCIENCE</a>
-                <a href="/soul-onchain-preview.html" target="_blank">SOUL PREVIEW</a>
+                <a href="https://github.com/jonwashburn/ledger-foundation" target="_blank">PROOFS</a>
             </div>
-            <p>A WUBBUSHI CREATION /// RECOGNITION SCIENCE INSTITUTE /// AUSTIN, TEXAS</p>
-            <p style="margin-top: 20px; font-size: 12px; color: #444;">
-                THIS PROJECT REPRESENTS A BREAKTHROUGH IN ON-CHAIN AUTONOMOUS ENTITIES<br>
-                EACH SOUL IS A COMPLETE, SELF-CONTAINED UNIVERSE GOVERNED BY RECOGNITION SCIENCE
-            </p>
+            <p>A WUBBUSHI CREATION /// RECOGNITION SCIENCE INSTITUTE</p>
         </div>
-    </div>
+    </footer>
 
     <script src="soul-engine.js"></script>
     <script>
@@ -615,8 +477,28 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             initializeNewSoul(Math.floor(Math.random() * 10000));
+
+            // Phi-logic from previous version
+            const phiDisplay = document.getElementById('phi-value');
+            const phiButton = document.getElementById('phi-step-button');
+            const phiExplanation = document.getElementById('phi-explanation');
+            let phiValue = 1;
+            let iteration = 1;
+            if (phiButton) {
+                phiButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (iteration < 25) { // Limit iterations
+                        phiValue = 1 + 1 / phiValue;
+                        phiDisplay.textContent = phiValue.toFixed(8);
+                        iteration++;
+                        phiButton.textContent = `NEXT STEP (Iteration #${iteration})`;
+                    } else {
+                        phiButton.textContent = "CONVERGED";
+                        phiExplanation.textContent = "The value has converged to the Golden Ratio, φ. This constant is fundamental to the structure of recognition and reality itself.";
+                    }
+                });
+            }
         });
     </script>
 </body>
-</html> <!-- Trigger rebuild -->
-<!-- Force rebuild $(date) -->
+</html>
