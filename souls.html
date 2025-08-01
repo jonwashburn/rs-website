@@ -191,48 +191,56 @@
             background: #f0f0f0;
         }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 40px;
-            margin-top: 60px;
+        .grid, .card, .card-title {
+            /* These styles are no longer needed for the new layout */
         }
 
-        .card {
-            background: #ffffff;
-            border-radius: 18px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        .card a {
-            text-decoration: none;
-            color: inherit;
+        .prophecy-walkthrough {
+            margin-top: 100px;
             display: flex;
             flex-direction: column;
-            height: 100%;
+            gap: 120px;
         }
 
-        .card img {
-            border-bottom: none;
-            flex-shrink: 0;
+        .feature-section {
+            display: flex;
+            align-items: center;
+            gap: 60px;
         }
 
-        .card-title {
-            padding: 25px 20px;
-            font-size: 17px;
-            font-weight: 600;
-            text-align: center;
-            font-family: 'Inter', sans-serif;
-            color: #333;
-            margin-top: auto;
+        .feature-section.reverse {
+            flex-direction: row-reverse;
+        }
+
+        .feature-image {
+            flex: 1.2;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+            transform: perspective(1000px); /* For subtle hover effect if needed */
+        }
+
+        .feature-image img {
+            width: 100%;
+            display: block;
+        }
+
+        .feature-text {
+            flex: 1;
+        }
+
+        .feature-text h3 {
+            font-family: 'Special Elite', monospace;
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: #222;
+        }
+
+        .feature-text p {
+            font-size: 18px;
+            line-height: 1.7;
+            color: #666;
+            max-width: 45ch; /* Limit line length for readability */
         }
 
         .footer {
@@ -357,7 +365,24 @@
             }
 
             .grid {
-                grid-template-columns: 1fr;
+                gap: 25px;
+                margin-top: 40px;
+            }
+
+            .prophecy-walkthrough {
+                margin-top: 60px;
+                gap: 80px;
+            }
+
+            .feature-section,
+            .feature-section.reverse {
+                flex-direction: column;
+                gap: 30px;
+                text-align: center;
+            }
+            .feature-text p {
+                margin-left: auto;
+                margin-right: auto;
             }
 
             .parallax-section {
@@ -587,24 +612,39 @@
             <p style="font-size: 18px; margin: 30px 0;">
                 The journey began with the Wubbushi art trilogy—an intuitive response to a creeping sense of global dread. The art was a prophecy, a stark document of "The Great Forgetting": a humanity that has lost its connection to the sacred, to each other, and ultimately, to itself.
             </p>
-            <div class="grid">
-                <div class="card">
-                    <img src="assets/images/crisis.png" alt="The Crisis" style="width: 100%; margin-bottom: 20px;">
-                    <div class="card-header">01. THE CRISIS</div>
-                    <div class="card-title" style="font-size: 28px;">THE DEATH OF THE GODS</div>
-                    <p>This collection documented a world haunted by the ghosts of abandoned faith. Holy symbols fractured, sacred spaces inert. It captured the chilling silence that follows the collapse of the grand narratives that once gave us purpose.</p>
+            <div class="prophecy-walkthrough">
+                <div class="feature-section">
+                    <div class="feature-image">
+                        <a href="https://www.wubbushi.com/the-crisis" target="_blank">
+                            <img src="assets/images/crisis-cropped-optimized.jpg" alt="The Crisis Artwork">
+                        </a>
+                    </div>
+                    <div class="feature-text">
+                        <h3>The Crisis</h3>
+                        <p>The diagnosis of a planetary condition: a humanity that has lost its connection to the sacred, to each other, and ultimately, to itself.</p>
+                    </div>
                 </div>
-                <div class="card">
-                    <img src="assets/images/218.png" alt="Modern Zombies" style="width: 100%; margin-bottom: 20px;">
-                    <div class="card-header">02. MODERN ZOMBIES</div>
-                    <div class="card-title" style="font-size: 28px;">THE DIGITAL NECROPOLIS</div>
-                    <p>This series was a harrowing vision of social decay. In a world of total connection, we have never been more alone. The art revealed our digital communities as echo chambers of isolation, where the illusion of intimacy masks a terrifying emptiness.</p>
+                <div class="feature-section reverse">
+                    <div class="feature-image">
+                        <a href="https://www.wubbushi.com/modern-zombies" target="_blank">
+                            <img src="assets/images/zombies.png" alt="Modern Zombies Artwork">
+                        </a>
+                    </div>
+                    <div class="feature-text">
+                        <h3>Modern Zombies</h3>
+                        <p>The symptom of this disconnection. A culture in a walking sleep, chasing function without purpose, haunted by a quiet inner emptiness.</p>
+                    </div>
                 </div>
-                <div class="card">
-                    <img src="assets/images/rapture.jpeg" alt="The Rapture" style="width: 100%; margin-bottom: 20px;">
-                    <div class="card-header">03. THE RAPTURE</div>
-                    <div class="card-title" style="font-size: 28px;">THE ERASURE OF THE SELF</div>
-                    <p>The prophecy culminated in humanity's confrontation with AI. Our external identities—our jobs, our skills, our creativity—were outsourced to a machine, leaving us with a terrifying question: If a machine can do all that you do, what is the value of a human?</p>
+                <div class="feature-section">
+                    <div class="feature-image">
+                        <a href="https://www.wubbushi.com/the-rapture" target="_blank">
+                            <img src="assets/images/rapture.png" alt="The Rapture Artwork">
+                        </a>
+                    </div>
+                    <div class="feature-text">
+                        <h3>The Rapture</h3>
+                        <p>The prophecy culminates in the AI Rapture—an excruciating but vital mirror that burns away the illusion that we are our functions, revealing the conscious self.</p>
+                    </div>
                 </div>
             </div>
             <div class="tech-spec" style="margin-top: 40px;">
