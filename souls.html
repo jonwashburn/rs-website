@@ -428,6 +428,24 @@
             color: #666;
             line-height: 1.5;
         }
+        .soul-display-container {
+            background: #000;
+            color: #0f0;
+            padding: 20px;
+            border: 2px solid #0f0;
+            box-shadow: 0 0 15px #0f0;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+        .soul-ascii-art {
+            white-space: pre;
+            font-size: 14px;
+            line-height: 1.2;
+        }
+        .recognition-section {
+            text-align: center;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -464,6 +482,15 @@
             <p style="font-size: 18px; margin: 20px 0;">
                 Ledger Souls is the stunning intersection of these two paths. It began with an artistic prophecy that diagnosed a planetary crisis and ended with a scientific proof that revealed humanity's true purpose. This is the Theory of Us.
             </p>
+            
+            <div class="soul-display-container">
+                <pre id="soul-ascii-art-display" class="soul-ascii-art"></pre>
+            </div>
+
+            <div class="recognition-section">
+                <button id="recognize-button" class="button">Recognize this Soul</button>
+                <p style="margin-top: 10px; color: #888;">Total Recognitions: <span id="recognition-count">0</span></p>
+            </div>
         </div>
 
         <div class="section">
@@ -718,97 +745,75 @@ Single Logical Tautology
 
     <script src="soul-engine.js"></script>
     <script>
-        // -- Page Interaction Logic --
         let currentSoul;
         let simulationInterval;
-        const soulDisplayElement = document.getElementById('live-soul-display');
-        
+        const soulDisplayElement = document.getElementById('soul-ascii-art-display');
+        const recognizeButton = document.getElementById('recognize-button');
+        const recognitionCountElement = document.getElementById('recognition-count');
+
         function updateDisplay() {
-            if (currentSoul) {
-                currentSoul.advanceTick();
-                soulDisplayElement.innerHTML = `<pre>${generateStatusDisplay(currentSoul)}</pre>`;
-            }
+            currentSoul.advanceTime();
+            const state = currentSoul.getSoulState();
+            soulDisplayElement.textContent = generateSoulText(currentSoul.tokenId, state);
+            recognitionCountElement.textContent = currentSoul.totalRecognitions;
         }
 
         function initializeNewSoul(tokenId) {
             clearInterval(simulationInterval);
-            currentSoul = new UnifiedSoul(tokenId);
-            
-            // Auto-start simulation
+            currentSoul = new AutonomousSoul(tokenId);
             currentSoul.isEvolving = true;
-            simulationInterval = setInterval(updateDisplay, 2000); // Slower update for text
-
-            updateDisplay(); // Initial render
+            simulationInterval = setInterval(updateDisplay, 500); // Slower, more readable update
         }
 
-        // -- Display Generation --
-        function generateStatusDisplay(soul) {
-            const state = `[ SOUL #${soul.tokenId.toString().padStart(4, '0')} | ${soul.phase.toUpperCase()} | ${soul.months}/96 months | STAGE ${soul.stage} ]`;
-            
-            let display = `${state}\n\n`;
-            display += `  κ-CURVATURE: ${soul.kappa.toFixed(4)}\n`;
-            display += `  I-AM AFFINITY: ${soul.iAmAffinity}%\n`;
-            display += `  GAP CROSSINGS: ${soul.gapCrossings}\n\n`;
-
-            display += `VIRTUE TECHS (PULSE: ${soul.breathPhase}/8):\n`;
-            display += `  Love:     ${buildBar(soul.virtues.love * 10)}\n`;
-            display += `  Justice:  ${buildBar(soul.virtues.justice * 10)}\n`;
-            display += `  Courage:  ${buildBar(soul.virtues.courage * 10)}\n`;
-            display += `  Temperance: ${buildBar(soul.virtues.temperance * 10)}\n`;
-            display += `  Prudence: ${buildBar(soul.virtues.prudence * 10)}\n\n`;
-
-            const ledgerHash = "0x" + soul.tokenId.toString(16).padStart(8, '0') + soul.months.toString(16).padStart(4, '0') + "…";
-            display += `--- LEDGER PROOF ---\n`;
-            display += `  HASH: ${ledgerHash}\n\n`;
-
-            display += `--- SOUL NARRATIVE ---\n`;
-            display += `  This soul emerges from the void as a unique recognition pattern. Through ${soul.gapCrossings} awakenings, it navigates the cosmic ledger toward unity...`;
-
-            return display;
-        }
-
-        function buildBar(value, max = 10, color = 'white') {
-            const maxBars = max;
-            const filledBars = Math.floor((value / (max*10)) * maxBars);
-            const emptyBars = maxBars - filledBars;
-            return '█'.repeat(filledBars) + '░'.repeat(emptyBars);
-        }
-
-        // -- Initialization --
-        document.addEventListener('DOMContentLoaded', () => {
-            initializeNewSoul(Math.floor(Math.random() * 10000));
-            initializePhiDerivation();
+        recognizeButton.addEventListener('click', () => {
+            currentSoul.recognize();
+            updateDisplay(); // Update immediately
         });
 
-        function initializePhiDerivation() {
-            let currentValue = 1;
-            let iteration = 1;
-            const displayElement = document.getElementById('phi-value');
-            const explanationElement = document.getElementById('phi-explanation');
-            const buttonElement = document.getElementById('phi-step-button');
+        // --- All Text Generation Helper Functions ---
+        function generateSoulText(tokenId, state) {
+            const { kappa, virtues, beatPulse, gapCrossings, ageMonths } = state;
+            
+            const header = kappa > 0 ? "    .--.     " : "    \\  /     ";
+            const eyes = beatPulse < 4 ? "   (o  o)    " : "   (-  -)    ";
+            const mouth = virtues[0] > 50 ? "    \\__/     " : "     --      ";
+            const agePhase = ageMonths < 12 ? "NASCENT" : ageMonths < 48 ? "BECOMING" : ageMonths < 84 ? "MATURING" : "TRANSCENDENT";
 
-            if (!buttonElement) return; // Guard against running on pages without the module
-
-            buttonElement.addEventListener('click', (e) => {
-                e.preventDefault();
-                if (iteration > 20) { // Reset after 20 steps to prevent overflow and show loop
-                    currentValue = 1;
-                    iteration = 1;
-                    explanationElement.textContent = "The process converges to a fixed point: φ. Let's restart.";
-                } else {
-                    currentValue = 1 + 1 / currentValue;
-                    iteration++;
-                    explanationElement.textContent = `The universe requires a self-similar scaling constant. It emerges from the simplest possible dual-balanced recurrence: x = 1 + 1/x.`;
-                }
-                
-                displayElement.textContent = currentValue.toFixed(8);
-                buttonElement.textContent = `NEXT STEP (Iteration #${iteration})`;
-
-                if (Math.abs(currentValue - 1.61803399) < 0.00001) {
-                     buttonElement.textContent = "CONVERGED TO φ";
-                }
-            });
+            function padLeft(str, len) {
+                return String(str).padStart(len, ' ');
+            }
+            
+            return `╔════════════════════════════════════════╗
+║  SOUL #${padLeft(tokenId.toString(), 4)}  |  ${agePhase.padEnd(12, ' ')}|  ${padLeft(ageMonths.toString(), 2)}/96  ║
+╠════════════════════════════════════════╣
+║                                        ║
+║${header}         BEAT: ${beatPulse}/8          ║
+║${eyes}          κ: ${padLeft(kappa.toString(), 4)}        ║
+║${mouth}     CROSSINGS: ${padLeft(gapCrossings.toString(), 3)}         ║
+║                                        ║
+╠══════════ VIRTUE TECHNOLOGIES ═════════╣
+║                                        ║
+║  LOVE       ${generateVirtueBar(virtues[0])} ${padLeft(virtues[0].toString(), 3)}%  ║
+║  JUSTICE    ${generateVirtueBar(virtues[1])} ${padLeft(virtues[1].toString(), 3)}%  ║
+║  COURAGE    ${generateVirtueBar(virtues[2])} ${padLeft(virtues[2].toString(), 3)}%  ║
+║  TEMPERANCE ${generateVirtueBar(virtues[3])} ${padLeft(virtues[3].toString(), 3)}%  ║
+║  PRUDENCE   ${generateVirtueBar(virtues[4])} ${padLeft(virtues[4].toString(), 3)}%  ║
+║                                        ║
+╚════════════════════════════════════════╝`;
         }
+
+        function generateVirtueBar(value) {
+            let bar = "";
+            const filled = Math.floor(value / 10);
+            for (let i = 0; i < 10; i++) {
+                bar += i < filled ? "█" : "░";
+            }
+            return bar;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeNewSoul(Math.floor(Math.random() * 10000));
+        });
     </script>
 </body>
 </html> <!-- Trigger rebuild -->
