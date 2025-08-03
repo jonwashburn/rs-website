@@ -60,8 +60,9 @@ a:hover {
 
 .main-header {
     text-align: center;
-    padding: 4rem 0;
+    padding: 4rem 0 2rem;
     margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .main-header .subtitle {
@@ -71,37 +72,21 @@ a:hover {
     margin: 1em auto 0;
 }
 
-.pillars {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    margin-top: 4rem;
+nav {
+    text-align: center;
+    margin-bottom: 2rem;
 }
 
-.pillar {
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 2rem;
-    text-decoration: none;
-    color: var(--text-color);
-    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-}
-
-.pillar:hover {
-    border-color: var(--accent-color);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    text-decoration: none;
-}
-
-.pillar h3 {
-    font-family: var(--header-font);
-    font-size: 1.5rem;
-    color: var(--accent-color);
-}
-
-.pillar p {
+nav a {
     color: #555;
+    margin: 0 0.75rem;
     font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.narrative-section {
+    padding: 2rem 0;
 }
 
 .footer {
@@ -118,11 +103,15 @@ a:hover {
     margin: 0 1rem;
 }
 
-@media (min-width: 768px) {
-    .pillars {
-        grid-template-columns: repeat(3, 1fr);
+@media (max-width: 768px) {
+    body {
+        padding: 1rem;
+    }
+    nav a {
+        display: block;
+        margin: 0.5rem 0;
     }
     p {
-        font-size: 1.15rem;
+        font-size: 1.05rem;
     }
 }
