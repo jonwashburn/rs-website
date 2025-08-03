@@ -1,5 +1,6 @@
 import hashlib
 import random
+import argparse
 from PIL import Image, ImageDraw, ImageFilter
 
 # --- Soul Data Generation (mirrors Solidity logic) ---
@@ -112,22 +113,21 @@ def generate_soul_image(soul, size=(1200, 1200)):
 
 
 if __name__ == '__main__':
-    # Generate a demo soul (e.g., Soul #777)
-    demo_soul_id = 777
-    demo_soul = Soul(demo_soul_id)
+    parser = argparse.ArgumentParser(description='Generate an image of a Ledger Soul.')
+    parser.add_argument('token_id', type=int, help='The token ID of the soul to generate.')
+    parser.add_argument('output_path', type=str, help='The path to save the generated image.')
+    args = parser.parse_args()
+
+    soul_to_generate = Soul(args.token_id)
     
-    print(f"--- Generating Demo Soul #{demo_soul_id} ---")
-    print(f"  - Hash (first 8 bytes): {demo_soul.soul_hash[:8].hex()}")
-    print(f"  - Cost State Signature: {demo_soul.cost_state_signature}")
-    print(f"  - Core Opcode: {demo_soul.core_opcode}")
+    print(f"--- Generating Soul #{args.token_id} ---")
+    print(f"  - Hash (first 8 bytes): {soul_to_generate.soul_hash[:8].hex()}")
+    print(f"  - Cost State Signature: {soul_to_generate.cost_state_signature}")
+    print(f"  - Core Opcode: {soul_to_generate.core_opcode}")
     
-    # Generate the image
-    soul_image = generate_soul_image(demo_soul)
+    soul_image = generate_soul_image(soul_to_generate)
     
-    # Save the image
-    output_path = "assets/images/demo_soul.png"
-    soul_image.save(output_path, "PNG")
+    soul_image.save(args.output_path, "PNG")
     
     print(f"\n✓ Successfully generated soul image.")
-    print(f"✓ Saved to: {output_path}")
-    print("\nYou can now embed 'assets/images/demo_soul.png' into the recognition-souls.html page.") 
+    print(f"✓ Saved to: {args.output_path}")
