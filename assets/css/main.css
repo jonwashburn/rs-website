@@ -58,32 +58,87 @@ a:hover {
     text-decoration: underline;
 }
 
-.main-header {
-    text-align: center;
-    padding: 4rem 0 2rem;
-    margin-bottom: 2rem;
-    border-bottom: 1px solid var(--border-color);
+.site-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 2rem 0;
 }
 
-.main-header .subtitle {
-    font-size: clamp(1.2rem, 3vw, 1.5rem);
-    color: #666;
-    max-width: 60ch;
-    margin: 1em auto 0;
+.logo a {
+    font-family: var(--header-font);
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+.global-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-align: right;
+}
+
+.global-nav li {
+    margin-bottom: 0.5rem;
+    position: relative;
+    padding-left: 1.5rem; /* Space for bullet */
+}
+
+.global-nav li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    top: -2px; /* Adjust vertical alignment */
+    color: var(--text-color);
+    font-size: 1.2rem;
+}
+
+.global-nav a {
+    font-family: var(--header-font);
+    font-size: 1.1rem;
+    color: #333;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: color 0.2s;
+}
+
+.global-nav a:hover {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+/* Remove main-header and old nav styles that conflict */
+.main-header {
+    padding: 0;
+    margin-bottom: 0;
+    border-bottom: none;
 }
 
 nav {
-    text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 0;
 }
 
-nav a {
-    color: #555;
-    margin: 0 0.75rem;
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+/* Adjustments for smaller screens */
+@media (max-width: 768px) {
+    .site-header .container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .global-nav ul {
+        text-align: center;
+        margin-top: 1rem;
+    }
+    .global-nav li {
+        padding-left: 0; /* Remove padding for centered text */
+    }
+    .global-nav li::before {
+       display: none; /* Hide bullets on mobile */
+    }
 }
+
 
 .narrative-section {
     padding: 2rem 0;
