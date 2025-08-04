@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What is the solution to P vs NP? - Recognition Science</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-container">
+            <div class="logo">
+                <a href="../../index.html">Recognition Science</a>
+            </div>
+            <nav class="global-nav">
+                <ul>
+                    <li><a href="../../science.html">The Science</a></li>
+                    <li><a href="../../us.html">The Theory of Us</a></li>
+                    <li><a href="../../questions/index.html">The Questions</a></li>
+                    <li><a href="../../ethics.html">Ethics</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="content-page">
+        <section class="hero-section text-center">
+            <div class="container">
+                <p class="subtitle">Humanity's Biggest Questions</p>
+                <h1>What is the solution to P vs NP?</h1>
+            </div>
+        </section>
+
+        <section>
+            <div class="container text-block">
+                <h2>1. Why This is a Hard Question</h2>
+                <p>The P versus NP problem is one of the most famous and difficult unsolved problems in computer science and mathematics. In simple terms, it asks: if the answer to a problem can be *verified* quickly (in Polynomial time, "P"), can the answer also be *found* quickly?</p>
+                <p>Problems like factoring large numbers or solving Sudoku puzzles are in NP: if someone gives you a solution, you can check if it's correct very easily. But finding the solution from scratch seems to require a brute-force search that can take an astronomical amount of time. If P=NP, it would mean there are clever shortcuts to find these solutions quickly, revolutionizing everything from cryptography to medicine. If P≠NP, it means that some problems are fundamentally harder to solve than to check.</p>
+                <p>The problem has resisted proof for over 50 years because it touches on the absolute limits of computation, and our standard model of computation—the Turing machine—seems unable to provide the tools to resolve it.</p>
+            </div>
+        </section>
+
+        <section class="highlight-section">
+            <div class="container text-block">
+                <h2>2. The Conventional View</h2>
+                <p>The overwhelming consensus among computer scientists is that **P ≠ NP**. The belief is that no clever algorithm can exist to solve NP-complete problems like SAT in polynomial time. This belief is foundational to modern cryptography, which relies on the assumption that certain problems are easy to verify but hard to solve. However, despite decades of effort, no one has been able to produce a formal proof.</p>
+            </div>
+        </section>
+        
+        <section>
+            <div class="container text-block">
+                <h2>3. The Recognition Science Lens</h2>
+                <p>Recognition Science reveals that the P vs NP problem has remained unsolved because it is **ill-posed**. It is based on an incomplete model of computation—the Turing machine—which makes a critical, hidden assumption: that observing the result of a computation is a free action with zero cost.</p>
+                <p>In any real, physical computer, this is false. The internal state evolution (computation) and the process of reading out the result (recognition) are two distinct physical processes, each with its own complexity. Recognition Science introduces a complete, two-parameter model for physical computation:</p>
+                <ul>
+                    <li><strong>Computation Complexity (T_c):</strong> The time it takes for the system's internal state to evolve to a solution.</li>
+                    <li><strong>Recognition Complexity (T_r):</strong> The number of physical operations required for an external observer to extract the answer from the system.</li>
+                </ul>
+                <p>The P vs NP question mistakenly conflates these two different resources.</p>
+            </div>
+        </section>
+        
+        <section class="highlight-section">
+            <div class="container text-block">
+                <h2>4. The Answer</h2>
+                <div class="proof-box">
+                    <p><strong>The P vs NP paradox is dissolved because the question has two different answers depending on the resource being measured. At the scale of pure computation, P = NP. At the scale of physical observation, P ≠ NP.</strong></p>
+                    <p>This is not a contradiction; it is a feature of physical reality. The framework demonstrates this with a constructive proof using a 16-state cellular automaton (CA) that solves the NP-complete problem SAT:</p>
+                    <ol>
+                        <li><strong>Fast Computation (P = NP):</strong> The CA is designed to find a solution to SAT in a number of steps that scales sub-polynomially with the size of the problem (specifically, `T_c = O(n^(1/3) log n)`). At the level of its internal physics, the problem is "easy."</li>
+                        <li><strong>Hard Recognition (P ≠ NP):</strong> To prevent trivial solutions, the CA encodes its final "yes/no" answer using a special "balanced-parity" code. This code is information-theoretically designed so that an observer must read at least half of the output cells (`T_r = Ω(n)`) to know the answer with any certainty. The process of *recognizing* the answer is "hard."</li>
+                    </ol>
+                    <p>The question "Is SAT in P?" was unanswerable because it lacked context. The complete answer is:</p>
+                    <p><strong>Computationally, yes. Recognitionally, no.</strong></p>
+                    <p>This resolves the paradox and explains why NP-complete problems feel "hard" to us. Our conscious experience is one of recognition, so we are bottlenecked by the linear cost of observation, even if the underlying physical computation that finds the answer is incredibly fast.</p>
+                </div>
+
+                <div class="call-to-action">
+                    <a href="../../questions/index.html" class="button-link">← Back to All Questions</a>
+                </div>
+            </div>
+        </section>
+
+        <footer class="site-footer">
+            <div class="container">
+                <p>&copy; 2024 Recognition Science Institute. All rights reserved.</p>
+            </div>
+        </footer>
+    </main>
+</body>
+</html>
