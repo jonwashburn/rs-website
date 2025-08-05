@@ -20,6 +20,7 @@
             border-bottom: 2px solid #e9ecef;
             padding-bottom: 0.5rem;
             margin-bottom: 1rem;
+            cursor: pointer;
         }
         .prediction-card ul {
             list-style: none;
@@ -28,6 +29,12 @@
         .prediction-card li {
             margin-bottom: 0.75rem;
             line-height: 1.6;
+        }
+        .explanation {
+            display: none;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e9ecef;
         }
     </style>
 </head>
@@ -42,12 +49,23 @@
             </p>
 
             <article class="prediction-card">
-                <h3>Fine-structure constant (α)</h3>
+                <h3 onclick="toggleExplanation('alpha-explanation')">Fine-structure constant (α)</h3>
                 <ul>
                     <li><strong>Framework Prediction:</strong> α<sup>-1</sup> = 137.035 999 08</li>
                     <li><strong>Observed Value:</strong> 137.035 999 206(11) (CODATA 2018)</li>
                     <li><strong>Deviation:</strong> Agreement to &lt;1 &times; 10<sup>-9</sup>.</li>
                 </ul>
+                <div class="explanation" id="alpha-explanation">
+                    <h4>How is this calculated?</h4>
+                    <p>The Fine-structure constant, often called alpha, describes the strength of the interaction between light and matter. In Recognition Science, its value is not a random number but is built from the fundamental geometry of reality.</p>
+                    <p>The calculation starts with a simple geometric foundation based on the structure of spacetime (3 spatial dimensions + 1 time dimension) and the 8-beat cycle of recognition. This gives a "seed" value.</p>
+                    <p>This seed is then refined by two correction factors that are also derived from the framework's core principles:</p>
+                    <ol>
+                        <li><strong>The Ledger-Gap Series:</strong> This correction accounts for the inherent "fuzziness" or undecidability in the ledger's accounting, which slightly alters the interaction strength.</li>
+                        <li><strong>Curvature Closure:</strong> This final correction accounts for the geometric curvature of the fundamental "pixels" (voxels) of space.</li>
+                    </ol>
+                    <p>The final predicted value is the result of combining these three parameter-free components, yielding a result that matches the measured value with extraordinary precision.</p>
+                </div>
             </article>
             <article class="prediction-card">
                 <h3>Dark-matter fraction (Ω<sub>dm</sub>)</h3>
@@ -378,5 +396,15 @@
 
     <div id="footer-placeholder"></div>
     <script src="assets/js/main.js"></script>
+    <script>
+        function toggleExplanation(id) {
+            var element = document.getElementById(id);
+            if (element.style.display === "block") {
+                element.style.display = "none";
+            } else {
+                element.style.display = "block";
+            }
+        }
+    </script>
 </body>
 </html>
