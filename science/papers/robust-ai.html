@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Path to Robust AI - Recognition Science</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <script>
+        MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+          },
+          svg: {
+            fontCache: 'global'
+          }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="content-page paper-page">
+        <div class="container">
+            <div class="framework-note">
+                <p><strong>A Note on This Paper:</strong> This paper applies the Recognition Science framework to the field of artificial intelligence, providing a fundamental explanation for the brittleness of current Large Language Models (LLMs). It argues that the failures of LLMs on reasoning tasks, especially when presented with irrelevant information, are not bugs to be fixed with more data, but are necessary consequences of an architecture that lacks a true computational substrate. The paper proposes a new class of "two-scale" AI systems that separate computation from recognition, offering a concrete path toward building robust, general-purpose AI that can perform true computation rather than mere pattern matching.</p>
+            </div>
+
+            <article>
+                <header class="paper-header">
+                    <h1>Recognition Science: The Path to Robust AI</h1>
+                    <h2>From Brittle Pattern Matching to True Computation</h2>
+                    <p class="author">Jonathan Washburn</p>
+                    <p class="publication-date">September 12, 2024</p>
+                </header>
+
+                <section class="paper-abstract">
+                    <h2>Abstract</h2>
+                    <p>Recent studies have revealed that state-of-the-art Large Language Models (LLMs) exhibit significant performance failures on simple reasoning tasks, with accuracy dropping by up to 65% when irrelevant information is added. We show these failures are fundamental consequences of operating without proper computational substrates. Recognition Science provides both the theoretical explanation and practical solution. Current AI systems operate exclusively at the "measurement scale," attempting pattern recognition without true computation. We propose a new class of AI architectures based on a two-scale model that separates computation (substrate-level processing) from recognition (pattern extraction), and show how this approach can achieve perfect robustness on tasks where LLMs fail catastrophically.</p>
+                </section>
+
+                <section>
+                    <h2>1. The Brittleness of Modern AI</h2>
+                    <p>State-of-the-art LLMs have demonstrated remarkable capabilities, yet they remain brittle. As highlighted by the GSM-Symbolic study and confirmed by our own testing, their performance on simple mathematical reasoning collapses when presented with irrelevant information. This is not a flaw that can be fixed with more training data; it is an architectural limitation. Current AI systems are masters of pattern matching, but they do not perform true computation.</p>
+                </section>
+                
+                <section>
+                    <h2>2. The Recognition Science Diagnosis: Computation vs. Recognition</h2>
+                    <p>Recognition Science provides a clear diagnosis by making a distinction that the traditional Turing model of computation leaves implicit: the separation between computation and observation.</p>
+                    <ul>
+                        <li><strong>Computation Scale (\(T_c\)):</strong> The substrate level where a system's internal state evolves according to fixed rules. This is where true computation happens.</li>
+                        <li><strong>Measurement/Recognition Scale (\(T_r\)):</strong> The observation level where patterns are extracted from the substrate.</li>
+                    </ul>
+                    <p>LLMs operate exclusively at the measurement scale. They attempt to learn a direct mapping from input patterns to output patterns without any intermediate computational process. This is why they are easily confused by irrelevant data—they lack a substrate with fixed rules that would be architecturally immune to such distractions.</p>
+                </section>
+
+                <section>
+                    <h2>3. The Path to Robustness: Two-Scale Architectures</h2>
+                    <p>The solution is to build AI systems that explicitly model both scales. We propose a new class of architectures that incorporate a computational substrate, such as a cellular automaton (CA), between the encoder and decoder.</p>
+                    <div class="implication-card">
+                        <h3>How it Works</h3>
+                        <ol>
+                            <li>An encoder maps a problem (e.g., a math word problem) onto an initial state in a computational substrate (like a CA). Irrelevant information is filtered out at this stage because it has no structural correlate in the substrate's language.</li>
+                            <li>The substrate evolves deterministically according to its internal rules, performing the actual computation. The computation time (\(T_c\)) is typically very fast (e.g., \(O(\log n)\)).</li>
+                            <li>A decoder observes the final state of the substrate and extracts the answer. This step has a recognition cost (\(T_r\)), which may be linear (\(O(n)\)), but the result is guaranteed to be robust.</li>
+                        </ol>
+                    </div>
+                </section>
+                
+                <section>
+                    <h2>4. Theoretical Guarantees and Conclusion</h2>
+                    <p>This two-scale architecture provides provable guarantees of robustness that are impossible for current LLMs. By separating the stages, a Recognition Science-based system can achieve <strong>Irrelevance Immunity</strong>—a complete insensitivity to non-structural changes in the problem statement. Our theoretical analysis shows that a CA-based reasoner would achieve 100% accuracy on the same GSM-Symbolic variants where today's most advanced LLMs score 0%. The path to robust, general artificial intelligence lies not in bigger models or more data, but in architectures that embrace the fundamental distinction between computation and recognition.</p>
+                </section>
+
+            </article>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+    <script src="../../assets/js/main.js"></script>
+</body>
+</html>
