@@ -74,13 +74,32 @@ a:hover {
 
 .header-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    flex-direction: column;
+    flex-direction: row;
     gap: 1rem;
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem;
+}
+
+/* Mobile hamburger menu */
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.mobile-menu-toggle span {
+    width: 25px;
+    height: 3px;
+    background: #000;
+    display: block;
+    transition: 0.3s;
 }
 
 .logo a {
@@ -184,6 +203,91 @@ a:hover {
 
     .dropdown:hover .dropdown-content {
         display: block;
+    }
+
+    /* Mobile Responsive Design */
+    @media (max-width: 768px) {
+        .header-container {
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 0 1rem;
+        }
+        
+        .site-header {
+            padding: 1rem 0;
+        }
+        
+        .logo a {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .mobile-menu-toggle {
+            display: flex;
+            position: absolute;
+            top: 1.5rem;
+            right: 1rem;
+        }
+        
+        .global-nav {
+            width: 100%;
+            order: 2;
+        }
+        
+        .global-nav ul {
+            flex-direction: column;
+            width: 100%;
+            display: none;
+        }
+        
+        .global-nav.active ul {
+            display: flex;
+        }
+        
+        .global-nav a {
+            border-right: none;
+            border-bottom: 1px solid #333;
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        .global-nav a:last-child {
+            border-bottom: none;
+        }
+        
+        /* Mobile dropdown adjustments */
+        .dropdown-content {
+            position: static;
+            display: block;
+            background: #222;
+            box-shadow: none;
+            border: none;
+            min-width: auto;
+        }
+        
+        .dropdown-content a {
+            padding: 0.8rem 2rem;
+            border-bottom: 1px solid #444;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .header-container {
+            padding: 0 0.5rem;
+        }
+        
+        .logo a {
+            font-size: 1.5rem;
+        }
+        
+        .mobile-menu-toggle {
+            top: 1rem;
+            right: 0.5rem;
+        }
     }
 
     /* Component Cards */
