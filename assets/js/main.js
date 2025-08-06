@@ -12,6 +12,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 })
                 .then(data => {
                     placeholder.innerHTML = data;
+                    // After injecting header, re-run script logic if needed
+                    if (placeholderId === 'header-placeholder') {
+                        setupHeaderEventListeners();
+                    }
                 })
                 .catch(error => {
                     console.error(`Error fetching ${url}:`, error);
@@ -24,3 +28,29 @@ document.addEventListener("DOMContentLoaded", function() {
     fetchAndInject('/_includes/header.html', 'header-placeholder');
     fetchAndInject('/_includes/footer.html', 'footer-placeholder');
 });
+
+function toggleMobileMenu() {
+    const nav = document.getElementById('globalNav');
+    if (nav) {
+        nav.classList.toggle('active');
+    }
+}
+
+function setupHeaderEventListeners() {
+    const mobileMenuButton = document.querySelector('.mobile-menu-toggle');
+    if (mobileMenuButton) {
+        mobileMenuButton.onclick = toggleMobileMenu;
+    }
+
+    const dropdowns = document.querySelectorAll('.dropdown > .dropbtn');
+    dropdowns.forEach(dropbtn => {
+        dropbtn.onclick = function(event) {
+            // Use this to handle clicks on mobile for dropdowns
+            if (window.innerWidth <= 768) {
+                event.preventDefault();
+                const dropdown = this.parentElement;
+                dropdown.classList.toggle('active');
+            }
+        }
+    });
+}

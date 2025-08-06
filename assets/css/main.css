@@ -258,11 +258,15 @@ a:hover {
         /* Mobile dropdown adjustments */
         .dropdown-content {
             position: static;
-            display: block;
+            display: none; /* Hide by default on mobile */
             background: #222;
             box-shadow: none;
             border: none;
             min-width: auto;
+        }
+
+        .dropdown.active .dropdown-content {
+            display: block; /* Show when parent .dropdown has .active class */
         }
         
         .dropdown-content a {
@@ -271,7 +275,7 @@ a:hover {
         }
         
         .dropdown:hover .dropdown-content {
-            display: block;
+            display: none; /* Disable hover effect on mobile */
         }
     }
     
