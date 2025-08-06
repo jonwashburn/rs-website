@@ -143,19 +143,48 @@ def window_score(timestamp: _dt.datetime) -> float:
     return 1.0 / (1.0 + J)
 
 
+def generate_heatmap(year: int) -> dict:
+    """Generate a full-year heatmap of daily window scores."""
+    start_date = _dt.datetime(year, 1, 1, tzinfo=_dt.timezone.utc)
+    daily_scores = {}
+    
+    for i in range(366):
+        current_date = start_date + _dt.timedelta(days=i)
+        if current_date.year > year:
+            break
+        
+        date_str = current_date.strftime('%Y-%m-%d')
+        score = window_score(current_date)
+        daily_scores[date_str] = score
+
+    # Find peaks
+    sorted_days = sorted(daily_scores.items(), key=lambda item: item[1], reverse=True)
+    peaks = sorted_days[:10] # Top 10 days
+
+    return {
+        "year": year,
+        "daily_scores": daily_scores,
+        "top_windows": [{"date": d, "score": s} for d, s in peaks],
+    }
+
+
 # CLI helper for quick inspection ------------------------------------------------
 if __name__ == "__main__":
     import argparse, json
 
     parser = argparse.ArgumentParser(description="Astrology OS window score")
-    parser.add_argument("utc", help="UTC timestamp, e.g. 2025-08-06T00:00:00")
+    parser.add_argument("utc_or_year", help="UTC timestamp (e.g. 2025-08-06T00:00:00) or a year for heatmap (e.g. 2025)")
     args = parser.parse_args()
 
-    ts = _dt.datetime.fromisoformat(args.utc)
-    vec = state_vector(ts)
-    print(json.dumps({
-        "timestamp": args.utc,
-        "window_score": window_score(ts),
-        "zodiac_hash": zodiac_hash(vec),
-        "global_cost": global_cost(vec),
-    }, indent=2))
+    if len(args.utc_or_year) == 4 and args.utc_or_year.isdigit():
+        heatmap_data = generate_heatmap(int(args.utc_or_year))
+        print(json.dumps(heatmap_data, indent=2))
+    else:
+        ts = _dt.datetime.fromisoformat(args.utc_or_year)
+        vec = state_vector(ts)
+        print(json.dumps({
+            "timestamp": args.utc_or_year,
+            "window_score": window_score(ts),
+            "zodiac_hash": zodiac_hash(vec),
+            "global_cost": global_cost(vec),
+        }, indent=2))
