@@ -100,6 +100,20 @@ a:hover {
     background: #000;
     display: block;
     transition: 0.3s;
+    transform-origin: center;
+}
+
+/* Hamburger animation */
+.mobile-menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.mobile-menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
 }
 
 .logo a {
@@ -237,11 +251,14 @@ a:hover {
         .global-nav ul {
             flex-direction: column;
             width: 100%;
-            display: none;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out;
+            display: flex;
         }
         
         .global-nav.active ul {
-            display: flex;
+            max-height: 500px; /* Large enough to accommodate all menu items */
         }
         
         .global-nav a {
@@ -258,20 +275,37 @@ a:hover {
         /* Mobile dropdown adjustments */
         .dropdown-content {
             position: static;
-            display: none; /* Hide by default on mobile */
+            max-height: 0;
+            overflow: hidden;
             background: #222;
             box-shadow: none;
             border: none;
             min-width: auto;
+            transition: max-height 0.3s ease-in-out;
         }
 
         .dropdown.active .dropdown-content {
-            display: block; /* Show when parent .dropdown has .active class */
+            max-height: 200px; /* Large enough for dropdown items */
         }
         
         .dropdown-content a {
             padding: 0.8rem 2rem;
             border-bottom: 1px solid #444;
+        }
+
+        /* Add touch feedback for mobile */
+        .global-nav a:active,
+        .dropdown-content a:active {
+            background: #555 !important;
+            transform: scale(0.98);
+            transition: all 0.1s ease;
+        }
+
+        /* Improve mobile button feedback */
+        .mobile-menu-toggle:active {
+            transform: scale(0.95);
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
         }
         
         .dropdown:hover .dropdown-content {

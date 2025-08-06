@@ -4,33 +4,57 @@ document.addEventListener("DOMContentLoaded", function() {
         const nav = document.getElementById('globalNav');
         if (nav) {
             nav.classList.toggle('active');
+            
+            // Animate hamburger menu
+            const button = document.querySelector('.mobile-menu-toggle');
+            if (button) {
+                button.classList.toggle('active');
+            }
         }
     }
 
     function setupHeaderEventListeners() {
-        const mobileMenuButton = document.querySelector('.mobile-menu-toggle');
-        if (mobileMenuButton) {
-            mobileMenuButton.addEventListener('click', toggleMobileMenu);
-        }
-
-        const dropdowns = document.querySelectorAll('.global-nav .dropdown');
-        dropdowns.forEach(dropdown => {
-            const dropbtn = dropdown.querySelector('.dropbtn');
-            if (dropbtn) {
-                dropbtn.addEventListener('click', function(event) {
-                    if (window.innerWidth <= 768) {
-                        event.preventDefault();
-                        // Close other open dropdowns
-                        dropdowns.forEach(otherDropdown => {
-                            if (otherDropdown !== dropdown) {
-                                otherDropdown.classList.remove('active');
-                            }
-                        });
-                        dropdown.classList.toggle('active');
-                    }
-                });
+        // Use a small delay to ensure DOM is fully ready
+        setTimeout(() => {
+            const mobileMenuButton = document.querySelector('.mobile-menu-toggle');
+            console.log('Setting up mobile menu button:', mobileMenuButton); // Debug log
+            
+            if (mobileMenuButton) {
+                // Remove any existing listeners to prevent duplicates
+                mobileMenuButton.removeEventListener('click', toggleMobileMenu);
+                mobileMenuButton.addEventListener('click', toggleMobileMenu);
             }
-        });
+
+            const dropdowns = document.querySelectorAll('.global-nav .dropdown');
+            console.log('Found dropdowns:', dropdowns.length); // Debug log
+            
+            dropdowns.forEach(dropdown => {
+                const dropbtn = dropdown.querySelector('.dropbtn');
+                if (dropbtn) {
+                    // Remove existing listeners to prevent duplicates
+                    dropbtn.removeEventListener('click', handleDropdownClick);
+                    dropbtn.addEventListener('click', handleDropdownClick);
+                }
+            });
+        }, 100);
+    }
+
+    function handleDropdownClick(event) {
+        if (window.innerWidth <= 768) {
+            event.preventDefault();
+            const dropdown = event.target.closest('.dropdown');
+            
+            // Close other open dropdowns
+            const allDropdowns = document.querySelectorAll('.global-nav .dropdown');
+            allDropdowns.forEach(otherDropdown => {
+                if (otherDropdown !== dropdown) {
+                    otherDropdown.classList.remove('active');
+                }
+            });
+            
+            // Toggle this dropdown
+            dropdown.classList.toggle('active');
+        }
     }
 
     function fetchAndInject(url, placeholderId) {
