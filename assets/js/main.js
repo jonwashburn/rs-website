@@ -40,20 +40,26 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function handleDropdownClick(event) {
+        console.log('Dropdown clicked, window width:', window.innerWidth); // Debug log
         if (window.innerWidth <= 768) {
             event.preventDefault();
+            event.stopPropagation();
             const dropdown = event.target.closest('.dropdown');
+            console.log('Dropdown element:', dropdown); // Debug log
             
-            // Close other open dropdowns
-            const allDropdowns = document.querySelectorAll('.global-nav .dropdown');
-            allDropdowns.forEach(otherDropdown => {
-                if (otherDropdown !== dropdown) {
-                    otherDropdown.classList.remove('active');
-                }
-            });
-            
-            // Toggle this dropdown
-            dropdown.classList.toggle('active');
+            if (dropdown) {
+                // Close other open dropdowns
+                const allDropdowns = document.querySelectorAll('.global-nav .dropdown');
+                allDropdowns.forEach(otherDropdown => {
+                    if (otherDropdown !== dropdown) {
+                        otherDropdown.classList.remove('active');
+                    }
+                });
+                
+                // Toggle this dropdown
+                dropdown.classList.toggle('active');
+                console.log('Dropdown active state:', dropdown.classList.contains('active')); // Debug log
+            }
         }
     }
 
@@ -79,6 +85,23 @@ document.addEventListener("DOMContentLoaded", function() {
                 });
         }
     }
+
+    // Event delegation for dropdown clicks (fallback)
+    document.addEventListener('click', function(event) {
+        if (event.target.matches('.dropdown .dropbtn') || event.target.closest('.dropdown .dropbtn')) {
+            handleDropdownClick(event);
+        }
+    });
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(event) {
+        if (window.innerWidth <= 768 && !event.target.closest('.dropdown')) {
+            const activeDropdowns = document.querySelectorAll('.dropdown.active');
+            activeDropdowns.forEach(dropdown => {
+                dropdown.classList.remove('active');
+            });
+        }
+    });
 
     fetchAndInject('/_includes/header.html', 'header-placeholder');
     fetchAndInject('/_includes/footer.html', 'footer-placeholder');
