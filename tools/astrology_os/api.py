@@ -140,6 +140,6 @@ if __name__ == '__main__':
     print("   GET /window_score?timestamp=2025-01-15T12:00:00")
     print("   GET /heatmap?year=2025")
     print("   GET /about")
-    print("🌐 Access at: http://localhost:5000")
+    print("🌐 Access at: http://localhost:5001")
     
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5001)
