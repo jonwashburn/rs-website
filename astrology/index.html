@@ -2,57 +2,196 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Astrology OS</title>
-    <style>body{font-family:sans-serif;background:#121212;color:#e0e0e0;padding:2rem;}.container{max-width:800px;margin:auto;}h1,h2{color:#fff;border-bottom:2px solid #4CAF50;padding-bottom:10px;text-align:center;}.input-section,.results,.heatmap-results{background:#1e1e1e;padding:2rem;border-radius:8px;margin-bottom:2rem;}input,button{width:100%;padding:10px;margin-bottom:1rem;border-radius:4px;border:1px solid #444;background:#333;color:#e0e0e0;}button{background:#4CAF50;cursor:pointer;}.result-item{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #333;}.result-value{color:#4CAF50;font-family:monospace;}table{width:100%;border-collapse:collapse;}th,td{padding:8px;border-bottom:1px solid #ddd;}th{background:#4CAF50;}</style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astrology OS /// Recognition Science</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <style>
+        .astrology-tool-section {
+            background-color: #f8f9fa;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 3rem;
+            box-shadow: var(--shadow-sm);
+        }
+        .input-section, .heatmap-section {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+        #heatmap, #topWindows, #results {
+            margin-top: 2rem;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Astrology OS</h1>
-        <div class="input-section">
-            <h2>Window Score</h2>
-            <input type="datetime-local" id="timestampInput">
-            <button onclick="getScore()">Calculate</button>
-        </div>
-        <div class="input-section">
-            <h2>Yearly Heatmap</h2>
-            <input type="number" id="yearInput" placeholder="2025">
-            <button onclick="getHeatmap()">Generate</button>
-        </div>
-        <div class="results" id="results" style="display:none;">
-            <div class="result-item"><span>Timestamp</span><span id="resTimestamp"></span></div>
-            <div class="result-item"><span>Window Score</span><span id="resScore"></span></div>
-            <div class="result-item"><span>Global Cost</span><span id="resCost"></span></div>
-            <div class="result-item"><span>Zodiac Hash</span><span id="resHash"></span></div>
-        </div>
-        <div class="heatmap-results" id="heatmapResults" style="display:none;">
-            <h2>Top 10 Days</h2>
-            <table><thead><tr><th>Date</th><th>Score</th></tr></thead><tbody></tbody></table>
-        </div>
-    </div>
+    <div id="header-placeholder"></div>
+
+    <main class="content-page">
+        <section class="intro-section" style="padding: 1.5rem 0; background: #fff;">
+            <div class="container text-center">
+                <h1 style="font-size: 2.8rem; margin-bottom: 1rem;">The Astrology OS</h1>
+                <p class="lead" style="font-size: 1.4rem; color: #555; max-width: 800px; margin: 0 auto;">
+                    A scientifically rigorous framework for temporal navigation, derived from the first principles of Recognition Science.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <div class="text-block" style="max-width: 800px; margin: 0 auto;">
+                    <h2>From Mysticism to Mathematics</h2>
+                    <p>For millennia, humanity has looked to the stars for guidance, believing that the positions of celestial bodies hold sway over our lives. While traditional astrology has been dismissed by modern science, its persistence across cultures suggests a deeper, forgotten truth. Recognition Science reveals this truth not as a mystical influence, but as a precise, computational system of temporal navigation.</p>
+                    <p>The **Astrology OS** is not a tool for divination or personality assessment. It is a scientifically-derived operating system for interacting with the Universal Ledger—the computational substrate of reality. It allows us to measure the "cost" of a given moment in time, providing a quantitative metric for the harmony or disharmony of the planetary state vector.</p>
+
+                    <h2>The Science Behind the Score</h2>
+                    <p>The core of the Astrology OS is the **Window Score**, a value between 0 and 1 that represents the optimality of a given moment. A higher score indicates a period of lower cosmic "cost"—a time when actions are more likely to propagate through the Ledger with minimal resistance.</p>
+                    <p>This score is derived from the following principles:</p>
+                    <ul>
+                        <li><strong>The 24-Dimensional State Vector:</strong> At any moment, the positions (λ) and velocities (λ̇) of the ten primary celestial bodies (Sun through Pluto) form a 24-dimensional vector that describes the state of our solar system within the Universal Ledger.</li>
+                        <li><strong>The Zodiac as a Hashing Algorithm:</strong> The twelve zodiacal signs are not mystical archetypes, but a natural hashing scheme derived from the 8-beat cycle (2³), which divides the ecliptic plane into twelve 30-degree sectors.</li>
+                        <li><strong>The Global Cost Functional (J(x)):</strong> Recognition Science provides a precise formula for the "cost" or disharmony between any two points on the ecliptic: <code>J_ij = |sin(Δσ·π/12)|?</code>, where ? is the Golden Ratio. The global cost is the sum of these pairwise costs for all planets.</li>
+                        <li><strong>The Window Score:</strong> The final score is a simple inversion of the global cost: <code>Score = 1 / (1 + J)</code>. This yields a value close to 1.0 for moments of low cost (harmony) and close to 0.0 for moments of high cost (disharmony).</li>
+                    </ul>
+
+                    <div class="quote-box">
+                        <p>This is not an interpretation of the stars, but a measurement of the computational state of the Universal Ledger. The planets do not influence events; their configuration *is* a direct read-out of the Ledger's underlying harmony.</p>
+                    </div>
+                </div>
+
+                <div class="astrology-tool-section">
+                    <h2 class="text-center" style="margin-top: 0;">Calculate a Window Score</h2>
+                    <div class="input-section">
+                        <label for="datetime">Select a Date and Time (UTC):</label>
+                        <input type="datetime-local" id="datetime" name="datetime">
+                        <button id="calculate">Calculate Score</button>
+                    </div>
+                    <div id="results" class="results" style="display:none;"></div>
+                
+                    <div class="heatmap-section">
+                        <h2>Generate Yearly Heatmap</h2>
+                        <label for="year">Enter a Year:</label>
+                        <input type="number" id="year" name="year" placeholder="e.g., 2025" min="1900" max="2100">
+                        <button id="generateHeatmap">Generate Heatmap</button>
+                    </div>
+                    <div id="heatmap" class="heatmap-results" style="display:none;"></div>
+                    <div id="topWindows" class="top-windows-results" style="display:none;"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <div id="footer-placeholder"></div>
+
     <script>
-        const API_URL = 'http://localhost:5001';
-        document.getElementById('timestampInput').value = new Date().toISOString().slice(0,16);
-        async function getScore() {
-            const res = await fetch(`${API_URL}/window_score?timestamp=${document.getElementById('timestampInput').value}`);
-            const data = await res.json();
-            document.getElementById('resTimestamp').textContent = data.timestamp;
-            document.getElementById('resScore').textContent = data.window_score.toFixed(6);
-            document.getElementById('resCost').textContent = data.global_cost.toFixed(6);
-            document.getElementById('resHash').textContent = `[${data.zodiac_hash.join(', ')}]`;
-            document.getElementById('results').style.display = 'block';
-        }
-        async function getHeatmap() {
-            const res = await fetch(`${API_URL}/heatmap?year=${document.getElementById('yearInput').value || 2025}`);
-            const data = await res.json();
-            const tableBody = document.querySelector('#heatmapResults tbody');
-            tableBody.innerHTML = '';
-            data.top_windows.forEach(item => {
-                const row = tableBody.insertRow();
-                row.insertCell(0).innerHTML = item.date;
-                row.insertCell(1).innerHTML = item.score.toFixed(6);
+        document.addEventListener('DOMContentLoaded', function () {
+            const API_BASE_URL = 'http://localhost:5001';
+
+            // Fetches and inserts header and footer
+            fetch('../_includes/header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-placeholder').innerHTML = data;
+                });
+            fetch('../_includes/footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('footer-placeholder').innerHTML = data;
+                });
+            
+            const calculateBtn = document.getElementById('calculate');
+            const datetimeInput = document.getElementById('datetime');
+            const resultsDiv = document.getElementById('results');
+
+            const generateBtn = document.getElementById('generateHeatmap');
+            const yearInput = document.getElementById('year');
+            const heatmapDiv = document.getElementById('heatmap');
+            const topWindowsDiv = document.getElementById('topWindows');
+
+            calculateBtn.addEventListener('click', () => {
+                const isoTimestamp = new Date(datetimeInput.value).toISOString();
+                if (!datetimeInput.value) {
+                    resultsDiv.innerHTML = '<p>Please select a date and time.</p>';
+                    resultsDiv.style.display = 'block';
+                    return;
+                }
+                resultsDiv.innerHTML = '<p>Calculating...</p>';
+                resultsDiv.style.display = 'block';
+
+                fetch(`${API_BASE_URL}/window_score?timestamp=${isoTimestamp}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            resultsDiv.innerHTML = `<p>Error: ${data.error}</p>`;
+                            return;
+                        }
+                        resultsDiv.innerHTML = \`
+                            <h3>Results for \${new Date(data.timestamp).toLocaleString()}</h3>
+                            <div class="result-item"><span>Window Score:</span> <span class="result-value">\${data.window_score.toFixed(6)}</span></div>
+                            <div class="result-item"><span>Global Cost (J):</span> <span class="result-value">\${data.global_cost.toFixed(4)}</span></div>
+                            <div class="result-item"><span>Zodiac Hash:</span> <span class="result-value">\${JSON.stringify(data.zodiac_hash)}</span></div>
+                        \`;
+                    })
+                    .catch(error => {
+                        resultsDiv.innerHTML = \`<p>Error connecting to API. Is it running?</p>\`;
+                        console.error('Error:', error);
+                    });
             });
-            document.getElementById('heatmapResults').style.display = 'block';
-        }
+
+            generateBtn.addEventListener('click', () => {
+                const year = yearInput.value;
+                if (!year) {
+                    heatmapDiv.innerHTML = '<p>Please enter a year.</p>';
+                    heatmapDiv.style.display = 'block';
+                    return;
+                }
+                heatmapDiv.innerHTML = '<p>Generating heatmap... This may take a moment.</p>';
+                heatmapDiv.style.display = 'block';
+                topWindowsDiv.style.display = 'none';
+
+                fetch(`${API_BASE_URL}/heatmap?year=${year}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            heatmapDiv.innerHTML = `<p>Error: ${data.error}</p>`;
+                            return;
+                        }
+                        heatmapDiv.innerHTML = '<h3>Yearly Heatmap</h3><p>Darker green indicates higher (more optimal) window scores.</p>';
+                        const calendar = document.createElement('div');
+                        calendar.className = 'calendar-heatmap';
+                        heatmapDiv.appendChild(calendar);
+                        
+                        // Simple calendar heatmap rendering
+                        for (const [date, score] of Object.entries(data.daily_scores)) {
+                            if (score === null) continue;
+                            const day = document.createElement('div');
+                            day.className = 'heatmap-day';
+                            day.style.backgroundColor = `rgba(0, 255, 0, ${score})`;
+                            day.title = `${date}: ${score.toFixed(4)}`;
+                            calendar.appendChild(day);
+                        }
+                        
+                        topWindowsDiv.innerHTML = '<h3>Top 10 Optimal Windows</h3>';
+                        const table = document.createElement('table');
+                        table.innerHTML = '<thead><tr><th>Date</th><th>Score</th></tr></thead>';
+                        const tbody = document.createElement('tbody');
+                        data.top_windows.forEach(item => {
+                            const row = tbody.insertRow();
+                            row.insertCell(0).textContent = item.date;
+                            row.insertCell(1).textContent = item.score.toFixed(6);
+                        });
+                        table.appendChild(tbody);
+                        topWindowsDiv.appendChild(table);
+                        topWindowsDiv.style.display = 'block';
+
+                    })
+                    .catch(error => {
+                        heatmapDiv.innerHTML = \`<p>Error connecting to API. Is it running?</p>\`;
+                        console.error('Error:', error);
+                    });
+            });
+        });
     </script>
 </body>
 </html>
