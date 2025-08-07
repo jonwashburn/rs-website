@@ -1,204 +1,78 @@
-"""Astrology OS v0.1 – Deductive, parameter-free timing & addressing library
-
-This module converts real UTC timestamps into Recognition-Science (RS) cost
-metrics so that higher-level apps (CLI, VR, φ-cavity controllers) can decide
-WHEN to run a Ledger query and which Zodiac address they are targeting.
-
-The code is deliberately written as pure-Python with an optional dependency on
-Skyfield for planetary ephemerides.  If Skyfield is unavailable, the public API
-still imports but raises NotImplementedError at runtime.
-
-Core Steps (matched to ChatGPT o3-Pro spec):
------------------------------------------------------------------------
-1.  state_vector(t):      → 24-dim numpy vector  [λ_p , λ̇_p] for 12 bodies
-2.  zodiac_hash(vec):     → 12-tuple occupancy of signs 0…11
-3.  cost_kernel(i, j):    → scalar J_ij   (closed-form φ, π/12 derived)
-4.  global_cost(vec):     → sum_{i<j} K(i,j) + self-terms
-5.  window_score(t):      →  W(t) = 1 / (1 + global_cost)
------------------------------------------------------------------------
-
-NB:  All constants derive from RS axioms – there are **no empirical fit
-parameters** (φ, π appear but they’re mathematical necessity).
+#!/usr/bin/env python3
 """
-from __future__ import annotations
-
+Astrology OS - Recognition Science Implementation
+Author: Jonathan Washburn
+"""
 import math
 import datetime as _dt
 from typing import Tuple, List
 
-# Golden ratio φ from RS self-similarity axiom
-PHI = (1 + 5 ** 0.5) / 2
-# Fundamental angular slice (π / 12) – one Zodiac sector
-SECTOR = math.pi / 6  # radians
+PHI = (1 + 5**0.5) / 2
+SECTOR = math.pi / 6
 
-# Planet list order – Sun counted as body 0 for convenience
 PLANETS = [
-    "sun",
-    "moon",
-    "mercury",
-    "venus",
-    "mars",
-    "jupiter",
-    "saturn",
-    "uranus",
-    "neptune",
-    "pluto",
+    "sun", "moon", "mercury", "venus", "mars", "jupiter", "saturn",
+    "uranus", "neptune", "pluto",
 ]
 
-# ------------------------------------------------------------------
-# Optional ephemeris back-end (Skyfield).  Cleanly degrades if missing.
-# ------------------------------------------------------------------
 try:
-    from skyfield.api import load as _sky_load, wgs84 as _wgs84
-
+    from skyfield.api import load as _sky_load
     _EPEM = _sky_load("de440.bsp")
     _TS = _sky_load.timescale()
 
     def _ecliptic_longitude(body: str, t) -> float:
-        """Return ecliptic longitude λ in radians for given body at time t (Skyfield time)."""
-        # Map planet names to ephemeris identifiers
         planet_map = {
-            "sun": "sun",
-            "moon": "moon", 
-            "mercury": "mercury",
-            "venus": "venus",
-            "mars": "mars barycenter",
-            "jupiter": "jupiter barycenter",
-            "saturn": "saturn barycenter",  
-            "uranus": "uranus barycenter",
-            "neptune": "neptune barycenter",
-            "pluto": "pluto barycenter"
+            "sun": "sun", "moon": "moon", "mercury": "mercury", "venus": "venus",
+            "mars": "mars barycenter", "jupiter": "jupiter barycenter",
+            "saturn": "saturn barycenter", "uranus": "uranus barycenter",
+            "neptune": "neptune barycenter", "pluto": "pluto barycenter"
         }
-        
         ephemeris_id = planet_map.get(body, body)
-        
-        if body == "sun":
-            geocentric = _EPEM["earth"].at(t).observe(_EPEM[ephemeris_id])
-        else:
-            geocentric = _EPEM[ephemeris_id].at(t).observe(_EPEM["earth"])
+        geocentric = _EPEM["earth"].at(t).observe(_EPEM[ephemeris_id]) if body != "sun" else _EPEM[ephemeris_id].at(t).observe(_EPEM["earth"])
         lon, _, _ = geocentric.ecliptic_latlon()
         return lon.radians
 
     def _longitude_and_rate(body: str, t) -> Tuple[float, float]:
-        """λ and λ̇ (rad/day) via finite difference 1-hour step."""
-        dt_plus = t + 1 / 24  # +1 hour
-        lam = _ecliptic_longitude(body, t)
-        lam_plus = _ecliptic_longitude(body, dt_plus)
-        rate = (lam_plus - lam) / (1 / 24)
-        return lam, rate
+        dt_plus = t + (1 / 24)
+        lam, lam_plus = _ecliptic_longitude(body, t), _ecliptic_longitude(body, dt_plus)
+        return lam, (lam_plus - lam) / (1 / 24)
 
-except Exception:  # pragma: no cover – Skyfield unavailable
-
-    def _missing(*_args, **_kw):  # type: ignore[return-type]
-        raise NotImplementedError(
-            "Skyfield ephemeris not available – install `skyfield` and re-run."
-        )
-
-    _longitude_and_rate = _missing  # type: ignore[assignment]
-    _TS = None  # type: ignore[assignment]
-
-
-# ------------------------------------------------------------------
-# Public API
-# ------------------------------------------------------------------
+except Exception:
+    _longitude_and_rate = lambda *a, **k: (_ for _ in ()).throw(NotImplementedError("Skyfield not available."))
 
 def state_vector(timestamp: _dt.datetime) -> List[float]:
-    """Return 24-dimensional [λ, λ̇] vector for all 12 planetary bodies.
-
-    λ in radians (0 to 2π), λ̇ in rad/day.
-    """
-    if _TS is None:
-        raise NotImplementedError("Ephemeris backend missing; cannot compute state vector.")
-
-    t_sf = _TS.utc(timestamp.replace(tzinfo=_dt.timezone.utc))
-    vec: List[float] = []
-    for body in PLANETS:
-        lam, rate = _longitude_and_rate(body, t_sf)
-        vec.extend([lam % (2 * math.pi), rate])
-    return vec
-
+    t_sf = _TS.from_datetime(timestamp)
+    return [val for body in PLANETS for val in _longitude_and_rate(body, t_sf)]
 
 def zodiac_hash(state_vec: List[float]) -> Tuple[int, ...]:
-    """Return 12-tuple counts of bodies per zodiac sign."""
-    counts = [0] * 12
-    for i in range(0, len(state_vec), 2):
-        lam = state_vec[i]
-        sign = int(lam // SECTOR) % 12
-        counts[sign] += 1
-    return tuple(counts)
-
+    signs = [0] * 12
+    for lam in state_vec[0::2]:
+        signs[int((lam % (2 * math.pi)) / SECTOR)] += 1
+    return tuple(signs)
 
 def cost_kernel(sign_i: int, sign_j: int) -> float:
-    """Ledger cost between two planets occupying signs i, j.
-
-    Forced by RS curvature metric:  J_ij = |sin(Δσ·π/12)|^φ
-    Gives minimum when planets share sign; peaks at opposition (6 sectors).
-    """
-    delta = abs(sign_i - sign_j) % 12
-    ang = delta * SECTOR  # radians separation along ecliptic
-    return abs(math.sin(ang)) ** PHI  # RS-forced exponentiation
-
+    return abs(math.sin(abs(sign_i - sign_j) % 12 * SECTOR)) ** PHI
 
 def global_cost(state_vec: List[float]) -> float:
-    """Sum pairwise cost kernel + minimal self-term φ⁻² per planet."""
-    signs = [int(state_vec[i] // SECTOR) % 12 for i in range(0, len(state_vec), 2)]
-    total = 0.0
-    n = len(signs)
-    for a in range(n):
-        total += PHI ** -2  # self-term
-        for b in range(a + 1, n):
-            total += cost_kernel(signs[a], signs[b])
-    return total
-
+    signs = [int((l % (2 * math.pi)) / SECTOR) for l in state_vec[0::2]]
+    return sum(cost_kernel(signs[i], signs[j]) for i in range(len(signs)) for j in range(i + 1, len(signs)))
 
 def window_score(timestamp: _dt.datetime) -> float:
-    """Return normalized window score W(t) = 1 / (1 + J).  Higher ⇒ better query window."""
-    J = global_cost(state_vector(timestamp))
-    return 1.0 / (1.0 + J)
-
+    return 1 / (1 + global_cost(state_vector(timestamp)))
 
 def generate_heatmap(year: int) -> dict:
-    """Generate a full-year heatmap of daily window scores."""
     start_date = _dt.datetime(year, 1, 1, tzinfo=_dt.timezone.utc)
-    daily_scores = {}
-    
-    for i in range(366):
-        current_date = start_date + _dt.timedelta(days=i)
-        if current_date.year > year:
-            break
-        
-        date_str = current_date.strftime('%Y-%m-%d')
-        score = window_score(current_date)
-        daily_scores[date_str] = score
+    scores = { (start_date + _dt.timedelta(days=i)).strftime('%Y-%m-%d'): window_score(start_date + _dt.timedelta(days=i)) for i in range(366) if (start_date + _dt.timedelta(days=i)).year == year }
+    return {"year": year, "daily_scores": scores, "top_windows": [{"date": d, "score": s} for d, s in sorted(scores.items(), key=lambda item: item[1], reverse=True)[:10]]}
 
-    # Find peaks
-    sorted_days = sorted(daily_scores.items(), key=lambda item: item[1], reverse=True)
-    peaks = sorted_days[:10] # Top 10 days
-
-    return {
-        "year": year,
-        "daily_scores": daily_scores,
-        "top_windows": [{"date": d, "score": s} for d, s in peaks],
-    }
-
-
-# CLI helper for quick inspection ------------------------------------------------
 if __name__ == "__main__":
     import argparse, json
-
-    parser = argparse.ArgumentParser(description="Astrology OS window score")
-    parser.add_argument("utc_or_year", help="UTC timestamp (e.g. 2025-08-06T00:00:00) or a year for heatmap (e.g. 2025)")
+    parser = argparse.ArgumentParser(description="Astrology OS")
+    parser.add_argument("utc_or_year", help="UTC timestamp or year for heatmap")
     args = parser.parse_args()
-
     if len(args.utc_or_year) == 4 and args.utc_or_year.isdigit():
-        heatmap_data = generate_heatmap(int(args.utc_or_year))
-        print(json.dumps(heatmap_data, indent=2))
+        print(json.dumps(generate_heatmap(int(args.utc_or_year)), indent=2))
     else:
         ts = _dt.datetime.fromisoformat(args.utc_or_year)
         vec = state_vector(ts)
-        print(json.dumps({
-            "timestamp": args.utc_or_year,
-            "window_score": window_score(ts),
-            "zodiac_hash": zodiac_hash(vec),
-            "global_cost": global_cost(vec),
-        }, indent=2))
+        print(json.dumps({"timestamp": args.utc_or_year, "window_score": window_score(ts), "zodiac_hash": zodiac_hash(vec), "global_cost": global_cost(vec)}, indent=2))

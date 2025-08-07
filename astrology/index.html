@@ -2,251 +2,56 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Astrology OS | Recognition Science</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: #121212;
-            color: #e0e0e0;
-            margin: 0;
-            padding: 2rem;
-            display: flex;
-            justify-content: center;
-        }
-        .container {
-            max-width: 800px;
-            width: 100%;
-        }
-        h1, h2 {
-            color: #ffffff;
-            border-bottom: 2px solid #4CAF50;
-            padding-bottom: 10px;
-            text-align: center;
-        }
-        .input-section, .heatmap-section {
-            background-color: #1e1e1e;
-            padding: 2rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        }
-        input[type="datetime-local"], input[type="number"] {
-            width: calc(100% - 22px);
-            padding: 10px;
-            margin-bottom: 1rem;
-            border-radius: 4px;
-            border: 1px solid #444;
-            background-color: #333;
-            color: #e0e0e0;
-        }
-        button {
-            width: 100%;
-            padding: 12px;
-            border-radius: 4px;
-            border: none;
-            background-color: #4CAF50;
-            color: white;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .results {
-            margin-top: 2rem;
-            background-color: #1e1e1e;
-            padding: 2rem;
-            border-radius: 8px;
-            display: none;
-        }
-        .heatmap-results {
-             margin-top: 2rem;
-            background-color: #1e1e1e;
-            padding: 2rem;
-            border-radius: 8px;
-            display: none;
-        }
-        .loader {
-            text-align: center;
-            padding: 2rem;
-            font-size: 1.2rem;
-            display: none;
-        }
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #333;
-        }
-        .result-item:last-child {
-            border-bottom: none;
-        }
-        .result-label {
-            font-weight: bold;
-            color: #a0a0a0;
-        }
-        .result-value {
-            color: #4CAF50;
-            font-family: monospace;
-        }
-         table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-        th, td {
-            text-align: left;
-            padding: 8px;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #4CAF50;
-            color: white;
-        }
-        footer {
-            text-align: center;
-            margin-top: 2rem;
-            font-size: 0.9rem;
-            color: #777;
-        }
-    </style>
+    <title>Astrology OS</title>
+    <style>body{font-family:sans-serif;background:#121212;color:#e0e0e0;padding:2rem;}.container{max-width:800px;margin:auto;}h1,h2{color:#fff;border-bottom:2px solid #4CAF50;padding-bottom:10px;text-align:center;}.input-section,.results,.heatmap-results{background:#1e1e1e;padding:2rem;border-radius:8px;margin-bottom:2rem;}input,button{width:100%;padding:10px;margin-bottom:1rem;border-radius:4px;border:1px solid #444;background:#333;color:#e0e0e0;}button{background:#4CAF50;cursor:pointer;}.result-item{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #333;}.result-value{color:#4CAF50;font-family:monospace;}table{width:100%;border-collapse:collapse;}th,td{padding:8px;border-bottom:1px solid #ddd;}th{background:#4CAF50;}</style>
 </head>
 <body>
     <div class="container">
         <h1>Astrology OS</h1>
-        <p style="text-align:center;">A Recognition Science Implementation</p>
-
         <div class="input-section">
-            <h2>Calculate Window Score</h2>
-            <input type="datetime-local" id="timestampInput" name="timestamp">
-            <button onclick="getScore()">Calculate Score</button>
+            <h2>Window Score</h2>
+            <input type="datetime-local" id="timestampInput">
+            <button onclick="getScore()">Calculate</button>
         </div>
-        
-         <div class="heatmap-section">
-            <h2>Generate Yearly Heatmap</h2>
-            <input type="number" id="yearInput" name="year" placeholder="Enter year (e.g., 2025)" min="1900" max="2100">
-            <button onclick="getHeatmap()">Generate Heatmap</button>
+        <div class="input-section">
+            <h2>Yearly Heatmap</h2>
+            <input type="number" id="yearInput" placeholder="2025">
+            <button onclick="getHeatmap()">Generate</button>
         </div>
-
-        <div class="loader" id="loader">Loading...</div>
-
-        <div class="results" id="results">
-            <h2>Results</h2>
-            <div class="result-item">
-                <span class="result-label">Timestamp</span>
-                <span class="result-value" id="resTimestamp"></span>
-            </div>
-            <div class="result-item">
-                <span class="result-label">Window Score</span>
-                <span class="result-value" id="resScore"></span>
-            </div>
-            <div class="result-item">
-                <span class="result-label">Global Cost (J(x))</span>
-                <span class="result-value" id="resCost"></span>
-            </div>
-            <div class="result-item">
-                <span class="result-label">Zodiac Hash</span>
-                <span class="result-value" id="resHash"></span>
-            </div>
+        <div class="results" id="results" style="display:none;">
+            <div class="result-item"><span>Timestamp</span><span id="resTimestamp"></span></div>
+            <div class="result-item"><span>Window Score</span><span id="resScore"></span></div>
+            <div class="result-item"><span>Global Cost</span><span id="resCost"></span></div>
+            <div class="result-item"><span>Zodiac Hash</span><span id="resHash"></span></div>
         </div>
-        
-         <div class="heatmap-results" id="heatmapResults">
-            <h2>Top 10 Optimal Days</h2>
-            <table id="heatmapTable">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Score</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+        <div class="heatmap-results" id="heatmapResults" style="display:none;">
+            <h2>Top 10 Days</h2>
+            <table><thead><tr><th>Date</th><th>Score</th></tr></thead><tbody></tbody></table>
         </div>
-        
-        <footer>
-            Built on the Recognition Science Framework by Jonathan Washburn.
-        </footer>
     </div>
-
     <script>
-        const API_BASE_URL = 'http://localhost:5001';
-
-        // Set default timestamp to now
-        document.getElementById('timestampInput').value = new Date().toISOString().slice(0, 16);
-
+        const API_URL = 'http://localhost:5001';
+        document.getElementById('timestampInput').value = new Date().toISOString().slice(0,16);
         async function getScore() {
-            const timestamp = document.getElementById('timestampInput').value;
-            if (!timestamp) {
-                alert('Please select a date and time.');
-                return;
-            }
-
-            document.getElementById('loader').style.display = 'block';
-            document.getElementById('results').style.display = 'none';
-            document.getElementById('heatmapResults').style.display = 'none';
-            
-            try {
-                const response = await fetch(`${API_BASE_URL}/window_score?timestamp=${timestamp}`);
-                const data = await response.json();
-
-                if (data.error) {
-                    throw new Error(data.error);
-                }
-
-                document.getElementById('resTimestamp').textContent = data.timestamp;
-                document.getElementById('resScore').textContent = data.window_score.toFixed(6);
-                document.getElementById('resCost').textContent = data.global_cost.toFixed(6);
-                document.getElementById('resHash').textContent = `[${data.zodiac_hash.join(', ')}]`;
-                
-                document.getElementById('results').style.display = 'block';
-
-            } catch (error) {
-                alert(`Error: ${error.message}`);
-            } finally {
-                document.getElementById('loader').style.display = 'none';
-            }
+            const res = await fetch(`${API_URL}/window_score?timestamp=${document.getElementById('timestampInput').value}`);
+            const data = await res.json();
+            document.getElementById('resTimestamp').textContent = data.timestamp;
+            document.getElementById('resScore').textContent = data.window_score.toFixed(6);
+            document.getElementById('resCost').textContent = data.global_cost.toFixed(6);
+            document.getElementById('resHash').textContent = `[${data.zodiac_hash.join(', ')}]`;
+            document.getElementById('results').style.display = 'block';
         }
-        
         async function getHeatmap() {
-            const year = document.getElementById('yearInput').value;
-            if (!year) {
-                alert('Please enter a year.');
-                return;
-            }
-            
-            document.getElementById('loader').style.display = 'block';
-            document.getElementById('results').style.display = 'none';
-            document.getElementById('heatmapResults').style.display = 'none';
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/heatmap?year=${year}`);
-                const data = await response.json();
-
-                if (data.error) {
-                    throw new Error(data.error);
-                }
-                
-                const tableBody = document.getElementById('heatmapTable').getElementsByTagName('tbody')[0];
-                tableBody.innerHTML = ''; // Clear previous results
-
-                data.top_windows.forEach(item => {
-                    let row = tableBody.insertRow();
-                    let dateCell = row.insertCell(0);
-                    let scoreCell = row.insertCell(1);
-                    dateCell.innerHTML = item.date;
-                    scoreCell.innerHTML = item.score.toFixed(6);
-                });
-
-                document.getElementById('heatmapResults').style.display = 'block';
-
-            } catch (error) {
-                alert(`Error: ${error.message}`);
-            } finally {
-                document.getElementById('loader').style.display = 'none';
-            }
+            const res = await fetch(`${API_URL}/heatmap?year=${document.getElementById('yearInput').value || 2025}`);
+            const data = await res.json();
+            const tableBody = document.querySelector('#heatmapResults tbody');
+            tableBody.innerHTML = '';
+            data.top_windows.forEach(item => {
+                const row = tableBody.insertRow();
+                row.insertCell(0).innerHTML = item.date;
+                row.insertCell(1).innerHTML = item.score.toFixed(6);
+            });
+            document.getElementById('heatmapResults').style.display = 'block';
         }
     </script>
 </body>
