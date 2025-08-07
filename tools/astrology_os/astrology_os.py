@@ -28,7 +28,8 @@ try:
             "neptune": "neptune barycenter", "pluto": "pluto barycenter"
         }
         ephemeris_id = planet_map.get(body, body)
-        geocentric = _EPEM["earth"].at(t).observe(_EPEM[ephemeris_id]) if body != "sun" else _EPEM[ephemeris_id].at(t).observe(_EPEM["earth"])
+        # ALWAYS observe from Earth for geocentric coordinates.
+        geocentric = _EPEM["earth"].at(t).observe(_EPEM[ephemeris_id])
         lon, _, _ = geocentric.ecliptic_latlon()
         return lon.radians
 
@@ -61,9 +62,36 @@ def window_score(timestamp: _dt.datetime) -> float:
     return 1 / (1 + global_cost(state_vector(timestamp)))
 
 def generate_heatmap(year: int) -> dict:
+    """Generate a full-year heatmap of daily window scores."""
     start_date = _dt.datetime(year, 1, 1, tzinfo=_dt.timezone.utc)
-    scores = { (start_date + _dt.timedelta(days=i)).strftime('%Y-%m-%d'): window_score(start_date + _dt.timedelta(days=i)) for i in range(366) if (start_date + _dt.timedelta(days=i)).year == year }
-    return {"year": year, "daily_scores": scores, "top_windows": [{"date": d, "score": s} for d, s in sorted(scores.items(), key=lambda item: item[1], reverse=True)[:10]]}
+    daily_scores = {}
+    
+    for i in range(366):
+        current_date = start_date + _dt.timedelta(days=i)
+        if current_date.year > year:
+            break
+        
+        date_str = current_date.strftime('%Y-%m-%d')
+        try:
+            score = window_score(current_date)
+            daily_scores[date_str] = score
+        except Exception as e:
+            # This will help debug if a specific day fails.
+            print(f"Error calculating score for {date_str}: {e}")
+            daily_scores[date_str] = None 
+
+    # Filter out any days that failed
+    valid_scores = {d: s for d, s in daily_scores.items() if s is not None}
+    
+    # Find the top 10 optimal windows
+    sorted_days = sorted(valid_scores.items(), key=lambda item: item[1], reverse=True)
+    peaks = sorted_days[:10]
+
+    return {
+        "year": year,
+        "daily_scores": daily_scores,
+        "top_windows": [{"date": d, "score": s} for d, s in peaks],
+    }
 
 if __name__ == "__main__":
     import argparse, json
