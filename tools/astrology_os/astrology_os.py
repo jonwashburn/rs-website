@@ -40,11 +40,8 @@ PLANETS = [
     "mars",
     "jupiter",
     "saturn",
-    "uranus",
-    "neptune",
-    "pluto",
-    "ceres",
-    "eris",  # keeps count at 12 bodies
+    # Note: Only inner planets + Jupiter/Saturn available in de440s.bsp
+    # Outer planets would need full de440.bsp ephemeris
 ]
 
 # ------------------------------------------------------------------
@@ -58,10 +55,26 @@ try:
 
     def _ecliptic_longitude(body: str, t) -> float:
         """Return ecliptic longitude λ in radians for given body at time t (Skyfield time)."""
+        # Map planet names to ephemeris identifiers
+        planet_map = {
+            "sun": "sun",
+            "moon": "moon", 
+            "mercury": "mercury",
+            "venus": "venus",
+            "mars": 4,  # Mars barycenter
+            "jupiter": 5,  # Jupiter barycenter
+            "saturn": 6,  # Saturn barycenter  
+            "uranus": 7,  # Uranus barycenter
+            "neptune": 8,  # Neptune barycenter
+            "pluto": 9   # Pluto barycenter
+        }
+        
+        ephemeris_id = planet_map.get(body, body)
+        
         if body == "sun":
-            geocentric = _EPEM["earth"].at(t).observe(_EPEM["sun"])
+            geocentric = _EPEM["earth"].at(t).observe(_EPEM[ephemeris_id])
         else:
-            geocentric = _EPEM[body].at(t).observe(_EPEM["earth"])
+            geocentric = _EPEM[ephemeris_id].at(t).observe(_EPEM["earth"])
         lon, _, _ = geocentric.ecliptic_latlon()
         return lon.radians
 
