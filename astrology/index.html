@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Astrology OS</title>
+    <style>body{font-family:sans-serif;background:#121212;color:#e0e0e0;padding:2rem;}.container{max-width:800px;margin:auto;}h1,h2{color:#fff;border-bottom:2px solid #4CAF50;padding-bottom:10px;text-align:center;}.input-section,.results,.heatmap-results{background:#1e1e1e;padding:2rem;border-radius:8px;margin-bottom:2rem;}input,button{width:100%;padding:10px;margin-bottom:1rem;border-radius:4px;border:1px solid #444;background:#333;color:#e0e0e0;}button{background:#4CAF50;cursor:pointer;}.result-item{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #333;}.result-value{color:#4CAF50;font-family:monospace;}table{width:100%;border-collapse:collapse;}th,td{padding:8px;border-bottom:1px solid #ddd;}th{background:#4CAF50;}</style>
+</head>
+<body>
+    <div class="container">
+        <h1>Astrology OS</h1>
+        <div class="input-section">
+            <h2>Window Score</h2>
+            <input type="datetime-local" id="timestampInput">
+            <button onclick="getScore()">Calculate</button>
+        </div>
+        <div class="input-section">
+            <h2>Yearly Heatmap</h2>
+            <input type="number" id="yearInput" placeholder="2025">
+            <button onclick="getHeatmap()">Generate</button>
+        </div>
+        <div class="results" id="results" style="display:none;">
+            <div class="result-item"><span>Timestamp</span><span id="resTimestamp"></span></div>
+            <div class="result-item"><span>Window Score</span><span id="resScore"></span></div>
+            <div class="result-item"><span>Global Cost</span><span id="resCost"></span></div>
+            <div class="result-item"><span>Zodiac Hash</span><span id="resHash"></span></div>
+        </div>
+        <div class="heatmap-results" id="heatmapResults" style="display:none;">
+            <h2>Top 10 Days</h2>
+            <table><thead><tr><th>Date</th><th>Score</th></tr></thead><tbody></tbody></table>
+        </div>
+    </div>
+    <script>
+        const API_URL = 'http://localhost:5001';
+        document.getElementById('timestampInput').value = new Date().toISOString().slice(0,16);
+        async function getScore() {
+            const res = await fetch(`${API_URL}/window_score?timestamp=${document.getElementById('timestampInput').value}`);
+            const data = await res.json();
+            document.getElementById('resTimestamp').textContent = data.timestamp;
+            document.getElementById('resScore').textContent = data.window_score.toFixed(6);
+            document.getElementById('resCost').textContent = data.global_cost.toFixed(6);
+            document.getElementById('resHash').textContent = `[${data.zodiac_hash.join(', ')}]`;
+            document.getElementById('results').style.display = 'block';
+        }
+        async function getHeatmap() {
+            const res = await fetch(`${API_URL}/heatmap?year=${document.getElementById('yearInput').value || 2025}`);
+            const data = await res.json();
+            const tableBody = document.querySelector('#heatmapResults tbody');
+            tableBody.innerHTML = '';
+            data.top_windows.forEach(item => {
+                const row = tableBody.insertRow();
+                row.insertCell(0).innerHTML = item.date;
+                row.insertCell(1).innerHTML = item.score.toFixed(6);
+            });
+            document.getElementById('heatmapResults').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
