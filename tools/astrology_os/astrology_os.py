@@ -40,8 +40,9 @@ PLANETS = [
     "mars",
     "jupiter",
     "saturn",
-    # Note: Only inner planets + Jupiter/Saturn available in de440s.bsp
-    # Outer planets would need full de440.bsp ephemeris
+    "uranus",
+    "neptune",
+    "pluto",
 ]
 
 # ------------------------------------------------------------------
@@ -50,7 +51,7 @@ PLANETS = [
 try:
     from skyfield.api import load as _sky_load, wgs84 as _wgs84
 
-    _EPEM = _sky_load("de440s.bsp")
+    _EPEM = _sky_load("de440.bsp")
     _TS = _sky_load.timescale()
 
     def _ecliptic_longitude(body: str, t) -> float:
@@ -61,12 +62,12 @@ try:
             "moon": "moon", 
             "mercury": "mercury",
             "venus": "venus",
-            "mars": 4,  # Mars barycenter
-            "jupiter": 5,  # Jupiter barycenter
-            "saturn": 6,  # Saturn barycenter  
-            "uranus": 7,  # Uranus barycenter
-            "neptune": 8,  # Neptune barycenter
-            "pluto": 9   # Pluto barycenter
+            "mars": "mars barycenter",
+            "jupiter": "jupiter barycenter",
+            "saturn": "saturn barycenter",  
+            "uranus": "uranus barycenter",
+            "neptune": "neptune barycenter",
+            "pluto": "pluto barycenter"
         }
         
         ephemeris_id = planet_map.get(body, body)
