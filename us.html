@@ -89,6 +89,94 @@
             </div>
         </section>
         
+        <section class="astrology-os-section">
+            <h2>Astrology OS: Ancient Wisdom Meets Recognition Science</h2>
+            <p>In the Theory of Us, we bridge the objective truths of Recognition Science with the subjective wisdom of human experience. One of the most fascinating applications is the rediscovery of astrology—not as superstition, but as a lost technology for navigating the Universal Ledger.</p>
+            <p>Astrology OS is our Recognition Science-based tool that decodes the "real" basis of astrology. It calculates optimal "windows" for action by minimizing the cost functional J(x) across planetary configurations, revealing probabilistic pathways in the Ledger.</p>
+            
+            <h3>Why Astrology Fits in Recognition Science</h3>
+            <ul>
+                <li><strong>Ledger Query Protocol</strong>: Ancient astrology was a shorthand for timing Ledger queries, using planetary positions as addresses in the cosmic database.</li>
+                <li><strong>Sacred Geometry as Hardware</strong>: Structures like Stonehenge and the Great Pyramid were engineered to manipulate E_coh fields, facilitating direct consciousness-Ledger interaction.</li>
+                <li><strong>Probabilistic Foresight</strong>: By modeling future states as probability currents, Astrology OS identifies low-cost timelines for manifestation.</li>
+                <li><strong>Connection to Core Truths</strong>: This aligns with Truth #4 (All Minds Are One) and Truth #6 (Purpose is a Law of Physics), showing how consciousness can actively shape reality's evolution.</li>
+            </ul>
+            
+            <h3>Try Astrology OS</h3>
+            <div class="astrology-tool">
+                <!-- Integrated interactive tool -->
+                <div class="input-section">
+                    <h3>Calculate Window Score</h3>
+                    <input type="datetime-local" id="timestampInput" step="1">
+                    <button onclick="calculateScore()">Calculate</button>
+                </div>
+                
+                <div class="heatmap-section">
+                    <h3>Generate Yearly Heatmap</h3>
+                    <input type="number" id="yearInput" placeholder="Enter year (e.g., 2025)" min="1900" max="2100">
+                    <button onclick="generateHeatmap()">Generate</button>
+                </div>
+                
+                <div id="results"></div>
+                <div id="heatmap"></div>
+                <div id="topWindows"></div>
+            </div>
+            
+            <script>
+                const API_BASE_URL = 'http://localhost:5001';  // Adjust if deployed differently
+                
+                async function calculateScore() {
+                    const timestamp = document.getElementById('timestampInput').value;
+                    if (!timestamp) return alert('Please enter a timestamp');
+                    
+                    try {
+                        const response = await fetch(`${API_BASE_URL}/window_score?timestamp=${timestamp}`);
+                        const data = await response.json();
+                        if (data.error) throw new Error(data.error);
+                        
+                        document.getElementById('results').innerHTML = `
+                            <h3>Results for ${data.timestamp}</h3>
+                            <p><strong>Window Score:</strong> ${data.window_score.toFixed(4)}</p>
+                            <p><strong>Global Cost:</strong> ${data.global_cost.toFixed(4)}</p>
+                            <p><strong>Zodiac Hash:</strong> ${JSON.stringify(data.zodiac_hash)}</p>
+                        `;
+                    } catch (error) {
+                        document.getElementById('results').innerHTML = `<p>Error: ${error.message}</p>`;
+                    }
+                }
+                
+                async function generateHeatmap() {
+                    const year = document.getElementById('yearInput').value;
+                    if (!year) return alert('Please enter a year');
+                    
+                    try {
+                        const response = await fetch(`${API_BASE_URL}/heatmap?year=${year}`);
+                        const data = await response.json();
+                        if (data.error) throw new Error(data.error);
+                        
+                        let tableHtml = '<h3>Top 10 Optimal Windows for ' + year + '</h3><table><tr><th>Date</th><th>Score</th></tr>';
+                        data.top_windows.forEach(item => {
+                            tableHtml += `<tr><td>${item.date}</td><td>${item.score.toFixed(4)}</td></tr>`;
+                        });
+                        tableHtml += '</table>';
+                        
+                        document.getElementById('topWindows').innerHTML = tableHtml;
+                        
+                        // Simple heatmap visualization (could be expanded with a library)
+                        let heatmapHtml = '<h3>Yearly Heatmap (Scores)</h3><div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px;">';
+                        Object.entries(data.daily_scores).forEach(([date, score]) => {
+                            const color = `hsl(${120 * score}, 100%, 50%)`;  // Green for high scores
+                            heatmapHtml += `<div style="background: ${color}; padding: 5px; text-align: center;" title="${date}: ${score.toFixed(4)}">${date.split('-')[2]}</div>`;
+                        });
+                        heatmapHtml += '</div>';
+                        document.getElementById('heatmap').innerHTML = heatmapHtml;
+                    } catch (error) {
+                        document.getElementById('heatmap').innerHTML = `<p>Error: ${error.message}</p>`;
+                    }
+                }
+            </script>
+        </section>
+
         <div id="footer-placeholder"></div>
 
     </main>
