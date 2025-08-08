@@ -26,6 +26,11 @@
         .calendar-heatmap { display: grid; grid-template-columns: repeat(31, 12px); gap: 2px; }
         .heatmap-day { width: 12px; height: 12px; border-radius: 2px; background: rgba(0,128,0,0.05); }
         .helper-text { margin-top: 0.5rem; color: #666; font-size: 0.95rem; }
+        .mode-badge { display: inline-block; padding: 0.25rem 0.5rem; border-radius: 999px; border: 1px solid var(--border-color); background: #f3f4f6; color: #333; font-size: 0.85rem; }
+        .callout { background: #fff; border-left: 4px solid #2f6fdd; padding: 0.75rem 1rem; margin: 1rem 0; border-radius: 6px; border: 1px solid var(--border-color); }
+        .legend { display: flex; align-items: center; gap: 8px; margin-top: 0.5rem; font-size: 0.9rem; color: #666; }
+        .legend .swatch { width: 16px; height: 12px; border-radius: 3px; background: rgba(0,128,0,0.2); }
+        .small-note { color:#666; font-size:0.9rem; margin-top:0.5rem; }
     </style>
 </head>
 <body>
@@ -61,9 +66,40 @@
                     <div class="quote-box">
                         <p>This is not an interpretation of the stars, but a measurement of the computational state of the Universal Ledger. The planets do not influence events; their configuration *is* a direct read-out of the Ledger's underlying harmony.</p>
                     </div>
+                    
+                    <h2>What this is — and isn’t</h2>
+                    <div class="callout">
+                        <ul>
+                            <li>Not divination or personality typing.</li>
+                            <li>No planetary “influence.” It is a read‑out of system harmony (global cost J).</li>
+                            <li>A temporal navigation tool: choose lower‑cost windows for sensitive actions.</li>
+                        </ul>
+                    </div>
+
+                    <h2>Method (brief)</h2>
+                    <div class="callout">
+                        <ol>
+                            <li>Compute planetary state vector (positions/velocities).</li>
+                            <li>Map to a 12‑sector zodiac hash from the 2³ cycle geometry.</li>
+                            <li>Sum pairwise costs J<sub>ij</sub> = |sin(Δσ·π/12)|·φ across bodies.</li>
+                            <li>Window Score = 1/(1+J).</li>
+                        </ol>
+                    </div>
+
+                    <h2>Limits and falsifiability</h2>
+                    <div class="callout">
+                        <ul>
+                            <li>Correlates timing windows; doesn’t predict outcomes.</li>
+                            <li>Use exact UTC timestamps; birth time is a proxy—conception timing may be more causal for research.</li>
+                            <li>Research: high‑precision timing cohorts, twin‑discordance, ephemeris regressions.</li>
+                        </ul>
+                    </div>
                 </div>
 
                 <div class="astrology-tool-section">
+                    <div style="text-align: right; margin-bottom: 0.5rem;">
+                        <span id="apiModeBadge" class="mode-badge" title="Computation mode">Mode: Auto</span>
+                    </div>
                     <h2 class="text-center" style="margin-top: 0;">Calculate a Window Score</h2>
                     <div class="input-section">
                         <label for="datetime">Select a Date and Time (UTC):</label>
@@ -71,6 +107,7 @@
                         <button id="calculate" type="button">Calculate Score</button>
                          <p class="helper-text">What this does: Computes a 0–1 Window Score for the selected moment. Higher = lower global cost J (more harmonious). If the backend API is offline, the page uses a simplified client‑side model so you still get an estimate.</p>
                          <p class="helper-text">How to use: Choose a meaningful time (launch, meeting, decision) and compare options. Prefer higher‑scoring windows when possible.</p>
+                         <p class="small-note">Note: Uses UTC. For research, exact timestamps improve fidelity; birth time is a proxy for conception.</p>
                     </div>
                     <div id="results" class="results" style="display:none;"></div>
                 
@@ -82,6 +119,7 @@
                      <p class="helper-text">What this shows: One square per day; greener = more optimal. The table lists the top 10 days by score. If the backend API is offline, a simplified client‑side model approximates daily scores.</p>
                     </div>
                     <div id="heatmap" class="heatmap-results" style="display:none;"></div>
+                    <div id="heatmapLegend" class="legend" style="display:none;"></div>
                     <div id="topWindows" class="top-windows-results" style="display:none;"></div>
                 </div>
             </div>
@@ -116,6 +154,8 @@
             const yearInput = document.getElementById('year');
             const heatmapDiv = document.getElementById('heatmap');
             const topWindowsDiv = document.getElementById('topWindows');
+            const heatmapLegend = document.getElementById('heatmapLegend');
+            const apiModeBadge = document.getElementById('apiModeBadge');
 
             // Network helper with timeout
             function fetchWithTimeout(url, options = {}, timeout = 5000) {
@@ -123,6 +163,25 @@
                     fetch(url, options),
                     new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), timeout))
                 ]);
+            }
+
+            function setMode(isApprox) {
+                if (!apiModeBadge) return;
+                if (isApprox === null || typeof isApprox === 'undefined') {
+                    apiModeBadge.textContent = 'Mode: Auto';
+                    apiModeBadge.style.background = '#f3f4f6';
+                    apiModeBadge.style.color = '#333';
+                    return;
+                }
+                if (isApprox) {
+                    apiModeBadge.textContent = 'Mode: Approximate (offline)';
+                    apiModeBadge.style.background = '#fff3cd';
+                    apiModeBadge.style.color = '#7a5b00';
+                } else {
+                    apiModeBadge.textContent = 'Mode: Live (API)';
+                    apiModeBadge.style.background = '#e7f5ff';
+                    apiModeBadge.style.color = '#0b5384';
+                }
             }
 
             // Client-side approximation fallbacks
@@ -204,6 +263,7 @@
 
                 getWindowScore(isoTimestamp)
                     .then(data => {
+                        try { setMode(data._approximate); } catch(_) {}
                         if (data.error) {
                             resultsDiv.innerHTML = `<p>Error: ${data.error}</p>`;
                             return;
@@ -238,6 +298,7 @@
                     .then(resp => resp.json())
                     .catch(() => approximateHeatmap(parseInt(year, 10)))
                     .then(data => {
+                        try { setMode(data._approximate); } catch(_) {}
                         if (data.error) {
                             heatmapDiv.innerHTML = `<p>Error: ${data.error}</p>`;
                             return;
@@ -258,6 +319,21 @@
                             day.style.backgroundColor = `rgba(0, 128, 0, ${alpha})`;
                             day.title = `${date}: ${Number(score).toFixed(4)}`;
                             calendar.appendChild(day);
+                        }
+                        if (heatmapLegend) {
+                            const alphas = [0.1, 0.3, 0.5, 0.7, 0.9];
+                            heatmapLegend.innerHTML = '';
+                            const low = document.createElement('span'); low.textContent = 'low';
+                            heatmapLegend.appendChild(low);
+                            alphas.forEach(a => {
+                                const sw = document.createElement('span');
+                                sw.className = 'swatch';
+                                sw.style.backgroundColor = `rgba(0, 128, 0, ${a})`;
+                                heatmapLegend.appendChild(sw);
+                            });
+                            const high = document.createElement('span'); high.textContent = 'high';
+                            heatmapLegend.appendChild(high);
+                            heatmapLegend.style.display = 'flex';
                         }
                         
                         topWindowsDiv.innerHTML = '<h3>Top 10 Optimal Windows</h3>';
@@ -281,6 +357,7 @@
             });
 
             // Initialize defaults to now and current year; auto-run initial calculation
+            setMode(null);
             try {
                 const now = new Date();
                 const pad = n => String(n).padStart(2,'0');
