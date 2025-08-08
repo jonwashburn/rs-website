@@ -23,6 +23,8 @@
         #heatmap, #topWindows, #results {
             margin-top: 2rem;
         }
+        .calendar-heatmap { display: grid; grid-template-columns: repeat(31, 12px); gap: 2px; }
+        .heatmap-day { width: 12px; height: 12px; border-radius: 2px; background: rgba(0,128,0,0.05); }
     </style>
 </head>
 <body>
@@ -86,7 +88,9 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const API_BASE_URL = 'http://localhost:5001';
+            const API_BASE_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+                ? 'http://localhost:5001'
+                : window.location.origin + '/api';
 
             // Fetches and inserts header and footer
             fetch('/_includes/header.html')
@@ -109,32 +113,108 @@
             const heatmapDiv = document.getElementById('heatmap');
             const topWindowsDiv = document.getElementById('topWindows');
 
+            // Network helper with timeout
+            function fetchWithTimeout(url, options = {}, timeout = 5000) {
+                return Promise.race([
+                    fetch(url, options),
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), timeout))
+                ]);
+            }
+
+            // Client-side approximation fallbacks
+            const PHI = (1 + Math.sqrt(5)) / 2;
+            const zodiacNames = ['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
+            function degToSign(deg){
+                const d = ((deg % 360) + 360) % 360;
+                return zodiacNames[Math.floor(d / 30)];
+            }
+            function dayOfYear(date){
+                const start = new Date(Date.UTC(date.getUTCFullYear(),0,1));
+                return Math.floor((date - start) / 86400000) + 1;
+            }
+            function approxPlanetAngle(days, periodDays, phase){
+                return (360 * (days / periodDays) + phase) % 360;
+            }
+            function approximateWindowScore(dateObj){
+                const days = dayOfYear(dateObj) + (dateObj.getUTCHours()/24) + (dateObj.getUTCMinutes()/(24*60));
+                const periods = { Moon: 27.3, Mercury: 87.97, Venus: 224.70, Earth: 365.256, Mars: 686.98, Jupiter: 4332.59, Saturn: 10759.22, Uranus: 30685.4, Neptune: 60190, Pluto: 90560 };
+                const phases = { Moon: 0, Mercury: 10, Venus: 20, Earth: 30, Mars: 40, Jupiter: 50, Saturn: 60, Uranus: 70, Neptune: 80, Pluto: 90 };
+                const angles = {};
+                for (const name of Object.keys(periods)) {
+                    angles[name] = approxPlanetAngle(days, periods[name], phases[name]);
+                }
+                const signs = {};
+                for (const name of Object.keys(angles)) { signs[name] = degToSign(angles[name]); }
+                const signIndex = s => zodiacNames.indexOf(s);
+                const names = Object.keys(signs);
+                let Jsum = 0, pairs = 0;
+                for (let i=0;i<names.length;i++){
+                    for(let j=i+1;j<names.length;j++){
+                        const di = Math.abs(signIndex(signs[names[i]]) - signIndex(signs[names[j]]));
+                        const wrapped = Math.min(di, 12 - di);
+                        const cost = Math.abs(Math.sin((wrapped * Math.PI / 12))) * PHI;
+                        Jsum += cost; pairs++;
+                    }
+                }
+                const J = Jsum / Math.max(1,pairs);
+                const score = 1 / (1 + J);
+                return { timestamp: dateObj.toISOString(), window_score: score, global_cost: J, zodiac_hash: signs, _approximate: true };
+            }
+            async function getWindowScore(iso){
+                try {
+                    const resp = await fetchWithTimeout(`${API_BASE_URL}/window_score?timestamp=${encodeURIComponent(iso)}`);
+                    const data = await resp.json();
+                    data._approximate = false;
+                    return data;
+                } catch (e) {
+                    return approximateWindowScore(new Date(iso));
+                }
+            }
+            function approximateHeatmap(year){
+                const daily_scores = {};
+                const top = [];
+                for (let m=0;m<12;m++){
+                    for (let d=1; d<=31; d++){
+                        const date = new Date(Date.UTC(year, m, d));
+                        if (date.getUTCMonth() !== m) continue;
+                        const approx = approximateWindowScore(date);
+                        const key = date.toISOString().slice(0,10);
+                        daily_scores[key] = approx.window_score;
+                        top.push({ date: key, score: approx.window_score });
+                    }
+                }
+                top.sort((a,b)=>b.score-a.score);
+                const top_windows = top.slice(0,10);
+                return { daily_scores, top_windows, _approximate: true };
+            }
+
             calculateBtn.addEventListener('click', () => {
-                const isoTimestamp = new Date(datetimeInput.value).toISOString();
                 if (!datetimeInput.value) {
                     resultsDiv.innerHTML = '<p>Please select a date and time.</p>';
                     resultsDiv.style.display = 'block';
                     return;
                 }
+                const isoTimestamp = new Date(datetimeInput.value).toISOString();
                 resultsDiv.innerHTML = '<p>Calculating...</p>';
                 resultsDiv.style.display = 'block';
 
-                fetch(`${API_BASE_URL}/window_score?timestamp=${isoTimestamp}`)
-                    .then(response => response.json())
+                getWindowScore(isoTimestamp)
                     .then(data => {
                         if (data.error) {
                             resultsDiv.innerHTML = `<p>Error: ${data.error}</p>`;
                             return;
                         }
-                        resultsDiv.innerHTML = \`
-                            <h3>Results for \${new Date(data.timestamp).toLocaleString()}</h3>
-                            <div class="result-item"><span>Window Score:</span> <span class="result-value">\${data.window_score.toFixed(6)}</span></div>
-                            <div class="result-item"><span>Global Cost (J):</span> <span class="result-value">\${data.global_cost.toFixed(4)}</span></div>
-                            <div class="result-item"><span>Zodiac Hash:</span> <span class="result-value">\${JSON.stringify(data.zodiac_hash)}</span></div>
-                        \`;
+                        const approxNote = data._approximate ? '<div style="margin-top:.5rem;font-size:.9rem;color:#666;">Approximate client-side estimate (API unavailable)</div>' : '';
+                        resultsDiv.innerHTML = `
+                            <h3>Results for ${new Date(data.timestamp).toLocaleString()}</h3>
+                            <div class="result-item"><span>Window Score:</span> <span class="result-value">${Number(data.window_score).toFixed(6)}</span></div>
+                            <div class="result-item"><span>Global Cost (J):</span> <span class="result-value">${Number(data.global_cost).toFixed(4)}</span></div>
+                            <div class="result-item"><span>Zodiac Hash:</span> <span class="result-value">${JSON.stringify(data.zodiac_hash)}</span></div>
+                            ${approxNote}
+                        `;
                     })
                     .catch(error => {
-                        resultsDiv.innerHTML = \`<p>Error connecting to API. Is it running?</p>\`;
+                        resultsDiv.innerHTML = `<p>Error computing score.</p>`;
                         console.error('Error:', error);
                     });
             });
@@ -150,25 +230,29 @@
                 heatmapDiv.style.display = 'block';
                 topWindowsDiv.style.display = 'none';
 
-                fetch(`${API_BASE_URL}/heatmap?year=${year}`)
-                    .then(response => response.json())
+                fetchWithTimeout(`${API_BASE_URL}/heatmap?year=${encodeURIComponent(year)}`)
+                    .then(resp => resp.json())
+                    .catch(() => approximateHeatmap(parseInt(year, 10)))
                     .then(data => {
                         if (data.error) {
                             heatmapDiv.innerHTML = `<p>Error: ${data.error}</p>`;
                             return;
                         }
-                        heatmapDiv.innerHTML = '<h3>Yearly Heatmap</h3><p>Darker green indicates higher (more optimal) window scores.</p>';
+                        const approxNote = data._approximate ? '<div style="margin-top:.5rem;font-size:.9rem;color:#666;">Approximate client-side estimate (API unavailable)</div>' : '';
+                        heatmapDiv.innerHTML = '<h3>Yearly Heatmap</h3><p>Darker green indicates higher (more optimal) window scores.</p>' + approxNote;
                         const calendar = document.createElement('div');
                         calendar.className = 'calendar-heatmap';
                         heatmapDiv.appendChild(calendar);
                         
                         // Simple calendar heatmap rendering
-                        for (const [date, score] of Object.entries(data.daily_scores)) {
-                            if (score === null) continue;
+                        const entries = Object.entries(data.daily_scores).sort((a,b)=> a[0] < b[0] ? -1 : 1);
+                        for (const [date, score] of entries) {
+                            if (score === null || typeof score === 'undefined') continue;
                             const day = document.createElement('div');
                             day.className = 'heatmap-day';
-                            day.style.backgroundColor = `rgba(0, 255, 0, ${score})`;
-                            day.title = `${date}: ${score.toFixed(4)}`;
+                            const alpha = Math.max(0.05, Math.min(1, Number(score)));
+                            day.style.backgroundColor = `rgba(0, 128, 0, ${alpha})`;
+                            day.title = `${date}: ${Number(score).toFixed(4)}`;
                             calendar.appendChild(day);
                         }
                         
@@ -179,7 +263,7 @@
                         data.top_windows.forEach(item => {
                             const row = tbody.insertRow();
                             row.insertCell(0).textContent = item.date;
-                            row.insertCell(1).textContent = item.score.toFixed(6);
+                            row.insertCell(1).textContent = Number(item.score).toFixed(6);
                         });
                         table.appendChild(tbody);
                         topWindowsDiv.appendChild(table);
@@ -187,7 +271,7 @@
 
                     })
                     .catch(error => {
-                        heatmapDiv.innerHTML = \`<p>Error connecting to API. Is it running?</p>\`;
+                        heatmapDiv.innerHTML = `<p>Error generating heatmap.</p>`;
                         console.error('Error:', error);
                     });
             });
