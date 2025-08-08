@@ -25,6 +25,7 @@
         }
         .calendar-heatmap { display: grid; grid-template-columns: repeat(31, 12px); gap: 2px; }
         .heatmap-day { width: 12px; height: 12px; border-radius: 2px; background: rgba(0,128,0,0.05); }
+        .helper-text { margin-top: 0.5rem; color: #666; font-size: 0.95rem; }
     </style>
 </head>
 <body>
@@ -68,6 +69,8 @@
                         <label for="datetime">Select a Date and Time (UTC):</label>
                         <input type="datetime-local" id="datetime" name="datetime">
                         <button id="calculate" type="button">Calculate Score</button>
+                         <p class="helper-text">What this does: Computes a 0–1 Window Score for the selected moment. Higher = lower global cost J (more harmonious). If the backend API is offline, the page uses a simplified client‑side model so you still get an estimate.</p>
+                         <p class="helper-text">How to use: Choose a meaningful time (launch, meeting, decision) and compare options. Prefer higher‑scoring windows when possible.</p>
                     </div>
                     <div id="results" class="results" style="display:none;"></div>
                 
@@ -76,6 +79,7 @@
                         <label for="year">Enter a Year:</label>
                         <input type="number" id="year" name="year" placeholder="e.g., 2025" min="1900" max="2100">
                         <button id="generateHeatmap" type="button">Generate Heatmap</button>
+                     <p class="helper-text">What this shows: One square per day; greener = more optimal. The table lists the top 10 days by score. If the backend API is offline, a simplified client‑side model approximates daily scores.</p>
                     </div>
                     <div id="heatmap" class="heatmap-results" style="display:none;"></div>
                     <div id="topWindows" class="top-windows-results" style="display:none;"></div>
@@ -275,6 +279,19 @@
                         console.error('Error:', error);
                     });
             });
+
+            // Initialize defaults to now and current year; auto-run initial calculation
+            try {
+                const now = new Date();
+                const pad = n => String(n).padStart(2,'0');
+                const localISO = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+                datetimeInput.value = localISO;
+                yearInput.value = now.getFullYear();
+                // Trigger initial calculation for immediate feedback
+                calculateBtn.click();
+            } catch (e) {
+                console.warn('Initialization error:', e);
+            }
         });
     </script>
     <script src="/assets/js/main.js"></script>
