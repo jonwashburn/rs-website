@@ -8,8 +8,26 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/souls.css">
+    <!-- Minimal header styles scoped to site header to avoid changing page aesthetic -->
+    <style>
+        .site-header { background:#fff; border-bottom:1px solid rgba(0,0,0,0.1); padding:1rem 0; position:sticky; top:0; z-index:1000; }
+        .header-container { display:flex; justify-content:space-between; align-items:center; gap:1rem; max-width:1200px; margin:0 auto; padding:0 2rem; }
+        .logo a { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; font-size:1.5rem; font-weight:800; color:#000; text-decoration:none; letter-spacing:-0.03em; }
+        .global-nav ul { list-style:none; margin:0; padding:0; display:flex; gap:2rem; align-items:center; }
+        .global-nav a { font-size:0.95rem; font-weight:600; color:#333; text-decoration:none; padding:0.5rem 0; border-bottom:2px solid transparent; transition:all 0.2s ease; display:block; }
+        .global-nav a:hover { color:#0066cc; border-bottom-color:#0066cc; transform:translateY(-1px); }
+        .dropdown { position:relative; display:inline-block; }
+        .dropdown-content { display:none; position:absolute; top:100%; left:0; background-color:#0b1220; min-width:200px; box-shadow:0 8px 16px rgba(0,0,0,0.3); z-index:1000; border:1px solid #23314d; }
+        .dropdown-content a { color:#fff !important; padding:0.75rem 1.25rem; display:block; border-bottom:1px solid #333; font-size:0.9rem; }
+        .dropdown-content a:last-child{ border-bottom:none; }
+        .dropdown-content a:hover{ background:#172033; }
+        .dropdown:hover .dropdown-content { display:block; }
+        .mobile-menu-toggle { display:none; }
+        @media (max-width:768px){ .mobile-menu-toggle{ display:flex; } .global-nav ul{ flex-direction:column; gap:0.5rem; } }
+    </style>
 </head>
 <body>
+    <div id="header-placeholder"></div>
     <div class="container">
     <header class="main-header">
             <h1>Ledger Souls</h1>
@@ -177,5 +195,6 @@
         }
         });
     </script>
+    <script src="/assets/js/main.js"></script>
 </body>
 </html>
