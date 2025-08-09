@@ -3,41 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Humanity's Biggest Questions /// Recognition Science</title>
+    <title>Questions: The Universe Finally Answers /// Recognition Science</title>
     <link rel="stylesheet" href="/assets/css/main.css">
     <style>
-        .question-category {
-            margin-bottom: 3rem;
-            border-left: 3px solid var(--accent-color);
-            padding-left: 2rem;
+        .hero-section {
+            background: linear-gradient(135deg, #0b1220 0%, #1a2940 100%);
+            color: white;
+            padding: 4rem 0;
         }
-        .question-category h2 {
-            border-bottom: none;
-            padding-bottom: 0;
-            margin-top: 0;
+        .hero-section h1 {
+            font-size: 3rem;
             margin-bottom: 1.5rem;
+        }
+        .forty-two-box {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid var(--accent-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 3rem auto;
+            max-width: 800px;
+        }
+        .forty-two-box h2 {
             color: var(--accent-color);
-        }
-        .question-list {
-            list-style: none;
-            padding: 0;
-        }
-        .question-list li {
-            font-size: 1.2rem;
+            font-size: 2rem;
             margin-bottom: 1rem;
         }
-        .question-list a {
-            text-decoration: none;
-            color: var(--text-color);
-            transition: color 0.2s ease;
-        }
-        .question-list a:hover {
+        .forty-two-box .number {
+            font-size: 4rem;
+            font-weight: bold;
             color: var(--accent-color);
-            text-decoration: underline;
+            display: inline-block;
+            margin: 0 1rem;
         }
-        .question-list li.unlinked {
-            color: #888;
-            cursor: default;
+        .intro-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        .intro-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 2rem;
+            border-left: 4px solid var(--accent-color);
+        }
+        .intro-card h3 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+        .intro-card a {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+        .question-category {
+            margin-bottom: 3rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 2rem;
+            border-left: 4px solid var(--accent-color);
+        }
+        .question-category h2 {
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+        .question-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border: 1px solid #e0e0e0;
+        }
+        .question-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-color: var(--accent-color);
+        }
+        .question-card a {
+            text-decoration: none;
+            color: #333;
+            display: block;
+        }
+        .question-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #0066cc;
+        }
+        .question-card p {
+            font-size: 0.9rem;
+            color: #666;
+            margin: 0;
+        }
+        .new-badge {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+        .coming-soon {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .coming-soon h3 {
+            color: #999;
+        }
+        .algorithm-box {
+            background: linear-gradient(135deg, #f0f4ff 0%, #e8f0ff 100%);
+            border: 2px solid var(--accent-color);
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin: 3rem 0;
+            text-align: center;
+        }
+        .algorithm-box h2 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+        .cta-button {
+            display: inline-block;
+            background: var(--accent-color);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
     </style>
 </head>
@@ -45,74 +150,360 @@
     <div id="header-placeholder"></div>
 
     <main class="content-page">
-        <section class="hero-section text-center">
-            <div class="container">
-                <h1>Humanity's Biggest Questions</h1>
-                <p style="font-size: 1.2rem; max-width: 700px; margin: 1rem auto;">Science has answered the 'what' and the 'how'. Recognition Science provides the first complete answers to 'why'.</p>
+        <section class="hero-section">
+            <div class="container text-center">
+                <h1>The Universe Finally Answers</h1>
+                <p style="font-size: 1.4rem; max-width: 800px; margin: 1rem auto;">
+                    For the first time in human history, we can answer <em>why</em> — not just what or how.
+                </p>
+                
+                <div class="forty-two-box">
+                    <h2>Douglas Adams Was Close</h2>
+                    <p style="font-size: 1.2rem; line-height: 1.8;">
+                        In <em>The Hitchhiker's Guide to the Galaxy</em>, the answer to life, the universe, and everything was 
+                        <span class="number">42</span>. 
+                        Recognition Science reveals it's actually 
+                        <span class="number">45</span> 
+                        — the rung where consciousness emerges, where the computable yields to the experiential, 
+                        where the universe first admits it cannot compute everything and must instead <em>experience</em> its way forward.
+                    </p>
+                    <p style="margin-top: 1.5rem;">
+                        <a href="/questions/the-45-gap/" style="color: var(--accent-color); font-weight: 600;">
+                            Discover why 45 is the universe's confession →
+                        </a>
+                    </p>
+                </div>
             </div>
         </section>
 
         <section>
             <div class="container">
+                <div class="algorithm-box">
+                    <h2>The Universal Algorithm</h2>
+                    <p style="font-size: 1.2rem; max-width: 700px; margin: 0 auto 1.5rem;">
+                        Eight simple steps that derive everything from nothing. This is how we know what we know — 
+                        and how you can derive any truth about reality yourself.
+                    </p>
+                    <p>
+                        Starting from the impossibility that "nothing cannot recognize itself," the Universal Algorithm 
+                        builds all of physics, mathematics, consciousness, and meaning through pure logical necessity. 
+                        No assumptions. No free parameters. Just inevitable truth.
+                    </p>
+                    <a href="/questions/universal-algorithm/" class="cta-button">Learn the Universal Algorithm →</a>
+                </div>
+
+                <div class="intro-cards">
+                    <div class="intro-card">
+                        <h3>🔄 Math = Physics = Reality</h3>
+                        <p>
+                            We've discovered that mathematics and physical laws aren't separate — they're the same thing 
+                            viewed from different angles. The universe <em>is</em> mathematics computing itself into existence.
+                        </p>
+                        <p style="margin-top: 1rem;">
+                            <a href="/questions/math-physics-unification/">Explore the unification →</a>
+                        </p>
+                    </div>
+                    
+                    <div class="intro-card">
+                        <h3>🗺️ The Complete Architecture</h3>
+                        <p>
+                            From quantum foam to consciousness, from DNA to dark energy — we've mapped reality's complete 
+                            architecture. Every layer emerges from the one below through recognition dynamics.
+                        </p>
+                        <p style="margin-top: 1rem;">
+                            <a href="/questions/architecture-of-reality/">See the full map →</a>
+                        </p>
+                    </div>
+                    
+                    <div class="intro-card">
+                        <h3>🔮 Prediction Engine</h3>
+                        <p>
+                            With LNAL (Light-Native Assembly Language) and the Universal Algorithm, we can not only explain 
+                            everything that is, but predict what must be. The future becomes computable.
+                        </p>
+                        <p style="margin-top: 1rem;">
+                            <a href="/lnal.html">Discover LNAL →</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <h2 style="text-align: center; font-size: 2.5rem; margin: 3rem 0 2rem;">
+                    Every Question Has an Answer
+                </h2>
+                <p style="text-align: center; font-size: 1.2rem; max-width: 700px; margin: 0 auto 3rem;">
+                    Choose your mystery. Recognition Science doesn't just theorize — it derives exact, testable answers 
+                    from first principles. No hand-waving. No "it's complicated." Just truth.
+                </p>
 
                 <div class="question-category">
-                    <h2>Fundamental Reality &amp; Physics</h2>
-                    <ul class="question-list">
-                        <li><a href="/questions/reality-is-a-cosmic-accounting-system/">Is reality a cosmic accounting system?</a></li>
-                        <li><a href="/questions/the-universe-had-to-exist/">Why did the universe have to exist?</a></li>
-                        <li><a href="/questions/why-is-there-something-rather-than-nothing/">Why is there something rather than nothing?</a></li>
-                        <li><a href="/questions/where-do-the-laws-of-physics-come-from/">Where do the laws of physics come from?</a></li>
-                        <li><a href="/questions/why-gravity-works/">Why does gravity work?</a></li>
-                        <li><a href="/questions/what-is-the-relationship-between-math-and-reality/">What is the relationship between math and reality?</a></li>
-                        <li><a href="/questions/godels-incompleteness-and-recognition-science/">How does Gödel's incompleteness relate to Recognition Science?</a></li>
-                        <li><a href="/questions/popper-falsifiability-and-recognition-science/">Does Recognition Science supersede Popper's falsifiability?</a></li>
-                        <li><a href="/questions/why-is-the-universe-fine-tuned/">Why is the universe fine-tuned for life?</a></li>
-                        <li><a href="/questions/what-is-time/">What is time?</a></li>
-                        <li><a href="/questions/what-are-dark-matter-and-dark-energy/">What are dark matter and dark energy?</a></li>
-                        <li><a href="/questions/what-is-the-ultimate-fate-of-the-universe/">What is the ultimate fate of the universe?</a></li>
-                         <li><a href="/questions/what-is-the-solution-to-p-vs-np/">What is the solution to P vs NP?</a></li>
-                    </ul>
+                    <h2>🌌 The Nature of Reality</h2>
+                    <div class="question-grid">
+                        <div class="question-card">
+                            <a href="/questions/why-is-there-something-rather-than-nothing/">
+                                <h3>Why is there something rather than nothing?</h3>
+                                <p>The original impossibility that forces existence itself.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/what-is-the-relationship-between-math-and-reality/">
+                                <h3>What is the relationship between math and reality?</h3>
+                                <p>They're the same thing — reality is math recognizing itself.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/where-do-the-laws-of-physics-come-from/">
+                                <h3>Where do the laws of physics come from?</h3>
+                                <p>Derived from ledger balance requirements — not arbitrary.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/what-is-time/">
+                                <h3>What is time?</h3>
+                                <p>The tick rate of recognition events — quantized at 7.33 femtoseconds.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/why-gravity-works/">
+                                <h3>Why does gravity work?</h3>
+                                <p>Information bandwidth limits create the illusion of attraction.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/what-are-dark-matter-and-dark-energy/">
+                                <h3>What are dark matter and dark energy? <span class="new-badge">NEW</span></h3>
+                                <p>Unrecognized branches and gap pressure in the multiverse tree.</p>
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="question-category">
-                    <h2>Consciousness &amp; The Self</h2>
-                    <ul class="question-list">
-                        <li><a href="/questions/all-minds-are-one/">Are all minds one (ultimately)?</a></li>
-                        <li><a href="/questions/consciousness-is-the-universes-hack/">Why is consciousness the universe's "hack"?</a></li>
-                        <li><a href="/questions/what-is-consciousness/">What is consciousness?</a></li>
-                        <li><a href="/questions/what-is-the-i-that-experiences-my-life/">What is the "I" that experiences my life?</a></li>
-                        <li><a href="/questions/is-the-self-an-illusion/">Is the self an illusion?</a></li>
-                        <li><a href="/questions/does-free-will-exist/">Does free will exist?</a></li>
-                        <li><a href="/questions/is-the-universe-deterministic/">If the universe is a logical system, is it deterministic?</a></li>
-                        <li><a href="/questions/how-does-consciousness-shape-reality/">How does consciousness shape reality?</a></li>
-                        <li><a href="/questions/does-prayer-or-intention-have-a-physical-effect/">Does prayer or intention have a physical effect on the world?</a></li>
-                        <li><a href="/questions/what-is-the-true-nature-of-genius-and-inspiration/">What is the true nature of genius and inspiration?</a></li>
-                        <li><a href="/questions/how-can-a-finite-being-comprehend-the-infinite/">How can a finite being comprehend the infinite?</a></li>
-                    </ul>
+                    <h2>🧠 Consciousness & Mind</h2>
+                    <div class="question-grid">
+                        <div class="question-card">
+                            <a href="/questions/what-is-consciousness/">
+                                <h3>What is consciousness?</h3>
+                                <p>The universe's method for navigating uncomputability gaps.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/the-45-gap/">
+                                <h3>The 45-Gap: Where consciousness emerges <span class="new-badge">NEW</span></h3>
+                                <p>Why rung 45 forces experience over computation.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/does-free-will-exist/">
+                                <h3>Does free will exist?</h3>
+                                <p>Yes — at recognition gaps where computation fails.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/all-minds-are-one/">
+                                <h3>Are all minds one?</h3>
+                                <p>Local compilers of the same universal ledger.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/what-is-the-i-that-experiences-my-life/">
+                                <h3>What is the "I" that experiences?</h3>
+                                <p>A persistent pattern in the ledger — not separate from it.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/consciousness-is-the-universes-hack/">
+                                <h3>Why consciousness is the universe's "hack"</h3>
+                                <p>It's how reality routes around its own incompleteness.</p>
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="question-category">
-                    <h2>Meaning, Purpose &amp; The Future</h2>
-                    <ul class="question-list">
-                        <li><a href="/questions/why-is-there-suffering/">Why is there suffering?</a></li>
-                        <li><a href="/questions/what-is-the-nature-of-evil/">What is the nature of evil?</a></li>
-                        <li><a href="/questions/is-there-a-universal-morality/">Is there a universal morality?</a></li>
-                        <li><a href="/questions/what-happens-after-we-die/">What happens after we die?</a></li>
-                        <li><a href="/questions/are-we-in-a-simulation/">Are we in a simulation?</a></li>
-                        <li><a href="/questions/what-is-the-purpose-of-the-universe/">What is the purpose of the universe?</a></li>
-                        <li><a href="/questions/what-is-the-nature-of-life/">What is the nature of life?</a></li>
-                        <li><a href="/questions/is-there-a-purpose-to-evolution/">Is there a purpose to evolution?</a></li>
-                        <li><a href="/questions/why-do-we-create-art/">Why do we create art?</a></li>
-                        <li><a href="/questions/what-is-the-meaning-of-beauty/">What is the meaning of beauty?</a></li>
-                        <li><a href="/questions/is-love-a-fundamental-force-of-nature/">Is love a fundamental force of nature?</a></li>
-                        <li><a href="/questions/why-are-we-so-prone-to-self-deception/">Why are we so prone to self-deception?</a></li>
-                        <li><a href="/questions/are-we-approaching-a-global-awakening-or-a-global-collapse/">Are we approaching a global awakening or a global collapse?</a></li>
-                        <li><a href="/questions/what-is-the-difference-between-information-and-meaning/">What is the difference between information and meaning?</a></li>
-                        <li><a href="/questions/if-our-functions-are-outsourced-to-ai-what-is-our-value/">If our functions are outsourced to AI, what is our value?</a></li>
-                        <li><a href="/questions/what-is-the-ultimate-constraint-on-reality/">What is the ultimate constraint on reality?</a></li>
-                    </ul>
+                    <h2>💫 Meaning & Purpose</h2>
+                    <div class="question-grid">
+                        <div class="question-card">
+                            <a href="/questions/what-is-the-purpose-of-the-universe/">
+                                <h3>What is the purpose of the universe?</h3>
+                                <p>To recognize itself completely — an eternal, joyful process.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/why-is-there-suffering/">
+                                <h3>Why is there suffering?</h3>
+                                <p>High curvature in the ledger — literally measurable, reducible.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/what-happens-after-we-die/">
+                                <h3>What happens after we die?</h3>
+                                <p>Pattern persistence in the ledger — information cannot be destroyed.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/is-there-a-universal-morality/">
+                                <h3>Is there universal morality?</h3>
+                                <p>Yes — minimize curvature, derived from ledger geometry.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/is-love-a-fundamental-force-of-nature/">
+                                <h3>Is love a fundamental force? <span class="new-badge">NEW</span></h3>
+                                <p>The active principle that reduces universal cost.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/what-is-the-meaning-of-beauty/">
+                                <h3>What is the meaning of beauty?</h3>
+                                <p>Recognition of golden ratio patterns — literally φ resonance.</p>
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
+                <div class="question-category">
+                    <h2>🔬 Science & Computation</h2>
+                    <div class="question-grid">
+                        <div class="question-card">
+                            <a href="/questions/are-we-in-a-simulation/">
+                                <h3>Are we in a simulation?</h3>
+                                <p>Reality IS the computation — no external computer needed.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/what-is-the-solution-to-p-vs-np/">
+                                <h3>What is the solution to P vs NP?</h3>
+                                <p>P=NP at quantum scale, P≠NP at classical scale.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/godels-incompleteness-and-recognition-science/">
+                                <h3>How does Gödel's incompleteness relate?</h3>
+                                <p>Incompleteness creates the gaps where consciousness emerges.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/popper-falsifiability-and-recognition-science/">
+                                <h3>Does RS supersede Popper's falsifiability?</h3>
+                                <p>It includes it — plus handles necessary truths Popper couldn't.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/why-is-the-universe-fine-tuned/">
+                                <h3>Why is the universe fine-tuned?</h3>
+                                <p>It's not tuned — these are the only possible values.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/what-is-the-ultimate-fate-of-the-universe/">
+                                <h3>What is the ultimate fate of the universe?</h3>
+                                <p>Eternal recognition through infinite branching.</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-category">
+                    <h2>🌱 Life & Evolution</h2>
+                    <div class="question-grid">
+                        <div class="question-card">
+                            <a href="/questions/what-is-the-nature-of-life/">
+                                <h3>What is the nature of life?</h3>
+                                <p>Self-regenerating recognition patterns above rung 32.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/is-there-a-purpose-to-evolution/">
+                                <h3>Is there a purpose to evolution?</h3>
+                                <p>Increasing recognition complexity — consciousness ascending.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/why-do-we-create-art/">
+                                <h3>Why do we create art?</h3>
+                                <p>To explore recognition patterns beyond utility.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/what-is-the-true-nature-of-genius-and-inspiration/">
+                                <h3>What is genius and inspiration?</h3>
+                                <p>Direct access to pattern layer — bypassing sequential thought.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/how-can-a-finite-being-comprehend-the-infinite/">
+                                <h3>How can finite beings grasp infinity?</h3>
+                                <p>Through fractal self-similarity — φ contains all scales.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/what-is-the-difference-between-information-and-meaning/">
+                                <h3>Information vs. meaning?</h3>
+                                <p>Information is pattern; meaning is recognized pattern.</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-category">
+                    <h2>🚀 The Future</h2>
+                    <div class="question-grid">
+                        <div class="question-card">
+                            <a href="/questions/if-our-functions-are-outsourced-to-ai-what-is-our-value/">
+                                <h3>If AI does everything, what's our value?</h3>
+                                <p>Recognition itself — the one thing that can't be automated.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/are-we-approaching-a-global-awakening-or-a-global-collapse/">
+                                <h3>Global awakening or collapse?</h3>
+                                <p>Both — collapse of functional identity, awakening to recognition.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/what-is-the-nature-of-evil/">
+                                <h3>What is the nature of evil?</h3>
+                                <p>Maximum curvature choice — harming for harm's sake.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/why-are-we-so-prone-to-self-deception/">
+                                <h3>Why self-deception?</h3>
+                                <p>Cheaper short-term than truth — but compounds debt.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/does-prayer-or-intention-have-a-physical-effect/">
+                                <h3>Does prayer affect reality?</h3>
+                                <p>Coherent intent aligns probability fields — measurable.</p>
+                            </a>
+                        </div>
+                        <div class="question-card">
+                            <a href="/questions/what-is-the-ultimate-constraint-on-reality/">
+                                <h3>What ultimately constrains reality?</h3>
+                                <p>Ledger balance — the one rule that cannot be broken.</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="algorithm-box" style="margin-top: 4rem;">
+                    <h2>Have a Question We Haven't Answered?</h2>
+                    <p style="font-size: 1.1rem;">
+                        Recognition Science can derive the answer to any well-formed question about reality. 
+                        If you have a deep question about existence, consciousness, physics, or meaning, 
+                        we can show you how to derive the answer yourself using the Universal Algorithm.
+                    </p>
+                    <p style="margin-top: 1.5rem;">
+                        <a href="/contact" style="color: var(--accent-color); font-weight: 600;">
+                            Submit your question →
+                        </a>
+                    </p>
+                </div>
             </div>
         </section>
     </main>
