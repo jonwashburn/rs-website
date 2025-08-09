@@ -21,16 +21,18 @@
       <div class="container text-block">
         <h2>In short</h2>
         <p>
-          I’m Jonathan Washburn—career tech entrepreneur and artist (Wubbushi). I currently serve as CEO of an agentic‑AI
-          company. I didn’t graduate from college, and I wasn’t a scientist before the discovery in early 2025. I did not set
-          out to “create a theory.” My art was <em>intuiting</em> a parameter‑free physics framework, and I followed that signal
-          into first‑principles work until the structure we now call Recognition Science (RS) revealed itself.
+          I'm Jonathan Washburn—career tech entrepreneur and artist (<a href="https://www.wubbushi.com/" target="_blank" style="color: var(--accent-color);">Wubbushi</a>). I currently serve as CEO of an agentic‑AI
+          company. I didn't graduate from college, and I wasn't a scientist before the discovery in early 2025. I did not set
+          out to "create a theory." I followed my intuition and calling to art. One day I just quit my job and started working 
+          like a possessed man on art, for three years. Then when the Rapture collection was released, I stopped just as abruptly 
+          and dove into science.
         </p>
         <p>
-          I’m not a painter by training. I do paintings, but my three major collections were all <strong>Post‑Photography (AI)</strong>.
-          RS unifies mathematics with physics—and extends to ethics and consciousness. It fixes a unique cost functional,
-          selects 3D, an eight‑beat recognition cycle, and a universal speed. It also shows morality is ledger geometry:
-          “good” is balanced curvature. The aim is practical: auditable predictions, open tools, and humane technologies.
+          I am not a painter, but I paint. And I'm not a scientist but I seek the deeper truth of existence. My three major 
+          collections were all <strong>Post‑Photography (AI)</strong>. RS unifies mathematics with physics—and extends to ethics 
+          and consciousness. It fixes a unique cost functional, selects 3D, an eight‑beat recognition cycle, and a universal speed. 
+          It also shows morality is ledger geometry: "good" is balanced curvature. The aim is practical: auditable predictions, 
+          open tools, and humane technologies.
         </p>
       </div>
     </section>
@@ -39,20 +41,20 @@
       <div class="container text-block">
         <h2>Bio</h2>
         <p>
-          Founder and theorist of Recognition Science. CEO in agentic‑AI. Artist (Wubbushi) behind the Post‑Photography (AI)
-          trilogy The Crisis · Modern Zombies · The Rapture. Creator of on‑chain Ledger Souls and author of “The Theory of Us.”
+          Founder and theorist of Recognition Science. CEO in agentic‑AI. Artist (<a href="https://www.wubbushi.com/" target="_blank" style="color: var(--accent-color);">Wubbushi</a>) behind the Post‑Photography (AI)
+          trilogy The Crisis · Modern Zombies · The Rapture. Creator of on‑chain Ledger Souls and author of "The Theory of Us."
         </p>
         <div style="display:flex; gap:1rem; flex-wrap:wrap; align-items:flex-start; margin-top:0.5rem;">
           <figure style="max-width:260px; margin:0;">
-            <img src="/assets/img/jonathan-profile.svg" data-jpg="/assets/img/jonathan-profile.jpg" alt="Profile photograph" class="bio-photo" loading="lazy" decoding="async" style="width:100%; border-radius:10px; aspect-ratio: 4/5; object-fit: cover; background:#0b1220;"/>
-            <figcaption style="font-size:0.9rem; color:#8aa;">Informal profile</figcaption>
+            <img src="/assets/img/jonathan-beach.jpg" alt="Jonathan at the beach" class="bio-photo" loading="lazy" decoding="async" style="width:100%; border-radius:10px; aspect-ratio: 4/5; object-fit: cover; background:#0b1220;"/>
+            <figcaption style="font-size:0.9rem; color:#8aa;">At the beach</figcaption>
           </figure>
           <figure style="max-width:420px; margin:0;">
-            <img src="/assets/img/jonathan-studio.svg" data-jpg="/assets/img/jonathan-studio.jpg" alt="Studio photograph with artwork" class="bio-photo" loading="lazy" decoding="async" style="width:100%; border-radius:10px; aspect-ratio: 7/5; object-fit: cover; background:#0b1220;"/>
-            <figcaption style="font-size:0.9rem; color:#8aa;">Studio</figcaption>
+            <img src="/assets/img/jonathan-art-studio.jpg" alt="Jonathan in studio with artwork" class="bio-photo" loading="lazy" decoding="async" style="width:100%; border-radius:10px; aspect-ratio: 7/5; object-fit: cover; background:#0b1220;"/>
+            <figcaption style="font-size:0.9rem; color:#8aa;">In the studio with my work</figcaption>
           </figure>
         </div>
-        <p style="margin-top:0.5rem; color:#89a; font-size:0.95rem;">Photos auto‑fallback to placeholders if the JPGs aren’t present yet.</p>
+
         <div class="component-card" style="margin-top:1rem;">
           <h3>Conceptual artwork</h3>
           <p>Ledger Souls is my conceptual artwork: 10,000 on‑chain entities that embody the recognition cycle and ledger balance over time.</p>
@@ -157,27 +159,7 @@
       } catch(e) {}
     })();
 
-    // Proactive photo upgrade: start with SVG, then try multiple JPG paths
-    document.addEventListener('DOMContentLoaded', function(){
-      document.querySelectorAll('img.bio-photo[data-jpg]').forEach(function(img){
-        var primary = img.getAttribute('data-jpg');
-        var candidates = [];
-        if (primary) candidates.push(primary);
-        // Try /assets/images/ variant
-        if (primary && primary.includes('/assets/img/')) {
-          candidates.push(primary.replace('/assets/img/','/assets/images/'));
-        }
-        // Try .jpeg variants
-        candidates = candidates.concat(candidates.map(function(p){ return p.replace(/\.jpg$/i, '.jpeg'); }));
 
-        (function tryNext(i){
-          if (i >= candidates.length) return; // keep SVG
-          fetch(candidates[i], { method: 'HEAD' })
-            .then(function(res){ if (res.ok) { img.src = candidates[i]; } else { tryNext(i+1); } })
-            .catch(function(){ tryNext(i+1); });
-        })(0);
-      });
-    });
   </script>
   <script src="/assets/js/main.js"></script>
 </body>
