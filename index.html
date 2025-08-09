@@ -5,9 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recognition Science /// The Inevitable Framework of Reality</title>
     <link rel="stylesheet" href="assets/css/main.css">
+    <style>
+      .audit-badge { position: fixed; top: 10px; right: 10px; z-index: 9999; background:#0b1220; color:#fff; border:1px solid #234; border-radius:10px; padding:.6rem .9rem; text-decoration:none; box-shadow:0 6px 18px rgba(0,0,0,.25); width: 320px; max-width: calc(100vw - 20px); }
+      .audit-badge h4 { margin:0 0 .35rem 0; font-size:.95rem; letter-spacing:.2px; }
+      .audit-meta { display:flex; justify-content:space-between; gap:.5rem; font-size:.78rem; color:#bcd; margin-bottom:.4rem; }
+      .audit-status { font-size:.85rem; color:#e6f1ff; }
+      .audit-progress { margin-top:.45rem; width:100%; height:6px; background:#263246; border-radius:999px; overflow:hidden; }
+      .audit-progress .bar { height:100%; width:0%; background:linear-gradient(90deg, #2aa198, #268bd2); transition:width .6s ease; }
+      @media (max-width: 768px) { .audit-badge { top:auto; bottom:10px; right:10px; width: calc(100vw - 20px); } }
+    </style>
 </head>
 <body>
     <div id="header-placeholder"></div>
+    <a id="audit-badge" class="audit-badge" href="/audit/" target="_blank" rel="noopener">
+      <h4>Realtime ChatGPT‑5 Pro Theory Audit</h4>
+      <div class="audit-meta"><span id="audit-updated">Updated: —</span><span id="audit-phase">Phase: —</span></div>
+      <div class="audit-status" id="audit-status">Status: syncing…</div>
+      <div class="audit-progress"><div class="bar" id="audit-bar"></div></div>
+    </a>
 
     <main class="content-page">
         <section class="intro-section" style="padding: 1.5rem 0; background: #fff;">
@@ -158,6 +173,28 @@
         <div id="footer-placeholder"></div>
 
     </main>
+    <script>
+      (function(){
+        const url = '/assets/data/audit-status.json';
+        const updatedEl = document.getElementById('audit-updated');
+        const phaseEl = document.getElementById('audit-phase');
+        const statusEl = document.getElementById('audit-status');
+        const barEl = document.getElementById('audit-bar');
+        function fmt(ts){ try { const d=new Date(ts); return d.toLocaleString(undefined,{hour12:false}); } catch(e){ return ts; } }
+        function apply(data){
+          const pct = Math.max(0, Math.min(100, Number(data.percentComplete||0)));
+          updatedEl.textContent = 'Updated: ' + (data.updatedAt ? fmt(data.updatedAt) : '—');
+          phaseEl.textContent = (data.phase ? ('Phase: ' + data.phase) : 'Phase: —');
+          statusEl.textContent = (data.statusText ? data.statusText : ('Status: ' + pct + '%'));
+          barEl.style.width = pct + '%';
+        }
+        function tick(){
+          fetch(url, {cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{ if(j) apply(j); }).catch(()=>{});
+        }
+        tick();
+        setInterval(tick, 60000);
+      })();
+    </script>
     <script src="assets/js/main.js"></script>
 </body>
 </html>
