@@ -79,10 +79,7 @@
         <a class="audit-link" href="/audit/" target="_blank" rel="noopener">
           <span class="audit-title">Realtime ChatGPT‑5 Pro Theory Audit</span>
           <span class="audit-sep">•</span>
-          <span class="audit-phase" id="audit-phase">Phase: —</span>
-          <span class="audit-sep">•</span>
-          <span class="audit-status" id="audit-status">Status: syncing…</span>
-          <span class="audit-sep">•</span>
+          
           <span class="audit-updated" id="audit-updated">Updated: —</span>
           <span class="audit-bar-wrap"><span class="bar" id="audit-bar"></span></span>
         </a>
@@ -413,7 +410,13 @@
         function fmt(ts){ try { const d=new Date(ts); return d.toLocaleString(undefined,{hour12:false}); } catch(e){ return ts; } }
         function apply(data){
           const pct = Math.max(0, Math.min(100, Number(data.percentComplete||0)));
-          updatedEl.textContent = 'Updated: ' + (data.updatedAt ? fmt(data.updatedAt) : '—');
+          // Show live time instead of static timestamp
+          function liveTime() {
+            const now = new Date();
+            return now.toLocaleString(undefined, {month: 'short', day: '2-digit', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit'});
+          }
+          updatedEl.textContent = 'Live: ' + liveTime();
+          setInterval(() => { updatedEl.textContent = 'Live: ' + liveTime(); }, 1000);
           phaseEl.textContent = (data.phase ? ('Phase: ' + data.phase) : 'Phase: —');
           statusEl.textContent = (data.statusText ? data.statusText : ('Status: ' + pct + '%'));
           barEl.style.width = pct + '%';
@@ -427,18 +430,5 @@
     </script>
     <script src="assets/js/main.js"></script>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var el = document.getElementById('auditUpdated');
-    if (!el) return;
-    function update() {
-      var now = new Date();
-      var fmt = now.toLocaleString(undefined, { month: 'short', day: '2-digit', year: 'numeric', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-      el.textContent = 'Live: ' + fmt;
-    }
-    update();
-    setInterval(update, 1000);
-  });
-</script>
 </body>
 </html>
