@@ -152,14 +152,25 @@
       } catch(e) {}
     })();
 
-    // Proactive photo upgrade: start with SVG, swap to JPG if present
+    // Proactive photo upgrade: start with SVG, then try multiple JPG paths
     document.addEventListener('DOMContentLoaded', function(){
       document.querySelectorAll('img.bio-photo[data-jpg]').forEach(function(img){
-        var jpg = img.getAttribute('data-jpg');
-        if (!jpg) return;
-        fetch(jpg, { method: 'HEAD' })
-          .then(function(res){ if (res.ok) img.src = jpg; })
-          .catch(function(){ /* keep SVG */ });
+        var primary = img.getAttribute('data-jpg');
+        var candidates = [];
+        if (primary) candidates.push(primary);
+        // Try /assets/images/ variant
+        if (primary && primary.includes('/assets/img/')) {
+          candidates.push(primary.replace('/assets/img/','/assets/images/'));
+        }
+        // Try .jpeg variants
+        candidates = candidates.concat(candidates.map(function(p){ return p.replace(/\.jpg$/i, '.jpeg'); }));
+
+        (function tryNext(i){
+          if (i >= candidates.length) return; // keep SVG
+          fetch(candidates[i], { method: 'HEAD' })
+            .then(function(res){ if (res.ok) { img.src = candidates[i]; } else { tryNext(i+1); } })
+            .catch(function(){ tryNext(i+1); });
+        })(0);
       });
     });
   </script>
