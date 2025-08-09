@@ -33,7 +33,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (dropbtn) {
                     // Remove existing listeners to prevent duplicates
                     dropbtn.removeEventListener('click', handleDropdownClick);
-                    dropbtn.addEventListener('click', handleDropdownClick);
+                    dropbtn.addEventListener('click', handleDropdownClick, { passive: false });
+
+                    // Also allow tapping the caret/arrow region to open
+                    dropbtn.removeEventListener('touchstart', handleDropdownClick);
+                    dropbtn.addEventListener('touchstart', handleDropdownClick, { passive: false });
                 }
             });
         }, 100);
