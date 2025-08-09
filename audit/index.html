@@ -4,7 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Recognition Science — Live Audit</title>
-  <link rel="stylesheet" href="/assets/css/audit.css" />
+  <link rel="stylesheet" href="/assets/css/main.css" id="standard-css" />
+  <link rel="stylesheet" href="/assets/css/audit.css" id="genius-css" disabled />
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <script>mermaid.initialize({ startOnLoad: false, theme: 'dark', themeVariables: { 
@@ -21,21 +22,430 @@
     textColor: '#00ff41',
     nodeTextColor: '#000'
   }});</script>
+  <style>
+    /* View toggle styles */
+    .view-toggle {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.95);
+      border: 2px solid #333;
+      border-radius: 25px;
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    .view-toggle label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #333;
+      cursor: pointer;
+      padding: 5px 10px;
+    }
+    
+    .toggle-switch {
+      position: relative;
+      width: 60px;
+      height: 30px;
+      background: #ddd;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    
+    .toggle-switch.active {
+      background: #00ff41;
+    }
+    
+    .toggle-slider {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 24px;
+      height: 24px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.3s;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    
+    .toggle-switch.active .toggle-slider {
+      transform: translateX(30px);
+    }
+    
+    /* Standard view overrides */
+    body.standard-view .static-overlay {
+      display: none;
+    }
+    
+    body.standard-view {
+      background: white;
+      color: #333;
+      animation: none;
+    }
+    
+    body.standard-view::before,
+    body.standard-view::after {
+      display: none;
+    }
+    
+    /* Confidence criteria section */
+    .confidence-section {
+      background: rgba(30, 41, 59, 0.8);
+      border: 2px solid #6B46C1;
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 2rem 0;
+    }
+    
+    body.standard-view .confidence-section {
+      background: #f8f9fa;
+      border: 2px solid #6B46C1;
+    }
+    
+    .confidence-section h2 {
+      color: #FFD700;
+      margin-bottom: 1rem;
+    }
+    
+    body.standard-view .confidence-section h2 {
+      color: #6B46C1;
+    }
+    
+    .confidence-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .confidence-list li {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+      color: #F1F5F9;
+    }
+    
+    body.standard-view .confidence-list li {
+      color: #333;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .confidence-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .confidence-list strong {
+      color: #FFD700;
+    }
+    
+    body.standard-view .confidence-list strong {
+      color: #6B46C1;
+    }
+    
+    /* Tracker table */
+    .tracker-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+    
+    .tracker-table th {
+      background: rgba(107, 70, 193, 0.3);
+      color: #FFD700;
+      padding: 0.75rem;
+      text-align: left;
+      border: 1px solid rgba(255, 215, 0, 0.3);
+    }
+    
+    body.standard-view .tracker-table th {
+      background: #6B46C1;
+      color: white;
+      border: 1px solid #6B46C1;
+    }
+    
+    .tracker-table td {
+      padding: 0.75rem;
+      border: 1px solid rgba(255, 215, 0, 0.2);
+      color: #F1F5F9;
+    }
+    
+    body.standard-view .tracker-table td {
+      border: 1px solid #e0e0e0;
+      color: #333;
+    }
+    
+    .tracker-table tr:hover {
+      background: rgba(255, 215, 0, 0.05);
+    }
+    
+    body.standard-view .tracker-table tr:hover {
+      background: #f8f9fa;
+    }
+    
+    .priority-p0 {
+      color: #ff0040;
+      font-weight: bold;
+    }
+    
+    .priority-p1 {
+      color: #ffb000;
+      font-weight: bold;
+    }
+    
+    .priority-p2 {
+      color: #00ff41;
+    }
+    
+    .status-open {
+      color: #ffb000;
+    }
+    
+    .status-progress {
+      color: #00ffff;
+    }
+    
+    .repo-link {
+      display: inline-block;
+      margin: 1rem 0;
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, #6B46C1, #2563EB);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+    
+    .repo-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(107, 70, 193, 0.5);
+    }
+    
+    /* Session log */
+    .session-log {
+      background: rgba(15, 23, 42, 0.9);
+      border-left: 4px solid #00ff41;
+      padding: 1rem;
+      margin-top: 2rem;
+      font-family: monospace;
+      font-size: 0.85rem;
+    }
+    
+    body.standard-view .session-log {
+      background: #f8f9fa;
+      border-left: 4px solid #6B46C1;
+    }
+    
+    .session-log p {
+      margin: 0.5rem 0;
+      color: #00ff41;
+    }
+    
+    body.standard-view .session-log p {
+      color: #666;
+    }
+    
+    @media (max-width: 768px) {
+      .view-toggle {
+        top: auto;
+        bottom: 20px;
+        right: 10px;
+      }
+      
+      .tracker-table {
+        font-size: 0.75rem;
+      }
+      
+      .tracker-table th,
+      .tracker-table td {
+        padding: 0.5rem;
+      }
+    }
+  </style>
 </head>
-<body>
+<body class="genius-view">
   <div class="static-overlay"></div>
   <header class="site-header">
     <div class="header-container">
       <div class="logo"><a href="/">Recognition Science</a></div>
     </div>
   </header>
+  
+  <!-- View Toggle -->
+  <div class="view-toggle">
+    <label>Standard View</label>
+    <div class="toggle-switch active" id="viewToggle">
+      <div class="toggle-slider"></div>
+    </div>
+    <label>Real Genius Mode</label>
+  </div>
+  
   <div class="container">
     <header class="main-header">
       <h1>Recognition Science — Live Audit</h1>
       <div class="header-text">
-        <p>Streaming directly from the public audit repository (status.json + study guide). Parameter‑free checks, live.</p>
+        <p>Streaming directly from the public audit repository. Parameter‑free checks, live.</p>
+        <a href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener" class="repo-link">View Audit Repository ↗</a>
       </div>
     </header>
+    
+    <!-- Confidence Criteria Section -->
+    <div class="confidence-section">
+      <h2>Confidence Criteria (Declaration Bar)</h2>
+      <p style="margin-bottom: 1.5rem; font-style: italic;">I will be comfortable stating "RS is the framework for reality" when the following are satisfied:</p>
+      
+      <ol class="confidence-list">
+        <li><strong>Eight foundational theorems are proven</strong> (preferably mechanized in Lean): ledger necessity/uniqueness; atomic tick; continuity; J‑uniqueness; κ=1 and φ; d=3; Eight‑tick and 2^D; causal maximal speed.</li>
+        <li><strong>Cubic‑tiling minimality:</strong> either proven via algorithmic‑minimality among 3D Bravais lattices or all downstream numerics are explicitly conditional and shown not to affect core claims.</li>
+        <li><strong>ILG kernel w(r)</strong> is uniquely derived (with Newtonian/MOND limits) and reused across structure/cosmology predictions.</li>
+        <li><strong>Mass pipeline</strong> is end‑to‑end parameter‑free with rung uniqueness, invariant definitions, and φ‑sheet weights fixed once; over‑constraint demonstrated by reusing the same gap coefficients in at least three independent domains.</li>
+        <li><strong>Any remaining constants in α closure</strong> are either proved combinatorially (fixed triangulation/Regge) or boxed as conjecture without contaminating the core.</li>
+      </ol>
+    </div>
+    
+    <!-- Loose Ends Tracker -->
+    <div class="confidence-section">
+      <h2>Loose Ends Tracker</h2>
+      <div style="overflow-x: auto;">
+        <table class="tracker-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Item</th>
+              <th>Priority</th>
+              <th>Status</th>
+              <th>Plan/Next Step</th>
+              <th>Acceptance Criteria</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>LT1</td>
+              <td>Cubic‑tiling minimality (ℤ³)</td>
+              <td class="priority-p0">P0</td>
+              <td class="status-open">Open</td>
+              <td>AIT/Bravais argument; compare description length; formalize homogeneity/isotropy constraints</td>
+              <td>Proof (or explicit conditionalization) with no alternative lattice meeting constraints</td>
+            </tr>
+            <tr>
+              <td>LT2</td>
+              <td>ILG kernel w(r) derivation + limits</td>
+              <td class="priority-p0">P0</td>
+              <td class="status-open">Open</td>
+              <td>Derive from recognition capacity + dual‑balance; prove small/large‑r limits</td>
+              <td>Unique w(r); Newtonian and MOND‑like limits without new parameters</td>
+            </tr>
+            <tr>
+              <td>LT3</td>
+              <td>α closure integers (4π×11; 102/103; 2π⁵)</td>
+              <td class="priority-p0">P0</td>
+              <td class="status-open">Open</td>
+              <td>Convert to combinatorial/Regge lemmas; or box as conjecture</td>
+              <td>Integer counts/normalization derived from fixed geometry; no tuning</td>
+            </tr>
+            <tr>
+              <td>LT4</td>
+              <td>1024‑tick breath minimal‑cancellation theorem</td>
+              <td class="priority-p0">P0</td>
+              <td class="status-open">Open</td>
+              <td>Info‑theoretic/combinatorial proof from 8‑beat + dual‑balance parity gates</td>
+              <td>Minimal global period = 1024 uniquely; reused in g−2 and cosmology</td>
+            </tr>
+            <tr>
+              <td>LT5</td>
+              <td>Rung uniqueness from ledger‑walk</td>
+              <td class="priority-p0">P0</td>
+              <td class="status-open">Open</td>
+              <td>Implement constructor from SM charges; prove minimal hop counts</td>
+              <td>Unique rᵢ per field class; independent of data</td>
+            </tr>
+            <tr>
+              <td>LT6</td>
+              <td>LNAL minimality/completeness; ±4 alphabet</td>
+              <td class="priority-p0">P0</td>
+              <td class="status-open">Open</td>
+              <td>Show 16 opcodes minimal/complete; prove ±5 excluded (Lyapunov/Planck)</td>
+              <td>Minimal set proven; any reduction breaks completeness; any extension violates constraints</td>
+            </tr>
+            <tr>
+              <td>LT7</td>
+              <td>Born rule uniqueness under ledger measure</td>
+              <td class="priority-p0">P0</td>
+              <td class="status-open">Open</td>
+              <td>Gleason/Deutsch‑Wallace style argument adapted to path‑cost</td>
+              <td>Only |ψ|² consistent with ledger measure</td>
+            </tr>
+            <tr>
+              <td>LT8</td>
+              <td>Ω_dm operator and gap δ</td>
+              <td class="priority-p1">P1</td>
+              <td class="status-open">Open</td>
+              <td>Define operator, spectrum, boundary conditions; tie δ to same gap series</td>
+              <td>Operator stated; eigenvalue controls unresolved measure; δ reuse demonstrated</td>
+            </tr>
+            <tr>
+              <td>LT9</td>
+              <td>H₀ "45‑gap" formalization</td>
+              <td class="priority-p1">P1</td>
+              <td class="status-open">Open</td>
+              <td>Define within gap series; propagate to late‑time clock lag</td>
+              <td>Unique fractional lag; matches intermediate value without new knobs</td>
+            </tr>
+            <tr>
+              <td>LT10</td>
+              <td>Force ranges from modularity ↔ SU(3)/U(1)</td>
+              <td class="priority-p1">P1</td>
+              <td class="status-open">Open</td>
+              <td>Bridge modular classes to group structure quantitatively</td>
+              <td>Infinite U(1) range; SU(3) confinement scale from voxel/mod counts</td>
+            </tr>
+            <tr>
+              <td>LT11</td>
+              <td>DNA pitch correction removal or proof</td>
+              <td class="priority-p2">P2</td>
+              <td class="status-open">Open</td>
+              <td>Replace with same gap series derivation or label speculative</td>
+              <td>Either derived from universal series or quarantined</td>
+            </tr>
+            <tr>
+              <td>LT12</td>
+              <td>Quark sector extension (thresholds/mixing)</td>
+              <td class="priority-p1">P1</td>
+              <td class="status-open">Open</td>
+              <td>Extend pipeline with thresholds, CKM; keep B fixed by sector</td>
+              <td>Ratios predicted within claimed tolerance; no tuning</td>
+            </tr>
+            <tr>
+              <td>LT13</td>
+              <td>Lean mechanization of eight theorems</td>
+              <td class="priority-p0">P0</td>
+              <td class="status-progress">In progress</td>
+              <td>Build minimal Lean files; compile with allow‑sorry→off over time</td>
+              <td>Artifacts compile; core theorems free of sorry</td>
+            </tr>
+            <tr>
+              <td>LT14</td>
+              <td>2025 citations/placeholders cleanup</td>
+              <td class="priority-p2">P2</td>
+              <td class="status-open">Open</td>
+              <td>Replace with "forthcoming" or current refs</td>
+              <td>No unverifiable 2025 placeholders remain</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="session-log">
+        <h3 style="color: #FFD700; margin-bottom: 1rem;">Session Log</h3>
+        <p>2025‑01‑09: Initial version added; distilled architecture, equations, audit items, and proof checklist.</p>
+        <p>2025‑01‑09: Added declaration bar and loose‑ends tracker (priorities, plans, acceptance criteria).</p>
+        <p>2025‑01‑09: Added text proofs (J‑uniqueness, d=3, 2^D ticks), drafted rung‑uniqueness constructor and ILG kernel derivation.</p>
+        <p>2025‑01‑09: Added ILG variational uniqueness draft; LNAL generator‑relation draft; rung uniqueness proof steps.</p>
+      </div>
+    </div>
 
     <div class="section">
       <h2 class="section-title">Status</h2>
@@ -125,11 +535,7 @@
 
     <footer class="footer">
       <div class="container">
-        <div class="social-links">
-          <a href="https://github.com/jonwashburn/audit" target="_blank">REPO</a>
-          <a href="/science.html" target="_blank">PROOFS</a>
-        </div>
-        <p>A WUBBUSHI CREATION /// RECOGNITION SCIENCE INSTITUTE</p>
+        <p>RECOGNITION SCIENCE INSTITUTE</p>
       </div>
     </footer>
   </div>
@@ -267,6 +673,46 @@
       setTimeout(() => { randomCard.style.opacity = '1'; }, 50);
     }
   }, 3000);
+  
+  // View toggle functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggle = document.getElementById('viewToggle');
+    const body = document.body;
+    const standardCSS = document.getElementById('standard-css');
+    const geniusCSS = document.getElementById('genius-css');
+    
+    // Load saved preference
+    const savedView = localStorage.getItem('auditViewMode');
+    if (savedView === 'standard') {
+      body.className = 'standard-view';
+      toggle.classList.remove('active');
+      standardCSS.disabled = false;
+      geniusCSS.disabled = true;
+    } else {
+      body.className = 'genius-view';
+      toggle.classList.add('active');
+      standardCSS.disabled = true;
+      geniusCSS.disabled = false;
+    }
+    
+    toggle.addEventListener('click', () => {
+      if (body.classList.contains('genius-view')) {
+        // Switch to standard view
+        body.className = 'standard-view';
+        toggle.classList.remove('active');
+        standardCSS.disabled = false;
+        geniusCSS.disabled = true;
+        localStorage.setItem('auditViewMode', 'standard');
+      } else {
+        // Switch to genius view
+        body.className = 'genius-view';
+        toggle.classList.add('active');
+        standardCSS.disabled = true;
+        geniusCSS.disabled = false;
+        localStorage.setItem('auditViewMode', 'genius');
+      }
+    });
+  });
   </script>
   <script src="/assets/js/main.js"></script>
 </body>
