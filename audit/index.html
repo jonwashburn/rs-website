@@ -8,20 +8,22 @@
   <link rel="stylesheet" href="/assets/css/audit.css" id="genius-css" disabled />
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-  <script>mermaid.initialize({ startOnLoad: false, theme: 'dark', themeVariables: { 
-    primaryColor: '#ffffff',
-    primaryTextColor: '#111111',
-    primaryBorderColor: '#ff1493',
-    lineColor: '#888888',
+  <script>mermaid.initialize({ startOnLoad: false, theme: 'base', themeVariables: { 
+    primaryColor: '#ffffff',          // node background
+    primaryTextColor: '#111111',      // node font
+    primaryBorderColor: '#64D2FF',    // node border
+    lineColor: '#64D2FF',             // edges
     secondaryColor: '#ffffff',
     tertiaryColor: '#ffffff',
-    background: '#000000',
+    background: '#000000',            // canvas
     mainBkg: '#000000',
     secondBkg: '#000000',
     tertiaryBkg: '#000000',
-    textColor: '#00ff41',
+    textColor: '#E6F6FF',
     nodeTextColor: '#111111',
-    borderRadius: 14
+    borderRadius: 14,
+    clusterBkg: '#0b1220',
+    clusterBorder: '#64D2FF'
   }});</script>
   <style>
     /* View toggle styles */
@@ -116,9 +118,11 @@
     }
     
     .confidence-list li {
-      padding: 0.75rem 0;
-      border-bottom: 1px solid rgba(255, 215, 0, 0.2);
-      color: #F1F5F9;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid rgba(255, 215, 0, 0.18);
+      color: #EAF2FF;
+      line-height: 1.6;
+      font-size: 1rem;
     }
     
     body.standard-view .confidence-list li {
@@ -253,6 +257,27 @@
         padding: 0.5rem;
       }
     }
+  </style>
+  <style>
+    /* Mermaid readability overrides for Genius view */
+    body.genius-view .mermaid .node rect,
+    body.genius-view .mermaid .node polygon,
+    body.genius-view .mermaid .node path {
+      fill: #ffffff !important;
+      stroke: #64D2FF !important;
+      stroke-width: 1px !important;
+      rx: 12 !important;
+      ry: 12 !important;
+    }
+    body.genius-view .mermaid .cluster rect {
+      fill: #0b1220 !important;
+      stroke: #64D2FF !important;
+    }
+    body.genius-view .mermaid .edgePath path,
+    body.genius-view .mermaid .flowchart-link { stroke: #64D2FF !important; }
+    body.genius-view .mermaid .arrowheadPath { fill: #64D2FF !important; }
+    body.genius-view .mermaid .label,
+    body.genius-view .mermaid text { fill: #111111 !important; font-weight: 600; }
   </style>
 </head>
 <body class="genius-view">
