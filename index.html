@@ -426,5 +426,19 @@
       })();
     </script>
     <script src="assets/js/main.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var el = document.getElementById('auditUpdated');
+    if (!el) return;
+    function update() {
+      var now = new Date();
+      var fmt = now.toLocaleString(undefined, { month: 'short', day: '2-digit', year: 'numeric', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      el.textContent = 'Live: ' + fmt;
+    }
+    update();
+    setInterval(update, 1000);
+  });
+</script>
 </body>
 </html>
