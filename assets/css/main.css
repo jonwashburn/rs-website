@@ -318,6 +318,8 @@ a:hover {
             padding: 0;
             box-shadow: var(--shadow-md);
             overflow-y: auto; /* allow submenu to scroll if tall */
+            gap: 0; /* Remove gap to prevent wrapping */
+            align-items: stretch; /* Full width items */
         }
         
         .global-nav.active ul {
@@ -325,13 +327,20 @@ a:hover {
             padding: 0.5rem 0;
         }
         
+        .global-nav li {
+            width: 100%;
+            display: block;
+        }
+        
         .global-nav a {
             border-bottom: none;
-            text-align: center;
+            text-align: left;
             padding: 0.75rem 1rem;
-            margin: 0.25rem 0.5rem;
-            border-radius: 6px;
+            margin: 0;
+            border-radius: 0;
             color: #333;
+            width: 100%;
+            display: block;
         }
         
         .global-nav a:last-child {
@@ -339,14 +348,19 @@ a:hover {
         }
         
         /* Mobile dropdown adjustments */
+        .dropdown {
+            width: 100%;
+        }
+        
         .dropdown-content {
             position: static;
             max-height: 0;
             overflow: hidden;
-            background: #0b1220;
+            background: #e8eaed;
             box-shadow: none;
             border: none;
             min-width: auto;
+            width: 100%;
             transition: max-height 0.3s ease-in-out;
             display: block !important; /* Always display, control with max-height */
         }
@@ -357,22 +371,31 @@ a:hover {
         }
         
         .dropdown-content a {
-            padding: 0.8rem 2rem;
-            border-bottom: 1px solid #444;
+            padding: 0.7rem 1rem 0.7rem 2.5rem;
+            border-bottom: none;
+            background: transparent;
+            color: #555 !important;
+            font-size: 0.95rem;
         }
 
         /* Better touch targets for mobile dropdowns */
         .dropdown .dropbtn {
             position: relative;
-            padding: 1rem 1.5rem;
+            padding: 0.75rem 1rem;
             touch-action: manipulation;
+            width: 100%;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .dropdown .dropbtn:after {
-            content: " ▼";
+            content: "▼";
             font-size: 0.7em;
-            margin-left: 0.5rem;
+            margin-left: auto;
             transition: transform 0.3s ease;
+            display: inline-block;
         }
 
         .dropdown.active .dropbtn:after {
