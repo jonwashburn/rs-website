@@ -5,8 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recognition Science /// The Inevitable Framework of Reality</title>
     <link rel="stylesheet" href="assets/css/main.css">
+
+    <style>
+      #audit-badge{position:fixed; top:8px; right:8px; z-index:1000; background:#0b0d10cc; color:#e6eef8; border:1px solid #223; border-radius:10px; padding:8px 12px; display:flex; align-items:center; gap:10px; box-shadow:0 4px 20px rgba(0,0,0,0.3); font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial}
+      #audit-badge .title{color:#6aa8ff; font-weight:600; text-decoration:none}
+      #audit-badge .ts{color:#9fb3c8}
+      #audit-badge .stat{color:#9fb3c8}
+      #audit-badge .progress{width:120px; height:8px; background:#0f141a; border:1px solid #1f2a36; border-radius:999px; overflow:hidden}
+      #audit-badge .progress i{display:block; height:100%; width:0%; background:linear-gradient(90deg,#6aa8ff,#48e4b7)}
+      @media (max-width:720px){ #audit-badge{left:8px; right:8px; top:auto; bottom:8px; flex-wrap:wrap} }
+    </style>
+
 </head>
 <body>
+    <div id="audit-badge"><a class="title" href="/audit">Realtime ChatGPT‑5 Pro Theory Audit</a><span class="ts"></span><div class="progress"><i></i></div><span class="stat"></span></div>
     <div id="header-placeholder"></div>
 
     <main class="content-page">
@@ -157,5 +169,27 @@
 
     </main>
     <script src="assets/js/main.js"></script>
+
+    <script>
+    (async function(){
+      try {
+        const url = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/status.json';
+        const r = await fetch(url); if(!r.ok) throw new Error('status');
+        const st = await r.json();
+        const badge = document.getElementById('audit-badge');
+        badge.querySelector('.ts').textContent = ` • ${st.last_updated}`;
+        // Compute weighted progress over loose_ends
+        const weights = { 'open': 0, 'in progress': 0.6, 'draft': 0.3, 'closed': 1 }
+        const items = Array.isArray(st.loose_ends) ? st.loose_ends : [];
+        let score = 0;
+        items.forEach(x => { const w = weights[(x.status||'open').toLowerCase()] ?? 0; score += w; });
+        const pct = items.length ? Math.round((score/items.length)*100) : 0;
+        badge.querySelector('.progress i').style.width = pct + '%';
+        const ilgStatus = st.ilg && st.ilg.status ? st.ilg.status : 'auditing';
+        badge.querySelector('.stat').textContent = ` • ${pct}% • ${ilgStatus}`;
+      } catch(e) { /* silent */ }
+    })();
+    </script>
+
 </body>
 </html>
