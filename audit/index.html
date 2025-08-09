@@ -9,73 +9,68 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <script>mermaid.initialize({ startOnLoad: false, theme: 'dark', themeVariables: { 
-    primaryColor: '#00ff41',
-    primaryTextColor: '#00ff41',
-    primaryBorderColor: '#00ff41',
-    lineColor: '#00ffff',
-    secondaryColor: '#ffb000',
-    tertiaryColor: '#ff0040',
-    background: '#000',
-    mainBkg: '#0a0a0a',
-    secondBkg: '#1a1a1a',
-    tertiaryBkg: '#2a2a2a',
+    primaryColor: '#ffffff',
+    primaryTextColor: '#111111',
+    primaryBorderColor: '#ff1493',
+    lineColor: '#888888',
+    secondaryColor: '#ffffff',
+    tertiaryColor: '#ffffff',
+    background: '#000000',
+    mainBkg: '#000000',
+    secondBkg: '#000000',
+    tertiaryBkg: '#000000',
     textColor: '#00ff41',
-    nodeTextColor: '#000'
+    nodeTextColor: '#111111',
+    borderRadius: 14
   }});</script>
   <style>
     /* View toggle styles */
     .view-toggle {
-      position: fixed;
-      top: 80px;
-      right: 20px;
-      z-index: 1000;
-      background: rgba(255, 255, 255, 0.95);
-      border: 2px solid #333;
-      border-radius: 25px;
-      padding: 5px;
-      display: flex;
+      position: static;
+      display: inline-flex;
       align-items: center;
-      gap: 10px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 9999px;
+      padding: 4px 8px;
+      box-shadow: none;
+      margin-top: 8px;
     }
     
     .view-toggle label {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: 600;
-      color: #333;
+      color: #ddd;
       cursor: pointer;
-      padding: 5px 10px;
+      padding: 0 4px;
     }
     
     .toggle-switch {
       position: relative;
-      width: 60px;
-      height: 30px;
-      background: #ddd;
-      border-radius: 15px;
+      width: 46px;
+      height: 22px;
+      background: #444;
+      border-radius: 9999px;
       cursor: pointer;
       transition: background 0.3s;
     }
     
-    .toggle-switch.active {
-      background: #00ff41;
-    }
+    .toggle-switch.active { background: #00ff41; }
     
     .toggle-slider {
       position: absolute;
-      top: 3px;
-      left: 3px;
-      width: 24px;
-      height: 24px;
+      top: 2px;
+      left: 2px;
+      width: 18px;
+      height: 18px;
       background: white;
       border-radius: 50%;
       transition: transform 0.3s;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
     
-    .toggle-switch.active .toggle-slider {
-      transform: translateX(30px);
-    }
+    .toggle-switch.active .toggle-slider { transform: translateX(24px); }
     
     /* Standard view overrides */
     body.standard-view .static-overlay {
@@ -249,11 +244,7 @@
     }
     
     @media (max-width: 768px) {
-      .view-toggle {
-        top: auto;
-        bottom: 20px;
-        right: 10px;
-      }
+      .view-toggle { margin-top: 6px; }
       
       .tracker-table {
         font-size: 0.75rem;
@@ -288,7 +279,16 @@
       <h1>Recognition Science — Live Audit</h1>
       <div class="header-text">
         <p>Streaming directly from the public audit repository. Parameter‑free checks, live.</p>
-        <a href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener" class="repo-link">View Audit Repository ↗</a>
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+          <a href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener" class="repo-link">View Audit Repository ↗</a>
+          <div class="view-toggle">
+            <label>Standard</label>
+            <div class="toggle-switch active" id="viewToggle">
+              <div class="toggle-slider"></div>
+            </div>
+            <label>Genius</label>
+          </div>
+        </div>
       </div>
     </header>
     
