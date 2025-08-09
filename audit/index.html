@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Recognition Science — Live Audit</title>
+  <link rel="stylesheet" href="/audit/audit.css" />
   <style>
     :root { --bg:#0b0d10; --fg:#e6eef8; --muted:#9fb3c8; --accent:#59f; }
     html,body { margin:0; padding:0; background:var(--bg); color:var(--fg); font:16px/1.55 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial; }
@@ -26,46 +27,67 @@
   <script>mermaid.initialize({ startOnLoad: false, theme: 'dark' });</script>
 </head>
 <body>
-  <header>
-    <h1>Recognition Science — Live Audit</h1>
-    <div class="muted">This page renders directly from the audit repository (status.json + study guide).</div>
+  <header class="hero">
+    <div class="wrap">
+      <h1>Recognition Science — Live Audit</h1>
+      <p class="muted">Streaming from the audit repository (status.json + study guide)</p>
+      <div class="hstack" style="margin-top:12px">
+        <span class="badge">parameter‑free</span>
+        <span class="badge">live</span>
+        <a class="badge" href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener">repo ↗</a>
+      </div>
+    </div>
+    <div class="glow"></div>
   </header>
+  <nav class="sticky">
+    <div class="wrap">
+      <a href="#status">Status</a>
+      <a href="#pillars-card">Pillars</a>
+      <a href="#ilg-card">ILG</a>
+      <a href="#lnal-card">LNAL</a>
+      <a href="#rung-card">Rungs</a>
+      <a href="#loose-card">Loose Ends</a>
+      <a href="#next-card">Next</a>
+      <a href="#arch-card">Architecture</a>
+      <a href="#guide-card">Guide</a>
+    </div>
+  </nav>
   <main>
-    <section class="card">
+    <section class="card" id="status">
       <h2>Status</h2>
-      <div id="status"></div>
+      <div id="status-body"></div>
     </section>
 
     <section class="grid">
-      <div class="card">
+      <div class="card" id="pillars-card">
         <h3>Pillars</h3>
         <ul id="pillars"></ul>
       </div>
-      <div class="card">
+      <div class="card" id="ilg-card">
         <h3>ILG Kernel</h3>
         <div id="ilg"></div>
       </div>
-      <div class="card">
+      <div class="card" id="lnal-card">
         <h3>LNAL</h3>
         <div id="lnal"></div>
       </div>
-      <div class="card">
+      <div class="card" id="rung-card">
         <h3>Rung Constructor</h3>
         <div id="rung"></div>
       </div>
     </section>
 
-    <section class="card">
+    <section class="card" id="loose-card">
       <h3>Loose Ends</h3>
       <ul id="loose"></ul>
     </section>
 
-    <section class="card">
+    <section class="card" id="next-card">
       <h3>Next Actions</h3>
       <ul id="next"></ul>
     </section>
 
-    <section class="card">
+    <section class="card" id="arch-card">
       <h3>Architecture</h3>
       <div class="muted">Rendered from Mermaid diagram.</div>
       <div class="mermaid" id="mmd">
@@ -87,7 +109,7 @@
       </div>
     </section>
 
-    <section class="card">
+    <section class="card" id="guide-card">
       <h3>Study Guide (Markdown)</h3>
       <div class="muted">Rendered from audit/docs/Recognition-Science-Study-Guide.md</div>
       <div id="guide"></div>
@@ -101,7 +123,7 @@
     const statusURL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/status.json';
     const guideURL  = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/Recognition-Science-Study-Guide.md';
     const status = await loadJSON(statusURL);
-    document.getElementById('status').innerHTML = `
+    document.getElementById('status-body').innerHTML = `
       <div><span class="muted">Last updated:</span> ${status.last_updated}</div>
       <div style="margin-top:8px">${status.thesis}</div>
       <div style="margin-top:8px" class="muted"><a href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener">View audit repository</a></div>
