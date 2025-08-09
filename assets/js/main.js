@@ -48,7 +48,11 @@ document.addEventListener("DOMContentLoaded", function() {
         if (window.innerWidth <= 768) {
             event.preventDefault();
             event.stopPropagation();
-            const dropdown = event.target.closest('.dropdown');
+            
+            // Get the dropdown element (handle clicks on children of dropbtn too)
+            const dropbtn = event.target.closest('.dropbtn');
+            const dropdown = dropbtn ? dropbtn.closest('.dropdown') : null;
+            
             console.log('Dropdown element:', dropdown); // Debug log
             
             if (dropdown) {
@@ -90,20 +94,16 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    // Event delegation for dropdown clicks (fallback)
-    document.addEventListener('click', function(event) {
-        if (event.target.matches('.dropdown .dropbtn') || event.target.closest('.dropdown .dropbtn')) {
-            handleDropdownClick(event);
-        }
-    });
-
     // Close dropdowns when clicking outside
     document.addEventListener('click', function(event) {
-        if (window.innerWidth <= 768 && !event.target.closest('.dropdown')) {
-            const activeDropdowns = document.querySelectorAll('.dropdown.active');
-            activeDropdowns.forEach(dropdown => {
-                dropdown.classList.remove('active');
-            });
+        if (window.innerWidth <= 768) {
+            // Only close if we're not clicking on a dropdown button
+            if (!event.target.closest('.dropbtn') && !event.target.closest('.dropdown-content')) {
+                const activeDropdowns = document.querySelectorAll('.dropdown.active');
+                activeDropdowns.forEach(dropdown => {
+                    dropdown.classList.remove('active');
+                });
+            }
         }
     });
 
