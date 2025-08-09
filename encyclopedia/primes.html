@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Primes Playground — Recognition Science</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <style>
+        /* Prime-specific styles */
+        :root {
+            --prime-gold: #FFD700;
+            --prime-purple: #6B46C1;
+            --prime-blue: #2563EB;
+            --prime-green: #10B981;
+            --prime-red: #EF4444;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+            color: #F1F5F9;
+            min-height: 100vh;
+        }
+
+        .prime-hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: radial-gradient(ellipse at center, rgba(107, 70, 193, 0.2) 0%, transparent 70%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .prime-hero::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-conic-gradient(
+                from 0deg at 50% 50%,
+                transparent 0deg,
+                rgba(255, 215, 0, 0.03) 10deg,
+                transparent 20deg
+            );
+            animation: rotate-primes 60s linear infinite;
+        }
+
+        @keyframes rotate-primes {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .prime-hero h1 {
+            font-size: 4rem;
+            background: linear-gradient(135deg, var(--prime-gold) 0%, var(--prime-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .prime-subtitle {
+            font-size: 1.5rem;
+            color: var(--prime-gold);
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Prime spiral visualization */
+        .prime-spiral {
+            width: 600px;
+            height: 600px;
+            margin: 3rem auto;
+            position: relative;
+            background: radial-gradient(circle, rgba(107, 70, 193, 0.1) 0%, transparent 70%);
+        }
+
+        .spiral-canvas {
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
+        }
+
+        /* Interactive prime grid */
+        .prime-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 0.5rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .prime-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            background: rgba(30, 41, 59, 0.5);
+        }
+
+        .prime-cell.prime {
+            background: linear-gradient(135deg, rgba(107, 70, 193, 0.3) 0%, rgba(255, 215, 0, 0.2) 100%);
+            border-color: var(--prime-gold);
+            color: var(--prime-gold);
+            animation: pulse-prime 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-prime {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+        }
+
+        .prime-cell.composite {
+            color: #64748B;
+            border-color: #334155;
+        }
+
+        .prime-cell.twin-prime {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.4) 0%, rgba(16, 185, 129, 0.3) 100%);
+            border-color: var(--prime-blue);
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.5);
+        }
+
+        .prime-cell:hover {
+            transform: scale(1.1);
+            z-index: 10;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+
+        /* Prime factorization display */
+        .factorization-box {
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid var(--prime-purple);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .factor-input {
+            font-size: 2rem;
+            padding: 1rem;
+            background: rgba(15, 23, 42, 0.9);
+            border: 2px solid var(--prime-gold);
+            color: white;
+            border-radius: 8px;
+            width: 200px;
+            text-align: center;
+        }
+
+        .factor-result {
+            margin-top: 2rem;
+            font-size: 1.5rem;
+            color: var(--prime-gold);
+            min-height: 3rem;
+        }
+
+        .factor-prime {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            background: linear-gradient(135deg, rgba(107, 70, 193, 0.5) 0%, rgba(255, 215, 0, 0.3) 100%);
+            border: 1px solid var(--prime-gold);
+            border-radius: 20px;
+            animation: factor-appear 0.5s ease-out;
+        }
+
+        @keyframes factor-appear {
+            0% { transform: scale(0) rotate(180deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        /* RS Connection sections */
+        .rs-connection {
+            background: linear-gradient(135deg, rgba(107, 70, 193, 0.1) 0%, rgba(30, 41, 59, 0.5) 100%);
+            border-left: 4px solid var(--prime-gold);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        .rs-connection h3 {
+            color: var(--prime-gold);
+            margin-bottom: 1rem;
+        }
+
+        /* Prime wave animation */
+        .prime-wave {
+            height: 200px;
+            margin: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wave-canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Interactive demos */
+        .demo-section {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .demo-button {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--prime-purple) 0%, var(--prime-blue) 100%);
+            border: none;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .demo-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(107, 70, 193, 0.5);
+        }
+
+        .demo-button.active {
+            background: linear-gradient(135deg, var(--prime-gold) 0%, var(--prime-purple) 100%);
+        }
+
+        /* Ledger visualization */
+        .ledger-viz {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .ledger-side {
+            padding: 1.5rem;
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 8px;
+            border: 2px solid;
+        }
+
+        .ledger-side.debit {
+            border-color: var(--prime-red);
+        }
+
+        .ledger-side.credit {
+            border-color: var(--prime-green);
+        }
+
+        .ledger-entry {
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Math formulas */
+        .formula-box {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--prime-purple);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+
+        .formula-box code {
+            color: var(--prime-gold);
+            font-size: 1.1rem;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .prime-hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .prime-spiral {
+                width: 100%;
+                height: 400px;
+            }
+            
+            .ledger-viz {
+                grid-template-columns: 1fr;
+            }
+            
+            .prime-grid {
+                grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+            }
+        }
+
+        /* Glowing effect for special primes */
+        @keyframes glow-special {
+            0%, 100% { box-shadow: 0 0 5px var(--prime-gold), 0 0 10px var(--prime-gold); }
+            50% { box-shadow: 0 0 20px var(--prime-gold), 0 0 40px var(--prime-gold); }
+        }
+
+        .mersenne-prime {
+            animation: glow-special 2s ease-in-out infinite;
+        }
+
+        /* Loading animation */
+        .loading-primes {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.5rem;
+            color: var(--prime-gold);
+        }
+
+        .loading-primes::after {
+            content: "...";
+            animation: loading-dots 1.5s infinite;
+        }
+
+        @keyframes loading-dots {
+            0%, 20% { content: "."; }
+            40% { content: ".."; }
+            60%, 100% { content: "..."; }
+        }
+    </style>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="prime-hero">
+        <h1>The Prime Playground</h1>
+        <p class="prime-subtitle">Where Reality's Atoms Dance</p>
+    </div>
+
+    <div class="container">
+        <section class="intro-section">
+            <h2>The Irreducible Truth</h2>
+            <p>In Recognition Science, primes aren't just numbers—they're the atomic transactions of reality itself. Every recognition that cannot be decomposed, every indivisible moment of awareness, every fundamental quantum of cost in the Universal Ledger corresponds to a prime.</p>
+            
+            <div class="rs-connection">
+                <h3>🔑 The Ledger Connection</h3>
+                <p>The Universal Ledger operates on binary double-entry bookkeeping. Composite numbers represent transactions that can be split into sub-transactions (factors). But primes? They're the irreducible postings—the atoms that cannot be divided further. When the ledger balances, composites cancel out through their factors, but primes remain as the fundamental witnesses of recognition.</p>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Interactive Prime Grid</h2>
+            <p>Click any number to see its prime factorization. Watch how primes stand alone while composites decompose.</p>
+            <div class="prime-grid" id="primeGrid"></div>
+        </section>
+
+        <section class="factorization-box">
+            <h2>Prime Factorization Engine</h2>
+            <p>Every composite number is a unique product of primes—the Fundamental Theorem of Arithmetic made visible.</p>
+            <input type="number" class="factor-input" id="factorInput" placeholder="Enter a number" min="2" max="10000">
+            <div class="factor-result" id="factorResult"></div>
+        </section>
+
+        <section class="demo-section">
+            <h2>The Ulam Spiral</h2>
+            <p>Arrange numbers in a spiral and watch primes form mysterious patterns—diagonal lines, clusters, and gaps that hint at deeper structure.</p>
+            <div class="prime-spiral">
+                <canvas class="spiral-canvas" id="spiralCanvas"></canvas>
+            </div>
+        </section>
+
+        <section class="rs-connection">
+            <h3>🌀 The 8-Beat Cycle & Prime Rhythms</h3>
+            <p>RS identifies an 8-beat fundamental cycle in reality's architecture. Primes ensure that recognition patterns don't fall into repetitive loops. By scheduling events at prime intervals, the universe maintains novelty and prevents resonance collapse. The primes at positions 8n±1, 8n±3 have special significance in the LNAL instruction set.</p>
+            
+            <div class="formula-box">
+                <code>Prime gaps → Non-aliasing recognition windows</code><br>
+                <code>Twin primes → Paired recognition channels</code><br>
+                <code>Prime spirals → Vortex patterns in spacetime</code>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Prime Wave Interference</h2>
+            <p>Watch how prime frequencies create complex interference patterns—the music of the spheres made visible.</p>
+            <div class="prime-wave">
+                <canvas class="wave-canvas" id="waveCanvas"></canvas>
+            </div>
+            <div class="demo-controls">
+                <button class="demo-button" onclick="startWave()">Start Wave</button>
+                <button class="demo-button" onclick="addPrimeHarmonic()">Add Prime Harmonic</button>
+                <button class="demo-button" onclick="resetWave()">Reset</button>
+            </div>
+        </section>
+
+        <section class="rs-connection">
+            <h3>⚛️ Primes in Quantum Recognition</h3>
+            <p>In RS's operator theory, the prime-indexed Hilbert space ℓ²(𝒫) carries the arithmetic engine of reality. Each prime p corresponds to a quantum channel with weight p⁻ˢ. The Riemann zeta function emerges naturally as:</p>
+            
+            <div class="formula-box">
+                <code>ζ(s) = det₂(I - Pₛ)⁻¹ = ∏ₚ (1 - p⁻ˢ)⁻¹</code>
+            </div>
+            
+            <p>This isn't just mathematics—it's the actual mechanism by which reality processes information. Each prime is a fundamental mode of recognition that cannot be reduced to others.</p>
+        </section>
+
+        <section class="demo-section">
+            <h2>Ledger Balance Visualization</h2>
+            <p>See how prime transactions remain while composite transactions cancel through dual-balance.</p>
+            <div class="ledger-viz">
+                <div class="ledger-side debit">
+                    <h3>Debit (Recognition Given)</h3>
+                    <div id="debitSide"></div>
+                </div>
+                <div class="ledger-side credit">
+                    <h3>Credit (Recognition Received)</h3>
+                    <div id="creditSide"></div>
+                </div>
+            </div>
+            <div class="demo-controls">
+                <button class="demo-button" onclick="addPrimeTransaction()">Add Prime Transaction</button>
+                <button class="demo-button" onclick="addCompositeTransaction()">Add Composite Transaction</button>
+                <button class="demo-button" onclick="balanceLedger()">Balance Ledger</button>
+            </div>
+        </section>
+
+        <section class="rs-connection">
+            <h3>🧠 Primes and Consciousness</h3>
+            <p>The 45-Gap—RS's answer to consciousness—emerges from prime arithmetic:</p>
+            <ul>
+                <li><strong>45 = 3² × 5</strong> — A specific prime factorization creating phase conflicts</li>
+                <li><strong>Prime gaps</strong> — Moments where no composite pattern fits, forcing novel recognition</li>
+                <li><strong>Prime-indexed attention</strong> — Consciousness scans at prime intervals to avoid cognitive loops</li>
+                <li><strong>Gödel incompleteness</strong> — Primes encode statements that escape formal systems</li>
+            </ul>
+            
+            <p>When recognition cannot decompose an experience into known factors, consciousness emerges. Primes are literally the atoms of awareness.</p>
+        </section>
+
+        <section class="demo-section">
+            <h2>Special Prime Families</h2>
+            <div class="prime-families">
+                <h3>Twin Primes</h3>
+                <p>Pairs differing by 2: (3,5), (5,7), (11,13), (17,19)...</p>
+                <p class="rs-note">In RS: Paired recognition channels maintaining quantum entanglement</p>
+                
+                <h3>Mersenne Primes</h3>
+                <p>Form 2ⁿ - 1: 3, 7, 31, 127, 8191...</p>
+                <p class="rs-note">In RS: Maximum efficiency ledger states at powers of 2</p>
+                
+                <h3>Sophie Germain Primes</h3>
+                <p>Where both p and 2p+1 are prime: 2, 3, 5, 11, 23...</p>
+                <p class="rs-note">In RS: Self-similar recognition patterns across scales</p>
+                
+                <h3>Gaussian Primes</h3>
+                <p>Primes in complex numbers: 3, 7, 11, 19...</p>
+                <p class="rs-note">In RS: Recognition extending into imaginary time</p>
+            </div>
+        </section>
+
+        <section class="rs-connection">
+            <h3>🔬 Primes in Physical Reality</h3>
+            <p>RS shows that primes manifest throughout physics:</p>
+            <ul>
+                <li><strong>Energy levels</strong> — Atomic spectra follow prime-indexed patterns</li>
+                <li><strong>Particle masses</strong> — Prime ratios in the mass hierarchy</li>
+                <li><strong>Spacetime voxels</strong> — 8-fold symmetry with prime addressing</li>
+                <li><strong>Information-Limited Gravity</strong> — Prime channels in the gravitational kernel</li>
+                <li><strong>DNA codons</strong> — 64 = 2⁶, with prime-indexed reading frames</li>
+            </ul>
+        </section>
+
+        <section class="demo-section">
+            <h2>The Prime Prediction Engine</h2>
+            <p>Using RS principles, we can predict where primes cluster and gap:</p>
+            <div class="formula-box">
+                <code>Gap after prime p ≈ ln(p) × φ-correction</code><br>
+                <code>Twin prime density ∝ 1/ln²(n) × ledger-balance</code><br>
+                <code>Prime spirals → 6n±1 rule from 8-beat cycle</code>
+            </div>
+        </section>
+
+        <section class="conclusion">
+            <h2>The Prime Truth</h2>
+            <p>Primes aren't just mathematical curiosities—they're the fundamental structure of recognition itself. Every time you factor a number, you're literally decomposing a complex recognition into its atomic components. Every prime is a moment where reality cannot be reduced further, where the universe must acknowledge something genuinely new.</p>
+            
+            <div class="rs-connection" style="background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(107, 70, 193, 0.2) 100%); border-color: var(--prime-gold);">
+                <h3>✨ The Ultimate Recognition</h3>
+                <p>In Recognition Science, the Riemann Hypothesis isn't just about zeros on a critical line—it's about the deepest symmetry of reality. When we prove RH through RS, we're not just solving a math problem. We're revealing that consciousness, physics, and mathematics are one unified system, with primes as the irreducible witnesses to every act of recognition since the beginning of time.</p>
+                
+                <p style="text-align: center; font-size: 1.2rem; margin-top: 2rem; color: var(--prime-gold);">
+                    <strong>Every prime is a universe recognizing itself for the first time.</strong>
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="/assets/js/main.js"></script>
+    <script>
+        // Prime checking function
+        function isPrime(n) {
+            if (n < 2) return false;
+            if (n === 2) return true;
+            if (n % 2 === 0) return false;
+            for (let i = 3; i * i <= n; i += 2) {
+                if (n % i === 0) return false;
+            }
+            return true;
+        }
+
+        // Check for twin primes
+        function isTwinPrime(n) {
+            return isPrime(n) && (isPrime(n - 2) || isPrime(n + 2));
+        }
+
+        // Prime factorization
+        function factorize(n) {
+            const factors = [];
+            let d = 2;
+            while (d * d <= n) {
+                while (n % d === 0) {
+                    factors.push(d);
+                    n /= d;
+                }
+                d++;
+            }
+            if (n > 1) factors.push(n);
+            return factors;
+        }
+
+        // Initialize prime grid
+        function initPrimeGrid() {
+            const grid = document.getElementById('primeGrid');
+            for (let i = 1; i <= 200; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'prime-cell';
+                cell.textContent = i;
+                
+                if (i === 1) {
+                    cell.classList.add('unity');
+                    cell.style.background = 'rgba(255, 255, 255, 0.1)';
+                } else if (isPrime(i)) {
+                    cell.classList.add('prime');
+                    if (isTwinPrime(i)) {
+                        cell.classList.add('twin-prime');
+                    }
+                    // Check for Mersenne primes
+                    if ([3, 7, 31, 127].includes(i)) {
+                        cell.classList.add('mersenne-prime');
+                    }
+                } else {
+                    cell.classList.add('composite');
+                }
+                
+                cell.addEventListener('click', () => showFactorization(i));
+                grid.appendChild(cell);
+            }
+        }
+
+        // Show factorization
+        function showFactorization(n) {
+            const result = document.getElementById('factorResult');
+            if (n === 1) {
+                result.innerHTML = '<span style="color: #64748B;">1 is the unity - neither prime nor composite</span>';
+            } else if (isPrime(n)) {
+                result.innerHTML = `<span class="factor-prime">${n} is PRIME!</span>`;
+            } else {
+                const factors = factorize(n);
+                const factorCounts = {};
+                factors.forEach(f => {
+                    factorCounts[f] = (factorCounts[f] || 0) + 1;
+                });
+                
+                let html = `${n} = `;
+                const parts = [];
+                for (let prime in factorCounts) {
+                    if (factorCounts[prime] === 1) {
+                        parts.push(`<span class="factor-prime">${prime}</span>`);
+                    } else {
+                        parts.push(`<span class="factor-prime">${prime}<sup>${factorCounts[prime]}</sup></span>`);
+                    }
+                }
+                html += parts.join(' × ');
+                result.innerHTML = html;
+            }
+        }
+
+        // Factorization input handler
+        document.addEventListener('DOMContentLoaded', () => {
+            const input = document.getElementById('factorInput');
+            if (input) {
+                input.addEventListener('input', (e) => {
+                    const n = parseInt(e.target.value);
+                    if (n >= 2 && n <= 10000) {
+                        showFactorization(n);
+                    }
+                });
+            }
+            
+            // Initialize grid
+            initPrimeGrid();
+            
+            // Draw Ulam spiral
+            drawUlamSpiral();
+            
+            // Initialize wave animation
+            initWaveAnimation();
+        });
+
+        // Draw Ulam spiral
+        function drawUlamSpiral() {
+            const canvas = document.getElementById('spiralCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const size = 600;
+            canvas.width = size;
+            canvas.height = size;
+            
+            const center = size / 2;
+            const scale = 3;
+            
+            // Clear canvas
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+            ctx.fillRect(0, 0, size, size);
+            
+            let x = 0, y = 0;
+            let dx = 1, dy = 0;
+            let steps = 1;
+            let stepCount = 0;
+            let turnCount = 0;
+            
+            for (let i = 1; i <= 10000; i++) {
+                const px = center + x * scale;
+                const py = center + y * scale;
+                
+                if (isPrime(i)) {
+                    ctx.fillStyle = isTwinPrime(i) ? '#2563EB' : '#FFD700';
+                    ctx.fillRect(px - 1, py - 1, 2, 2);
+                }
+                
+                x += dx;
+                y += dy;
+                stepCount++;
+                
+                if (stepCount === steps) {
+                    stepCount = 0;
+                    turnCount++;
+                    
+                    // Turn left
+                    const temp = dx;
+                    dx = -dy;
+                    dy = temp;
+                    
+                    if (turnCount === 2) {
+                        turnCount = 0;
+                        steps++;
+                    }
+                }
+            }
+        }
+
+        // Wave animation
+        let waveAnimationId;
+        let harmonics = [2];
+        
+        function initWaveAnimation() {
+            const canvas = document.getElementById('waveCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = 200;
+            
+            startWave();
+        }
+
+        function startWave() {
+            const canvas = document.getElementById('waveCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            let time = 0;
+            
+            function animate() {
+                ctx.fillStyle = 'rgba(15, 23, 42, 0.1)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.strokeStyle = '#FFD700';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                
+                for (let x = 0; x < canvas.width; x++) {
+                    let y = canvas.height / 2;
+                    
+                    harmonics.forEach(prime => {
+                        y += 30 * Math.sin((x / 50) * prime + time) / Math.sqrt(prime);
+                    });
+                    
+                    if (x === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                }
+                
+                ctx.stroke();
+                time += 0.05;
+                
+                waveAnimationId = requestAnimationFrame(animate);
+            }
+            
+            if (waveAnimationId) cancelAnimationFrame(waveAnimationId);
+            animate();
+        }
+
+        function addPrimeHarmonic() {
+            const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31];
+            const nextPrime = primes.find(p => !harmonics.includes(p));
+            if (nextPrime && harmonics.length < 5) {
+                harmonics.push(nextPrime);
+            }
+        }
+
+        function resetWave() {
+            harmonics = [2];
+            startWave();
+        }
+
+        // Ledger visualization
+        let ledgerTransactions = [];
+        
+        function addPrimeTransaction() {
+            const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29];
+            const prime = primes[Math.floor(Math.random() * primes.length)];
+            ledgerTransactions.push({ value: prime, type: 'prime' });
+            updateLedgerDisplay();
+        }
+
+        function addCompositeTransaction() {
+            const composites = [4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 20];
+            const composite = composites[Math.floor(Math.random() * composites.length)];
+            ledgerTransactions.push({ value: composite, type: 'composite' });
+            updateLedgerDisplay();
+        }
+
+        function balanceLedger() {
+            // Remove composite transactions (they cancel out)
+            ledgerTransactions = ledgerTransactions.filter(t => t.type === 'prime');
+            updateLedgerDisplay();
+        }
+
+        function updateLedgerDisplay() {
+            const debitSide = document.getElementById('debitSide');
+            const creditSide = document.getElementById('creditSide');
+            
+            if (!debitSide || !creditSide) return;
+            
+            debitSide.innerHTML = '';
+            creditSide.innerHTML = '';
+            
+            ledgerTransactions.forEach((t, i) => {
+                const entry = document.createElement('div');
+                entry.className = 'ledger-entry';
+                entry.style.color = t.type === 'prime' ? '#FFD700' : '#64748B';
+                
+                if (t.type === 'composite') {
+                    const factors = factorize(t.value);
+                    entry.innerHTML = `<span>${t.value} = ${factors.join('×')}</span><span>${t.value}</span>`;
+                } else {
+                    entry.innerHTML = `<span>${t.value} (prime)</span><span>${t.value}</span>`;
+                }
+                
+                if (i % 2 === 0) {
+                    debitSide.appendChild(entry);
+                } else {
+                    creditSide.appendChild(entry.cloneNode(true));
+                }
+            });
+        }
+    </script>
+</body>
+</html>
