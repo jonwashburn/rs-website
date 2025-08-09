@@ -91,22 +91,63 @@
 
     <main class="content-page">
         <!-- Hero Section 1: Reality, measured -->
-        <section class="hero-section" style="padding: 2rem 0 5rem; background: linear-gradient(135deg, #5a67d8 0%, #9f7aea 100%); position: relative; overflow: hidden;">
-            <!-- Subtle background pattern for depth -->
-            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.05; background-image: radial-gradient(circle at 1px 1px, white 1px, transparent 1px); background-size: 40px 40px;"></div>
-            
-            <div class="container text-center" style="max-width: 1080px; position: relative;">
-                <h1 style="font-size: 6rem; font-weight: 800; margin-bottom: 1.5rem; line-height: 1.05; letter-spacing: -0.04em; color: #ffffff; text-shadow: 0 4px 8px rgba(0,0,0,0.15);">
+        <section class="hero-section" style="min-height: 100vh; position: relative; background: #ffffff; overflow: hidden;">
+            <!-- Title above everything -->
+            <div style="position: absolute; top: 2rem; left: 50%; transform: translateX(-50%); width: 90vw; z-index: 10;">
+                <h1 style="font-size: clamp(4rem, 15vw, 12rem); font-weight: 900; line-height: 0.9; letter-spacing: -0.05em; color: #1d1d1f; text-align: center; margin: 0;">
                     Reality, measured.
                 </h1>
-                <p class="lead" style="font-size: 2rem; color: rgba(255,255,255,0.98); max-width: 860px; margin: 0 auto 2.5rem; line-height: 1.35; font-weight: 500; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            </div>
+            
+            <!-- Visual background element -->
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%; height: 60%; display: flex; align-items: center; justify-content: center;">
+                <!-- Animated mesh/grid visualization -->
+                <div style="width: 80%; height: 100%; position: relative;">
+                    <!-- Base gradient -->
+                    <div style="position: absolute; inset: 0; background: linear-gradient(135deg, #667eea 0%, #9f7aea 50%, #f093fb 100%); opacity: 0.3; filter: blur(100px);"></div>
+                    
+                    <!-- Grid pattern -->
+                    <svg style="position: absolute; inset: 0; width: 100%; height: 100%;" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(103,126,234,0.2)" stroke-width="1"/>
+                            </pattern>
+                            <linearGradient id="fadeGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:white;stop-opacity:0" />
+                                <stop offset="20%" style="stop-color:white;stop-opacity:0.1" />
+                                <stop offset="50%" style="stop-color:white;stop-opacity:0.2" />
+                                <stop offset="80%" style="stop-color:white;stop-opacity:0.1" />
+                                <stop offset="100%" style="stop-color:white;stop-opacity:0" />
+                            </linearGradient>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#grid)" />
+                        <rect width="100%" height="100%" fill="url(#fadeGradient)" />
+                    </svg>
+                    
+                    <!-- Floating orbs -->
+                    <div style="position: absolute; top: 20%; left: 15%; width: 200px; height: 200px; background: radial-gradient(circle, rgba(102,126,234,0.4) 0%, transparent 70%); border-radius: 50%; filter: blur(40px); animation: float 6s ease-in-out infinite;"></div>
+                    <div style="position: absolute; bottom: 30%; right: 20%; width: 150px; height: 150px; background: radial-gradient(circle, rgba(159,122,234,0.4) 0%, transparent 70%); border-radius: 50%; filter: blur(30px); animation: float 8s ease-in-out infinite reverse;"></div>
+                    <div style="position: absolute; top: 50%; left: 60%; width: 180px; height: 180px; background: radial-gradient(circle, rgba(240,147,251,0.3) 0%, transparent 70%); border-radius: 50%; filter: blur(35px); animation: float 7s ease-in-out infinite;"></div>
+                </div>
+            </div>
+            
+            <!-- Content below the visual -->
+            <div style="position: absolute; bottom: 3rem; left: 50%; transform: translateX(-50%); width: 90%; max-width: 1080px; text-align: center; z-index: 10;">
+                <p class="lead" style="font-size: 1.75rem; color: #6e6e73; max-width: 860px; margin: 0 auto 2rem; line-height: 1.4; font-weight: 400;">
                     You can't prove a theory, but you can read an instrument. We turned the whole of science into one instrument. When independent results agree without tuning, that isn't opinion—it's a reading of how the world is built.
                 </p>
-                <div style="font-size: 1.25rem; color: rgba(255,255,255,0.75); max-width: 720px; margin: 0 auto; line-height: 1.65; font-weight: 300;">
+                <div style="font-size: 1.125rem; color: #86868b; max-width: 720px; margin: 0 auto; line-height: 1.65;">
                     <p>Every measurement in physics—from the fine structure constant to dark matter density—emerges from the same underlying pattern. Not because we designed it that way, but because that's what the instrument shows.</p>
                 </div>
             </div>
         </section>
+        
+        <style>
+            @keyframes float {
+                0%, 100% { transform: translateY(0px); }
+                50% { transform: translateY(-20px); }
+            }
+        </style>
 
         <!-- Hero Section 2: The most precise thing (white background) -->
         <section class="hero-section" style="padding: 5rem 0; background: #ffffff;">
