@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LNAL: Light-Native Assembly Language | Recognition Science</title>
     <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/lnal-demo.css">
     <script>
         MathJax = {
           tex: {
@@ -127,6 +128,54 @@ STILL           # Meditation state (zero activity)
 ECHO R,phase    # Memory consolidation
 FLIP σ          # Global parity swap (auto at tick 512)
 CYCLE           # Breath barrier (1024 ticks)</code></pre>
+        </section>
+
+        <!-- Interactive PoC: 8-beat instruction runner -->
+        <section>
+            <div class="container text-block">
+                <h2>Try it: the 8‑beat instruction runner</h2>
+                <p>Step through the eight instructions. Watch registers change, see the φ‑scaling and the cost J(x) = ½(x + 1/x). This is a toy model—just enough to feel how the cycle behaves.</p>
+                <div id="lnal-demo" class="lnal-demo">
+                    <div class="demo-controls">
+                        <button id="demo-prev" type="button">◀︎ Prev</button>
+                        <button id="demo-step" type="button">Step ▶︎</button>
+                        <button id="demo-reset" type="button">Reset</button>
+                    </div>
+                    <div class="demo-status">
+                        <div><strong>Tick</strong>: <span id="demo-tick">0</span> / 8</div>
+                        <div><strong>Instruction</strong>: <span id="demo-instr">—</span></div>
+                    </div>
+                    <div class="demo-grid">
+                        <div class="panel">
+                            <h4>Registers</h4>
+                            <div class="kv"><span>νφ</span><span id="reg-nu">1.000</span></div>
+                            <div class="kv"><span>ℓ</span><span id="reg-ell">0</span></div>
+                            <div class="kv"><span>σ</span><span id="reg-sigma">+1</span></div>
+                            <div class="kv"><span>τ</span><span id="reg-tau">0</span></div>
+                            <div class="kv"><span>k⟂</span><span id="reg-kp">0</span></div>
+                            <div class="kv"><span>ϕe</span><span id="reg-phi">0</span></div>
+                        </div>
+                        <div class="panel">
+                            <h4>Cost</h4>
+                            <div class="kv"><span>x</span><span id="cost-x">1.000</span></div>
+                            <div class="kv"><span>J(x)</span><span id="cost-j">0.000</span></div>
+                        </div>
+                        <div class="panel">
+                            <h4>Cycle</h4>
+                            <ol class="cycle-list" id="cycle-list">
+                                <li>LISTEN</li>
+                                <li>LOCK</li>
+                                <li>FOLD</li>
+                                <li>GIVE</li>
+                                <li>REGIVE</li>
+                                <li>UNFOLD</li>
+                                <li>BALANCE</li>
+                                <li>ECHO</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <section>
@@ -480,5 +529,6 @@ CYCLE           # Breath barrier (1024 ticks)</code></pre>
 
     <div id="footer-placeholder"></div>
     <script src="/assets/js/main.js"></script>
+    <script type="module" src="/assets/js/lnal-demo.js"></script>
 </body>
 </html> 
