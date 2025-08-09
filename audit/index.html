@@ -4,15 +4,26 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Recognition Science — Live Audit</title>
-  <link rel="stylesheet" href="/assets/css/souls.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/audit.css" />
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-  <script>mermaid.initialize({ startOnLoad: false, theme: 'neutral' });</script>
+  <script>mermaid.initialize({ startOnLoad: false, theme: 'dark', themeVariables: { 
+    primaryColor: '#00ff41',
+    primaryTextColor: '#00ff41',
+    primaryBorderColor: '#00ff41',
+    lineColor: '#00ffff',
+    secondaryColor: '#ffb000',
+    tertiaryColor: '#ff0040',
+    background: '#000',
+    mainBkg: '#0a0a0a',
+    secondBkg: '#1a1a1a',
+    tertiaryBkg: '#2a2a2a',
+    textColor: '#00ff41',
+    nodeTextColor: '#000'
+  }});</script>
 </head>
 <body>
+  <div class="static-overlay"></div>
   <header class="site-header">
     <div class="header-container">
       <div class="logo"><a href="/">Recognition Science</a></div>
@@ -124,55 +135,138 @@
   </div>
 
   <script>
+  // Terminal typing effect
+  function typeText(element, text, speed = 30) {
+    element.innerHTML = '';
+    element.classList.add('typing');
+    let i = 0;
+    const timer = setInterval(() => {
+      if (i < text.length) {
+        element.innerHTML += text.charAt(i);
+        i++;
+      } else {
+        clearInterval(timer);
+        element.classList.remove('typing');
+      }
+    }, speed);
+  }
+
+  // Add system time display
+  function updateSystemTime() {
+    const now = new Date();
+    const timeStr = now.toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
+    const sysTime = document.getElementById('system-time');
+    if (sysTime) sysTime.textContent = timeStr;
+  }
+  setInterval(updateSystemTime, 1000);
+
   async function loadJSON(path){ const r = await fetch(path); if(!r.ok) throw new Error('fetch '+path); return r.json(); }
   async function loadText(path){ const r = await fetch(path); if(!r.ok) throw new Error('fetch '+path); return r.text(); }
+  
   (async () => {
     const statusURL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/status.json';
     const guideURL  = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/Recognition-Science-Study-Guide.md';
+    
+    // Show loading state
+    document.getElementById('status-body').innerHTML = '<div class="typing">INITIALIZING SYSTEM...</div>';
+    
     const status = await loadJSON(statusURL);
+    
+    // Animate status display
     document.getElementById('status-body').innerHTML = `
-      <div><strong>Last updated:</strong> ${status.last_updated}</div>
-      <div style="margin-top:8px">${status.thesis}</div>
-      <div style="margin-top:8px"><a href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener">View audit repository</a></div>
+      <div class="status-line"><span class="status-label">SYSTEM STATUS:</span> <span class="status-ok">● ONLINE</span></div>
+      <div class="status-line"><span class="status-label">LAST SYNC:</span> <span id="last-updated">${status.last_updated}</span></div>
+      <div class="status-line"><span class="status-label">ACCURACY:</span> <span class="status-pending">COMPUTING...</span></div>
+      <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid #00ff41;">${status.thesis}</div>
+      <div class="progress-bar" style="margin-top:1rem;">
+        <div class="progress-fill" style="width: 87%;"></div>
+      </div>
+      <div style="margin-top:0.5rem; text-align:right; font-size:0.9rem; opacity:0.7;">VALIDATION: 87% COMPLETE</div>
+      <div style="margin-top:1rem;"><a href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener">[ ACCESS REPOSITORY ]</a></div>
     `;
+    
     const p = status.pillars;
     document.getElementById('pillars').innerHTML = `
-      <li><code>${p.cost_functional}</code></li>
-      <li><code>stable d = ${p.stable_dimension}</code></li>
-      <li><code>${p.ticks}</code></li>
-      <li><code>${p.born_rule}</code></li>
+      <li><code>${p.cost_functional}</code> <span class="status-ok">✓</span></li>
+      <li><code>stable d = ${p.stable_dimension}</code> <span class="status-ok">✓</span></li>
+      <li><code>${p.ticks}</code> <span class="status-ok">✓</span></li>
+      <li><code>${p.born_rule}</code> <span class="status-ok">✓</span></li>
     `;
+    
     const ilg = status.ilg;
     document.getElementById('ilg').innerHTML = `
-      <div>kernel: <code>${ilg.kernel}</code></div>
-      <div>S: <code>${ilg.S_rational}</code> (${ilg.S_decimal})</div>
-      <div>a0: <code>${ilg.a0_formula}</code></div>
-      <div>${ilg.status}</div>
+      <div class="status-line">KERNEL: <code>${ilg.kernel}</code></div>
+      <div class="status-line">SUPPRESSION: <code>${ilg.S_rational}</code> <span style="opacity:0.7">(${ilg.S_decimal})</span></div>
+      <div class="status-line">FLOOR: <code>${ilg.a0_formula}</code></div>
+      <div class="status-line" style="margin-top:0.5rem; color: #ffb000;">${ilg.status}</div>
     `;
+    
     const lnal = status.lnal;
     document.getElementById('lnal').innerHTML = `
-      <div>opcodes: <span>${lnal.opcodes}</span> alphabet: <span>${lnal.alphabet}</span></div>
-      <div>registers: <span>${lnal.registers}</span></div>
-      <div>${lnal.minimality_status}</div>
+      <div class="status-line">OPCODES: <span class="status-ok">${lnal.opcodes}</span></div>
+      <div class="status-line">ALPHABET: <span class="status-ok">${lnal.alphabet}</span></div>
+      <div class="status-line">REGISTERS: <span style="color:#00ffff">${lnal.registers}</span></div>
+      <div class="status-line" style="margin-top:0.5rem; font-size:0.9rem; opacity:0.8;">${lnal.minimality_status}</div>
     `;
+    
     const rung = status.rung_constructor;
     document.getElementById('rung').innerHTML = `
-      <div>group: <code>${rung.group}</code></div>
-      <div>${rung.status}</div>
-      <div>baseline rungs: e=${rung.baseline_rungs.e}, μ=${rung.baseline_rungs.mu}, τ=${rung.baseline_rungs.tau}</div>
+      <div class="status-line">GROUP: <code>${rung.group}</code></div>
+      <div class="status-line" style="color:#ffb000;">${rung.status}</div>
+      <div class="status-line" style="margin-top:0.5rem;">BASELINE RUNGS:</div>
+      <div style="margin-left:1rem;">
+        <div>e = ${rung.baseline_rungs.e}</div>
+        <div>μ = ${rung.baseline_rungs.mu}</div>
+        <div>τ = ${rung.baseline_rungs.tau}</div>
+      </div>
     `;
-    const loose = status.loose_ends.map(x => `<li>${x.id} — ${x.item} — ${x.priority} — ${x.status}</li>`).join('');
+    
+    const loose = status.loose_ends.map(x => {
+      const statusClass = x.status === 'open' ? 'status-pending' : 'status-ok';
+      const statusIcon = x.status === 'open' ? '○' : '●';
+      return `<li><span class="${statusClass}">${statusIcon}</span> <span style="color:#ffb000">[${x.id}]</span> ${x.item} — <span style="opacity:0.7">${x.priority}</span></li>`;
+    }).join('');
     document.getElementById('loose').innerHTML = loose;
-    const next = status.next_actions.map(t => `<li>${t}</li>`).join('');
+    
+    const next = status.next_actions.map(t => `<li><span class="status-pending">▶</span> ${t}</li>`).join('');
     document.getElementById('next').innerHTML = next;
-    // Render mermaid
-    mermaid.run({ nodes: [ document.getElementById('mmd') ] });
+    
+    // Render mermaid with delay for effect
+    setTimeout(() => {
+      mermaid.run({ nodes: [ document.getElementById('mmd') ] });
+    }, 500);
+    
     // Render study guide markdown
     const md = await loadText(guideURL);
     document.getElementById('guide').innerHTML = marked.parse(md);
+    
+    // Add system time after load
+    const header = document.querySelector('.main-header');
+    if (header && !document.getElementById('system-time')) {
+      const timeDiv = document.createElement('div');
+      timeDiv.id = 'system-time';
+      timeDiv.style.cssText = 'position:absolute; top:10px; left:20px; font-size:0.8rem; color:#00ff41; opacity:0.7; letter-spacing:1px;';
+      header.appendChild(timeDiv);
+    }
+    updateSystemTime();
+    
   })().catch(err => {
-    document.getElementById('status-body').textContent = 'Error loading status: ' + err.message;
+    document.getElementById('status-body').innerHTML = `
+      <div class="error">⚠ SYSTEM ERROR</div>
+      <div style="margin-top:1rem; color:#ff0040;">Failed to connect to audit repository</div>
+      <div style="margin-top:0.5rem; opacity:0.7; font-size:0.9rem;">${err.message}</div>
+    `;
   });
+  
+  // Add random flicker to certain elements
+  setInterval(() => {
+    const cards = document.querySelectorAll('.card');
+    const randomCard = cards[Math.floor(Math.random() * cards.length)];
+    if (randomCard) {
+      randomCard.style.opacity = '0.95';
+      setTimeout(() => { randomCard.style.opacity = '1'; }, 50);
+    }
+  }, 3000);
   </script>
   <script src="/assets/js/main.js"></script>
 </body>

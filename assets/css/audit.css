@@ -1,0 +1,552 @@
+/* 1980s Nuclear Control Room / Chemistry Lab Aesthetic */
+
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap');
+
+:root {
+  --crt-green: #00ff41;
+  --crt-amber: #ffb000;
+  --crt-red: #ff0040;
+  --crt-cyan: #00ffff;
+  --dark-green: #003d0f;
+  --panel-gray: #2a2a2a;
+  --metal-gray: #3a3a3a;
+  --console-bg: #0a0a0a;
+  --grid-lines: #00ff4133;
+  --warning-yellow: #ffff00;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #000;
+  color: var(--crt-green);
+  font-family: 'Share Tech Mono', monospace;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  animation: flicker 0.15s infinite;
+}
+
+/* CRT Monitor Effect */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 255, 65, 0.03),
+    rgba(0, 255, 65, 0.03) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* Scan line effect */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 255, 65, 0.01) 50%,
+    transparent 100%
+  );
+  animation: scan 8s linear infinite;
+  pointer-events: none;
+  z-index: 1001;
+}
+
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes flicker {
+  0% { opacity: 0.97; }
+  50% { opacity: 1; }
+  100% { opacity: 0.98; }
+}
+
+/* Header */
+.site-header {
+  background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+  border-bottom: 3px solid var(--crt-amber);
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 20px rgba(255, 176, 0, 0.3);
+}
+
+.header-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.logo a {
+  font-family: 'Orbitron', monospace;
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--crt-amber);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  text-shadow: 
+    0 0 10px rgba(255, 176, 0, 0.8),
+    0 0 20px rgba(255, 176, 0, 0.4);
+  transition: all 0.3s;
+}
+
+.logo a:hover {
+  color: var(--crt-cyan);
+  text-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.8),
+    0 0 20px rgba(0, 255, 255, 0.4);
+}
+
+/* Main Container */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: radial-gradient(ellipse at center, #0a0a0a 0%, #000 100%);
+}
+
+/* Main Header */
+.main-header {
+  background: var(--panel-gray);
+  border: 2px solid var(--crt-amber);
+  border-radius: 0;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.main-header::before {
+  content: "SYSTEM MONITOR";
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 0.8rem;
+  color: var(--crt-amber);
+  opacity: 0.5;
+  letter-spacing: 2px;
+}
+
+.main-header h1 {
+  font-family: 'Orbitron', monospace;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--crt-cyan);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  text-shadow: 
+    0 0 20px rgba(0, 255, 255, 0.5),
+    0 0 40px rgba(0, 255, 255, 0.3);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+.header-text {
+  color: var(--crt-green);
+  font-size: 1rem;
+  line-height: 1.6;
+  text-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
+}
+
+/* Sections */
+.section {
+  background: var(--console-bg);
+  border: 2px solid var(--crt-green);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  position: relative;
+  box-shadow: 
+    inset 0 0 20px rgba(0, 255, 65, 0.1),
+    0 0 20px rgba(0, 255, 65, 0.2);
+}
+
+.section::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, var(--crt-green), transparent, var(--crt-green));
+  opacity: 0;
+  animation: border-pulse 3s linear infinite;
+  z-index: -1;
+}
+
+@keyframes border-pulse {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 0.5; }
+}
+
+.section-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--crt-amber);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--crt-amber);
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(255, 176, 0, 0.5);
+}
+
+/* Status Display */
+#status-body {
+  background: linear-gradient(135deg, #001a00 0%, #000 100%);
+  padding: 1rem;
+  border: 1px solid var(--dark-green);
+  margin-bottom: 1rem;
+  font-family: 'Share Tech Mono', monospace;
+  box-shadow: inset 0 0 10px rgba(0, 255, 65, 0.1);
+}
+
+#status-body strong {
+  color: var(--crt-amber);
+  text-shadow: 0 0 5px rgba(255, 176, 0, 0.5);
+}
+
+#status-body a {
+  color: var(--crt-cyan);
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+#status-body a:hover {
+  color: var(--warning-yellow);
+  text-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+}
+
+/* Grid Layout */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* Cards (Control Panels) */
+.card {
+  background: var(--metal-gray);
+  border: 2px solid var(--crt-green);
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    inset 0 0 30px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(0, 255, 65, 0.2);
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    var(--crt-green) 50%, 
+    transparent 100%);
+  animation: scan-horizontal 2s linear infinite;
+}
+
+@keyframes scan-horizontal {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.card-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--crt-cyan);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+/* LED Indicators */
+.card::after {
+  content: "●";
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  color: var(--crt-green);
+  font-size: 1rem;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0.3; }
+}
+
+/* Code blocks */
+code {
+  background: #000;
+  color: var(--crt-amber);
+  padding: 2px 6px;
+  border: 1px solid var(--crt-amber);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.9rem;
+  text-shadow: 0 0 5px rgba(255, 176, 0, 0.3);
+}
+
+/* Lists */
+ul, ol {
+  margin-left: 1.5rem;
+  color: var(--crt-green);
+}
+
+li {
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 3px rgba(0, 255, 65, 0.3);
+}
+
+/* Quote boxes */
+.quote {
+  background: linear-gradient(135deg, #1a0f00 0%, #000 100%);
+  border-left: 4px solid var(--crt-amber);
+  padding: 1rem;
+  margin: 1rem 0;
+  color: var(--crt-amber);
+  font-style: italic;
+  box-shadow: inset 0 0 10px rgba(255, 176, 0, 0.1);
+}
+
+.quote strong {
+  color: var(--warning-yellow);
+  font-style: normal;
+}
+
+/* Centered text */
+.centered-text {
+  text-align: center;
+  color: var(--crt-green);
+  opacity: 0.8;
+  font-size: 0.9rem;
+  text-shadow: 0 0 5px rgba(0, 255, 65, 0.3);
+}
+
+/* Mermaid diagram container */
+.hero-image-section {
+  background: #000;
+  border: 2px solid var(--crt-cyan);
+  padding: 2rem;
+  margin: 1rem 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    inset 0 0 50px rgba(0, 255, 255, 0.1),
+    0 0 30px rgba(0, 255, 255, 0.2);
+}
+
+.hero-image-section::before {
+  content: "SYSTEM ARCHITECTURE";
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  font-size: 0.8rem;
+  color: var(--crt-cyan);
+  opacity: 0.5;
+  letter-spacing: 2px;
+}
+
+/* Mermaid diagram styling */
+.mermaid {
+  filter: hue-rotate(120deg) saturate(1.5) brightness(1.2);
+}
+
+/* Footer */
+.footer {
+  background: var(--panel-gray);
+  border-top: 3px solid var(--crt-amber);
+  padding: 2rem;
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+.social-links a {
+  color: var(--crt-cyan);
+  text-decoration: none;
+  font-family: 'Orbitron', monospace;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--crt-cyan);
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.social-links a::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--crt-cyan);
+  transition: left 0.3s;
+  z-index: -1;
+}
+
+.social-links a:hover {
+  color: #000;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+}
+
+.social-links a:hover::before {
+  left: 0;
+}
+
+.footer p {
+  color: var(--crt-amber);
+  font-family: 'Orbitron', monospace;
+  font-size: 0.9rem;
+  letter-spacing: 3px;
+  text-shadow: 0 0 10px rgba(255, 176, 0, 0.3);
+}
+
+/* Warning/Error states */
+.warning {
+  color: var(--warning-yellow) !important;
+  text-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+  animation: warning-pulse 0.5s infinite;
+}
+
+@keyframes warning-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.error {
+  color: var(--crt-red) !important;
+  text-shadow: 0 0 10px rgba(255, 0, 64, 0.5);
+  animation: error-flash 0.3s infinite;
+}
+
+@keyframes error-flash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* Status indicators */
+.status-ok { 
+  color: var(--crt-green); 
+  text-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
+}
+.status-pending { 
+  color: var(--crt-amber);
+  text-shadow: 0 0 5px rgba(255, 176, 0, 0.5);
+}
+.status-error { 
+  color: var(--crt-red);
+  text-shadow: 0 0 5px rgba(255, 0, 64, 0.5);
+}
+
+.status-line {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.status-label {
+  color: var(--crt-cyan);
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+/* Progress bars */
+.progress-bar {
+  width: 100%;
+  height: 20px;
+  background: #000;
+  border: 1px solid var(--crt-green);
+  position: relative;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, 
+    var(--crt-green) 0%, 
+    var(--crt-cyan) 100%);
+  transition: width 0.5s ease;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .container {
+    padding: 1rem;
+  }
+}
+
+/* Additional monitor effects */
+@keyframes static-noise {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 0.02; }
+}
+
+.static-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><filter id="noise"><feTurbulence baseFrequency="0.9"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.02"/></svg>');
+  pointer-events: none;
+  z-index: 999;
+  animation: static-noise 0.2s infinite;
+}
+
+/* Blinking cursor effect for dynamic content */
+.typing::after {
+  content: "_";
+  animation: cursor-blink 1s infinite;
+}
+
+@keyframes cursor-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
