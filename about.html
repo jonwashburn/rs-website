@@ -6,11 +6,11 @@
   <title>About · Jonathan Washburn /// Recognition Science</title>
   <link rel="stylesheet" href="/assets/css/main.css" />
 </head>
-<body>
+<body class="about-page">
   <div id="header-placeholder"></div>
 
   <main class="content-page">
-    <section class="hero-section text-center">
+    <section class="hero-section text-center" style="padding-bottom: 1rem;">
       <div class="container">
         <h1>About</h1>
         <p class="subtitle">Jonathan Washburn — discoverer of Recognition Science</p>
@@ -42,12 +42,12 @@
           trilogy The Crisis · Modern Zombies · The Rapture. Creator of on‑chain Ledger Souls and author of “The Theory of Us.”
         </p>
         <div style="display:flex; gap:1rem; flex-wrap:wrap; align-items:flex-start; margin-top:0.5rem;">
-          <figure style="max-width:260px;">
-            <img src="/assets/img/jonathan-profile.jpg" onerror="this.onerror=null;this.src='/assets/img/jonathan-profile.svg';" alt="Profile photograph" class="bio-photo" loading="lazy" style="width:100%; border-radius:10px;"/>
+          <figure style="max-width:260px; margin:0;">
+            <img src="/assets/img/jonathan-profile.svg" data-jpg="/assets/img/jonathan-profile.jpg" alt="Profile photograph" class="bio-photo" loading="lazy" decoding="async" style="width:100%; border-radius:10px; aspect-ratio: 4/5; object-fit: cover; background:#0b1220;"/>
             <figcaption style="font-size:0.9rem; color:#8aa;">Informal profile</figcaption>
           </figure>
-          <figure style="max-width:420px;">
-            <img src="/assets/img/jonathan-studio.jpg" onerror="this.onerror=null;this.src='/assets/img/jonathan-studio.svg';" alt="Studio photograph with artwork" class="bio-photo" loading="lazy" style="width:100%; border-radius:10px;"/>
+          <figure style="max-width:420px; margin:0;">
+            <img src="/assets/img/jonathan-studio.svg" data-jpg="/assets/img/jonathan-studio.jpg" alt="Studio photograph with artwork" class="bio-photo" loading="lazy" decoding="async" style="width:100%; border-radius:10px; aspect-ratio: 7/5; object-fit: cover; background:#0b1220;"/>
             <figcaption style="font-size:0.9rem; color:#8aa;">Studio</figcaption>
           </figure>
         </div>
@@ -69,6 +69,42 @@
     </section>
 
     <section>
+      <div class="container">
+        <div class="paper-link-section" style="margin-top: 1.5rem;">
+          <h3>Read: The Theory of Us</h3>
+          <p>A short, accessible narrative that connects the art to the proofs and what it means for all of us.</p>
+          <a class="button-link" href="/us/theory.html">Open “The Theory of Us”</a>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container text-block">
+        <h2>Current work</h2>
+        <div class="component-card">
+          <ul>
+            <li>Formalizing the eight foundational theorems for machine‑checked proofs.</li>
+            <li>Publishing replication kits for the verified predictions and cross‑domain checks.</li>
+            <li>Evolving LNAL demos that show the eight‑beat cycle and φ‑timing in action.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container text-block">
+        <h2>Ways to help</h2>
+        <div class="component-card">
+          <ul>
+            <li>Peer‑review: audit derivations, propose formal lemmas, or port to Lean.</li>
+            <li>Engineering: build interactive demos (T7, T4, T8) and reproducibility hubs.</li>
+            <li>Community: join the discussion and propose testable predictions. <a href="/us/community.html">Community →</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
       <div class="container text-block">
         <h2>Selected writing</h2>
         <ul>
@@ -81,6 +117,32 @@
   </main>
 
   <div id="footer-placeholder"></div>
+  <script>
+    // About-page spacing tweaks
+    (function(){
+      try {
+        document.documentElement.style.setProperty('--about-section-pad','2rem');
+        var style = document.createElement('style');
+        style.textContent = `
+          body.about-page section { padding: 2rem 0; }
+          @media (max-width:768px){ body.about-page section { padding: 1.5rem 0; } }
+          body.about-page h2 { margin-top: 1.5rem; }
+        `;
+        document.head.appendChild(style);
+      } catch(e) {}
+    })();
+
+    // Proactive photo upgrade: start with SVG, swap to JPG if present
+    document.addEventListener('DOMContentLoaded', function(){
+      document.querySelectorAll('img.bio-photo[data-jpg]').forEach(function(img){
+        var jpg = img.getAttribute('data-jpg');
+        if (!jpg) return;
+        fetch(jpg, { method: 'HEAD' })
+          .then(function(res){ if (res.ok) img.src = jpg; })
+          .catch(function(){ /* keep SVG */ });
+      });
+    });
+  </script>
   <script src="/assets/js/main.js"></script>
 </body>
 </html>
