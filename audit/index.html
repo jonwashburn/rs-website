@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Recognition Science — Live Audit</title>
+  <style>
+    :root { --bg:#0b0d10; --fg:#e6eef8; --muted:#9fb3c8; --accent:#59f; }
+    html,body { margin:0; padding:0; background:var(--bg); color:var(--fg); font:16px/1.55 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    header { padding: 24px 16px; border-bottom: 1px solid #223; }
+    main { max-width: 1100px; margin: 0 auto; padding: 24px 16px 64px; }
+    h1,h2,h3 { margin: 0.8em 0 0.4em; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); gap: 16px; }
+    .card { background:#11151b; border:1px solid #223; border-radius:12px; padding:16px; }
+    code, pre { background:#0f141a; border:1px solid #1f2a36; border-radius:8px; padding:2px 6px; }
+    .pill { display:inline-block; padding:2px 8px; border-radius:999px; border:1px solid #2a3; margin-right:6px; color:#9f9; }
+    .tag { display:inline-block; padding:2px 8px; border-radius:999px; border:1px solid #345; margin-right:6px; color:#9fb3c8; }
+    .muted { color: var(--muted); }
+    .ok { color:#9f9; }
+    .warn { color:#ffb84d; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: false, theme: 'dark' });</script>
+</head>
+<body>
+  <header>
+    <h1>Recognition Science — Live Audit</h1>
+    <div class="muted">This page renders directly from the audit repository (status.json + study guide).</div>
+  </header>
+  <main>
+    <section class="card">
+      <h2>Status</h2>
+      <div id="status"></div>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h3>Pillars</h3>
+        <ul id="pillars"></ul>
+      </div>
+      <div class="card">
+        <h3>ILG Kernel</h3>
+        <div id="ilg"></div>
+      </div>
+      <div class="card">
+        <h3>LNAL</h3>
+        <div id="lnal"></div>
+      </div>
+      <div class="card">
+        <h3>Rung Constructor</h3>
+        <div id="rung"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>Loose Ends</h3>
+      <ul id="loose"></ul>
+    </section>
+
+    <section class="card">
+      <h3>Next Actions</h3>
+      <ul id="next"></ul>
+    </section>
+
+    <section class="card">
+      <h3>Architecture</h3>
+      <div class="muted">Rendered from Mermaid diagram.</div>
+      <div class="mermaid" id="mmd">
+      graph TD
+        MP["Meta‑Principle: ¬(∅ ▶ ∅)"] --> RS["Recognition Structure ⟨U, ∅, ▶⟩"]
+        RS --> Ledger["Ledger ⟨C, ι, κ; δ>0⟩"]
+        Ledger --> P["Derived principles"]
+        P --> J["Cost J(x)=½(x+1/x)"]
+        P --> CB["Countability & conservation"]
+        P --> SS["Self‑similarity ⇒ φ"]
+        SS --> Space["d=3; voxel (8); N_ticks=8"]
+        Space --> Lattice["Periodic cubic ℤ^3 (conditional)"]
+        Ledger --> LNAL["LNAL (16 opcodes; ±4 alphabet)"]
+        LNAL --> Mass["m = B E_coh φ^{r+f}"]
+        LNAL --> QM["Path measure ⇒ Born rule"]
+        LNAL --> ILG["ILG: F=−GMm/r²·w(r)"]
+        Mass --> Pred["α, masses, Ω_dm, …"]
+        ILG --> Pred
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>Study Guide (Markdown)</h3>
+      <div class="muted">Rendered from audit/docs/Recognition-Science-Study-Guide.md</div>
+      <div id="guide"></div>
+    </section>
+  </main>
+
+  <script>
+  async function loadJSON(path){ const r = await fetch(path); if(!r.ok) throw new Error('fetch '+path); return r.json(); }
+  async function loadText(path){ const r = await fetch(path); if(!r.ok) throw new Error('fetch '+path); return r.text(); }
+  (async () => {
+    const statusURL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/status.json';
+    const guideURL  = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/Recognition-Science-Study-Guide.md';
+    const status = await loadJSON(statusURL);
+    document.getElementById('status').innerHTML = `
+      <div><span class="muted">Last updated:</span> ${status.last_updated}</div>
+      <div style="margin-top:8px">${status.thesis}</div>
+      <div style="margin-top:8px" class="muted"><a href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener">View audit repository</a></div>
+    `;
+    const p = status.pillars;
+    document.getElementById('pillars').innerHTML = `
+      <li><code>${p.cost_functional}</code></li>
+      <li><code>stable d = ${p.stable_dimension}</code></li>
+      <li><code>${p.ticks}</code></li>
+      <li><code>${p.born_rule}</code></li>
+    `;
+    const ilg = status.ilg;
+    document.getElementById('ilg').innerHTML = `
+      <div>kernel: <code>${ilg.kernel}</code></div>
+      <div>S: <code>${ilg.S_rational}</code> (${ilg.S_decimal})</div>
+      <div>a0: <code>${ilg.a0_formula}</code></div>
+      <div class="muted">${ilg.status}</div>
+    `;
+    const lnal = status.lnal;
+    document.getElementById('lnal').innerHTML = `
+      <div>opcodes: <span class="pill">${lnal.opcodes}</span> alphabet: <span class="pill">${lnal.alphabet}</span></div>
+      <div>registers: <span class="pill">${lnal.registers}</span></div>
+      <div class="muted">${lnal.minimality_status}</div>
+    `;
+    const rung = status.rung_constructor;
+    document.getElementById('rung').innerHTML = `
+      <div>group: <code>${rung.group}</code></div>
+      <div class="muted">${rung.status}</div>
+      <div>baseline rungs: e=${rung.baseline_rungs.e}, μ=${rung.baseline_rungs.mu}, τ=${rung.baseline_rungs.tau}</div>
+    `;
+    const loose = status.loose_ends.map(x => `<li><span class="tag">${x.id}</span> ${x.item} — <span class="muted">${x.priority}</span> <span class="${x.status==='open'?'warn':'ok'}">${x.status}</span></li>`).join('');
+    document.getElementById('loose').innerHTML = loose;
+    const next = status.next_actions.map(t => `<li>${t}</li>`).join('');
+    document.getElementById('next').innerHTML = next;
+    // Render mermaid
+    mermaid.run({ nodes: [ document.getElementById('mmd') ] });
+    // Render study guide markdown
+    const md = await loadText(guideURL);
+    document.getElementById('guide').innerHTML = marked.parse(md);
+  })().catch(err => {
+    document.getElementById('status').textContent = 'Error loading status: ' + err.message;
+  });
+  </script>
+</body>
+</html>
