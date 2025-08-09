@@ -300,7 +300,7 @@
             <div class="toggle-switch active" id="viewToggle">
               <div class="toggle-slider"></div>
             </div>
-            <label>Genius</label>
+            <label><a href="#" id="geniusLink" style="text-decoration: none; color: inherit; cursor: pointer;">Real Genius Mode</a></label>
           </div>
         </div>
       </div>
@@ -727,7 +727,116 @@
       }
     });
   });
+  
+  // Real Genius Mode video link
+  document.getElementById('geniusLink').addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Create modal overlay
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      animation: fadeIn 0.3s ease;
+    `;
+    
+    // Create video container
+    const videoContainer = document.createElement('div');
+    videoContainer.style.cssText = `
+      position: relative;
+      width: 90%;
+      max-width: 1200px;
+      aspect-ratio: 16/9;
+      animation: scaleIn 0.3s ease;
+    `;
+    
+    // Create iframe
+    const iframe = document.createElement('iframe');
+    iframe.src = 'https://www.youtube.com/embed/G-gAbSQGGqM?autoplay=1';
+    iframe.style.cssText = `
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 12px;
+    `;
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    iframe.allowFullscreen = true;
+    
+    // Create close button
+    const closeBtn = document.createElement('button');
+    closeBtn.innerHTML = '✕';
+    closeBtn.style.cssText = `
+      position: absolute;
+      top: -40px;
+      right: 0;
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 32px;
+      cursor: pointer;
+      padding: 8px;
+      transition: transform 0.2s;
+    `;
+    closeBtn.onmouseover = () => closeBtn.style.transform = 'scale(1.2)';
+    closeBtn.onmouseout = () => closeBtn.style.transform = 'scale(1)';
+    
+    // Add elements to DOM
+    videoContainer.appendChild(iframe);
+    videoContainer.appendChild(closeBtn);
+    modal.appendChild(videoContainer);
+    document.body.appendChild(modal);
+    
+    // Close modal on click
+    const closeModal = () => {
+      modal.style.animation = 'fadeOut 0.3s ease';
+      videoContainer.style.animation = 'scaleOut 0.3s ease';
+      setTimeout(() => modal.remove(), 300);
+    };
+    
+    closeBtn.onclick = closeModal;
+    modal.onclick = (e) => {
+      if (e.target === modal) closeModal();
+    };
+    
+    // ESC key to close
+    const escHandler = (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        document.removeEventListener('keydown', escHandler);
+      }
+    };
+    document.addEventListener('keydown', escHandler);
+  });
   </script>
+  
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+    @keyframes scaleIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    @keyframes scaleOut {
+      from { transform: scale(1); opacity: 1; }
+      to { transform: scale(0.8); opacity: 0; }
+    }
+  </style>
+  
   <script src="/assets/js/main.js"></script>
 </body>
 </html>
