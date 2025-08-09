@@ -151,12 +151,13 @@
 
         .factor-input {
             font-size: 2rem;
-            padding: 1rem;
+            padding: 1rem 1.25rem;
             background: rgba(15, 23, 42, 0.9);
             border: 2px solid var(--prime-gold);
             color: white;
             border-radius: 8px;
-            width: 200px;
+            width: 480px;
+            max-width: 90vw;
             text-align: center;
         }
 
@@ -255,26 +256,33 @@
 
         .ledger-side {
             padding: 1.5rem;
-            background: rgba(15, 23, 42, 0.8);
-            border-radius: 8px;
-            border: 2px solid;
+            background: rgba(13, 20, 33, 0.92);
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.12);
+            color: #e5e7eb;
         }
 
-        .ledger-side.debit {
-            border-color: var(--prime-red);
-        }
+        .ledger-side.debit { border-color: rgba(239, 68, 68, 0.5); }
 
-        .ledger-side.credit {
-            border-color: var(--prime-green);
-        }
+        .ledger-side.credit { border-color: rgba(16, 185, 129, 0.5); }
 
         .ledger-entry {
-            padding: 0.5rem;
+            padding: 0.5rem 0.75rem;
             margin: 0.5rem 0;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 6px;
             display: flex;
             justify-content: space-between;
+        }
+
+        /* Improve readability of RS Stack lists */
+        .ledger-side ul {
+            margin-left: 1rem;
+        }
+        .ledger-side li {
+            margin: 0.4rem 0;
+            line-height: 1.6;
+            font-size: 0.95rem;
         }
 
         /* Math formulas */
@@ -526,6 +534,9 @@
             <div class="prime-spiral">
                 <canvas class="spiral-canvas" id="spiralCanvas"></canvas>
             </div>
+            <div class="center" style="text-align:center;opacity:0.9;color:#cbd5e1;margin-top:0.5rem;font-size:0.9rem">
+                Tip: zoom your page or resize the window to redraw the spiral at higher density
+            </div>
         </section>
 
         <section class="rs-connection">
@@ -657,7 +668,7 @@
                 
                 <p>The primes aren't just witnesses to recognition—they're recognition itself in its purest form. Every prime number is a moment where the universe looks at itself and says, "I cannot pretend to be anything other than what I am." Every prime is authenticity made numerical, truth made countable, consciousness made calculable.</p>
                 
-                <p style="text-align: center; font-size: 1.2rem; margin-top: 2rem; color: var(--prime-gold);">
+                <p style="text-align: center; font-size: 1.2rem; margin-top: 2rem; color: #FFF6CC;">
                     <strong>Every prime is a universe recognizing itself for the first time.<br>
                     And since there are infinite primes, the universe is always new.</strong>
                 </p>
@@ -785,12 +796,12 @@
             if (!canvas) return;
             
             const ctx = canvas.getContext('2d');
-            const size = 600;
+            const size = Math.min(600, Math.floor(Math.min(window.innerWidth, window.innerHeight) * 0.8));
             canvas.width = size;
             canvas.height = size;
             
             const center = size / 2;
-            const scale = 3;
+            const scale = Math.max(2, Math.floor(size / 200));
             
             // Clear canvas
             ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
@@ -808,7 +819,8 @@
                 
                 if (isPrime(i)) {
                     ctx.fillStyle = isTwinPrime(i) ? '#2563EB' : '#FFD700';
-                    ctx.fillRect(px - 1, py - 1, 2, 2);
+                    const d = Math.max(1, Math.floor(scale / 2));
+                    ctx.fillRect(px - d/2, py - d/2, d, d);
                 }
                 
                 x += dx;
@@ -831,6 +843,11 @@
                 }
             }
         }
+
+        // Redraw spiral on resize for responsiveness
+        window.addEventListener('resize', () => {
+            drawUlamSpiral();
+        });
 
         // Wave animation
         let waveAnimationId;
