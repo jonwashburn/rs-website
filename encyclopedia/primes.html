@@ -515,11 +515,7 @@
             </div>
         </section>
 
-        <section class="demo-section">
-            <h2>Interactive Prime Grid</h2>
-            <p>Click any number to see its prime factorization. Watch how primes stand alone while composites decompose.</p>
-            <div class="prime-grid" id="primeGrid"></div>
-        </section>
+        
 
         <section class="factorization-box">
             <h2>Prime Factorization Engine</h2>
@@ -711,34 +707,7 @@
             return factors;
         }
 
-        // Initialize prime grid
-        function initPrimeGrid() {
-            const grid = document.getElementById('primeGrid');
-            for (let i = 1; i <= 200; i++) {
-                const cell = document.createElement('div');
-                cell.className = 'prime-cell';
-                cell.textContent = i;
-                
-                if (i === 1) {
-                    cell.classList.add('unity');
-                    cell.style.background = 'rgba(255, 255, 255, 0.1)';
-                } else if (isPrime(i)) {
-                    cell.classList.add('prime');
-                    if (isTwinPrime(i)) {
-                        cell.classList.add('twin-prime');
-                    }
-                    // Check for Mersenne primes
-                    if ([3, 7, 31, 127].includes(i)) {
-                        cell.classList.add('mersenne-prime');
-                    }
-                } else {
-                    cell.classList.add('composite');
-                }
-                
-                cell.addEventListener('click', () => showFactorization(i));
-                grid.appendChild(cell);
-            }
-        }
+        // Interactive prime grid removed
 
         // Show factorization
         function showFactorization(n) {
@@ -780,8 +749,7 @@
                 });
             }
             
-            // Initialize grid
-            initPrimeGrid();
+            // Prime grid removed
             
             // Draw Ulam spiral
             drawUlamSpiral();
