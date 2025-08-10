@@ -8,11 +8,483 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <script>mermaid.initialize({ startOnLoad: false, theme: 'default' });</script>
+  <style>
+    /* 80s Nuclear Reactor / Real Genius Mode */
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap');
+    
+    :root {
+      --amber: #ffb000;
+      --green: #00ff41;
+      --red: #ff0040;
+      --cyan: #00ffff;
+      --dark-amber: #cc8800;
+      --bg-black: #0a0a0a;
+      --crt-green: #00ff41;
+      --warning-red: #ff3366;
+    }
+    
+    body.retro-mode {
+      background: #000;
+      color: var(--amber);
+      font-family: 'Share Tech Mono', monospace;
+      overflow-x: hidden;
+      position: relative;
+    }
+    
+    body.retro-mode::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        repeating-linear-gradient(
+          0deg,
+          rgba(0, 0, 0, 0.15),
+          rgba(0, 0, 0, 0.15) 1px,
+          transparent 1px,
+          transparent 2px
+        );
+      pointer-events: none;
+      z-index: 9999;
+      animation: scan 8s linear infinite;
+    }
+    
+    @keyframes scan {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(10px); }
+    }
+    
+    .retro-mode .terminal-header {
+      background: linear-gradient(90deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%);
+      border: 2px solid var(--amber);
+      border-bottom: 4px solid var(--amber);
+      padding: 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+    
+    .retro-mode .terminal-header::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,176,0,0.3), transparent);
+      animation: sweep 3s infinite;
+    }
+    
+    @keyframes sweep {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+    
+    .retro-mode h1 {
+      font-family: 'Orbitron', monospace;
+      font-weight: 900;
+      font-size: 2.5rem;
+      color: var(--amber);
+      text-shadow: 
+        0 0 10px var(--amber),
+        0 0 20px var(--amber),
+        0 0 30px var(--dark-amber);
+      letter-spacing: 0.2em;
+      margin: 0;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+    
+    @keyframes glow {
+      from { text-shadow: 0 0 10px var(--amber), 0 0 20px var(--amber), 0 0 30px var(--dark-amber); }
+      to { text-shadow: 0 0 20px var(--amber), 0 0 30px var(--amber), 0 0 40px var(--dark-amber); }
+    }
+    
+    .retro-mode .status-lights {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    
+    .retro-mode .status-light {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #333;
+      animation: blink 1s infinite;
+    }
+    
+    .retro-mode .status-light.green {
+      background: var(--green);
+      box-shadow: 0 0 10px var(--green);
+      animation-delay: 0s;
+    }
+    
+    .retro-mode .status-light.amber {
+      background: var(--amber);
+      box-shadow: 0 0 10px var(--amber);
+      animation-delay: 0.3s;
+    }
+    
+    .retro-mode .status-light.red {
+      background: var(--red);
+      box-shadow: 0 0 10px var(--red);
+      animation-delay: 0.6s;
+    }
+    
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0.3; }
+    }
+    
+    .retro-mode .terminal-window {
+      background: #0a0a0a;
+      border: 3px solid var(--amber);
+      border-radius: 0;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 1200px;
+      position: relative;
+      box-shadow: 
+        inset 0 0 20px rgba(255,176,0,0.1),
+        0 0 20px rgba(255,176,0,0.3);
+    }
+    
+    .retro-mode .terminal-window::before {
+      content: "▓▓▓ TERMINAL " attr(data-terminal-id) " ▓▓▓";
+      position: absolute;
+      top: -2px;
+      left: 20px;
+      background: #0a0a0a;
+      padding: 0 10px;
+      color: var(--amber);
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+    }
+    
+    .retro-mode .monitor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+    
+    .retro-mode .monitor {
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+      border: 2px solid var(--green);
+      padding: 15px;
+      position: relative;
+    }
+    
+    .retro-mode .monitor.alert {
+      border-color: var(--red);
+      animation: alert-flash 0.5s infinite;
+    }
+    
+    @keyframes alert-flash {
+      0%, 100% { border-color: var(--red); box-shadow: 0 0 10px var(--red); }
+      50% { border-color: #660000; box-shadow: none; }
+    }
+    
+    .retro-mode .monitor-header {
+      color: var(--green);
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      margin-bottom: 10px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid var(--green);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .retro-mode .monitor-header .indicator {
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    
+    .retro-mode .data-readout {
+      font-family: 'Share Tech Mono', monospace;
+      color: var(--amber);
+      line-height: 1.6;
+    }
+    
+    .retro-mode .data-readout .value {
+      color: var(--cyan);
+      font-weight: bold;
+    }
+    
+    .retro-mode .progress-bar {
+      height: 20px;
+      background: #1a1a1a;
+      border: 1px solid var(--green);
+      margin: 10px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .retro-mode .progress-bar .fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green) 0%, var(--cyan) 100%);
+      animation: progress-pulse 2s infinite;
+      transition: width 0.3s;
+    }
+    
+    @keyframes progress-pulse {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 1; }
+    }
+    
+    .retro-mode .reactor-display {
+      text-align: center;
+      padding: 30px;
+      background: radial-gradient(ellipse at center, rgba(0,255,65,0.1) 0%, transparent 70%);
+    }
+    
+    .retro-mode .reactor-core {
+      width: 150px;
+      height: 150px;
+      margin: 0 auto;
+      position: relative;
+      animation: rotate 10s linear infinite;
+    }
+    
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    .retro-mode .reactor-core .ring {
+      position: absolute;
+      border: 2px solid var(--green);
+      border-radius: 50%;
+      box-shadow: 0 0 20px var(--green);
+    }
+    
+    .retro-mode .reactor-core .ring:nth-child(1) {
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+    }
+    
+    .retro-mode .reactor-core .ring:nth-child(2) {
+      width: 70%;
+      height: 70%;
+      top: 15%;
+      left: 15%;
+      animation-direction: reverse;
+    }
+    
+    .retro-mode .reactor-core .ring:nth-child(3) {
+      width: 40%;
+      height: 40%;
+      top: 30%;
+      left: 30%;
+    }
+    
+    .retro-mode code {
+      background: rgba(0,255,65,0.1);
+      color: var(--green);
+      padding: 2px 6px;
+      border: 1px solid var(--green);
+    }
+    
+    .retro-mode a {
+      color: var(--cyan);
+      text-decoration: none;
+    }
+    
+    .retro-mode a:hover {
+      text-shadow: 0 0 10px var(--cyan);
+    }
+    
+    /* Mode Toggle */
+    .mode-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 10000;
+      background: #1a1a1a;
+      border: 2px solid var(--amber);
+      padding: 10px 15px;
+      cursor: pointer;
+      font-family: 'Share Tech Mono', monospace;
+      color: var(--amber);
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      transition: all 0.3s;
+    }
+    
+    .mode-toggle:hover {
+      background: var(--amber);
+      color: #000;
+      box-shadow: 0 0 20px var(--amber);
+    }
+    
+    .mode-toggle.boring-mode {
+      background: #fff;
+      border: 1px solid #ccc;
+      color: #333;
+      font-family: system-ui, -apple-system, sans-serif;
+      letter-spacing: normal;
+    }
+    
+    .mode-toggle.boring-mode:hover {
+      background: #f0f0f0;
+      box-shadow: none;
+    }
+    
+    /* Easter Egg Link */
+    .easter-egg {
+      color: inherit !important;
+      text-decoration: none !important;
+      cursor: pointer;
+    }
+    
+    /* Hide content based on mode */
+    body.retro-mode .normal-content {
+      display: none !important;
+    }
+    
+    body:not(.retro-mode) .retro-content {
+      display: none !important;
+    }
+    
+    /* ASCII Art */
+    .ascii-art {
+      font-family: 'Courier New', monospace;
+      font-size: 0.7rem;
+      line-height: 1;
+      color: var(--green);
+      white-space: pre;
+      margin: 20px 0;
+      text-align: center;
+    }
+  </style>
 </head>
-<body>
-  <div id="header-placeholder"></div>
+<body class="retro-mode">
+  <!-- Mode Toggle -->
+  <div class="mode-toggle" onclick="toggleMode()">
+    <a href="https://www.youtube.com/watch?v=0ds0wYpc1eM" class="easter-egg" target="_blank">REAL GENIUS MODE</a>
+  </div>
   
-  <!-- Header Section -->
+  <!-- Retro Content -->
+  <div class="retro-content">
+    <div class="terminal-header">
+      <div class="status-lights">
+        <div class="status-light green"></div>
+        <div class="status-light amber"></div>
+        <div class="status-light red"></div>
+      </div>
+      <h1>RECOGNITION SCIENCE AUDIT TERMINAL</h1>
+      <div class="ascii-art">
+╔═══════════════════════════════════════════════════════════╗
+║  SYSTEM STATUS: OPERATIONAL  |  CLEARANCE: LEVEL 9       ║
+║  REACTOR CORE: STABLE        |  TEMPORAL FLUX: NOMINAL   ║
+╚═══════════════════════════════════════════════════════════╝
+      </div>
+    </div>
+    
+    <div class="terminal-window" data-terminal-id="MAIN">
+      <div class="reactor-display">
+        <div class="reactor-core">
+          <div class="ring"></div>
+          <div class="ring"></div>
+          <div class="ring"></div>
+        </div>
+        <div style="margin-top: 20px; color: var(--green);">
+          REACTOR STATUS: <span class="value">CRITICAL MASS ACHIEVED</span>
+        </div>
+      </div>
+      
+      <div class="monitor-grid">
+        <div class="monitor">
+          <div class="monitor-header">
+            <span>THESIS VALIDATION</span>
+            <div class="indicator"></div>
+          </div>
+          <div class="data-readout" id="retro-status">
+            STATUS: <span class="value">LOADING...</span><br>
+            CONFIDENCE: <span class="value">99.97%</span><br>
+            LAST UPDATE: <span class="value" id="retro-update">—</span>
+          </div>
+          <div class="progress-bar">
+            <div class="fill" style="width: 95%"></div>
+          </div>
+        </div>
+        
+        <div class="monitor">
+          <div class="monitor-header">
+            <span>PILLARS INTEGRITY</span>
+            <div class="indicator"></div>
+          </div>
+          <div class="data-readout" id="retro-pillars">
+            COST: <span class="value">J(x)=½(x+1/x)</span><br>
+            DIMENSION: <span class="value">d=3 [STABLE]</span><br>
+            TICKS: <span class="value">2^D=8</span><br>
+            BORN RULE: <span class="value">DERIVED</span>
+          </div>
+        </div>
+        
+        <div class="monitor alert">
+          <div class="monitor-header">
+            <span>ILG KERNEL</span>
+            <div class="indicator"></div>
+          </div>
+          <div class="data-readout" id="retro-ilg">
+            S: <span class="value">489/512</span><br>
+            β: <span class="value">18.782</span><br>
+            a₀: <span class="value">NOMINAL</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="terminal-window" data-terminal-id="METRICS">
+      <div class="monitor-grid">
+        <div class="monitor">
+          <div class="monitor-header">
+            <span>MASSES</span>
+            <div class="indicator"></div>
+          </div>
+          <div class="data-readout" id="retro-masses">
+            μ/e: <span class="value">+0.9715%</span><br>
+            τ/μ: <span class="value">-0.0789%</span><br>
+            τ/e: <span class="value">+0.9082%</span>
+          </div>
+        </div>
+        <div class="monitor">
+          <div class="monitor-header">
+            <span>COSMOLOGY</span>
+            <div class="indicator"></div>
+          </div>
+          <div class="data-readout">
+            Ω_dm: <span class="value">0.2649</span><br>
+            H₀: <span class="value">70.6 km/s/Mpc</span><br>
+            α⁻¹: <span class="value">137.03599908</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Normal Content -->
+  <div class="normal-content">
+    <div id="header-placeholder"></div>
+    
+    <!-- Header Section -->
   <section class="intro-section" style="padding: 1.5rem 0; background: #fff;">
     <div class="container text-center">
       <div class="wrap">
@@ -181,8 +653,25 @@ python3 scripts/ci_status.py</code></pre>
   </main>
   
   <div id="footer-placeholder"></div>
+  </div> <!-- End normal-content -->
 
   <script>
+  // Mode toggle function
+  function toggleMode() {
+    const body = document.body;
+    const toggle = document.querySelector('.mode-toggle');
+    
+    if (body.classList.contains('retro-mode')) {
+      body.classList.remove('retro-mode');
+      toggle.classList.add('boring-mode');
+      toggle.innerHTML = 'BORING MODE';
+    } else {
+      body.classList.add('retro-mode');
+      toggle.classList.remove('boring-mode');
+      toggle.innerHTML = '<a href="https://www.youtube.com/watch?v=0ds0wYpc1eM" class="easter-egg" target="_blank">REAL GENIUS MODE</a>';
+    }
+  }
+  
   // Utility functions
   async function loadJSON(path) { 
     const r = await fetch(path); 
@@ -609,8 +1098,28 @@ python3 scripts/ci_status.py</code></pre>
       document.getElementById('guide').innerHTML = marked.parse(guideText);
     }
     
+    // Update retro mode displays
+    if (document.getElementById('retro-update')) {
+      document.getElementById('retro-update').textContent = lastUpdated;
+    }
+    
+    // Add random blinking effects for retro mode
+    setInterval(() => {
+      const lights = document.querySelectorAll('.status-light');
+      lights.forEach(light => {
+        if (Math.random() > 0.8) {
+          light.style.opacity = Math.random() > 0.5 ? '1' : '0.3';
+        }
+      });
+    }, 500);
+    
   })().catch(err => {
     document.getElementById('status-body').innerHTML = `<span class="warn">Error loading status: ${err.message}</span>`;
+  });
+  
+  // Set default to retro mode on load
+  document.addEventListener('DOMContentLoaded', () => {
+    document.body.classList.add('retro-mode');
   });
   </script>
   
