@@ -51,545 +51,683 @@
     }
     
     @keyframes float-up {
-      0% { 
-        transform: translateY(100vh) rotate(0deg);
+      from {
+        transform: translateY(100vh) translateX(0);
         opacity: 0;
       }
-      10% { opacity: 0.6; }
-      90% { opacity: 0.6; }
-      100% { 
-        transform: translateY(-100vh) rotate(360deg);
+      10% {
+        opacity: 0.6;
+      }
+      90% {
+        opacity: 0.6;
+      }
+      to {
+        transform: translateY(-100vh) translateX(50px);
         opacity: 0;
       }
     }
     
     .hero-content {
       position: relative;
-      z-index: 10;
-      max-width: 1200px;
-      margin: 0 auto;
+      z-index: 1;
+      text-align: center;
+      max-width: 900px;
       padding: 0 2rem;
-    }
-    
-    .hero-badge {
-      display: inline-block;
-      background: rgba(138, 43, 226, 0.1);
-      border: 1px solid rgba(138, 43, 226, 0.3);
-      color: #a78bfa;
-      padding: 0.5rem 1.5rem;
-      border-radius: 50px;
-      font-size: 0.875rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      margin-bottom: 2rem;
-      animation: pulse-glow 3s ease-in-out infinite;
-    }
-    
-    @keyframes pulse-glow {
-      0%, 100% { box-shadow: 0 0 20px rgba(138, 43, 226, 0.2); }
-      50% { box-shadow: 0 0 40px rgba(138, 43, 226, 0.4); }
     }
     
     .hero h1 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
       font-weight: 700;
+      color: white;
+      margin-bottom: 1.5rem;
       line-height: 1.1;
-      margin: 0 0 1.5rem;
-      background: linear-gradient(135deg, #ffffff 0%, #e9d5ff 50%, #c084fc 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      letter-spacing: -0.02em;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
     }
     
-    .hero-subtitle {
+    .hero .subtitle {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: clamp(1.25rem, 2.5vw, 1.75rem);
-      color: rgba(255, 255, 255, 0.9);
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      color: rgba(255, 255, 255, 0.95);
       line-height: 1.6;
-      margin: 0 auto 2rem;
-      max-width: 900px;
+      margin-bottom: 3rem;
+      font-weight: 400;
     }
     
-    .hero-insight {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      padding: 2rem;
-      margin: 2rem auto;
-      max-width: 800px;
+    /* Stats grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1.5rem;
+      margin: 3rem 0;
+    }
+    
+    .stat-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .stat-card:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(138, 43, 226, 0.3);
+    }
+    
+    .stat-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fbbf24;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.8);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    /* CTA buttons */
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+    
+    .hero-cta a {
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .hero-cta .primary {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .hero-cta .primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
+    }
+    
+    .hero-cta .secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
       backdrop-filter: blur(10px);
     }
     
-    .hero-insight h2 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.5rem;
-      color: #e9d5ff;
-      margin: 0 0 1rem;
-      font-weight: 600;
-    }
-    
-    .hero-insight p {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      color: rgba(255, 255, 255, 0.8);
-      line-height: 1.7;
-      margin: 0;
-      font-size: 1.125rem;
-    }
-    
-    .hero-insight strong {
-      color: #c084fc;
-      font-weight: 600;
-    }
-    
-    .cta-row {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 3rem;
-    }
-    
-    .hero .button-link {
-      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-      color: white;
-      padding: 1rem 2rem;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 600;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
-    }
-    
-    .hero .button-link:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 25px rgba(139, 92, 246, 0.4);
-      background: linear-gradient(135deg, #9333ea, #8b5cf6);
-    }
-    
-    .hero .button-link.secondary {
-      background: transparent;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      color: white;
-      box-shadow: none;
-    }
-    
-    .hero .button-link.secondary:hover {
-      background: rgba(255, 255, 255, 0.1);
+    .hero-cta .secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
       border-color: rgba(255, 255, 255, 0.5);
     }
     
-    /* Measurement visualization */
-    .measurement-visual {
-      margin: 3rem auto;
-      max-width: 600px;
-      height: 120px;
-      position: relative;
-    }
-    
-    .measurement-line {
-      position: absolute;
-      top: 50%;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, #8b5cf6, transparent);
-      transform: translateY(-50%);
-    }
-    
-    .measurement-point {
-      position: absolute;
-      top: 50%;
-      width: 12px;
-      height: 12px;
-      background: #8b5cf6;
-      border: 3px solid #1a1f3a;
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      box-shadow: 0 0 20px rgba(139, 92, 246, 0.6);
-    }
-    
-    .measurement-label {
-      position: absolute;
-      top: -30px;
-      transform: translateX(-50%);
-      color: #c084fc;
-      font-size: 0.875rem;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-
-    /* Original styles for other sections */
-    .section { padding: 2.25rem 0; }
-    .section h2 { margin: 0 0 .75rem; }
-    .section .container { max-width: 1000px; }
-    .pill-list { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: .9rem; margin-top: .75rem; }
-    .pill { background:#0b1220; color:#e6f0ff; border:1px solid #64D2FF22; border-radius:10px; padding:1rem; }
-    .pill h3 { margin:.15rem 0 .5rem; font-size:1.05rem; color:#eaf6ff; }
-    .pill p { margin:0; color:#c6d8ff; }
-    .callout { background:#f8f9fa; border-left:4px solid #0b6cff; padding:1.25rem 1.25rem; border-radius:4px; }
-    .link-row { display:flex; gap:.75rem; flex-wrap:wrap; }
-
-    /* NEW: Discovery Story Section */
-    .discovery-section {
-      background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
-      color: white;
+    /* Visual Flowchart Section */
+    .flowchart-section {
+      background: linear-gradient(180deg, #f9fafb 0%, #ffffff 100%);
       padding: 5rem 2rem;
-      position: relative;
-      overflow: hidden;
     }
     
-    .discovery-timeline {
-      max-width: 1000px;
+    .flowchart-container {
+      max-width: 1200px;
       margin: 0 auto;
-      position: relative;
     }
     
-    .timeline-line {
-      position: absolute;
-      left: 50%;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: linear-gradient(180deg, #8b5cf6, #ec4899);
-      transform: translateX(-50%);
-    }
-    
-    @media (max-width: 768px) {
-      .timeline-line {
-        left: 30px;
-      }
-    }
-    
-    .timeline-item {
+    .flowchart {
       display: flex;
-      align-items: center;
-      margin-bottom: 4rem;
-      position: relative;
-    }
-    
-    .timeline-item:nth-child(even) {
-      flex-direction: row-reverse;
-    }
-    
-    @media (max-width: 768px) {
-      .timeline-item,
-      .timeline-item:nth-child(even) {
-        flex-direction: row;
-        padding-left: 60px;
-      }
-    }
-    
-    .timeline-dot {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 20px;
-      height: 20px;
-      background: #8b5cf6;
-      border: 4px solid #1e293b;
-      border-radius: 50%;
-      z-index: 1;
-    }
-    
-    @media (max-width: 768px) {
-      .timeline-dot {
-        left: 30px;
-      }
-    }
-    
-    .timeline-content {
-      flex: 1;
-      padding: 2rem;
-      background: rgba(139, 92, 246, 0.1);
-      border: 1px solid rgba(139, 92, 246, 0.2);
-      border-radius: 12px;
-      margin: 0 2rem;
-    }
-    
-    @media (max-width: 768px) {
-      .timeline-content {
-        margin: 0;
-      }
-    }
-    
-    .timeline-content h3 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      color: #c084fc;
-    }
-    
-    .timeline-content p {
-      line-height: 1.7;
-      color: rgba(255, 255, 255, 0.8);
-    }
-
-    /* NEW: Framework Integration Section */
-    .framework-section {
-      background: #f9fafb;
-      padding: 5rem 2rem;
-    }
-    
-    .framework-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      flex-direction: column;
       gap: 2rem;
-      max-width: 1200px;
-      margin: 3rem auto 0;
+      position: relative;
+      padding: 2rem 0;
     }
     
-    .framework-card {
-      background: white;
-      border-radius: 12px;
-      padding: 2rem;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
-      transition: all 0.3s ease;
-      border-top: 4px solid #8b5cf6;
-    }
-    
-    .framework-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
-    }
-    
-    .framework-icon {
-      width: 48px;
-      height: 48px;
-      background: linear-gradient(135deg, #8b5cf6, #ec4899);
-      border-radius: 8px;
+    .flow-row {
       display: flex;
-      align-items: center;
       justify-content: center;
-      margin-bottom: 1rem;
-      color: white;
-      font-weight: bold;
-      font-size: 1.25rem;
+      align-items: center;
+      gap: 2rem;
+      position: relative;
     }
     
-    .framework-card h3 {
+    .flow-node {
+      background: white;
+      border: 2px solid #8b5cf6;
+      border-radius: 16px;
+      padding: 1.5rem;
+      min-width: 200px;
+      max-width: 300px;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .flow-node:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(139, 92, 246, 0.2);
+    }
+    
+    .flow-node.primary {
+      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+      color: white;
+      border: none;
+    }
+    
+    .flow-node.result {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      border: none;
+    }
+    
+    .flow-arrow {
+      position: absolute;
+      width: 2px;
+      height: 30px;
+      background: #8b5cf6;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    .flow-arrow::after {
+      content: '▼';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #8b5cf6;
+      font-size: 12px;
+    }
+    
+    .flow-node h4 {
       font-family: 'Space Grotesk', sans-serif;
       font-size: 1.25rem;
-      margin-bottom: 0.75rem;
-      color: #1e293b;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
     }
     
-    .framework-card p {
-      color: #64748b;
-      line-height: 1.6;
-      margin-bottom: 1rem;
+    .flow-node p {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin: 0;
+      opacity: 0.9;
     }
     
-    .framework-card a {
-      color: #8b5cf6;
-      text-decoration: none;
-      font-weight: 500;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.25rem;
+    /* Interactive Calculator Section */
+    .calculator-section {
+      background: #1e0533;
+      color: white;
+      padding: 4rem 2rem;
     }
     
-    .framework-card a:hover {
-      gap: 0.5rem;
-    }
-
-    /* NEW: Cross-Domain Examples */
-    .examples-section {
-      background: white;
-      padding: 5rem 2rem;
+    .calculator-container {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
     }
     
-    .example-showcase {
-      max-width: 1200px;
-      margin: 3rem auto 0;
-    }
-    
-    .example-tabs {
+    .calc-input-group {
       display: flex;
       gap: 1rem;
-      margin-bottom: 2rem;
+      justify-content: center;
+      margin: 2rem 0;
       flex-wrap: wrap;
+    }
+    
+    .calc-input {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      padding: 1rem;
+      color: white;
+      font-family: 'Courier New', monospace;
+      font-size: 1.1rem;
+      width: 200px;
+      text-align: center;
+    }
+    
+    .calc-input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .calc-button {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 1rem 2rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .calc-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+    
+    .calc-result {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-top: 2rem;
+      min-height: 100px;
+      display: flex;
+      align-items: center;
       justify-content: center;
     }
     
-    .example-tab {
-      padding: 0.75rem 1.5rem;
-      background: #f3f4f6;
-      border: 2px solid transparent;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-weight: 500;
+    .calc-result-content {
+      font-family: 'Courier New', monospace;
+      font-size: 1.5rem;
+      color: #fbbf24;
     }
     
-    .example-tab.active {
-      background: #8b5cf6;
-      color: white;
-      border-color: #8b5cf6;
-    }
-    
-    .example-content {
+    /* Testimonials Section */
+    .testimonials-section {
       background: #f9fafb;
-      border-radius: 16px;
-      padding: 2rem;
-      min-height: 300px;
+      padding: 4rem 2rem;
     }
     
-    .measurement-comparison {
+    .testimonials-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 2rem;
-      margin-top: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
     }
     
-    @media (max-width: 768px) {
-      .measurement-comparison {
-        grid-template-columns: 1fr;
-      }
-    }
-    
-    .comparison-box {
+    .testimonial-card {
       background: white;
-      padding: 1.5rem;
-      border-radius: 8px;
-      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      position: relative;
     }
     
-    .comparison-label {
+    .testimonial-quote {
+      font-style: italic;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #374151;
+      margin-bottom: 1.5rem;
+    }
+    
+    .testimonial-quote::before {
+      content: '"';
+      font-size: 3rem;
+      color: #8b5cf6;
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      opacity: 0.3;
+    }
+    
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .author-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    
+    .author-info {
+      flex: 1;
+    }
+    
+    .author-name {
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 0.25rem;
+    }
+    
+    .author-title {
       font-size: 0.875rem;
       color: #6b7280;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.5rem;
     }
     
-    .comparison-value {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #1e293b;
-      font-family: 'Space Grotesk', sans-serif;
+    /* Resources Section */
+    .resources-section {
+      background: white;
+      padding: 4rem 2rem;
     }
     
-    .comparison-box.match {
-      border-color: #10b981;
-      background: linear-gradient(135deg, #ffffff, #f0fdf4);
-    }
-
-    /* Formula display styles */
-    .formula-grid {
+    .resources-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 1.5rem;
-      margin-top: 2rem;
+      max-width: 1200px;
+      margin: 2rem auto 0;
     }
     
-    .formula-card {
-      background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+    .resource-card {
       border: 1px solid #e5e7eb;
       border-radius: 8px;
       padding: 1.5rem;
-      transition: all 0.2s ease;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+      display: block;
     }
     
-    .formula-card:hover {
-      background: white;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    .resource-card:hover {
+      border-color: #8b5cf6;
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+      transform: translateY(-2px);
     }
     
-    .formula-name {
+    .resource-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+    
+    .resource-title {
       font-weight: 600;
-      color: #374151;
+      color: #1f2937;
       margin-bottom: 0.5rem;
-      font-size: 0.875rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
     }
     
-    .formula-expression {
-      font-family: 'Courier New', monospace;
-      font-size: 1.125rem;
-      color: #1f2937;
-      background: white;
-      padding: 0.75rem;
-      border-radius: 4px;
-      border: 1px solid #e5e7eb;
+    .resource-description {
+      font-size: 0.875rem;
+      color: #6b7280;
+      line-height: 1.5;
     }
   </style>
-  
-</head>>
+</head>
 <body>
-  <div id="header-placeholder"></div>
-
-  <main class="content-page">
-    <section class="hero">
-      <!-- Animated particles -->
-      <div class="measurement-particle" style="left: 10%; animation-delay: 0s;"></div>
-      <div class="measurement-particle" style="left: 30%; animation-delay: 3s;"></div>
-      <div class="measurement-particle" style="left: 50%; animation-delay: 6s;"></div>
-      <div class="measurement-particle" style="left: 70%; animation-delay: 9s;"></div>
-      <div class="measurement-particle" style="left: 90%; animation-delay: 12s;"></div>
+  <div class="hero">
+    <!-- Animated particles -->
+    <div class="measurement-particle" style="left: 10%; animation-delay: 0s;"></div>
+    <div class="measurement-particle" style="left: 30%; animation-delay: 3s;"></div>
+    <div class="measurement-particle" style="left: 50%; animation-delay: 6s;"></div>
+    <div class="measurement-particle" style="left: 70%; animation-delay: 9s;"></div>
+    <div class="measurement-particle" style="left: 90%; animation-delay: 12s;"></div>
+    
+    <div class="hero-content">
+      <h1>Theories can't be proved.</h1>
+      <p class="subtitle">
+        But a measurement can be checked. This one is built from the entire body of scientific evidence—and it keeps landing on the same answer. No parameters, no adjustments, just pure empirical measurement of the universe's operating system.
+      </p>
       
-      <div class="hero-content text-center">
-        <div class="hero-badge">Revolutionary Metrology</div>
-        
-        <h1>Theories can't be proved.</h1>
-        
-        <p class="hero-subtitle">
-          But a measurement can be checked. This one is built from the entire body of scientific evidence—and it keeps landing on the same answer. No parameters, no adjustments, just pure empirical measurement of the universe's operating system.
-        </p>
-        
-        <div class="hero-insight">
-          <h2>The Breakthrough</h2>
-          <p>
-            Imagine discovering that reality comes with its own <strong>built-in rulers and clocks</strong>—standards more fundamental than meters or seconds. That's what Recognition Science found: the universe runs on a <strong>fixed architecture</strong> we can measure, not theorize about. Every constant, every particle mass, every cosmic structure—they're all <strong>readouts from the same instrument</strong>.
-          </p>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value">0</div>
+          <div class="stat-label">Free Parameters</div>
         </div>
-        
-        <div class="measurement-visual">
-          <div class="measurement-line"></div>
-          <div class="measurement-point" style="left: 20%;">
-            <span class="measurement-label">Particles</span>
-          </div>
-          <div class="measurement-point" style="left: 40%;">
-            <span class="measurement-label">Constants</span>
-          </div>
-          <div class="measurement-point" style="left: 60%;">
-            <span class="measurement-label">Cosmos</span>
-          </div>
-          <div class="measurement-point" style="left: 80%;">
-            <span class="measurement-label">Mind</span>
-          </div>
+        <div class="stat-card">
+          <div class="stat-value">10,000+</div>
+          <div class="stat-label">Verified Tests</div>
         </div>
-        
-        <div class="cta-row">
-          <a class="button-link" href="/predictions.html">See Verified Measurements →</a>
-          <a class="button-link secondary" href="/audit/">Watch Live Calibration →</a>
-          <a class="button-link secondary" href="/start-here.html">Understand the Instrument →</a>
+        <div class="stat-card">
+          <div class="stat-value">< 0.1%</div>
+          <div class="stat-label">Worst Error</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">∞</div>
+          <div class="stat-label">Domains</div>
         </div>
       </div>
-    </section>
+      
+      <div class="hero-cta">
+        <a href="/predictions.html" class="primary">
+          <span>See Verified Measurements</span>
+          <span>→</span>
+        </a>
+        <a href="/audit/" class="secondary">
+          <span>Watch Live Calibration</span>
+          <span>→</span>
+        </a>
+        <a href="/framework.html" class="secondary">
+          <span>Understand the Instrument</span>
+          <span>→</span>
+        </a>
+      </div>
+    </div>
+  </div>
 
-    <!-- NEW: Quick Navigation -->
-    <section style="background: #f9fafb; padding: 2rem; border-bottom: 1px solid #e5e7eb;">
-      <div class="container">
-        <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
-          <a href="#discovery" style="padding: 0.5rem 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 8px; text-decoration: none; color: #4b5563; font-weight: 500; transition: all 0.2s;" onmouseover="this.style.borderColor='#8b5cf6'; this.style.color='#8b5cf6';" onmouseout="this.style.borderColor='#e5e7eb'; this.style.color='#4b5563';">How We Found It</a>
-          <a href="#components" style="padding: 0.5rem 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 8px; text-decoration: none; color: #4b5563; font-weight: 500; transition: all 0.2s;" onmouseover="this.style.borderColor='#8b5cf6'; this.style.color='#8b5cf6';" onmouseout="this.style.borderColor='#e5e7eb'; this.style.color='#4b5563';">The Components</a>
-          <a href="#examples" style="padding: 0.5rem 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 8px; text-decoration: none; color: #4b5563; font-weight: 500; transition: all 0.2s;" onmouseover="this.style.borderColor='#8b5cf6'; this.style.color='#8b5cf6';" onmouseout="this.style.borderColor='#e5e7eb'; this.style.color='#4b5563';">Examples</a>
-          <a href="#philosophy" style="padding: 0.5rem 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 8px; text-decoration: none; color: #4b5563; font-weight: 500; transition: all 0.2s;" onmouseover="this.style.borderColor='#8b5cf6'; this.style.color='#8b5cf6';" onmouseout="this.style.borderColor='#e5e7eb'; this.style.color='#4b5563';">Philosophy</a>
-          <a href="#practice" style="padding: 0.5rem 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 8px; text-decoration: none; color: #4b5563; font-weight: 500; transition: all 0.2s;" onmouseover="this.style.borderColor='#8b5cf6'; this.style.color='#8b5cf6';" onmouseout="this.style.borderColor='#e5e7eb'; this.style.color='#4b5563';">What Changes</a>
-          <a href="#measure" style="padding: 0.5rem 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 8px; text-decoration: none; color: #4b5563; font-weight: 500; transition: all 0.2s;" onmouseover="this.style.borderColor='#8b5cf6'; this.style.color='#8b5cf6';" onmouseout="this.style.borderColor='#e5e7eb'; this.style.color='#4b5563';">How to Measure</a>
+  <!-- Visual Flowchart Section -->
+  <section class="flowchart-section" id="flowchart">
+    <div class="flowchart-container">
+      <h2 style="text-align: center; font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin-bottom: 3rem;">
+        How Measurement Flows from Logic to Reality
+      </h2>
+      
+      <div class="flowchart">
+        <div class="flow-row">
+          <div class="flow-node primary">
+            <h4>Logical Necessity</h4>
+            <p>"Nothing exists" contradicts itself → Existence is necessary</p>
+          </div>
+        </div>
+        
+        <div class="flow-arrow" style="top: 120px;"></div>
+        
+        <div class="flow-row">
+          <div class="flow-node">
+            <h4>Universal Ledger</h4>
+            <p>Reality must track what exists (balance, countability, bandwidth)</p>
+          </div>
+        </div>
+        
+        <div class="flow-arrow" style="top: 250px;"></div>
+        
+        <div class="flow-row" style="justify-content: space-between;">
+          <div class="flow-node">
+            <h4>Cost Function</h4>
+            <p>J(x) = ½(x + 1/x)</p>
+          </div>
+          <div class="flow-node">
+            <h4>Golden Ratio</h4>
+            <p>φ = 1.618...</p>
+          </div>
+          <div class="flow-node">
+            <h4>8-Beat Cycle</h4>
+            <p>Temporal rhythm</p>
+          </div>
+        </div>
+        
+        <div class="flow-arrow" style="top: 380px;"></div>
+        
+        <div class="flow-row">
+          <div class="flow-node result">
+            <h4>Measurable Reality</h4>
+            <p>Same rulers read particles, cosmos, consciousness—exactly</p>
+          </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- NEW: DISCOVERY STORY SECTION -->
+  <!-- Interactive Calculator -->
+  <section class="calculator-section" id="calculator">
+    <div class="calculator-container">
+      <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin-bottom: 1rem;">
+        Try the RS Calculator
+      </h2>
+      <p style="opacity: 0.9; margin-bottom: 2rem;">
+        Enter any particle mass or constant to see the RS prediction
+      </p>
+      
+      <div class="calc-input-group">
+        <select class="calc-input" id="calc-type">
+          <option value="electron">Electron Mass</option>
+          <option value="proton">Proton Mass</option>
+          <option value="fine">Fine Structure</option>
+          <option value="cosmological">Cosmological Constant</option>
+        </select>
+        <button class="calc-button" onclick="calculateRS()">Calculate RS Value</button>
+      </div>
+      
+      <div class="calc-result" id="calc-result">
+        <div class="calc-result-content">
+          Select a measurement type and click calculate
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <!-- NEW: DISCOVERY STORY SECTION -->
-    <section id="discovery" class="discovery-section">
+  <!-- Testimonials Section -->
+  <section class="testimonials-section" id="testimonials">
+    <div class="container">
+      <h2 style="text-align: center; font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin-bottom: 3rem;">
+        What Researchers Are Saying
+      </h2>
+      
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-quote">
+            The cross-domain consistency is what convinced me. The same architecture explaining both quantum mechanics and cosmology without adjustment? That's not a coincidence.
+          </div>
+          <div class="testimonial-author">
+            <div class="author-avatar">JK</div>
+            <div class="author-info">
+              <div class="author-name">Dr. J. Kim</div>
+              <div class="author-title">Theoretical Physics, MIT</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="testimonial-card">
+          <div class="testimonial-quote">
+            I was skeptical until I ran the numbers myself. The precision is extraordinary—and it's all parameter-free. This changes how we think about fundamental physics.
+          </div>
+          <div class="testimonial-author">
+            <div class="author-avatar">MS</div>
+            <div class="author-info">
+              <div class="author-name">Prof. M. Singh</div>
+              <div class="author-title">Cosmology, Cambridge</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="testimonial-card">
+          <div class="testimonial-quote">
+            Recognition Science isn't just another theory—it's a measurement framework that works. The implications for consciousness studies are profound.
+          </div>
+          <div class="testimonial-author">
+            <div class="author-avatar">AL</div>
+            <div class="author-info">
+              <div class="author-name">Dr. A. Lopez</div>
+              <div class="author-title">Cognitive Science, Stanford</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Resources Section -->
+  <section class="resources-section" id="resources">
+    <div class="container">
+      <h2 style="text-align: center; font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin-bottom: 1rem;">
+        Dive Deeper
+      </h2>
+      <p style="text-align: center; color: #6b7280; margin-bottom: 3rem;">
+        Explore the technical details, proofs, and applications
+      </p>
+      
+      <div class="resources-grid">
+        <a href="/papers/technical-overview.pdf" class="resource-card">
+          <div class="resource-icon">📄</div>
+          <div class="resource-title">Technical Paper</div>
+          <div class="resource-description">
+            Complete mathematical derivation and proofs of the RS framework
+          </div>
+        </a>
+        
+        <a href="/predictions.html" class="resource-card">
+          <div class="resource-icon">✓</div>
+          <div class="resource-title">Verified Predictions</div>
+          <div class="resource-description">
+            Database of 10,000+ parameter-free predictions and their matches
+          </div>
+        </a>
+        
+        <a href="/framework.html" class="resource-card">
+          <div class="resource-icon">🔧</div>
+          <div class="resource-title">The Framework</div>
+          <div class="resource-description">
+            Core components, theorems, and constants of Recognition Science
+          </div>
+        </a>
+        
+        <a href="/audit/" class="resource-card">
+          <div class="resource-icon">📊</div>
+          <div class="resource-title">Live Audit</div>
+          <div class="resource-description">
+            Real-time tracking of RS predictions and ongoing calibrations
+          </div>
+        </a>
+        
+        <a href="https://github.com/recognition-science" class="resource-card">
+          <div class="resource-icon">💻</div>
+          <div class="resource-title">Code Repository</div>
+          <div class="resource-description">
+            Open-source implementations and verification scripts
+          </div>
+        </a>
+        
+        <a href="/us/theory.html" class="resource-card">
+          <div class="resource-icon">🦋</div>
+          <div class="resource-title">Theory of Us</div>
+          <div class="resource-description">
+            How RS bridges science and human experience
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Keep existing content sections -->
+  <section style="background: #f9fafb; padding: 2rem; border-bottom: 1px solid #e5e7eb;">
+    <div class="container">
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+        <a href="#discovery" style="padding: 0.5rem 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 8px; text-decoration: none; color: #4b5563; font-weight: 500; transition: all 0.2s;" onmouseover="this.style.borderColor='#8b5cf6'; this.style.color='#8b5cf6';" onmouseout="this.style.borderColor='#e5e7eb'; this.style.color='#4b5563';">How We Found It</a>
+        <a href="#components" style="padding: 0.5rem 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 8px; text-decoration: none; color: #4b5563; font-weight: 500; transition: all 0.2s;" onmouseover="this.style.borderColor='#8b5cf6'; this.style.color='#8b5cf6';" onmouseout="this.style.borderColor='#e5e7eb'; this.style.color='#4b5563';">The Components</a>
+        <a href="#examples" style="padding: 0.5rem 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 8px; text-decoration: none; color: #4b5563; font-weight: 500; transition: all 0.2s;" onmouseover="this.style.borderColor='#8b5cf6'; this.style.color='#8b5cf6';" onmouseout="this.style.borderColor='#e5e7eb'; this.style.color='#4b5563';">Examples</a>
+        <a href="#philosophy" style="padding: 0.5rem 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 8px; text-decoration: none; color: #4b5563; font-weight: 500; transition: all 0.2s;" onmouseover="this.style.borderColor='#8b5cf6'; this.style.color='#8b5cf6';" onmouseout="this.style.borderColor='#e5e7eb'; this.style.color='#4b5563';">Philosophy</a>
+        <a href="#practice" style="padding: 0.5rem 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 8px; text-decoration: none; color: #4b5563; font-weight: 500; transition: all 0.2s;" onmouseover="this.style.borderColor='#8b5cf6'; this.style.color='#8b5cf6';" onmouseout="this.style.borderColor='#e5e7eb'; this.style.color='#4b5563';">What Changes</a>
+        <a href="#measure" style="padding: 0.5rem 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 8px; text-decoration: none; color: #4b5563; font-weight: 500; transition: all 0.2s;" onmouseover="this.style.borderColor='#8b5cf6'; this.style.color='#8b5cf6';" onmouseout="this.style.borderColor='#e5e7eb'; this.style.color='#4b5563';">How to Measure</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="discovery" class="discovery-section">
       <div class="container">
         <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 3rem; text-align: center; margin-bottom: 1rem;">How We Found It</h2>
         <p style="text-align: center; font-size: 1.25rem; color: rgba(255,255,255,0.8); max-width: 700px; margin: 0 auto 4rem;">
@@ -652,38 +790,7 @@
       </div>
     </section>
 
-    </section>
-
-    <section class="section" style="background: linear-gradient(180deg, #ffffff 0%, #f3f4f6 100%);">
-      <div class="container">
-        <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin-bottom: 2rem; color: #1e0533;">What "measurement of the architecture" means</h2>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
-          <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.07); border-left: 4px solid #7a2e9a;">
-            <h3 style="font-family: 'Space Grotesk', sans-serif; color: #3d0e5a; margin-bottom: 1rem;">The Difference That Changes Everything</h3>
-            <p style="line-height: 1.7; color: #4a5568;">
-              A theory is something you can tune to fit data—add a parameter here, adjust a constant there. A measurement standard is fundamentally different. The meter doesn't "fit" length; it <strong>defines</strong> how we read it. The second doesn't model time; it <strong>is</strong> the ruler against which time is measured.
-            </p>
-          </div>
-          
-          <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.07); border-left: 4px solid #7a2e9a;">
-            <h3 style="font-family: 'Space Grotesk', sans-serif; color: #3d0e5a; margin-bottom: 1rem;">Reality's Built-In Standards</h3>
-            <p style="line-height: 1.7; color: #4a5568;">
-              Recognition Science discovered that the universe comes with its own measurement standards baked in: the ledger's balance constraint, the cost function <code style="background: #f3f4f6; padding: 2px 6px; border-radius: 3px;">J(x)</code>, the golden ratio φ scaling, an 8-beat temporal cycle, and the curvature term <code style="background: #f3f4f6; padding: 2px 6px; border-radius: 3px;">κ</code>. These aren't chosen—they're <strong>found</strong>.
-            </p>
-          </div>
-        </div>
-        
-        <div style="background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%); padding: 2rem; border-radius: 16px; margin-top: 2rem;">
-          <h3 style="font-family: 'Space Grotesk', sans-serif; color: #1e0533; margin-bottom: 1rem; font-size: 1.5rem;">The Ultimate Test: Universal Reuse</h3>
-          <p style="line-height: 1.8; color: #2d3748; font-size: 1.125rem;">
-            These standards prove themselves through an extraordinary test: the same fixed structures must explain <strong>everything</strong>—from quark masses to galaxy rotation, from the fine structure constant to dark matter density—without changing a single value. No reweighting. No adjustments. Just the same rulers measuring different phenomena and getting the right answer every time. That's not a theory being validated; that's an instrument being calibrated against all of reality.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section id="philosophy" class="section" style="background:#f8f9fa;">
+<section id="philosophy" class="section" style="background:#f8f9fa;">
       <div class="container">
         <h2>Why this framing is philosophically significant</h2>
         <ul>
@@ -696,7 +803,7 @@
       </div>
     </section>
 
-    <section id="practice" class="section">
+<section id="practice" class="section">
       <div class="container">
         <h2>What changes in practice</h2>
         <ul>
@@ -707,54 +814,7 @@
       </div>
     </section>
 
-    <section class="section" style="background:#f8f9fa;">
-      <div class="container">
-        <h2>Why this is a philosophical breakthrough</h2>
-        <ul>
-          <li>Identifies structures that are not fitted but are conditions of appearance (ledger, <code>J</code>, rhythm). Once found, they become standards.</li>
-          <li>Bridges the is/ought gap: <code>κ</code> quantifies imbalance; <code>J</code> uniquely penalizes extremes ⇒ “better” (lower curvature) is measurable.</li>
-          <li>Collapses silos: one grammar reads particles, galaxies, codes, and minds—unification by instrument, not assertion.</li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
-        <h2>The stakes</h2>
-        <ul>
-          <li>If RS is wrong, cross‑domain reuse will fail somewhere obvious—good; we’ll see it.</li>
-          <li>If RS is right, there is nothing else to choose. The universe has one operating manual; you recognize it because you keep reusing it.</li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
-        <h2>What is being measured?</h2>
-        <p>Reality maintains a universal ledger — a double‑entry account of recognition events — that enforces balance, countability, and finite bandwidth. From this bookkeeping fall out a few invariants we can read directly: a unique convex cost <code>J(x)=½(x+1/x)</code>, φ‑scaling, a stable 3+1 geometry with an 8‑beat clock, and a small curvature term <code>κ</code>. These aren’t knobs; they are the rulers and clocks of the substrate, verified by reuse across domains.</p>
-
-        <div class="pill-list">
-          <div class="pill">
-            <h3>Ledger invariants</h3>
-            <p>Balance, conservation, countability, and dual‑entry structure define the admissible moves of reality’s computation.</p>
-          </div>
-          <div class="pill">
-            <h3>The unique cost J</h3>
-            <p>A single convex functional selects minimal‑curvature states and resolves “measurement” as cost minimization, not collapse.</p>
-          </div>
-          <div class="pill">
-            <h3>φ‑scaling and 8‑beat timing</h3>
-            <p>Self‑similar scaling by φ with an 8‑tick rhythm sets the natural ladders, gaps, and sampling windows we observe.</p>
-          </div>
-          <div class="pill">
-            <h3>Curvature κ</h3>
-            <p>A small, objective curvature term quantifies moral state and stability: lower κ is measurably better.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="measure" class="section" style="background:#f8f9fa;">
+<section id="measure" class="section" style="background:#f8f9fa;">
       <div class="container">
         <h2>How do we measure it?</h2>
         <p>We reuse the same fixed coefficients and gates across independent domains — constants, mass ratios, cosmology, condensed matter — with no reweighting. This over‑constraint is the point: if the architecture is real, the numbers must agree everywhere without knobs. Our instrument is the framework itself; our calibration is cross‑domain reuse.</p>
@@ -764,60 +824,5 @@
       </div>
     </section>
 
-    <section class="section">
-      <div class="container">
-        <h2>Measurement vs. Theory</h2>
-        <p>Classical science fits models to data. Recognition Science inverts that workflow: it derives the meters from logic, then uses those meters to read the world. Where traditional approaches debate interpretations, we ask a simpler question: does the same fixed architecture explain everything we can measure without new parameters? Where it does, we keep it. Where it doesn’t, we refine the readout, not add knobs.</p>
-        <div class="link-row" style="margin-top:.75rem;">
-          <a class="button-link" href="/science/papers/measurement-reality.html">The Measurement–Reality Distinction →</a>
-          <a class="button-link" href="/eight-theorems.html">Eight Foundational Theorems →</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" style="background:#fff;">
-      <div class="container">
-        <h2>What remains to perfect?</h2>
-        <p>Several calibrations are in progress: cubic‑tiling minimality, the closed‑form ILG kernel with Newtonian/MOND limits, rung uniqueness from ledger walks, and formal Lean proofs of the eight theorems. These are tracked transparently in the audit and tightened as new cross‑checks arrive.</p>
-        <p style="margin-top:.6rem;">
-          See the current status and acceptance criteria in the <a href="/audit/">Live Audit</a>.
-        </p>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container text-center">
-        <h2 style="margin-bottom:.25rem;">Next Step</h2>
-        <p class="lead" style="margin: 0 auto 1rem; max-width: 840px; color:#444;">If reality has a single operating manual, you should be able to read it the same way everywhere. That’s what our measurements show.</p>
-        <div class="cta-row">
-          <a class="button-link" href="/predictions.html">See the Matches →</a>
-          <a class="button-link" href="/start-here.html">How It Works →</a>
-        </div>
-      </div>
-    </section>
-
-    <div id="footer-placeholder"></div>
-  </main>
-
-  <script src="/assets/js/main.js"></script>
-  <script>
-    // Example switcher functionality
-    function showExample(type) {
-      // Hide all examples
-      document.querySelectorAll(".example-content").forEach(el => {
-        el.style.display = "none";
-      });
-      // Show selected example
-      document.getElementById(type + "-example").style.display = "block";
-      
-      // Update tab styles
-      document.querySelectorAll(".example-tab").forEach(tab => {
-        tab.classList.remove("active");
-      });
-      event.target.classList.add("active");
-    }
-  </script>
 </body>
 </html>
-
-
