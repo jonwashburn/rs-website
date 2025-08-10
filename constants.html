@@ -242,14 +242,15 @@
     <section class="constants-section">
       <div class="container">
         <h2 class="section-title">🎉 The New Constants of Reality 🎊</h2>
-        <div class="reading">
-          <p>From the Meta‑Principle and the Eight Theorems flow scales and ratios that are not optional. They are the only values compatible with a positive, balanced, double‑entry ledger that updates locally in atomic ticks.</p>
+        <div class="reading" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%); padding: 2rem; border-radius: 12px; margin-bottom: 2rem;">
+          <p style="font-size: 1.1rem; line-height: 1.7;">From the Meta‑Principle and the Eight Theorems flow scales and ratios that are <strong>not optional</strong>. They are the only values compatible with a positive, balanced, double‑entry ledger that updates locally in atomic ticks.</p>
           
-          <p><em>Corollary:</em> These constants together predict Ω<sub>dm</sub> ≈ 0.2649 from pure geometry—without tuning.</p>
+          <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(255, 255, 255, 0.5); border-left: 4px solid #8b5cf6; border-radius: 4px;">
+            <p style="margin: 0; font-style: italic;"><strong>Remarkable Corollary:</strong> These constants together predict the dark matter fraction Ω<sub>dm</sub> ≈ 0.2649 from pure geometry—without any tuning or free parameters.</p>
+          </div>
         </div>
         
         <div class="constant-explorer">
-          <h3 class="explorer-title">Explore the Foundation</h3>
           <div class="explorer-tabs">
             <div class="explorer-tab active" onclick="showTab('golden')">Golden Ratio</div>
             <div class="explorer-tab" onclick="showTab('coherence')">Coherence Energy</div>
@@ -475,6 +476,23 @@
       setTimeout(() => {
         card.style.transform = 'scale(1)';
       }, 300);
+    }
+    
+    // Function to show old constant content
+    function showOldConstant(constantId) {
+      // Remove active class from all buttons
+      const buttons = document.querySelectorAll('.old-constant-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      
+      // Remove active class from all content
+      const contents = document.querySelectorAll('.old-constant-content');
+      contents.forEach(content => content.classList.remove('active'));
+      
+      // Add active class to clicked button
+      event.target.closest('.old-constant-btn').classList.add('active');
+      
+      // Show selected content
+      document.getElementById(constantId).classList.add('active');
     }
   </script>
 </body>
