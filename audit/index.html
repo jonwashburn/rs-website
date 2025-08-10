@@ -316,6 +316,63 @@ python3 scripts/ci_status.py</code></pre>
     } catch(e) {
       // ignore
     }
+    // Attempt to load masses snapshot and render compact tables
+    try {
+      const massesURL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/masses_snapshot.json';
+      const ms = await loadJSON(massesURL);
+      const cl = ms.charged_leptons || {}; const q = ms.quarks || {}; const b = ms.bosons || {}; const nu = ms.neutrinos || {};
+      const card = document.createElement('section');
+      card.className = 'component-card';
+      card.innerHTML = `
+        <h3>Masses (snapshot)</h3>
+        <div class="muted">Last updated: ${ms.last_updated}</div>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap:12px; margin-top:8px">
+          <div>
+            <strong>Charged leptons (${cl.version||'—'})</strong>
+            <ul style="margin:6px 0 0 18px">
+              <li>μ/e: ${(cl.deltas_pct&&cl.deltas_pct.mu_over_e!=null)?cl.deltas_pct.mu_over_e.toFixed(3):'—'}%</li>
+              <li>τ/μ: ${(cl.deltas_pct&&cl.deltas_pct.tau_over_mu!=null)?cl.deltas_pct.tau_over_mu.toFixed(3):'—'}%</li>
+              <li>τ/e: ${(cl.deltas_pct&&cl.deltas_pct.tau_over_e!=null)?cl.deltas_pct.tau_over_e.toFixed(3):'—'}%</li>
+            </ul>
+          </div>
+          <div>
+            <strong>Quarks (${q.version||'—'})</strong>
+            <ul style="margin:6px 0 0 18px">
+              <li>s/d: ${(q.down&&q.down.deltas_pct&&q.down.deltas_pct.s_over_d!=null)?q.down.deltas_pct.s_over_d.toFixed(3):'—'}%</li>
+              <li>b/s: ${(q.down&&q.down.deltas_pct&&q.down.deltas_pct.b_over_s!=null)?q.down.deltas_pct.b_over_s.toFixed(3):'—'}%</li>
+              <li>b/d: ${(q.down&&q.down.deltas_pct&&q.down.deltas_pct.b_over_d!=null)?q.down.deltas_pct.b_over_d.toFixed(3):'—'}%</li>
+              <li style="margin-top:6px">c/u: ${(q.up&&q.up.deltas_pct&&q.up.deltas_pct.c_over_u!=null)?q.up.deltas_pct.c_over_u.toFixed(3):'—'}%</li>
+              <li>t/c: ${(q.up&&q.up.deltas_pct&&q.up.deltas_pct.t_over_c!=null)?q.up.deltas_pct.t_over_c.toFixed(3):'—'}%</li>
+              <li>t/u: ${(q.up&&q.up.deltas_pct&&q.up.deltas_pct.t_over_u!=null)?q.up.deltas_pct.t_over_u.toFixed(3):'—'}%</li>
+            </ul>
+          </div>
+          <div>
+            <strong>Bosons (${b.version||'—'})</strong>
+            <ul style="margin:6px 0 0 18px">
+              <li>Z/W: ${(b.deltas_pct&&b.deltas_pct.Z_over_W!=null)?b.deltas_pct.Z_over_W.toFixed(3):'—'}%</li>
+              <li>H/Z: ${(b.deltas_pct&&b.deltas_pct.H_over_Z!=null)?b.deltas_pct.H_over_Z.toFixed(3):'—'}%</li>
+              <li>H/W: ${(b.deltas_pct&&b.deltas_pct.H_over_W!=null)?b.deltas_pct.H_over_W.toFixed(3):'—'}%</li>
+            </ul>
+          </div>
+          <div>
+            <strong>Neutrinos (${nu.version||'—'})</strong>
+            <ul style="margin:6px 0 0 18px">
+              <li>Ordering: ${nu.ordering||'—'}; rungs: ${(nu.rungs||[]).join(', ')||'—'}</li>
+              <li>m (meV): ${(nu.masses_meV||[]).map(x=>x.toFixed(4)).join(', ')||'—'}</li>
+              <li>Σmν: ${nu.sum_mnu_meV!=null?nu.sum_mnu_meV.toFixed(3):'—'} meV; mβ: ${nu.m_beta_meV!=null?nu.m_beta_meV.toFixed(3):'—'} meV</li>
+              <li>Dirac: ${nu.dirac===true?'yes':(nu.dirac===false?'no':'—')}</li>
+            </ul>
+          </div>
+        </div>
+        <div class="muted" style="margin-top:8px">
+          Archival TeX: <a href="https://raw.githubusercontent.com/jonwashburn/audit/main/papers/particle-masses-ai.tex" target="_blank" rel="noopener">AI snapshot (v21) ↗</a>
+        </div>`;
+      const archEl5 = document.getElementById('arch-card');
+      const mainEl5 = document.querySelector('main .content-page') || document.querySelector('main');
+      mainEl5.insertBefore(card, archEl5);
+    } catch(e) {
+      // ignore
+    }
     // Render mermaid
     mermaid.run({ nodes: [ document.getElementById('mmd') ] });
     // Render study guide markdown
