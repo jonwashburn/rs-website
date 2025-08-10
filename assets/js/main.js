@@ -107,6 +107,17 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    fetchAndInject('/_includes/header.html', 'header-placeholder');
-    fetchAndInject('/_includes/footer.html', 'footer-placeholder');
+    // Determine the base path based on the current location
+    let basePath = '';
+    const path = window.location.pathname;
+    
+    // Check if we're in a subdirectory
+    if (path.includes('/audit/') || path.includes('/science/') || path.includes('/us/') || path.includes('/questions/') || path.includes('/astrology/') || path.includes('/encyclopedia/')) {
+        basePath = '../';
+    } else if (path.includes('/science/papers/')) {
+        basePath = '../../';
+    }
+    
+    fetchAndInject(basePath + 'includes/header.html', 'header-placeholder');
+    fetchAndInject(basePath + 'includes/footer.html', 'footer-placeholder');
 });
