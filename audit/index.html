@@ -312,28 +312,37 @@
     
     /* Mode Toggle */
     .mode-toggle {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
+      text-align: center;
+      margin: 20px auto;
       z-index: 10000;
+    }
+    
+    .mode-toggle button {
       background: #1a1a1a;
       border: 2px solid var(--amber);
-      padding: 10px 15px;
+      padding: 10px 20px;
       cursor: pointer;
       font-family: 'Share Tech Mono', monospace;
       color: var(--amber);
       font-size: 0.9rem;
       letter-spacing: 0.1em;
       transition: all 0.3s;
+      display: inline-block;
+      margin: 0 5px;
     }
     
-    .mode-toggle:hover {
+    .mode-toggle button:hover {
       background: var(--amber);
       color: #000;
       box-shadow: 0 0 20px var(--amber);
     }
     
-    .mode-toggle.boring-mode {
+    .mode-toggle button.active {
+      background: var(--amber);
+      color: #000;
+    }
+    
+    body:not(.retro-mode) .mode-toggle button {
       background: #fff;
       border: 1px solid #ccc;
       color: #333;
@@ -341,9 +350,14 @@
       letter-spacing: normal;
     }
     
-    .mode-toggle.boring-mode:hover {
+    body:not(.retro-mode) .mode-toggle button:hover {
       background: #f0f0f0;
       box-shadow: none;
+    }
+    
+    body:not(.retro-mode) .mode-toggle button.active {
+      background: #333;
+      color: #fff;
     }
     
     /* Easter Egg Link */
@@ -353,13 +367,44 @@
       cursor: pointer;
     }
     
-    /* Hide content based on mode */
-    body.retro-mode .normal-content {
+    /* Show/hide retro overlay based on mode */
+    body:not(.retro-mode) .retro-content {
       display: none !important;
     }
     
-    body:not(.retro-mode) .retro-content {
-      display: none !important;
+    /* In retro mode, style the normal content with retro theme */
+    body.retro-mode .normal-content .component-card {
+      background: #0a0a0a;
+      border: 2px solid var(--amber);
+      color: var(--amber);
+      box-shadow: 0 0 20px rgba(255,176,0,0.3);
+    }
+    
+    body.retro-mode .normal-content h1, 
+    body.retro-mode .normal-content h2, 
+    body.retro-mode .normal-content h3 {
+      color: var(--green);
+      text-shadow: 0 0 10px var(--green);
+    }
+    
+    body.retro-mode .normal-content .muted {
+      color: var(--amber);
+      opacity: 0.8;
+    }
+    
+    body.retro-mode .normal-content code {
+      background: rgba(0,255,65,0.1);
+      color: var(--green);
+      border: 1px solid var(--green);
+    }
+    
+    body.retro-mode .normal-content a {
+      color: var(--cyan);
+    }
+    
+    body.retro-mode .intro-section {
+      background: #000 !important;
+      border-bottom: 2px solid var(--amber);
     }
     
     /* ASCII Art */
@@ -375,12 +420,7 @@
   </style>
 </head>
 <body class="retro-mode">
-  <!-- Mode Toggle -->
-  <div class="mode-toggle" onclick="toggleMode()">
-    <a href="https://www.youtube.com/watch?v=0ds0wYpc1eM" class="easter-egg" target="_blank">REAL GENIUS MODE</a>
-  </div>
-  
-  <!-- Retro Content -->
+  <!-- Retro Content Header -->
   <div class="retro-content">
     <div class="terminal-header">
       <div class="status-lights">
@@ -396,7 +436,18 @@
 ╚═══════════════════════════════════════════════════════════╝
       </div>
     </div>
-    
+  </div>
+  
+  <!-- Mode Toggle - Centered below header -->
+  <div class="mode-toggle">
+    <button onclick="setMode('retro')" class="retro-btn active">
+      <a href="https://www.youtube.com/watch?v=0ds0wYpc1eM" class="easter-egg" target="_blank">REAL GENIUS MODE</a>
+    </button>
+    <button onclick="setMode('boring')" class="boring-btn">BORING MODE</button>
+  </div>
+  
+  <!-- Main Content Area -->
+  <div class="retro-content">
     <div class="terminal-window" data-terminal-id="MAIN">
       <div class="reactor-display">
         <div class="reactor-core">
@@ -657,18 +708,19 @@ python3 scripts/ci_status.py</code></pre>
 
   <script>
   // Mode toggle function
-  function toggleMode() {
+  function setMode(mode) {
     const body = document.body;
-    const toggle = document.querySelector('.mode-toggle');
+    const retroBtn = document.querySelector('.retro-btn');
+    const boringBtn = document.querySelector('.boring-btn');
     
-    if (body.classList.contains('retro-mode')) {
-      body.classList.remove('retro-mode');
-      toggle.classList.add('boring-mode');
-      toggle.innerHTML = 'BORING MODE';
-    } else {
+    if (mode === 'retro') {
       body.classList.add('retro-mode');
-      toggle.classList.remove('boring-mode');
-      toggle.innerHTML = '<a href="https://www.youtube.com/watch?v=0ds0wYpc1eM" class="easter-egg" target="_blank">REAL GENIUS MODE</a>';
+      retroBtn.classList.add('active');
+      boringBtn.classList.remove('active');
+    } else {
+      body.classList.remove('retro-mode');
+      retroBtn.classList.remove('active');
+      boringBtn.classList.add('active');
     }
   }
   
