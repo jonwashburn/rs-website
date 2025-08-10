@@ -251,7 +251,9 @@ python3 scripts/ci_status.py</code></pre>
             <thead><tr><th style="text-align:left">k (h/Mpc)</th><th style="text-align:right">a</th><th style="text-align:right">Sigma</th></tr></thead>
             <tbody>${rows}</tbody>
           </table>
-        </div>`;
+        </div>
+        ${(lj.grid&&lj.grid.length)?`<div style="margin-top:8px"><details><summary>Grid (Σ over a,k)</summary><table style=\"width:100%; border-collapse:collapse\"><thead><tr><th>a</th><th>k (h/Mpc)</th><th>Sigma</th></tr></thead><tbody>${lj.grid.map(g=>`<tr><td>${g.a.toFixed(2)}</td><td>${g.k}</td><td>${g.Sigma.toFixed(6)}</td></tr>`).join('')}</tbody></table></details></div>`:''}
+        `;
       // Insert before Architecture card for visibility
       const mainEl = document.querySelector('main .content-page') || document.querySelector('main');
       const archEl = document.getElementById('arch-card');
@@ -309,10 +311,39 @@ python3 scripts/ci_status.py</code></pre>
         <h3>CI Status</h3>
         <div class="muted">Last updated: ${ci.last_updated}</div>
         <div style="margin-top:8px">Overall: <span class="${ok}">${ok==='ok'?'passed':'failed'}</span></div>
-        <div class="muted" style="margin-top:6px">Includes: gates, growth JSON, lensing JSON, and 2D/3D conservation checks.</div>`;
+        <div class="muted" style="margin-top:6px">Includes: gates, growth JSON, lensing JSON, and 2D/3D conservation checks.</div>
+        <div class="muted" style="margin-top:6px">Uncertainties file: ${ci.uncertainties && ci.uncertainties.present ? (ci.uncertainties.nonzero ? 'present (non‑zero)' : 'present (zeros)') : 'missing'}</div>`;
       const archEl4 = document.getElementById('arch-card');
       const mainEl4 = document.querySelector('main .content-page') || document.querySelector('main');
       mainEl4.insertBefore(card, archEl4);
+    } catch(e) {
+      // ignore
+    }
+    // Attempt to load metrics and render a compact panel
+    try {
+      const metricsURL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/metrics.json';
+      const mx = await loadJSON(metricsURL);
+      const card = document.createElement('section');
+      card.className = 'component-card';
+      const allGreen = (mx.badges && mx.badges.all_green) ? 'ok' : 'warn';
+      card.innerHTML = `
+        <h3>Metrics</h3>
+        <div class="muted">Last updated: ${mx.last_updated}</div>
+        <div style="margin-top:8px">Overall: <span class="${allGreen}">${allGreen==='ok'?'all‑green':'attention'}</span></div>
+        <div class="muted" style="margin-top:6px">No‑knobs: ${mx.badges && mx.badges.no_knobs ? 'yes' : 'no'}</div>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap:12px; margin-top:10px">
+          <div><strong>Masses</strong><div class="muted" style="margin-top:4px">CL max |Δ|: ${(mx.masses&&mx.masses.charged_leptons_max_abs_pct!=null)?mx.masses.charged_leptons_max_abs_pct.toFixed(3):'—'}%</div>
+          <div class="muted">Qdown max |Δ|: ${(mx.masses&&mx.masses.quarks_down_max_abs_pct!=null)?mx.masses.quarks_down_max_abs_pct.toFixed(3):'—'}%</div>
+          <div class="muted">Qup max |Δ|: ${(mx.masses&&mx.masses.quarks_up_max_abs_pct!=null)?mx.masses.quarks_up_max_abs_pct.toFixed(3):'—'}%</div>
+          <div class="muted">Bosons max |Δ|: ${(mx.masses&&mx.masses.bosons_max_abs_pct!=null)?mx.masses.bosons_max_abs_pct.toFixed(3):'—'}%</div></div>
+          <div><strong>Growth</strong><div class="muted" style="margin-top:4px">max |D/Λ−1|: ${(mx.growth&&mx.growth.max_abs_ratio_dev!=null)?mx.growth.max_abs_ratio_dev.toFixed(3):'—'}</div>
+          <div class="muted">mean |D/Λ−1|: ${(mx.growth&&mx.growth.mean_abs_ratio_dev!=null)?mx.growth.mean_abs_ratio_dev.toFixed(3):'—'}</div></div>
+          <div><strong>Lensing</strong><div class="muted" style="margin-top:4px">max |Σ−1|: ${(mx.lensing&&mx.lensing.max_abs_sigma_dev!=null)?mx.lensing.max_abs_sigma_dev.toFixed(3):'—'}</div>
+          <div class="muted">mean |Σ−1|: ${(mx.lensing&&mx.lensing.mean_abs_sigma_dev!=null)?mx.lensing.mean_abs_sigma_dev.toFixed(3):'—'}</div></div>
+        </div>`;
+      const archElM = document.getElementById('arch-card');
+      const mainElM = document.querySelector('main .content-page') || document.querySelector('main');
+      mainElM.insertBefore(card, archElM);
     } catch(e) {
       // ignore
     }
@@ -358,8 +389,12 @@ python3 scripts/ci_status.py</code></pre>
             <strong>Neutrinos (${nu.version||'—'})</strong>
             <ul style="margin:6px 0 0 18px">
               <li>Ordering: ${nu.ordering||'—'}; rungs: ${(nu.rungs||[]).join(', ')||'—'}</li>
-              <li>m (meV): ${(nu.masses_meV||[]).map(x=>x.toFixed(4)).join(', ')||'—'}</li>
-              <li>Σmν: ${nu.sum_mnu_meV!=null?nu.sum_mnu_meV.toFixed(3):'—'} meV; mβ: ${nu.m_beta_meV!=null?nu.m_beta_meV.toFixed(3):'—'} meV</li>
+              <li>m (meV): ${(() => {
+                const mv = nu.masses_meV||[]; const mu = nu.masses_unc_meV||[];
+                if (!mv.length) return '—';
+                return mv.map((x,idx) => `${x.toFixed(4)}${(mu[idx]!=null && mu[idx]!==0)?` ± ${Number(mu[idx]).toPrecision(2)}`:''}`).join(', ');
+              })()}</li>
+              <li>Σmν: ${nu.sum_mnu_meV!=null?nu.sum_mnu_meV.toFixed(3):'—'}${(nu.sum_mnu_unc_meV!=null && nu.sum_mnu_unc_meV!==0)?` ± ${Number(nu.sum_mnu_unc_meV).toPrecision(2)}`:''} meV; mβ: ${nu.m_beta_meV!=null?nu.m_beta_meV.toFixed(3):'—'} meV</li>
               <li>Dirac: ${nu.dirac===true?'yes':(nu.dirac===false?'no':'—')}</li>
             </ul>
           </div>
@@ -374,7 +409,10 @@ python3 scripts/ci_status.py</code></pre>
             <strong>CKM |V| (${ms.ckm && ms.ckm.version || '—'})</strong>
             <table style="margin-top:6px; width:100%; border-collapse:collapse">
               <tbody>
-                ${(ms.ckm&&ms.ckm.V||[]).map(row => `<tr>${row.map(v=>`<td style=\"padding:2px 6px\">${v.toFixed(4)}</td>`).join('')}</tr>`).join('')}
+                ${(ms.ckm&&ms.ckm.V||[]).map((row,i) => `<tr>${row.map((v,j)=>{
+                  const unc = (ms.ckm && ms.ckm.V_unc && ms.ckm.V_unc[i] && ms.ckm.V_unc[i][j]!=null) ? ms.ckm.V_unc[i][j] : null;
+                  return `<td style=\"padding:2px 6px\">${v.toFixed(4)}${(unc&&unc!==0)?` ± ${Number(unc).toPrecision(2)}`:''}</td>`;
+                }).join('')}</tr>`).join('')}
               </tbody>
             </table>
             <div class="muted" style="margin-top:6px">(λ, A, ρ̄, η̄) = (${ms.ckm?ms.ckm.lambda.toFixed(6):'—'}, ${ms.ckm?ms.ckm.A.toFixed(3):'—'}, ${ms.ckm?ms.ckm.rho_bar.toFixed(3):'—'}, ${ms.ckm?ms.ckm.eta_bar.toFixed(3):'—'})</div>
@@ -382,10 +420,10 @@ python3 scripts/ci_status.py</code></pre>
           <div>
             <strong>PMNS (angles, ${ms.pmns && ms.pmns.version || '—'})</strong>
             <ul style="margin:6px 0 0 18px">
-              <li>θ12 = ${ms.pmns?ms.pmns.theta12_deg.toFixed(2):'—'}°</li>
-              <li>θ23 = ${ms.pmns?ms.pmns.theta23_deg.toFixed(2):'—'}°</li>
-              <li>θ13 = ${ms.pmns?ms.pmns.theta13_deg.toFixed(2):'—'}°</li>
-              <li>δCP ≈ ${ms.pmns?ms.pmns.delta_CP_deg.toFixed(1):'—'}°; JCP ≈ ${ms.pmns?ms.pmns.J_CP.toFixed(3):'—'}</li>
+              <li>θ12 = ${ms.pmns?ms.pmns.theta12_deg.toFixed(2):'—'}°${ms.pmns&&ms.pmns.theta12_unc_deg?` ± ${ms.pmns.theta12_unc_deg.toFixed(2)}°`:''}</li>
+              <li>θ23 = ${ms.pmns?ms.pmns.theta23_deg.toFixed(2):'—'}°${ms.pmns&&ms.pmns.theta23_unc_deg?` ± ${ms.pmns.theta23_unc_deg.toFixed(2)}°`:''}</li>
+              <li>θ13 = ${ms.pmns?ms.pmns.theta13_deg.toFixed(2):'—'}°${ms.pmns&&ms.pmns.theta13_unc_deg?` ± ${ms.pmns.theta13_unc_deg.toFixed(2)}°`:''}</li>
+              <li>δCP ≈ ${ms.pmns?ms.pmns.delta_CP_deg.toFixed(1):'—'}°${ms.pmns&&ms.pmns.delta_CP_unc_deg?` ± ${ms.pmns.delta_CP_unc_deg.toFixed(1)}°`:''}; JCP ≈ ${ms.pmns?ms.pmns.J_CP.toFixed(3):'—'}${ms.pmns&&ms.pmns.J_CP_unc?` ± ${ms.pmns.J_CP_unc.toPrecision(2)}`:''}</li>
             </ul>
           </div>
         </div>`;
