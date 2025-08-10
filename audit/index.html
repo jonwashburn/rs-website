@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Recognition Science — Live Audit</title>
   <link rel="stylesheet" href="/assets/css/main.css" />
-  <!--style removed-->
+  <style>
     :root { --bg:#0b0d10; --fg:#e6eef8; --muted:#9fb3c8; --accent:#59f; }
     html,body { margin:0; padding:0; background:var(--bg); color:var(--fg); font:16px/1.55 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial; }
     a { color: var(--accent); text-decoration: none; }
@@ -29,7 +29,7 @@
     .muted { color: var(--muted); }
     .ok { color:#9f9; }
     .warn { color:#ffb84d; }
-  <!--/style-->
+  </style>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <script>mermaid.initialize({ startOnLoad: false, theme: 'dark' });</script>
@@ -56,6 +56,11 @@
       <a href="#status">Status</a>
       <a href="#pillars-card">Pillars</a>
       <a href="#ilg-card">ILG</a>
+      <a href="#growth-card">Growth</a>
+      <a href="#lensing-card">Lensing</a>
+      <a href="#ci-card">CI</a>
+      <a href="#metrics-card">Metrics</a>
+      <a href="#masses-card">Masses</a>
       <a href="#lnal-card">LNAL</a>
       <a href="#rung-card">Rungs</a>
       <a href="#loose-card">Loose Ends</a>
@@ -240,6 +245,7 @@ python3 scripts/ci_status.py</code></pre>
       const rows = (lj.lensing||[]).map(r => `<tr><td>${r.k}</td><td>${(r.a||1).toFixed(3)}</td><td>${(r.z!=null?Number(r.z).toFixed(3):'—')}</td><td>${r.Sigma.toFixed(6)}</td></tr>`).join('');
       const lensingCard = document.createElement('section');
       lensingCard.className = 'component-card';
+      lensingCard.id = 'lensing-card';
       lensingCard.innerHTML = `
         <h3>Lensing (live)</h3>
         <div class="muted">Last updated: ${lj.last_updated}</div>
@@ -284,6 +290,7 @@ python3 scripts/ci_status.py</code></pre>
       const cons3URL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/conservation_check_3d.json';
       const c3 = await loadJSON(cons3URL);
       const el = document.createElement('div');
+      el.id = 'cons-3d-card';
       const lap = c3.conservation_check_3d && c3.conservation_check_3d.constant_w_laplacian;
       const varw = c3.conservation_check_3d && c3.conservation_check_3d.varying_w_divergence;
       el.className = 'component-card';
@@ -300,6 +307,25 @@ python3 scripts/ci_status.py</code></pre>
     } catch(e) {
       // ignore
     }
+    // ILG Limit Checks panel
+    try {
+      const limitsURL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/ilg_limit_checks.json';
+      const lim = await loadJSON(limitsURL);
+      const lc = document.createElement('section');
+      lc.className = 'component-card';
+      lc.id = 'ilg-limits-card';
+      lc.innerHTML = `
+        <h3>ILG Limits</h3>
+        <div class="muted">Last updated: ${lim.last_updated || '—'}</div>
+        <div style="margin-top:8px">Newtonian probe μ(a=1,k=1): <code>${(lim.newtonian_limit && lim.newtonian_limit.mu_at_a1_k1!=null)?Number(lim.newtonian_limit.mu_at_a1_k1).toFixed(6):'—'}</code></div>
+        <div class="muted" style="margin-top:6px">Deep probe (a=${lim.deep_limit_probe?lim.deep_limit_probe.a:'—'}, k=${lim.deep_limit_probe?lim.deep_limit_probe.k:'—'}): x=${lim.deep_limit_probe?Number(lim.deep_limit_probe.x).toExponential(3):'—'}, μ=${lim.deep_limit_probe?Number(lim.deep_limit_probe.mu).toFixed(6):'—'}</div>
+        ${(lim.sweep&&lim.sweep.length)?`<div style=\"margin-top:8px\"><details><summary>Sweep (x and μ over a,k)</summary><table style=\"width:100%; border-collapse:collapse\"><thead><tr><th>a</th><th>k</th><th>x</th><th>μ</th></tr></thead><tbody>${lim.sweep.map(s=>`<tr><td>${s.a.toFixed(2)}</td><td>${s.k}</td><td>${Number(s.x).toExponential(3)}</td><td>${Number(s.mu).toFixed(6)}</td></tr>`).join('')}</tbody></table></details></div>`:''}
+      `;
+      const archElL = document.getElementById('arch-card');
+      const mainElL = document.querySelector('main .content-page') || document.querySelector('main');
+      mainElL.insertBefore(lc, archElL);
+    } catch(e) { /* ignore */ }
+
     // Attempt to load CI status grid and show a compact badge
     try {
       const ciURL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/ci_status.json';
@@ -307,6 +333,7 @@ python3 scripts/ci_status.py</code></pre>
       const ok = (ci.summary && ci.summary.passed) ? 'ok' : 'warn';
       const card = document.createElement('section');
       card.className = 'component-card';
+      card.id = 'ci-card';
       card.innerHTML = `
         <h3>CI Status</h3>
         <div class="muted">Last updated: ${ci.last_updated}</div>
@@ -335,6 +362,7 @@ python3 scripts/ci_status.py</code></pre>
       const mx = await loadJSON(metricsURL);
       const card = document.createElement('section');
       card.className = 'component-card';
+      card.id = 'metrics-card';
       const allGreen = (mx.badges && mx.badges.all_green) ? 'ok' : 'warn';
       card.innerHTML = `
         <h3>Metrics</h3>
@@ -364,6 +392,7 @@ python3 scripts/ci_status.py</code></pre>
       const cl = ms.charged_leptons || {}; const q = ms.quarks || {}; const b = ms.bosons || {}; const nu = ms.neutrinos || {};
       const card = document.createElement('section');
       card.className = 'component-card';
+      card.id = 'masses-card';
       card.innerHTML = `
         <h3>Masses (snapshot)</h3>
         <div class="muted">Last updated: ${ms.last_updated}</div>
@@ -446,6 +475,7 @@ python3 scripts/ci_status.py</code></pre>
         const gr = await loadJSON(growthURL);
         const gcard = document.createElement('section');
         gcard.className = 'component-card';
+        gcard.id = 'growth-card';
         const grows = (gr.growth||[]).map(r => `<tr><td>${r.k}</td><td>${(r.D_LCDM!=null? r.D_LCDM.toFixed(6):'—')}</td><td>${(r.D_ILG!=null? r.D_ILG.toFixed(6):'—')}</td><td>${(r.ratio!=null? r.ratio.toFixed(6):'—')}</td></tr>`).join('');
         gcard.innerHTML = `
           <h3>Growth (live)</h3>
