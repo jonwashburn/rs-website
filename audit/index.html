@@ -909,14 +909,23 @@ python3 scripts/ci_status.py</code></pre>
     const lastUpdated = ci.last_updated || status.last_updated || '—';
     const overallStatus = (ci.summary && ci.summary.passed) ? 'passed' : 'failed';
     const statusClass = (ci.summary && ci.summary.passed) ? 'ok' : 'warn';
-    
+    const verdict = ci.verdict || {};
+    const verdictLevel = verdict.level || (ci.summary?.passed ? 'evidence-passing' : 'failing');
+    const verdictClass = verdict.vouched ? 'ok' : (verdictLevel === 'evidence-passing' ? 'warn' : 'warn');
+    const blockers = Array.isArray(verdict.blockers) ? verdict.blockers : [];
+
     document.getElementById('status-body').innerHTML = `
       <div><span class="muted">Last updated:</span> ${lastUpdated}</div>
       <div style="margin-top:8px">${status.thesis || 'Loading thesis...'}</div>
-      <div style="margin-top:8px" class="muted">
-        <a href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener">View audit repository</a> 
-        · Overall: <span class="${statusClass}">${overallStatus}</span>
+      <div style="margin-top:8px">
+        Verdict: <span class="${verdictClass}">${verdictLevel}</span>${verdict.vouched ? ' (vouched)' : ''}
       </div>
+      <div class="muted" style="margin-top:4px">
+        Evidence checks: <span class="${statusClass}">${overallStatus}</span>
+        · <a href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener">audit repository</a>
+      </div>
+      ${blockers.length ? `<div class="muted" style="margin-top:6px">Blockers (P0 outstanding): ${blockers.map(b => `<span class='tag warn'>${b}</span>`).join(' ')}</div>` : ''}
+      ${verdict.note ? `<div class="muted" style="margin-top:6px">${verdict.note}</div>` : ''}
     `;
     
     // Update Pillars
@@ -1150,7 +1159,7 @@ python3 scripts/ci_status.py</code></pre>
       document.getElementById('conservation-placeholder').appendChild(consCard);
     }
     
-    // Render CI Status
+    // Render CI Status & Checks (purpose/method/result/meaning)
     if (ci.summary) {
       const ciCard = createElement('div', 'component-card', 'ci-card', `
         <h3>CI Status</h3>
@@ -1161,6 +1170,11 @@ python3 scripts/ci_status.py</code></pre>
         <div class="muted" style="margin-top:6px">
           Includes: gates, growth JSON, lensing JSON, ILG limit checks, masses snapshot, and 2D/3D conservation checks.
         </div>
+        ${ci.verdict ? `
+        <div class="muted" style="margin-top:6px">
+          Verdict: <strong>${ci.verdict.level}</strong>${ci.verdict.vouched ? ' (vouched)' : ''}
+          ${ci.verdict.blockers?.length ? `<div style='margin-top:4px'>Blockers: ${ci.verdict.blockers.map(b => `<span class='tag warn'>${b}</span>`).join(' ')}</div>` : ''}
+        </div>` : ''}
         ${ci.ledger_snapshot?.present ? `
         <div class="muted" style="margin-top:6px">
           Ledger snapshot: <a href="https://raw.githubusercontent.com/jonwashburn/audit/main/docs/ledger_snapshot_v22c.txt" target="_blank" rel="noopener">ledger_snapshot_v22c.txt</a>
@@ -1176,6 +1190,21 @@ python3 scripts/ci_status.py</code></pre>
           </ul>
           <div style="margin-top:6px">
             <strong>Failed checks:</strong> ${ci.summary.failed_checks?.join(', ') || 'none'}
+          </div>
+        </details>` : ''}
+        ${ci.checks ? `
+        <details style="margin-top:10px">
+          <summary>Checks: purpose, method, results, meaning</summary>
+          <div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap:12px; margin-top:8px">
+            ${Object.entries(ci.checks).map(([k,chk]) => `
+              <div class="component-card">
+                <h4 style="margin-top:0">${k} ${chk.passed ? '<span class=ok>passed</span>' : '<span class=warn>failed</span>'}</h4>
+                <div><strong>Purpose</strong>: ${chk.purpose || '—'}</div>
+                <div style="margin-top:4px"><strong>Method</strong>: ${chk.method || '—'}</div>
+                <div style="margin-top:4px"><strong>Result</strong>: <pre style="white-space:pre-wrap; font-size:0.9em;">${(chk.result || '').toString().slice(0,800)}</pre></div>
+                <div style="margin-top:4px"><strong>Meaning</strong>: ${chk.meaning || '—'}</div>
+              </div>
+            `).join('')}
           </div>
         </details>` : ''}
       `);
