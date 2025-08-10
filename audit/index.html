@@ -205,6 +205,32 @@
     document.getElementById('loose').innerHTML = loose;
     const next = status.next_actions.map(t => `<li>${t}</li>`).join('');
     document.getElementById('next').innerHTML = next;
+    // Attempt to load lensing results JSON and render panel
+    try {
+      const lensingURL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/lensing_results.json';
+      const lj = await loadJSON(lensingURL);
+      const rows = (lj.lensing||[]).map(r => `<tr><td>${r.k}</td><td>${(r.a||1).toFixed(3)}</td><td>${r.Sigma.toFixed(6)}</td></tr>`).join('');
+      const lensingCard = document.createElement('section');
+      lensingCard.className = 'component-card';
+      lensingCard.innerHTML = `
+        <h3>Lensing (live)</h3>
+        <div class="muted">Last updated: ${lj.last_updated}</div>
+        <div style="margin-top:8px">
+          <strong>ILG Gates</strong>: |B|=${(lj.ilg&&lj.ilg.blocked)||'—'}, S=${(lj.ilg&&lj.ilg.S)||'—'}
+        </div>
+        <div style="margin-top:8px">
+          <table style="width:100%; border-collapse:collapse">
+            <thead><tr><th style="text-align:left">k (h/Mpc)</th><th style="text-align:right">a</th><th style="text-align:right">Sigma</th></tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>`;
+      // Insert before Architecture card for visibility
+      const mainEl = document.querySelector('main .content-page');
+      const archEl = document.getElementById('arch-card');
+      mainEl.insertBefore(lensingCard, archEl);
+    } catch (e) {
+      // no-op if missing
+    }
     // Render mermaid
     mermaid.run({ nodes: [ document.getElementById('mmd') ] });
     // Render study guide markdown
