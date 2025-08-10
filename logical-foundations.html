@@ -5,434 +5,554 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Logical Foundations | Recognition Science</title>
   <link rel="stylesheet" href="/assets/css/main.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
-    /* Modern Scientific Design System */
     :root {
-      --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      --dark-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-      --light-gradient: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
-      --accent: #667eea;
-      --accent-dark: #764ba2;
-      --text-primary: #1a202c;
-      --text-secondary: #4a5568;
-      --text-muted: #718096;
+      --ink: #0f172a;
+      --muted: #475569;
+      --soft: #64748b;
+      --bg: #ffffff;
+      --bg-alt: #f8fafc;
+      --line: #e2e8f0;
+      --accent: #6d28d9;
+      --accent-soft: #8b5cf6;
+      --accent-light: #a78bfa;
+      --gold: #f59e0b;
     }
 
-    /* Hero Section - Clean & Bold */
-    .hero-section {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      padding: 5rem 0 4rem;
-      color: white;
+    html, body { 
+      background: var(--bg); 
+      color: var(--ink); 
+    }
+    
+    body { 
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; 
+    }
+
+    .container { 
+      max-width: 980px; 
+      margin: 0 auto; 
+      padding: 0 1.25rem; 
+    }
+    
+    .reading { 
+      max-width: 800px; 
+      margin: 0 auto; 
+    }
+
+    /* Hero with animated background */
+    .hero {
+      padding: clamp(3rem, 8vw, 6rem) 0 2rem;
+      border-bottom: 1px solid var(--line);
       position: relative;
       overflow: hidden;
+      background: linear-gradient(180deg, #faf7ff 0%, #fff 100%);
     }
 
-    .hero-section::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-image: 
-        radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 0%, transparent 40%),
-        radial-gradient(circle at 75% 75%, rgba(255,255,255,0.05) 0%, transparent 40%);
-      animation: float 20s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: scale(1) rotate(0deg); }
-      50% { transform: scale(1.1) rotate(5deg); }
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 0 2rem;
-      text-align: center;
-    }
-
-    .hero-section h1 {
-      font-size: clamp(2.5rem, 5vw, 4rem);
-      font-weight: 700;
-      margin-bottom: 1.5rem;
-      letter-spacing: -1px;
-      line-height: 1.1;
-    }
-
-    .hero-section .subtitle {
-      font-size: 1.5rem;
-      opacity: 0.95;
-      margin-bottom: 2rem;
-      font-weight: 300;
-    }
-
-    .hero-section .lead {
-      font-size: 1.125rem;
-      line-height: 1.7;
-      opacity: 0.9;
-      max-width: 700px;
-      margin: 0 auto;
-    }
-
-    /* Fun Floating Symbols */
-    .floating-symbols {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      pointer-events: none;
-    }
-
-    .symbol {
-      position: absolute;
-      font-size: 2rem;
-      opacity: 0.1;
-      animation: float-symbol 20s infinite ease-in-out;
-      color: white;
-      font-family: 'Times New Roman', serif;
-    }
-
-    .symbol:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; }
-    .symbol:nth-child(2) { left: 80%; top: 30%; animation-delay: 3s; }
-    .symbol:nth-child(3) { left: 20%; top: 70%; animation-delay: 6s; }
-    .symbol:nth-child(4) { left: 70%; top: 80%; animation-delay: 9s; }
-    .symbol:nth-child(5) { left: 50%; top: 50%; animation-delay: 12s; }
-
-    @keyframes float-symbol {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      25% { transform: translateY(-20px) rotate(10deg); }
-      75% { transform: translateY(20px) rotate(-10deg); }
-    }
-
-    /* Content Sections */
-    .content-section {
-      padding: 4rem 0;
-      position: relative;
-    }
-
-    .content-section:nth-child(even) {
-      background: var(--light-gradient);
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 0 2rem;
-    }
-
-    h2 {
-      font-size: 2.5rem;
-      color: var(--text-primary);
-      margin-bottom: 2rem;
-      font-weight: 700;
-      text-align: center;
-      position: relative;
-    }
-
-    h2::after {
-      content: '';
-      position: absolute;
-      bottom: -0.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60px;
-      height: 3px;
-      background: var(--primary-gradient);
-      border-radius: 2px;
-    }
-
-    .narrative-text {
-      font-size: 1.125rem;
-      line-height: 1.8;
-      color: var(--text-secondary);
-      margin-bottom: 1.5rem;
-    }
-
-    .narrative-text:first-of-type {
-      font-size: 1.25rem;
-      color: var(--text-primary);
-    }
-
-    /* Big Idea Callouts */
-    .big-idea {
-      background: linear-gradient(135deg, #fff 0%, #f8f9ff 100%);
-      border-left: 4px solid;
-      border-image: var(--primary-gradient) 1;
-      padding: 2rem;
-      margin: 3rem -1rem;
-      border-radius: 0 12px 12px 0;
-      font-size: 1.3rem;
-      line-height: 1.6;
-      color: var(--text-primary);
-      font-weight: 500;
-      box-shadow: 0 10px 30px rgba(102,126,234,0.1);
-      position: relative;
-    }
-
-    .big-idea::before {
-      content: '💡';
-      position: absolute;
-      left: -15px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: white;
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-
-    /* Euclid's Postulates - Visual List */
-    .postulates-container {
-      background: white;
-      border-radius: 16px;
-      padding: 2rem;
-      margin: 2rem 0;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.05);
-    }
-
-    .postulates-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .postulates-list li {
-      padding: 1rem 0 1rem 3rem;
-      position: relative;
-      border-bottom: 1px solid #f0f0f0;
-      transition: all 0.3s ease;
-    }
-
-    .postulates-list li:last-child {
-      border-bottom: none;
-    }
-
-    .postulates-list li::before {
-      content: attr(data-number);
-      position: absolute;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 32px;
-      height: 32px;
-      background: var(--primary-gradient);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      font-weight: 700;
-      font-size: 0.9rem;
-    }
-
-    .postulates-list li:hover {
-      padding-left: 3.5rem;
-      background: #f8f9ff;
-    }
-
-    /* Revolution Block - Eye-catching */
-    .revolution-block {
-      background: var(--dark-gradient);
-      color: white;
-      padding: 4rem 3rem;
-      border-radius: 24px;
-      margin: 3rem 0;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-    }
-
-    .revolution-block::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(102,126,234,0.2) 0%, transparent 50%);
-      animation: rotate 30s linear infinite;
-    }
-
-    @keyframes rotate {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .revolution-block h3 {
-      font-size: 2rem;
-      margin-bottom: 1.5rem;
-      position: relative;
-      z-index: 1;
-    }
-
-    .revolution-block p {
-      font-size: 1.125rem;
-      line-height: 1.8;
-      position: relative;
-      z-index: 1;
-      opacity: 0.95;
-    }
-
-    /* Theorem Cards - Interactive Grid */
-    .theorems-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin: 3rem 0;
-    }
-
-    .theorem-card {
-      background: white;
-      border-radius: 16px;
-      padding: 2rem;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-      cursor: pointer;
-    }
-
-    .theorem-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background: var(--primary-gradient);
-    }
-
-    .theorem-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 15px 40px rgba(102,126,234,0.15);
-    }
-
-    .theorem-number {
-      display: inline-block;
-      background: var(--primary-gradient);
-      color: white;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      margin-bottom: 1rem;
-      font-size: 0.9rem;
-    }
-
-    .theorem-card h3 {
-      font-size: 1.25rem;
-      color: var(--text-primary);
-      margin-bottom: 1rem;
-    }
-
-    .theorem-card p {
-      color: var(--text-secondary);
-      line-height: 1.6;
-      margin-bottom: 1rem;
-    }
-
-    .theorem-implication {
-      color: var(--accent);
-      font-style: italic;
-      font-size: 0.95rem;
-      padding-top: 1rem;
-      border-top: 1px solid #f0f0f0;
-    }
-
-    /* Quote Blocks */
-    .quote-block {
-      background: linear-gradient(135deg, rgba(102,126,234,0.05) 0%, rgba(118,75,162,0.05) 100%);
-      border-left: 3px solid;
-      border-image: var(--primary-gradient) 1;
-      padding: 1.5rem 2rem;
-      margin: 2rem 0;
-      border-radius: 0 8px 8px 0;
-      font-style: italic;
-      font-size: 1.2rem;
-      color: var(--text-primary);
-      position: relative;
-    }
-
-    .quote-block::before {
-      content: '"';
-      position: absolute;
-      top: -10px;
-      left: 15px;
-      font-size: 3rem;
-      color: var(--accent);
-      opacity: 0.3;
-      font-family: Georgia, serif;
-    }
-
-    /* Interactive Steps */
-    .steps-container {
-      background: white;
-      border-radius: 16px;
-      padding: 2rem;
-      margin: 2rem 0;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.05);
-    }
-
-    .step-item {
-      padding: 1.5rem;
-      margin-bottom: 1rem;
-      background: var(--light-gradient);
-      border-radius: 12px;
-      border-left: 3px solid var(--accent);
-      transition: all 0.3s ease;
-    }
-
-    .step-item:hover {
-      transform: translateX(10px);
-      box-shadow: 0 5px 20px rgba(102,126,234,0.1);
-    }
-
-    .step-item strong {
-      display: block;
-      color: var(--accent);
-      font-size: 1.1rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .step-item code {
-      background: rgba(102,126,234,0.1);
-      padding: 0.2rem 0.4rem;
-      border-radius: 4px;
-      color: var(--accent-dark);
-      font-family: 'Courier New', monospace;
-    }
-
-    /* CTA Section */
-    .cta-section {
-      background: var(--primary-gradient);
-      padding: 4rem 2rem;
-      border-radius: 24px;
-      text-align: center;
-      margin: 4rem 0 2rem;
-      color: white;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .cta-section::before {
+    .hero::before {
       content: '';
       position: absolute;
       top: -50%;
       left: -50%;
       width: 200%;
       height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+      background: radial-gradient(circle at 30% 40%, rgba(139, 92, 246, 0.05) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 60%, rgba(109, 40, 217, 0.03) 0%, transparent 50%);
+      animation: float 30s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(5deg) scale(1.1); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-size: .9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .eyebrow::before {
+      content: '◆';
+      color: var(--gold);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      line-height: 1.08;
+      margin: .35rem 0 .85rem;
+      font-size: clamp(2.5rem, 7vw, 4.5rem);
+      background: linear-gradient(135deg, var(--ink) 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .lede {
+      color: var(--muted);
+      font-size: clamp(1.1rem, 2vw, 1.35rem);
+      line-height: 1.75;
+    }
+
+    /* Fun floating math symbols */
+    .math-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0.03;
+    }
+
+    .math-symbol {
+      position: absolute;
+      font-family: 'Times New Roman', serif;
+      font-size: 2rem;
+      color: var(--accent);
+      animation: drift 60s linear infinite;
+    }
+
+    @keyframes drift {
+      from { transform: translateY(100vh) rotate(0deg); }
+      to { transform: translateY(-100px) rotate(360deg); }
+    }
+
+    .math-symbol:nth-child(1) { left: 10%; animation-delay: 0s; }
+    .math-symbol:nth-child(2) { left: 25%; animation-delay: 10s; }
+    .math-symbol:nth-child(3) { left: 40%; animation-delay: 20s; }
+    .math-symbol:nth-child(4) { left: 55%; animation-delay: 30s; }
+    .math-symbol:nth-child(5) { left: 70%; animation-delay: 40s; }
+    .math-symbol:nth-child(6) { left: 85%; animation-delay: 50s; }
+
+    /* CTA buttons */
+    .cta-row {
+      display: flex;
+      gap: .75rem;
+      flex-wrap: wrap;
+      margin-top: 1.5rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .8rem 1.25rem;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn.primary {
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .btn.primary:hover {
+      background: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(109, 40, 217, 0.2);
+    }
+
+    .btn.ghost {
+      border: 1px solid var(--line);
+      color: var(--ink);
+      background: #fff;
+    }
+
+    .btn.ghost:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Quick nav chips */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin: 1.5rem 0 0;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .5rem 1rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--soft);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: .95rem;
+      background: #fff;
+      transition: all 0.3s ease;
+    }
+
+    .chip:hover {
+      border-color: var(--accent-soft);
+      color: var(--accent-soft);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(139, 92, 246, 0.1);
+    }
+
+    /* Sections */
+    section.section {
+      padding: clamp(3rem, 6vw, 4rem) 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    section.section.alt {
+      background: var(--bg-alt);
+    }
+
+    section h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      margin: 0 0 1rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    section h2::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent) 0%, var(--gold) 100%);
+      border-radius: 2px;
+    }
+
+    section p {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 1.1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    /* Big idea callouts */
+    .big-idea {
+      background: linear-gradient(135deg, #faf7ff 0%, #f3e8ff 100%);
+      border-left: 4px solid var(--accent);
+      padding: 1.5rem 2rem;
+      margin: 2rem -1rem;
+      border-radius: 0 12px 12px 0;
+      font-size: 1.25rem;
+      line-height: 1.6;
+      color: var(--ink);
+      font-weight: 500;
+      position: relative;
+      box-shadow: 0 5px 20px rgba(139, 92, 246, 0.08);
+    }
+
+    .big-idea::before {
+      content: '✨';
+      position: absolute;
+      left: -12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: white;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-size: 12px;
+    }
+
+    /* Euclid's postulates - visual list */
+    .postulates {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .postulates ol {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      counter-reset: postulate;
+    }
+
+    .postulates li {
+      counter-increment: postulate;
+      padding: 1rem 0 1rem 3rem;
+      position: relative;
+      border-bottom: 1px solid var(--bg-alt);
+      transition: all 0.3s ease;
+    }
+
+    .postulates li:last-child {
+      border-bottom: none;
+    }
+
+    .postulates li::before {
+      content: counter(postulate, upper-roman);
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-soft) 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .postulates li:hover {
+      padding-left: 3.5rem;
+      background: var(--bg-alt);
+    }
+
+    /* Theorem timeline */
+    .theorem-timeline {
+      position: relative;
+      margin: 3rem 0;
+      padding-left: 3rem;
+    }
+
+    .theorem-timeline::before {
+      content: '';
+      position: absolute;
+      left: 1rem;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--accent) 0%, var(--gold) 100%);
+    }
+
+    .theorem {
+      position: relative;
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .theorem:hover {
+      transform: translateX(10px);
+      box-shadow: 0 10px 30px rgba(139, 92, 246, 0.1);
+      border-color: var(--accent-soft);
+    }
+
+    .theorem-number {
+      position: absolute;
+      left: -2.5rem;
+      top: 1.5rem;
+      width: 2rem;
+      height: 2rem;
+      background: var(--ink);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .theorem h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.25rem;
+      color: var(--ink);
+    }
+
+    .theorem p {
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 0.75rem;
+      font-size: 1rem;
+    }
+
+    .theorem-insight {
+      color: var(--accent);
+      font-style: italic;
+      font-size: 0.95rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--line);
+    }
+
+    /* Quote blocks */
+    .quote {
+      border-left: 3px solid var(--accent-soft);
+      padding: 1rem 1.5rem;
+      background: linear-gradient(90deg, #faf7ff 0%, transparent 100%);
+      margin: 2rem 0;
+      font-style: italic;
+      font-size: 1.15rem;
+      color: var(--ink);
+      position: relative;
+    }
+
+    .quote::before {
+      content: '"';
+      position: absolute;
+      top: -10px;
+      left: 10px;
+      font-size: 3rem;
+      color: var(--accent-soft);
+      opacity: 0.2;
+      font-family: Georgia, serif;
+    }
+
+    /* Interactive cards grid */
+    .concepts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.25rem;
+      margin: 2rem 0;
+    }
+
+    .concept-card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .concept-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent) 0%, var(--gold) 100%);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .concept-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .concept-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .concept-card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.15rem;
+      color: var(--ink);
+    }
+
+    .concept-card p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* Steps */
+    .steps {
+      background: var(--bg-alt);
+      border-radius: 16px;
+      padding: 2rem;
+      margin: 2rem 0;
+    }
+
+    .step {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .step:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .step-number {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      background: var(--accent);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-weight: 700;
+    }
+
+    .step-content h4 {
+      margin: 0 0 0.25rem;
+      color: var(--ink);
+    }
+
+    .step-content p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .step-content code {
+      background: rgba(109, 40, 217, 0.1);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      color: var(--accent);
+      font-family: 'Courier New', monospace;
+    }
+
+    /* Bottom CTA */
+    .bottom-cta {
+      background: linear-gradient(135deg, var(--ink) 0%, var(--accent) 100%);
+      color: white;
+      padding: 3rem 2rem;
+      border-radius: 24px;
+      text-align: center;
+      margin: 3rem 0 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bottom-cta::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
       background-size: 20px 20px;
       animation: drift 30s linear infinite;
     }
@@ -442,106 +562,85 @@
       to { transform: translate(20px, 20px); }
     }
 
-    .cta-section h3 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
+    .bottom-cta h3 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
       position: relative;
       z-index: 1;
     }
 
-    .cta-section p {
-      font-size: 1.25rem;
-      margin-bottom: 2rem;
-      opacity: 0.95;
+    .bottom-cta p {
+      font-size: 1.15rem;
+      margin-bottom: 1.5rem;
+      opacity: 0.9;
       position: relative;
       z-index: 1;
     }
 
-    .cta-buttons {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-      position: relative;
-      z-index: 1;
-    }
-
-    .cta-button {
-      display: inline-block;
-      padding: 1rem 2rem;
+    .bottom-cta .btn {
       background: white;
       color: var(--accent);
-      text-decoration: none;
-      border-radius: 50px;
-      font-weight: 600;
-      transition: all 0.3s ease;
+      position: relative;
+      z-index: 1;
     }
 
-    .cta-button:hover {
+    .bottom-cta .btn:hover {
       transform: translateY(-3px);
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
 
-    .cta-button.secondary {
-      background: transparent;
-      color: white;
-      border: 2px solid white;
-    }
-
-    .cta-button.secondary:hover {
-      background: white;
-      color: var(--accent);
-    }
-
     /* Responsive */
     @media (max-width: 768px) {
-      .hero-section h1 {
-        font-size: 2rem;
-      }
-      
-      h2 {
-        font-size: 1.75rem;
-      }
-      
-      .theorems-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .big-idea {
-        margin: 2rem 0;
-        font-size: 1.1rem;
-      }
+      h1 { font-size: 2.5rem; }
+      .theorem-timeline { padding-left: 2rem; }
+      .theorem-number { left: -1.5rem; }
     }
   </style>
 </head>
 <body>
+  <!-- Floating math background -->
+  <div class="math-bg">
+    <div class="math-symbol">∀</div>
+    <div class="math-symbol">∃</div>
+    <div class="math-symbol">φ</div>
+    <div class="math-symbol">∞</div>
+    <div class="math-symbol">π</div>
+    <div class="math-symbol">∇</div>
+  </div>
+
   <div id="header-placeholder"></div>
 
-  <!-- Hero Section -->
-  <section class="hero-section">
-    <div class="floating-symbols">
-      <div class="symbol">∀</div>
-      <div class="symbol">∃</div>
-      <div class="symbol">φ</div>
-      <div class="symbol">∞</div>
-      <div class="symbol">π</div>
-    </div>
+  <!-- Hero -->
+  <header class="hero">
     <div class="hero-content">
-      <h1>Logical Foundations</h1>
-      <p class="subtitle">From a single tautology to a complete, testable framework</p>
-      <p class="lead">What if the constants of nature aren't arbitrary? What if they're as forced as the angles in a triangle? Begin with what must be true in any self-consistent world, and watch reality unfold through pure deduction.</p>
+      <div class="container reading">
+        <div class="eyebrow">The Architecture of Necessity</div>
+        <h1>From tautology to testable truth</h1>
+        <p class="lede">What if the constants of nature aren't arbitrary? What if they're as forced as the angles in a triangle? Begin with what must be true in any self-consistent world, and watch reality unfold through pure deduction.</p>
+        <div class="cta-row">
+          <a class="btn primary" href="/meta-principle.html">Read the Meta-Principle →</a>
+          <a class="btn ghost" href="#theorems">See the Eight Theorems</a>
+        </div>
+        <nav class="chips" aria-label="Quick navigation">
+          <a class="chip" href="#dream">First Principles</a>
+          <a class="chip" href="#axioms">Axioms vs Theorems</a>
+          <a class="chip" href="#revolution">The Revolution</a>
+          <a class="chip" href="#theorems">Eight Theorems</a>
+          <a class="chip" href="#verification">Machine Proofs</a>
+        </nav>
+      </div>
     </div>
-  </section>
+  </header>
 
   <!-- The Dream of First Principles -->
-  <section class="content-section">
-    <div class="container">
+  <section class="section" id="dream">
+    <div class="container reading">
       <h2>The Dream of First Principles</h2>
-      <p class="narrative-text">For millennia, natural philosophers have sought to explain the complexity of the world from simple beginnings. The ancient Greeks imagined atoms—indivisible building blocks—while Pythagoras believed "all is number." Newton unified terrestrial and celestial mechanics with three laws and universal gravitation. Maxwell compressed all electromagnetic phenomena into four equations. Einstein revealed that space and time were one fabric, bent by mass.</p>
+      <p>For millennia, natural philosophers have sought to explain the complexity of the world from simple beginnings. The ancient Greeks imagined atoms—indivisible building blocks—while Pythagoras believed "all is number." Newton unified terrestrial and celestial mechanics with three laws and universal gravitation. Maxwell compressed all electromagnetic phenomena into four equations. Einstein revealed that space and time were one fabric, bent by mass.</p>
       
-      <p class="narrative-text">Each revolution simplified our picture, yet each required <em>assumptions</em>. Newton assumed absolute space and time. Maxwell's equations needed the permittivity and permeability of free space. Einstein's relativity required the constancy of light speed. Quantum mechanics brought a zoo of constants: Planck's h, the electron charge e, particle masses—all measured, never derived.</p>
+      <p>Each revolution simplified our picture, yet each required <em>assumptions</em>. Newton assumed absolute space and time. Maxwell's equations needed the permittivity and permeability of free space. Einstein's relativity required the constancy of light speed. Quantum mechanics brought a zoo of constants: Planck's h, the electron charge e, particle masses—all measured, never derived.</p>
       
-      <p class="narrative-text">Today's Standard Model is humanity's greatest achievement in precision, predicting phenomena to twelve decimal places. Yet it contains 26 free parameters that we dial by hand to match experiment. The gravitational constant G, the fine structure constant α, the Higgs mass—these are not predictions but inputs. We have extraordinary <em>descriptions</em> but not <em>explanations</em>. The dream of deriving nature from pure logic remains unfulfilled.</p>
+      <p>Today's Standard Model is humanity's greatest achievement in precision, predicting phenomena to twelve decimal places. Yet it contains 26 free parameters that we dial by hand to match experiment. The gravitational constant G, the fine structure constant α, the Higgs mass—these are not predictions but inputs. We have extraordinary <em>descriptions</em> but not <em>explanations</em>.</p>
       
       <div class="big-idea">
         Until now. What if those 26 parameters aren't free at all? What if they're as forced as π in a circle?
@@ -550,290 +649,237 @@
   </section>
 
   <!-- What is an Axiomatic Foundation? -->
-  <section class="content-section">
-    <div class="container">
+  <section class="section alt">
+    <div class="container reading">
       <h2>What is an Axiomatic Foundation?</h2>
-      <p class="narrative-text">An axiomatic system begins with statements accepted as true without proof—the axioms—and derives all other truths through logical deduction. Euclid showed us the way 2,300 years ago. He began geometry with five postulates:</p>
+      <p>An axiomatic system begins with statements accepted as true without proof—the axioms—and derives all other truths through logical deduction. Euclid showed us the way 2,300 years ago with five postulates:</p>
       
-      <div class="postulates-container">
-        <ul class="postulates-list">
-          <li data-number="1">A straight line can be drawn between any two points</li>
-          <li data-number="2">A line segment can be extended indefinitely</li>
-          <li data-number="3">A circle can be drawn with any center and radius</li>
-          <li data-number="4">All right angles are equal</li>
-          <li data-number="5">The parallel postulate (exactly one parallel line through a point)</li>
-        </ul>
+      <div class="postulates">
+        <ol>
+          <li>A straight line can be drawn between any two points</li>
+          <li>A line segment can be extended indefinitely</li>
+          <li>A circle can be drawn with any center and radius</li>
+          <li>All right angles are equal</li>
+          <li>The parallel postulate (exactly one parallel line through a point)</li>
+        </ol>
       </div>
       
-      <p class="narrative-text">From these sparse beginnings, Euclid derived the entire edifice of plane geometry—hundreds of theorems about triangles, circles, areas, and angles. Nothing was assumed beyond the axioms. Every result was <em>forced</em> by logic.</p>
+      <p>From these sparse beginnings, Euclid derived the entire edifice of plane geometry—hundreds of theorems about triangles, circles, areas, and angles. Nothing was assumed beyond the axioms. Every result was <em>forced</em> by logic.</p>
       
-      <p class="narrative-text">Arithmetic received similar treatment through Peano's axioms: start with zero, define succession, and the natural numbers emerge. Add axioms for addition and multiplication, and arithmetic is born. The power is this: once you accept the axioms, you must accept everything that follows. There is no wiggle room, no parameters to adjust.</p>
+      <p>Arithmetic received similar treatment through Peano's axioms: start with zero, define succession, and the natural numbers emerge. The power is this: once you accept the axioms, you must accept everything that follows. There is no wiggle room, no parameters to adjust.</p>
       
-      <p class="narrative-text">But here's the catch: axioms are <em>chosen</em>. Euclid chose his five postulates; they seemed self-evident but weren't forced by logic. Change the parallel postulate and you get hyperbolic or spherical geometry—equally valid, describing different spaces. The axioms of arithmetic could be different too. We select axioms that seem to match our world, but the selection itself is not derived.</p>
+      <p>But here's the catch: axioms are <em>chosen</em>. Euclid chose his five postulates; they seemed self-evident but weren't forced by logic. Change the parallel postulate and you get hyperbolic or spherical geometry—equally valid, describing different spaces.</p>
     </div>
   </section>
 
   <!-- The Difference Between Axioms and Theorems -->
-  <section class="content-section">
-    <div class="container">
+  <section class="section" id="axioms">
+    <div class="container reading">
       <h2>The Difference Between Axioms and Theorems</h2>
-      <p class="narrative-text">An <strong>axiom</strong> is a starting assumption—something you accept without proof because you need <em>somewhere</em> to begin. "A straight line can be drawn between two points" is an axiom because Euclid didn't prove it; he declared it. Axioms are the bedrock, chosen for their apparent truth or utility.</p>
       
-      <p class="narrative-text">A <strong>theorem</strong> is what you prove from axioms using logic. "The angles of a triangle sum to 180°" is a theorem in Euclidean geometry—it <em>must</em> be true if you accept Euclid's axioms. You cannot have Euclid's five postulates without triangles summing to 180°. The theorem is forced.</p>
+      <div class="concepts-grid">
+        <div class="concept-card">
+          <h3>Axiom</h3>
+          <p>A starting assumption—something you accept without proof because you need somewhere to begin. "A straight line can be drawn between two points" is declared, not proven.</p>
+        </div>
+        <div class="concept-card">
+          <h3>Theorem</h3>
+          <p>What you prove from axioms using logic. "The angles of a triangle sum to 180°" must be true if you accept Euclid's axioms. The theorem is forced.</p>
+        </div>
+      </div>
       
-      <p class="narrative-text">Every mathematical and physical theory follows this pattern: assume axioms, derive theorems. But there's always been a gap. The axioms themselves are arbitrary choices. Even our most successful theories begin with "let's assume..." Why three spatial dimensions? Why this speed of light? Why these particle masses? The axioms of physics have always been fitted to match observation, not derived from necessity.</p>
+      <p>Every mathematical and physical theory follows this pattern: assume axioms, derive theorems. But there's always been a gap. The axioms themselves are arbitrary choices. Even our most successful theories begin with "let's assume..."</p>
+      
+      <p>Why three spatial dimensions? Why this speed of light? Why these particle masses? The axioms of physics have always been fitted to match observation, not derived from necessity.</p>
     </div>
   </section>
 
   <!-- The Revolutionary Step -->
-  <section class="content-section">
-    <div class="container">
+  <section class="section alt" id="revolution">
+    <div class="container reading">
       <h2>The Revolutionary Step: A Tautological Axiom</h2>
-      <p class="narrative-text">Recognition Science breaks the pattern. Instead of <em>choosing</em> axioms that seem reasonable, it begins with a statement that <em>must</em> be true in any self-consistent reality: "Nothing cannot recognize itself."</p>
       
-      <p class="narrative-text">This is not a choice; it's a logical tautology. To recognize requires a recognizer and something recognized—a relation between entities. Absolute nothingness cannot satisfy this relation without ceasing to be nothing. The statement is true by the meanings of the words, like "a bachelor is unmarried" or "A = A".</p>
+      <p>Recognition Science breaks the pattern. Instead of <em>choosing</em> axioms that seem reasonable, it begins with a statement that <em>must</em> be true in any self-consistent reality:</p>
+      
+      <div class="quote">
+        Nothing cannot recognize itself.
+      </div>
+      
+      <p>This is not a choice; it's a logical tautology. To recognize requires a recognizer and something recognized—a relation between entities. Absolute nothingness cannot satisfy this relation without ceasing to be nothing. The statement is true by the meanings of the words, like "a bachelor is unmarried" or "A = A".</p>
       
       <div class="big-idea">
         For the first time in physics, we begin with something that MUST be true—not something we hope is true.
       </div>
       
-      <div class="revolution-block">
-        <h3>What the Logic Forces</h3>
-        <p>Here's what's unprecedented: from this single tautology flows a complete framework with specific, testable predictions. The logic doesn't suggest or allow—it <em>forces</em>. A unique cost function J(x) = ½(x + 1/x) emerges as the only fair penalty. The golden ratio φ appears as nature's scaling constant, not by choice but by necessity. Exactly three spatial dimensions stabilize the ledger. An eight-beat fundamental time cycle closes the recognition loop. The dark matter fraction lands at precisely Ω<sub>dm</sub> ≈ 0.2649. All particle mass ratios cascade from a single coherence energy.</p>
-      </div>
+      <p>From this single tautology flows a complete framework with specific, testable predictions. The logic doesn't suggest or allow—it <em>forces</em>:</p>
       
-      <p class="narrative-text">These aren't assumptions or fits—they're <em>theorems</em>. Just as 180° triangles are forced by Euclid's axioms, these physical quantities are forced by the impossibility of self-referential nothingness. For the first time, the constants of nature are not free parameters but logical necessities.</p>
-      
-      <p class="narrative-text">No physical theory has ever achieved this. Newton assumed F = ma. Einstein assumed constant c. Quantum mechanics assumed ℏ. Recognition Science assumes only what cannot be false—and derives the rest.</p>
-    </div>
-  </section>
-
-  <!-- The Closure of Predictions -->
-  <section class="content-section">
-    <div class="container">
-      <h2>The Closure of Predictions: A New Euclid</h2>
-      <p class="narrative-text">Euclid's geometry is <em>complete</em> for the plane. Accept his five axioms, and every question about flat figures has a definite answer derivable by logic. You cannot add a sixth axiom without creating contradictions or redundancy. The system is closed.</p>
-      
-      <p class="narrative-text">Recognition Science achieves something similar but more ambitious. From one tautology emerges a complete framework that:</p>
-      
-      <div class="steps-container">
-        <div class="step-item">
-          <strong>Derives all fundamental constants</strong>
-          No free parameters remain—every number is forced by logic
+      <div class="concepts-grid">
+        <div class="concept-card">
+          <h3>Unique Cost Function</h3>
+          <p>J(x) = ½(x + 1/x) emerges as the only fair penalty for imbalance</p>
         </div>
-        <div class="step-item">
-          <strong>Predicts all particle masses</strong>
-          From one coherence scale E<sub>coh</sub> = φ<sup>-5</sup>
+        <div class="concept-card">
+          <h3>Golden Ratio</h3>
+          <p>φ appears as nature's scaling constant, not by choice but necessity</p>
         </div>
-        <div class="step-item">
-          <strong>Explains space, time, and causality</strong>
-          As emergent from ledger mechanics
+        <div class="concept-card">
+          <h3>Three Dimensions</h3>
+          <p>Exactly 3D space stabilizes the ledger optimally</p>
         </div>
-        <div class="step-item">
-          <strong>Computes dark matter and dark energy</strong>
-          From geometric necessity: Ω<sub>dm</sub> ≈ 0.2649
+        <div class="concept-card">
+          <h3>Eight-Beat Cycle</h3>
+          <p>Fundamental time rhythm closes the recognition loop</p>
         </div>
-        <div class="step-item">
-          <strong>Unifies quantum mechanics and gravity</strong>
-          As dual aspects of ledger phenomena
+        <div class="concept-card">
+          <h3>Dark Matter</h3>
+          <p>Ω<sub>dm</sub> ≈ 0.2649 from geometric necessity</p>
+        </div>
+        <div class="concept-card">
+          <h3>Particle Masses</h3>
+          <p>All ratios cascade from a single coherence energy</p>
         </div>
       </div>
       
-      <p class="narrative-text">The predictions form a <em>closed set</em>—each supports the others, and changing any one breaks the whole. Like Euclid's theorems, they're not independent facts but facets of one structure. The electron-muon mass ratio, the fine structure constant, the cosmological parameters—all emerge from the same logical chain.</p>
-      
-      <p class="narrative-text">This closure is what separates Recognition Science from empirical theories. The Standard Model could have different quark masses and still be mathematically consistent—you'd just adjust the Yukawa couplings. But Recognition Science's predictions are rigid. The proton must be 1836.15 times heavier than the electron, not because we measured it, but because the ledger algebra demands it.</p>
-      
-      <p class="narrative-text">We're witnessing something unprecedented: a theory of physics with the logical completeness of Euclidean geometry but applied to physical reality. Every measurement becomes a test not of parameters but of the framework itself. One wrong prediction and the entire edifice collapses—but if the predictions hold, we've found nature's source code.</p>
-    </div>
-  </section>
-
-  <!-- Why Logical Foundations Matter Now -->
-  <section class="content-section">
-    <div class="container">
-      <h2>Why Logical Foundations Matter Now</h2>
-      <p class="narrative-text">Modern physics is extraordinary—but it depends on dozens of fitted constants. Those dials signal that our theories are effective descriptions, not first causes. If we begin from a statement that must be true in any self‑consistent world, then what follows is not tuned for this universe; it is forced by logic to be the only way any universe can work. The promise is radical parsimony: a single starting point, a short chain of theorems, and predictions that require no adjustable parameters.</p>
-      
-      <p class="narrative-text"><strong>Falsifiability moves:</strong> the axiom itself is a tautology, so it cannot fail; the <em>consequences</em> must match reality. Every prediction shown here is parameter‑free and therefore fragile—one clean mismatch is enough to overturn the cascade.</p>
-    </div>
-  </section>
-
-  <!-- The Meta-Principle -->
-  <section class="content-section">
-    <div class="container">
-      <h2>The Meta‑Principle (Tautological Axiom)</h2>
-      <p class="narrative-text"><strong>Plainly:</strong> Nothing cannot recognize itself. Recognition is relational; it presupposes a recognizer and a recognized. Absolute non‑existence cannot satisfy that relation without ceasing to be nothing. Formalized, this becomes a short proof by contradiction: a recognition record over an empty type cannot be constructed. The axiom itself is unfalsifiable because it is logical; the consequences are falsifiable because they touch the world.</p>
-      
-      <p class="narrative-text"><strong>What the axiom forces, in outline:</strong></p>
-      <ul style="font-size: 1.1rem; line-height: 1.8; color: var(--text-secondary);">
-        <li>a minimal <em>relational</em> structure (there must be distinguishable states),</li>
-        <li>a universal, positive‑cost <em>ledger</em> to track recognitions,</li>
-        <li>an <em>atomic tick</em> (recognitions post one at a time),</li>
-        <li>a unique <em>cost functional</em> that penalizes imbalance across scales,</li>
-        <li>a stable <em>3D</em> arena with a minimal eight‑beat recognition cycle and finite update speed.</li>
-      </ul>
-      
-      <p class="narrative-text">For the narrative exposition and citations, see the public note <a href="https://recognitionphysics.org/meta-principle.html" target="_blank" rel="noopener">The Meta‑Principle</a>.</p>
+      <p>These aren't assumptions or fits—they're <em>theorems</em>. Just as 180° triangles are forced by Euclid's axioms, these physical quantities are forced by the impossibility of self-referential nothingness.</p>
     </div>
   </section>
 
   <!-- The Eight Theorems -->
-  <section class="content-section">
-    <div class="container">
+  <section class="section" id="theorems">
+    <div class="container reading">
       <h2>The Chain of Necessity: Eight Theorems</h2>
-      <p class="narrative-text">From the impossibility of self-referential nothingness flows a cascade of logical consequences. Each theorem isn't a choice or assumption—it's forced. Like dominoes falling, each truth triggers the next, until the complete architecture of reality stands revealed.</p>
+      <p>From the impossibility of self-referential nothingness flows a cascade of logical consequences. Each theorem isn't a choice or assumption—it's forced. Like dominoes falling, each truth triggers the next.</p>
       
-      <div class="theorems-grid">
-        <div class="theorem-card">
+      <div class="theorem-timeline">
+        <div class="theorem">
           <div class="theorem-number">T1</div>
           <h3>The Ledger Must Exist</h3>
           <p>If recognitions happen, they must be recorded somewhere. Not metaphorically—literally. The universe needs books. These books must be positive (you can't have negative existence), balanced (what goes up must come down), and double-entry (every action has an equal and opposite posting).</p>
-          <p class="theorem-implication">Conservation laws aren't fundamental—they're just what happens when you keep honest books.</p>
+          <div class="theorem-insight">Conservation laws aren't fundamental—they're just what happens when you keep honest books.</div>
         </div>
         
-        <div class="theorem-card">
+        <div class="theorem">
           <div class="theorem-number">T2</div>
           <h3>Time is Atomic</h3>
           <p>The ledger can't update everything at once—chaos would reign. One recognition posts per tick, creating the heartbeat of existence. Time isn't continuous; it's the discrete drumbeat of ledger updates, one entry at a time.</p>
-          <p class="theorem-implication">At the deepest level, the universe is turn-based, not parallel.</p>
+          <div class="theorem-insight">At the deepest level, the universe is turn-based, not parallel.</div>
         </div>
         
-        <div class="theorem-card">
+        <div class="theorem">
           <div class="theorem-number">T3</div>
           <h3>What Goes Around Comes Around</h3>
           <p>Walk any closed path through the ledger, and the books balance to zero. This isn't a choice—it's what "closed" means in ledger terms. Every conservation law, from energy to momentum, is just this principle wearing different masks.</p>
-          <p class="theorem-implication">Global invariants are ledger potentials that don't care about your path, only your destination.</p>
+          <div class="theorem-insight">Global invariants are ledger potentials that don't care about your path, only your destination.</div>
         </div>
         
-        <div class="theorem-card">
+        <div class="theorem">
           <div class="theorem-number">T4</div>
           <h3>The Universe's Cost Function</h3>
-          <p>How does the universe penalize imbalance? Not arbitrarily. Demand fairness, convexity, and scale-compatibility, and only one function survives: J(x) = ½(x + 1/x). This unique shape makes extremes expensive and balance cheap, at every scale from quarks to galaxies.</p>
-          <p class="theorem-implication">The universe has a built-in preference for moderation, encoded in pure mathematics.</p>
+          <p>How does the universe penalize imbalance? Not arbitrarily. Demand fairness, convexity, and scale-compatibility, and only one function survives: J(x) = ½(x + 1/x). This unique shape makes extremes expensive and balance cheap.</p>
+          <div class="theorem-insight">The universe has a built-in preference for moderation, encoded in pure mathematics.</div>
         </div>
         
-        <div class="theorem-card">
+        <div class="theorem">
           <div class="theorem-number">T5</div>
           <h3>Why φ Rules Everything</h3>
           <p>When you split something and want the pieces to resemble the whole, while minimizing cost, only one ratio works: the golden ratio φ. It's not mystical—it's the unique fixed point where self-similarity meets efficiency.</p>
-          <p class="theorem-implication">Nature's favorite number isn't arbitrary—it's the only one that makes recursive splitting sustainable.</p>
+          <div class="theorem-insight">Nature's favorite number isn't arbitrary—it's the only one that makes recursive splitting sustainable.</div>
         </div>
         
-        <div class="theorem-card">
+        <div class="theorem">
           <div class="theorem-number">T6</div>
           <h3>Space Must Be Three-Dimensional</h3>
-          <p>In fewer than three dimensions, recognition paths tangle and collapse. In more than three, you waste energy maintaining unnecessary structure. Three dimensions provide the minimal stable scaffold where paths can link without tangling.</p>
-          <p class="theorem-implication">We live in 3D not by accident, but because it's the cheapest stable configuration.</p>
+          <p>In fewer than three dimensions, recognition paths tangle and collapse. In more than three, you waste energy maintaining unnecessary structure. Three dimensions provide the minimal stable scaffold.</p>
+          <div class="theorem-insight">We live in 3D not by accident, but because it's the cheapest stable configuration.</div>
         </div>
         
-        <div class="theorem-card">
+        <div class="theorem">
           <div class="theorem-number">T7</div>
           <h3>The Eight-Beat of Reality</h3>
           <p>In three dimensions, visiting all necessary recognition states takes exactly 2³ = 8 steps. This creates the fundamental rhythm of existence—an eight-tick cycle that all higher processes synchronize to.</p>
-          <p class="theorem-implication">Complex phenomena emerge from this simple eight-beat, like symphonies from a conductor's tempo.</p>
+          <div class="theorem-insight">Complex phenomena emerge from this simple eight-beat, like symphonies from a conductor's tempo.</div>
         </div>
         
-        <div class="theorem-card">
+        <div class="theorem">
           <div class="theorem-number">T8</div>
           <h3>Nothing Travels Faster Than Light</h3>
           <p>With atomic ticks and local updates, information spreads one voxel per tick. This finite propagation speed isn't a mysterious constant—it's the inevitable result of discrete, local ledger updates.</p>
-          <p class="theorem-implication">Causality has a speed limit because the cosmic computer has a clock rate.</p>
+          <div class="theorem-insight">Causality has a speed limit because the cosmic computer has a clock rate.</div>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- The Language of Reality -->
-  <section class="content-section">
-    <div class="container">
-      <h2>The Language of Reality</h2>
-      <p class="narrative-text">To speak precisely about these foundations, we need a vocabulary. These aren't arbitrary definitions—each term captures something forced by the logic.</p>
-      
-      <div class="quote-block">
-        Recognition is the atomic relation 'this matches that'—the fundamental event from which all else emerges.
-      </div>
-      
-      <p class="narrative-text">The <strong>Universal Ledger</strong> is the cosmic accounting system, a positive, double-entry book that records every recognition with an indivisible cost δ > 0. Think of it as reality's blockchain, except it can't be forked or corrupted because it's maintained by logic itself.</p>
-      
-      <p class="narrative-text">A <strong>tick</strong> is one atomic posting interval—the quantum of time. Between ticks, nothing happens; at each tick, exactly one recognition posts. Time isn't flowing; it's ticking, one ledger entry at a time.</p>
-      
-      <p class="narrative-text">When recognitions chain together, they create <strong>flux</strong>—a potential difference that telescopes along paths. Close the path, and the flux must sum to zero. This is why perpetual motion machines can't exist: closed loops in the ledger always balance.</p>
-      
-      <p class="narrative-text">The <strong>cost function J</strong> penalizes imbalance with mathematical precision. The <strong>golden ratio φ</strong> emerges as the unique self-similar scaling that minimizes this cost recursively. The <strong>Gray-code walk</strong> traces the minimal path through recognition states—eight steps in our three-dimensional reality.</p>
-      
-      <p class="narrative-text">And <strong>causality</strong>? It's just the finite speed at which recognition updates propagate through the ledger, one voxel per tick, creating the light cones that govern what can influence what.</p>
     </div>
   </section>
 
   <!-- Machine-Verified Truth -->
-  <section class="content-section">
-    <div class="container">
+  <section class="section alt" id="verification">
+    <div class="container reading">
       <h2>Machine-Verified Truth</h2>
-      <p class="narrative-text">In mathematics, saying something is "proven" used to mean a human checked it. But humans make mistakes. That's why we've formalized these foundations in Lean 4—a proof assistant that acts as an infallible referee.</p>
       
-      <p class="narrative-text">When we say "proven in Lean," we mean the computer has verified every logical step. No handwaving, no "it can be shown that," no appeals to authority. The machine either accepts the proof or shows you exactly where it fails.</p>
+      <p>In mathematics, saying something is "proven" used to mean a human checked it. But humans make mistakes. That's why we've formalized these foundations in Lean 4—a proof assistant that acts as an infallible referee.</p>
       
-      <div class="quote-block">
+      <div class="quote">
         The compile step is your referee—it either accepts each lemma or reports the exact failure.
       </div>
       
-      <p class="narrative-text">What's been verified? The tautology of the Meta-Principle compiles clean. The existence and uniqueness of the positive ledger checks out. Atomicity emerges from a constructive tick schedule. Conservation follows from closed chains. The cost function J is proven unique under convexity and fairness. The golden ratio φ is confirmed as the self-similar fixed point. The eight-tick cycle and three-dimensional stability are locked in. Causal propagation at finite speed—verified.</p>
+      <p>When we say "proven in Lean," we mean the computer has verified every logical step. No handwaving, no "it can be shown that," no appeals to authority. The machine either accepts the proof or shows you exactly where it fails.</p>
       
-      <p class="narrative-text">We're transparent about what remains: a finiteness condition on primitive recognition, and the constructive nature of the tick schedule. These aren't gaps in the logic—they're minimal structure requirements we're working to derive from even deeper principles. Science progresses by acknowledging what we don't yet know.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4>Clone the Repository</h4>
+            <p>Get the Lean proofs from <code>github.com/jonwashburn/meta-principle</code></p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4>Build and Verify</h4>
+            <p>Run <code>lake build</code> and watch Lean verify every theorem</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h4>Explore the Chain</h4>
+            <p>Open <code>AllInOne.lean</code> to see the unbreakable logical chain</p>
+          </div>
+        </div>
+      </div>
+      
+      <p>What's been verified? The tautology of the Meta-Principle compiles clean. The existence and uniqueness of the positive ledger checks out. Atomicity emerges from a constructive tick schedule. Conservation follows from closed chains. The cost function J is proven unique. The golden ratio φ is confirmed as the self-similar fixed point. The eight-tick cycle and three-dimensional stability are locked in.</p>
     </div>
   </section>
 
   <!-- Where Logic Meets Measurement -->
-  <section class="content-section">
-    <div class="container">
+  <section class="section">
+    <div class="container reading">
       <h2>Where Logic Meets Measurement</h2>
-      <p class="narrative-text">A beautiful theory that doesn't match reality is just mathematics. But when logical necessity predicts measurable quantities—with no freedom to adjust—every measurement becomes a potential falsification.</p>
       
-      <p class="narrative-text">Take dark matter. Cosmologists measure it at roughly 26.5% of the universe's energy density. Recognition Science computes it from the geometry of recognition on a 3D voxel lattice: Ω<sub>dm</sub> = sin(π/12) + 1/(8 ln φ) ≈ 0.2649. No fitting. No parameters. Just pure geometric necessity.</p>
+      <p>A beautiful theory that doesn't match reality is just mathematics. But when logical necessity predicts measurable quantities—with no freedom to adjust—every measurement becomes a potential falsification.</p>
       
-      <div class="quote-block">
+      <p>Take dark matter. Cosmologists measure it at roughly 26.5% of the universe's energy density. Recognition Science computes it from the geometry of recognition on a 3D voxel lattice: Ω<sub>dm</sub> = sin(π/12) + 1/(8 ln φ) ≈ 0.2649. No fitting. No parameters. Just pure geometric necessity.</p>
+      
+      <div class="quote">
         Every prediction is parameter-free and therefore fragile—one clean mismatch and the entire edifice collapses.
       </div>
       
-      <p class="narrative-text">The framework predicts all particle masses from a single coherence energy E<sub>coh</sub> = φ<sup>-5</sup>. The electron-muon mass ratio, the strange quark mass, the W and Z boson masses—all emerge from the same formula: m = B·E<sub>coh</sub>·φ<sup>r+f</sup>, where B is a sector factor, r is an integer radius, and f is computed from the dispersion.</p>
+      <p>The framework predicts all particle masses from a single coherence energy E<sub>coh</sub> = φ<sup>-5</sup>. The electron-muon mass ratio, the strange quark mass, the W and Z boson masses—all emerge from the same formula: m = B·E<sub>coh</sub>·φ<sup>r+f</sup>, where B is a sector factor, r is an integer radius, and f is computed from the dispersion.</p>
       
-      <p class="narrative-text">Neutrino oscillations? The framework predicts specific mass differences that match the measured values. Gravitational anomalies in galaxies? The eight-beat refresh cycle creates a natural MOND-like transition. The fine structure constant? Falls out at α<sup>-1</sup> = 137.036.</p>
-      
-      <p class="narrative-text">These aren't retroactive fits. They're pre-registered predictions from a rigid logical structure. Change any piece, and the whole framework fails. That's the power—and the risk—of building from necessity rather than observation.</p>
+      <p>These aren't retroactive fits. They're pre-registered predictions from a rigid logical structure. Change any piece, and the whole framework fails. That's the power—and the risk—of building from necessity rather than observation.</p>
     </div>
   </section>
 
-  <!-- The Path Forward -->
-  <section class="content-section">
+  <!-- Bottom CTA -->
+  <section class="section">
     <div class="container">
-      <h2>The Path Forward</h2>
-      <p class="narrative-text">This is just the beginning. The logical foundations are solid, but there's a universe of consequences to explore.</p>
-      
-      <p class="narrative-text">We're building out detailed pages for each theorem, complete with interactive visualizations and the full Lean proofs. The particle masses portal lets you compute any mass from first principles. The audit system tracks every prediction against the latest experimental data.</p>
-      
-      <p class="narrative-text">Future work includes deriving the remaining Standard Model parameters, explaining quantum measurement through ledger collapse, and connecting consciousness to the incomputability at φ<sup>45</sup>. Each piece strengthens the whole.</p>
-      
-      <div class="steps-container">
-        <div class="step-item">
-          <strong>Step 1: Clone the Repository</strong>
-          Get the Lean proofs from <a href="https://github.com/jonwashburn/meta-principle" target="_blank" rel="noopener">github.com/jonwashburn/meta-principle</a>
-        </div>
-        <div class="step-item">
-          <strong>Step 2: Build and Verify</strong>
-          Run <code>lake build</code> and watch Lean verify every theorem. No faith required—the compiler is your judge.
-        </div>
-        <div class="step-item">
-          <strong>Step 3: Explore the Chain</strong>
-          Open <code>AllInOne.lean</code> to see how MP → T1 → T2 → ... → T8 forms an unbreakable logical chain.
-        </div>
-      </div>
-      
-      <div class="cta-section">
+      <div class="bottom-cta">
         <h3>Ready to Go Deeper?</h3>
         <p>The revolution in physics starts with understanding what must be true.</p>
-        <div class="cta-buttons">
-          <a href="/meta-principle.html" class="cta-button">Read the Meta-Principle</a>
-          <a href="/particle-masses.html" class="cta-button secondary">Explore Particle Masses</a>
-          <a href="https://github.com/jonwashburn/meta-principle" class="cta-button secondary" target="_blank">View the Proofs</a>
+        <div class="cta-row" style="justify-content: center;">
+          <a href="/meta-principle.html" class="btn">Read the Meta-Principle</a>
+          <a href="/particle-masses.html" class="btn">Explore Particle Masses</a>
+          <a href="https://github.com/jonwashburn/meta-principle" class="btn" target="_blank">View the Proofs</a>
         </div>
       </div>
     </div>
