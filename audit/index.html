@@ -1,80 +1,136 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Recognition Science — Live Audit</title>
-  <link rel="stylesheet" href="/assets/css/main.css" />
-  <link rel="stylesheet" href="audit.css" />
-  <style>
-    /* Additional Mermaid dark-theme readability overrides */
-    .mermaid svg { background: transparent; }
-    .mermaid .node rect,
-    .mermaid .node circle,
-    .mermaid .node polygon { fill: #11151b !important; stroke: var(--accent) !important; }
-    .mermaid .cluster rect { fill: #0f141a !important; stroke: #345 !important; }
-    .mermaid .edgePath .path { stroke: var(--accent) !important; }
-    .mermaid .label, .mermaid text { fill: var(--fg) !important; }
-    .ok { color:#9f9; }
-    .warn { color:#ffb84d; }
-    .tag { display:inline-block; padding:2px 8px; border-radius:999px; border:1px solid #345; margin-right:6px; color:#9fb3c8; }
-    .component-card { background: var(--card); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom: 16px; }
-    .proof-box { background:#0f141a; border:1px solid #1f2a36; border-radius:8px; padding:12px; margin-top:12px; }
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-  <script>mermaid.initialize({ startOnLoad: false, theme: 'dark' });</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Audit - Recognition Science</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <style>
+        /* Clean, consistent audit styles matching main site */
+        .audit-hero {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 4rem 0 3rem;
+            margin-bottom: 2rem;
+        }
+        
+        .audit-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #0066cc, #004499);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .status-badges {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .status-badge {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 999px;
+            font-weight: 600;
+            color: #333;
+            text-decoration: none;
+        }
+        
+        .audit-nav {
+            background: white;
+            border: 1px solid #e0e0e0;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .audit-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .ok { color: #10b981; }
+        .warn { color: #f59e0b; }
+        .tag { 
+            display: inline-block; 
+            padding: 0.25rem 0.75rem; 
+            background: #f0f9ff; 
+            border: 1px solid #0284c7; 
+            border-radius: 999px; 
+            font-size: 0.875rem; 
+            color: #0c4a6e;
+            margin-right: 0.5rem;
+        }
+        .proof-box {
+            background: #f8f9fa;
+            border-left: 4px solid #0066cc;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 4px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: false, theme: 'default' });</script>
 </head>
 <body>
   <div id="header-placeholder"></div>
   
-  <header class="hero">
-    <div class="wrap">
-      <h1>Recognition Science — Live Audit</h1>
-      <p>Streaming from the audit repository (status.json + study guide)</p>
-      <div class="hstack" style="margin-top:12px">
-        <span class="badge">parameter‑free</span>
-        <span class="badge">live</span>
-        <a class="badge" href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener">repo ↗</a>
+  <section class="audit-hero">
+    <div class="container text-center">
+      <h1>Recognition Science Live Audit</h1>
+      <p style="font-size: 1.25rem; color: #555;">Real-time validation streaming from the audit repository</p>
+      <div class="status-badges">
+        <span class="status-badge">Parameter-Free</span>
+        <span class="status-badge" style="border-color: #10b981; color: #065f46;">● Live</span>
+        <a class="status-badge" href="https://github.com/jonwashburn/audit" target="_blank">View Repository →</a>
       </div>
     </div>
-    <div class="glow"></div>
-  </header>
+  </section>
   
-  <nav class="sticky">
-    <div class="wrap">
-      <a href="#status">Status</a>
-      <a href="#pillars-card">Pillars</a>
-      <a href="#ilg-card">ILG</a>
-      <a href="#lnal-card">LNAL</a>
-      <a href="#rung-card">Rungs</a>
-      <a href="#loose-card">Loose Ends</a>
-      <a href="#next-card">Next</a>
-      <a href="#arch-card">Architecture</a>
-      <a href="#guide-card">Guide</a>
+  <nav class="audit-nav">
+    <div class="container" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+      <a href="#status" style="padding: 0.5rem 1rem; color: #666; text-decoration: none;">Status</a>
+      <a href="#pillars-card" style="padding: 0.5rem 1rem; color: #666; text-decoration: none;">Pillars</a>
+      <a href="#ilg-card" style="padding: 0.5rem 1rem; color: #666; text-decoration: none;">ILG</a>
+      <a href="#lnal-card" style="padding: 0.5rem 1rem; color: #666; text-decoration: none;">LNAL</a>
+      <a href="#rung-card" style="padding: 0.5rem 1rem; color: #666; text-decoration: none;">Rungs</a>
+      <a href="#loose-card" style="padding: 0.5rem 1rem; color: #666; text-decoration: none;">Loose Ends</a>
+      <a href="#next-card" style="padding: 0.5rem 1rem; color: #666; text-decoration: none;">Next</a>
+      <a href="#arch-card" style="padding: 0.5rem 1rem; color: #666; text-decoration: none;">Architecture</a>
+      <a href="#guide-card" style="padding: 0.5rem 1rem; color: #666; text-decoration: none;">Guide</a>
     </div>
   </nav>
   
-  <main>
-          <div class="component-card" id="status">
-      <h2>Status</h2>
+  <main class="container" style="padding: 2rem 1.5rem;">
+    <div class="audit-card" id="status">
+      <h2 style="color: #0066cc; margin-bottom: 1rem;">Current Status</h2>
       <div id="status-body"></div>
-      <div class="muted" style="margin-top:10px">
-        <strong>What “accuracy” means here:</strong> parameter‑free derivations that match experiment across domains,
+      <p style="margin-top: 1rem; color: #666;">
+        <strong>What "accuracy" means here:</strong> Parameter-free derivations that match experiment across domains,
         reuse of the same gap series and gating without reweighting, and uniqueness/minimality theorems that remove hidden knobs.
-      </div>
-          </div>
-      <div class="grid">
-      <div class="component-card" id="pillars-card">
-        <h3>Pillars</h3>
+      </p>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem;">
+      <div class="audit-card" id="pillars-card">
+        <h3 style="color: #0066cc; margin-bottom: 1rem;">Foundational Pillars</h3>
         <ul id="pillars"></ul>
-        <p class="muted" style="margin-top:8px">
+        <p style="color: #666; margin-top: 1rem;">
           These pillars are not postulates but theorems. Together they force a rigid architecture (no free functions),
-          enabling cross‑domain predictions from the same primitives.
+          enabling cross-domain predictions from the same primitives.
         </p>
       </div>
-      <div class="component-card" id="ilg-card">
-        <h3>ILG Kernel</h3>
+      <div class="audit-card" id="ilg-card">
+        <h3 style="color: #0066cc; margin-bottom: 1rem;">ILG Kernel</h3>
         <div id="ilg"></div>
         <div class="proof-box" style="margin-top:12px">
           <strong>Why this matters.</strong> A unique kernel that reduces to Newtonian gravity at high acceleration and produces
@@ -82,18 +138,18 @@
           same law. The suppression S encodes parity‑gate combinatorics of the 1024‑tick breath; fixing it ties predictions together.
         </div>
       </div>
-      <div class="component-card" id="lnal-card">
-        <h3>LNAL</h3>
+      <div class="audit-card" id="lnal-card">
+        <h3 style="color: #0066cc; margin-bottom: 1rem;">LNAL Architecture</h3>
         <div id="lnal"></div>
         <div class="proof-box" style="margin-top:12px">
-          <strong>Meaning.</strong> Minimality means no smaller instruction set can generate all legal ledger walks, and completeness means
+          <strong style="color: #0066cc;">Meaning:</strong> Minimality means no smaller instruction set can generate all legal ledger walks, and completeness means
           every allowed recognition can be built from these opcodes. The ±4 alphabet bound prevents runaway cost and collapses.
         </div>
       </div>
-      <div class="component-card" id="rung-card">
-        <h3>Rung Constructor</h3>
+      <div class="audit-card" id="rung-card">
+        <h3 style="color: #0066cc; margin-bottom: 1rem;">Rung Constructor</h3>
         <div id="rung"></div>
-        <div class="component-card" style="margin-top:12px">
+        <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-top:12px">
           <h4 style="margin-top:0">Latest charged‑lepton snapshot (v9)</h4>
           <p class="muted" style="margin:6px 0 10px">Parameter‑free ratios in dimensionless ladder units (driver unchanged)</p>
           <ul style="margin:0 0 6px 18px">
@@ -105,27 +161,27 @@
           <p style="margin:8px 0 0"><a href="https://raw.githubusercontent.com/jonwashburn/audit/main/papers/snapshot-charged-lepton-masses-v9.tex" target="_blank" rel="noopener">View the v9 snapshot (TeX) ↗</a></p>
         </div>
       </div>
-          </div>
-      <div class="component-card" id="loose-card">
-      <h3>Loose Ends</h3>
-      <ul id="loose"></ul>
-          </div>
-      <div class="component-card" id="next-card">
-      <h3>Next Actions</h3>
-      <ul id="next"></ul>
-          </div>
-      <div class="component-card" style="margin-top:12px">
-        <h3>Validated predictions (selection)</h3>
+    </div>
+      <div class="audit-card" id="loose-card">
+        <h3 style="color: #0066cc; margin-bottom: 1rem;">Loose Ends</h3>
+        <ul id="loose"></ul>
+      </div>
+      <div class="audit-card" id="next-card">
+        <h3 style="color: #0066cc; margin-bottom: 1rem;">Next Actions</h3>
+        <ul id="next"></ul>
+      </div>
+      <div class="audit-card" style="margin-top:12px">
+        <h3 style="color: #0066cc; margin-bottom: 1rem;">Validated Predictions</h3>
         <ul style="margin:0 0 0 18px">
           <li>Fine‑structure constant: α⁻¹ = 137.03599908 (no fit; geometric seed + gap + curvature closure)</li>
           <li>Dark‑matter fraction: Ω<sub>dm</sub> = 0.2649 (lattice eigenstructure + gap correction)</li>
           <li>Local H₀: 70.6 km s⁻¹ Mpc⁻¹ (ledger clock lag; between SH0ES and Planck)</li>
           <li>Muon g−2 residual: parameter‑free cancellation from dual tours in the 1024‑breath</li>
         </ul>
-        <p class="muted" style="margin-top:8px">Each comes from the same primitives (gap series, gating, φ‑scaling) without reweighting.</p>
+        <p style="color: #666; margin-top:8px">Each comes from the same primitives (gap series, gating, φ‑scaling) without reweighting.</p>
       </div>
-      <div class="component-card" style="margin-top:12px">
-        <h3>How to verify</h3>
+      <div class="audit-card" style="margin-top:12px">
+        <h3 style="color: #0066cc; margin-bottom: 1rem;">How to Verify</h3>
         <ol style="margin:0 0 0 18px">
           <li>Review the <a href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener">audit repository</a> (study guide, proofs, status).</li>
           <li>Run the ILG gate check: <code>python scripts/ilg_gates_check.py</code> (|B| and S).</li>
@@ -153,9 +209,9 @@ python3 scripts/ci_status.py</code></pre>
           <div class="muted" style="margin-top:6px">Full instructions: <a href="https://raw.githubusercontent.com/jonwashburn/audit/main/docs/CI-README.md" target="_blank" rel="noopener">CI README ↗</a>.</div>
         </details>
       </div>
-      <div class="component-card" id="arch-card">
-      <h3>Architecture</h3>
-      <div class="muted">Rendered from Mermaid diagram.</div>
+      <div class="audit-card" id="arch-card">
+        <h3 style="color: #0066cc; margin-bottom: 1rem;">System Architecture</h3>
+        <p style="color: #666; margin-bottom: 1rem;">Rendered from Mermaid diagram</p>
       <div class="mermaid" id="mmd">
       graph TD
         MP["Meta‑Principle: ¬(∅ ▶ ∅)"] --> RS["Recognition Structure ⟨U, ∅, ▶⟩"]
@@ -174,9 +230,9 @@ python3 scripts/ci_status.py</code></pre>
         ILG --> Pred
       </div>
           </div>
-      <div class="component-card" id="guide-card">
-      <h3>Study Guide (Markdown)</h3>
-      <div class="muted">Rendered from audit/docs/Recognition-Science-Study-Guide.md</div>
+      <div class="audit-card" id="guide-card">
+        <h3 style="color: #0066cc; margin-bottom: 1rem;">Study Guide</h3>
+        <p style="color: #666; margin-bottom: 1rem;">Rendered from audit/docs/Recognition-Science-Study-Guide.md</p>
       <div id="guide"></div>
           </div>
   </main>
