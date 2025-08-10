@@ -310,54 +310,92 @@
       text-shadow: 0 0 10px var(--cyan);
     }
     
-    /* Mode Toggle */
+    /* Mode Toggle Switch */
     .mode-toggle {
-      text-align: center;
-      margin: 20px auto;
+      position: fixed;
+      top: 20px;
+      right: 20px;
       z-index: 10000;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(0,0,0,0.8);
+      padding: 8px 15px;
+      border-radius: 25px;
+      border: 1px solid var(--amber);
     }
     
-    .mode-toggle button {
-      background: #1a1a1a;
-      border: 2px solid var(--amber);
-      padding: 10px 20px;
-      cursor: pointer;
-      font-family: 'Share Tech Mono', monospace;
-      color: var(--amber);
-      font-size: 0.9rem;
-      letter-spacing: 0.1em;
-      transition: all 0.3s;
-      display: inline-block;
-      margin: 0 5px;
-    }
-    
-    .mode-toggle button:hover {
-      background: var(--amber);
-      color: #000;
-      box-shadow: 0 0 20px var(--amber);
-    }
-    
-    .mode-toggle button.active {
-      background: var(--amber);
-      color: #000;
-    }
-    
-    body:not(.retro-mode) .mode-toggle button {
-      background: #fff;
+    body:not(.retro-mode) .mode-toggle {
+      background: rgba(255,255,255,0.95);
       border: 1px solid #ccc;
-      color: #333;
+    }
+    
+    .toggle-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--amber);
+      letter-spacing: 0.05em;
+      user-select: none;
+    }
+    
+    body:not(.retro-mode) .toggle-label {
       font-family: system-ui, -apple-system, sans-serif;
-      letter-spacing: normal;
+      color: #666;
     }
     
-    body:not(.retro-mode) .mode-toggle button:hover {
-      background: #f0f0f0;
-      box-shadow: none;
-    }
-    
-    body:not(.retro-mode) .mode-toggle button.active {
+    .toggle-switch {
+      position: relative;
+      width: 60px;
+      height: 28px;
       background: #333;
-      color: #fff;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    
+    body:not(.retro-mode) .toggle-switch {
+      background: #ddd;
+    }
+    
+    .toggle-switch.active {
+      background: var(--green);
+    }
+    
+    body:not(.retro-mode) .toggle-switch.active {
+      background: #4CAF50;
+    }
+    
+    .toggle-slider {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 22px;
+      height: 22px;
+      background: var(--amber);
+      border-radius: 50%;
+      transition: transform 0.3s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    body:not(.retro-mode) .toggle-slider {
+      background: white;
+    }
+    
+    .toggle-switch.active .toggle-slider {
+      transform: translateX(32px);
+    }
+    
+    .retro-label {
+      cursor: pointer;
+    }
+    
+    .retro-label.clickable {
+      text-decoration: none;
+      color: var(--amber);
+    }
+    
+    .retro-label.clickable:hover {
+      text-shadow: 0 0 10px var(--amber);
     }
     
     /* Easter Egg Link */
@@ -420,6 +458,15 @@
   </style>
 </head>
 <body class="retro-mode">
+  <!-- Mode Toggle Switch -->
+  <div class="mode-toggle">
+    <span class="toggle-label">BORING</span>
+    <div class="toggle-switch active" onclick="toggleMode()">
+      <div class="toggle-slider"></div>
+    </div>
+    <span class="toggle-label retro-label" id="retro-label">REAL GENIUS</span>
+  </div>
+
   <!-- Retro Content Header -->
   <div class="retro-content">
     <div class="terminal-header">
@@ -436,14 +483,6 @@
 ╚═══════════════════════════════════════════════════════════╝
       </div>
     </div>
-  </div>
-  
-  <!-- Mode Toggle - Centered below header -->
-  <div class="mode-toggle">
-    <button onclick="setMode('retro')" class="retro-btn active">
-      <a href="https://www.youtube.com/watch?v=0ds0wYpc1eM" class="easter-egg" target="_blank">REAL GENIUS MODE</a>
-    </button>
-    <button onclick="setMode('boring')" class="boring-btn">BORING MODE</button>
   </div>
   
   <!-- Main Content Area -->
@@ -708,21 +747,36 @@ python3 scripts/ci_status.py</code></pre>
 
   <script>
   // Mode toggle function
-  function setMode(mode) {
+  function toggleMode() {
     const body = document.body;
-    const retroBtn = document.querySelector('.retro-btn');
-    const boringBtn = document.querySelector('.boring-btn');
+    const toggleSwitch = document.querySelector('.toggle-switch');
+    const retroLabel = document.getElementById('retro-label');
     
-    if (mode === 'retro') {
-      body.classList.add('retro-mode');
-      retroBtn.classList.add('active');
-      boringBtn.classList.remove('active');
-    } else {
+    if (body.classList.contains('retro-mode')) {
+      // Switch to boring mode
       body.classList.remove('retro-mode');
-      retroBtn.classList.remove('active');
-      boringBtn.classList.add('active');
+      toggleSwitch.classList.remove('active');
+      // Remove link when in boring mode
+      retroLabel.innerHTML = 'REAL GENIUS';
+      retroLabel.classList.remove('clickable');
+    } else {
+      // Switch to retro mode
+      body.classList.add('retro-mode');
+      toggleSwitch.classList.add('active');
+      // Add link only in retro mode
+      retroLabel.innerHTML = '<a href="https://www.youtube.com/watch?v=0ds0wYpc1eM" class="easter-egg" target="_blank">REAL GENIUS</a>';
+      retroLabel.classList.add('clickable');
     }
   }
+  
+  // Initialize the easter egg link on page load
+  window.addEventListener('DOMContentLoaded', function() {
+    const retroLabel = document.getElementById('retro-label');
+    if (document.body.classList.contains('retro-mode')) {
+      retroLabel.innerHTML = '<a href="https://www.youtube.com/watch?v=0ds0wYpc1eM" class="easter-egg" target="_blank">REAL GENIUS</a>';
+      retroLabel.classList.add('clickable');
+    }
+  });
   
   // Utility functions
   async function loadJSON(path) { 
