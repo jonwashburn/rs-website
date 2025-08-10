@@ -11,61 +11,72 @@
 </head>
 <body>
   <div id="header-placeholder"></div>
+  
+  <!-- Header Section -->
   <section class="intro-section" style="padding: 1.5rem 0; background: #fff;">
-  <div class="container text-center">
-    <div class="wrap">
-      <h1>Recognition Science — Live Audit</h1>
-      <p class="muted">Streaming from the audit repository (status.json + study guide)</p>
-      <div class="hstack" style="margin-top:12px">
-        <span class="badge">parameter‑free</span>
-        <span class="badge">live</span>
-        <a class="badge" href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener">repo ↗</a>
+    <div class="container text-center">
+      <div class="wrap">
+        <h1>Recognition Science — Live Audit</h1>
+        <p class="lead" style="font-size: 1.1rem; color: #555; max-width: 900px; margin: 0.5rem auto 0;">
+          Streaming live from the public audit repository
+        </p>
+        <div class="hstack" style="margin-top:12px">
+          <span class="badge">parameter‑free</span>
+          <span class="badge">live</span>
+          <a class="badge" href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener">repo ↗</a>
+        </div>
       </div>
     </div>
-    <div class="glow"></div>
-      <p class="lead" style="font-size: 1.1rem; color: #555; max-width: 900px; margin: 0.5rem auto 0;">Streaming live from the public audit repository (status.json + study guide).</p>
-  </div>
-</section>
+  </section>
   
   <main class="content-page">
-          <div class="component-card" id="status">
+    <!-- Primary Status Section -->
+    <div class="component-card" id="status">
       <h2>Status</h2>
-      <div id="status-body"></div>
+      <div id="status-body">Loading...</div>
       <div class="muted" style="margin-top:10px">
-        <strong>What “accuracy” means here:</strong> parameter‑free derivations that match experiment across domains,
+        <strong>What "accuracy" means here:</strong> parameter‑free derivations that match experiment across domains,
         reuse of the same gap series and gating without reweighting, and uniqueness/minimality theorems that remove hidden knobs.
       </div>
-          </div>
-      <div class="grid">
+    </div>
+    
+    <!-- Metrics Card (will be inserted here dynamically) -->
+    <div id="metrics-placeholder"></div>
+    
+    <!-- Core Framework Grid -->
+    <div class="grid">
       <div class="component-card" id="pillars-card">
         <h3>Pillars</h3>
-        <ul id="pillars"></ul>
+        <ul id="pillars">Loading...</ul>
         <p class="muted" style="margin-top:8px">
           These pillars are not postulates but theorems. Together they force a rigid architecture (no free functions),
           enabling cross‑domain predictions from the same primitives.
         </p>
       </div>
+      
       <div class="component-card" id="ilg-card">
         <h3>ILG Kernel</h3>
-        <div id="ilg"></div>
+        <div id="ilg">Loading...</div>
         <div class="proof-box" style="margin-top:12px">
           <strong>Why this matters.</strong> A unique kernel that reduces to Newtonian gravity at high acceleration and produces
           the observed low‑acceleration floor (a₀) without new parameters explains galaxy rotation, growth, and lensing with the
           same law. The suppression S encodes parity‑gate combinatorics of the 1024‑tick breath; fixing it ties predictions together.
         </div>
       </div>
+      
       <div class="component-card" id="lnal-card">
         <h3>LNAL</h3>
-        <div id="lnal"></div>
+        <div id="lnal">Loading...</div>
         <div class="proof-box" style="margin-top:12px">
           <strong>Meaning.</strong> Minimality means no smaller instruction set can generate all legal ledger walks, and completeness means
           every allowed recognition can be built from these opcodes. The ±4 alphabet bound prevents runaway cost and collapses.
         </div>
       </div>
+      
       <div class="component-card" id="rung-card">
         <h3>Rung Constructor</h3>
-        <div id="rung"></div>
-        <div class="component-card" style="margin-top:12px">
+        <div id="rung">Loading...</div>
+        <div class="proof-box" style="margin-top:12px">
           <h4 style="margin-top:0">Latest charged‑lepton snapshot (v9)</h4>
           <p class="muted" style="margin:6px 0 10px">Parameter‑free ratios in dimensionless ladder units (driver unchanged)</p>
           <ul style="margin:0 0 6px 18px">
@@ -77,57 +88,71 @@
           <p style="margin:8px 0 0"><a href="https://raw.githubusercontent.com/jonwashburn/audit/main/papers/snapshot-charged-lepton-masses-v9.tex" target="_blank" rel="noopener">View the v9 snapshot (TeX) ↗</a></p>
         </div>
       </div>
-          </div>
-      <div class="component-card" id="loose-card">
+    </div>
+    
+    <!-- Dynamic Sections Placeholder -->
+    <div id="cosmology-placeholder"></div>
+    <div id="ilg-limits-placeholder"></div>
+    <div id="conservation-placeholder"></div>
+    <div id="ci-placeholder"></div>
+    <div id="masses-placeholder"></div>
+    
+    <!-- Planning and Actions -->
+    <div class="component-card" id="loose-card">
       <h3>Loose Ends</h3>
-      <ul id="loose"></ul>
-          </div>
-      <div class="component-card" id="next-card">
+      <ul id="loose">Loading...</ul>
+    </div>
+    
+    <div class="component-card" id="next-card">
       <h3>Next Actions</h3>
-      <ul id="next"></ul>
-          </div>
-      <div class="component-card" style="margin-top:12px">
-        <h3>Validated predictions (selection)</h3>
-        <ul style="margin:0 0 0 18px">
-          <li>Fine‑structure constant: α⁻¹ = 137.03599908 (no fit; geometric seed + gap + curvature closure)</li>
-          <li>Dark‑matter fraction: Ω<sub>dm</sub> = 0.2649 (lattice eigenstructure + gap correction)</li>
-          <li>Local H₀: 70.6 km s⁻¹ Mpc⁻¹ (ledger clock lag; between SH0ES and Planck)</li>
-          <li>Muon g−2 residual: parameter‑free cancellation from dual tours in the 1024‑breath</li>
-        </ul>
-        <p class="muted" style="margin-top:8px">Each comes from the same primitives (gap series, gating, φ‑scaling) without reweighting.</p>
-      </div>
-      <div class="component-card" style="margin-top:12px">
-        <h3>How to verify</h3>
-        <ol style="margin:0 0 0 18px">
-          <li>Review the <a href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener">audit repository</a> (study guide, proofs, status).</li>
-          <li>Run the ILG gate check: <code>python scripts/ilg_gates_check.py</code> (|B| and S).</li>
-          <li>Inspect the charged‑lepton pipeline snapshot (v9) and confirm no sector‑specific knobs.</li>
-          <li>Track live progress at the top‑right badge (timestamp, progress, status).
-            See the <a href="https://raw.githubusercontent.com/jonwashburn/audit/main/docs/CI-README.md" target="_blank" rel="noopener">CI README ↗</a> for how checks are run.
-          </li>
-        </ol>
-        <div style="margin-top:12px">
-          <strong>Run CI locally</strong>
-          <pre style="margin-top:6px"><code>git clone https://github.com/jonwashburn/audit
+      <ul id="next">Loading...</ul>
+    </div>
+    
+    <!-- Validated Predictions -->
+    <div class="component-card">
+      <h3>Validated predictions (selection)</h3>
+      <ul style="margin:0 0 0 18px">
+        <li>Fine‑structure constant: α⁻¹ = 137.03599908 (no fit; geometric seed + gap + curvature closure)</li>
+        <li>Dark‑matter fraction: Ω<sub>dm</sub> = 0.2649 (lattice eigenstructure + gap correction)</li>
+        <li>Local H₀: 70.6 km s⁻¹ Mpc⁻¹ (ledger clock lag; between SH0ES and Planck)</li>
+        <li>Muon g−2 residual: parameter‑free cancellation from dual tours in the 1024‑breath</li>
+      </ul>
+      <p class="muted" style="margin-top:8px">Each comes from the same primitives (gap series, gating, φ‑scaling) without reweighting.</p>
+    </div>
+    
+    <!-- How to Verify -->
+    <div class="component-card">
+      <h3>How to verify</h3>
+      <ol style="margin:0 0 0 18px">
+        <li>Review the <a href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener">audit repository</a> (study guide, proofs, status).</li>
+        <li>Run the ILG gate check: <code>python scripts/ilg_gates_check.py</code> (|B| and S).</li>
+        <li>Inspect the charged‑lepton pipeline snapshot (v9) and confirm no sector‑specific knobs.</li>
+        <li>Track live progress in the status section above.</li>
+      </ol>
+      <div style="margin-top:12px">
+        <strong>Run CI locally</strong>
+        <pre style="margin-top:6px"><code>git clone https://github.com/jonwashburn/audit
 cd audit
 python3 scripts/ci_status.py</code></pre>
-          <div class="muted">Writes <code>docs/ci_status.json</code> and the website will stream it.</div>
-        </div>
-        <details style="margin-top:10px">
-          <summary>What each check does</summary>
-          <ul style="margin:8px 0 0 18px">
-            <li><strong>Gates</strong>: parity‑gate schedule → <code>|B|=46</code>, <code>S=489/512</code>. Script: <code>scripts/ilg_gates_check.py</code>.</li>
-            <li><strong>Growth</strong>: compute D and D/ΛCDM using μ(a,k) with derived <code>a0</code> and fixed <code>β=(T·N_gates)/S</code>. Script: <code>scripts/linear_growth_demo.py --normalise --write-json docs/demo_results.json</code>.</li>
-            <li><strong>Lensing</strong>: compute Σ(a,k)=μ(a,k) with the same parameters. Script: <code>scripts/lensing_demo.py --write-json docs/lensing_results.json</code>.</li>
-            <li><strong>Conservation (2D)</strong>: constant‑w Laplacian and varying‑w divergence theorem. Scripts: <code>scripts/conservation_check.py</code>, <code>scripts/conservation_check_varying_w.py</code>.</li>
-            <li><strong>Conservation (3D)</strong>: ΔΦ consistency and varying‑w divergence theorem on a voxel cube. Script: <code>scripts/conservation_check_3d.py</code>.</li>
-          </ul>
-          <div class="muted" style="margin-top:6px">Full instructions: <a href="https://raw.githubusercontent.com/jonwashburn/audit/main/docs/CI-README.md" target="_blank" rel="noopener">CI README ↗</a>.</div>
-        </details>
+        <div class="muted">Writes <code>docs/ci_status.json</code> and the website will stream it.</div>
       </div>
-      <div class="component-card" id="arch-card">
+      <details style="margin-top:10px">
+        <summary>What each check does</summary>
+        <ul style="margin:8px 0 0 18px">
+          <li><strong>Gates</strong>: parity‑gate schedule → <code>|B|=46</code>, <code>S=489/512</code></li>
+          <li><strong>Growth</strong>: compute D and D/ΛCDM using μ(a,k) with derived <code>a0</code> and fixed <code>β=(T·N_gates)/S</code></li>
+          <li><strong>Lensing</strong>: compute Σ(a,k)=μ(a,k) with the same parameters</li>
+          <li><strong>Conservation</strong>: 2D/3D discrete Laplacian and divergence theorem checks</li>
+          <li><strong>ILG Limits</strong>: Newtonian and deep-MOND limit verification</li>
+        </ul>
+        <div class="muted" style="margin-top:6px">Full instructions: <a href="https://raw.githubusercontent.com/jonwashburn/audit/main/docs/CI-README.md" target="_blank" rel="noopener">CI README ↗</a></div>
+      </details>
+    </div>
+    
+    <!-- Architecture Diagram -->
+    <div class="component-card" id="arch-card">
       <h3>Architecture</h3>
-      <div class="muted">Rendered from Mermaid diagram.</div>
+      <div class="muted">Rendered from Mermaid diagram</div>
       <div class="mermaid" id="mmd">
       graph TD
         MP["Meta‑Principle: ¬(∅ ▶ ∅)"] --> RS["Recognition Structure ⟨U, ∅, ▶⟩"]
@@ -145,351 +170,450 @@ python3 scripts/ci_status.py</code></pre>
         Mass --> Pred["α, masses, Ω_dm, …"]
         ILG --> Pred
       </div>
-          </div>
-      <div class="component-card" id="guide-card">
+    </div>
+    
+    <!-- Study Guide -->
+    <div class="component-card" id="guide-card">
       <h3>Study Guide (Markdown)</h3>
       <div class="muted">Rendered from audit/docs/Recognition-Science-Study-Guide.md</div>
-      <div id="guide"></div>
-    </section>
-      <div id="footer-placeholder"></div>
+      <div id="guide">Loading...</div>
+    </div>
   </main>
+  
+  <div id="footer-placeholder"></div>
 
   <script>
-  async function loadJSON(path){ const r = await fetch(path); if(!r.ok) throw new Error('fetch '+path); return r.json(); }
-  async function loadText(path){ const r = await fetch(path); if(!r.ok) throw new Error('fetch '+path); return r.text(); }
+  // Utility functions
+  async function loadJSON(path) { 
+    const r = await fetch(path); 
+    if (!r.ok) throw new Error('Failed to fetch ' + path); 
+    return r.json(); 
+  }
+  
+  async function loadText(path) { 
+    const r = await fetch(path); 
+    if (!r.ok) throw new Error('Failed to fetch ' + path); 
+    return r.text(); 
+  }
+  
+  function createElement(tag, className, id, innerHTML) {
+    const el = document.createElement(tag);
+    if (className) el.className = className;
+    if (id) el.id = id;
+    if (innerHTML) el.innerHTML = innerHTML;
+    return el;
+  }
+  
+  // Main initialization
   (async () => {
-    const ciURL    = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/ci_status.json';
-    const statusURL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/status.json';
-    const guideURL  = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/Recognition-Science-Study-Guide.md';
-    const [ci, status] = await Promise.all([
-      loadJSON(ciURL),
-      loadJSON(statusURL)
+    // Define all data URLs
+    const urls = {
+      status: 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/status.json',
+      ci: 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/ci_status.json',
+      metrics: 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/metrics.json',
+      masses: 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/masses_snapshot.json',
+      growth: 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/demo_results.json',
+      lensing: 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/lensing_results.json',
+      cons2d: 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/conservation_check_varying.json',
+      cons3d: 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/conservation_check_3d.json',
+      limits: 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/ilg_limit_checks.json',
+      guide: 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/Recognition-Science-Study-Guide.md'
+    };
+    
+    // Load all data in parallel
+    const [status, ci, metrics, masses, growth, lensing, cons2d, cons3d, limits, guideText] = await Promise.all([
+      loadJSON(urls.status).catch(() => ({})),
+      loadJSON(urls.ci).catch(() => ({})),
+      loadJSON(urls.metrics).catch(() => ({})),
+      loadJSON(urls.masses).catch(() => ({})),
+      loadJSON(urls.growth).catch(() => ({})),
+      loadJSON(urls.lensing).catch(() => ({})),
+      loadJSON(urls.cons2d).catch(() => ({})),
+      loadJSON(urls.cons3d).catch(() => ({})),
+      loadJSON(urls.limits).catch(() => ({})),
+      loadText(urls.guide).catch(() => '')
     ]);
+    
+    // Update Status
+    const lastUpdated = ci.last_updated || status.last_updated || '—';
+    const overallStatus = (ci.summary && ci.summary.passed) ? 'passed' : 'failed';
+    const statusClass = (ci.summary && ci.summary.passed) ? 'ok' : 'warn';
+    
     document.getElementById('status-body').innerHTML = `
-      <div><span class="muted">Last updated:</span> ${(ci && ci.last_updated) || status.last_updated || '—'}</div>
-      <div style="margin-top:8px">${status.thesis}</div>
-      <div style="margin-top:8px" class="muted"><a href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener">View audit repository</a> · Overall: <span class="${(ci && ci.summary && ci.summary.passed)?'ok':'warn'}">${(ci && ci.summary && ci.summary.passed)?'passed':'failed'}</span></div>
+      <div><span class="muted">Last updated:</span> ${lastUpdated}</div>
+      <div style="margin-top:8px">${status.thesis || 'Loading thesis...'}</div>
+      <div style="margin-top:8px" class="muted">
+        <a href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener">View audit repository</a> 
+        · Overall: <span class="${statusClass}">${overallStatus}</span>
+      </div>
     `;
-    const p = status.pillars;
+    
+    // Update Pillars
+    const p = status.pillars || {};
     document.getElementById('pillars').innerHTML = `
-      <li><code>${p.cost_functional}</code></li>
-      <li><code>stable d = ${p.stable_dimension}</code></li>
-      <li><code>${p.ticks}</code></li>
-      <li><code>${p.born_rule}</code></li>
+      <li><code>${p.cost_functional || '—'}</code></li>
+      <li><code>stable d = ${p.stable_dimension || '—'}</code></li>
+      <li><code>${p.ticks || '—'}</code></li>
+      <li><code>${p.born_rule || '—'}</code></li>
     `;
-    const ilg = status.ilg;
-    const Srat = (ilg && ilg.S_rational) ? ilg.S_rational : '489/512';
-    const Sdec = (ilg && ilg.S_decimal) ? Number(ilg.S_decimal) : (489/512);
-    const Tbreath = 1024;
-    const Ngates = 9;
-    const betaGates = (Tbreath * Ngates) / (Sdec || 1);
+    
+    // Update ILG
+    const ilg = status.ilg || {};
+    const Srat = ilg.S_rational || '489/512';
+    const Sdec = Number(ilg.S_decimal) || (489/512);
+    const betaGates = (1024 * 9) / Sdec;
+    
     document.getElementById('ilg').innerHTML = `
       <div><code>S=${Srat}</code>, <code>β=(T·N)/S=${betaGates.toFixed(3)}</code>, <span class="muted">a0 from κ via c²/λ_rec · S/(T·N)</span></div>
       <details style="margin-top:8px"><summary>Details</summary>
-        <div style="margin-top:6px">kernel: <code>${ilg.kernel}</code></div>
-        <div style="margin-top:6px">a0: <code>${ilg.a0_formula}</code></div>
-        <div class="muted" style="margin-top:6px">${ilg.status}</div>
+        <div style="margin-top:6px">kernel: <code>${ilg.kernel || '—'}</code></div>
+        <div style="margin-top:6px">a0: <code>${ilg.a0_formula || '—'}</code></div>
+        <div class="muted" style="margin-top:6px">${ilg.status || '—'}</div>
       </details>
     `;
-    const lnal = status.lnal;
+    
+    // Update LNAL
+    const lnal = status.lnal || {};
     document.getElementById('lnal').innerHTML = `
-      <div>opcodes: <span class="pill">${lnal.opcodes}</span> alphabet: <span class="pill">${lnal.alphabet}</span></div>
-      <div>registers: <span class="pill">${lnal.registers}</span></div>
-      <div class="muted">${lnal.minimality_status}</div>
+      <div>opcodes: <span class="pill">${lnal.opcodes || '—'}</span> alphabet: <span class="pill">${lnal.alphabet || '—'}</span></div>
+      <div>registers: <span class="pill">${lnal.registers || '—'}</span></div>
+      <div class="muted">${lnal.minimality_status || '—'}</div>
     `;
-    const rung = status.rung_constructor;
+    
+    // Update Rung Constructor
+    const rung = status.rung_constructor || {};
     document.getElementById('rung').innerHTML = `
-      <div>group: <code>${rung.group}</code></div>
-      <div class="muted">${rung.status}</div>
-      <div>baseline rungs: e=${rung.baseline_rungs.e}, μ=${rung.baseline_rungs.mu}, τ=${rung.baseline_rungs.tau}</div>
+      <div>group: <code>${rung.group || '—'}</code></div>
+      <div class="muted">${rung.status || '—'}</div>
+      <div>baseline rungs: e=${rung.baseline_rungs?.e || '—'}, μ=${rung.baseline_rungs?.mu || '—'}, τ=${rung.baseline_rungs?.tau || '—'}</div>
     `;
-    const loose = status.loose_ends.map(x => `<li><span class="tag">${x.id}</span> ${x.item} — <span class="muted">${x.priority}</span> <span class="${x.status==='open'?'warn':'ok'}">${x.status}</span></li>`).join('');
-    document.getElementById('loose').innerHTML = loose;
-    const next = status.next_actions.map(t => `<li>${t}</li>`).join('');
-    document.getElementById('next').innerHTML = next;
-    // Attempt to load lensing results JSON and render panel
-    try {
-      const lensingURL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/lensing_results.json';
-      const lj = await loadJSON(lensingURL);
-      const rows = (lj.lensing||[]).map(r => `<tr><td>${r.k}</td><td>${(r.a||1).toFixed(3)}</td><td>${(r.z!=null?Number(r.z).toFixed(3):'—')}</td><td>${r.Sigma.toFixed(6)}</td></tr>`).join('');
-      // Build Cosmology group container if not present
-      let cosmoGroup = document.getElementById('cosmo-group');
-      if (!cosmoGroup) {
-        cosmoGroup = document.createElement('section');
-        cosmoGroup.className = 'component-card';
-        cosmoGroup.id = 'cosmo-group';
-        cosmoGroup.innerHTML = `<h3>Cosmology (Growth & Lensing)</h3><div class="muted">Same μ(a,k) and gating parameters used in both panels.</div><div id="cosmo-grid" style="display:grid; grid-template-columns: repeat(auto-fit,minmax(320px,1fr)); gap:12px; margin-top:10px"></div>`;
-        const mainEl = document.querySelector('main .content-page') || document.querySelector('main');
-        const archEl = document.getElementById('arch-card');
-        mainEl.insertBefore(cosmoGroup, archEl);
-      }
-      // Lensing card
-      const lensingCard = document.createElement('div');
-      lensingCard.className = 'component-card';
-      lensingCard.id = 'lensing-card';
-      lensingCard.innerHTML = `
-        <h4 style="margin-top:0">Lensing (live)</h4>
-        <div class="muted">Last updated: ${lj.last_updated}</div>
-        <div style="margin-top:8px">
-          <strong>ILG Gates</strong>: |B|=${(lj.ilg&&lj.ilg.blocked)||'—'}, S=${(lj.ilg&&lj.ilg.S)||'—'}
-        </div>
-        <div style="margin-top:8px">
-          <table style="width:100%; border-collapse:collapse">
-            <thead><tr><th style="text-align:left">k (h/Mpc)</th><th style="text-align:right">a</th><th style="text-align:right">z</th><th style="text-align:right">Sigma</th></tr></thead>
-            <tbody>${rows}</tbody>
-          </table>
-        </div>
-        ${(lj.grid&&lj.grid.length)?`<div style=\"margin-top:8px\"><details><summary>Grid (Σ over a,k)</summary><div class=\"muted\" style=\"margin:6px 0\"><a href=\"https://raw.githubusercontent.com/jonwashburn/audit/main/docs/lensing_results.json\" target=\"_blank\" rel=\"noopener\">lensing_results.json ↗</a></div><table style=\"width:100%; border-collapse:collapse\"><thead><tr><th>a</th><th>z</th><th>k (h/Mpc)</th><th>Sigma</th></tr></thead><tbody>${lj.grid.map(g=>`<tr><td>${g.a.toFixed(2)}</td><td>${(g.z!=null?Number(g.z).toFixed(3):'—')}</td><td>${g.k}</td><td>${g.Sigma.toFixed(6)}</td></tr>`).join('')}</tbody></table></details></div>`:''}
-      `;
-      document.getElementById('cosmo-grid').appendChild(lensingCard);
-    } catch (e) {
-      // no-op if missing
+    
+    // Update Loose Ends
+    if (status.loose_ends) {
+      const loose = status.loose_ends.map(x => 
+        `<li><span class="tag">${x.id}</span> ${x.item} — <span class="muted">${x.priority}</span> <span class="${x.status==='open'?'warn':'ok'}">${x.status}</span></li>`
+      ).join('');
+      document.getElementById('loose').innerHTML = loose;
     }
-    // Attempt to load conservation check JSON and render a small pass/fail badge
-    try {
-      const consURL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/conservation_check_varying.json';
-      const cj = await loadJSON(consURL);
-      const badge = document.createElement('section');
-      badge.className = 'component-card';
-      const ok = (cj.conservation_check_varying && cj.conservation_check_varying.passed) ? 'ok' : 'warn';
-      badge.innerHTML = `
-        <h3>Conservation (toy check)</h3>
-        <div class="muted">Last updated: ${cj.last_updated}</div>
-        <div style="margin-top:8px">Discrete divergence theorem: <span class="${ok}">${ok==='ok'?'passed':'failed'}</span></div>
-        <div class="muted" style="margin-top:6px">|sum-div − flux| = ${(cj.conservation_check_varying && cj.conservation_check_varying.abs_residual)||'—'}</div>`;
-      const archEl2 = document.getElementById('arch-card');
-      const mainEl2 = document.querySelector('main .content-page') || document.querySelector('main');
-      mainEl2.insertBefore(badge, archEl2);
-    } catch (e) {
-      // ignore if missing
+    
+    // Update Next Actions
+    if (status.next_actions) {
+      const next = status.next_actions.map(t => `<li>${t}</li>`).join('');
+      document.getElementById('next').innerHTML = next;
     }
-    // Attempt to load 3D conservation JSON and add summary below the badge if available
-    try {
-      const cons3URL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/conservation_check_3d.json';
-      const c3 = await loadJSON(cons3URL);
-      const el = document.createElement('div');
-      el.id = 'cons-3d-card';
-      const lap = c3.conservation_check_3d && c3.conservation_check_3d.constant_w_laplacian;
-      const varw = c3.conservation_check_3d && c3.conservation_check_3d.varying_w_divergence;
-      el.className = 'component-card';
-      el.innerHTML = `
-        <h3>Conservation (3D toy)</h3>
-        <div class="muted">Last updated: ${c3.last_updated}</div>
-        <div style="margin-top:8px">Laplacian ΔΦ=6: <span class="${lap&&lap.passed?'ok':'warn'}">${lap&&lap.passed?'passed':'failed'}</span></div>
-        <div class="muted" style="margin-top:6px">max |ΔΦ−6| = ${(lap&&lap.max_abs_err)||'—'}</div>
-        <div style="margin-top:8px">Divergence theorem: <span class="${varw&&varw.passed?'ok':'warn'}">${varw&&varw.passed?'passed':'failed'}</span></div>
-        <div class="muted" style="margin-top:6px">|sum-div − flux| = ${(varw&&varw.abs_residual)||'—'}</div>`;
-      const archEl3 = document.getElementById('arch-card');
-      const mainEl3 = document.querySelector('main .content-page') || document.querySelector('main');
-      mainEl3.insertBefore(el, archEl3);
-    } catch(e) {
-      // ignore
-    }
-    // ILG Limit Checks panel
-    try {
-      const limitsURL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/ilg_limit_checks.json';
-      const lim = await loadJSON(limitsURL);
-      const lc = document.createElement('section');
-      lc.className = 'component-card';
-      lc.id = 'ilg-limits-card';
-      lc.innerHTML = `
-        <h3>ILG Limits</h3>
-        <div class="muted">Last updated: ${lim.last_updated || '—'}</div>
-        <div style="margin-top:8px">Newtonian probe μ(a=1,k=1): <code>${(lim.newtonian_limit && lim.newtonian_limit.mu_at_a1_k1!=null)?Number(lim.newtonian_limit.mu_at_a1_k1).toFixed(6):'—'}</code></div>
-        <div class="muted" style="margin-top:6px">Deep probe (a=${lim.deep_limit_probe?lim.deep_limit_probe.a:'—'}, k=${lim.deep_limit_probe?lim.deep_limit_probe.k:'—'}): x=${lim.deep_limit_probe?Number(lim.deep_limit_probe.x).toExponential(3):'—'}, μ=${lim.deep_limit_probe?Number(lim.deep_limit_probe.mu).toFixed(6):'—'}</div>
-        ${(lim.sweep&&lim.sweep.length)?`<div style=\"margin-top:8px\"><details><summary>Sweep (x and μ over a,k)</summary><table style=\"width:100%; border-collapse:collapse\"><thead><tr><th>a</th><th>k</th><th>x</th><th>μ</th></tr></thead><tbody>${lim.sweep.map(s=>`<tr><td>${s.a.toFixed(2)}</td><td>${s.k}</td><td>${Number(s.x).toExponential(3)}</td><td>${Number(s.mu).toFixed(6)}</td></tr>`).join('')}</tbody></table></details></div>`:''}
-      `;
-      const archElL = document.getElementById('arch-card');
-      const mainElL = document.querySelector('main .content-page') || document.querySelector('main');
-      mainElL.insertBefore(lc, archElL);
-    } catch(e) { /* ignore */ }
-
-    // Attempt to load CI status grid and show a compact badge
-    try {
-      const ciURL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/ci_status.json';
-      const ci = await loadJSON(ciURL);
-      const ok = (ci.summary && ci.summary.passed) ? 'ok' : 'warn';
-      const card = document.createElement('section');
-      card.className = 'component-card';
-      card.id = 'ci-card';
-      card.innerHTML = `
-        <h3>CI Status</h3>
-        <div class="muted">Last updated: ${ci.last_updated}</div>
-        <div style="margin-top:8px">Overall: <span class="${ok}">${ok==='ok'?'passed':'failed'}</span></div>
-         <div class="muted" style="margin-top:6px">Includes: gates, growth JSON, lensing JSON, ILG limit checks, masses snapshot, and 2D/3D conservation checks.</div>
-         <div class="muted" style="margin-top:6px">Ledger snapshot: ${ci.ledger_snapshot && ci.ledger_snapshot.present ? `<a href=\"https://raw.githubusercontent.com/jonwashburn/audit/main/docs/ledger_snapshot_v22c.txt\" target=\"_blank\" rel=\"noopener\">ledger_snapshot_v22c.txt</a>` : '—'}</div>
-        <div class="muted" style="margin-top:6px">Uncertainties file: ${ci.uncertainties && ci.uncertainties.present ? (ci.uncertainties.nonzero ? 'present (non‑zero)' : 'present (zeros)') : 'missing'}</div>`;
-      const archEl4 = document.getElementById('arch-card');
-      const mainEl4 = document.querySelector('main .content-page') || document.querySelector('main');
-      mainEl4.insertBefore(card, archEl4);
-      // Add explanations and failed checks, if present
-      if (ci.explanations) {
-        const exp = document.createElement('div');
-        exp.className = 'muted';
-        const failed = (ci.summary && ci.summary.failed_checks && ci.summary.failed_checks.length) ? ci.summary.failed_checks.join(', ') : 'none';
-        exp.style.marginTop = '8px';
-        exp.innerHTML = `<details><summary>What each check means</summary><ul style="margin:6px 0 0 18px">${Object.entries(ci.explanations).map(([k,v])=>`<li><strong>${k}</strong>: ${v}</li>`).join('')}</ul><div style="margin-top:6px"><strong>Failed checks:</strong> ${failed}</div></details>`;
-        card.appendChild(exp);
-      }
-    } catch(e) {
-      // ignore
-    }
-    // Attempt to load metrics and render a compact panel (move near top after Status/Pillars)
-    try {
-      const metricsURL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/metrics.json';
-      const mx = await loadJSON(metricsURL);
-      const card = document.createElement('section');
-      card.className = 'component-card';
-      card.id = 'metrics-card';
-      const allGreen = (mx.badges && mx.badges.all_green) ? 'ok' : 'warn';
-      card.innerHTML = `
+    
+    // Render Metrics (right after Status)
+    if (metrics.badges) {
+      const metricsCard = createElement('div', 'component-card', 'metrics-card', `
         <h3>Metrics</h3>
-        <div class="muted">Last updated: ${mx.last_updated}</div>
-        <div style="margin-top:8px">Overall: <span class="${allGreen}">${allGreen==='ok'?'all‑green':'attention'}</span></div>
-        <div class="muted" style="margin-top:6px">No‑knobs: ${mx.badges && mx.badges.no_knobs ? 'yes' : 'no'}</div>
+        <div class="muted">Last updated: ${metrics.last_updated || '—'}</div>
+        <div style="margin-top:8px">Overall: <span class="${metrics.badges.all_green ? 'ok' : 'warn'}">${metrics.badges.all_green ? 'all‑green' : 'attention'}</span></div>
+        <div class="muted" style="margin-top:6px">No‑knobs: ${metrics.badges.no_knobs ? 'yes' : 'no'}</div>
         <div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap:12px; margin-top:10px">
-          <div><strong>Masses</strong><div class="muted" style="margin-top:4px">CL max |Δ|: ${(mx.masses&&mx.masses.charged_leptons_max_abs_pct!=null)?mx.masses.charged_leptons_max_abs_pct.toFixed(3):'—'}%</div>
-          <div class="muted">Qdown max |Δ|: ${(mx.masses&&mx.masses.quarks_down_max_abs_pct!=null)?mx.masses.quarks_down_max_abs_pct.toFixed(3):'—'}%</div>
-          <div class="muted">Qup max |Δ|: ${(mx.masses&&mx.masses.quarks_up_max_abs_pct!=null)?mx.masses.quarks_up_max_abs_pct.toFixed(3):'—'}%</div>
-          <div class="muted">Bosons max |Δ|: ${(mx.masses&&mx.masses.bosons_max_abs_pct!=null)?mx.masses.bosons_max_abs_pct.toFixed(3):'—'}%</div></div>
-          <div><strong>Growth</strong><div class="muted" style="margin-top:4px">max |D/Λ−1|: ${(mx.growth&&mx.growth.max_abs_ratio_dev!=null)?mx.growth.max_abs_ratio_dev.toFixed(3):'—'}</div>
-          <div class="muted">mean |D/Λ−1|: ${(mx.growth&&mx.growth.mean_abs_ratio_dev!=null)?mx.growth.mean_abs_ratio_dev.toFixed(3):'—'}</div></div>
-          <div><strong>Lensing</strong><div class="muted" style="margin-top:4px">max |Σ−1|: ${(mx.lensing&&mx.lensing.max_abs_sigma_dev!=null)?mx.lensing.max_abs_sigma_dev.toFixed(3):'—'}</div>
-          <div class="muted">mean |Σ−1|: ${(mx.lensing&&mx.lensing.mean_abs_sigma_dev!=null)?mx.lensing.mean_abs_sigma_dev.toFixed(3):'—'}</div></div>
-        </div>`;
-      const statusEl = document.getElementById('status');
-      statusEl.parentNode.insertBefore(card, statusEl.nextSibling);
-    } catch(e) {
-      // ignore
+          <div>
+            <strong>Masses</strong>
+            <div class="muted" style="margin-top:4px">CL max |Δ|: ${metrics.masses?.charged_leptons_max_abs_pct?.toFixed(3) || '—'}%</div>
+            <div class="muted">Qdown max |Δ|: ${metrics.masses?.quarks_down_max_abs_pct?.toFixed(3) || '—'}%</div>
+            <div class="muted">Qup max |Δ|: ${metrics.masses?.quarks_up_max_abs_pct?.toFixed(3) || '—'}%</div>
+            <div class="muted">Bosons max |Δ|: ${metrics.masses?.bosons_max_abs_pct?.toFixed(3) || '—'}%</div>
+          </div>
+          <div>
+            <strong>Growth</strong>
+            <div class="muted" style="margin-top:4px">max |D/Λ−1|: ${metrics.growth?.max_abs_ratio_dev?.toFixed(3) || '—'}</div>
+            <div class="muted">mean |D/Λ−1|: ${metrics.growth?.mean_abs_ratio_dev?.toFixed(3) || '—'}</div>
+          </div>
+          <div>
+            <strong>Lensing</strong>
+            <div class="muted" style="margin-top:4px">max |Σ−1|: ${metrics.lensing?.max_abs_sigma_dev?.toFixed(3) || '—'}</div>
+            <div class="muted">mean |Σ−1|: ${metrics.lensing?.mean_abs_sigma_dev?.toFixed(3) || '—'}</div>
+          </div>
+        </div>
+      `);
+      document.getElementById('metrics-placeholder').appendChild(metricsCard);
     }
-    // Attempt to load masses snapshot and render compact tables
-    try {
-      const massesURL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/masses_snapshot.json';
-      const ms = await loadJSON(massesURL);
-      const cl = ms.charged_leptons || {}; const q = ms.quarks || {}; const b = ms.bosons || {}; const nu = ms.neutrinos || {};
-      const card = document.createElement('section');
-      card.className = 'component-card';
-      card.id = 'masses-card';
-      card.innerHTML = `
+    
+    // Render Cosmology (Growth & Lensing)
+    if (growth.growth || lensing.lensing) {
+      const cosmoCard = createElement('div', 'component-card', 'cosmology-card', `
+        <h3>Cosmology (Growth & Lensing)</h3>
+        <div class="muted">Same μ(a,k) and gating parameters used in both panels</div>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(320px,1fr)); gap:12px; margin-top:10px">
+          ${growth.growth ? `
+          <div class="component-card">
+            <h4 style="margin-top:0">Growth (live)</h4>
+            <div class="muted">Last updated: ${growth.last_updated || '—'}</div>
+            <div style="margin-top:8px">
+              <strong>ILG Gates</strong>: |B|=${growth.ilg?.blocked || '—'}, S=${growth.ilg?.S || '—'}; β=${growth.ilg?.beta || '—'}
+            </div>
+            <div style="margin-top:8px">
+              <table style="width:100%; border-collapse:collapse">
+                <thead><tr><th>k (h/Mpc)</th><th>D_LCDM</th><th>D_ILG</th><th>ratio</th></tr></thead>
+                <tbody>${growth.growth.map(r => 
+                  `<tr><td>${r.k}</td><td>${r.D_LCDM?.toFixed(6) || '—'}</td><td>${r.D_ILG?.toFixed(6) || '—'}</td><td>${r.ratio?.toFixed(6) || '—'}</td></tr>`
+                ).join('')}</tbody>
+              </table>
+            </div>
+            ${growth.grid?.length ? `
+            <details style="margin-top:8px">
+              <summary>Grid (ratio D_ILG/D_LCDM over a,k)</summary>
+              <div class="muted" style="margin:6px 0">
+                <a href="${urls.growth}" target="_blank" rel="noopener">demo_results.json ↗</a>
+              </div>
+              <table style="width:100%; border-collapse:collapse">
+                <thead><tr><th>a</th><th>z</th><th>k (h/Mpc)</th><th>ratio</th></tr></thead>
+                <tbody>${growth.grid.map(g => 
+                  `<tr><td>${g.a.toFixed(2)}</td><td>${g.z?.toFixed(3) || '—'}</td><td>${g.k}</td><td>${g.ratio.toFixed(6)}</td></tr>`
+                ).join('')}</tbody>
+              </table>
+            </details>` : ''}
+          </div>` : ''}
+          
+          ${lensing.lensing ? `
+          <div class="component-card">
+            <h4 style="margin-top:0">Lensing (live)</h4>
+            <div class="muted">Last updated: ${lensing.last_updated || '—'}</div>
+            <div style="margin-top:8px">
+              <strong>ILG Gates</strong>: |B|=${lensing.ilg?.blocked || '—'}, S=${lensing.ilg?.S || '—'}
+            </div>
+            <div style="margin-top:8px">
+              <table style="width:100%; border-collapse:collapse">
+                <thead><tr><th>k (h/Mpc)</th><th>a</th><th>z</th><th>Sigma</th></tr></thead>
+                <tbody>${lensing.lensing.map(r => 
+                  `<tr><td>${r.k}</td><td>${(r.a || 1).toFixed(3)}</td><td>${r.z?.toFixed(3) || '—'}</td><td>${r.Sigma.toFixed(6)}</td></tr>`
+                ).join('')}</tbody>
+              </table>
+            </div>
+            ${lensing.grid?.length ? `
+            <details style="margin-top:8px">
+              <summary>Grid (Σ over a,k)</summary>
+              <div class="muted" style="margin:6px 0">
+                <a href="${urls.lensing}" target="_blank" rel="noopener">lensing_results.json ↗</a>
+              </div>
+              <table style="width:100%; border-collapse:collapse">
+                <thead><tr><th>a</th><th>z</th><th>k (h/Mpc)</th><th>Sigma</th></tr></thead>
+                <tbody>${lensing.grid.map(g => 
+                  `<tr><td>${g.a.toFixed(2)}</td><td>${g.z?.toFixed(3) || '—'}</td><td>${g.k}</td><td>${g.Sigma.toFixed(6)}</td></tr>`
+                ).join('')}</tbody>
+              </table>
+            </details>` : ''}
+          </div>` : ''}
+        </div>
+      `);
+      document.getElementById('cosmology-placeholder').appendChild(cosmoCard);
+    }
+    
+    // Render ILG Limits
+    if (limits.newtonian_limit) {
+      const limitsCard = createElement('div', 'component-card', 'ilg-limits-card', `
+        <h3>ILG Limits</h3>
+        <div class="muted">Last updated: ${limits.last_updated || '—'}</div>
+        <div style="margin-top:8px">Newtonian probe μ(a=1,k=1): <code>${limits.newtonian_limit.mu_at_a1_k1?.toFixed(6) || '—'}</code></div>
+        <div class="muted" style="margin-top:6px">
+          Deep probe (a=${limits.deep_limit_probe?.a || '—'}, k=${limits.deep_limit_probe?.k || '—'}): 
+          x=${limits.deep_limit_probe?.x ? Number(limits.deep_limit_probe.x).toExponential(3) : '—'}, 
+          μ=${limits.deep_limit_probe?.mu?.toFixed(6) || '—'}
+        </div>
+        ${limits.sweep?.length ? `
+        <details style="margin-top:8px">
+          <summary>Sweep (x and μ over a,k)</summary>
+          <table style="width:100%; border-collapse:collapse">
+            <thead><tr><th>a</th><th>k</th><th>x</th><th>μ</th></tr></thead>
+            <tbody>${limits.sweep.map(s => 
+              `<tr><td>${s.a.toFixed(2)}</td><td>${s.k}</td><td>${Number(s.x).toExponential(3)}</td><td>${Number(s.mu).toFixed(6)}</td></tr>`
+            ).join('')}</tbody>
+          </table>
+        </details>` : ''}
+      `);
+      document.getElementById('ilg-limits-placeholder').appendChild(limitsCard);
+    }
+    
+    // Render Conservation
+    if (cons2d.conservation_check_varying || cons3d.conservation_check_3d) {
+      const consCard = createElement('div', 'component-card', 'conservation-card', `
+        <h3>Conservation Checks</h3>
+        <div class="muted">Last updated: ${cons2d.last_updated || cons3d.last_updated || '—'}</div>
+        ${cons2d.conservation_check_varying ? `
+        <div style="margin-top:8px">
+          <h4>2D Varying-w</h4>
+          <div style="margin-top:4px">
+            Discrete divergence theorem: 
+            <span class="${cons2d.conservation_check_varying.passed ? 'ok' : 'warn'}">
+              ${cons2d.conservation_check_varying.passed ? 'passed' : 'failed'}
+            </span>
+          </div>
+          <div class="muted" style="margin-top:4px">
+            |sum-div − flux| = ${cons2d.conservation_check_varying.abs_residual?.toExponential(3) || '—'}
+          </div>
+        </div>` : ''}
+        ${cons3d.conservation_check_3d ? `
+        <div style="margin-top:12px">
+          <h4>3D Checks</h4>
+          <div style="margin-top:4px">
+            Laplacian ΔΦ=6: 
+            <span class="${cons3d.conservation_check_3d.constant_w_laplacian?.passed ? 'ok' : 'warn'}">
+              ${cons3d.conservation_check_3d.constant_w_laplacian?.passed ? 'passed' : 'failed'}
+            </span>
+          </div>
+          <div class="muted" style="margin-top:4px">
+            max |ΔΦ−6| = ${cons3d.conservation_check_3d.constant_w_laplacian?.max_abs_err?.toExponential(3) || '—'}
+          </div>
+          <div style="margin-top:8px">
+            Divergence theorem: 
+            <span class="${cons3d.conservation_check_3d.varying_w_divergence?.passed ? 'ok' : 'warn'}">
+              ${cons3d.conservation_check_3d.varying_w_divergence?.passed ? 'passed' : 'failed'}
+            </span>
+          </div>
+          <div class="muted" style="margin-top:4px">
+            |sum-div − flux| = ${cons3d.conservation_check_3d.varying_w_divergence?.abs_residual?.toExponential(3) || '—'}
+          </div>
+        </div>` : ''}
+      `);
+      document.getElementById('conservation-placeholder').appendChild(consCard);
+    }
+    
+    // Render CI Status
+    if (ci.summary) {
+      const ciCard = createElement('div', 'component-card', 'ci-card', `
+        <h3>CI Status</h3>
+        <div class="muted">Last updated: ${ci.last_updated || '—'}</div>
+        <div style="margin-top:8px">
+          Overall: <span class="${ci.summary.passed ? 'ok' : 'warn'}">${ci.summary.passed ? 'passed' : 'failed'}</span>
+        </div>
+        <div class="muted" style="margin-top:6px">
+          Includes: gates, growth JSON, lensing JSON, ILG limit checks, masses snapshot, and 2D/3D conservation checks.
+        </div>
+        ${ci.ledger_snapshot?.present ? `
+        <div class="muted" style="margin-top:6px">
+          Ledger snapshot: <a href="https://raw.githubusercontent.com/jonwashburn/audit/main/docs/ledger_snapshot_v22c.txt" target="_blank" rel="noopener">ledger_snapshot_v22c.txt</a>
+        </div>` : ''}
+        <div class="muted" style="margin-top:6px">
+          Uncertainties file: ${ci.uncertainties?.present ? (ci.uncertainties.nonzero ? 'present (non‑zero)' : 'present (zeros)') : 'missing'}
+        </div>
+        ${ci.explanations ? `
+        <details style="margin-top:8px">
+          <summary>What each check means</summary>
+          <ul style="margin:6px 0 0 18px">
+            ${Object.entries(ci.explanations).map(([k,v]) => `<li><strong>${k}</strong>: ${v}</li>`).join('')}
+          </ul>
+          <div style="margin-top:6px">
+            <strong>Failed checks:</strong> ${ci.summary.failed_checks?.join(', ') || 'none'}
+          </div>
+        </details>` : ''}
+      `);
+      document.getElementById('ci-placeholder').appendChild(ciCard);
+    }
+    
+    // Render Masses
+    if (masses.charged_leptons) {
+      const cl = masses.charged_leptons;
+      const q = masses.quarks || {};
+      const b = masses.bosons || {};
+      const nu = masses.neutrinos || {};
+      
+      const massesCard = createElement('div', 'component-card', 'masses-card', `
         <h3>Masses (snapshot)</h3>
-        <div class="muted">Last updated: ${ms.last_updated}</div>
+        <div class="muted">Last updated: ${masses.last_updated || '—'}</div>
         <div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap:12px; margin-top:8px">
           <div>
-            <strong>Charged leptons (${cl.version||'—'})</strong>
+            <strong>Charged leptons (${cl.version || '—'})</strong>
             <ul style="margin:6px 0 0 18px">
-              <li>μ/e: ${(cl.deltas_pct&&cl.deltas_pct.mu_over_e!=null)?cl.deltas_pct.mu_over_e.toFixed(3):'—'}%</li>
-              <li>τ/μ: ${(cl.deltas_pct&&cl.deltas_pct.tau_over_mu!=null)?cl.deltas_pct.tau_over_mu.toFixed(3):'—'}%</li>
-              <li>τ/e: ${(cl.deltas_pct&&cl.deltas_pct.tau_over_e!=null)?cl.deltas_pct.tau_over_e.toFixed(3):'—'}%</li>
+              <li>μ/e: ${cl.deltas_pct?.mu_over_e?.toFixed(3) || '—'}%</li>
+              <li>τ/μ: ${cl.deltas_pct?.tau_over_mu?.toFixed(3) || '—'}%</li>
+              <li>τ/e: ${cl.deltas_pct?.tau_over_e?.toFixed(3) || '—'}%</li>
             </ul>
           </div>
           <div>
-            <strong>Quarks (${q.version||'—'})</strong>
+            <strong>Quarks (${q.version || '—'})</strong>
             <ul style="margin:6px 0 0 18px">
-              <li>s/d: ${(q.down&&q.down.deltas_pct&&q.down.deltas_pct.s_over_d!=null)?q.down.deltas_pct.s_over_d.toFixed(3):'—'}%</li>
-              <li>b/s: ${(q.down&&q.down.deltas_pct&&q.down.deltas_pct.b_over_s!=null)?q.down.deltas_pct.b_over_s.toFixed(3):'—'}%</li>
-              <li>b/d: ${(q.down&&q.down.deltas_pct&&q.down.deltas_pct.b_over_d!=null)?q.down.deltas_pct.b_over_d.toFixed(3):'—'}%</li>
-              <li style="margin-top:6px">c/u: ${(q.up&&q.up.deltas_pct&&q.up.deltas_pct.c_over_u!=null)?q.up.deltas_pct.c_over_u.toFixed(3):'—'}%</li>
-              <li>t/c: ${(q.up&&q.up.deltas_pct&&q.up.deltas_pct.t_over_c!=null)?q.up.deltas_pct.t_over_c.toFixed(3):'—'}%</li>
-              <li>t/u: ${(q.up&&q.up.deltas_pct&&q.up.deltas_pct.t_over_u!=null)?q.up.deltas_pct.t_over_u.toFixed(3):'—'}%</li>
+              <li>s/d: ${q.down?.deltas_pct?.s_over_d?.toFixed(3) || '—'}%</li>
+              <li>b/s: ${q.down?.deltas_pct?.b_over_s?.toFixed(3) || '—'}%</li>
+              <li>b/d: ${q.down?.deltas_pct?.b_over_d?.toFixed(3) || '—'}%</li>
+              <li style="margin-top:6px">c/u: ${q.up?.deltas_pct?.c_over_u?.toFixed(3) || '—'}%</li>
+              <li>t/c: ${q.up?.deltas_pct?.t_over_c?.toFixed(3) || '—'}%</li>
+              <li>t/u: ${q.up?.deltas_pct?.t_over_u?.toFixed(3) || '—'}%</li>
             </ul>
           </div>
           <div>
-            <strong>Bosons (${b.version||'—'})</strong>
+            <strong>Bosons (${b.version || '—'})</strong>
             <ul style="margin:6px 0 0 18px">
-              <li>Z/W: ${(b.deltas_pct&&b.deltas_pct.Z_over_W!=null)?b.deltas_pct.Z_over_W.toFixed(3):'—'}%</li>
-              <li>H/Z: ${(b.deltas_pct&&b.deltas_pct.H_over_Z!=null)?b.deltas_pct.H_over_Z.toFixed(3):'—'}%</li>
-              <li>H/W: ${(b.deltas_pct&&b.deltas_pct.H_over_W!=null)?b.deltas_pct.H_over_W.toFixed(3):'—'}%</li>
+              <li>Z/W: ${b.deltas_pct?.Z_over_W?.toFixed(3) || '—'}%</li>
+              <li>H/Z: ${b.deltas_pct?.H_over_Z?.toFixed(3) || '—'}%</li>
+              <li>H/W: ${b.deltas_pct?.H_over_W?.toFixed(3) || '—'}%</li>
             </ul>
           </div>
           <div>
-            <strong>Neutrinos (${nu.version||'—'})</strong>
+            <strong>Neutrinos (${nu.version || '—'})</strong>
             <ul style="margin:6px 0 0 18px">
-              <li>Ordering: ${nu.ordering||'—'}; rungs: ${(nu.rungs||[]).join(', ')||'—'}</li>
+              <li>Ordering: ${nu.ordering || '—'}; rungs: ${nu.rungs?.join(', ') || '—'}</li>
               <li>m (meV): ${(() => {
-                const mv = nu.masses_meV||[]; const mu = nu.masses_unc_meV||[];
+                const mv = nu.masses_meV || [];
+                const mu = nu.masses_unc_meV || [];
                 if (!mv.length) return '—';
-                return mv.map((x,idx) => `${x.toFixed(4)}${(mu[idx]!=null && mu[idx]!==0)?` ± ${Number(mu[idx]).toPrecision(2)}`:''}`).join(', ');
+                return mv.map((x, idx) => 
+                  `${x.toFixed(4)}${mu[idx] && mu[idx] !== 0 ? ` ± ${Number(mu[idx]).toPrecision(2)}` : ''}`
+                ).join(', ');
               })()}</li>
-              <li>Σmν: ${nu.sum_mnu_meV!=null?nu.sum_mnu_meV.toFixed(3):'—'}${(nu.sum_mnu_unc_meV!=null && nu.sum_mnu_unc_meV!==0)?` ± ${Number(nu.sum_mnu_unc_meV).toPrecision(2)}`:''} meV; mβ: ${nu.m_beta_meV!=null?nu.m_beta_meV.toFixed(3):'—'} meV</li>
-              <li>Dirac: ${nu.dirac===true?'yes':(nu.dirac===false?'no':'—')}</li>
+              <li>Σmν: ${nu.sum_mnu_meV?.toFixed(3) || '—'}${nu.sum_mnu_unc_meV && nu.sum_mnu_unc_meV !== 0 ? ` ± ${Number(nu.sum_mnu_unc_meV).toPrecision(2)}` : ''} meV; 
+                  mβ: ${nu.m_beta_meV?.toFixed(3) || '—'} meV</li>
+              <li>Dirac: ${nu.dirac === true ? 'yes' : (nu.dirac === false ? 'no' : '—')}</li>
             </ul>
           </div>
         </div>
         <div class="muted" style="margin-top:8px">
-          Download: <a href="https://raw.githubusercontent.com/jonwashburn/audit/main/docs/masses_snapshot.json" target="_blank" rel="noopener">JSON</a>
-          · <a href="https://raw.githubusercontent.com/jonwashburn/audit/main/docs/masses_snapshot.csv" target="_blank" rel="noopener">CSV</a>
-          · Archival TeX: <a href="https://raw.githubusercontent.com/jonwashburn/audit/main/papers/particle-masses-ai.tex" target="_blank" rel="noopener">AI snapshot (v21) ↗</a>
+          Download: 
+          <a href="https://raw.githubusercontent.com/jonwashburn/audit/main/docs/masses_snapshot.json" target="_blank" rel="noopener">JSON</a> · 
+          <a href="https://raw.githubusercontent.com/jonwashburn/audit/main/docs/masses_snapshot.csv" target="_blank" rel="noopener">CSV</a> · 
+          Archival TeX: <a href="https://raw.githubusercontent.com/jonwashburn/audit/main/papers/particle-masses-ai.tex" target="_blank" rel="noopener">AI snapshot (v21) ↗</a>
         </div>
+        ${masses.ckm || masses.pmns ? `
         <div style="margin-top:10px; display:grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap:12px">
+          ${masses.ckm ? `
           <div>
-            <strong>CKM |V| (${ms.ckm && ms.ckm.version || '—'})</strong>
+            <strong>CKM |V| (${masses.ckm.version || '—'})</strong>
             <table style="margin-top:6px; width:100%; border-collapse:collapse">
               <tbody>
-                ${(ms.ckm&&ms.ckm.V||[]).map((row,i) => `<tr>${row.map((v,j)=>{
-                  const unc = (ms.ckm && ms.ckm.V_unc && ms.ckm.V_unc[i] && ms.ckm.V_unc[i][j]!=null) ? ms.ckm.V_unc[i][j] : null;
-                  return `<td style=\"padding:2px 6px\">${v.toFixed(4)}${(unc&&unc!==0)?` ± ${Number(unc).toPrecision(2)}`:''}</td>`;
-                }).join('')}</tr>`).join('')}
+                ${masses.ckm.V.map((row, i) => 
+                  `<tr>${row.map((v, j) => {
+                    const unc = masses.ckm.V_unc?.[i]?.[j];
+                    return `<td style="padding:2px 6px">${v.toFixed(4)}${unc && unc !== 0 ? ` ± ${Number(unc).toPrecision(2)}` : ''}</td>`;
+                  }).join('')}</tr>`
+                ).join('')}
               </tbody>
             </table>
-            <div class="muted" style="margin-top:6px">(λ, A, ρ̄, η̄) = (${ms.ckm?ms.ckm.lambda.toFixed(6):'—'}, ${ms.ckm?ms.ckm.A.toFixed(3):'—'}, ${ms.ckm?ms.ckm.rho_bar.toFixed(3):'—'}, ${ms.ckm?ms.ckm.eta_bar.toFixed(3):'—'})</div>
-          </div>
+            <div class="muted" style="margin-top:6px">
+              (λ, A, ρ̄, η̄) = (${masses.ckm.lambda?.toFixed(6) || '—'}, ${masses.ckm.A?.toFixed(3) || '—'}, 
+              ${masses.ckm.rho_bar?.toFixed(3) || '—'}, ${masses.ckm.eta_bar?.toFixed(3) || '—'})
+            </div>
+          </div>` : ''}
+          ${masses.pmns ? `
           <div>
-            <strong>PMNS (angles, ${ms.pmns && ms.pmns.version || '—'})</strong>
+            <strong>PMNS (angles, ${masses.pmns.version || '—'})</strong>
             <ul style="margin:6px 0 0 18px">
-              <li>θ12 = ${ms.pmns?ms.pmns.theta12_deg.toFixed(2):'—'}°${ms.pmns&&ms.pmns.theta12_unc_deg?` ± ${ms.pmns.theta12_unc_deg.toFixed(2)}°`:''}</li>
-              <li>θ23 = ${ms.pmns?ms.pmns.theta23_deg.toFixed(2):'—'}°${ms.pmns&&ms.pmns.theta23_unc_deg?` ± ${ms.pmns.theta23_unc_deg.toFixed(2)}°`:''}</li>
-              <li>θ13 = ${ms.pmns?ms.pmns.theta13_deg.toFixed(2):'—'}°${ms.pmns&&ms.pmns.theta13_unc_deg?` ± ${ms.pmns.theta13_unc_deg.toFixed(2)}°`:''}</li>
-              <li>δCP ≈ ${ms.pmns?ms.pmns.delta_CP_deg.toFixed(1):'—'}°${ms.pmns&&ms.pmns.delta_CP_unc_deg?` ± ${ms.pmns.delta_CP_unc_deg.toFixed(1)}°`:''}; JCP ≈ ${ms.pmns?ms.pmns.J_CP.toFixed(3):'—'}${ms.pmns&&ms.pmns.J_CP_unc?` ± ${ms.pmns.J_CP_unc.toPrecision(2)}`:''}</li>
+              <li>θ12 = ${masses.pmns.theta12_deg?.toFixed(2) || '—'}°${masses.pmns.theta12_unc_deg ? ` ± ${masses.pmns.theta12_unc_deg.toFixed(2)}°` : ''}</li>
+              <li>θ23 = ${masses.pmns.theta23_deg?.toFixed(2) || '—'}°${masses.pmns.theta23_unc_deg ? ` ± ${masses.pmns.theta23_unc_deg.toFixed(2)}°` : ''}</li>
+              <li>θ13 = ${masses.pmns.theta13_deg?.toFixed(2) || '—'}°${masses.pmns.theta13_unc_deg ? ` ± ${masses.pmns.theta13_unc_deg.toFixed(2)}°` : ''}</li>
+              <li>δCP ≈ ${masses.pmns.delta_CP_deg?.toFixed(1) || '—'}°${masses.pmns.delta_CP_unc_deg ? ` ± ${masses.pmns.delta_CP_unc_deg.toFixed(1)}°` : ''}; 
+                  JCP ≈ ${masses.pmns.J_CP?.toFixed(3) || '—'}${masses.pmns.J_CP_unc ? ` ± ${masses.pmns.J_CP_unc.toPrecision(2)}` : ''}</li>
             </ul>
-          </div>
-        </div>`;
-      const archEl5 = document.getElementById('arch-card');
-      const mainEl5 = document.querySelector('main .content-page') || document.querySelector('main');
-      mainEl5.insertBefore(card, archEl5);
-      // Also insert growth panel using demo_results.json
-      try {
-        const growthURL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/demo_results.json';
-        const gr = await loadJSON(growthURL);
-        const gcard = document.createElement('div');
-        gcard.className = 'component-card';
-        gcard.id = 'growth-card';
-        const grows = (gr.growth||[]).map(r => `<tr><td>${r.k}</td><td>${(r.D_LCDM!=null? r.D_LCDM.toFixed(6):'—')}</td><td>${(r.D_ILG!=null? r.D_ILG.toFixed(6):'—')}</td><td>${(r.ratio!=null? r.ratio.toFixed(6):'—')}</td></tr>`).join('');
-        gcard.innerHTML = `
-          <h4 style="margin-top:0">Growth (live)</h4>
-          <div class="muted">Last updated: ${gr.last_updated}</div>
-          <div style="margin-top:8px">
-            <strong>ILG Gates</strong>: |B|=${(gr.ilg&&gr.ilg.blocked)||'—'}, S=${(gr.ilg&&gr.ilg.S)||'—'}; β=${(gr.ilg&&gr.ilg.beta)||'—'}
-          </div>
-          <div style="margin-top:8px">
-            <table style=\"width:100%; border-collapse:collapse\"><thead><tr><th>k (h/Mpc)</th><th>D_LCDM</th><th>D_ILG</th><th>ratio</th></tr></thead><tbody>${grows}</tbody></table>
-          </div>
-          ${(gr.grid&&gr.grid.length)?`<div style=\"margin-top:8px\"><details><summary>Grid (ratio D_ILG/D_LCDM over a,k)</summary><div class=\"muted\" style=\"margin:6px 0\"><a href=\"https://raw.githubusercontent.com/jonwashburn/audit/main/docs/demo_results.json\" target=\"_blank\" rel=\"noopener\">demo_results.json ↗</a></div><table style=\"width:100%; border-collapse:collapse\"><thead><tr><th>a</th><th>z</th><th>k (h/Mpc)</th><th>ratio</th></tr></thead><tbody>${gr.grid.map(g=>`<tr><td>${g.a.toFixed(2)}</td><td>${(g.z!=null?Number(g.z).toFixed(3):'—')}</td><td>${g.k}</td><td>${g.ratio.toFixed(6)}</td></tr>`).join('')}</tbody></table></details></div>`:''}
-        `;
-        // Ensure Cosmology group exists (created by lensing block); if not, create it
-        let cosmoGroup2 = document.getElementById('cosmo-group');
-        if (!cosmoGroup2) {
-          cosmoGroup2 = document.createElement('section');
-          cosmoGroup2.className = 'component-card';
-          cosmoGroup2.id = 'cosmo-group';
-          cosmoGroup2.innerHTML = `<h3>Cosmology (Growth & Lensing)</h3><div class=\"muted\">Same μ(a,k) and gating parameters used in both panels.</div><div id=\"cosmo-grid\" style=\"display:grid; grid-template-columns: repeat(auto-fit,minmax(320px,1fr)); gap:12px; margin-top:10px\"></div>`;
-          const mainElX = document.querySelector('main .content-page') || document.querySelector('main');
-          const archElX = document.getElementById('arch-card');
-          mainElX.insertBefore(cosmoGroup2, archElX);
-        }
-        document.getElementById('cosmo-grid').appendChild(gcard);
-      } catch (e) { /* ignore */ }
-    } catch(e) {
-      // ignore
+          </div>` : ''}
+        </div>` : ''}
+      `);
+      document.getElementById('masses-placeholder').appendChild(massesCard);
     }
-    // Render mermaid
-    mermaid.run({ nodes: [ document.getElementById('mmd') ] });
-    // Render study guide markdown
-    const md = await loadText(guideURL);
-    document.getElementById('guide').innerHTML = marked.parse(md);
+    
+    // Render Mermaid diagram
+    mermaid.run({ nodes: [document.getElementById('mmd')] });
+    
+    // Render Study Guide
+    if (guideText) {
+      document.getElementById('guide').innerHTML = marked.parse(guideText);
+    }
+    
   })().catch(err => {
-    document.getElementById('status').textContent = 'Error loading status: ' + err.message;
+    document.getElementById('status-body').innerHTML = `<span class="warn">Error loading status: ${err.message}</span>`;
   });
   </script>
+  
   <script src="/assets/js/main.js"></script>
 </body>
 </html>
