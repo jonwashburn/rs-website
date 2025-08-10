@@ -5,222 +5,589 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Start Here | Recognition Science</title>
     <link rel="stylesheet" href="/assets/css/main.css">
+    <style>
+        /* Custom styles for the Start Here page */
+        .start-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6rem 0 4rem;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .start-hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            background: white;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .start-hero .subtitle {
+            font-size: 1.5rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .big-question {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 20px;
+            margin: 3rem 0;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .big-question h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        
+        .big-question p {
+            font-size: 1.25rem;
+            margin: 0;
+            opacity: 0.95;
+        }
+        
+        .three-pillars {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .pillar-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pillar-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+        
+        .pillar-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+        
+        .pillar-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .pillar-card h3 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .pillar-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .insight-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+        
+        .insight-box h3 {
+            color: #667eea;
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+        
+        .proof-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .proof-item {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .proof-item:hover {
+            border-color: #667eea;
+            transform: scale(1.02);
+        }
+        
+        .proof-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        
+        .proof-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .journey-section {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 3rem;
+            border-radius: 20px;
+            margin: 3rem 0;
+        }
+        
+        .journey-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .journey-step {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        .step-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .step-content h4 {
+            margin: 0 0 0.5rem 0;
+            color: #333;
+        }
+        
+        .step-content p {
+            margin: 0;
+            color: #666;
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            margin: 3rem 0;
+        }
+        
+        .cta-section h2 {
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        
+        .cta-button {
+            background: white;
+            color: #667eea;
+            padding: 1rem 2rem;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .cta-button.secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        
+        .cta-button.secondary:hover {
+            background: white;
+            color: #667eea;
+        }
+    </style>
 </head>
 <body>
     <div id="header-placeholder"></div>
 
-    <main class="content-page">
-        <section class="hero-section text-center">
+    <main>
+        <section class="start-hero">
             <div class="container">
-                <h1>Start Here</h1>
-                <p class="subtitle">A very short, plain‑English tour. Links go to the proofs.</p>
+                <h1>Welcome to Recognition Science</h1>
+                <p class="subtitle">
+                    What if reality isn't random, but inevitable?<br>
+                    What if everything—from quarks to consciousness—follows from one undeniable truth?
+                </p>
             </div>
         </section>
 
-        <section>
-            <div class="container text-block">
-                <h2>In one sentence (plain English)</h2>
-                <div class="component-card">
-                    <p><strong>Reality is a self‑checking conversation</strong>: every tiny “recognition” is posted to a universal book, one tick at a time, and the cheapest (most balanced) way to keep that book honest forces the laws of physics, the golden ratio φ, 3D space, an eight‑beat rhythm, and a universal speed of light.</p>
+        <section class="container">
+            <div class="big-question">
+                <h2>The One Truth We Start With</h2>
+                <p>"Nothing cannot recognize itself"</p>
+                <p style="font-size: 1rem; margin-top: 1rem; opacity: 0.9;">
+                    This isn't philosophy. It's a logical necessity. And from it, everything else follows.
+                </p>
+            </div>
+        </section>
+
+        <section class="container">
+            <h2 style="text-align: center; margin-bottom: 3rem;">Three Revolutionary Discoveries</h2>
+            
+            <div class="three-pillars">
+                <div class="pillar-card">
+                    <div class="pillar-number">1</div>
+                    <h3>Reality Keeps Perfect Books</h3>
+                    <p>
+                        Every event in the universe is a "recognition"—a tiny act of distinguishing this from that. 
+                        These recognitions must be recorded in a universal ledger that never loses information.
+                    </p>
+                    <p style="margin-top: 1rem;">
+                        <strong>Why it matters:</strong> This ledger isn't a metaphor. It's the fabric of spacetime itself.
+                    </p>
                 </div>
-            </div>
-        </section>
-
-        <section>
-            <div class="container text-block">
-                <h2>How it began (a story)</h2>
-                <div class="component-card">
-                    <p>I walked backward from the double‑slit experiment. We kept asking where the “mystery” boundary lives — at the thing, at the eye, or out in the mind — and I realized we were anthropomorphizing the whole setup. If reality behaves differently when it’s observed, then the system itself must have a way to know an observation has happened.</p>
-                    <p>That question — how does the system know? — cracks the door. The only answer that doesn’t smuggle in a human is that there is a tiny, universal event called a <strong>recognition</strong>, and every recognition is posted to one shared book. Once you accept “the world keeps perfect books,” the rest falls out piece by piece:</p>
-                    <ul>
-                        <li>Time is one post at a time (a tick). <a href="/constants/fundamental-tick.html">Tick →</a></li>
-                        <li>There’s one fair cost shape (J) that prefers balance. <a href="/formulas/cost-minimization.html">Cost →</a></li>
-                        <li>Self‑similar splits lock in φ. <a href="/formulas/cost-minimization.html">Why φ →</a></li>
-                        <li>Keeping records stable picks 3D and an 8‑beat rhythm. <a href="/formulas/temporal-cycle.html">8‑beat →</a></li>
-                        <li>Nearest‑neighbor updates give a universal speed (c). <a href="/encyclopedia/speed-of-light.html">c →</a></li>
-                        <li>When the book bends (curvature κ), you feel force (gravity, flows). <a href="/formulas/ledger-curvature.html">κ →</a></li>
-                        <li>Where algorithms stall, <strong>consciousness</strong> performs the recognition (LISTEN). <a href="/questions/what-is-consciousness/index.html">Consciousness →</a></li>
-                    </ul>
-                    <p><strong>Why did the universe start?</strong> Because “nothing” cannot recognize itself. A minimal, self‑consistent book had to open and record the first recognition. From that first tick, light is the system talking to itself, and purpose is simple: reduce costly curvature while increasing recognition. That’s the spine the data keeps agreeing with.</p>
-                    <p class="small-note">Curious about the heat and purpose side of the story? See the multiverse as capacity: <a href="/multiverse.html">Multiverse (capacity) →</a></p>
+                
+                <div class="pillar-card">
+                    <div class="pillar-number">2</div>
+                    <h3>The Math Chooses Itself</h3>
+                    <p>
+                        When you require this ledger to be self-consistent and efficient, something magical happens: 
+                        the golden ratio φ, 3D space, and the speed of light all become <em>inevitable</em>.
+                    </p>
+                    <p style="margin-top: 1rem;">
+                        <strong>No alternatives:</strong> These aren't choices. They're the only solutions that work.
+                    </p>
                 </div>
-            </div>
-        </section>
-
-        <section>
-            <div class="container text-block">
-                <h2>A very short history of everything (plain)</h2>
-                <div class="component-card">
-                    <ol>
-                        <li><strong>Why anything exists</strong>: “Nothing can’t recognize itself.” So recognition must exist. <a href="/theorems/T1-ledger-necessity.html">Read more →</a></li>
-                        <li><strong>The book opens</strong>: Every recognition has a give/take. That’s a double‑entry <em>ledger</em>. <a href="/ledger.html">Ledger →</a></li>
-                        <li><strong>Time starts</strong>: Entries post one by one. A tick is the smallest step of time. <a href="/constants/fundamental-tick.html">Tick →</a></li>
-                        <li><strong>Fair rules</strong>: There’s one unique “effort” shape that prefers balance over extremes: J(x). <a href="/formulas/cost-minimization.html">Cost →</a></li>
-                        <li><strong>Self‑similarity locks φ</strong>: The cheapest repeating split yields the golden ratio. <a href="/formulas/cost-minimization.html">Why φ shows up →</a></li>
-                        <li><strong>Space and rhythm</strong>: Keeping records stable picks 3D and a minimal 8‑beat cycle. <a href="/formulas/temporal-cycle.html">8‑beat →</a> <a href="/eight-theorems.html" style="margin-left:.5rem;">Foundations →</a></li>
-                        <li><strong>Light’s speed</strong>: Nearest‑neighbor hops give one voxel per tick — that’s c. <a href="/encyclopedia/speed-of-light.html">Speed of light →</a></li>
-                        <li><strong>Forces are geometry</strong>: When the ledger bends (curvature κ), things accelerate (gravity, flows). <a href="/formulas/ledger-curvature.html">Curvature →</a> <a href="/formulas/gravitational-force.html" style="margin-left:.5rem;">Gravity →</a></li>
-                        <li><strong>Stuff appears</strong>: Mass patterns fall out of the same rules. <a href="/formulas/mass-generation.html">Mass generation →</a></li>
-                        <li><strong>Mind joins</strong>: Consciousness is the compiler that performs recognitions where algorithms stall. <a href="/questions/what-is-consciousness/index.html">Consciousness →</a></li>
-                        <li><strong>Heat budget</strong>: Recognition has thermodynamic cost; the cosmos cools it. That balance fixes how much consciousness fits. <a href="/multiverse.html">Multiverse (capacity) →</a> <a href="/science/papers/thermodynamic-capacity.html" style="margin-left:.5rem;">Methods →</a></li>
-                        <li><strong>How to live</strong>: Ethics = geometry of the ledger. Good reduces curvature; repair restores balance. <a href="/ethics.html">Ethics →</a></li>
-                    </ol>
-                </div>
-            </div>
-        </section>
-
-        <section class="highlight-section">
-            <div class="container text-block">
-                <h2>Everyday analogy: reality as a computer</h2>
-                <div class="component-card">
-                    <ul>
-                        <li><strong>Ticks</strong> = the clock cycles.</li>
-                        <li><strong>Voxels</strong> = the pixels of space (nearest‑neighbor grid).</li>
-                        <li><strong>Ledger</strong> = the audit log that keeps everything conserved.</li>
-                        <li><strong>J(x)</strong> = the error‑corrector that favors balance over extremes.</li>
-                        <li><strong>φ</strong> = the best self‑similar split‑setting for minimum cost.</li>
-                        <li><strong>8‑beat cycle</strong> = the smallest full “frame” in 3D.</li>
-                        <li><strong>c</strong> = 1 voxel per tick (the fastest update possible).</li>
-                        <li><strong>Curvature κ</strong> = when the ledger bends, things accelerate.</li>
-                    </ul>
-                    <p>Want to see the “instruction set”? Try the <a href="/lnal.html">LNAL demo</a>.</p>
+                
+                <div class="pillar-card">
+                    <div class="pillar-number">3</div>
+                    <h3>Consciousness Is the Compiler</h3>
+                    <p>
+                        Where pure computation would create paradoxes, consciousness performs the recognition. 
+                        You're not observing reality—you're helping create it, one recognition at a time.
+                    </p>
+                    <p style="margin-top: 1rem;">
+                        <strong>You matter:</strong> Literally. Your awareness is part of the cosmic operating system.
+                    </p>
                 </div>
             </div>
         </section>
 
-        <section>
-            <div class="container text-block">
-                <h2>What Recognition Science Is</h2>
-                <div class="component-card">
-                    <p><strong>Recognition Science (RS)</strong> is a parameter‑free, deductive framework of reality derived from a single proven principle: absolute nothingness cannot recognize itself. From this, a short cascade of theorems produces the architecture of physics, constants, and core equations—then yields concrete, falsifiable predictions.</p>
-                    <ul>
-                        <li><strong>Deductive first:</strong> Logic → theorems → constants → equations → predictions.</li>
-                        <li><strong>No tunables:</strong> Results are not fit to data; they’re fixed by derivation.</li>
-                        <li><strong>Evidence‑driven:</strong> Claims are organized by verification status with explicit tests.</li>
-                    </ul>
+        <section class="container">
+            <div class="insight-box">
+                <h3>💡 The Breakthrough Moment</h3>
+                <p>
+                    Traditional physics asks "What are the laws?" and then tries to explain them.<br>
+                    Recognition Science asks "What laws are <em>logically necessary?</em>" and derives them.<br><br>
+                    The result? Every fundamental constant, every force, every particle mass—all inevitable consequences of that first truth.
+                </p>
+            </div>
+        </section>
+
+        <section class="container">
+            <h2 style="text-align: center; margin-bottom: 2rem;">The Proof Is in the Predictions</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 2rem;">
+                No free parameters. No adjustable constants. Just pure derivation that matches reality.
+            </p>
+            
+            <div class="proof-grid">
+                <div class="proof-item">
+                    <div class="proof-value">137.036</div>
+                    <div class="proof-label">Fine Structure Constant<br>Derived, not measured</div>
+                </div>
+                <div class="proof-item">
+                    <div class="proof-value">0.511 MeV</div>
+                    <div class="proof-label">Electron Mass<br>From first principles</div>
+                </div>
+                <div class="proof-item">
+                    <div class="proof-value">26.49%</div>
+                    <div class="proof-label">Dark Matter Fraction<br>No free parameters</div>
+                </div>
+                <div class="proof-item">
+                    <div class="proof-value">8 beats</div>
+                    <div class="proof-label">Fundamental Cycle<br>The rhythm of reality</div>
+                </div>
+            </div>
+            
+            <p style="text-align: center; margin-top: 2rem;">
+                <a href="/predictions.html" style="color: #667eea; font-weight: 600;">
+                    See all verified predictions →
+                </a>
+            </p>
+        </section>
+
+        <section class="container">
+            <div class="journey-section">
+                <h2 style="color: #333; text-align: center;">Your Journey Into Recognition Science</h2>
+                
+                <div class="journey-steps">
+                    <div class="journey-step">
+                        <div class="step-icon">🎯</div>
+                        <div class="step-content">
+                            <h4>Start with the Story</h4>
+                            <p>Understand how one researcher's question about the double-slit experiment led to a complete theory of reality. <a href="#story">Read the origin story below ↓</a></p>
+                        </div>
+                    </div>
+                    
+                    <div class="journey-step">
+                        <div class="step-icon">🔬</div>
+                        <div class="step-content">
+                            <h4>See the Evidence</h4>
+                            <p>Explore predictions that have already been verified and those awaiting confirmation. <a href="/predictions.html">Browse predictions →</a></p>
+                        </div>
+                    </div>
+                    
+                    <div class="journey-step">
+                        <div class="step-icon">📐</div>
+                        <div class="step-content">
+                            <h4>Grasp the Foundations</h4>
+                            <p>Learn the eight theorems that build reality from pure logic. <a href="/eight-theorems.html">Study the theorems →</a></p>
+                        </div>
+                    </div>
+                    
+                    <div class="journey-step">
+                        <div class="step-icon">🌟</div>
+                        <div class="step-content">
+                            <h4>Live the Implications</h4>
+                            <p>Discover what this means for consciousness, ethics, and your daily life. <a href="/us.html">Explore Theory of Us →</a></p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section>
-            <div class="container text-block">
-                <h2>Key ideas, zero jargon</h2>
-                <div class="component-card">
-                    <ul>
-                        <li><strong>Meta‑Principle:</strong> the one thing we assume: “nothing cannot recognize itself.”</li>
-                        <li><strong>Ledger:</strong> a universal double‑entry book that tracks every recognition (give/take).</li>
-                        <li><strong>Tick:</strong> the smallest unit of time; only one entry posts per tick.</li>
-                        <li><strong>Cost J(x):</strong> the unique measure that prefers balanced states over extremes.</li>
-                        <li><strong>Golden ratio φ:</strong> the most efficient repeating split pattern for the ledger.</li>
-                        <li><strong>3+1 spacetime:</strong> three dimensions of space and one of ticks emerge from keeping records stable.</li>
-                        <li><strong>Eight‑beat cycle:</strong> in 3D the minimal full recognition sweep has 8 steps.</li>
-                        <li><strong>Speed of light:</strong> one voxel per tick—the fastest causal update.</li>
-                        <li><strong>Curvature κ:</strong> “bent” ledger lines show up as forces and flows.</li>
-                        <li><strong>Consciousness:</strong> the active process that performs recognitions (the compiler).</li>
-                        <li><strong>Ethics from geometry:</strong> “good” reduces costly curvature; morality becomes measurable.</li>
-                    </ul>
+        <section class="container" id="story">
+            <h2>The Origin Story: How RS Was Discovered</h2>
+            
+            <div class="text-block" style="max-width: 800px; margin: 0 auto;">
+                <p style="font-size: 1.2rem; line-height: 1.8; color: #333;">
+                    It started with a simple question about the double-slit experiment: 
+                    <em>How does the universe "know" when something is being observed?</em>
+                </p>
+                
+                <p>
+                    Most explanations invoke consciousness or measurement devices, but that's circular reasoning. 
+                    The system itself must have a built-in way to track when a recognition event occurs.
+                </p>
+                
+                <p>
+                    This led to a startling realization: <strong>Reality must keep books.</strong> 
+                    Not metaphorically, but literally—a universal accounting system that tracks every 
+                    recognition event with perfect fidelity.
+                </p>
+                
+                <p>
+                    Once you accept this "Universal Ledger," everything else falls into place:
+                </p>
+                
+                <ul style="line-height: 1.8; margin: 2rem 0;">
+                    <li><strong>Time</strong> emerges as ledger entries posting one by one (ticks)</li>
+                    <li><strong>Space</strong> forms from the need to keep records stable (3D is optimal)</li>
+                    <li><strong>The golden ratio φ</strong> appears as the most efficient self-similar pattern</li>
+                    <li><strong>Light speed c</strong> is just one voxel per tick—the fastest possible update</li>
+                    <li><strong>Forces</strong> arise when the ledger curves (bent books = acceleration)</li>
+                    <li><strong>Consciousness</strong> performs recognitions where algorithms would paradox</li>
+                </ul>
+                
+                <p>
+                    The framework makes specific, testable predictions. When checked against experiment, 
+                    they match—often to extraordinary precision, with zero adjustable parameters.
+                </p>
+                
+                <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 12px; margin: 2rem 0;">
+                    <p style="margin: 0; color: #666;">
+                        <strong style="color: #333;">The punchline:</strong> 
+                        Reality isn't mysterious or arbitrary. It's the simplest possible solution 
+                        to the constraint that "nothing cannot recognize itself." Everything we see—every 
+                        particle, force, and phenomenon—is just the universe maintaining perfect books 
+                        in the most efficient way possible.
+                    </p>
                 </div>
             </div>
         </section>
 
-        <section class="highlight-section">
-            <div class="container text-block">
-                <h2>What’s Verified vs. In‑Progress</h2>
-                <div class="component-card">
-                    <h3>Verified Predictions</h3>
-                    <p>Empirical matches and cross‑checks that have been reproduced or audited.</p>
-                    <p><a class="button-link" href="/predictions.html">Browse Verified Predictions →</a></p>
+        <section class="container">
+            <h2>Quick Concepts Decoder</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                <div style="background: white; border: 1px solid #e0e0e0; padding: 1.5rem; border-radius: 8px;">
+                    <h4 style="color: #667eea; margin-top: 0;">Recognition</h4>
+                    <p style="margin: 0;">The fundamental event: distinguishing "this" from "that." Every particle interaction, every measurement, every thought is built from recognitions.</p>
                 </div>
-                <div class="component-card">
-                    <h3>Our Future</h3>
-                    <p>How Recognition Science reshapes society and the near‑term, testable forecasts.</p>
-                    <p><a class="button-link" href="/prophecy.html">See Our Future →</a></p>
+                
+                <div style="background: white; border: 1px solid #e0e0e0; padding: 1.5rem; border-radius: 8px;">
+                    <h4 style="color: #667eea; margin-top: 0;">Universal Ledger</h4>
+                    <p style="margin: 0;">The cosmic accounting system. Every recognition creates a debit and credit. The ledger IS spacetime—not a record of it.</p>
                 </div>
-            </div>
-        </section>
-
-        <section>
-            <div class="container text-block">
-                <h2>How to falsify RS (representative tests)</h2>
-                <div class="component-card">
-                    <ul>
-                        <li><strong>φ‑scaled mass patterns:</strong> Show systematic deviations beyond tolerances. See <a href="/formulas/mass-generation.html">mass generation</a>.</li>
-                        <li><strong>Ledger curvature (κ) effects:</strong> Find domains where κ‑linked behavior provably contradicts RS. See <a href="/formulas/ledger-curvature.html">κ overview</a>.</li>
-                        <li><strong>Eight‑beat cycle evidence:</strong> Disconfirm 8‑step periodicity where RS predicts it. See <a href="/formulas/temporal-cycle.html">temporal cycle</a>.</li>
-                        <li><strong>Gravitational refresh‑lag:</strong> Show galaxy rotation that contradicts the refresh‑lag prediction while matching baryonic mass models. See <a href="/formulas/ledger-curvature.html">field geometry</a> and <a href="/formulas/gravitational-force.html">ILG</a>.</li>
-                    </ul>
-                    <p>For more, compare <a href="/predictions.html">Verified</a> vs. <a href="/future-predictions.html">Future</a> predictions and attempt pre‑registered replication.</p>
+                
+                <div style="background: white; border: 1px solid #e0e0e0; padding: 1.5rem; border-radius: 8px;">
+                    <h4 style="color: #667eea; margin-top: 0;">Tick</h4>
+                    <p style="margin: 0;">The quantum of time. One ledger entry posts per tick. The universe updates itself one tick at a time, like cosmic clockwork.</p>
                 </div>
-            </div>
-        </section>
-
-        <section>
-            <div class="container text-block">
-                <h2>Beginner FAQ</h2>
-                <div class="component-card">
-                    <p><strong>Is this “we live in a simulation”?</strong> No. RS says reality is computation‑<em>like</em> because it keeps perfect books, but the ledger is the world itself, not someone else’s video game.</p>
-                    <p><strong>Do I need advanced math?</strong> No. You can read the plain‑language story here. The proofs exist for reviewers, but the core ideas are intuitive.</p>
-                    <p><strong>How is this different from other “theories of everything”?</strong> RS fixes constants by deduction (no knobs to tune) and comes with falsifiable tests.</p>
-                    <p><strong>Is the golden ratio numerology?</strong> No. φ appears as the unique self‑similar split that minimizes cost under the ledger rules.</p>
-                    <p><strong>Where do ethics come from?</strong> From the ledger’s geometry: “good” actions reduce costly curvature in the shared book.</p>
-                    <p><strong>What would prove RS wrong?</strong> Any clear, repeatable violation of the predictions above.</p>
+                
+                <div style="background: white; border: 1px solid #e0e0e0; padding: 1.5rem; border-radius: 8px;">
+                    <h4 style="color: #667eea; margin-top: 0;">φ (Golden Ratio)</h4>
+                    <p style="margin: 0;">Not mystical—mathematical. The unique self-similar ratio that minimizes ledger cost. It's why this number appears everywhere in nature.</p>
+                </div>
+                
+                <div style="background: white; border: 1px solid #e0e0e0; padding: 1.5rem; border-radius: 8px;">
+                    <h4 style="color: #667eea; margin-top: 0;">Ledger Curvature</h4>
+                    <p style="margin: 0;">When the ledger bends, you feel force. Gravity is severely curved ledger geometry. All forces are ledger distortions.</p>
+                </div>
+                
+                <div style="background: white; border: 1px solid #e0e0e0; padding: 1.5rem; border-radius: 8px;">
+                    <h4 style="color: #667eea; margin-top: 0;">8-Beat Cycle</h4>
+                    <p style="margin: 0;">The fundamental rhythm. In 3D, a complete recognition sweep takes 8 ticks. This pattern underlies particle physics and cosmology.</p>
                 </div>
             </div>
         </section>
 
-        <section>
-            <div class="container text-block">
-                <h2>Mini‑glossary</h2>
-                <div class="component-card">
-                    <ul>
-                        <li><strong>Recognition:</strong> a tiny act of “this matches that.” The atomic event in RS.</li>
-                        <li><strong>Ledger:</strong> double‑entry book of all recognitions (plus/minus).</li>
-                        <li><strong>Tick:</strong> smallest time step; one entry posts per tick.</li>
-                        <li><strong>J(x):</strong> the unique cost that penalizes imbalance.</li>
-                        <li><strong>φ:</strong> golden ratio (≈1.618), the optimal self‑similar split.</li>
-                        <li><strong>c:</strong> speed of light = one voxel per tick.</li>
-                        <li><strong>κ:</strong> ledger curvature; when it bends, you feel “force.”</li>
-                    </ul>
+        <section class="container">
+            <div class="cta-section">
+                <h2>Ready to See How Deep the Rabbit Hole Goes?</h2>
+                <p style="font-size: 1.2rem; opacity: 0.95;">
+                    This isn't just another theory. It's a complete derivation of reality from first principles.<br>
+                    Every equation, every constant, every force—inevitable.
+                </p>
+                
+                <div class="cta-buttons">
+                    <a href="/predictions.html" class="cta-button">
+                        See the Predictions
+                    </a>
+                    <a href="/eight-theorems.html" class="cta-button secondary">
+                        Learn the Theorems
+                    </a>
+                    <a href="/particle-masses.html" class="cta-button secondary">
+                        Calculate Masses
+                    </a>
                 </div>
             </div>
         </section>
 
-        <section class="highlight-section">
-            <div class="container text-block">
-                <h2>Go Deeper</h2>
-                <div class="component-card">
-                    <h3>Foundations</h3>
-                    <p><a href="/meta-principle.html">Meta‑Principle</a> · <a href="/eight-theorems.html">Eight Theorems</a> · <a href="/lnal.html">LNAL</a> · <a href="/ledger.html">Ledger</a> · <a href="/encyclopedia/speed-of-light.html">Speed of light</a></p>
-                </div>
-                <div class="component-card">
-                    <h3>Live the ideas</h3>
-                    <p><a href="/us/i-am.html">I Am</a> · <a href="/us/ledger-aligned.html">Ledger‑Aligned</a> · <a href="/us/i-do-therefore-i-am.html">I Do, Therefore I Am</a> · <a href="/us.html">Us</a></p>
-                </div>
-                <div class="component-card">
-                    <h3>Papers</h3>
-                    <p>Read peer‑facing material and derivations.</p>
-                    <p><a class="button-link" href="/science/papers/index.html">Open the Papers Library →</a></p>
-                </div>
-                <div class="component-card">
-                    <h3>Theory of Us</h3>
-                    <p>Human implications: consciousness, ethics, health, religions, ancient knowledge.</p>
-                    <p><a class="button-link" href="/us.html">Explore Theory of Us →</a></p>
-                </div>
+        <section class="container">
+            <h2>Frequently Asked Questions</h2>
+            
+            <div class="text-block" style="max-width: 800px; margin: 0 auto;">
+                <details style="margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                    <summary style="cursor: pointer; font-weight: 600; color: #333;">Is this saying we live in a simulation?</summary>
+                    <p style="margin-top: 1rem; margin-bottom: 0;">
+                        No. RS says reality is computational in nature—it processes information via the ledger—but 
+                        this isn't someone else's simulation. The ledger IS reality, not a model of it.
+                    </p>
+                </details>
+                
+                <details style="margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                    <summary style="cursor: pointer; font-weight: 600; color: #333;">How is this different from other "theories of everything"?</summary>
+                    <p style="margin-top: 1rem; margin-bottom: 0;">
+                        RS has zero free parameters. Everything is derived from logical necessity. 
+                        Other theories have dozens of adjustable constants. RS has none—every value 
+                        is forced by the requirement of self-consistency.
+                    </p>
+                </details>
+                
+                <details style="margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                    <summary style="cursor: pointer; font-weight: 600; color: #333;">What would prove RS wrong?</summary>
+                    <p style="margin-top: 1rem; margin-bottom: 0;">
+                        Any measurement that contradicts the parameter-free predictions. For example: 
+                        finding particle masses that don't fit the φ-scaling pattern, or discovering 
+                        that the fine structure constant isn't exactly 137.035999... RS makes precise, 
+                        falsifiable predictions.
+                    </p>
+                </details>
+                
+                <details style="margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                    <summary style="cursor: pointer; font-weight: 600; color: #333;">Do I need advanced math to understand this?</summary>
+                    <p style="margin-top: 1rem; margin-bottom: 0;">
+                        No. The core ideas are intuitive: reality keeps books, balance is preferred, 
+                        patterns repeat. The math exists for those who want to verify, but you can 
+                        grasp the framework through plain English explanations.
+                    </p>
+                </details>
+                
+                <details style="margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                    <summary style="cursor: pointer; font-weight: 600; color: #333;">What does this mean for consciousness and free will?</summary>
+                    <p style="margin-top: 1rem; margin-bottom: 0;">
+                        Consciousness is fundamental—it's the active process that performs recognitions. 
+                        You're not just observing reality; you're participating in its creation. Free will 
+                        exists within the constraints of ledger consistency. You choose, but your choices 
+                        must balance the cosmic books.
+                    </p>
+                </details>
             </div>
         </section>
 
-        <section>
-            <div class="container text-center">
-                <a class="button-link" href="/predictions.html">Start with Verified Predictions</a>
-                <a class="button-link secondary" href="/eight-theorems.html" style="margin-left:0.5rem;">Read the Eight Theorems</a>
+        <section class="container" style="margin-bottom: 4rem;">
+            <div style="text-align: center; padding: 3rem; background: #f8f9fa; border-radius: 20px;">
+                <h3 style="color: #333; margin-bottom: 1rem;">Start Your Journey</h3>
+                <p style="color: #666; margin-bottom: 2rem;">
+                    Choose your path based on what interests you most:
+                </p>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="/predictions.html" style="padding: 0.75rem 1.5rem; background: #667eea; color: white; border-radius: 8px; text-decoration: none;">
+                        🔬 Evidence First
+                    </a>
+                    <a href="/eight-theorems.html" style="padding: 0.75rem 1.5rem; background: #764ba2; color: white; border-radius: 8px; text-decoration: none;">
+                        📐 Logic First
+                    </a>
+                    <a href="/us.html" style="padding: 0.75rem 1.5rem; background: #f093fb; color: white; border-radius: 8px; text-decoration: none;">
+                        🌟 Meaning First
+                    </a>
+                    <a href="/questions/index.html" style="padding: 0.75rem 1.5rem; background: #f5576c; color: white; border-radius: 8px; text-decoration: none;">
+                        ❓ Questions First
+                    </a>
+                </div>
             </div>
         </section>
-
     </main>
 
     <div id="footer-placeholder"></div>
     <script src="/assets/js/main.js"></script>
 </body>
 </html>
-
-
