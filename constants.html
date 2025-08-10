@@ -104,107 +104,133 @@
     <section class="constants-section">
       <div class="container">
         <h2 class="section-title">The Old Constants: Decoded at Last</h2>
-        <div class="constants-grid">
-          <div class="constant-card" onclick="expandConstant(this)">
-            <div class="constant-symbol">c</div>
-            <div class="constant-name">Speed of Light</div>
-            <div class="constant-value">299,792,458 m/s</div>
-            <div class="constant-comparison">
-              <div class="comparison-item">
-                <div class="comparison-label">What we thought</div>
-                <div class="comparison-text">Einstein's cosmic speed limit. Nothing can go faster because... well, because Einstein said so. Relativity works, but we never knew why this specific speed.</div>
+        
+        <!-- Interactive buttons -->
+        <div class="old-constants-buttons">
+          <button class="old-constant-btn active" onclick="showOldConstant('speed-light')">
+            <span class="btn-symbol">c</span>
+            <span class="btn-name">Speed of Light</span>
+          </button>
+          <button class="old-constant-btn" onclick="showOldConstant('planck')">
+            <span class="btn-symbol">h</span>
+            <span class="btn-name">Planck's Constant</span>
+          </button>
+          <button class="old-constant-btn" onclick="showOldConstant('fine-structure')">
+            <span class="btn-symbol">α</span>
+            <span class="btn-name">Fine-Structure</span>
+          </button>
+          <button class="old-constant-btn" onclick="showOldConstant('gravity')">
+            <span class="btn-symbol">G</span>
+            <span class="btn-name">Newton's G</span>
+          </button>
+        </div>
+        
+        <!-- Content display area -->
+        <div class="old-constant-display">
+          <!-- Speed of Light -->
+          <div id="speed-light" class="old-constant-content active">
+            <div class="constant-header">
+              <div class="constant-value">299,792,458 m/s</div>
+            </div>
+            <div class="constant-details-grid">
+              <div class="detail-section">
+                <h4>What we thought</h4>
+                <p>Einstein's cosmic speed limit. Nothing can go faster because... well, because Einstein said so. Relativity works, but we never knew why this specific speed.</p>
               </div>
-              <div class="comparison-item">
-                <div class="comparison-label">What it actually is</div>
-                <div class="comparison-text">The universe's refresh rate. Reality updates like a computer screen—one pixel (voxel) per tick. Light doesn't have a "speed limit"; it simply surfs the wave of reality updating itself.</div>
+              <div class="detail-section">
+                <h4>What it actually is</h4>
+                <p>The universe's refresh rate. Reality updates like a computer screen—one pixel (voxel) per tick. Light doesn't have a "speed limit"; it simply surfs the wave of reality updating itself.</p>
               </div>
-              <div class="comparison-item" style="grid-column: 1 / -1;">
-                <div class="comparison-label">Derivation</div>
-                <div style="background: rgba(139, 92, 246, 0.1); padding: 1rem; border-radius: 8px; margin: 0.5rem 0; font-family: 'JetBrains Mono', monospace; border: 1px solid rgba(139, 92, 246, 0.3);">
+              <div class="detail-section full-width">
+                <h4>Derivation</h4>
+                <div class="derivation-box">
                   c = L<sub>min</sub>/τ<sub>0</sub> = λ<sub>rec</sub>/(8·τ<sub>0</sub>) = 2.20×10⁻⁶ m / (8 × 7.33×10⁻¹⁵ s)
                 </div>
               </div>
-              <div class="comparison-item" style="grid-column: 1 / -1;">
-                <div class="comparison-label">Why this value</div>
-                <div class="comparison-text">The 8-beat recognition cycle (T7) and the minimal voxel spacing force exactly this speed. Not arbitrary—geometrically inevitable.</div>
+              <div class="detail-section full-width">
+                <h4>Why this value</h4>
+                <p>The 8-beat recognition cycle (T7) and the minimal voxel spacing force exactly this speed. Not arbitrary—geometrically inevitable.</p>
               </div>
             </div>
           </div>
           
-          <div class="constant-card" onclick="expandConstant(this)">
-            <div class="constant-symbol">h</div>
-            <div class="constant-name">Planck's Constant</div>
-            <div class="constant-value">6.626×10⁻³⁴ J·s</div>
-            <div class="constant-comparison">
-              <div class="comparison-item">
-                <div class="comparison-label">What we thought</div>
-                <div class="comparison-text">The smallest possible action. Quantum mechanics needs it, but nobody knows why this value. It makes energy come in packets, but why these specific packets?</div>
+          <!-- Planck's Constant -->
+          <div id="planck" class="old-constant-content">
+            <div class="constant-header">
+              <div class="constant-value">6.626×10⁻³⁴ J·s</div>
+            </div>
+            <div class="constant-details-grid">
+              <div class="detail-section">
+                <h4>What we thought</h4>
+                <p>The smallest possible action. Quantum mechanics needs it, but nobody knows why this value. It makes energy come in packets, but why these specific packets?</p>
               </div>
-              <div class="comparison-item">
-                <div class="comparison-label">What it actually is</div>
-                <div class="comparison-text">The universe's accounting unit. You can't write half an entry in a ledger—entries are indivisible. Planck's constant is simply what happens when you insist on honest bookkeeping at the quantum scale.</div>
+              <div class="detail-section">
+                <h4>What it actually is</h4>
+                <p>The universe's accounting unit. You can't write half an entry in a ledger—entries are indivisible. Planck's constant is simply what happens when you insist on honest bookkeeping at the quantum scale.</p>
               </div>
-              <div class="comparison-item" style="grid-column: 1 / -1;">
-                <div class="comparison-label">Derivation</div>
-                <div style="background: rgba(139, 92, 246, 0.1); padding: 1rem; border-radius: 8px; margin: 0.5rem 0; font-family: 'JetBrains Mono', monospace; border: 1px solid rgba(139, 92, 246, 0.3);">
+              <div class="detail-section full-width">
+                <h4>Derivation</h4>
+                <div class="derivation-box">
                   h = 2π·E<sub>coh</sub>·τ<sub>0</sub> = 2π × 0.090 eV × 7.33×10⁻¹⁵ s
                 </div>
               </div>
-              <div class="comparison-item" style="grid-column: 1 / -1;">
-                <div class="comparison-label">Why this value</div>
-                <div class="comparison-text">The minimal ledger entry combines the coherence energy with the atomic tick duration. Every quantum jump is exactly one ledger posting.</div>
+              <div class="detail-section full-width">
+                <h4>Why this value</h4>
+                <p>The minimal ledger entry combines the coherence energy with the atomic tick duration. Every quantum jump is exactly one ledger posting.</p>
               </div>
             </div>
           </div>
           
-          <div class="constant-card" onclick="expandConstant(this)">
-            <div class="constant-symbol">α</div>
-            <div class="constant-name">Fine-Structure Constant</div>
-            <div class="constant-value">≈ 1/137.036</div>
-            <div class="constant-comparison">
-              <div class="comparison-item">
-                <div class="comparison-label">What we thought</div>
-                <div class="comparison-text">A mysterious number that sets the strength of electromagnetic force. Feynman called it "a magic number that comes to us with no understanding." It appears everywhere in quantum mechanics, but its value seemed random.</div>
+          <!-- Fine-Structure Constant -->
+          <div id="fine-structure" class="old-constant-content">
+            <div class="constant-header">
+              <div class="constant-value">α ≈ 1/137.036</div>
+            </div>
+            <div class="constant-details-grid">
+              <div class="detail-section">
+                <h4>What we thought</h4>
+                <p>A mysterious number that sets the strength of electromagnetic force. Feynman called it "a magic number that comes to us with no understanding." It appears everywhere in quantum mechanics, but its value seemed random.</p>
               </div>
-              <div class="comparison-item">
-                <div class="comparison-label">What it actually is</div>
-                <div class="comparison-text">The natural tax rate on electromagnetic transactions. When charged particles interact, they pay a cost for recognition.</div>
+              <div class="detail-section">
+                <h4>What it actually is</h4>
+                <p>The natural tax rate on electromagnetic transactions. When charged particles interact, they pay a cost for recognition.</p>
               </div>
-              <div class="comparison-item" style="grid-column: 1 / -1;">
-                <div class="comparison-label">Derivation</div>
-                <div style="background: rgba(139, 92, 246, 0.1); padding: 1rem; border-radius: 8px; margin: 0.5rem 0; font-family: 'JetBrains Mono', monospace; border: 1px solid rgba(139, 92, 246, 0.3);">
+              <div class="detail-section full-width">
+                <h4>Derivation</h4>
+                <div class="derivation-box">
                   α⁻¹ = 4π/δ × φ²ˣ × f(ledger geometry) ≈ 137.035999084
                 </div>
               </div>
-              <div class="comparison-item" style="grid-column: 1 / -1;">
-                <div class="comparison-label">Why this value</div>
-                <div class="comparison-text">The ledger's φ-scaled geometry and the fairness function J(x) = ½(x + 1/x) force this exact coupling strength. Not random—geometrically inevitable.</div>
+              <div class="detail-section full-width">
+                <h4>Why this value</h4>
+                <p>The ledger's φ-scaled geometry and the fairness function J(x) = ½(x + 1/x) force this exact coupling strength. Not random—geometrically inevitable.</p>
               </div>
             </div>
           </div>
           
-          <div class="constant-card" onclick="expandConstant(this)">
-            <div class="constant-symbol">G</div>
-            <div class="constant-name">Newton's G</div>
-            <div class="constant-value">6.674×10⁻¹¹ m³/kg·s²</div>
-            <div class="constant-comparison">
-              <div class="comparison-item">
-                <div class="comparison-label">What we thought</div>
-                <div class="comparison-text">How strongly gravity pulls. We measure it with pendulums and satellites, but why this strength? Why is gravity so much weaker than other forces?</div>
+          <!-- Newton's G -->
+          <div id="gravity" class="old-constant-content">
+            <div class="constant-header">
+              <div class="constant-value">6.674×10⁻¹¹ m³/kg·s²</div>
+            </div>
+            <div class="constant-details-grid">
+              <div class="detail-section">
+                <h4>What we thought</h4>
+                <p>How strongly gravity pulls. We measure it with pendulums and satellites, but why this strength? Why is gravity so much weaker than other forces?</p>
               </div>
-              <div class="comparison-item">
-                <div class="comparison-label">What it actually is</div>
-                <div class="comparison-text">How much the ledger bends per kilogram. Mass doesn't "attract" other mass—it curves the recognition ledger, and things follow the curves.</div>
+              <div class="detail-section">
+                <h4>What it actually is</h4>
+                <p>How much the ledger bends per kilogram. Mass doesn't "attract" other mass—it curves the recognition ledger, and things follow the curves.</p>
               </div>
-              <div class="comparison-item" style="grid-column: 1 / -1;">
-                <div class="comparison-label">Derivation</div>
-                <div style="background: rgba(139, 92, 246, 0.1); padding: 1rem; border-radius: 8px; margin: 0.5rem 0; font-family: 'JetBrains Mono', monospace; border: 1px solid rgba(139, 92, 246, 0.3);">
+              <div class="detail-section full-width">
+                <h4>Derivation</h4>
+                <div class="derivation-box">
                   G = (c³/ħ) × (λ<sub>rec</sub>²/M<sub>Planck</sub>²) × φ⁻ⁿ
                 </div>
               </div>
-              <div class="comparison-item" style="grid-column: 1 / -1;">
-                <div class="comparison-label">Why this value</div>
-                <div class="comparison-text">The weakness of gravity? It's because matter barely disturbs the ledger compared to charge or color. The conversion rate is set by the ledger's spatial granularity.</div>
+              <div class="detail-section full-width">
+                <h4>Why this value</h4>
+                <p>The weakness of gravity? It's because matter barely disturbs the ledger compared to charge or color. The conversion rate is set by the ledger's spatial granularity.</p>
               </div>
             </div>
           </div>
