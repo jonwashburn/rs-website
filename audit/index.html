@@ -311,7 +311,8 @@ python3 scripts/ci_status.py</code></pre>
         <h3>CI Status</h3>
         <div class="muted">Last updated: ${ci.last_updated}</div>
         <div style="margin-top:8px">Overall: <span class="${ok}">${ok==='ok'?'passed':'failed'}</span></div>
-        <div class="muted" style="margin-top:6px">Includes: gates, growth JSON, lensing JSON, and 2D/3D conservation checks.</div>
+         <div class="muted" style="margin-top:6px">Includes: gates, growth JSON, lensing JSON, and 2D/3D conservation checks.</div>
+         <div class="muted" style="margin-top:6px">Ledger snapshot: ${ci.ledger_snapshot && ci.ledger_snapshot.present ? `<a href=\"https://raw.githubusercontent.com/jonwashburn/audit/main/docs/ledger_snapshot_v22c.txt\" target=\"_blank\" rel=\"noopener\">ledger_snapshot_v22c.txt</a>` : '—'}</div>
         <div class="muted" style="margin-top:6px">Uncertainties file: ${ci.uncertainties && ci.uncertainties.present ? (ci.uncertainties.nonzero ? 'present (non‑zero)' : 'present (zeros)') : 'missing'}</div>`;
       const archEl4 = document.getElementById('arch-card');
       const mainEl4 = document.querySelector('main .content-page') || document.querySelector('main');
