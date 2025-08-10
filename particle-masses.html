@@ -482,9 +482,9 @@
                     Every particle mass in the universe emerges from a single formula. No fitting, no tuning—just pure mathematics.
                 </p>
                 <div style="margin-top: 2rem;">
-                    <span id="parameterFreeBadge" style="display: inline-block; background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 0.75rem 1.5rem; border-radius: 999px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 15px rgba(16,185,129,0.3); transition: all 0.3s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-                        ✓ 100% Parameter-Free
-                    </span>
+                    <a href="#parameter-free-audit" style="display: inline-block; background: transparent; color: white; padding: 0.5rem 1.25rem; border: 1px solid rgba(255,255,255,0.5); border-radius: 999px; font-weight: 500; cursor: pointer; text-decoration: none; transition: all 0.3s ease;" onmouseover="this.style.borderColor='rgba(255,255,255,0.8)'; this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.5)'; this.style.background='transparent'">
+                        100% Parameter-Free
+                    </a>
                 </div>
             </div>
         </section>
@@ -492,16 +492,6 @@
         <section class="container">
             <div class="formula-display">
                 m = B · E<sub>coh</sub> · φ<sup>(r + f)</sup>
-            </div>
-            
-            <!-- Calculation Details Section (Hidden by default) -->
-            <div id="calculationDetails" class="calculation-details">
-                <div class="calc-header">
-                    <span id="calcParticleName">Particle</span> Mass Calculation
-                </div>
-                <div id="calcContent">
-                    <!-- Content will be dynamically inserted here -->
-                </div>
             </div>
             
             <div class="text-block" style="max-width: 800px; margin: 0 auto; text-align: center;">
@@ -790,12 +780,61 @@
                     </div>
                     
                     <div class="explanation-box" style="margin-top: 2rem;">
-                        <h3>About the Calculator</h3>
-                        <p>This output shows the complete parameter-free calculation of all particle masses 
-                        using the Recognition Science framework. The Python code (ledger_snapshot_v22c.py) 
-                        implements the φ-sheet fixed point solver and computes masses directly from first 
-                        principles with zero free parameters.</p>
+                        <h3>Python Implementation</h3>
+                        <p>Click below to view the complete Python code that implements the φ-sheet fixed point solver 
+                        and computes all particle masses from first principles.</p>
+                        <div style="margin-top: 1rem;">
+                            <button onclick="togglePythonCode()" style="background: #3b82f6; color: white; padding: 0.5rem 1rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">
+                                View Python Code
+                            </button>
+                            <a href="https://github.com/jonwashburn/particle-masses" target="_blank" style="margin-left: 1rem; color: #3b82f6; text-decoration: none; font-weight: 500;">
+                                View on GitHub →
+                            </a>
+                        </div>
+                        <div id="pythonCode" style="display: none; margin-top: 1rem; position: relative;">
+                            <button onclick="copyPythonCode()" style="position: absolute; top: 10px; right: 10px; background: #4b5563; color: white; padding: 0.25rem 0.75rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.875rem;">
+                                Copy
+                            </button>
+                            <pre style="background: #1f2937; color: #e5e7eb; padding: 1.5rem; border-radius: 8px; overflow-x: auto; font-size: 0.875rem;"><code id="pythonCodeContent"># ledger_snapshot_v22c.py — parameter-free mass calculation
+from tools.mass_calc.mass_calc import (
+    compute_f_i_phi_sheet, solve_mass_fixed_point_phi_sheet, 
+    mass_dimensionless, PHI
+)
+from tools.mass_calc.invariants import invariants_lepton_charged
+from tools.mass_calc.sm_rge import gamma_e, gamma_mu, gamma_tau
+
+# Locked ledger choices
+PHI_ = PHI; E_COH = PHI_**(-5); B = 1
+R_LEP = {'e':0, 'mu':11, 'tau':17}
+
+def calculate_mass(r, gamma, inv):
+    """Calculate dimensionless mass using φ-sheet fixed point"""
+    ln_m = solve_mass_fixed_point_phi_sheet(B, E_COH, r, gamma, inv, 0.0)
+    f = compute_f_i_phi_sheet(ln_m, gamma, inv)
+    return mass_dimensionless(B, E_COH, r, f)
+
+# Calculate charged lepton masses
+for particle in ['e', 'mu', 'tau']:
+    r = R_LEP[particle]
+    inv = invariants_lepton_charged(r_i=r)
+    gamma = eval(f'gamma_{particle}')
+    mass = calculate_mass(r, gamma, inv)
+    print(f"{particle}: {mass:.6f}")
+</code></pre>
+                        </div>
                     </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Always-visible calculation details section -->
+        <section class="container">
+            <div class="calculation-details" style="display: block; background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border: 2px solid #0284c7; border-radius: 12px; padding: 2rem; margin: 2rem auto; max-width: 900px;">
+                <div class="calc-header">
+                    <span id="calcParticleName">Select a particle above</span> to see detailed calculation
+                </div>
+                <div id="calcContent" style="color: #6b7280; text-align: center; padding: 2rem;">
+                    Click on any particle card above to see the step-by-step calculation of its mass from first principles.
                 </div>
             </div>
         </section>
@@ -856,6 +895,47 @@
             </div>
         </section>
         
+        <!-- Parameter-Free Audit Section -->
+        <section class="container" id="parameter-free-audit">
+            <div class="text-block" style="background: linear-gradient(135deg, #f0fdf4, #dcfce7); border: 2px solid #10b981; border-radius: 12px; padding: 2rem; margin: 2rem auto;">
+                <h2 style="color: #065f46; margin-bottom: 1.5rem;">100% Parameter-Free Verification</h2>
+                <p style="color: #064e3b; font-size: 1.1rem; margin-bottom: 2rem;">Every value in the mass formula emerges from first principles with zero adjustable parameters</p>
+                
+                <div style="background: white; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                    <h3 style="color: #065f46; margin-bottom: 1rem;">Core Formula Components</h3>
+                    
+                    <div style="margin-bottom: 1.5rem;">
+                        <h4 style="color: #10b981; margin-bottom: 0.5rem;">φ - Golden Ratio (1.618...)</h4>
+                        <p style="color: #374151;">Emerges from the self-similarity requirement: x = 1 + 1/x. This is the unique scaling factor that preserves recognition structure across all scales. No choice involved—it's the only solution.</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 1.5rem;">
+                        <h4 style="color: #10b981; margin-bottom: 0.5rem;">E<sub>coh</sub> - Coherence Quantum (φ<sup>-5</sup> = 0.090 eV)</h4>
+                        <p style="color: #374151;">The fundamental energy unit emerges from the fifth power of the golden ratio inverse. This specific power arises from the requirement that energy scales must close under the ledger's recognition operations.</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 1.5rem;">
+                        <h4 style="color: #10b981; margin-bottom: 0.5rem;">B - Sector Factors {1, 2, 3, 4, 6, 8, 9, 12}</h4>
+                        <p style="color: #374151;">These eight values are the complete set of divisors that maintain ledger balance in 3D voxel space. They emerge from the requirement that recognition events must conserve across cubic lattice boundaries.</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 1.5rem;">
+                        <h4 style="color: #10b981; margin-bottom: 0.5rem;">r - Rung Number (0, 1, 2, ...)</h4>
+                        <p style="color: #374151;">The discrete position on the φ-ladder counting recognition cycles. Each particle occupies a specific rung determined by its topological winding number in the ledger.</p>
+                    </div>
+                    
+                    <div>
+                        <h4 style="color: #10b981; margin-bottom: 0.5rem;">f - φ-Sheet Correction (~10<sup>-3</sup>)</h4>
+                        <p style="color: #374151;">Small correction arising from the ledger's requirement to maintain causality across recognition boundaries. Calculated from the gap series F(z) = log(1 + z/φ) evaluated at specific ledger checkpoints.</p>
+                    </div>
+                </div>
+                
+                <div style="background: #ecfdf5; border-left: 4px solid #10b981; padding: 1rem; margin-top: 1.5rem;">
+                    <strong style="color: #065f46;">Result:</strong> Every particle mass is completely determined by which ledger state it represents. There are no knobs to turn, no parameters to adjust. The agreement with experiment (often better than 0.1%) validates that reality operates according to these ledger principles.
+                </div>
+            </div>
+        </section>
+        
         <section class="container">
             <div class="text-block">
                 <h2>Technical Implementation</h2>
@@ -889,123 +969,6 @@
     </main>
     
     <div id="footer-placeholder"></div>
-    
-    <!-- Parameter-Free Audit Modal -->
-    <div id="auditModal" class="audit-modal">
-        <div class="audit-content">
-            <button class="audit-close" onclick="closeAuditModal()">&times;</button>
-            <h2 class="audit-title">100% Parameter-Free Verification</h2>
-            <p class="audit-subtitle">Every value in the mass formula emerges from first principles with zero adjustable parameters</p>
-            
-            <div class="audit-section">
-                <h3 class="audit-section-title">
-                    <span class="audit-badge">DERIVED</span>
-                    Core Formula Components
-                </h3>
-                
-                <div class="audit-item">
-                    <div class="audit-icon">φ</div>
-                    <div class="audit-description">
-                        <div class="audit-term">Golden Ratio (φ = 1.618...)</div>
-                        <div class="audit-explanation">
-                            Emerges from the self-similarity requirement of the ledger: x = 1 + 1/x. 
-                            This is the unique scaling factor that preserves recognition structure across all scales.
-                            No choice involved—it's the only solution to the ledger's self-consistency equation.
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="audit-item">
-                    <div class="audit-icon">E</div>
-                    <div class="audit-description">
-                        <div class="audit-term">Coherence Quantum (E<sub>coh</sub> = φ<sup>-5</sup> = 0.090 eV)</div>
-                        <div class="audit-explanation">
-                            The fundamental energy unit emerges from the fifth power of the golden ratio inverse.
-                            This specific power arises from the requirement that energy scales must close under
-                            the ledger's recognition operations. Completely determined by ledger geometry.
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="audit-item">
-                    <div class="audit-icon">B</div>
-                    <div class="audit-description">
-                        <div class="audit-term">Sector Factors (B ∈ {1, 2, 3, 4, 6, 8, 9, 12})</div>
-                        <div class="audit-explanation">
-                            These eight values are the complete set of divisors that maintain ledger balance
-                            in 3D voxel space. They emerge from the requirement that recognition events must
-                            conserve across cubic lattice boundaries. Not chosen—geometrically forced.
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="audit-item">
-                    <div class="audit-icon">r</div>
-                    <div class="audit-description">
-                        <div class="audit-term">Rung Number (r = 0, 1, 2, ...)</div>
-                        <div class="audit-explanation">
-                            The discrete position on the φ-ladder counting recognition cycles. Each particle
-                            occupies a specific rung determined by its topological winding number in the ledger.
-                            These are not free parameters but counting indices of allowed ledger states.
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="audit-item">
-                    <div class="audit-icon">f</div>
-                    <div class="audit-description">
-                        <div class="audit-term">φ-Sheet Correction (f ~ 10<sup>-3</sup>)</div>
-                        <div class="audit-explanation">
-                            Small correction arising from the ledger's requirement to maintain causality across
-                            recognition boundaries. Calculated from the gap series F(z) = log(1 + z/φ) evaluated
-                            at specific ledger checkpoints. Uniquely determined by consistency conditions.
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="audit-section">
-                <h3 class="audit-section-title">
-                    <span class="audit-badge">THEOREM</span>
-                    Why No Parameters?
-                </h3>
-                <p style="line-height: 1.6; color: #4b5563;">
-                    The mass formula m = B · E<sub>coh</sub> · φ<sup>(r + f)</sup> contains no adjustable parameters because:
-                </p>
-                <ul style="line-height: 1.8; color: #4b5563; margin-top: 1rem;">
-                    <li><strong>φ</strong> is mathematically unique (only solution to x = 1 + 1/x)</li>
-                    <li><strong>E<sub>coh</sub></strong> is geometrically forced (φ<sup>-5</sup> from closure requirement)</li>
-                    <li><strong>B values</strong> are the complete set of balance-preserving divisors in 3D</li>
-                    <li><strong>r values</strong> are counting numbers (like 1, 2, 3...)</li>
-                    <li><strong>f corrections</strong> are calculated from ledger consistency, not fitted</li>
-                </ul>
-                <p style="margin-top: 1.5rem; padding: 1rem; background: #ecfdf5; border-left: 4px solid #10b981; color: #065f46;">
-                    <strong>Result:</strong> Every particle mass is completely determined by which ledger state it represents.
-                    There are no knobs to turn, no parameters to adjust. The agreement with experiment (often better than 0.1%)
-                    validates that reality operates according to these ledger principles.
-                </p>
-            </div>
-            
-            <div class="audit-section">
-                <h3 class="audit-section-title">
-                    <span class="audit-badge">PROOF</span>
-                    Verification Method
-                </h3>
-                <p style="line-height: 1.6; color: #4b5563;">
-                    You can verify this yourself:
-                </p>
-                <ol style="line-height: 1.8; color: #4b5563; margin-top: 1rem;">
-                    <li>Start with the Meta-Principle: "Nothing cannot recognize itself"</li>
-                    <li>Derive that recognition requires a positive-cost ledger</li>
-                    <li>Show that self-similarity forces φ as the scaling factor</li>
-                    <li>Prove that 3D voxel balance gives exactly 8 sector factors</li>
-                    <li>Calculate E<sub>coh</sub> from dimensional closure</li>
-                    <li>Apply formula with particle quantum numbers</li>
-                    <li>Compare with measured masses—no adjustments needed</li>
-                </ol>
-            </div>
-        </div>
-    </div>
     
     <script>
         function showTab(tabName) {
@@ -1119,8 +1082,7 @@
             const particle = particleData[particleName];
             if (!particle) return;
             
-            // Show calculation details
-            const detailsSection = document.getElementById('calculationDetails');
+            // Update calculation details section
             const particleNameSpan = document.getElementById('calcParticleName');
             const calcContent = document.getElementById('calcContent');
             
@@ -1168,12 +1130,6 @@
                     </p>
                 </div>
             `;
-            
-            // Show the details section with animation
-            detailsSection.classList.add('active');
-            
-            // Scroll to the details section
-            detailsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
         
         function runCalculation() {
@@ -1224,26 +1180,29 @@ Up  : c/u=586.7231268 (exp 587.9629630), t/c=135.8306806 (135.8267717), t/u=7969
             }, 2000);
         }
         
-        // Parameter-free badge click handler
-        document.addEventListener('DOMContentLoaded', function() {
-            const badge = document.getElementById('parameterFreeBadge');
-            if (badge) {
-                badge.addEventListener('click', function() {
-                    document.getElementById('auditModal').classList.add('active');
-                });
+        function togglePythonCode() {
+            const codeDiv = document.getElementById('pythonCode');
+            const button = event.target;
+            if (codeDiv.style.display === 'none') {
+                codeDiv.style.display = 'block';
+                button.textContent = 'Hide Python Code';
+            } else {
+                codeDiv.style.display = 'none';
+                button.textContent = 'View Python Code';
             }
-        });
-        
-        function closeAuditModal() {
-            document.getElementById('auditModal').classList.remove('active');
         }
         
-        // Close modal when clicking outside
-        document.getElementById('auditModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeAuditModal();
-            }
-        });
+        function copyPythonCode() {
+            const code = document.getElementById('pythonCodeContent').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
     </script>
     <script src="assets/js/main.js"></script>
 </body>
