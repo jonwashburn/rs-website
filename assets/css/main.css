@@ -279,30 +279,48 @@ a:hover {
     /* Mobile Responsive Design */
     @media (max-width: 768px) {
         .header-container {
-            flex-direction: column;
-            gap: 0.25rem; /* tighter vertical gap */
+            flex-direction: row;
+            gap: 0;
             padding: 0 1rem;
+            position: relative;
+            align-items: center;
+            min-height: 3.5rem;
         }
         
         .site-header {
-            padding: 0.5rem 0; /* reduce header vertical padding */
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        .logo {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 3.5rem;
         }
         
         .logo a {
             font-size: 1.8rem;
-            margin-bottom: 0.5rem;
+            margin: 0;
         }
         
         .mobile-menu-toggle {
             display: flex;
             position: absolute;
-            top: 0.75rem; /* bring toggle up to reduce overall height */
+            top: 50%;
+            transform: translateY(-50%);
             right: 1rem;
+            z-index: 1001;
         }
         
         .global-nav {
             width: 100%;
-            order: 2;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border-top: 1px solid rgba(0,0,0,0.1);
         }
         
         .global-nav ul {
@@ -313,18 +331,16 @@ a:hover {
             transition: max-height 0.3s ease-in-out;
             display: flex;
             background: #ffffff;
-            border-radius: 12px;
-            margin-top: 0.5rem; /* tighter */
-            padding: 0.25rem 0; /* add a touch of internal padding */
+            margin: 0;
+            padding: 0;
             box-shadow: 0 10px 24px rgba(0,0,0,0.08);
-            overflow-y: auto; /* allow submenu to scroll if tall */
-            gap: 0; /* Remove gap to prevent wrapping */
-            align-items: stretch; /* Full width items */
+            gap: 0;
+            align-items: stretch;
         }
         
         .global-nav.active ul {
-            max-height: 90vh; /* allow tall menus and submenus */
-            padding: 0.25rem 0; /* tighter */
+            max-height: calc(100vh - 3.5rem);
+            padding: 0.5rem 0;
         }
         
         .global-nav li {
@@ -357,28 +373,48 @@ a:hover {
             position: static;
             max-height: 0;
             overflow: hidden;
-            background: #ffffff; /* white on mobile too */
+            background: #f8f9fa; /* Light gray background for submenu */
             box-shadow: none;
             border: none;
             min-width: auto;
             width: 100%;
             transition: max-height 0.3s ease-in-out;
             display: block !important; /* Always display, control with max-height */
+            margin: 0 1rem;
+            width: calc(100% - 2rem);
+            border-radius: 8px;
         }
 
         .dropdown.active .dropdown-content {
             max-height: 400px; /* Large enough for all dropdown items */
-            padding: 0.5rem 0;
+            padding: 0.25rem 0;
+            margin-top: 0.25rem;
+            margin-bottom: 0.25rem;
         }
         
         .dropdown-content a {
-            padding: 0.85rem 1rem; /* centered, good tap size */
-            border-bottom: 1px solid #eee;
+            padding: 0.75rem 1.5rem; /* Indented submenu items */
+            border-bottom: none;
             background: transparent;
-            color: #111 !important;
-            font-size: 1rem;
-            text-align: center;
-            font-weight: 500;
+            color: #555 !important;
+            font-size: 0.95rem;
+            text-align: left;
+            font-weight: 400;
+            padding-left: 2.5rem;
+            position: relative;
+        }
+        
+        .dropdown-content a::before {
+            content: '→';
+            position: absolute;
+            left: 1.5rem;
+            color: #999;
+            font-size: 0.85rem;
+        }
+        
+        .dropdown-content a:hover {
+            background: rgba(102,126,234,0.08);
+            color: #333 !important;
         }
 
         /* Better touch targets for mobile dropdowns */
