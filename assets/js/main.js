@@ -72,12 +72,26 @@ document.addEventListener("DOMContentLoaded", function() {
                 allDropdowns.forEach(otherDropdown => {
                     if (otherDropdown !== dropdown) {
                         otherDropdown.classList.remove('active');
+                        const otherContent = otherDropdown.querySelector('.dropdown-content');
+                        if (otherContent) {
+                            otherContent.style.maxHeight = '0px';
+                        }
                     }
                 });
                 
                 // Toggle this dropdown
                 dropdown.classList.toggle('active');
                 console.log('Dropdown active state:', dropdown.classList.contains('active')); // Debug log
+                
+                // Animate the dropdown content
+                const dropdownContent = dropdown.querySelector('.dropdown-content');
+                if (dropdownContent) {
+                    if (dropdown.classList.contains('active')) {
+                        dropdownContent.style.maxHeight = dropdownContent.scrollHeight + 'px';
+                    } else {
+                        dropdownContent.style.maxHeight = '0px';
+                    }
+                }
             }
         }
     }
