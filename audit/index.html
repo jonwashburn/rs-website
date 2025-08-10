@@ -5,18 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Recognition Science — Live Audit</title>
   <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="audit.css" />
   <style>
-    :root { --bg:#0b0d10; --fg:#e6eef8; --muted:#9fb3c8; --accent:#59f; }
-    html,body { margin:0; padding:0; background:var(--bg); color:var(--fg); font:16px/1.55 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial; }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    header { padding: 24px 16px; border-bottom: 1px solid #223; }
-    main { max-width: 1100px; margin: 0 auto; padding: 24px 16px 64px; }
-    h1,h2,h3 { margin: 0.8em 0 0.4em; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); gap: 16px; }
-    .card { background:#11151b; border:1px solid #223; border-radius:12px; padding:16px; }
-    code, pre { background:#0f141a; border:1px solid #1f2a36; border-radius:8px; padding:2px 6px; }
-    /* Mermaid dark-theme readability overrides */
+    /* Additional Mermaid dark-theme readability overrides */
     .mermaid svg { background: transparent; }
     .mermaid .node rect,
     .mermaid .node circle,
@@ -24,11 +15,11 @@
     .mermaid .cluster rect { fill: #0f141a !important; stroke: #345 !important; }
     .mermaid .edgePath .path { stroke: var(--accent) !important; }
     .mermaid .label, .mermaid text { fill: var(--fg) !important; }
-    .pill { display:inline-block; padding:2px 8px; border-radius:999px; border:1px solid #2a3; margin-right:6px; color:#9f9; }
-    .tag { display:inline-block; padding:2px 8px; border-radius:999px; border:1px solid #345; margin-right:6px; color:#9fb3c8; }
-    .muted { color: var(--muted); }
     .ok { color:#9f9; }
     .warn { color:#ffb84d; }
+    .tag { display:inline-block; padding:2px 8px; border-radius:999px; border:1px solid #345; margin-right:6px; color:#9fb3c8; }
+    .component-card { background: var(--card); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom: 16px; }
+    .proof-box { background:#0f141a; border:1px solid #1f2a36; border-radius:8px; padding:12px; margin-top:12px; }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
@@ -36,11 +27,11 @@
 </head>
 <body>
   <div id="header-placeholder"></div>
-  <section class="intro-section" style="padding: 1.5rem 0; background: #fff;">
-  <div class="container text-center">
+  
+  <header class="hero">
     <div class="wrap">
       <h1>Recognition Science — Live Audit</h1>
-      <p class="muted">Streaming from the audit repository (status.json + study guide)</p>
+      <p>Streaming from the audit repository (status.json + study guide)</p>
       <div class="hstack" style="margin-top:12px">
         <span class="badge">parameter‑free</span>
         <span class="badge">live</span>
@@ -48,10 +39,9 @@
       </div>
     </div>
     <div class="glow"></div>
-      <p class="lead" style="font-size: 1.1rem; color: #555; max-width: 900px; margin: 0.5rem auto 0;">Streaming live from the public audit repository (status.json + study guide).</p>
-  </div>
-</section>
-  <section>
+  </header>
+  
+  <nav class="sticky">
     <div class="wrap">
       <a href="#status">Status</a>
       <a href="#pillars-card">Pillars</a>
@@ -63,8 +53,9 @@
       <a href="#arch-card">Architecture</a>
       <a href="#guide-card">Guide</a>
     </div>
-  </section>
-  <main class="content-page">
+  </nav>
+  
+  <main>
           <div class="component-card" id="status">
       <h2>Status</h2>
       <div id="status-body"></div>
@@ -187,9 +178,10 @@ python3 scripts/ci_status.py</code></pre>
       <h3>Study Guide (Markdown)</h3>
       <div class="muted">Rendered from audit/docs/Recognition-Science-Study-Guide.md</div>
       <div id="guide"></div>
-    </section>
-      <div id="footer-placeholder"></div>
+          </div>
   </main>
+  
+  <div id="footer-placeholder"></div>
 
   <script>
   async function loadJSON(path){ const r = await fetch(path); if(!r.ok) throw new Error('fetch '+path); return r.json(); }
