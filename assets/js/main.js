@@ -2,14 +2,25 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function toggleMobileMenu() {
         const nav = document.getElementById('globalNav');
-        if (nav) {
-            nav.classList.toggle('active');
-            
-            // Animate hamburger menu
-            const button = document.querySelector('.mobile-menu-toggle');
-            if (button) {
-                button.classList.toggle('active');
+        if (!nav) return;
+
+        nav.classList.toggle('active');
+
+        // Force reflow to ensure CSS transition on max-height triggers
+        const list = nav.querySelector('ul');
+        if (list) {
+            // If activating, compute scrollHeight for smooth animation
+            if (nav.classList.contains('active')) {
+                list.style.maxHeight = list.scrollHeight + 'px';
+            } else {
+                list.style.maxHeight = '0px';
             }
+        }
+
+        // Animate hamburger menu
+        const button = document.querySelector('.mobile-menu-toggle');
+        if (button) {
+            button.classList.toggle('active');
         }
     }
 
