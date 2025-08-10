@@ -26,24 +26,7 @@
       <p class="lead" style="font-size: 1.1rem; color: #555; max-width: 900px; margin: 0.5rem auto 0;">Streaming live from the public audit repository (status.json + study guide).</p>
   </div>
 </section>
-  <section>
-    <div class="wrap">
-      <a href="#status">Status</a>
-      <a href="#pillars-card">Pillars</a>
-      <a href="#ilg-card">ILG</a>
-      <a href="#growth-card">Growth</a>
-      <a href="#lensing-card">Lensing</a>
-      <a href="#ci-card">CI</a>
-      <a href="#metrics-card">Metrics</a>
-      <a href="#masses-card">Masses</a>
-      <a href="#lnal-card">LNAL</a>
-      <a href="#rung-card">Rungs</a>
-      <a href="#loose-card">Loose Ends</a>
-      <a href="#next-card">Next</a>
-      <a href="#arch-card">Architecture</a>
-      <a href="#guide-card">Guide</a>
-    </div>
-  </section>
+  
   <main class="content-page">
           <div class="component-card" id="status">
       <h2>Status</h2>
@@ -175,13 +158,17 @@ python3 scripts/ci_status.py</code></pre>
   async function loadJSON(path){ const r = await fetch(path); if(!r.ok) throw new Error('fetch '+path); return r.json(); }
   async function loadText(path){ const r = await fetch(path); if(!r.ok) throw new Error('fetch '+path); return r.text(); }
   (async () => {
+    const ciURL    = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/ci_status.json';
     const statusURL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/status.json';
     const guideURL  = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/Recognition-Science-Study-Guide.md';
-    const status = await loadJSON(statusURL);
+    const [ci, status] = await Promise.all([
+      loadJSON(ciURL),
+      loadJSON(statusURL)
+    ]);
     document.getElementById('status-body').innerHTML = `
-      <div><span class="muted">Last updated:</span> ${status.last_updated}</div>
+      <div><span class="muted">Last updated:</span> ${(ci && ci.last_updated) || status.last_updated || '—'}</div>
       <div style="margin-top:8px">${status.thesis}</div>
-      <div style="margin-top:8px" class="muted"><a href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener">View audit repository</a></div>
+      <div style="margin-top:8px" class="muted"><a href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener">View audit repository</a> · Overall: <span class="${(ci && ci.summary && ci.summary.passed)?'ok':'warn'}">${(ci && ci.summary && ci.summary.passed)?'passed':'failed'}</span></div>
     `;
     const p = status.pillars;
     document.getElementById('pillars').innerHTML = `
@@ -218,11 +205,23 @@ python3 scripts/ci_status.py</code></pre>
       const lensingURL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/lensing_results.json';
       const lj = await loadJSON(lensingURL);
       const rows = (lj.lensing||[]).map(r => `<tr><td>${r.k}</td><td>${(r.a||1).toFixed(3)}</td><td>${(r.z!=null?Number(r.z).toFixed(3):'—')}</td><td>${r.Sigma.toFixed(6)}</td></tr>`).join('');
-      const lensingCard = document.createElement('section');
+      // Build Cosmology group container if not present
+      let cosmoGroup = document.getElementById('cosmo-group');
+      if (!cosmoGroup) {
+        cosmoGroup = document.createElement('section');
+        cosmoGroup.className = 'component-card';
+        cosmoGroup.id = 'cosmo-group';
+        cosmoGroup.innerHTML = `<h3>Cosmology (Growth & Lensing)</h3><div class="muted">Same μ(a,k) and gating parameters used in both panels.</div><div id="cosmo-grid" style="display:grid; grid-template-columns: repeat(auto-fit,minmax(320px,1fr)); gap:12px; margin-top:10px"></div>`;
+        const mainEl = document.querySelector('main .content-page') || document.querySelector('main');
+        const archEl = document.getElementById('arch-card');
+        mainEl.insertBefore(cosmoGroup, archEl);
+      }
+      // Lensing card
+      const lensingCard = document.createElement('div');
       lensingCard.className = 'component-card';
       lensingCard.id = 'lensing-card';
       lensingCard.innerHTML = `
-        <h3>Lensing (live)</h3>
+        <h4 style="margin-top:0">Lensing (live)</h4>
         <div class="muted">Last updated: ${lj.last_updated}</div>
         <div style="margin-top:8px">
           <strong>ILG Gates</strong>: |B|=${(lj.ilg&&lj.ilg.blocked)||'—'}, S=${(lj.ilg&&lj.ilg.S)||'—'}
@@ -233,12 +232,9 @@ python3 scripts/ci_status.py</code></pre>
             <tbody>${rows}</tbody>
           </table>
         </div>
-        ${(lj.grid&&lj.grid.length)?`<div style="margin-top:8px"><details><summary>Grid (Σ over a,k)</summary><table style=\"width:100%; border-collapse:collapse\"><thead><tr><th>a</th><th>z</th><th>k (h/Mpc)</th><th>Sigma</th></tr></thead><tbody>${lj.grid.map(g=>`<tr><td>${g.a.toFixed(2)}</td><td>${(g.z!=null?Number(g.z).toFixed(3):'—')}</td><td>${g.k}</td><td>${g.Sigma.toFixed(6)}</td></tr>`).join('')}</tbody></table></details></div>`:''}
-        `;
-      // Insert before Architecture card for visibility
-      const mainEl = document.querySelector('main .content-page') || document.querySelector('main');
-      const archEl = document.getElementById('arch-card');
-      mainEl.insertBefore(lensingCard, archEl);
+        ${(lj.grid&&lj.grid.length)?`<div style=\"margin-top:8px\"><details><summary>Grid (Σ over a,k)</summary><table style=\"width:100%; border-collapse:collapse\"><thead><tr><th>a</th><th>z</th><th>k (h/Mpc)</th><th>Sigma</th></tr></thead><tbody>${lj.grid.map(g=>`<tr><td>${g.a.toFixed(2)}</td><td>${(g.z!=null?Number(g.z).toFixed(3):'—')}</td><td>${g.k}</td><td>${g.Sigma.toFixed(6)}</td></tr>`).join('')}</tbody></table></details></div>`:''}
+      `;
+      document.getElementById('cosmo-grid').appendChild(lensingCard);
     } catch (e) {
       // no-op if missing
     }
@@ -444,16 +440,16 @@ python3 scripts/ci_status.py</code></pre>
       const archEl5 = document.getElementById('arch-card');
       const mainEl5 = document.querySelector('main .content-page') || document.querySelector('main');
       mainEl5.insertBefore(card, archEl5);
-      // Also insert growth grid panel using demo_results.json
+      // Also insert growth panel using demo_results.json
       try {
         const growthURL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/demo_results.json';
         const gr = await loadJSON(growthURL);
-        const gcard = document.createElement('section');
+        const gcard = document.createElement('div');
         gcard.className = 'component-card';
         gcard.id = 'growth-card';
         const grows = (gr.growth||[]).map(r => `<tr><td>${r.k}</td><td>${(r.D_LCDM!=null? r.D_LCDM.toFixed(6):'—')}</td><td>${(r.D_ILG!=null? r.D_ILG.toFixed(6):'—')}</td><td>${(r.ratio!=null? r.ratio.toFixed(6):'—')}</td></tr>`).join('');
         gcard.innerHTML = `
-          <h3>Growth (live)</h3>
+          <h4 style="margin-top:0">Growth (live)</h4>
           <div class="muted">Last updated: ${gr.last_updated}</div>
           <div style="margin-top:8px">
             <strong>ILG Gates</strong>: |B|=${(gr.ilg&&gr.ilg.blocked)||'—'}, S=${(gr.ilg&&gr.ilg.S)||'—'}; β=${(gr.ilg&&gr.ilg.beta)||'—'}
@@ -463,7 +459,18 @@ python3 scripts/ci_status.py</code></pre>
           </div>
           ${(gr.grid&&gr.grid.length)?`<div style=\"margin-top:8px\"><details><summary>Grid (ratio D_ILG/D_LCDM over a,k)</summary><table style=\"width:100%; border-collapse:collapse\"><thead><tr><th>a</th><th>z</th><th>k (h/Mpc)</th><th>ratio</th></tr></thead><tbody>${gr.grid.map(g=>`<tr><td>${g.a.toFixed(2)}</td><td>${(g.z!=null?Number(g.z).toFixed(3):'—')}</td><td>${g.k}</td><td>${g.ratio.toFixed(6)}</td></tr>`).join('')}</tbody></table></details></div>`:''}
         `;
-        mainEl5.insertBefore(gcard, archEl5);
+        // Ensure Cosmology group exists (created by lensing block); if not, create it
+        let cosmoGroup2 = document.getElementById('cosmo-group');
+        if (!cosmoGroup2) {
+          cosmoGroup2 = document.createElement('section');
+          cosmoGroup2.className = 'component-card';
+          cosmoGroup2.id = 'cosmo-group';
+          cosmoGroup2.innerHTML = `<h3>Cosmology (Growth & Lensing)</h3><div class=\"muted\">Same μ(a,k) and gating parameters used in both panels.</div><div id=\"cosmo-grid\" style=\"display:grid; grid-template-columns: repeat(auto-fit,minmax(320px,1fr)); gap:12px; margin-top:10px\"></div>`;
+          const mainElX = document.querySelector('main .content-page') || document.querySelector('main');
+          const archElX = document.getElementById('arch-card');
+          mainElX.insertBefore(cosmoGroup2, archElX);
+        }
+        document.getElementById('cosmo-grid').appendChild(gcard);
       } catch (e) { /* ignore */ }
     } catch(e) {
       // ignore
