@@ -328,8 +328,8 @@ a:hover {
         .global-nav ul {
             flex-direction: column;
             width: 100%;
-            max-height: 0;
-            overflow: hidden;
+            max-height: 0; /* collapsed by default; JS sets to viewport height when active */
+            overflow-y: hidden; /* will be set to auto by JS when active */
             transition: max-height 0.3s ease-in-out;
             display: flex;
             background: #ffffff;
@@ -341,9 +341,11 @@ a:hover {
         }
         
         .global-nav.active ul {
-            max-height: calc(100vh - 3.5rem);
+            max-height: calc(100vh - 3.5rem); /* fill viewport below header */
             padding: 0.5rem 0;
             border-radius: 12px;
+            overflow-y: auto; /* allow scrolling when content exceeds viewport */
+            -webkit-overflow-scrolling: touch;
         }
         
         .global-nav li {
@@ -383,9 +385,8 @@ a:hover {
             width: 100%;
             transition: max-height 0.3s ease-in-out;
             display: block !important; /* Always display, control with max-height */
-            margin: 0 1rem;
-            width: calc(100% - 2rem);
-            border-radius: 8px;
+            margin: 0; /* remove side margins that caused clipping */
+            border-radius: 0;
         }
 
         .dropdown.active .dropdown-content {

@@ -6,14 +6,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
         nav.classList.toggle('active');
 
-        // Force reflow to ensure CSS transition on max-height triggers
+        // Ensure the menu can grow beyond initial measurement and scroll within viewport
         const list = nav.querySelector('ul');
         if (list) {
-            // If activating, compute scrollHeight for smooth animation
             if (nav.classList.contains('active')) {
-                list.style.maxHeight = list.scrollHeight + 'px';
+                list.style.maxHeight = 'calc(100vh - 3.5rem)';
+                list.style.overflowY = 'auto';
             } else {
                 list.style.maxHeight = '0px';
+                list.style.overflowY = 'hidden';
             }
         }
 
@@ -91,6 +92,13 @@ document.addEventListener("DOMContentLoaded", function() {
                     } else {
                         dropdownContent.style.maxHeight = '0px';
                     }
+                }
+
+                // After expanding/collapsing a submenu, ensure the outer list can scroll to fit
+                const navList = document.querySelector('#globalNav ul');
+                if (navList && document.getElementById('globalNav').classList.contains('active')) {
+                    navList.style.maxHeight = 'calc(100vh - 3.5rem)';
+                    navList.style.overflowY = 'auto';
                 }
             }
         }
