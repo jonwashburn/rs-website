@@ -231,6 +231,24 @@
     } catch (e) {
       // no-op if missing
     }
+    // Attempt to load conservation check JSON and render a small pass/fail badge
+    try {
+      const consURL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/conservation_check_varying.json';
+      const cj = await loadJSON(consURL);
+      const badge = document.createElement('section');
+      badge.className = 'component-card';
+      const ok = (cj.conservation_check_varying && cj.conservation_check_varying.passed) ? 'ok' : 'warn';
+      badge.innerHTML = `
+        <h3>Conservation (toy check)</h3>
+        <div class="muted">Last updated: ${cj.last_updated}</div>
+        <div style="margin-top:8px">Discrete divergence theorem: <span class="${ok}">${ok==='ok'?'passed':'failed'}</span></div>
+        <div class="muted" style="margin-top:6px">|sum-div − flux| = ${(cj.conservation_check_varying && cj.conservation_check_varying.abs_residual)||'—'}</div>`;
+      const archEl2 = document.getElementById('arch-card');
+      const mainEl2 = document.querySelector('main .content-page') || document.querySelector('main');
+      mainEl2.insertBefore(badge, archEl2);
+    } catch (e) {
+      // ignore if missing
+    }
     // Render mermaid
     mermaid.run({ nodes: [ document.getElementById('mmd') ] });
     // Render study guide markdown
