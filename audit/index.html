@@ -365,7 +365,29 @@ python3 scripts/ci_status.py</code></pre>
           </div>
         </div>
         <div class="muted" style="margin-top:8px">
-          Archival TeX: <a href="https://raw.githubusercontent.com/jonwashburn/audit/main/papers/particle-masses-ai.tex" target="_blank" rel="noopener">AI snapshot (v21) ↗</a>
+          Download: <a href="https://raw.githubusercontent.com/jonwashburn/audit/main/docs/masses_snapshot.json" target="_blank" rel="noopener">JSON</a>
+          · <a href="https://raw.githubusercontent.com/jonwashburn/audit/main/docs/masses_snapshot.csv" target="_blank" rel="noopener">CSV</a>
+          · Archival TeX: <a href="https://raw.githubusercontent.com/jonwashburn/audit/main/papers/particle-masses-ai.tex" target="_blank" rel="noopener">AI snapshot (v21) ↗</a>
+        </div>
+        <div style="margin-top:10px; display:grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap:12px">
+          <div>
+            <strong>CKM |V| (${ms.ckm && ms.ckm.version || '—'})</strong>
+            <table style="margin-top:6px; width:100%; border-collapse:collapse">
+              <tbody>
+                ${(ms.ckm&&ms.ckm.V||[]).map(row => `<tr>${row.map(v=>`<td style=\"padding:2px 6px\">${v.toFixed(4)}</td>`).join('')}</tr>`).join('')}
+              </tbody>
+            </table>
+            <div class="muted" style="margin-top:6px">(λ, A, ρ̄, η̄) = (${ms.ckm?ms.ckm.lambda.toFixed(6):'—'}, ${ms.ckm?ms.ckm.A.toFixed(3):'—'}, ${ms.ckm?ms.ckm.rho_bar.toFixed(3):'—'}, ${ms.ckm?ms.ckm.eta_bar.toFixed(3):'—'})</div>
+          </div>
+          <div>
+            <strong>PMNS (angles, ${ms.pmns && ms.pmns.version || '—'})</strong>
+            <ul style="margin:6px 0 0 18px">
+              <li>θ12 = ${ms.pmns?ms.pmns.theta12_deg.toFixed(2):'—'}°</li>
+              <li>θ23 = ${ms.pmns?ms.pmns.theta23_deg.toFixed(2):'—'}°</li>
+              <li>θ13 = ${ms.pmns?ms.pmns.theta13_deg.toFixed(2):'—'}°</li>
+              <li>δCP ≈ ${ms.pmns?ms.pmns.delta_CP_deg.toFixed(1):'—'}°; JCP ≈ ${ms.pmns?ms.pmns.J_CP.toFixed(3):'—'}</li>
+            </ul>
+          </div>
         </div>`;
       const archEl5 = document.getElementById('arch-card');
       const mainEl5 = document.querySelector('main .content-page') || document.querySelector('main');
