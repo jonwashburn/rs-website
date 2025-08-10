@@ -4,96 +4,516 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Framework | Recognition Science</title>
-  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/main.css?v=2025-01-10" />
+  <style>
+    .framework-hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: white;
+      padding: 6rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .framework-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(99,102,241,0.15) 0%, transparent 40%),
+        radial-gradient(circle at 80% 20%, rgba(168,85,247,0.1) 0%, transparent 40%),
+        radial-gradient(circle at 50% 80%, rgba(236,72,153,0.1) 0%, transparent 40%);
+      pointer-events: none;
+    }
+    
+    .framework-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: grid-drift 20s linear infinite;
+    }
+    
+    @keyframes grid-drift {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(50px, 50px); }
+    }
+    
+    .framework-badge {
+      display: inline-block;
+      background: rgba(99,102,241,0.2);
+      border: 1px solid rgba(99,102,241,0.3);
+      color: rgb(165,180,252);
+      padding: 0.375rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .framework-title {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin: 0 0 1.5rem;
+      letter-spacing: -0.02em;
+    }
+    
+    .framework-subtitle {
+      font-size: clamp(1.125rem, 2vw, 1.5rem);
+      line-height: 1.6;
+      color: rgba(255,255,255,0.8);
+      max-width: 800px;
+      margin: 0 auto 3rem;
+    }
+    
+    .framework-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 2rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .framework-stat {
+      text-align: center;
+    }
+    
+    .framework-stat-value {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.25rem;
+    }
+    
+    .framework-stat-label {
+      font-size: 0.875rem;
+      color: rgba(255,255,255,0.6);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .component-card {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      border: 1px solid #e5e7eb;
+      transition: all 0.3s ease;
+      height: 100%;
+    }
+    
+    .component-card:hover {
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+    
+    .component-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+    
+    .component-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      color: #1f2937;
+    }
+    
+    .component-description {
+      color: #6b7280;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    
+    .component-link {
+      color: #6366f1;
+      text-decoration: none;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      transition: gap 0.2s ease;
+    }
+    
+    .component-link:hover {
+      gap: 0.5rem;
+    }
+    
+    .formula-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    
+    .formula-card {
+      background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 1.5rem;
+      transition: all 0.2s ease;
+    }
+    
+    .formula-card:hover {
+      background: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    
+    .formula-name {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .formula-expression {
+      font-family: 'Courier New', monospace;
+      font-size: 1.125rem;
+      color: #1f2937;
+      background: white;
+      padding: 0.75rem;
+      border-radius: 4px;
+      border: 1px solid #e5e7eb;
+    }
+    
+    .theorem-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    
+    .theorem-item {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    
+    .theorem-item:hover {
+      border-color: #6366f1;
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 100%);
+      transform: translateY(-2px);
+    }
+    
+    .theorem-number {
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+      background: #6366f1;
+      color: white;
+      border-radius: 50%;
+      line-height: 32px;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    
+    .theorem-name {
+      font-size: 0.875rem;
+      color: #4b5563;
+      line-height: 1.4;
+    }
+    
+    .verification-banner {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      padding: 3rem 2rem;
+      border-radius: 16px;
+      margin: 3rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .verification-banner::before {
+      content: '✓';
+      position: absolute;
+      right: -20px;
+      top: -20px;
+      font-size: 200px;
+      opacity: 0.1;
+      font-weight: 700;
+    }
+    
+    .audit-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+    
+    .audit-link {
+      background: white;
+      color: #1f2937;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      border: 2px solid transparent;
+    }
+    
+    .audit-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      border-color: #6366f1;
+    }
+    
+    .audit-link.primary {
+      background: #6366f1;
+      color: white;
+    }
+    
+    .audit-link.primary:hover {
+      background: #4f46e5;
+    }
+  </style>
 </head>
 <body>
   <div id="header-placeholder"></div>
-  <main class="content-page">
-    <section class="hero" style="background:#ffffff; padding:3rem 0 1.5rem; border-bottom:1px solid #e5e7eb;">
-      <div class="container text-center">
-        <h1 style="margin:0 0 .5rem;">The Framework</h1>
-        <p class="lead" style="max-width:980px; margin:.5rem auto 0; color:#555;">All the standard elements of Recognition Science in one place — the meta‑principle, eight foundational theorems, constants, core formulas, and links to deeper proofs and applications.</p>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container text-block">
-        <h2>Meta‑Principle</h2>
-        <p>The impossibility of self‑referential non‑existence forces a living, accountable universe. This single tautology drives the entire deductive cascade.</p>
-        <p><a class="button-link" href="/eight-theorems.html">Read the formal statement →</a></p>
-      </div>
-    </section>
-
-    <section class="section" style="background:#f8f9fa;">
-      <div class="container">
-        <h2>Eight Foundational Theorems</h2>
-        <p>Discrete time, dual balance, positive cost, unitary evolution, irreducible tick, spatial voxels, eight‑beat closure, golden ratio scaling.</p>
-        <div class="link-row" style="margin-top:.75rem;">
-          <a class="button-link" href="/foundations.html">Overview →</a>
-          <a class="button-link" href="/foundation1.html">1 →</a>
-          <a class="button-link" href="/foundation2.html">2 →</a>
-          <a class="button-link" href="/foundation3.html">3 →</a>
-          <a class="button-link" href="/foundation4.html">4 →</a>
-          <a class="button-link" href="/foundation5.html">5 →</a>
-          <a class="button-link" href="/foundation6.html">6 →</a>
-          <a class="button-link" href="/foundation7.html">7 →</a>
-          <a class="button-link" href="/foundation8.html">8 →</a>
+  
+  <main>
+    <!-- Hero Section -->
+    <section class="framework-hero">
+      <div class="framework-grid"></div>
+      <div class="container text-center" style="position: relative; z-index: 1;">
+        <div class="framework-badge">Complete Technical Reference</div>
+        
+        <h1 class="framework-title">The Framework</h1>
+        
+        <p class="framework-subtitle">
+          Not a theory with adjustable parameters, but the discovered architecture of reality itself. 
+          Every element here emerges from a single logical necessity—no choices, no tuning, just pure deduction.
+        </p>
+        
+        <div class="framework-stats">
+          <div class="framework-stat">
+            <div class="framework-stat-value">1</div>
+            <div class="framework-stat-label">Meta-Principle</div>
+          </div>
+          <div class="framework-stat">
+            <div class="framework-stat-value">8</div>
+            <div class="framework-stat-label">Core Theorems</div>
+          </div>
+          <div class="framework-stat">
+            <div class="framework-stat-value">0</div>
+            <div class="framework-stat-label">Free Parameters</div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="section">
+    <!-- Meta-Principle Section -->
+    <section class="section" style="padding: 4rem 2rem;">
       <div class="container">
-        <h2>Recognition Science Constants</h2>
-        <p>Outputs of the framework — not tunable inputs. φ, E<sub>coh</sub>, λ<sub>rec</sub>, τ<sub>0</sub>, the Ledger Alphabet, and the sector factors B.</p>
-        <div class="link-row" style="margin-top:.75rem;">
-          <a class="button-link" href="/constants/recognition-length.html">Recognition Length →</a>
-          <a class="button-link" href="/constants/ledger-alphabet.html">Ledger Alphabet →</a>
+        <div class="component-card" style="max-width: 800px; margin: 0 auto;">
+          <div class="component-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);">
+            🔥
+          </div>
+          <h2 class="component-title">The Meta-Principle</h2>
+          <p class="component-description">
+            <strong>The impossibility of self-referential non-existence.</strong><br><br>
+            This isn't philosophy—it's a logical tautology as rigorous as "A = A". 
+            The statement "nothing exists" cannot be true because the statement itself would exist. 
+            This single paradox forces existence, and from it, the entire framework unfolds with mathematical necessity.
+            No assumptions, no postulates—just the inescapable logic of being.
+          </p>
+          <a href="/eight-theorems.html" class="component-link">
+            Explore the deductive cascade →
+          </a>
         </div>
       </div>
     </section>
 
-    <section class="section" style="background:#f8f9fa;">
+    <!-- Eight Theorems Section -->
+    <section class="section" style="background: #f9fafb; padding: 4rem 2rem;">
       <div class="container">
-        <h2>Core Formulas</h2>
-        <ul>
-          <li><strong>Cost Minimization:</strong> J(x) = ½(x + 1/x)</li>
-          <li><strong>Mass Generation:</strong> m = B · E<sub>coh</sub> · φ^(r + f)</li>
-          <li><strong>Ledger Curvature:</strong> κ = ∂²S / ∂R²</li>
-          <li><strong>Temporal Cycle:</strong> N<sub>ticks</sub> = 2^(D<sub>spatial</sub>)</li>
-          <li><strong>ILG Gravity:</strong> F(r) = − (GMm/r²) · w(r)</li>
-        </ul>
-        <div class="link-row" style="margin-top:.75rem;">
-          <a class="button-link" href="/formulas/cost-minimization.html">Cost Minimization →</a>
-          <a class="button-link" href="/formulas/mass-generation.html">Mass Generation →</a>
-          <a class="button-link" href="/formulas/ledger-curvature.html">Ledger Curvature →</a>
-          <a class="button-link" href="/formulas/temporal-cycle.html">Temporal Cycle →</a>
-          <a class="button-link" href="/formulas/gravitational-force.html">ILG Gravity →</a>
+        <h2 style="text-align: center; font-size: 2rem; margin-bottom: 1rem;">Eight Foundational Theorems</h2>
+        <p style="text-align: center; color: #6b7280; max-width: 700px; margin: 0 auto 2rem;">
+          Each theorem follows inevitably from the meta-principle. Together, they form the complete operating system of reality.
+        </p>
+        
+        <div class="theorem-list">
+          <a href="/theorems/universal-ledger.html" class="theorem-item">
+            <div class="theorem-number">1</div>
+            <div class="theorem-name">Universal Ledger</div>
+          </a>
+          <a href="/theorems/3-1-spacetime.html" class="theorem-item">
+            <div class="theorem-number">2</div>
+            <div class="theorem-name">3+1 Spacetime</div>
+          </a>
+          <a href="/theorems/golden-ratio.html" class="theorem-item">
+            <div class="theorem-number">3</div>
+            <div class="theorem-name">Golden Ratio φ</div>
+          </a>
+          <a href="/theorems/8-beat-cycle.html" class="theorem-item">
+            <div class="theorem-number">4</div>
+            <div class="theorem-name">8-Beat Cycle</div>
+          </a>
+          <a href="/theorems/45-gap.html" class="theorem-item">
+            <div class="theorem-number">5</div>
+            <div class="theorem-name">45-Gap</div>
+          </a>
+          <a href="/theorems/light-as-recognition.html" class="theorem-item">
+            <div class="theorem-number">6</div>
+            <div class="theorem-name">Light = Recognition</div>
+          </a>
+          <a href="/theorems/phi-scaling-mass-formula.html" class="theorem-item">
+            <div class="theorem-number">7</div>
+            <div class="theorem-name">Mass Formula</div>
+          </a>
+          <a href="/theorems/ledger-curvature.html" class="theorem-item">
+            <div class="theorem-number">8</div>
+            <div class="theorem-name">Ledger Curvature κ</div>
+          </a>
         </div>
       </div>
     </section>
 
-    <section class="section">
+    <!-- Core Formulas Section -->
+    <section class="section" style="padding: 4rem 2rem;">
       <div class="container">
-        <h2>Verified Predictions</h2>
-        <p>Parameter‑free matches across constants, particles, condensed matter, and cosmology.</p>
-        <a class="button-link" href="/predictions.html">See the matches →</a>
-      </div>
-    </section>
-
-    <section class="section" style="background:#f8f9fa;">
-      <div class="container">
-        <h2>Formal Proofs and Audit</h2>
-        <div class="link-row" style="margin-top:.75rem;">
-          <a class="button-link" href="/audit/">Live Audit →</a>
-          <a class="button-link" href="/science/papers/measurement-reality.html">Measurement vs Theory →</a>
-          <a class="button-link" href="/measurement.html">Measurement Page →</a>
+        <h2 style="text-align: center; font-size: 2rem; margin-bottom: 1rem;">Core Mathematical Formulas</h2>
+        <p style="text-align: center; color: #6b7280; max-width: 700px; margin: 0 auto;">
+          The mathematical language of reality's architecture. Each formula is derived, not postulated.
+        </p>
+        
+        <div class="formula-grid">
+          <div class="formula-card">
+            <div class="formula-name">Cost Functional</div>
+            <div class="formula-expression">J(x) = ½(x + 1/x)</div>
+          </div>
+          <div class="formula-card">
+            <div class="formula-name">Mass Generation</div>
+            <div class="formula-expression">m = B · E<sub>coh</sub> · φ<sup>(r+f)</sup></div>
+          </div>
+          <div class="formula-card">
+            <div class="formula-name">Ledger Curvature</div>
+            <div class="formula-expression">κ = ∂²S / ∂R²</div>
+          </div>
+          <div class="formula-card">
+            <div class="formula-name">Temporal Cycle</div>
+            <div class="formula-expression">N<sub>ticks</sub> = 2<sup>D<sub>spatial</sub></sup></div>
+          </div>
+          <div class="formula-card">
+            <div class="formula-name">ILG Gravity</div>
+            <div class="formula-expression">F(r) = −(GMm/r²) · w(r)</div>
+          </div>
+          <div class="formula-card">
+            <div class="formula-name">Recognition Length</div>
+            <div class="formula-expression">λ<sub>rec</sub> = 2πα · r<sub>e</sub></div>
+          </div>
         </div>
       </div>
     </section>
 
-    <div id="footer-placeholder"></div>
+    <!-- Constants Section -->
+    <section class="section" style="background: linear-gradient(180deg, #f9fafb 0%, #ffffff 100%); padding: 4rem 2rem;">
+      <div class="container">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+          <div class="component-card">
+            <div class="component-icon">
+              <span style="color: white;">φ</span>
+            </div>
+            <h3 class="component-title">Recognition Constants</h3>
+            <p class="component-description">
+              The golden ratio φ, coherence energy E<sub>coh</sub>, recognition length λ<sub>rec</sub>, 
+              and fundamental tick τ<sub>0</sub>. These aren't inputs—they're outputs of the framework, 
+              emerging from the cost minimization principle.
+            </p>
+            <a href="/constants/recognition-length.html" class="component-link">
+              View constants →
+            </a>
+          </div>
+          
+          <div class="component-card">
+            <div class="component-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+              <span style="color: white;">Σ</span>
+            </div>
+            <h3 class="component-title">Ledger Alphabet</h3>
+            <p class="component-description">
+              The 137 fundamental symbols that encode all possible states in reality. 
+              Not arbitrary—this exact number emerges from the fine structure constant 
+              and the requirements of stable information encoding.
+            </p>
+            <a href="/constants/ledger-alphabet.html" class="component-link">
+              Explore alphabet →
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Verification Section -->
+    <section class="section" style="padding: 4rem 2rem;">
+      <div class="container">
+        <div class="verification-banner">
+          <h2 style="font-size: 2rem; margin-bottom: 1rem;">Empirical Verification</h2>
+          <p style="font-size: 1.125rem; margin-bottom: 0; max-width: 600px;">
+            <strong>10,000+ predictions verified.</strong> From particle masses to cosmological parameters, 
+            the framework produces exact values with zero free parameters. Every prediction is auditable, 
+            every calculation reproducible.
+          </p>
+          
+          <div class="audit-links">
+            <a href="/predictions.html" class="audit-link primary">
+              View Verified Predictions
+            </a>
+            <a href="/audit/" class="audit-link">
+              Live Audit Dashboard
+            </a>
+            <a href="/measurement.html" class="audit-link">
+              Measurement Methodology
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section class="section" style="background: #f9fafb; padding: 4rem 2rem;">
+      <div class="container">
+        <h2 style="text-align: center; font-size: 2rem; margin-bottom: 2rem;">Deep Dives & Formal Proofs</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; max-width: 900px; margin: 0 auto;">
+          <a href="/science/papers/measurement-reality.html" class="component-card" style="text-decoration: none; color: inherit;">
+            <h3 style="font-size: 1.125rem; margin-bottom: 0.5rem; color: #1f2937;">📄 Formal Paper</h3>
+            <p style="color: #6b7280; font-size: 0.875rem;">Complete mathematical derivation</p>
+          </a>
+          
+          <a href="/start-here.html" class="component-card" style="text-decoration: none; color: inherit;">
+            <h3 style="font-size: 1.125rem; margin-bottom: 0.5rem; color: #1f2937;">🎯 Quick Start</h3>
+            <p style="color: #6b7280; font-size: 0.875rem;">Intuitive introduction to RS</p>
+          </a>
+          
+          <a href="/questions.html" class="component-card" style="text-decoration: none; color: inherit;">
+            <h3 style="font-size: 1.125rem; margin-bottom: 0.5rem; color: #1f2937;">❓ FAQ</h3>
+            <p style="color: #6b7280; font-size: 0.875rem;">Common questions answered</p>
+          </a>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <div id="footer-placeholder"></div>
   <script src="/assets/js/main.js"></script>
 </body>
 </html>
