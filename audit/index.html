@@ -310,29 +310,27 @@
       text-shadow: 0 0 10px var(--cyan);
     }
     
-    /* Mode Toggle Switch */
+    /* Mode Toggle Switch - Embedded Square Design */
     .mode-toggle {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 10000;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
+      margin: 15px auto;
+      width: fit-content;
+      padding: 6px 12px;
       background: rgba(0,0,0,0.8);
-      padding: 8px 15px;
-      border-radius: 25px;
+      border-radius: 4px;
       border: 1px solid var(--amber);
     }
     
     body:not(.retro-mode) .mode-toggle {
       background: rgba(255,255,255,0.95);
-      border: 1px solid #ccc;
+      border: 1px solid #ddd;
     }
     
     .toggle-label {
       font-family: 'Share Tech Mono', monospace;
-      font-size: 0.8rem;
+      font-size: 0.7rem;
       color: var(--amber);
       letter-spacing: 0.05em;
       user-select: none;
@@ -341,14 +339,15 @@
     body:not(.retro-mode) .toggle-label {
       font-family: system-ui, -apple-system, sans-serif;
       color: #666;
+      font-size: 0.75rem;
     }
     
     .toggle-switch {
       position: relative;
-      width: 60px;
-      height: 28px;
+      width: 40px;
+      height: 20px;
       background: #333;
-      border-radius: 14px;
+      border-radius: 2px;
       cursor: pointer;
       transition: background 0.3s;
     }
@@ -367,14 +366,14 @@
     
     .toggle-slider {
       position: absolute;
-      top: 3px;
-      left: 3px;
-      width: 22px;
-      height: 22px;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
       background: var(--amber);
-      border-radius: 50%;
+      border-radius: 2px;
       transition: transform 0.3s;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
     }
     
     body:not(.retro-mode) .toggle-slider {
@@ -382,7 +381,7 @@
     }
     
     .toggle-switch.active .toggle-slider {
-      transform: translateX(32px);
+      transform: translateX(20px);
     }
     
     .retro-label {
@@ -458,14 +457,8 @@
   </style>
 </head>
 <body class="retro-mode">
-  <!-- Mode Toggle Switch -->
-  <div class="mode-toggle">
-    <span class="toggle-label">BORING</span>
-    <div class="toggle-switch active" onclick="toggleMode()">
-      <div class="toggle-slider"></div>
-    </div>
-    <span class="toggle-label retro-label" id="retro-label">REAL GENIUS</span>
-  </div>
+  <!-- Site Header (always at top) -->
+  <div id="header-placeholder"></div>
 
   <!-- Retro Content Header -->
   <div class="retro-content">
@@ -572,13 +565,21 @@
   
   <!-- Normal Content -->
   <div class="normal-content">
-    <div id="header-placeholder"></div>
-    
     <!-- Header Section -->
   <section class="intro-section" style="padding: 1.5rem 0; background: #fff;">
     <div class="container text-center">
       <div class="wrap">
         <h1>Recognition Science — Live Audit</h1>
+        
+        <!-- Mode Toggle Switch -->
+        <div class="mode-toggle">
+          <span class="toggle-label">BORING</span>
+          <div class="toggle-switch active" onclick="toggleMode()">
+            <div class="toggle-slider"></div>
+          </div>
+          <span class="toggle-label retro-label" id="retro-label">REAL GENIUS</span>
+        </div>
+        
         <p class="lead" style="font-size: 1.1rem; color: #555; max-width: 900px; margin: 0.5rem auto 0;">
           Streaming live from the public audit repository
         </p>
@@ -896,6 +897,14 @@ python3 scripts/ci_status.py</code></pre>
       const next = status.next_actions.map(t => `<li>${t}</li>`).join('');
       document.getElementById('next').innerHTML = next;
     }
+    
+    // Clear all dynamic placeholders first to prevent duplication
+    document.getElementById('metrics-placeholder').innerHTML = '';
+    document.getElementById('cosmology-placeholder').innerHTML = '';
+    document.getElementById('ilg-limits-placeholder').innerHTML = '';
+    document.getElementById('conservation-placeholder').innerHTML = '';
+    document.getElementById('ci-placeholder').innerHTML = '';
+    document.getElementById('masses-placeholder').innerHTML = '';
     
     // Render Metrics (right after Status)
     if (metrics.badges) {
