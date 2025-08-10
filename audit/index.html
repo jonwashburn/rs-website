@@ -143,6 +143,24 @@
             See the <a href="https://raw.githubusercontent.com/jonwashburn/audit/main/docs/CI-README.md" target="_blank" rel="noopener">CI README ↗</a> for how checks are run.
           </li>
         </ol>
+        <div style="margin-top:12px">
+          <strong>Run CI locally</strong>
+          <pre style="margin-top:6px"><code>git clone https://github.com/jonwashburn/audit
+cd audit
+python3 scripts/ci_status.py</code></pre>
+          <div class="muted">Writes <code>docs/ci_status.json</code> and the website will stream it.</div>
+        </div>
+        <details style="margin-top:10px">
+          <summary>What each check does</summary>
+          <ul style="margin:8px 0 0 18px">
+            <li><strong>Gates</strong>: parity‑gate schedule → <code>|B|=46</code>, <code>S=489/512</code>. Script: <code>scripts/ilg_gates_check.py</code>.</li>
+            <li><strong>Growth</strong>: compute D and D/ΛCDM using μ(a,k) with derived <code>a0</code> and fixed <code>β=(T·N_gates)/S</code>. Script: <code>scripts/linear_growth_demo.py --normalise --write-json docs/demo_results.json</code>.</li>
+            <li><strong>Lensing</strong>: compute Σ(a,k)=μ(a,k) with the same parameters. Script: <code>scripts/lensing_demo.py --write-json docs/lensing_results.json</code>.</li>
+            <li><strong>Conservation (2D)</strong>: constant‑w Laplacian and varying‑w divergence theorem. Scripts: <code>scripts/conservation_check.py</code>, <code>scripts/conservation_check_varying_w.py</code>.</li>
+            <li><strong>Conservation (3D)</strong>: ΔΦ consistency and varying‑w divergence theorem on a voxel cube. Script: <code>scripts/conservation_check_3d.py</code>.</li>
+          </ul>
+          <div class="muted" style="margin-top:6px">Full instructions: <a href="https://raw.githubusercontent.com/jonwashburn/audit/main/docs/CI-README.md" target="_blank" rel="noopener">CI README ↗</a>.</div>
+        </details>
       </div>
       <div class="component-card" id="arch-card">
       <h3>Architecture</h3>
