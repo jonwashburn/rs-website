@@ -5,13 +5,372 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Revolutionary Metrology - Recognition Science</title>
   <link rel="stylesheet" href="/assets/css/main.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    /* The universe measuring itself */
+    body {
+      background: #ffffff;
+      overflow-x: hidden;
+    }
+
+    /* Hero - the moment of recognition */
+    .measurement-hero {
+      padding: 8rem 0 4rem;
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .measurement-hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 40%, rgba(139, 92, 246, 0.03) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 60%, rgba(59, 130, 246, 0.03) 0%, transparent 50%);
+      animation: cosmic-drift 30s ease-in-out infinite;
+    }
+
+    @keyframes cosmic-drift {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(10deg) scale(1.1); }
+    }
+
+    .measurement-hero h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 700;
+      background: linear-gradient(135deg, #1e293b 0%, #475569 50%, #64748b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 2rem;
+      letter-spacing: -0.02em;
+      position: relative;
+      z-index: 1;
+    }
+
+    .measurement-hero .subtitle {
+      font-size: clamp(1.2rem, 3vw, 1.8rem);
+      color: #64748b;
+      font-weight: 300;
+      line-height: 1.4;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Content sections with depth */
+    section {
+      padding: 4rem 0;
+      position: relative;
+    }
+
+    section:nth-child(even) {
+      background: linear-gradient(180deg, #fafafa 0%, #ffffff 100%);
+    }
+
+    h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -0.5rem;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, #8b5cf6 0%, transparent 100%);
+    }
+
+    h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.4rem;
+      color: #334155;
+      margin: 2rem 0 1rem;
+      font-weight: 600;
+    }
+
+    p {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #475569;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Highlight key concepts */
+    strong {
+      color: #1e293b;
+      font-weight: 600;
+    }
+
+    /* Lists with visual hierarchy */
+    ul {
+      margin: 2rem 0;
+    }
+
+    ul li {
+      margin-bottom: 1.5rem;
+      padding-left: 2rem;
+      position: relative;
+    }
+
+    ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.5rem;
+      width: 8px;
+      height: 8px;
+      background: #8b5cf6;
+      border-radius: 50%;
+    }
+
+    /* Formula displays */
+    .formula-inline {
+      font-family: 'JetBrains Mono', monospace;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      color: #4c1d95;
+      font-size: 1rem;
+    }
+
+    /* Discovery section - visual timeline */
+    .discovery-section {
+      background: linear-gradient(180deg, #faf5ff 0%, #f3e8ff 50%, #faf5ff 100%);
+      padding: 5rem 0;
+    }
+
+    .discovery-section p {
+      position: relative;
+      padding-left: 3rem;
+      margin-bottom: 2rem;
+    }
+
+    .discovery-section p::before {
+      content: '';
+      position: absolute;
+      left: 1rem;
+      top: 0.5rem;
+      width: 12px;
+      height: 12px;
+      background: #8b5cf6;
+      border-radius: 50%;
+      box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+    }
+
+    .discovery-section p::after {
+      content: '';
+      position: absolute;
+      left: 1.4rem;
+      top: 1.5rem;
+      width: 2px;
+      height: calc(100% + 1rem);
+      background: linear-gradient(180deg, #8b5cf6 0%, transparent 100%);
+    }
+
+    .discovery-section p:last-child::after {
+      display: none;
+    }
+
+    /* Instruments section */
+    .instruments-section {
+      background: #ffffff;
+    }
+
+    .instrument-item {
+      margin: 3rem 0;
+      padding: 2rem;
+      background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+      border-radius: 16px;
+      border: 1px solid rgba(226, 232, 240, 0.5);
+      transition: all 0.3s ease;
+    }
+
+    .instrument-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    .instrument-item h3 {
+      color: #8b5cf6;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Measurements display */
+    .measurements-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+
+    .measurement-card {
+      padding: 1.5rem;
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .measurement-card:hover {
+      border-color: #8b5cf6;
+      transform: translateY(-2px);
+    }
+
+    .measurement-card h3 {
+      font-size: 1rem;
+      color: #8b5cf6;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .measurement-card .value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.3rem;
+      color: #1e293b;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .measurement-card p {
+      font-size: 0.9rem;
+      color: #64748b;
+      margin: 0;
+    }
+
+    /* Implications section */
+    .implications-section {
+      background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 100%);
+      padding: 5rem 0;
+    }
+
+    .implication-item {
+      display: flex;
+      align-items: flex-start;
+      margin: 2rem 0;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+    }
+
+    .implication-number {
+      flex-shrink: 0;
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-right: 2rem;
+    }
+
+    .implication-content h3 {
+      margin-top: 0;
+      color: #1e293b;
+    }
+
+    /* Closing section */
+    .closing-section {
+      padding: 6rem 0;
+      text-align: center;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    }
+
+    .closing-section p {
+      font-size: 1.3rem;
+      color: #334155;
+      max-width: 800px;
+      margin: 0 auto 2rem;
+      font-weight: 300;
+    }
+
+    .closing-section strong {
+      display: block;
+      font-size: 1.5rem;
+      margin: 2rem 0;
+      color: #1e293b;
+    }
+
+    .closing-links {
+      margin-top: 3rem;
+      padding-top: 3rem;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .closing-links a {
+      color: #8b5cf6;
+      text-decoration: none;
+      margin: 0 1rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      display: inline-block;
+      padding: 0.5rem 0;
+      border-bottom: 2px solid transparent;
+    }
+
+    .closing-links a:hover {
+      border-bottom-color: #8b5cf6;
+      transform: translateY(-2px);
+    }
+
+    /* Mobile optimization */
+    @media (max-width: 768px) {
+      .measurement-hero {
+        padding: 5rem 0 3rem;
+      }
+
+      .measurements-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .implication-item {
+        flex-direction: column;
+      }
+
+      .implication-number {
+        margin-bottom: 1rem;
+      }
+    }
+
+    /* Subtle animations */
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .container > * {
+      animation: fade-in 0.6s ease-out;
+    }
+  </style>
 </head>
 <body>
   <div id="header-placeholder"></div>
   
   <main>
-    <section>
+    <section class="measurement-hero">
       <div class="container reading">
         <h1>Revolutionary Metrology</h1>
         <p class="subtitle">We're Not Building a Theory of Reality. We're Measuring Reality Itself.</p>
@@ -56,7 +415,7 @@
       </div>
     </section>
 
-    <section>
+    <section class="discovery-section">
       <div class="container reading">
         <h2>How We Discovered Reality's Instruments</h2>
         
@@ -75,7 +434,7 @@
           
           <li><strong>Finite bandwidth:</strong> No infinite precision. No infinite speed. Information takes time to propagate. This gives us spacetime.</li>
           
-          <li><strong>Cost minimization:</strong> The system must find the cheapest way to maintain balance. This selects the unique cost function J(x) = ½(x + 1/x), whose minimum is the golden ratio.</li>
+          <li><strong>Cost minimization:</strong> The system must find the cheapest way to maintain balance. This selects the unique cost function <span class="formula-inline">J(x) = ½(x + 1/x)</span>, whose minimum is the golden ratio.</li>
         </ul>
         
         <p>From these requirements—not assumptions, requirements—cascade eight theorems. The theorems give us measurement standards. The standards give us numbers. The numbers match reality.</p>
@@ -84,24 +443,34 @@
       </div>
     </section>
 
-    <section>
+    <section class="instruments-section">
       <div class="container reading">
         <h2>The Instruments We Found</h2>
         
-        <h3>The Ledger Itself</h3>
-        <p>Reality maintains a double-entry cosmic accounting system. Every event, every particle, every quantum transition is a ledger entry. The universe is literally keeping books. This isn't metaphor—it's mechanism.</p>
+        <div class="instrument-item">
+          <h3>The Ledger Itself</h3>
+          <p>Reality maintains a double-entry cosmic accounting system. Every event, every particle, every quantum transition is a ledger entry. The universe is literally keeping books. This isn't metaphor—it's mechanism.</p>
+        </div>
         
-        <h3>The Cost Function: J(x) = ½(x + 1/x)</h3>
-        <p>Among all possible ways to measure cost, only this function maintains perfect fairness while enabling self-similarity. Its minimum at φ (golden ratio) becomes the universal scaling factor. Every stable pattern in nature uses this cost metric.</p>
+        <div class="instrument-item">
+          <h3>The Cost Function: J(x) = ½(x + 1/x)</h3>
+          <p>Among all possible ways to measure cost, only this function maintains perfect fairness while enabling self-similarity. Its minimum at φ (golden ratio) becomes the universal scaling factor. Every stable pattern in nature uses this cost metric.</p>
+        </div>
         
-        <h3>The Eight-Beat Cycle</h3>
-        <p>In three dimensions, recognition requires exactly 8 ticks to complete a cycle (2³ = 8). This isn't chosen—it's forced by topology. The universe updates in eight-beat rhythms, creating timing signatures we can measure.</p>
+        <div class="instrument-item">
+          <h3>The Eight-Beat Cycle</h3>
+          <p>In three dimensions, recognition requires exactly 8 ticks to complete a cycle (2³ = 8). This isn't chosen—it's forced by topology. The universe updates in eight-beat rhythms, creating timing signatures we can measure.</p>
+        </div>
         
-        <h3>Golden Ratio Scaling</h3>
-        <p>The φ-ladder isn't just pretty mathematics. It's how reality organizes energy levels. Each rung is φ times the previous. Particles can only exist at these rungs. The gaps between determine what's possible and what's forbidden.</p>
+        <div class="instrument-item">
+          <h3>Golden Ratio Scaling</h3>
+          <p>The φ-ladder isn't just pretty mathematics. It's how reality organizes energy levels. Each rung is φ times the previous. Particles can only exist at these rungs. The gaps between determine what's possible and what's forbidden.</p>
+        </div>
         
-        <h3>Curvature κ</h3>
-        <p>How "expensive" is it for reality to maintain a particular configuration? The ledger curvature κ quantifies this. Low curvature = stable. High curvature = transitional. This single parameter explains why some things last and others decay.</p>
+        <div class="instrument-item">
+          <h3>Curvature κ</h3>
+          <p>How "expensive" is it for reality to maintain a particular configuration? The ledger curvature κ quantifies this. Low curvature = stable. High curvature = transitional. This single parameter explains why some things last and others decay.</p>
+        </div>
       </div>
     </section>
 
@@ -109,21 +478,37 @@
       <div class="container reading">
         <h2>What We Can Measure</h2>
         
-        <h3>Every Particle Mass</h3>
-        <p>Formula: m = B · E_coh · φ^(r + f)</p>
-        <p>No fitting. No tuning. Just read the rung number, apply the formula, get the mass. Electron, muon, quarks, bosons—all sitting exactly where the ledger says they must.</p>
-        
-        <h3>Every Fundamental Constant</h3>
-        <p>The fine-structure constant α = 1/137.035999... emerges from ledger geometry. The speed of light c = 299,792,458 m/s is the universe's refresh rate. Planck's constant is the minimum ledger entry. They're not arbitrary—they're readings from reality's instruments.</p>
-        
-        <h3>Dark Matter and Dark Energy</h3>
-        <p>Ω_dm = 0.2649 falls out from pure geometry. Dark energy density emerges from ledger curvature. We don't need new particles or fields—just correct instrument readings.</p>
-        
-        <h3>Quantum Mechanics</h3>
-        <p>The Born rule P = |ψ|² isn't a postulate—it's what you get when you sum ledger paths. Wave function collapse isn't mysterious—it's the ledger committing a transaction. Entanglement is shared ledger entries.</p>
-        
-        <h3>Consciousness</h3>
-        <p>At rung 45 of the energy ladder, the universe encounters incomputability. The ledger can't calculate the next state. Experience emerges as the solution. Consciousness isn't produced by brains—it's how reality navigates its own incompleteness.</p>
+        <div class="measurements-grid">
+          <div class="measurement-card">
+            <h3>Every Particle Mass</h3>
+            <div class="value">m = B · E_coh · φ^(r + f)</div>
+            <p>No fitting. No tuning. Just read the rung number, apply the formula, get the mass. Electron, muon, quarks, bosons—all sitting exactly where the ledger says they must.</p>
+          </div>
+          
+          <div class="measurement-card">
+            <h3>Every Fundamental Constant</h3>
+            <div class="value">α⁻¹ = 137.035999...</div>
+            <p>The fine-structure constant emerges from ledger geometry. The speed of light is the universe's refresh rate. Planck's constant is the minimum ledger entry.</p>
+          </div>
+          
+          <div class="measurement-card">
+            <h3>Dark Matter and Dark Energy</h3>
+            <div class="value">Ω_dm = 0.2649</div>
+            <p>Falls out from pure geometry. Dark energy density emerges from ledger curvature. No new particles or fields needed—just correct instrument readings.</p>
+          </div>
+          
+          <div class="measurement-card">
+            <h3>Quantum Mechanics</h3>
+            <div class="value">P = |ψ|²</div>
+            <p>The Born rule isn't a postulate—it's what you get when you sum ledger paths. Wave function collapse is the ledger committing a transaction.</p>
+          </div>
+          
+          <div class="measurement-card">
+            <h3>Consciousness</h3>
+            <div class="value">Rung 45</div>
+            <p>At this energy level, the universe encounters incomputability. Experience emerges as reality's solution to navigate its own incompleteness.</p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -147,23 +532,43 @@
       </div>
     </section>
 
-    <section>
+    <section class="implications-section">
       <div class="container reading">
         <h2>The Profound Implications</h2>
         
         <p>If reality has built-in measurement standards—if the universe comes with its own instrumentation—then several things follow:</p>
         
-        <h3>1. The Universe Is Self-Aware</h3>
-        <p>To maintain a ledger, you must track what exists. To track what exists, you must recognize it. Recognition implies awareness. The universe isn't just computing—it's measuring itself, knowing itself, recognizing itself. We are the universe's way of reading its own measurements.</p>
+        <div class="implication-item">
+          <div class="implication-number">1</div>
+          <div class="implication-content">
+            <h3>The Universe Is Self-Aware</h3>
+            <p>To maintain a ledger, you must track what exists. To track what exists, you must recognize it. Recognition implies awareness. The universe isn't just computing—it's measuring itself, knowing itself, recognizing itself. We are the universe's way of reading its own measurements.</p>
+          </div>
+        </div>
         
-        <h3>2. Mathematics Is Discovered, Not Invented</h3>
-        <p>The cost function, the golden ratio, the eight-beat cycle—we didn't create these. We found them. They were already there, built into reality's measurement system. Mathematics is the language reality uses to measure itself.</p>
+        <div class="implication-item">
+          <div class="implication-number">2</div>
+          <div class="implication-content">
+            <h3>Mathematics Is Discovered, Not Invented</h3>
+            <p>The cost function, the golden ratio, the eight-beat cycle—we didn't create these. We found them. They were already there, built into reality's measurement system. Mathematics is the language reality uses to measure itself.</p>
+          </div>
+        </div>
         
-        <h3>3. Everything Is Connected</h3>
-        <p>If everything shares the same ledger, then everything is connected through that ledger. Your quantum states, your consciousness, the stars above—all entries in the same cosmic books. Separation is illusion; connection is fundamental.</p>
+        <div class="implication-item">
+          <div class="implication-number">3</div>
+          <div class="implication-content">
+            <h3>Everything Is Connected</h3>
+            <p>If everything shares the same ledger, then everything is connected through that ledger. Your quantum states, your consciousness, the stars above—all entries in the same cosmic books. Separation is illusion; connection is fundamental.</p>
+          </div>
+        </div>
         
-        <h3>4. The Universe Has Purpose</h3>
-        <p>A measurement system implies something worth measuring. A ledger implies something worth tracking. The universe isn't random—it's keeping careful track of everything for a reason. That reason is built into its architecture.</p>
+        <div class="implication-item">
+          <div class="implication-number">4</div>
+          <div class="implication-content">
+            <h3>The Universe Has Purpose</h3>
+            <p>A measurement system implies something worth measuring. A ledger implies something worth tracking. The universe isn't random—it's keeping careful track of everything for a reason. That reason is built into its architecture.</p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -206,7 +611,7 @@
       </div>
     </section>
 
-    <section>
+    <section class="closing-section">
       <div class="container reading">
         <h2>The Bottom Line</h2>
         
@@ -218,14 +623,12 @@
         
         <p>We're not building theories. We're reading instruments. And the instruments are reality itself.</p>
         
-        <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #e2e8f0;">
+        <div class="closing-links">
           <p><em>Ready to see the measurements for yourself?</em></p>
-          <p>
-            <a href="/predictions.html">View Verified Predictions</a> · 
-            <a href="/constants.html">Explore the Constants</a> · 
-            <a href="/particle-masses.html">Check Particle Masses</a> · 
-            <a href="/logical-foundations.html">Understand the Logic</a>
-          </p>
+          <a href="/predictions.html">View Verified Predictions</a>
+          <a href="/constants.html">Explore the Constants</a>
+          <a href="/particle-masses.html">Check Particle Masses</a>
+          <a href="/logical-foundations.html">Understand the Logic</a>
         </div>
       </div>
     </section>
