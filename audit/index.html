@@ -251,7 +251,9 @@ python3 scripts/ci_status.py</code></pre>
             <thead><tr><th style="text-align:left">k (h/Mpc)</th><th style="text-align:right">a</th><th style="text-align:right">Sigma</th></tr></thead>
             <tbody>${rows}</tbody>
           </table>
-        </div>`;
+        </div>
+        ${(lj.grid&&lj.grid.length)?`<div style="margin-top:8px"><details><summary>Grid (Σ over a,k)</summary><table style=\"width:100%; border-collapse:collapse\"><thead><tr><th>a</th><th>k (h/Mpc)</th><th>Sigma</th></tr></thead><tbody>${lj.grid.map(g=>`<tr><td>${g.a.toFixed(2)}</td><td>${g.k}</td><td>${g.Sigma.toFixed(6)}</td></tr>`).join('')}</tbody></table></details></div>`:''}
+        `;
       // Insert before Architecture card for visibility
       const mainEl = document.querySelector('main .content-page') || document.querySelector('main');
       const archEl = document.getElementById('arch-card');
@@ -314,6 +316,34 @@ python3 scripts/ci_status.py</code></pre>
       const archEl4 = document.getElementById('arch-card');
       const mainEl4 = document.querySelector('main .content-page') || document.querySelector('main');
       mainEl4.insertBefore(card, archEl4);
+    } catch(e) {
+      // ignore
+    }
+    // Attempt to load metrics and render a compact panel
+    try {
+      const metricsURL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/metrics.json';
+      const mx = await loadJSON(metricsURL);
+      const card = document.createElement('section');
+      card.className = 'component-card';
+      const allGreen = (mx.badges && mx.badges.all_green) ? 'ok' : 'warn';
+      card.innerHTML = `
+        <h3>Metrics</h3>
+        <div class="muted">Last updated: ${mx.last_updated}</div>
+        <div style="margin-top:8px">Overall: <span class="${allGreen}">${allGreen==='ok'?'all‑green':'attention'}</span></div>
+        <div class="muted" style="margin-top:6px">No‑knobs: ${mx.badges && mx.badges.no_knobs ? 'yes' : 'no'}</div>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap:12px; margin-top:10px">
+          <div><strong>Masses</strong><div class="muted" style="margin-top:4px">CL max |Δ|: ${(mx.masses&&mx.masses.charged_leptons_max_abs_pct!=null)?mx.masses.charged_leptons_max_abs_pct.toFixed(3):'—'}%</div>
+          <div class="muted">Qdown max |Δ|: ${(mx.masses&&mx.masses.quarks_down_max_abs_pct!=null)?mx.masses.quarks_down_max_abs_pct.toFixed(3):'—'}%</div>
+          <div class="muted">Qup max |Δ|: ${(mx.masses&&mx.masses.quarks_up_max_abs_pct!=null)?mx.masses.quarks_up_max_abs_pct.toFixed(3):'—'}%</div>
+          <div class="muted">Bosons max |Δ|: ${(mx.masses&&mx.masses.bosons_max_abs_pct!=null)?mx.masses.bosons_max_abs_pct.toFixed(3):'—'}%</div></div>
+          <div><strong>Growth</strong><div class="muted" style="margin-top:4px">max |D/Λ−1|: ${(mx.growth&&mx.growth.max_abs_ratio_dev!=null)?mx.growth.max_abs_ratio_dev.toFixed(3):'—'}</div>
+          <div class="muted">mean |D/Λ−1|: ${(mx.growth&&mx.growth.mean_abs_ratio_dev!=null)?mx.growth.mean_abs_ratio_dev.toFixed(3):'—'}</div></div>
+          <div><strong>Lensing</strong><div class="muted" style="margin-top:4px">max |Σ−1|: ${(mx.lensing&&mx.lensing.max_abs_sigma_dev!=null)?mx.lensing.max_abs_sigma_dev.toFixed(3):'—'}</div>
+          <div class="muted">mean |Σ−1|: ${(mx.lensing&&mx.lensing.mean_abs_sigma_dev!=null)?mx.lensing.mean_abs_sigma_dev.toFixed(3):'—'}</div></div>
+        </div>`;
+      const archElM = document.getElementById('arch-card');
+      const mainElM = document.querySelector('main .content-page') || document.querySelector('main');
+      mainElM.insertBefore(card, archElM);
     } catch(e) {
       // ignore
     }
