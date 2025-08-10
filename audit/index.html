@@ -404,6 +404,43 @@
       cursor: pointer;
     }
     
+    /* Video Container */
+    .video-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 20000;
+      background: #000;
+      border: 3px solid var(--amber);
+      padding: 5px;
+      box-shadow: 0 0 50px rgba(255,176,0,0.8);
+      display: none;
+    }
+    
+    .video-container.active {
+      display: block;
+    }
+    
+    .video-close {
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      background: var(--amber);
+      color: #000;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-family: 'Share Tech Mono', monospace;
+      font-weight: bold;
+      border-radius: 2px;
+    }
+    
+    .video-close:hover {
+      background: var(--green);
+      box-shadow: 0 0 10px var(--green);
+    }
+    
     /* Show/hide retro overlay based on mode */
     body:not(.retro-mode) .retro-content {
       display: none !important;
@@ -459,6 +496,16 @@
 <body class="retro-mode">
   <!-- Site Header (always at top) -->
   <div id="header-placeholder"></div>
+  
+  <!-- Video Container for Easter Egg -->
+  <div class="video-container" id="video-container">
+    <button class="video-close" onclick="closeVideo()">X CLOSE</button>
+    <iframe id="youtube-video" width="640" height="360" 
+            src="" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen></iframe>
+  </div>
 
   <!-- Retro Content Header -->
   <div class="retro-content">
@@ -760,23 +807,51 @@ python3 scripts/ci_status.py</code></pre>
       // Remove link when in boring mode
       retroLabel.innerHTML = 'REAL GENIUS';
       retroLabel.classList.remove('clickable');
+      retroLabel.onclick = null;
     } else {
       // Switch to retro mode
       body.classList.add('retro-mode');
       toggleSwitch.classList.add('active');
-      // Add link only in retro mode
-      retroLabel.innerHTML = '<a href="https://www.youtube.com/watch?v=0ds0wYpc1eM" class="easter-egg" target="_blank">REAL GENIUS</a>';
+      // Add clickable text only in retro mode
+      retroLabel.innerHTML = '<span class="easter-egg">REAL GENIUS</span>';
       retroLabel.classList.add('clickable');
+      retroLabel.onclick = playVideo;
     }
   }
   
-  // Initialize the easter egg link on page load
+  // Play video function
+  function playVideo(e) {
+    if (e) e.preventDefault();
+    const container = document.getElementById('video-container');
+    const iframe = document.getElementById('youtube-video');
+    // Add autoplay=1 to URL to start playing immediately
+    iframe.src = 'https://www.youtube.com/embed/0ds0wYpc1eM?autoplay=1';
+    container.classList.add('active');
+  }
+  
+  // Close video function
+  function closeVideo() {
+    const container = document.getElementById('video-container');
+    const iframe = document.getElementById('youtube-video');
+    iframe.src = ''; // Stop the video
+    container.classList.remove('active');
+  }
+  
+  // Initialize the easter egg on page load
   window.addEventListener('DOMContentLoaded', function() {
     const retroLabel = document.getElementById('retro-label');
     if (document.body.classList.contains('retro-mode')) {
-      retroLabel.innerHTML = '<a href="https://www.youtube.com/watch?v=0ds0wYpc1eM" class="easter-egg" target="_blank">REAL GENIUS</a>';
+      retroLabel.innerHTML = '<span class="easter-egg">REAL GENIUS</span>';
       retroLabel.classList.add('clickable');
+      retroLabel.onclick = playVideo;
     }
+    
+    // Close video on escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeVideo();
+      }
+    });
   });
   
   // Utility functions
