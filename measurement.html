@@ -5,16 +5,224 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Measuring Reality | Recognition Science</title>
   <link rel="stylesheet" href="/assets/css/main.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
+    /* Hero Section - Completely Redesigned */
     .hero {
-      background: #ffffff;
-      padding: 3rem 0 2rem;
-      border-bottom: 1px solid #e5e7eb;
+      min-height: 85vh;
+      background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #2d1b69 100%);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 0;
     }
-    .hero h1 { font-size: 2.4rem; margin: 0 0 .5rem; line-height: 1.2; }
-    .hero p.lead { font-size: 1.25rem; color: #555; max-width: 980px; margin: .5rem auto 0; }
-    .cta-row { display:flex; gap:.75rem; justify-content:center; flex-wrap:wrap; margin-top: 1rem; }
+    
+    /* Animated measurement grid background */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        linear-gradient(rgba(138, 43, 226, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(138, 43, 226, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: grid-move 20s linear infinite;
+    }
+    
+    @keyframes grid-move {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(50px, 50px); }
+    }
+    
+    /* Floating measurement particles */
+    .measurement-particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 50%;
+      opacity: 0.6;
+      animation: float-up 15s linear infinite;
+    }
+    
+    @keyframes float-up {
+      0% { 
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.6; }
+      100% { 
+        transform: translateY(-100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    
+    .hero-badge {
+      display: inline-block;
+      background: rgba(138, 43, 226, 0.1);
+      border: 1px solid rgba(138, 43, 226, 0.3);
+      color: #a78bfa;
+      padding: 0.5rem 1.5rem;
+      border-radius: 50px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      animation: pulse-glow 3s ease-in-out infinite;
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(138, 43, 226, 0.2); }
+      50% { box-shadow: 0 0 40px rgba(138, 43, 226, 0.4); }
+    }
+    
+    .hero h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin: 0 0 1.5rem;
+      background: linear-gradient(135deg, #ffffff 0%, #e9d5ff 50%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.02em;
+    }
+    
+    .hero-subtitle {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.6;
+      margin: 0 auto 2rem;
+      max-width: 900px;
+    }
+    
+    .hero-insight {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 2rem;
+      margin: 2rem auto;
+      max-width: 800px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .hero-insight h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      color: #e9d5ff;
+      margin: 0 0 1rem;
+      font-weight: 600;
+    }
+    
+    .hero-insight p {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.7;
+      margin: 0;
+      font-size: 1.125rem;
+    }
+    
+    .hero-insight strong {
+      color: #c084fc;
+      font-weight: 600;
+    }
+    
+    .cta-row {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 3rem;
+    }
+    
+    .hero .button-link {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+    }
+    
+    .hero .button-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(139, 92, 246, 0.4);
+      background: linear-gradient(135deg, #9333ea, #8b5cf6);
+    }
+    
+    .hero .button-link.secondary {
+      background: transparent;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      box-shadow: none;
+    }
+    
+    .hero .button-link.secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+    
+    /* Measurement visualization */
+    .measurement-visual {
+      margin: 3rem auto;
+      max-width: 600px;
+      height: 120px;
+      position: relative;
+    }
+    
+    .measurement-line {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #8b5cf6, transparent);
+      transform: translateY(-50%);
+    }
+    
+    .measurement-point {
+      position: absolute;
+      top: 50%;
+      width: 12px;
+      height: 12px;
+      background: #8b5cf6;
+      border: 3px solid #1a1f3a;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 20px rgba(139, 92, 246, 0.6);
+    }
+    
+    .measurement-label {
+      position: absolute;
+      top: -30px;
+      transform: translateX(-50%);
+      color: #c084fc;
+      font-size: 0.875rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
 
+    /* Original styles for other sections */
     .section { padding: 2.25rem 0; }
     .section h2 { margin: 0 0 .75rem; }
     .section .container { max-width: 1000px; }
@@ -22,7 +230,6 @@
     .pill { background:#0b1220; color:#e6f0ff; border:1px solid #64D2FF22; border-radius:10px; padding:1rem; }
     .pill h3 { margin:.15rem 0 .5rem; font-size:1.05rem; color:#eaf6ff; }
     .pill p { margin:0; color:#c6d8ff; }
-
     .callout { background:#f8f9fa; border-left:4px solid #0b6cff; padding:1.25rem 1.25rem; border-radius:4px; }
     .link-row { display:flex; gap:.75rem; flex-wrap:wrap; }
   </style>
@@ -33,13 +240,49 @@
 
   <main class="content-page">
     <section class="hero">
-      <div class="container text-center">
-        <h1>Measuring the Architecture of Reality</h1>
-        <p class="lead">If RS is real, calling it a theory undersells it. The right category is metrology. RS doesn’t speculate about how the world might be; it supplies the instrument that reads the world as it is. The task ahead isn’t to win arguments—it’s to perfect the measurement.</p>
+      <!-- Animated particles -->
+      <div class="measurement-particle" style="left: 10%; animation-delay: 0s;"></div>
+      <div class="measurement-particle" style="left: 30%; animation-delay: 3s;"></div>
+      <div class="measurement-particle" style="left: 50%; animation-delay: 6s;"></div>
+      <div class="measurement-particle" style="left: 70%; animation-delay: 9s;"></div>
+      <div class="measurement-particle" style="left: 90%; animation-delay: 12s;"></div>
+      
+      <div class="hero-content text-center">
+        <div class="hero-badge">Revolutionary Metrology</div>
+        
+        <h1>We're Not Theorizing.<br>We're Measuring.</h1>
+        
+        <p class="hero-subtitle">
+          For the first time in human history, we have an instrument that reads reality's source code directly—no parameters, no adjustments, just pure empirical measurement of the universe's operating system.
+        </p>
+        
+        <div class="hero-insight">
+          <h2>The Breakthrough</h2>
+          <p>
+            Imagine discovering that reality comes with its own <strong>built-in rulers and clocks</strong>—standards more fundamental than meters or seconds. That's what Recognition Science found: the universe runs on a <strong>fixed architecture</strong> we can measure, not theorize about. Every constant, every particle mass, every cosmic structure—they're all <strong>readouts from the same instrument</strong>.
+          </p>
+        </div>
+        
+        <div class="measurement-visual">
+          <div class="measurement-line"></div>
+          <div class="measurement-point" style="left: 20%;">
+            <span class="measurement-label">Particles</span>
+          </div>
+          <div class="measurement-point" style="left: 40%;">
+            <span class="measurement-label">Constants</span>
+          </div>
+          <div class="measurement-point" style="left: 60%;">
+            <span class="measurement-label">Cosmos</span>
+          </div>
+          <div class="measurement-point" style="left: 80%;">
+            <span class="measurement-label">Mind</span>
+          </div>
+        </div>
+        
         <div class="cta-row">
-          <a class="button-link" href="/predictions.html">Verified Predictions →</a>
-          <a class="button-link" href="/audit/">Live Audit →</a>
-          <a class="button-link" href="/start-here.html">Start Here →</a>
+          <a class="button-link" href="/predictions.html">See 10,000+ Verified Measurements →</a>
+          <a class="button-link secondary" href="/audit/">Watch Live Calibration →</a>
+          <a class="button-link secondary" href="/start-here.html">Understand the Instrument →</a>
         </div>
       </div>
     </section>
