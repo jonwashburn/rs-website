@@ -270,6 +270,24 @@
     } catch(e) {
       // ignore
     }
+    // Attempt to load CI status grid and show a compact badge
+    try {
+      const ciURL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/ci_status.json';
+      const ci = await loadJSON(ciURL);
+      const ok = (ci.summary && ci.summary.passed) ? 'ok' : 'warn';
+      const card = document.createElement('section');
+      card.className = 'component-card';
+      card.innerHTML = `
+        <h3>CI Status</h3>
+        <div class="muted">Last updated: ${ci.last_updated}</div>
+        <div style="margin-top:8px">Overall: <span class="${ok}">${ok==='ok'?'passed':'failed'}</span></div>
+        <div class="muted" style="margin-top:6px">Includes: gates, growth JSON, lensing JSON, and 2D/3D conservation checks.</div>`;
+      const archEl4 = document.getElementById('arch-card');
+      const mainEl4 = document.querySelector('main .content-page') || document.querySelector('main');
+      mainEl4.insertBefore(card, archEl4);
+    } catch(e) {
+      // ignore
+    }
     // Render mermaid
     mermaid.run({ nodes: [ document.getElementById('mmd') ] });
     // Render study guide markdown
