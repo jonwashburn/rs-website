@@ -237,7 +237,7 @@ python3 scripts/ci_status.py</code></pre>
     try {
       const lensingURL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/lensing_results.json';
       const lj = await loadJSON(lensingURL);
-      const rows = (lj.lensing||[]).map(r => `<tr><td>${r.k}</td><td>${(r.a||1).toFixed(3)}</td><td>${r.Sigma.toFixed(6)}</td></tr>`).join('');
+      const rows = (lj.lensing||[]).map(r => `<tr><td>${r.k}</td><td>${(r.a||1).toFixed(3)}</td><td>${(r.z!=null?Number(r.z).toFixed(3):'—')}</td><td>${r.Sigma.toFixed(6)}</td></tr>`).join('');
       const lensingCard = document.createElement('section');
       lensingCard.className = 'component-card';
       lensingCard.innerHTML = `
@@ -248,11 +248,11 @@ python3 scripts/ci_status.py</code></pre>
         </div>
         <div style="margin-top:8px">
           <table style="width:100%; border-collapse:collapse">
-            <thead><tr><th style="text-align:left">k (h/Mpc)</th><th style="text-align:right">a</th><th style="text-align:right">Sigma</th></tr></thead>
+            <thead><tr><th style="text-align:left">k (h/Mpc)</th><th style="text-align:right">a</th><th style="text-align:right">z</th><th style="text-align:right">Sigma</th></tr></thead>
             <tbody>${rows}</tbody>
           </table>
         </div>
-        ${(lj.grid&&lj.grid.length)?`<div style="margin-top:8px"><details><summary>Grid (Σ over a,k)</summary><table style=\"width:100%; border-collapse:collapse\"><thead><tr><th>a</th><th>k (h/Mpc)</th><th>Sigma</th></tr></thead><tbody>${lj.grid.map(g=>`<tr><td>${g.a.toFixed(2)}</td><td>${g.k}</td><td>${g.Sigma.toFixed(6)}</td></tr>`).join('')}</tbody></table></details></div>`:''}
+        ${(lj.grid&&lj.grid.length)?`<div style="margin-top:8px"><details><summary>Grid (Σ over a,k)</summary><table style=\"width:100%; border-collapse:collapse\"><thead><tr><th>a</th><th>z</th><th>k (h/Mpc)</th><th>Sigma</th></tr></thead><tbody>${lj.grid.map(g=>`<tr><td>${g.a.toFixed(2)}</td><td>${(g.z!=null?Number(g.z).toFixed(3):'—')}</td><td>${g.k}</td><td>${g.Sigma.toFixed(6)}</td></tr>`).join('')}</tbody></table></details></div>`:''}
         `;
       // Insert before Architecture card for visibility
       const mainEl = document.querySelector('main .content-page') || document.querySelector('main');
@@ -311,12 +311,21 @@ python3 scripts/ci_status.py</code></pre>
         <h3>CI Status</h3>
         <div class="muted">Last updated: ${ci.last_updated}</div>
         <div style="margin-top:8px">Overall: <span class="${ok}">${ok==='ok'?'passed':'failed'}</span></div>
-         <div class="muted" style="margin-top:6px">Includes: gates, growth JSON, lensing JSON, and 2D/3D conservation checks.</div>
+         <div class="muted" style="margin-top:6px">Includes: gates, growth JSON, lensing JSON, ILG limit checks, masses snapshot, and 2D/3D conservation checks.</div>
          <div class="muted" style="margin-top:6px">Ledger snapshot: ${ci.ledger_snapshot && ci.ledger_snapshot.present ? `<a href=\"https://raw.githubusercontent.com/jonwashburn/audit/main/docs/ledger_snapshot_v22c.txt\" target=\"_blank\" rel=\"noopener\">ledger_snapshot_v22c.txt</a>` : '—'}</div>
         <div class="muted" style="margin-top:6px">Uncertainties file: ${ci.uncertainties && ci.uncertainties.present ? (ci.uncertainties.nonzero ? 'present (non‑zero)' : 'present (zeros)') : 'missing'}</div>`;
       const archEl4 = document.getElementById('arch-card');
       const mainEl4 = document.querySelector('main .content-page') || document.querySelector('main');
       mainEl4.insertBefore(card, archEl4);
+      // Add explanations and failed checks, if present
+      if (ci.explanations) {
+        const exp = document.createElement('div');
+        exp.className = 'muted';
+        const failed = (ci.summary && ci.summary.failed_checks && ci.summary.failed_checks.length) ? ci.summary.failed_checks.join(', ') : 'none';
+        exp.style.marginTop = '8px';
+        exp.innerHTML = `<details><summary>What each check means</summary><ul style="margin:6px 0 0 18px">${Object.entries(ci.explanations).map(([k,v])=>`<li><strong>${k}</strong>: ${v}</li>`).join('')}</ul><div style="margin-top:6px"><strong>Failed checks:</strong> ${failed}</div></details>`;
+        card.appendChild(exp);
+      }
     } catch(e) {
       // ignore
     }
@@ -431,6 +440,26 @@ python3 scripts/ci_status.py</code></pre>
       const archEl5 = document.getElementById('arch-card');
       const mainEl5 = document.querySelector('main .content-page') || document.querySelector('main');
       mainEl5.insertBefore(card, archEl5);
+      // Also insert growth grid panel using demo_results.json
+      try {
+        const growthURL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/demo_results.json';
+        const gr = await loadJSON(growthURL);
+        const gcard = document.createElement('section');
+        gcard.className = 'component-card';
+        const grows = (gr.growth||[]).map(r => `<tr><td>${r.k}</td><td>${(r.D_LCDM!=null? r.D_LCDM.toFixed(6):'—')}</td><td>${(r.D_ILG!=null? r.D_ILG.toFixed(6):'—')}</td><td>${(r.ratio!=null? r.ratio.toFixed(6):'—')}</td></tr>`).join('');
+        gcard.innerHTML = `
+          <h3>Growth (live)</h3>
+          <div class="muted">Last updated: ${gr.last_updated}</div>
+          <div style="margin-top:8px">
+            <strong>ILG Gates</strong>: |B|=${(gr.ilg&&gr.ilg.blocked)||'—'}, S=${(gr.ilg&&gr.ilg.S)||'—'}; β=${(gr.ilg&&gr.ilg.beta)||'—'}
+          </div>
+          <div style="margin-top:8px">
+            <table style=\"width:100%; border-collapse:collapse\"><thead><tr><th>k (h/Mpc)</th><th>D_LCDM</th><th>D_ILG</th><th>ratio</th></tr></thead><tbody>${grows}</tbody></table>
+          </div>
+          ${(gr.grid&&gr.grid.length)?`<div style=\"margin-top:8px\"><details><summary>Grid (ratio D_ILG/D_LCDM over a,k)</summary><table style=\"width:100%; border-collapse:collapse\"><thead><tr><th>a</th><th>z</th><th>k (h/Mpc)</th><th>ratio</th></tr></thead><tbody>${gr.grid.map(g=>`<tr><td>${g.a.toFixed(2)}</td><td>${(g.z!=null?Number(g.z).toFixed(3):'—')}</td><td>${g.k}</td><td>${g.ratio.toFixed(6)}</td></tr>`).join('')}</tbody></table></details></div>`:''}
+        `;
+        mainEl5.insertBefore(gcard, archEl5);
+      } catch (e) { /* ignore */ }
     } catch(e) {
       // ignore
     }
