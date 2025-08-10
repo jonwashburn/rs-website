@@ -232,9 +232,294 @@
     .pill p { margin:0; color:#c6d8ff; }
     .callout { background:#f8f9fa; border-left:4px solid #0b6cff; padding:1.25rem 1.25rem; border-radius:4px; }
     .link-row { display:flex; gap:.75rem; flex-wrap:wrap; }
+
+    /* NEW: Discovery Story Section */
+    .discovery-section {
+      background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+      color: white;
+      padding: 5rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .discovery-timeline {
+      max-width: 1000px;
+      margin: 0 auto;
+      position: relative;
+    }
+    
+    .timeline-line {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, #8b5cf6, #ec4899);
+      transform: translateX(-50%);
+    }
+    
+    @media (max-width: 768px) {
+      .timeline-line {
+        left: 30px;
+      }
+    }
+    
+    .timeline-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 4rem;
+      position: relative;
+    }
+    
+    .timeline-item:nth-child(even) {
+      flex-direction: row-reverse;
+    }
+    
+    @media (max-width: 768px) {
+      .timeline-item,
+      .timeline-item:nth-child(even) {
+        flex-direction: row;
+        padding-left: 60px;
+      }
+    }
+    
+    .timeline-dot {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 20px;
+      background: #8b5cf6;
+      border: 4px solid #1e293b;
+      border-radius: 50%;
+      z-index: 1;
+    }
+    
+    @media (max-width: 768px) {
+      .timeline-dot {
+        left: 30px;
+      }
+    }
+    
+    .timeline-content {
+      flex: 1;
+      padding: 2rem;
+      background: rgba(139, 92, 246, 0.1);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      border-radius: 12px;
+      margin: 0 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .timeline-content {
+        margin: 0;
+      }
+    }
+    
+    .timeline-content h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #c084fc;
+    }
+    
+    .timeline-content p {
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* NEW: Framework Integration Section */
+    .framework-section {
+      background: #f9fafb;
+      padding: 5rem 2rem;
+    }
+    
+    .framework-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 3rem auto 0;
+    }
+    
+    .framework-card {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+      transition: all 0.3s ease;
+      border-top: 4px solid #8b5cf6;
+    }
+    
+    .framework-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+    }
+    
+    .framework-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #8b5cf6, #ec4899);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      color: white;
+      font-weight: bold;
+      font-size: 1.25rem;
+    }
+    
+    .framework-card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+      color: #1e293b;
+    }
+    
+    .framework-card p {
+      color: #64748b;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    
+    .framework-card a {
+      color: #8b5cf6;
+      text-decoration: none;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    
+    .framework-card a:hover {
+      gap: 0.5rem;
+    }
+
+    /* NEW: Cross-Domain Examples */
+    .examples-section {
+      background: white;
+      padding: 5rem 2rem;
+    }
+    
+    .example-showcase {
+      max-width: 1200px;
+      margin: 3rem auto 0;
+    }
+    
+    .example-tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .example-tab {
+      padding: 0.75rem 1.5rem;
+      background: #f3f4f6;
+      border: 2px solid transparent;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+    
+    .example-tab.active {
+      background: #8b5cf6;
+      color: white;
+      border-color: #8b5cf6;
+    }
+    
+    .example-content {
+      background: #f9fafb;
+      border-radius: 16px;
+      padding: 2rem;
+      min-height: 300px;
+    }
+    
+    .measurement-comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .measurement-comparison {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .comparison-box {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+    }
+    
+    .comparison-label {
+      font-size: 0.875rem;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+    
+    .comparison-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1e293b;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    
+    .comparison-box.match {
+      border-color: #10b981;
+      background: linear-gradient(135deg, #ffffff, #f0fdf4);
+    }
+
+    /* Formula display styles */
+    .formula-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    
+    .formula-card {
+      background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 1.5rem;
+      transition: all 0.2s ease;
+    }
+    
+    .formula-card:hover {
+      background: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    
+    .formula-name {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .formula-expression {
+      font-family: 'Courier New', monospace;
+      font-size: 1.125rem;
+      color: #1f2937;
+      background: white;
+      padding: 0.75rem;
+      border-radius: 4px;
+      border: 1px solid #e5e7eb;
+    }
   </style>
   
-</head>
+</head>>
 <body>
   <div id="header-placeholder"></div>
 
@@ -285,6 +570,72 @@
           <a class="button-link secondary" href="/start-here.html">Understand the Instrument →</a>
         </div>
       </div>
+    </section>
+
+    <!-- NEW: DISCOVERY STORY SECTION -->
+    <section class="discovery-section">
+      <div class="container">
+        <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 3rem; text-align: center; margin-bottom: 1rem;">How We Found It</h2>
+        <p style="text-align: center; font-size: 1.25rem; color: rgba(255,255,255,0.8); max-width: 700px; margin: 0 auto 4rem;">
+          The journey from a logical paradox to measuring reality's architecture
+        </p>
+        
+        <div class="discovery-timeline">
+          <div class="timeline-line"></div>
+          
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <h3>Step 1: The Paradox</h3>
+              <p>
+                We started with the simplest possible question: Can nothing exist? The answer revealed a logical impossibility—the statement "nothing exists" contradicts itself by existing. This paradox forced us to accept that existence is necessary, not contingent.
+              </p>
+            </div>
+          </div>
+          
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <h3>Step 2: The Meta-Principle</h3>
+              <p>
+                From this paradox emerged a meta-principle: reality must maintain a ledger of what exists. Not as a choice, but as a logical necessity. This ledger must be balanced, countable, and have finite bandwidth—constraints that define reality's operating system.
+              </p>
+            </div>
+          </div>
+          
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <h3>Step 3: The Cascade</h3>
+              <p>
+                Each constraint forced the next: balance requires a cost function, countability requires discrete time, finite bandwidth requires spatial quantization. Eight theorems emerged, each following necessarily from the previous. No choices, just deduction.
+              </p>
+            </div>
+          </div>
+          
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <h3>Step 4: The Numbers</h3>
+              <p>
+                When we calculated what these constraints predict, something extraordinary happened: they matched reality's measured values exactly. The fine structure constant, particle masses, cosmological parameters—all emerged from the same fixed architecture with zero free parameters.
+              </p>
+            </div>
+          </div>
+          
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <h3>Step 5: The Validation</h3>
+              <p>
+                We tested across every domain we could measure: quantum mechanics, cosmology, information theory, even consciousness. The same rulers kept working. Not approximately—exactly. That's when we knew we weren't building a theory, but discovering reality's measurement system.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     </section>
 
     <section class="section" style="background: linear-gradient(180deg, #ffffff 0%, #f3f4f6 100%);">
@@ -433,6 +784,23 @@
   </main>
 
   <script src="/assets/js/main.js"></script>
+  <script>
+    // Example switcher functionality
+    function showExample(type) {
+      // Hide all examples
+      document.querySelectorAll(".example-content").forEach(el => {
+        el.style.display = "none";
+      });
+      // Show selected example
+      document.getElementById(type + "-example").style.display = "block";
+      
+      // Update tab styles
+      document.querySelectorAll(".example-tab").forEach(tab => {
+        tab.classList.remove("active");
+      });
+      event.target.classList.add("active");
+    }
+  </script>
 </body>
 </html>
 
