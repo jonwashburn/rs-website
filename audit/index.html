@@ -309,7 +309,8 @@ python3 scripts/ci_status.py</code></pre>
         <h3>CI Status</h3>
         <div class="muted">Last updated: ${ci.last_updated}</div>
         <div style="margin-top:8px">Overall: <span class="${ok}">${ok==='ok'?'passed':'failed'}</span></div>
-        <div class="muted" style="margin-top:6px">Includes: gates, growth JSON, lensing JSON, and 2D/3D conservation checks.</div>`;
+        <div class="muted" style="margin-top:6px">Includes: gates, growth JSON, lensing JSON, and 2D/3D conservation checks.</div>
+        <div class="muted" style="margin-top:6px">Uncertainties file: ${ci.uncertainties && ci.uncertainties.present ? (ci.uncertainties.nonzero ? 'present (non‑zero)' : 'present (zeros)') : 'missing'}</div>`;
       const archEl4 = document.getElementById('arch-card');
       const mainEl4 = document.querySelector('main .content-page') || document.querySelector('main');
       mainEl4.insertBefore(card, archEl4);
@@ -358,8 +359,12 @@ python3 scripts/ci_status.py</code></pre>
             <strong>Neutrinos (${nu.version||'—'})</strong>
             <ul style="margin:6px 0 0 18px">
               <li>Ordering: ${nu.ordering||'—'}; rungs: ${(nu.rungs||[]).join(', ')||'—'}</li>
-              <li>m (meV): ${(nu.masses_meV||[]).map(x=>x.toFixed(4)).join(', ')||'—'}</li>
-              <li>Σmν: ${nu.sum_mnu_meV!=null?nu.sum_mnu_meV.toFixed(3):'—'} meV; mβ: ${nu.m_beta_meV!=null?nu.m_beta_meV.toFixed(3):'—'} meV</li>
+              <li>m (meV): ${(() => {
+                const mv = nu.masses_meV||[]; const mu = nu.masses_unc_meV||[];
+                if (!mv.length) return '—';
+                return mv.map((x,idx) => `${x.toFixed(4)}${(mu[idx]!=null && mu[idx]!==0)?` ± ${Number(mu[idx]).toPrecision(2)}`:''}`).join(', ');
+              })()}</li>
+              <li>Σmν: ${nu.sum_mnu_meV!=null?nu.sum_mnu_meV.toFixed(3):'—'}${(nu.sum_mnu_unc_meV!=null && nu.sum_mnu_unc_meV!==0)?` ± ${Number(nu.sum_mnu_unc_meV).toPrecision(2)}`:''} meV; mβ: ${nu.m_beta_meV!=null?nu.m_beta_meV.toFixed(3):'—'} meV</li>
               <li>Dirac: ${nu.dirac===true?'yes':(nu.dirac===false?'no':'—')}</li>
             </ul>
           </div>
@@ -374,9 +379,9 @@ python3 scripts/ci_status.py</code></pre>
             <strong>CKM |V| (${ms.ckm && ms.ckm.version || '—'})</strong>
             <table style="margin-top:6px; width:100%; border-collapse:collapse">
               <tbody>
-                ${(ms.ckm&&ms.ckm.V||[]).map(row => `<tr>${row.map((v,j)=>{
-                  const unc = (ms.ckm && ms.ckm.V_unc && ms.ckm.V_unc.length===3 && ms.ckm.V_unc[0].length===3) ? ms.ckm.V_unc[row.indexOf(v)]?.[j] : null;
-                  return `<td style=\"padding:2px 6px\">${v.toFixed(4)}${unc?` ± ${Number(unc).toPrecision(2)}`:''}</td>`;
+                ${(ms.ckm&&ms.ckm.V||[]).map((row,i) => `<tr>${row.map((v,j)=>{
+                  const unc = (ms.ckm && ms.ckm.V_unc && ms.ckm.V_unc[i] && ms.ckm.V_unc[i][j]!=null) ? ms.ckm.V_unc[i][j] : null;
+                  return `<td style=\"padding:2px 6px\">${v.toFixed(4)}${(unc&&unc!==0)?` ± ${Number(unc).toPrecision(2)}`:''}</td>`;
                 }).join('')}</tr>`).join('')}
               </tbody>
             </table>
