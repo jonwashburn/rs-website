@@ -249,6 +249,27 @@
     } catch (e) {
       // ignore if missing
     }
+    // Attempt to load 3D conservation JSON and add summary below the badge if available
+    try {
+      const cons3URL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/conservation_check_3d.json';
+      const c3 = await loadJSON(cons3URL);
+      const el = document.createElement('div');
+      const lap = c3.conservation_check_3d && c3.conservation_check_3d.constant_w_laplacian;
+      const varw = c3.conservation_check_3d && c3.conservation_check_3d.varying_w_divergence;
+      el.className = 'component-card';
+      el.innerHTML = `
+        <h3>Conservation (3D toy)</h3>
+        <div class="muted">Last updated: ${c3.last_updated}</div>
+        <div style="margin-top:8px">Laplacian ΔΦ=6: <span class="${lap&&lap.passed?'ok':'warn'}">${lap&&lap.passed?'passed':'failed'}</span></div>
+        <div class="muted" style="margin-top:6px">max |ΔΦ−6| = ${(lap&&lap.max_abs_err)||'—'}</div>
+        <div style="margin-top:8px">Divergence theorem: <span class="${varw&&varw.passed?'ok':'warn'}">${varw&&varw.passed?'passed':'failed'}</span></div>
+        <div class="muted" style="margin-top:6px">|sum-div − flux| = ${(varw&&varw.abs_residual)||'—'}</div>`;
+      const archEl3 = document.getElementById('arch-card');
+      const mainEl3 = document.querySelector('main .content-page') || document.querySelector('main');
+      mainEl3.insertBefore(el, archEl3);
+    } catch(e) {
+      // ignore
+    }
     // Render mermaid
     mermaid.run({ nodes: [ document.getElementById('mmd') ] });
     // Render study guide markdown
