@@ -74,7 +74,9 @@ document.addEventListener("DOMContentLoaded", function() {
     function fetchAndInject(url, placeholderId) {
         const placeholder = document.getElementById(placeholderId);
         if (placeholder) {
-            fetch(url)
+            // Bust caches aggressively to avoid stale includes
+            const cacheBustedUrl = `${url}${url.includes('?') ? '&' : '?'}v=${Date.now()}`;
+            fetch(cacheBustedUrl, { cache: 'no-store' })
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok ' + response.statusText);
@@ -107,17 +109,21 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    // Determine the base path based on the current location
-    let basePath = '';
-    const path = window.location.pathname;
-    
-    // Check if we're in a subdirectory
-    if (path.includes('/audit/') || path.includes('/science/') || path.includes('/us/') || path.includes('/questions/') || path.includes('/astrology/') || path.includes('/encyclopedia/')) {
-        basePath = '../';
-    } else if (path.includes('/science/papers/')) {
-        basePath = '../../';
+    // Robust base path detection (works for any depth)
+    function getBasePath() {
+        const pathname = window.location.pathname;
+        if (pathname === '/' || pathname === '' || pathname === '/index.html') {
+            return '';
+        }
+        const segments = pathname.split('/').filter(Boolean);
+        const lastSegment = segments[segments.length - 1] || '';
+        const isFile = lastSegment.includes('.');
+        const depth = isFile ? segments.length - 1 : segments.length;
+        if (depth <= 0) return '';
+        return '../'.repeat(depth);
     }
-    
+
+    const basePath = getBasePath();
     fetchAndInject(basePath + 'includes/header.html', 'header-placeholder');
     fetchAndInject(basePath + 'includes/footer.html', 'footer-placeholder');
 });
