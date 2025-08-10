@@ -406,39 +406,63 @@
     
     /* Video Container */
     .video-container {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 20000;
+      position: relative;
+      z-index: 10;
       background: #000;
       border: 3px solid var(--amber);
-      padding: 5px;
-      box-shadow: 0 0 50px rgba(255,176,0,0.8);
+      padding: 8px;
+      box-shadow: 0 0 20px rgba(255,176,0,0.4);
       display: none;
+      margin: 16px auto;
+      width: min(100%, 960px);
+      border-radius: 4px;
     }
-    
     .video-container.active {
       display: block;
     }
-    
+    .video-frame {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,176,0,0.3);
+    }
+    .video-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
     .video-close {
       position: absolute;
-      top: -30px;
-      right: -30px;
+      top: 8px;
+      right: 8px;
       background: var(--amber);
       color: #000;
       border: none;
-      padding: 5px 10px;
+      padding: 6px 10px;
       cursor: pointer;
       font-family: 'Share Tech Mono', monospace;
       font-weight: bold;
       border-radius: 2px;
+      line-height: 1;
     }
-    
     .video-close:hover {
       background: var(--green);
       box-shadow: 0 0 10px var(--green);
+    }
+    @media (max-width: 600px) {
+      .video-container {
+        width: 100%;
+        padding: 6px;
+        border-width: 2px;
+      }
+      .video-close {
+        padding: 8px 12px;
+        top: 6px;
+        right: 6px;
+      }
     }
     
     /* Show/hide retro overlay based on mode */
@@ -507,13 +531,15 @@
   </div>
   
   <!-- Video Container for Easter Egg -->
-  <div class="video-container" id="video-container">
-    <button class="video-close" onclick="closeVideo()">X CLOSE</button>
-    <iframe id="youtube-video" width="640" height="360" 
-            src="" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen></iframe>
+  <div class="video-container" id="video-container" aria-hidden="true">
+    <button class="video-close" onclick="closeVideo()" aria-label="Close video">CLOSE ✕</button>
+    <div class="video-frame">
+      <iframe id="youtube-video"
+              src=""
+              title="Real Genius"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen></iframe>
+    </div>
   </div>
 
   <!-- Retro Content Header -->
@@ -825,16 +851,23 @@ python3 scripts/ci_status.py</code></pre>
     const container = document.getElementById('video-container');
     const iframe = document.getElementById('youtube-video');
     // Add autoplay=1 to URL to start playing immediately
-    iframe.src = 'https://www.youtube.com/embed/0ds0wYpc1eM?autoplay=1';
+    iframe.src = 'https://www.youtube.com/embed/0ds0wYpc1eM?autoplay=1&rel=0&modestbranding=1';
     container.classList.add('active');
+    container.setAttribute('aria-hidden', 'false');
+    // Scroll into view on open (helps mobile)
+    setTimeout(() => {
+      container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
   }
   
   // Close video function
   function closeVideo() {
     const container = document.getElementById('video-container');
     const iframe = document.getElementById('youtube-video');
-    iframe.src = ''; // Stop the video
+    // Stop and clear to release audio/video on mobile
+    iframe.src = '';
     container.classList.remove('active');
+    container.setAttribute('aria-hidden', 'true');
   }
   
   // Initialize the easter egg on page load
