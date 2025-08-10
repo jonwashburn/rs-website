@@ -178,11 +178,18 @@ python3 scripts/ci_status.py</code></pre>
       <li><code>${p.born_rule}</code></li>
     `;
     const ilg = status.ilg;
+    const Srat = (ilg && ilg.S_rational) ? ilg.S_rational : '489/512';
+    const Sdec = (ilg && ilg.S_decimal) ? Number(ilg.S_decimal) : (489/512);
+    const Tbreath = 1024;
+    const Ngates = 9;
+    const betaGates = (Tbreath * Ngates) / (Sdec || 1);
     document.getElementById('ilg').innerHTML = `
-      <div>kernel: <code>${ilg.kernel}</code></div>
-      <div>S: <code>${ilg.S_rational}</code> (${ilg.S_decimal})</div>
-      <div>a0: <code>${ilg.a0_formula}</code></div>
-      <div class="muted">${ilg.status}</div>
+      <div><code>S=${Srat}</code>, <code>β=(T·N)/S=${betaGates.toFixed(3)}</code>, <span class="muted">a0 from κ via c²/λ_rec · S/(T·N)</span></div>
+      <details style="margin-top:8px"><summary>Details</summary>
+        <div style="margin-top:6px">kernel: <code>${ilg.kernel}</code></div>
+        <div style="margin-top:6px">a0: <code>${ilg.a0_formula}</code></div>
+        <div class="muted" style="margin-top:6px">${ilg.status}</div>
+      </details>
     `;
     const lnal = status.lnal;
     document.getElementById('lnal').innerHTML = `
@@ -232,7 +239,7 @@ python3 scripts/ci_status.py</code></pre>
             <tbody>${rows}</tbody>
           </table>
         </div>
-        ${(lj.grid&&lj.grid.length)?`<div style=\"margin-top:8px\"><details><summary>Grid (Σ over a,k)</summary><table style=\"width:100%; border-collapse:collapse\"><thead><tr><th>a</th><th>z</th><th>k (h/Mpc)</th><th>Sigma</th></tr></thead><tbody>${lj.grid.map(g=>`<tr><td>${g.a.toFixed(2)}</td><td>${(g.z!=null?Number(g.z).toFixed(3):'—')}</td><td>${g.k}</td><td>${g.Sigma.toFixed(6)}</td></tr>`).join('')}</tbody></table></details></div>`:''}
+        ${(lj.grid&&lj.grid.length)?`<div style=\"margin-top:8px\"><details><summary>Grid (Σ over a,k)</summary><div class=\"muted\" style=\"margin:6px 0\"><a href=\"https://raw.githubusercontent.com/jonwashburn/audit/main/docs/lensing_results.json\" target=\"_blank\" rel=\"noopener\">lensing_results.json ↗</a></div><table style=\"width:100%; border-collapse:collapse\"><thead><tr><th>a</th><th>z</th><th>k (h/Mpc)</th><th>Sigma</th></tr></thead><tbody>${lj.grid.map(g=>`<tr><td>${g.a.toFixed(2)}</td><td>${(g.z!=null?Number(g.z).toFixed(3):'—')}</td><td>${g.k}</td><td>${g.Sigma.toFixed(6)}</td></tr>`).join('')}</tbody></table></details></div>`:''}
       `;
       document.getElementById('cosmo-grid').appendChild(lensingCard);
     } catch (e) {
@@ -327,7 +334,7 @@ python3 scripts/ci_status.py</code></pre>
     } catch(e) {
       // ignore
     }
-    // Attempt to load metrics and render a compact panel
+    // Attempt to load metrics and render a compact panel (move near top after Status/Pillars)
     try {
       const metricsURL = 'https://raw.githubusercontent.com/jonwashburn/audit/main/docs/metrics.json';
       const mx = await loadJSON(metricsURL);
@@ -350,9 +357,8 @@ python3 scripts/ci_status.py</code></pre>
           <div><strong>Lensing</strong><div class="muted" style="margin-top:4px">max |Σ−1|: ${(mx.lensing&&mx.lensing.max_abs_sigma_dev!=null)?mx.lensing.max_abs_sigma_dev.toFixed(3):'—'}</div>
           <div class="muted">mean |Σ−1|: ${(mx.lensing&&mx.lensing.mean_abs_sigma_dev!=null)?mx.lensing.mean_abs_sigma_dev.toFixed(3):'—'}</div></div>
         </div>`;
-      const archElM = document.getElementById('arch-card');
-      const mainElM = document.querySelector('main .content-page') || document.querySelector('main');
-      mainElM.insertBefore(card, archElM);
+      const statusEl = document.getElementById('status');
+      statusEl.parentNode.insertBefore(card, statusEl.nextSibling);
     } catch(e) {
       // ignore
     }
@@ -457,7 +463,7 @@ python3 scripts/ci_status.py</code></pre>
           <div style="margin-top:8px">
             <table style=\"width:100%; border-collapse:collapse\"><thead><tr><th>k (h/Mpc)</th><th>D_LCDM</th><th>D_ILG</th><th>ratio</th></tr></thead><tbody>${grows}</tbody></table>
           </div>
-          ${(gr.grid&&gr.grid.length)?`<div style=\"margin-top:8px\"><details><summary>Grid (ratio D_ILG/D_LCDM over a,k)</summary><table style=\"width:100%; border-collapse:collapse\"><thead><tr><th>a</th><th>z</th><th>k (h/Mpc)</th><th>ratio</th></tr></thead><tbody>${gr.grid.map(g=>`<tr><td>${g.a.toFixed(2)}</td><td>${(g.z!=null?Number(g.z).toFixed(3):'—')}</td><td>${g.k}</td><td>${g.ratio.toFixed(6)}</td></tr>`).join('')}</tbody></table></details></div>`:''}
+          ${(gr.grid&&gr.grid.length)?`<div style=\"margin-top:8px\"><details><summary>Grid (ratio D_ILG/D_LCDM over a,k)</summary><div class=\"muted\" style=\"margin:6px 0\"><a href=\"https://raw.githubusercontent.com/jonwashburn/audit/main/docs/demo_results.json\" target=\"_blank\" rel=\"noopener\">demo_results.json ↗</a></div><table style=\"width:100%; border-collapse:collapse\"><thead><tr><th>a</th><th>z</th><th>k (h/Mpc)</th><th>ratio</th></tr></thead><tbody>${gr.grid.map(g=>`<tr><td>${g.a.toFixed(2)}</td><td>${(g.z!=null?Number(g.z).toFixed(3):'—')}</td><td>${g.k}</td><td>${g.ratio.toFixed(6)}</td></tr>`).join('')}</tbody></table></details></div>`:''}
         `;
         // Ensure Cosmology group exists (created by lensing block); if not, create it
         let cosmoGroup2 = document.getElementById('cosmo-group');
