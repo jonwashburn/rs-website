@@ -27,9 +27,9 @@
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
     .mono { font-family: 'JetBrains Mono', monospace; color: #111827; }
     code, .formula { font-family: 'JetBrains Mono', monospace; background: #f3f4f6; padding: 0.15rem 0.35rem; border-radius: 6px; color: #111827; }
-    .callout { background: #ffffff; border: 2px solid #111827; border-radius: 10px; padding: 1rem 1.25rem; box-shadow: 6px 6px 0 #11182710; }
+    .callout { background: transparent; border: 0; border-radius: 0; padding: 0; }
     .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
-    .card { background: #ffffff; border: 2px solid #111827; border-radius: 10px; padding: 1rem 1.25rem; box-shadow: 6px 6px 0 #11182715; }
+    .card { background: transparent; border: 0; border-radius: 0; padding: 0.4rem 0; box-shadow: none; }
     .label { font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: #6b7280; }
     .value { font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #b45309; }
     .small { font-size: 0.95rem; color: #374151; }
@@ -62,37 +62,17 @@
     /* Clickable terms */
     .term { background: none; border: none; padding: 0; cursor: pointer; color: #111827; font: inherit; border-bottom: 2px dotted #111827; }
     .term:hover { background: #fff59d33; }
-
-    /* Right-side term panel */
-    .term-backdrop { position: fixed; inset: 0; background: rgba(17,24,39,0.35); backdrop-filter: blur(2px); opacity: 0; pointer-events: none; transition: opacity .2s ease; z-index: 49; }
-    .term-backdrop.open { opacity: 1; pointer-events: auto; }
-    .term-panel { position: fixed; right: 0; top: 0; height: 100vh; width: min(440px, 92vw); background: #ffffff; border-left: 2px solid #111827; box-shadow: -6px 0 0 #11182715; transform: translateX(100%); transition: transform .25s ease; display: flex; flex-direction: column; z-index: 50; }
-    .term-panel.open { transform: translateX(0); }
-    .term-panel-header { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 1rem; border-bottom: 2px solid #111827; }
-    .term-panel-title { font-family: 'Space Grotesk', sans-serif; font-weight: 800; color: #111827; font-size: 1.15rem; }
-    .term-close { background: #111827; color: #fff; border: 2px solid #111827; border-radius: 6px; padding: 0.25rem 0.5rem; cursor: pointer; }
-    .term-panel-body { padding: 1rem; overflow: auto; }
-    .term-kicker { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: #6b7280; }
-    .term-math { font-family: 'JetBrains Mono', monospace; background: #f3f4f6; padding: 0.35rem 0.45rem; border-radius: 6px; display: inline-block; color: #111827; margin: 0.15rem 0; }
-    .term-section { border-top: 1px dashed #e5e7eb; padding-top: 0.75rem; margin-top: 0.75rem; }
-    .term-links a { color: #111827; border: 2px solid #111827; padding: 0.25rem 0.5rem; border-radius: 6px; display: inline-block; text-decoration: none; margin-right: 0.5rem; }
+    .term-inline { display: block; margin: 0.25rem 0 0.5rem 0; color: #374151; }
+    .term-kicker { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: #6b7280; margin-right: 0.5rem; }
+    .term-math { font-family: 'JetBrains Mono', monospace; background: #f3f4f6; padding: 0.15rem 0.35rem; border-radius: 6px; display: inline-block; color: #111827; margin-right: 0.35rem; }
   </style>
 </head>
 <body>
   <div id="header-placeholder"></div>
 
   <main class="content-page">
-    <!-- Right-side term panel for deep dives -->
-    <div class="term-backdrop" id="termBackdrop"></div>
-    <aside class="term-panel" id="termPanel" aria-hidden="true">
-      <div class="term-panel-header">
-        <div class="term-panel-title" id="termTitle">Term</div>
-        <button class="term-close" id="termClose" aria-label="Close">Close</button>
-      </div>
-      <div class="term-panel-body" id="termBody">
-        <!-- Dynamic content injected via JS -->
-      </div>
-    </aside>
+    <!-- Inline term expansion container (no off-canvas, no bouncing) -->
+    <div id="termInlineContainer"></div>
     <section class="container" id="overview">
       <h1>Recognition Science: A Technical Overview</h1>
       <p class="lead">
@@ -628,7 +608,7 @@
 
   <script src="/assets/js/main.js"></script>
   <script>
-    // Simple term dictionary for deep dives
+    // Simple term dictionary for deep dives (inline, no navigation)
     const TERM_DB = {
       'E_coh': {
         title: 'Coherence Energy (E_coh)',
@@ -706,51 +686,35 @@
       }
     };
 
-    const panel = document.getElementById('termPanel');
-    const backdrop = document.getElementById('termBackdrop');
-    const titleEl = document.getElementById('termTitle');
-    const bodyEl = document.getElementById('termBody');
-    const closeBtn = document.getElementById('termClose');
+    const inlineContainer = document.getElementById('termInlineContainer');
 
-    function openTerm(key) {
+    function renderInlineTerm(key, anchorEl) {
       const term = TERM_DB[key];
       if (!term) return;
-      titleEl.textContent = term.title;
-      bodyEl.innerHTML = '';
-      const kicker = document.createElement('div');
-      kicker.className = 'term-kicker';
-      kicker.textContent = term.kicker;
-      bodyEl.appendChild(kicker);
+      // Remove any existing inline expansion right after the same anchor
+      const existing = anchorEl.parentElement.querySelector('.term-inline');
+      if (existing) existing.remove();
+
+      const wrap = document.createElement('div');
+      wrap.className = 'term-inline';
+      const title = document.createElement('div');
+      title.innerHTML = `<span class="term-kicker">${term.kicker}</span> <strong>${term.title}</strong>`;
+      wrap.appendChild(title);
       if (term.math && term.math.length) {
+        const mathRow = document.createElement('div');
         term.math.forEach(m => {
-          const mEl = document.createElement('div');
+          const mEl = document.createElement('span');
           mEl.className = 'term-math';
           mEl.textContent = m;
-          bodyEl.appendChild(mEl);
+          mathRow.appendChild(mEl);
         });
+        wrap.appendChild(mathRow);
       }
       const p = document.createElement('p');
       p.textContent = term.body.replace(/\s+/g, ' ').trim();
-      bodyEl.appendChild(p);
-      if (term.links && term.links.length) {
-        const linksDiv = document.createElement('div');
-        linksDiv.className = 'term-section term-links';
-        term.links.forEach(l => {
-          const a = document.createElement('a');
-          a.href = l.href; a.textContent = l.text;
-          linksDiv.appendChild(a);
-        });
-        bodyEl.appendChild(linksDiv);
-      }
-      panel.classList.add('open');
-      backdrop.classList.add('open');
-      panel.setAttribute('aria-hidden', 'false');
-    }
-
-    function closeTerm() {
-      panel.classList.remove('open');
-      backdrop.classList.remove('open');
-      panel.setAttribute('aria-hidden', 'true');
+      wrap.appendChild(p);
+      // Insert directly after the anchor sentence
+      anchorEl.insertAdjacentElement('afterend', wrap);
     }
 
     document.addEventListener('click', (e) => {
@@ -758,12 +722,9 @@
       if (t) {
         e.preventDefault();
         const key = t.getAttribute('data-term');
-        openTerm(key);
+        renderInlineTerm(key, t);
       }
     });
-    closeBtn.addEventListener('click', closeTerm);
-    backdrop.addEventListener('click', closeTerm);
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeTerm(); });
   </script>
 </body>
 </html>
