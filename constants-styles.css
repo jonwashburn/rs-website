@@ -612,8 +612,14 @@
 
 .constant-details-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .constant-details-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
 }
 
 .detail-section {
@@ -633,11 +639,51 @@
 }
 
 .derivation-box {
-  background: rgba(139, 92, 246, 0.1);
-  padding: 1rem;
-  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(59, 130, 246, 0.15) 100%);
+  padding: 1.5rem;
+  border-radius: 12px;
   font-family: 'JetBrains Mono', monospace;
-  border: 1px solid rgba(139, 92, 246, 0.3);
+  border: 2px solid rgba(139, 92, 246, 0.4);
+  text-align: center;
+  font-size: 1.1rem;
+  color: #1a1a2e;
+  font-weight: 600;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.1);
+  transition: all 0.3s ease;
+}
+
+.derivation-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.2);
+  border-color: rgba(139, 92, 246, 0.6);
+}
+
+/* Make derivation section a square box on desktop */
+@media (min-width: 768px) {
+  .detail-section.derivation-section {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: white;
+    border: 2px solid rgba(139, 92, 246, 0.2);
+  }
+  
+  .detail-section.derivation-section h4 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .detail-section.derivation-section .derivation-box {
+    border: none;
+    box-shadow: none;
+    padding: 0.75rem;
+    background: transparent;
+    font-size: 1rem;
+  }
 }
 
 @keyframes fadeIn {
