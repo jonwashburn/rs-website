@@ -20,16 +20,16 @@
     h3 { font-size: clamp(1.25rem, 2vw, 1.5rem); font-weight: 700; margin: 2rem 0 0.5rem; }
     p { color: #374151; line-height: 1.75; }
     .muted { color: #6b7280; }
-    .hr { height: 1px; background: linear-gradient(90deg, transparent, rgba(0,0,0,0.12), transparent); margin: 2.5rem 0; }
+    .hr { height: 2px; background: #111827; opacity: 0.08; margin: 2.5rem 0; }
     .toc { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem; margin: 1rem 0 2rem; }
-    .toc a { display: block; padding: 0.75rem 1rem; border: 1px solid rgba(0,0,0,0.08); border-radius: 10px; color: #1f2937; text-decoration: none; background: #ffffff; }
-    .toc a:hover { border-color: rgba(0,0,0,0.2); background: #f9fafb; }
+    .toc a { display: block; padding: 0.75rem 1rem; border: 2px solid #111827; border-radius: 8px; color: #111827; text-decoration: none; background: #ffffff; box-shadow: 4px 4px 0 #11182722; transition: transform .15s ease, box-shadow .15s ease; }
+    .toc a:hover { transform: translate(-1px, -1px); box-shadow: 6px 6px 0 #11182733; }
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
     .mono { font-family: 'JetBrains Mono', monospace; color: #111827; }
     code, .formula { font-family: 'JetBrains Mono', monospace; background: #f3f4f6; padding: 0.15rem 0.35rem; border-radius: 6px; color: #111827; }
-    .callout { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 14px; padding: 1rem 1.25rem; }
+    .callout { background: #ffffff; border: 2px solid #111827; border-radius: 10px; padding: 1rem 1.25rem; box-shadow: 6px 6px 0 #11182710; }
     .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
-    .card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1rem 1.25rem; }
+    .card { background: #ffffff; border: 2px solid #111827; border-radius: 10px; padding: 1rem 1.25rem; box-shadow: 6px 6px 0 #11182715; }
     .label { font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: #6b7280; }
     .value { font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #b45309; }
     .small { font-size: 0.95rem; color: #374151; }
@@ -58,12 +58,41 @@
     .expander-card details { margin: 0; }
     .expander-card summary { list-style: none; cursor: pointer; display: flex; align-items: baseline; gap: 0.75rem; }
     .expander-card summary::-webkit-details-marker { display: none; }
+
+    /* Clickable terms */
+    .term { background: none; border: none; padding: 0; cursor: pointer; color: #111827; font: inherit; border-bottom: 2px dotted #111827; }
+    .term:hover { background: #fff59d33; }
+
+    /* Right-side term panel */
+    .term-backdrop { position: fixed; inset: 0; background: rgba(17,24,39,0.35); backdrop-filter: blur(2px); opacity: 0; pointer-events: none; transition: opacity .2s ease; z-index: 49; }
+    .term-backdrop.open { opacity: 1; pointer-events: auto; }
+    .term-panel { position: fixed; right: 0; top: 0; height: 100vh; width: min(440px, 92vw); background: #ffffff; border-left: 2px solid #111827; box-shadow: -6px 0 0 #11182715; transform: translateX(100%); transition: transform .25s ease; display: flex; flex-direction: column; z-index: 50; }
+    .term-panel.open { transform: translateX(0); }
+    .term-panel-header { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 1rem; border-bottom: 2px solid #111827; }
+    .term-panel-title { font-family: 'Space Grotesk', sans-serif; font-weight: 800; color: #111827; font-size: 1.15rem; }
+    .term-close { background: #111827; color: #fff; border: 2px solid #111827; border-radius: 6px; padding: 0.25rem 0.5rem; cursor: pointer; }
+    .term-panel-body { padding: 1rem; overflow: auto; }
+    .term-kicker { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: #6b7280; }
+    .term-math { font-family: 'JetBrains Mono', monospace; background: #f3f4f6; padding: 0.35rem 0.45rem; border-radius: 6px; display: inline-block; color: #111827; margin: 0.15rem 0; }
+    .term-section { border-top: 1px dashed #e5e7eb; padding-top: 0.75rem; margin-top: 0.75rem; }
+    .term-links a { color: #111827; border: 2px solid #111827; padding: 0.25rem 0.5rem; border-radius: 6px; display: inline-block; text-decoration: none; margin-right: 0.5rem; }
   </style>
 </head>
 <body>
   <div id="header-placeholder"></div>
 
   <main class="content-page">
+    <!-- Right-side term panel for deep dives -->
+    <div class="term-backdrop" id="termBackdrop"></div>
+    <aside class="term-panel" id="termPanel" aria-hidden="true">
+      <div class="term-panel-header">
+        <div class="term-panel-title" id="termTitle">Term</div>
+        <button class="term-close" id="termClose" aria-label="Close">Close</button>
+      </div>
+      <div class="term-panel-body" id="termBody">
+        <!-- Dynamic content injected via JS -->
+      </div>
+    </aside>
     <section class="container" id="overview">
       <h1>Recognition Science: A Technical Overview</h1>
       <p class="lead">
@@ -131,7 +160,7 @@
             </summary>
             <div class="micro">Dual‑balance fixed point of the exchange‑symmetric cost.</div>
             <div class="details-content">
-              <p class="small"><strong>Statement.</strong> Under <span class="formula">J(x)=½(x+1/x)</span> and composition, the unique non‑trivial self‑similar fixed point is <span class="mono">x=φ</span>.</p>
+              <p class="small"><strong>Statement.</strong> Under <span class="formula">J(x)=½(x+1/x)</span> and composition, the unique non‑trivial self‑similar fixed point is <button class="term" data-term="phi">x=φ</button>.</p>
               <ul class="small">
                 <li><strong>Proof sketch.</strong> Stationarity under <span class="mono">x→1/x</span> and multiplicative composition yields quadratic <span class="mono">x^2=x+1</span>.</li>
                 <li><strong>Consequence.</strong> Scaling exponents are quantized in φ‑steps with small quantized corrections.</li>
@@ -202,7 +231,7 @@
             </summary>
             <div class="micro">Masses come from runged recognition depth with sector multiplicity.</div>
             <div class="details-content">
-              <p class="small"><strong>Statement.</strong> <span class="formula">m = B · E_coh · φ^{r+f}</span> with integer rung <span class="mono">r</span>, sector <span class="mono">B</span>, and small correction <span class="mono">f</span>.</p>
+              <p class="small"><strong>Statement.</strong> <span class="formula">m = B · E_coh · φ^{r+f}</span> with integer rung <button class="term" data-term="rung">r</button>, sector <button class="term" data-term="B">B</button>, and small correction <button class="term" data-term="f">f</button>.</p>
               <ul class="small">
                 <li><strong>Consequence.</strong> No free mass parameters; spectrum is computable.</li>
               </ul>
@@ -401,9 +430,9 @@
         all dimensional outputs are determined.
       </p>
       <p>
-        Classical constants then follow as ledger invariants expressed in SI units. Examples: the fine‑structure constant emerges from
+        Classical constants then follow as ledger invariants expressed in SI units. Examples: the <button class="term" data-term="alpha">fine‑structure constant</button> emerges from
         recognition geometry with a small curvature correction; the MOND scale follows from the cosmic tick bandwidth; and mass scales
-        reduce to powers of <span class="mono">φ</span> multiplied by sector factors and <span class="mono">E_coh</span>.
+        reduce to powers of <button class="term" data-term="phi">φ</button> multiplied by sector factors and <button class="term" data-term="E_coh">E_coh</button>.
       </p>
 
       <!-- Expandable anchor derivations/examples -->
@@ -417,7 +446,7 @@
             </summary>
             <div class="micro">Geometric ledger count with curvature correction.</div>
             <div class="details-content">
-              <p class="small">Sketch: <span class="formula">α⁻¹ = (4π × 11) − ln(φ) + δκ</span>. Here <span class="mono">4π×11</span> is the sphere/ledger seed, <span class="mono">ln(φ)</span> is the gap term, and <span class="mono">δκ</span> is a small voxel‑curvature correction.</p>
+              <p class="small">Sketch: <span class="formula">α⁻¹ = (4π × 11) − ln(φ) + δκ</span>. Here <span class="mono">4π×11</span> is the sphere/ledger seed, <button class="term" data-term="lnphi">ln(φ)</button> is the gap term, and <button class="term" data-term="delta_kappa">δκ</button> is a small voxel‑curvature correction.</p>
               <ul class="small">
                 <li><strong>Computation.</strong> Evaluate each term from ledger geometry; no fitted parameters.</li>
                 <li><strong>Check.</strong> Returns <span class="mono">137.035999</span> to 10⁻⁹ precision.</li>
@@ -435,7 +464,7 @@
             </summary>
             <div class="micro">Stable interference pattern in the ledger.</div>
             <div class="details-content">
-              <p class="small">Sketch: <span class="formula">Ω_dm = sin(π/12) + δ</span>, where <span class="mono">δ</span> is a small ledger correction from quantum fuzziness.</p>
+              <p class="small">Sketch: <span class="formula">Ω_dm = sin(π/12) + δ</span>, where <button class="term" data-term="delta">δ</button> is a small ledger correction from quantum fuzziness.</p>
               <ul class="small">
                 <li><strong>Check.</strong> Center of observed error bars <span class="mono">0.265±0.007</span>.</li>
               </ul>
@@ -452,7 +481,7 @@
             </summary>
             <div class="micro">Local/CMB tension from ledger time lag.</div>
             <div class="details-content">
-              <p class="small">Sketch: <span class="formula">H₀(local) = H₀(CMB) / (1 − 0.0469)</span>. A <span class="mono">4.69%</span> lag arises from the 45‑Gap’s incomputability delay.</p>
+              <p class="small">Sketch: <span class="formula">H₀(local) = H₀(CMB) / (1 − 0.0469)</span>. A <button class="term" data-term="lag">4.69%</button> lag arises from the <button class="term" data-term="45gap">45‑Gap</button>’s incomputability delay.</p>
               <ul class="small">
                 <li><strong>Result.</strong> Resolves the 5σ tension within a parameter‑free correction.</li>
               </ul>
@@ -598,6 +627,144 @@
   <div id="footer-placeholder"></div>
 
   <script src="/assets/js/main.js"></script>
+  <script>
+    // Simple term dictionary for deep dives
+    const TERM_DB = {
+      'E_coh': {
+        title: 'Coherence Energy (E_coh)',
+        kicker: 'Foundational Constant',
+        body: `Minimal energy per recognition update.
+               Derivation: E_coh = ħ/τ_rec = (ħ c)/λ_rec.
+               Role: base scale in mass spectrum m = B·E_coh·φ^{r+f}.`,
+        math: ['E_coh = ħ / τ_rec', 'E_coh = (ħ c) / λ_rec'],
+        links: [{ href: '#constants', text: 'Constants' }, { href: '#formulas', text: 'Mass Ladder' }]
+      },
+      'phi': {
+        title: 'Golden Ratio (φ)',
+        kicker: 'Scaling Fixed Point',
+        body: `Unique self‑similar fixed point of dual‑balance cost J(x)=½(x+1/x).
+               Quantizes scaling exponents and underlies spectrum structure.`,
+        math: ['x^2 = x + 1', 'x = φ ≈ 1.618...'],
+        links: [{ href: '#logic', text: 'Golden‑Ratio Theorem' }]
+      },
+      'alpha': {
+        title: 'Fine‑Structure Constant (α)',
+        kicker: 'Derived Constant',
+        body: `Geometric ledger count with small curvature correction.
+               α⁻¹ = (4π·11) − ln(φ) + δκ.`,
+        math: ['α⁻¹ = (4π × 11) − ln(φ) + δκ'],
+        links: [{ href: '#anchor', text: 'Anchor Examples' }]
+      },
+      'B': {
+        title: 'Sector Factor (B_i)',
+        kicker: 'Combinatorial Multiplicity',
+        body: `Discrete multiplicity from path topology/representation; enters linearly in mass law.`,
+        math: ['B_i ∈ {1,2,3,4,6,8,9,12}'],
+        links: [{ href: '#constants', text: 'Sector Factors' }]
+      },
+      'rung': {
+        title: 'Recognition Rung (r)',
+        kicker: 'Exponent Index',
+        body: `Integer depth in the recognition ladder determining φ‑exponent in the mass spectrum.`,
+        math: ['m ∝ φ^{r}'],
+        links: [{ href: '#formulas', text: 'Mass Ladder' }]
+      },
+      'f': {
+        title: 'Small Correction (f)',
+        kicker: 'Gap/Curvature',
+        body: `Tiny, signed offset sourced by δ_gap and κ; explains minute deviations.`,
+        math: ['m ∝ φ^{r+f}'],
+        links: [{ href: '#constants', text: 'Ledger Gap' }]
+      },
+      'lnphi': {
+        title: 'ln(φ)',
+        kicker: 'Gap Term',
+        body: `Appears as the ledger gap contribution in α derivation.`,
+        math: ['ln(φ)'],
+        links: [{ href: '#anchor', text: 'α Derivation' }]
+      },
+      'delta_kappa': {
+        title: 'δκ',
+        kicker: 'Curvature Correction',
+        body: `Voxel curvature correction when mapping discrete geometry to continuum.`,
+        math: ['δκ'],
+        links: [{ href: '#formulas', text: 'Ledger Curvature' }]
+      },
+      'delta': {
+        title: 'δ (ledger correction)',
+        kicker: 'Quantum Fuzziness',
+        body: `Small adjustment to stable interference pattern in Ω_dm.`,
+        math: ['Ω_dm = sin(π/12) + δ'],
+        links: [{ href: '#anchor', text: 'Ω_dm Derivation' }]
+      },
+      '45gap': {
+        title: '45‑Gap',
+        kicker: 'Incomputability',
+        body: `Discrete universal gap creating a 4.69% timing lag relevant to H₀ and tiny exponent shifts.`,
+        math: ['lag ≈ 4.69%'],
+        links: [{ href: '#logic', text: '45‑Gap Theorem' }, { href: '#anchor', text: 'H₀ Tension' }]
+      }
+    };
+
+    const panel = document.getElementById('termPanel');
+    const backdrop = document.getElementById('termBackdrop');
+    const titleEl = document.getElementById('termTitle');
+    const bodyEl = document.getElementById('termBody');
+    const closeBtn = document.getElementById('termClose');
+
+    function openTerm(key) {
+      const term = TERM_DB[key];
+      if (!term) return;
+      titleEl.textContent = term.title;
+      bodyEl.innerHTML = '';
+      const kicker = document.createElement('div');
+      kicker.className = 'term-kicker';
+      kicker.textContent = term.kicker;
+      bodyEl.appendChild(kicker);
+      if (term.math && term.math.length) {
+        term.math.forEach(m => {
+          const mEl = document.createElement('div');
+          mEl.className = 'term-math';
+          mEl.textContent = m;
+          bodyEl.appendChild(mEl);
+        });
+      }
+      const p = document.createElement('p');
+      p.textContent = term.body.replace(/\s+/g, ' ').trim();
+      bodyEl.appendChild(p);
+      if (term.links && term.links.length) {
+        const linksDiv = document.createElement('div');
+        linksDiv.className = 'term-section term-links';
+        term.links.forEach(l => {
+          const a = document.createElement('a');
+          a.href = l.href; a.textContent = l.text;
+          linksDiv.appendChild(a);
+        });
+        bodyEl.appendChild(linksDiv);
+      }
+      panel.classList.add('open');
+      backdrop.classList.add('open');
+      panel.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeTerm() {
+      panel.classList.remove('open');
+      backdrop.classList.remove('open');
+      panel.setAttribute('aria-hidden', 'true');
+    }
+
+    document.addEventListener('click', (e) => {
+      const t = e.target.closest('.term');
+      if (t) {
+        e.preventDefault();
+        const key = t.getAttribute('data-term');
+        openTerm(key);
+      }
+    });
+    closeBtn.addEventListener('click', closeTerm);
+    backdrop.addEventListener('click', closeTerm);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeTerm(); });
+  </script>
 </body>
 </html>
 
