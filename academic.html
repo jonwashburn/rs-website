@@ -741,10 +741,72 @@
   </div>
 
   <script>
-    // Handle term clicks
+    // Deeper explanations for skeptical readers
+    const deeperExplanations = {
+      'parameter‑free': 'Unlike standard physics which has ~25 free parameters that must be measured, this framework derives all constants from logical structure. The key insight: when counting operations have a unique self-consistent form (like φ from dual-balance), numbers emerge deterministically. Think of it like discovering π from circle geometry—no measurement needed, just logical necessity.',
+      
+      'fixed point': 'In mathematics, a fixed point f(x)=x remains unchanged under its own operation. Here, physical law is the unique configuration that remains stable under the universe\'s own recognition updates. This explains why laws appear "fine-tuned"—they\'re the only self-consistent possibility.',
+      
+      'self‑recognizing ledger': 'A computational substrate that records its own state changes. Imagine a cosmic blockchain that validates itself: each update must be witnessed and recorded, creating an audit trail that prevents contradictions. The "self" aspect means the recording mechanism is part of what\'s being recorded—leading to recursive constraints that fix the laws.',
+      
+      'dual‑balance': 'Every distinction can be counted two ways (like inside/outside a boundary). The framework requires these dual counts to have equal computational cost. This seemingly simple constraint turns out to be incredibly restrictive—it forces φ scaling, 3+1 dimensions, and quantized masses.',
+      
+      'Meta‑Principle': 'The starting axiom is genuinely tautological: "absolute nothingness cannot exist" (because even defining it requires something). From this logical necessity, we get forced existence of a minimal recording structure. The formal proof uses type theory to show this is contradiction-free.',
+      
+      'golden‑ratio': 'φ emerges as the unique ratio that remains invariant under the dual-balance operation J(x)=½(x+1/x). Mathematically: minimizing J under composition gives x²=x+1, whose positive root is φ=1.618... This isn\'t numerology—it\'s the forced solution to a well-defined optimization problem.',
+      
+      '3+1 spacetime': 'Why 3 spatial dimensions? The framework shows that recognition exchange is only stable in D=3. For D<3, there\'s insufficient complexity for stable orbits. For D>3, recognition paths diverge exponentially. The +1 time dimension provides the update ordering.',
+      
+      '8‑beat recognition cycle': 'In 3D space with dual representation, you need 2³=8 ordered update passes for complete, contradiction-free evolution. This creates an 8-tick rhythm underlying all dynamics—visible in interference patterns and spectral structures.',
+      
+      'τ_rec': 'The recognition tick τ_rec=7.33 femtoseconds isn\'t arbitrary—it\'s the minimal time for stable two-way light exchange given the universe\'s bandwidth constraints. Shorter times would violate causality; longer times would be unstable.',
+      
+      'fine‑structure constant': 'α emerges from counting recognition channels in the minimal stable configuration. The formula α⁻¹=(4π×11)−ln(φ)+δκ has three parts: geometric seed (4π×11), gap correction (ln φ), and curvature (δκ). Each term is forced by ledger structure—no fitting.',
+      
+      'Ω_dm': 'Dark matter fraction 0.265 comes from the stable interference pattern when 12 recognition channels meet at minimal angle π/12. The formula Ω_dm=sin(π/12)+corrections gives exactly the observed value. The 12 channels aren\'t arbitrary—they\'re the minimal kissing number in 3D.',
+      
+      '45gap': 'At 45° phase angle, the ledger hits an incomputability boundary—forward and backward paths have equal weight, creating maximal uncertainty. This "45-Gap" (δ_gap=0.006115) appears throughout physics as a universal correction term.',
+      
+      'continuum physics': 'Smooth, continuous fields are emergent—like how fluid dynamics emerges from discrete molecules. At the deepest level, reality is discrete ledger updates. But at scales >> λ_rec, these appear continuous, giving us familiar physics.',
+      
+      'falsifiable': 'The framework makes ~20 precise predictions with no adjustable parameters. Any measurement outside the predicted ranges falsifies the entire structure. So far, all predictions match observations within measurement uncertainty.',
+      
+      'absolute nothingness': 'True void—not just empty space (which has quantum fluctuations), but complete non-existence. The framework proves this is logically impossible: to even define "nothing" requires a distinction between nothing and something, which itself is something. This forces minimal existence.',
+      
+      'universal ledger': 'A cosmic accounting system tracking all recognition events. Like a distributed database that records every distinction made in the universe. Conservation laws emerge because the ledger must balance—you can\'t create or destroy entries without record.',
+      
+      'dual representations': 'Every physical state can be described two complementary ways (position/momentum, time/frequency, inside/outside). The framework requires these dual descriptions to have equal complexity—a powerful constraint that determines allowed dynamics.',
+      
+      'cost‑invariant': 'The computational cost of forward vs backward evolution must be equal. This time-reversal-like symmetry, combined with the ledger structure, forces specific scaling laws and quantization conditions.',
+      
+      'φ‑scaled mass spectrum': 'Particle masses form a ladder where each rung differs by factors involving φ. Not arbitrary—this scaling emerges from the recursive structure of the recognition process. Like how Fibonacci numbers naturally involve φ.',
+      
+      'incomputability gap at 45°': 'At 45° phase, forward and backward predictions have equal weight, creating a fundamental uncertainty. This isn\'t measurement limitation but computational—the universe itself can\'t resolve the ambiguity. Creates necessary quantum uncertainty.',
+      
+      'curvature functional': 'Measures how the ledger\'s information density changes with scale. Like spacetime curvature in GR, but for information geometry. Small corrections from this curvature explain precision measurements like g-2.',
+      
+      'MOND scale': 'The acceleration a₀≈1.2×10⁻¹⁰ m/s² where galaxy rotation curves deviate from Newton. The framework derives this as bandwidth saturation: a₀=cH₀/2π. No new physics or dark matter needed—just recognition bandwidth limits.',
+      
+      'λ_rec': 'The recognition wavelength λ_rec=2.20 μm is the minimal spatial separation for stable recognition events. Shorter wavelengths would overlap and interfere destructively; longer would be inefficient. Sets the fundamental length scale.',
+      
+      'path‑exchange invariance': 'Swapping any two equivalent paths must preserve the total cost. This symmetry requirement is surprisingly restrictive—it forces the J(x) functional form and leads directly to φ scaling.',
+      
+      'w(r)': 'The bandwidth weight function that modifies gravity at large scales. Encodes how recognition channels saturate with distance. At galactic scales, this saturation produces MOND-like behavior without new fields or particles.',
+      
+      'bandwidth‑limited updates': 'The universe processes information at finite rate—the speed of light isn\'t just a speed limit but a bandwidth limit. This explains why causality exists and why physics is local.',
+      
+      'dimensionless': 'Pure numbers without units. The ledger counts distinctions (dimensionless), then maps to physics via recognition scales. This separation explains why physics has the constants it does—they\'re conversion factors, not fundamental.',
+      
+      'H₀': 'Hubble constant—the universe\'s expansion rate. The framework explains the H₀ tension (CMB vs local measurements differ by ~5σ) as a 4.69% time lag from the 45-Gap. Both measurements are correct; they measure different things.',
+      
+      'tautology': 'A statement true by logical necessity, like "A=A" or "nothing cannot exist". The Meta-Principle is tautological—it requires no empirical input, just logical consistency. From this, all physics follows deductively.'
+    };
+
+    // Handle term clicks with progressive disclosure
     document.addEventListener('click', function(e) {
       if (e.target.classList.contains('term')) {
         const def = e.target.getAttribute('data-def');
+        const termText = e.target.textContent;
         if (!def) return;
         
         // Find or create expansion div right after the paragraph
@@ -760,11 +822,46 @@
         }
         
         // Toggle expansion
-        if (expansion.classList.contains('active') && expansion.textContent.includes(def)) {
+        if (expansion.classList.contains('active') && expansion.innerHTML.includes(def)) {
           expansion.classList.remove('active');
+          expansion.innerHTML = '';
         } else {
-          expansion.textContent = def;
+          // Build content with "Need more clarity?" helper
+          let content = `<div>${def}</div>`;
+          
+          // Check if we have a deeper explanation
+          const deeperKey = termText.replace(/\s+/g, '‑');
+          if (deeperExplanations[deeperKey]) {
+            content += `
+              <div class="need-more" style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px dashed #ddd;">
+                <span style="color: #666; font-size: 0.9em;">Need more clarity?</span>
+                <a href="#" class="deeper-toggle" style="color: #003d82; margin-left: 0.5rem; font-weight: 600;">
+                  See deeper explanation →
+                </a>
+                <div class="deeper-content" style="display: none; margin-top: 0.75rem; padding: 0.75rem; background: #f0f4f8; border-left: 3px solid #003d82;">
+                  ${deeperExplanations[deeperKey]}
+                </div>
+              </div>`;
+          }
+          
+          expansion.innerHTML = content;
           expansion.classList.add('active');
+          
+          // Handle "deeper" toggle
+          const deeperToggle = expansion.querySelector('.deeper-toggle');
+          if (deeperToggle) {
+            deeperToggle.addEventListener('click', function(e) {
+              e.preventDefault();
+              const deeperContent = expansion.querySelector('.deeper-content');
+              if (deeperContent.style.display === 'none') {
+                deeperContent.style.display = 'block';
+                deeperToggle.textContent = 'Hide deeper explanation ↑';
+              } else {
+                deeperContent.style.display = 'none';
+                deeperToggle.textContent = 'See deeper explanation →';
+              }
+            });
+          }
         }
       }
     });
