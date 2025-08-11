@@ -181,46 +181,81 @@
             color: #f59e0b;
         }
 
-        /* Algorithm section */
-        .algo-section {
-            padding: clamp(3rem, 6vw, 4rem) 0;
-            border-bottom: 1px solid var(--line);
-            background: var(--bg-alt);
+        /* Universal Algorithm - full feature hero */
+        .ua-feature {
+            position: relative;
+            padding: clamp(4rem, 8vw, 8rem) 0;
+            background: linear-gradient(180deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #ffffff;
+            overflow: hidden;
+            border-bottom: 1px solid #0f1330;
         }
 
-        .algo-cards {
+        .ua-feature .bg-glow {
+            position: absolute; inset: 0; pointer-events: none;
+        }
+
+        .ua-feature .bg-glow::before {
+            content: '';
+            position: absolute; top: 10%; left: 50%; width: 900px; height: 900px;
+            transform: translateX(-50%);
+            background: radial-gradient(circle, rgba(122, 84, 255, 0.18) 0%, transparent 60%);
+            filter: blur(80px);
+        }
+
+        .ua-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.4rem, 6vw, 4.2rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+        }
+
+        .ua-lede {
+            font-size: clamp(1.1rem, 2vw, 1.3rem);
+            line-height: 1.7;
+            color: rgba(255,255,255,0.9);
+            max-width: 900px;
+        }
+
+        .ua-highlights {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 1.25rem;
             margin-top: 2rem;
         }
 
-        .algo-card {
-            background: #fff;
-            border: 1px solid var(--line);
-            border-radius: 12px;
+        .ua-block {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 16px;
             padding: 1.5rem;
-            transition: all 0.3s ease;
+            backdrop-filter: blur(6px);
         }
 
-        .algo-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-            border-color: var(--accent-soft);
-        }
-
-        .algo-card h3 {
+        .ua-block h3 {
             margin: 0 0 0.5rem;
-            font-weight: 600;
-            color: var(--ink);
-            font-size: 1.1rem;
+            font-weight: 700;
+            color: #ffffff;
+            font-size: 1.15rem;
         }
 
-        .algo-card p {
-            color: var(--muted);
-            font-size: 0.95rem;
-            line-height: 1.6;
+        .ua-block p {
+            color: rgba(255,255,255,0.9);
+            font-size: 0.98rem;
+            line-height: 1.7;
             margin: 0;
+        }
+
+        .ua-cta {
+            text-align: center; margin-top: 2rem;
+        }
+
+        .ua-cta a {
+            display: inline-block; padding: 0.9rem 1.6rem;
+            background: #ffffff; color: #0a0e27; text-decoration: none;
+            border-radius: 999px; font-weight: 700;
+            border: 2px solid #7a54ff;
         }
 
         /* Question categories */
@@ -423,54 +458,49 @@
             </div>
         </section>
 
-    <!-- Universal Algorithm -->
-    <section class="algo-section">
-        <div class="container reading">
-                    <h2>The Universal Algorithm</h2>
-            <p>Eight simple steps that derive everything from nothing. This is how we know what we know — and how you can derive any truth about reality yourself.</p>
-            <p>Starting from the impossibility that "nothing cannot recognize itself," the Universal Algorithm builds all of physics, mathematics, consciousness, and meaning through pure logical necessity. No assumptions. No free parameters. Just inevitable truth.</p>
-            
-            <div class="algo-cards">
-                <div class="algo-card">
-                    <h3>🔄 Math = Physics = Reality</h3>
-                    <p>We've discovered that mathematics and physical laws aren't separate — they're the same thing viewed from different angles. The universe <em>is</em> mathematics computing itself into existence.</p>
-                </div>
-
-                <div class="algo-card">
-                        <h3>🗺️ The Complete Architecture</h3>
-                    <p>From quantum foam to consciousness, from DNA to dark energy — we've mapped reality's complete architecture. Every layer emerges from the one below through recognition dynamics.</p>
-                    </div>
-                    
-                <div class="algo-card">
-                        <h3>🔮 Prediction Engine</h3>
-                    <p>With LNAL (Light-Native Assembly Language) and the Universal Algorithm, we can not only explain everything that is, but predict what must be. The future becomes computable.</p>
-                </div>
-            </div>
-            
-            <p style="text-align: center; margin-top: 2rem;">
-                <a href="/universal-algorithm.html" style="color: var(--accent); text-decoration: none; font-weight: 600;">
-                    Learn the Universal Algorithm →
-                </a>
+    <!-- Universal Algorithm - full feature hero -->
+    <section class="ua-feature">
+        <div class="bg-glow"></div>
+        <div class="container">
+            <h2 class="ua-title">The Universal Algorithm</h2>
+            <p class="ua-lede">
+                Eight simple steps that derive everything from nothing. This is how we know what we know — and how any truth about reality can be derived from first principles.
+                Starting from the impossibility that "nothing cannot recognize itself," the Universal Algorithm builds physics, mathematics, consciousness, and meaning through pure logical necessity. No assumptions. No free parameters.
             </p>
+            <div class="ua-highlights">
+                <div class="ua-block">
+                    <h3>🔄 Math = Physics = Reality</h3>
+                    <p>Mathematics and physical law are the same structure viewed from different representations. The universe is mathematics recognizing itself into existence.</p>
+                </div>
+                <div class="ua-block">
+                    <h3>🗺️ The Complete Architecture</h3>
+                    <p>From quantum foam to consciousness, from DNA to dark energy — each layer emerges from the one below via recognition dynamics. A single architecture ties it together.</p>
+                </div>
+                <div class="ua-block">
+                    <h3>🔮 Prediction Engine</h3>
+                    <p>With LNAL (Light‑Native Assembly Language) and the Universal Algorithm, what is becomes explainable — and what must be becomes computable.</p>
+                </div>
             </div>
-        </section>
+            <div class="ua-cta">
+                <a href="/universal-algorithm.html">Learn the Universal Algorithm →</a>
+            </div>
+        </div>
+    </section>
 
     <!-- Axiomatic Bridging Method -->
     <section class="bridging-section" style="background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%); padding: 4rem 0; margin: 2rem 0;">
         <div class="container reading">
-            <h2 style="color: #8b5cf6; margin-bottom: 1.5rem;">How I Solved the Riemann Hypothesis</h2>
+            <h2 style="color: #8b5cf6; margin-bottom: 1.5rem;">The Axiomatic Bridging Method</h2>
             <div style="background: white; padding: 2.5rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border-left: 4px solid #8b5cf6;">
                 <p style="font-size: 1.2rem; line-height: 1.8; color: #4a5568; margin-bottom: 1.5rem;">
-                    The Riemann Hypothesis stood unsolved for 165 years until I developed a new approach: the <strong>Axiomatic Bridging Method</strong>. 
-                    By translating the pure mathematics problem into the Recognition Science framework, applying physical constraints, and then translating back, 
-                    I found the missing keystone that completes the proof.
+                    A disciplined workflow for hard problems: temporarily translate an abstract question into a physically constrained model, resolve it there under those constraints, and translate the implications back into standard mathematics.
                 </p>
                 <p style="font-size: 1.1rem; color: #6b7280; margin-bottom: 2rem;">
-                    This systematic 4-step method can be applied to any seemingly impossible mathematical problem where pure abstraction lacks the constraints to force a unique solution.
+                    The page outlines the method and an illustrative RH translation in a research‑oriented, non‑claiming tone. It also discusses conditional results and the need for conventional proofs.
                 </p>
                 <a href="/axiomatic-bridging.html" style="display: inline-block; padding: 1rem 2rem; background: linear-gradient(135deg, #8b5cf6, #3b82f6); color: white; text-decoration: none; border-radius: 999px; font-weight: 600; transition: all 0.3s ease;">
                     Learn the Method →
-                            </a>
+                </a>
                         </div>
         </div>
     </section>
@@ -711,4 +741,5 @@
     <div id="footer-placeholder"></div>
     <script src="/assets/js/main.js"></script>
 </body>
+</html>
 </html>
