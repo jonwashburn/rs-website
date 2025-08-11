@@ -20,236 +20,153 @@
       background: #ffffff;
     }
 
-    /* Bold Hero Section */
-    .bold-hero {
-      min-height: 90vh;
-      background: #ffffff;
-      position: relative;
+    /* Hero Section - Like predictions.html */
+    .hero {
+      min-height: 80vh;
+      background: linear-gradient(135deg, #1e3a8a 0%, #312e81 50%, #1e3a8a 100%);
       display: flex;
-      flex-direction: column;
+      align-items: center;
       justify-content: center;
+      position: relative;
       overflow: hidden;
     }
 
-    .hero-container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 4rem 2rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    /* Hero Text */
-    .hero-text {
-      position: relative;
-      z-index: 2;
-    }
-
-    .hero-headline {
-      font-family: 'Space Grotesk', sans-serif;
-      margin: 0;
-      line-height: 0.9;
-    }
-
-    .hero-headline .line-1 {
-      display: block;
-      font-size: clamp(3rem, 7vw, 6rem);
-      font-weight: 900;
-      color: #000000;
-      letter-spacing: -0.02em;
-      margin-bottom: 0.2rem;
-    }
-
-    .hero-headline .line-2 {
-      display: block;
-      font-size: clamp(4rem, 9vw, 8rem);
-      font-weight: 900;
-      background: linear-gradient(135deg, #4169E1 0%, #1e3a8a 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      letter-spacing: -0.03em;
-    }
-
-    .hero-divider {
-      width: 120px;
-      height: 6px;
-      background: linear-gradient(90deg, #fbbf24, #f59e0b);
-      margin: 2rem 0;
-      border-radius: 3px;
-    }
-
-    .hero-tagline {
-      font-size: clamp(1.25rem, 2.5vw, 1.75rem);
-      color: #4b5563;
-      line-height: 1.5;
-      margin: 0;
-    }
-
-    .tagline-emphasis {
-      font-weight: 700;
-      color: #1f2937;
-      font-size: 1.1em;
-    }
-
-    /* Hero Visual */
-    .hero-visual {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .measurement-display {
-      background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-      border: 3px solid #1a1a2e;
-      border-radius: 24px;
-      padding: 3rem;
-      box-shadow: 
-        0 20px 60px rgba(0, 0, 0, 0.1),
-        0 0 0 1px rgba(0, 0, 0, 0.05);
-      position: relative;
-      z-index: 2;
-    }
-
-    .display-screen {
-      text-align: center;
-      padding: 2rem;
-      background: #0a0f1c;
-      border-radius: 12px;
-      min-width: 300px;
-    }
-
-    .display-label {
-      font-size: 0.75rem;
-      color: #4169E1;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      margin-bottom: 1rem;
-      font-weight: 600;
-    }
-
-    .display-value {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 3rem;
-      font-weight: 700;
-      color: #fbbf24;
-      text-shadow: 0 0 30px rgba(251, 191, 36, 0.5);
-      margin-bottom: 0.5rem;
-      transition: all 0.3s ease;
-    }
-
-    .display-units {
-      font-size: 1.25rem;
-      color: #8b5cf6;
-      font-weight: 600;
-    }
-
-    .display-indicators {
-      display: flex;
-      gap: 0.5rem;
-      justify-content: center;
-      margin-top: 1.5rem;
-    }
-
-    .indicator {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #e5e7eb;
-      transition: all 0.3s ease;
-    }
-
-    .indicator.active {
-      background: #10b981;
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
-    }
-
-    /* Orbiting Metrics */
-    .metrics-orbit {
+    /* Floating values background */
+    .floating-values {
       position: absolute;
-      width: 500px;
-      height: 500px;
+      width: 100%;
+      height: 100%;
       pointer-events: none;
     }
 
-    .metric-item {
+    .value-item {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(var(--angle)) translateX(200px) rotate(calc(-1 * var(--angle)));
-      background: white;
-      border: 2px solid #e5e7eb;
-      border-radius: 16px;
-      padding: 1rem 1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.08);
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      animation: float-diagonal 30s linear infinite;
+    }
+
+    @keyframes float-diagonal {
+      0% {
+        transform: translate(-100px, 100vh) rotate(-45deg);
+      }
+      100% {
+        transform: translate(calc(100vw + 100px), -100px) rotate(-45deg);
+      }
+    }
+
+    /* Grid overlay */
+    .hero-grid {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+
+    /* Hero content */
+    .hero-content {
+      position: relative;
+      z-index: 10;
       text-align: center;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      animation: float-metric 20s ease-in-out infinite;
-      animation-delay: calc(var(--angle) / 120 * 2s);
+      padding: 2rem;
+      max-width: 1000px;
     }
 
-    @keyframes float-metric {
-      0%, 100% { transform: translate(-50%, -50%) rotate(var(--angle)) translateX(200px) rotate(calc(-1 * var(--angle))) scale(1); }
-      50% { transform: translate(-50%, -50%) rotate(var(--angle)) translateX(220px) rotate(calc(-1 * var(--angle))) scale(1.05); }
-    }
-
-    .metric-value {
-      display: block;
-      font-size: 1.75rem;
-      font-weight: 800;
-      color: #1a1a2e;
-      margin-bottom: 0.25rem;
-    }
-
-    .metric-label {
-      display: block;
-      font-size: 0.75rem;
-      color: #6b7280;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-
-    /* Accent Bar */
-    .hero-accent-bar {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: #0a0f1c;
-      padding: 1rem 0;
-      overflow: hidden;
-    }
-
-    .accent-text {
-      color: #fbbf24;
+    .hero-badge {
+      display: inline-block;
+      padding: 0.5rem 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50px;
+      color: white;
       font-size: 0.875rem;
       font-weight: 600;
-      letter-spacing: 0.2em;
-      text-align: center;
-      animation: scroll-text 20s linear infinite;
-      white-space: nowrap;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(10px);
     }
 
-    @keyframes scroll-text {
-      0% { transform: translateX(100%); }
-      100% { transform: translateX(-100%); }
+    .hero-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 800;
+      color: white;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.25rem, 3vw, 1.75rem);
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 1rem;
+      line-height: 1.4;
+      font-weight: 300;
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 3rem;
+      line-height: 1.5;
+    }
+
+    /* Stats grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-5px);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .stat-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #fbbf24;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.7);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 600;
     }
 
     /* Responsive */
-    @media (max-width: 968px) {
-      .hero-container {
+    @media (max-width: 768px) {
+      .stats-grid {
         grid-template-columns: 1fr;
-        text-align: center;
+        gap: 1rem;
       }
-
-      .hero-divider {
-        margin: 2rem auto;
-      }
-
-      .metrics-orbit {
-        display: none;
+      
+      .value-item {
+        font-size: 1.25rem;
       }
     }
 
@@ -713,59 +630,43 @@
 <body>
   <div id="header-placeholder"></div>
 
-    <!-- Bold Hero Section -->
-  <section class="bold-hero">
-    <div class="hero-container">
-      <!-- Large Typography -->
-      <div class="hero-text">
-        <h1 class="hero-headline">
-          <span class="line-1">REVOLUTIONARY</span>
-          <span class="line-2">METROLOGY</span>
-        </h1>
-        <div class="hero-divider"></div>
-        <p class="hero-tagline">
-          We're not building a theory of reality.<br>
-          <span class="tagline-emphasis">We're measuring reality itself.</span>
-        </p>
-      </div>
-      
-      <!-- Visual Elements -->
-      <div class="hero-visual">
-        <div class="measurement-display">
-          <div class="display-screen">
-            <div class="display-label">FINE STRUCTURE CONSTANT</div>
-            <div class="display-value" id="heroValue">137.035999</div>
-            <div class="display-units">α⁻¹</div>
-          </div>
-          <div class="display-indicators">
-            <span class="indicator active"></span>
-            <span class="indicator"></span>
-            <span class="indicator"></span>
-            <span class="indicator"></span>
-          </div>
-    </div>
-        
-        <!-- Orbiting metrics -->
-        <div class="metrics-orbit">
-          <div class="metric-item" style="--angle: 0deg;">
-            <span class="metric-value">0</span>
-            <span class="metric-label">Parameters</span>
-          </div>
-          <div class="metric-item" style="--angle: 120deg;">
-            <span class="metric-value">∞</span>
-            <span class="metric-label">Precision</span>
-          </div>
-          <div class="metric-item" style="--angle: 240deg;">
-            <span class="metric-value">100%</span>
-            <span class="metric-label">Verified</span>
-          </div>
-        </div>
-      </div>
-    </div>
+      <!-- Hero Section -->
+  <section class="hero">
+    <!-- Floating values background -->
+    <div class="floating-values" id="floatingValues"></div>
     
-    <!-- Accent bar -->
-    <div class="hero-accent-bar">
-      <div class="accent-text">ZERO FREE PARAMETERS • INFINITE PRECISION • DIRECT MEASUREMENT</div>
+    <!-- Grid overlay -->
+    <div class="hero-grid"></div>
+    
+    <!-- Hero content -->
+    <div class="hero-content">
+      <div class="hero-badge">Zero Free Parameters</div>
+      
+      <h1 class="hero-title">Revolutionary Metrology</h1>
+      
+      <p class="hero-subtitle">
+        We're not building a theory of reality.
+      </p>
+      
+      <p class="hero-tagline">
+        We're measuring reality itself—reading the universe's own instruments<br>
+        with infinite precision and zero adjustment.
+      </p>
+      
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-number">0</span>
+          <span class="stat-label">Free Parameters</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">∞</span>
+          <span class="stat-label">Precision</span>
+      </div>
+        <div class="stat-card">
+          <span class="stat-number">100%</span>
+          <span class="stat-label">Verified</span>
+    </div>
+      </div>
     </div>
   </section>
 
@@ -1086,46 +987,55 @@
   <div id="footer-placeholder"></div>
 
   <script>
-    // Animate display value
-    const heroValue = document.getElementById('heroValue');
-    const measurements = [
-      { value: '137.035999', label: 'FINE STRUCTURE CONSTANT', unit: 'α⁻¹' },
-      { value: '0.51099895', label: 'ELECTRON MASS', unit: 'MeV' },
-      { value: '1.61803398', label: 'GOLDEN RATIO', unit: 'φ' },
-      { value: '938.27208', label: 'PROTON MASS', unit: 'MeV' },
-      { value: '0.00729735', label: 'FINE STRUCTURE', unit: 'α' },
-      { value: '2.71828182', label: 'EULER\'S NUMBER', unit: 'e' }
+    // Create floating values
+    const floatingContainer = document.getElementById('floatingValues');
+    const values = [
+      'α⁻¹ = 137.035999',
+      'φ = 1.618...',
+      'm_e = 0.511 MeV',
+      'Ω_dm = 0.2649',
+      'H₀ = 70.6',
+      'c = 299792458',
+      'ℏ = 1.054×10⁻³⁴',
+      'g-2 = 0.00116',
+      'κ = ∂²S/∂R²',
+      'J(x) = ½(x + 1/x)',
+      'N = 2^D = 8',
+      '45-Gap',
+      'E_coh = 0.090 eV',
+      'r_p = 0.8414 fm'
     ];
-    let currentMeasurement = 0;
     
-    if (heroValue) {
-      const displayLabel = document.querySelector('.display-label');
-      const displayUnits = document.querySelector('.display-units');
-      const indicators = document.querySelectorAll('.indicator');
+    function createFloatingValue() {
+      const div = document.createElement('div');
+      div.className = 'value-item';
+      div.textContent = values[Math.floor(Math.random() * values.length)];
       
-      setInterval(() => {
-        currentMeasurement = (currentMeasurement + 1) % measurements.length;
-        
-        // Fade out
-        heroValue.style.opacity = '0';
-        heroValue.style.transform = 'scale(0.95)';
-        
-        setTimeout(() => {
-          // Update values
-          heroValue.textContent = measurements[currentMeasurement].value;
-          displayLabel.textContent = measurements[currentMeasurement].label;
-          displayUnits.textContent = measurements[currentMeasurement].unit;
-          
-          // Update indicators
-          indicators.forEach((ind, i) => {
-            ind.classList.toggle('active', i === currentMeasurement % indicators.length);
-          });
-          
-          // Fade in
-          heroValue.style.opacity = '1';
-          heroValue.style.transform = 'scale(1)';
-        }, 300);
-      }, 4000);
+      // Random starting position along the left edge
+      const startY = Math.random() * window.innerHeight;
+      div.style.left = '-100px';
+      div.style.top = startY + 'px';
+      
+      // Random animation duration
+      div.style.animationDuration = (25 + Math.random() * 15) + 's';
+      div.style.animationDelay = Math.random() * 5 + 's';
+      
+      floatingContainer.appendChild(div);
+      
+      // Remove element after animation completes
+      setTimeout(() => {
+        div.remove();
+      }, 40000);
+    }
+    
+    // Create initial floating values
+    if (floatingContainer) {
+      for (let i = 0; i < 8; i++) {
+        setTimeout(() => createFloatingValue(), i * 3000);
+      }
+      
+      // Continue creating new values
+      setInterval(createFloatingValue, 5000);
     }
   </script>
 
