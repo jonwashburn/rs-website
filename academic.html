@@ -10,7 +10,7 @@
     
     body {
       font-family: 'Inter', sans-serif;
-      font-size: 18px;
+      font-size: 16px; /* Reduced from 18px */
       line-height: 1.7;
       color: #000;
       background: #fff;
@@ -21,7 +21,7 @@
 
     /* Typography hierarchy */
     h1 {
-      font-size: 3rem;
+      font-size: 2.5rem; /* Reduced from 3rem */
       font-weight: 900;
       line-height: 1;
       margin: 3rem 0 1rem;
@@ -29,7 +29,7 @@
     }
 
     h2 {
-      font-size: 2rem;
+      font-size: 1.75rem; /* Reduced from 2rem */
       font-weight: 800;
       margin: 4rem 0 1rem;
       padding-top: 2rem;
@@ -37,7 +37,7 @@
     }
 
     h3 {
-      font-size: 1.25rem;
+      font-size: 1.15rem; /* Reduced from 1.25rem */
       font-weight: 600;
       margin: 2rem 0 0.5rem;
       text-transform: uppercase;
@@ -50,32 +50,10 @@
 
     /* Lead paragraph */
     .lead {
-      font-size: 1.25rem;
+      font-size: 1.1rem; /* Reduced from 1.25rem */
       line-height: 1.6;
       margin: 2rem 0 3rem;
       font-weight: 400;
-    }
-
-    /* Navigation */
-    nav {
-      margin: 3rem 0;
-      padding: 2rem 0;
-      border-top: 2px solid #000;
-      border-bottom: 2px solid #000;
-    }
-
-    nav a {
-      display: block;
-      color: #000;
-      text-decoration: none;
-      padding: 0.5rem 0;
-      border-bottom: 1px solid #ccc;
-      font-weight: 600;
-    }
-
-    nav a:hover {
-      padding-left: 1rem;
-      background: #f0f0f0;
     }
 
     /* Code/formulas */
@@ -84,6 +62,40 @@
       background: #f5f5f5;
       padding: 0.2rem 0.4rem;
       font-size: 0.9em;
+    }
+
+    /* Clickable terms */
+    .term {
+      border-bottom: 1px dotted #666;
+      cursor: pointer;
+      position: relative;
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      padding: 0;
+      font: inherit;
+      color: inherit;
+    }
+
+    .term:hover {
+      background: #fffbf0;
+      border-bottom-color: #000;
+    }
+
+    /* Inline expansions */
+    .expansion {
+      display: none;
+      background: #f9f9f9;
+      border-left: 3px solid #000;
+      padding: 0.75rem 1rem;
+      margin: 0.5rem 0 1rem 0;
+      font-size: 0.95em;
+      line-height: 1.6;
+    }
+
+    .expansion.active {
+      display: block;
     }
 
     /* Details/Summary for expandable content */
@@ -165,11 +177,11 @@
     /* Mobile */
     @media (max-width: 600px) {
       body {
-        font-size: 16px;
+        font-size: 15px;
         padding: 1rem;
       }
-      h1 { font-size: 2rem; }
-      h2 { font-size: 1.5rem; }
+      h1 { font-size: 1.75rem; }
+      h2 { font-size: 1.35rem; }
     }
   </style>
 </head>
@@ -178,38 +190,46 @@
   <h1>Recognition Science:<br>Technical Overview</h1>
   
   <p class="lead">
-    Recognition Science is a parameter‑free computational framework in which physical law is the unique fixed point of a
-    self‑recognizing ledger. The framework derives a minimal set of discrete structures and update rules under dual‑balance
-    invariance, from which continuum physics and its constants emerge as effective descriptions. All quantitative outputs are
-    consequences of one tautology, eight short theorems, and a small set of derived ledger constants; no parameters are
+    Recognition Science is a <button class="term" data-def="A framework that requires no adjustable parameters; all constants emerge from logical necessity">parameter‑free</button> computational framework in which physical law is the unique <button class="term" data-def="A solution that remains unchanged under the system's own operations">fixed point</button> of a
+    <button class="term" data-def="A system that recognizes and records its own states, creating a feedback loop of observation">self‑recognizing ledger</button>. The framework derives a minimal set of discrete structures and update rules under <button class="term" data-def="Invariance requiring that forward and backward representations have equal computational cost">dual‑balance
+    invariance</button>, from which continuum physics and its constants emerge as effective descriptions. All quantitative outputs are
+    consequences of one <button class="term" data-def="A statement that is true by logical necessity, requiring no proof">tautology</button>, eight short theorems, and a small set of derived ledger constants; no parameters are
     fitted to data.
   </p>
-
-  <nav>
-    <a href="#logic">Logical Foundation: Meta‑Principle and Eight Theorems</a>
-    <a href="#constants">Foundational Ledger Constants</a>
-    <a href="#anchor">Anchor From Pattern Space to Physical Units</a>
-    <a href="#formulas">Core Formulas and How to Compute With Them</a>
-    <a href="#worldview">What Reality Is (in this Framework)</a>
-  </nav>
+  <div class="expansion" id="exp-parameter-free"></div>
+  <div class="expansion" id="exp-fixed-point"></div>
+  <div class="expansion" id="exp-self-recognizing"></div>
+  <div class="expansion" id="exp-dual-balance"></div>
+  <div class="expansion" id="exp-tautology"></div>
 
   <h2 id="logic">Logical Foundation: Meta‑Principle and Eight Theorems</h2>
   
   <p>
-    Meta‑Principle (tautology): absolute nothingness is logically impossible. The only consistent alternative is a
+    <button class="term" data-def="The foundational axiom: absolute nothingness cannot exist because even defining 'nothing' requires something">Meta‑Principle</button> (tautology): <button class="term" data-def="The state of complete non-existence, which is logically impossible as it cannot be consistently defined">absolute nothingness</button> is logically impossible. The only consistent alternative is a
     self‑recognizing process that excludes contradiction by continuously recording and reconciling distinctions. This necessity
-    forces the existence of a universal ledger—a count of recognition events—with dual representations (forward/backward,
-    inside/outside) that must remain cost‑invariant.
+    forces the existence of a <button class="term" data-def="A cosmic accounting system that tracks all recognition events and their relationships">universal ledger</button>—a count of recognition events—with <button class="term" data-def="Two complementary ways of representing the same information (e.g., position/momentum, time/frequency)">dual representations</button> (forward/backward,
+    inside/outside) that must remain <button class="term" data-def="The requirement that different representations have equal computational complexity">cost‑invariant</button>.
   </p>
+  <div class="expansion" id="exp-meta-principle"></div>
+  <div class="expansion" id="exp-absolute-nothingness"></div>
+  <div class="expansion" id="exp-universal-ledger"></div>
+  <div class="expansion" id="exp-dual-representations"></div>
+  <div class="expansion" id="exp-cost-invariant"></div>
   
   <p>
-    From the Meta‑Principle follow eight short theorems that fix the framework: (1) a Universal Ledger of counts; (2) golden‑ratio
-    scaling as the unique self‑similar fixed point of dual‑balance; (3) 3+1 spacetime as the only stable arena for causal
-    recognition; (4) an 8‑beat recognition cycle organizing update order; (5) light as recognition exchange across the ledger;
-    (6) a φ‑scaled mass spectrum from runged recognition depth; (7) an incomputability gap at 45° (the "45‑Gap") that enforces
-    limited forward predictability and yields dual balance of paths; and (8) a curvature functional on the ledger that enforces
+    From the Meta‑Principle follow eight short theorems that fix the framework: (1) a Universal Ledger of counts; (2) <button class="term" data-def="The ratio φ = 1.618... that appears as the unique self-similar solution to dual-balance equations">golden‑ratio
+    scaling</button> as the unique self‑similar fixed point of dual‑balance; (3) <button class="term" data-def="Three spatial dimensions plus one time dimension, the only stable configuration for recognition">3+1 spacetime</button> as the only stable arena for causal
+    recognition; (4) an <button class="term" data-def="The fundamental rhythm requiring 2³=8 ticks for a complete update cycle in 3D space">8‑beat recognition cycle</button> organizing update order; (5) light as recognition exchange across the ledger;
+    (6) a <button class="term" data-def="Mass values that scale by powers of the golden ratio φ">φ‑scaled mass spectrum</button> from runged recognition depth; (7) an <button class="term" data-def="A fundamental limit in computational predictability that creates necessary uncertainty">incomputability gap at 45°</button> (the "45‑Gap") that enforces
+    limited forward predictability and yields dual balance of paths; and (8) a <button class="term" data-def="A measure of how the ledger's state count changes with recognition radius">curvature functional</button> on the ledger that enforces
     objective constraints on allowable state changes. Each theorem is short, formal, and directly constructive.
   </p>
+  <div class="expansion" id="exp-golden-ratio"></div>
+  <div class="expansion" id="exp-3plus1"></div>
+  <div class="expansion" id="exp-8beat"></div>
+  <div class="expansion" id="exp-phi-scaled"></div>
+  <div class="expansion" id="exp-45gap"></div>
+  <div class="expansion" id="exp-curvature"></div>
 
   <h3>The Eight Theorems</h3>
 
@@ -248,16 +268,21 @@
   <details>
     <summary>Theorem 5: Light as Recognition — Exchange</summary>
     <p>Photonic exchange implements recognition across ledger voxels.</p>
-    <p><strong>Statement:</strong> The invariant signal that advances the ledger is the lightlike exchange; bandwidth limits set τ_rec, λ_rec.</p>
+    <p><strong>Statement:</strong> The invariant signal that advances the ledger is the lightlike exchange; bandwidth limits set <button class="term" data-def="τ_rec = 7.33 femtoseconds, the time for one recognition update">τ_rec</button>, <button class="term" data-def="λ_rec = 2.20 micrometers, the minimal spatial separation for stable recognition">λ_rec</button>.</p>
     <p><strong>Consequence:</strong> c is a conversion between ticks and length; no tuning.</p>
   </details>
+  <div class="expansion" id="exp-tau-rec"></div>
+  <div class="expansion" id="exp-lambda-rec"></div>
 
   <details>
     <summary>Theorem 6: φ‑Scaled Mass — Exponent ladder</summary>
     <p>Masses come from runged recognition depth with sector multiplicity.</p>
-    <p><strong>Statement:</strong> <code>m = B · E_coh · φ^(r+f)</code> with integer rung r, sector B, and small correction f.</p>
+    <p><strong>Statement:</strong> <code>m = B · E_coh · φ^(r+f)</code> with integer <button class="term" data-def="An integer index representing the depth level in the recognition hierarchy">rung r</button>, <button class="term" data-def="Discrete multiplicity factors from topological sectors: {1,2,3,4,6,8,9,12}">sector B</button>, and <button class="term" data-def="Small corrections from ledger gaps and curvature, typically ~0.001">small correction f</button>.</p>
     <p><strong>Consequence:</strong> No free mass parameters; spectrum is computable.</p>
   </details>
+  <div class="expansion" id="exp-rung"></div>
+  <div class="expansion" id="exp-sector"></div>
+  <div class="expansion" id="exp-correction"></div>
 
   <details>
     <summary>Theorem 7: 45‑Gap — δ_gap</summary>
@@ -279,12 +304,13 @@
   
   <p>
     The ledger yields a small set of non‑fitted constants that anchor quantitative predictions. They arise from counting
-    arguments, dual‑balance minima, and invariance under exchange. Numerically, they are fixed without tuning.
+    arguments, <button class="term" data-def="Points where the dual-balance cost function J(x)=½(x+1/x) reaches its minimum">dual‑balance minima</button>, and invariance under exchange. Numerically, they are fixed without tuning.
   </p>
+  <div class="expansion" id="exp-dual-balance-minima"></div>
 
   <div class="constant">
     <div class="constant-header">
-      <span class="constant-name">Coherence Energy (E_coh)</span>
+      <span class="constant-name">Coherence Energy (<button class="term" data-def="The fundamental energy scale of 0.090 eV that sets the mass of all particles">E_coh</button>)</span>
       <span class="constant-value">0.090 eV</span>
     </div>
     <p class="constant-desc">Minimal energy per recognition update.</p>
@@ -297,6 +323,7 @@
       </ul>
     </details>
   </div>
+  <div class="expansion" id="exp-e-coh"></div>
 
   <div class="constant">
     <div class="constant-header">
@@ -332,7 +359,7 @@
 
   <div class="constant">
     <div class="constant-header">
-      <span class="constant-name">Ledger Alphabet (A_L)</span>
+      <span class="constant-name">Ledger Alphabet (<button class="term" data-def="The set of allowed scaling values {1, φ, φ², ...} that the ledger can use">A_L</button>)</span>
       <span class="constant-value">{1, φ, …}</span>
     </div>
     <p class="constant-desc">Permitted self‑similar scaling digits.</p>
@@ -345,6 +372,7 @@
       </ul>
     </details>
   </div>
+  <div class="expansion" id="exp-ledger-alphabet"></div>
 
   <div class="constant">
     <div class="constant-header">
@@ -364,7 +392,7 @@
 
   <div class="constant">
     <div class="constant-header">
-      <span class="constant-name">Ledger Gap (δ_gap)</span>
+      <span class="constant-name">Ledger Gap (<button class="term" data-def="A small correction of 0.006115 arising from the 45-degree incomputability limit">δ_gap</button>)</span>
       <span class="constant-value">0.006115</span>
     </div>
     <p class="constant-desc">Quantized incomputability (the 45‑Gap) used for tiny corrections.</p>
@@ -377,21 +405,25 @@
       </ul>
     </details>
   </div>
+  <div class="expansion" id="exp-delta-gap"></div>
 
   <h2 id="anchor">Anchor From Pattern Space to Physical Units</h2>
   
   <p>
-    The ledger is intrinsically dimensionless. The bridge to SI units is provided by the coherence scale
+    The ledger is intrinsically <button class="term" data-def="Having no units; pure numbers that must be mapped to physical quantities">dimensionless</button>. The bridge to SI units is provided by the coherence scale
     E_coh together with the recognition tick τ_rec (equivalently λ_rec). Because E_coh = ħ / τ_rec and
     λ_rec = c τ_rec, the mapping uses only universal conversion factors ħ and c and introduces no free parameters. 
     Once E_coh is fixed by ledger logic, all dimensional outputs are determined.
   </p>
+  <div class="expansion" id="exp-dimensionless"></div>
   
   <p>
-    Classical constants then follow as ledger invariants expressed in SI units. Examples: the fine‑structure constant emerges from
-    recognition geometry with a small curvature correction; the MOND scale follows from the cosmic tick bandwidth; and mass scales
+    Classical constants then follow as ledger invariants expressed in SI units. Examples: the <button class="term" data-def="The coupling constant α ≈ 1/137 that determines electromagnetic interaction strength">fine‑structure constant</button> emerges from
+    recognition geometry with a small curvature correction; the <button class="term" data-def="The acceleration scale a₀ ≈ 1.2×10⁻¹⁰ m/s² where galaxy rotation curves flatten">MOND scale</button> follows from the cosmic tick bandwidth; and mass scales
     reduce to powers of φ multiplied by sector factors and E_coh.
   </p>
+  <div class="expansion" id="exp-fine-structure"></div>
+  <div class="expansion" id="exp-mond"></div>
 
   <h3>Derived Constants Examples</h3>
 
@@ -406,22 +438,24 @@
   </details>
 
   <details>
-    <summary>Dark‑Matter Fraction (Ω_dm) — 0.2649</summary>
+    <summary>Dark‑Matter Fraction (<button class="term" data-def="The fraction of the universe's energy in dark matter: Ω_dm ≈ 0.265">Ω_dm</button>) — 0.2649</summary>
     <p>Stable interference pattern in the ledger.</p>
     <p>Sketch: <code>Ω_dm = sin(π/12) + δ</code>, where δ is a small ledger correction from quantum fuzziness.</p>
     <ul>
       <li><strong>Check:</strong> Center of observed error bars 0.265±0.007.</li>
     </ul>
   </details>
+  <div class="expansion" id="exp-omega-dm"></div>
 
   <details>
-    <summary>Hubble Constant (H₀) — 70.6</summary>
+    <summary>Hubble Constant (<button class="term" data-def="The expansion rate of the universe: H₀ ≈ 70 km/s/Mpc">H₀</button>) — 70.6</summary>
     <p>Local/CMB tension from ledger time lag.</p>
     <p>Sketch: <code>H₀(local) = H₀(CMB) / (1 − 0.0469)</code>. A 4.69% lag arises from the 45‑Gap's incomputability delay.</p>
     <ul>
       <li><strong>Result:</strong> Resolves the 5σ tension within a parameter‑free correction.</li>
     </ul>
   </details>
+  <div class="expansion" id="exp-hubble"></div>
 
   <details>
     <summary>MOND Scale (a₀) — ≈ c H₀ / 2π</summary>
@@ -433,7 +467,7 @@
 
   <h3>1. Dual‑Balance Cost</h3>
   <p><code>J(x) = 1/2 (x + 1/x)</code></p>
-  <p>Enforces path‑exchange invariance. Stationary structure under composition forces self‑similar scaling by φ, with deviations appearing only via quantized ledger gaps.</p>
+  <p>Enforces <button class="term" data-def="Invariance under swapping forward/backward or inside/outside representations">path‑exchange invariance</button>. Stationary structure under composition forces self‑similar scaling by φ, with deviations appearing only via quantized ledger gaps.</p>
   <details>
     <summary>Details</summary>
     <ul>
@@ -442,6 +476,7 @@
       <li><strong>Relation:</strong> Log‑symmetric penalty; connects to convex duality and harmonic mean bounds.</li>
     </ul>
   </details>
+  <div class="expansion" id="exp-path-exchange"></div>
 
   <h3>2. Mass Spectrum</h3>
   <p><code>m = B · E_coh · φ^(r + f)</code></p>
@@ -479,7 +514,7 @@
 
   <h3>5. Information‑Weighted Gravity (ILG)</h3>
   <p><code>F(r) = - (G M m / r²) · w(r)</code></p>
-  <p>Where w(r) is a unitless bandwidth weight arising from ledger congestion. For weak fields w(r) → 1, recovering Newton; deviations encode finite recognition bandwidth at large scales.</p>
+  <p>Where <button class="term" data-def="A weight function that encodes how recognition bandwidth decreases at large scales">w(r)</button> is a unitless bandwidth weight arising from ledger congestion. For weak fields w(r) → 1, recovering Newton; deviations encode finite recognition bandwidth at large scales.</p>
   <details>
     <summary>Details</summary>
     <ul>
@@ -487,6 +522,7 @@
       <li><strong>Phenomenology:</strong> Produces a₀ ≈ cH₀/2π at galactic scales without tuning.</li>
     </ul>
   </details>
+  <div class="expansion" id="exp-weight-function"></div>
 
   <p><strong>Computation workflow:</strong> choose the process; identify r, B, and any applicable gap/curvature corrections; evaluate with E_coh; convert via the anchor relations. All steps are fixed—no tuning.</p>
 
@@ -494,22 +530,55 @@
   
   <p>
     Reality is the unique, self‑consistent fixed point of the recognition ledger. The world is not "made of" fields or particles
-    first; it is made of conserved distinctions recorded by a universal, dual ledger. Continuum physics arises as the large‑scale
-    limit of these discrete, bandwidth‑limited updates, with φ‑self‑similarity and 3+1 causal structure forced by
+    first; it is made of conserved distinctions recorded by a universal, dual ledger. <button class="term" data-def="The smooth, continuous physics we observe, which emerges from discrete ledger updates">Continuum physics</button> arises as the large‑scale
+    limit of these discrete, <button class="term" data-def="Updates limited by the finite speed of recognition exchange (speed of light)">bandwidth‑limited updates</button>, with φ‑self‑similarity and 3+1 causal structure forced by
     stability.
   </p>
+  <div class="expansion" id="exp-continuum"></div>
+  <div class="expansion" id="exp-bandwidth-limited"></div>
   
   <p>
     All constants and laws are outputs of this computation. Where classical models require knobs, the ledger supplies a reason.
     Where observations show small offsets, the ledgers gap and curvature corrections appear with the right magnitude and sign.
-    The result is a parameter‑free, falsifiable map from logic to measurement: change any premise and the agreement with nature
+    The result is a parameter‑free, <button class="term" data-def="Capable of being proven wrong by experiment; making specific testable predictions">falsifiable</button> map from logic to measurement: change any premise and the agreement with nature
     collapses.
   </p>
+  <div class="expansion" id="exp-falsifiable"></div>
 
   <hr>
   
   <p><a href="/">← Back to Recognition Science</a></p>
 
+  <script>
+    // Handle term clicks
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('term')) {
+        const def = e.target.getAttribute('data-def');
+        if (!def) return;
+        
+        // Find or create expansion div right after the paragraph
+        let expansion = e.target.parentElement.nextElementSibling;
+        while (expansion && !expansion.classList.contains('expansion')) {
+          expansion = expansion.nextElementSibling;
+        }
+        
+        if (!expansion) {
+          expansion = document.createElement('div');
+          expansion.className = 'expansion';
+          e.target.parentElement.insertAdjacentElement('afterend', expansion);
+        }
+        
+        // Toggle expansion
+        if (expansion.classList.contains('active') && expansion.textContent.includes(def)) {
+          expansion.classList.remove('active');
+        } else {
+          expansion.textContent = def;
+          expansion.classList.add('active');
+        }
+      }
+    });
+  </script>
+
 </body>
 </html>
-<!-- Deployment timestamp: 2025-08-11 12:47:00 -->
+<!-- Deployment timestamp: 2025-08-11 19:25:00 -->
