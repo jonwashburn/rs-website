@@ -157,6 +157,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     const basePath = getBasePath();
-    fetchAndInject(basePath + 'includes/header.html', 'header-placeholder');
-    fetchAndInject(basePath + 'includes/footer.html', 'footer-placeholder');
+    fetchAndInject(basePath + '_includes/header.html', 'header-placeholder');
+    fetchAndInject(basePath + '_includes/footer.html', 'footer-placeholder');
 });
