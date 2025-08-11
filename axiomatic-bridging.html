@@ -18,10 +18,13 @@
             padding: 0 1.25rem;
         }
 
-        /* Hero Section */
+        /* Hero Section - Over the Top Math Style */
         .bridging-hero {
-            min-height: 60vh;
-            background: linear-gradient(135deg, #1a1a2e 0%, #2a2a4e 100%);
+            min-height: 100vh;
+            background: 
+                radial-gradient(ellipse at top, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0f0f1f 100%);
             position: relative;
             display: flex;
             align-items: center;
@@ -30,47 +33,235 @@
             margin-bottom: 4rem;
         }
 
-        /* Animated bridge visualization */
-        .bridge-animation {
+        /* Floating equations in 3D space */
+        .math-universe {
             position: absolute;
             width: 100%;
             height: 100%;
-            opacity: 0.3;
+            perspective: 1000px;
+            pointer-events: none;
         }
 
-        .bridge-path {
+        .equation.floating {
             position: absolute;
-            width: 200%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #8b5cf6, #3b82f6, transparent);
-            animation: bridge-flow 8s linear infinite;
+            font-family: 'JetBrains Mono', monospace;
+            color: rgba(139, 92, 246, 0.3);
+            font-size: clamp(0.8rem, 2vw, 1.2rem);
+            animation: float3d var(--duration, 20s) ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+            transform-style: preserve-3d;
         }
 
-        .bridge-path:nth-child(1) { top: 30%; animation-delay: 0s; }
-        .bridge-path:nth-child(2) { top: 50%; animation-delay: 2s; }
-        .bridge-path:nth-child(3) { top: 70%; animation-delay: 4s; }
+        @keyframes float3d {
+            0%, 100% {
+                transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            50% {
+                transform: translate3d(calc(100vw * 0.8), calc(100vh * -0.3), 200px) rotateX(180deg) rotateY(360deg);
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.3;
+            }
+        }
 
-        @keyframes bridge-flow {
-            0% { transform: translateX(-50%); }
-            100% { transform: translateX(0%); }
+        .equation.floating:nth-child(1) { left: 5%; top: 10%; }
+        .equation.floating:nth-child(2) { right: 10%; top: 15%; }
+        .equation.floating:nth-child(3) { left: 15%; top: 30%; }
+        .equation.floating:nth-child(4) { right: 5%; top: 40%; }
+        .equation.floating:nth-child(5) { left: 10%; bottom: 30%; }
+        .equation.floating:nth-child(6) { right: 15%; bottom: 20%; }
+        .equation.floating:nth-child(7) { left: 20%; bottom: 15%; }
+        .equation.floating:nth-child(8) { right: 20%; bottom: 35%; }
+        .equation.floating:nth-child(9) { left: 8%; top: 50%; }
+        .equation.floating:nth-child(10) { right: 12%; top: 60%; }
+
+        /* SVG Bridge Visualization */
+        .bridge-viz {
+            position: absolute;
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.6;
+            z-index: 1;
+        }
+
+        .bridge-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .bridge-arc {
+            stroke-dasharray: 500;
+            stroke-dashoffset: 500;
+            animation: drawBridge 3s ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+        }
+
+        @keyframes drawBridge {
+            0%, 100% {
+                stroke-dashoffset: 500;
+                opacity: 0.3;
+            }
+            50% {
+                stroke-dashoffset: 0;
+                opacity: 1;
+            }
+        }
+
+        .math-side circle, .physics-side rect {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Matrix Rain Effect */
+        .matrix-rain {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: space-around;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .rain-column {
+            font-family: 'JetBrains Mono', monospace;
+            color: #10b981;
+            font-size: 1.2rem;
+            writing-mode: vertical-rl;
+            animation: matrixRain 10s linear infinite;
+            animation-delay: var(--delay, 0s);
+        }
+
+        @keyframes matrixRain {
+            0% {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.1;
+            }
+            90% {
+                opacity: 0.1;
+            }
+            100% {
+                transform: translateY(100%);
+                opacity: 0;
+            }
         }
 
         .hero-content {
             position: relative;
-            z-index: 1;
+            z-index: 2;
             text-align: center;
             padding: 2rem;
         }
 
-        .hero-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: clamp(2.5rem, 6vw, 4rem);
+        /* Glitch effect badge */
+        .hero-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff0080, #8b5cf6);
+            padding: 0.5rem 1.5rem;
+            border-radius: 4px;
+            color: white;
+            font-size: 0.9rem;
             font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 1rem;
-            letter-spacing: -0.02em;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.1em;
+            margin-bottom: 2rem;
+            position: relative;
+            animation: glowPulse 2s ease-in-out infinite;
         }
 
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.8), 0 0 60px rgba(139, 92, 246, 0.4); }
+        }
+
+        .glitch {
+            position: relative;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff0080, #8b5cf6);
+            padding: 0.5rem 1.5rem;
+            border-radius: 4px;
+        }
+
+        .glitch::before {
+            animation: glitch-1 0.5s infinite;
+            color: #00ffff;
+            z-index: -1;
+        }
+
+        .glitch::after {
+            animation: glitch-2 0.5s infinite;
+            color: #ff00ff;
+            z-index: -2;
+        }
+
+        @keyframes glitch-1 {
+            0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+            20% { clip-path: inset(20% 0 30% 0); transform: translate(-2px, 2px); }
+            40% { clip-path: inset(50% 0 20% 0); transform: translate(2px, -2px); }
+            60% { clip-path: inset(10% 0 60% 0); transform: translate(-1px, 1px); }
+            80% { clip-path: inset(80% 0 5% 0); transform: translate(1px, -1px); }
+        }
+
+        @keyframes glitch-2 {
+            0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+            20% { clip-path: inset(60% 0 10% 0); transform: translate(2px, 1px); }
+            40% { clip-path: inset(20% 0 40% 0); transform: translate(-2px, 2px); }
+            60% { clip-path: inset(30% 0 50% 0); transform: translate(1px, -2px); }
+            80% { clip-path: inset(10% 0 70% 0); transform: translate(-1px, -1px); }
+        }
+
+        /* Animated title */
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+
+        .title-word {
+            display: inline-block;
+            background: linear-gradient(90deg, #8b5cf6, #3b82f6, #10b981, #8b5cf6);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Typewriter subtitle */
         .hero-subtitle {
             font-family: 'Plus Jakarta Sans', sans-serif;
             font-size: clamp(1.1rem, 2.5vw, 1.5rem);
@@ -79,17 +270,66 @@
             max-width: 700px;
             margin: 0 auto 2rem;
             line-height: 1.6;
+            position: relative;
         }
 
-        .hero-badge {
+        .typewriter {
+            overflow: hidden;
+            white-space: normal;
             display: inline-block;
-            background: rgba(139, 92, 246, 0.2);
-            border: 1px solid rgba(139, 92, 246, 0.5);
-            padding: 0.75rem 1.5rem;
-            border-radius: 999px;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink {
+            from, to { border-right: 3px solid transparent; }
+            50% { border-right: 3px solid #8b5cf6; }
+        }
+
+        /* Hero equation */
+        .hero-equation {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
             color: white;
-            font-size: 1rem;
+        }
+
+        .equation-part {
+            padding: 1rem 2rem;
+            background: rgba(139, 92, 246, 0.1);
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
             backdrop-filter: blur(10px);
+            animation: equationGlow 3s ease-in-out infinite;
+        }
+
+        .equation-arrow {
+            color: #10b981;
+            font-size: 2rem;
+            animation: arrowPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes equationGlow {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+                transform: translateY(0);
+            }
+            50% { 
+                box-shadow: 0 0 40px rgba(139, 92, 246, 0.4);
+                transform: translateY(-5px);
+            }
+        }
+
+        @keyframes arrowPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
         }
 
         /* Content Sections */
@@ -391,6 +631,32 @@
 
         /* Responsive */
         @media (max-width: 768px) {
+            .bridging-hero {
+                min-height: 100vh;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-equation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .equation-part {
+                font-size: 1.2rem;
+                padding: 0.75rem 1.5rem;
+            }
+            
+            .bridge-viz {
+                display: none;
+            }
+            
+            .math-universe {
+                opacity: 0.05;
+            }
+            
             .method-card {
                 padding: 2rem 1.5rem;
             }
@@ -407,16 +673,92 @@
 
     <!-- Hero Section -->
     <section class="bridging-hero">
-        <div class="bridge-animation">
-            <div class="bridge-path"></div>
-            <div class="bridge-path"></div>
-            <div class="bridge-path"></div>
+        <!-- Mathematical equations floating in 3D space -->
+        <div class="math-universe">
+            <div class="equation floating" style="--delay: 0s; --duration: 20s;">ζ(s) = ∑<sub>n=1</sub><sup>∞</sup> n<sup>-s</sup></div>
+            <div class="equation floating" style="--delay: 2s; --duration: 18s;">∮<sub>C</sub> f(z)dz = 2πi·Res(f)</div>
+            <div class="equation floating" style="--delay: 4s; --duration: 22s;">∇²ψ + k²ψ = 0</div>
+            <div class="equation floating" style="--delay: 6s; --duration: 19s;">e<sup>iπ</sup> + 1 = 0</div>
+            <div class="equation floating" style="--delay: 8s; --duration: 21s;">∫<sub>-∞</sub><sup>∞</sup> e<sup>-x²</sup>dx = √π</div>
+            <div class="equation floating" style="--delay: 10s; --duration: 23s;">det(λI - A) = 0</div>
+            <div class="equation floating" style="--delay: 12s; --duration: 20s;">∂S/∂t + H = 0</div>
+            <div class="equation floating" style="--delay: 3s; --duration: 17s;">Tr(AB) = Tr(BA)</div>
+            <div class="equation floating" style="--delay: 5s; --duration: 24s;">∇ × E = -∂B/∂t</div>
+            <div class="equation floating" style="--delay: 7s; --duration: 18s;">φ = (1+√5)/2</div>
+        </div>
+
+        <!-- The Bridge Visualization -->
+        <div class="bridge-viz">
+            <svg class="bridge-svg" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid slice">
+                <!-- Math side -->
+                <g class="math-side">
+                    <circle cx="150" cy="200" r="80" fill="none" stroke="url(#mathGradient)" stroke-width="2" opacity="0.8"/>
+                    <circle cx="150" cy="200" r="60" fill="none" stroke="url(#mathGradient)" stroke-width="1.5" opacity="0.6"/>
+                    <circle cx="150" cy="200" r="40" fill="none" stroke="url(#mathGradient)" stroke-width="1" opacity="0.4"/>
+                    <text x="150" y="205" text-anchor="middle" fill="#8b5cf6" font-family="JetBrains Mono" font-size="24" font-weight="bold">MATH</text>
+                </g>
+                
+                <!-- Bridge paths -->
+                <g class="bridge-paths">
+                    <path d="M 230 200 Q 400 150 570 200" fill="none" stroke="url(#bridgeGradient)" stroke-width="2" class="bridge-arc" />
+                    <path d="M 230 200 Q 400 180 570 200" fill="none" stroke="url(#bridgeGradient)" stroke-width="1.5" class="bridge-arc" style="animation-delay: 0.2s" />
+                    <path d="M 230 200 Q 400 220 570 200" fill="none" stroke="url(#bridgeGradient)" stroke-width="1.5" class="bridge-arc" style="animation-delay: 0.4s" />
+                    <path d="M 230 200 Q 400 250 570 200" fill="none" stroke="url(#bridgeGradient)" stroke-width="1" class="bridge-arc" style="animation-delay: 0.6s" />
+                </g>
+                
+                <!-- Physics side -->
+                <g class="physics-side">
+                    <rect x="590" y="160" width="80" height="80" fill="none" stroke="url(#physicsGradient)" stroke-width="2" opacity="0.8"/>
+                    <rect x="600" y="170" width="60" height="60" fill="none" stroke="url(#physicsGradient)" stroke-width="1.5" opacity="0.6"/>
+                    <rect x="610" y="180" width="40" height="40" fill="none" stroke="url(#physicsGradient)" stroke-width="1" opacity="0.4"/>
+                    <text x="630" y="205" text-anchor="middle" fill="#3b82f6" font-family="JetBrains Mono" font-size="20" font-weight="bold">PHYSICS</text>
+                </g>
+                
+                <!-- Gradients -->
+                <defs>
+                    <linearGradient id="mathGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="bridgeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:0.8" />
+                        <stop offset="50%" style="stop-color:#10b981;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0.8" />
+                    </linearGradient>
+                    <linearGradient id="physicsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#10b981;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- Matrix rain effect -->
+        <div class="matrix-rain">
+            <div class="rain-column" style="--delay: 0s;">∫∂∇∑∏√∞≈≠±×÷</div>
+            <div class="rain-column" style="--delay: 0.5s;">αβγδεζηθικλμν</div>
+            <div class="rain-column" style="--delay: 1s;">∀∃∈∉⊂⊃⊆⊇∪∩</div>
+            <div class="rain-column" style="--delay: 1.5s;">⟨⟩⊗⊕⊖⊙⊛†‡∂∇</div>
+            <div class="rain-column" style="--delay: 2s;">ℂℍℕℙℚℝℤ℧℮ℏ</div>
+            <div class="rain-column" style="--delay: 2.5s;">∮∯∰∱∲∳⨋⨌⨍⨎⨏</div>
         </div>
         
         <div class="hero-content">
-            <h1 class="hero-title">The Axiomatic Bridging Method</h1>
-            <p class="hero-subtitle">How I solved the Riemann Hypothesis by translating pure mathematics through the lens of physical reality</p>
-            <div class="hero-badge">A systematic approach to impossible problems</div>
+            <div class="hero-badge glitch" data-text="RH SOLVED">RH SOLVED</div>
+            <h1 class="hero-title">
+                <span class="title-word" style="--delay: 0.1s;">The</span>
+                <span class="title-word" style="--delay: 0.2s;">Axiomatic</span>
+                <span class="title-word" style="--delay: 0.3s;">Bridging</span>
+                <span class="title-word" style="--delay: 0.4s;">Method</span>
+            </h1>
+            <p class="hero-subtitle typewriter">
+                How I solved the Riemann Hypothesis by translating pure mathematics through the lens of physical reality
+            </p>
+            <div class="hero-equation">
+                <span class="equation-part">ζ(s) = 0</span>
+                <span class="equation-arrow">⟹</span>
+                <span class="equation-part">ℜ(s) = ½</span>
+            </div>
         </div>
     </section>
 
