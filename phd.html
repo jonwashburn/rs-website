@@ -36,6 +36,21 @@
     a.inline { color: #1d4ed8; text-decoration: underline; }
     .section-mt { margin-top: 3rem; }
     @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* Compacted constants UI with expand-on-click */
+    .constants-grid { gap: 0.75rem; }
+    .constant-card { padding: 0.85rem 1rem; border-radius: 10px; }
+    .constant-card details { margin: 0; }
+    .constant-card summary { list-style: none; cursor: pointer; display: flex; align-items: baseline; gap: 0.75rem; }
+    .constant-card summary::-webkit-details-marker { display: none; }
+    .summary-title { flex: 1; display: flex; align-items: baseline; gap: 0.5rem; }
+    .summary-title .label { font-size: 0.72rem; letter-spacing: 0.08em; color: #6b7280; text-transform: uppercase; }
+    .summary-title .name { font-weight: 700; color: #111827; }
+    .summary-title .value { margin-left: auto; color: #b45309; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+    .chevron { color: #6b7280; transition: transform 0.2s ease; }
+    details[open] .chevron { transform: rotate(90deg); }
+    .micro { font-size: 0.9rem; color: #6b7280; margin-top: 0.25rem; }
+    .details-content { margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed #e5e7eb; }
   </style>
 </head>
 <body>
@@ -94,61 +109,131 @@
         arguments, dual‑balance minima, and invariance under exchange. Numerically, they are fixed without tuning.
       </p>
 
-      <div class="grid section-mt">
-        <div class="card">
-          <div class="label">Coherence Energy</div>
-          <h3>E<span class="mono">_coh</span> = <span class="value">0.090 eV</span></h3>
-          <p>
-            Minimal energy per recognition event. Derived by equating angular update rate with ledger recognition time:
-            <span class="formula">E_coh = \u0127 / \u03C4_rec = (\u0127 c) / \u03BB_rec</span>.
-            With <span class="mono">\u03C4_rec = 7.33 fs</span> and <span class="mono">\u03BB_rec = 2.20 µm</span> one obtains
-            <span class="mono">E_coh \u2248 0.090 eV</span>.
-          </p>
+      <div class="grid constants-grid section-mt">
+        <div class="card constant-card">
+          <details>
+            <summary>
+              <span class="chevron">›</span>
+              <span class="summary-title">
+                <span class="label">Coherence Energy</span>
+                <span class="name">E<small class="mono">_coh</small></span>
+              </span>
+              <span class="value">0.090 eV</span>
+            </summary>
+            <div class="micro">Minimal energy per recognition update.</div>
+            <div class="details-content">
+              <p class="small">Derivation: <span class="formula">E_coh = ħ / τ_rec = (ħ c) / λ_rec</span>. With <span class="mono">τ_rec = 7.33 fs</span> and <span class="mono">λ_rec = 2.20 µm</span> ⇒ <span class="mono">E_coh ≈ 0.090 eV</span>.</p>
+              <ul class="small">
+                <li>Role: base scale in <span class="formula">m = B · E_coh · φ^(r + f)</span>.</li>
+                <li>Units: SI via <span class="mono">ħ, c</span>; no fitted parameters.</li>
+              </ul>
+            </div>
+          </details>
         </div>
 
-        <div class="card">
-          <div class="label">Recognition Time</div>
-          <h3>\u03C4<span class="mono">_rec</span> = <span class="value">7.33 fs</span></h3>
-          <p>
-            Time for one recognition update. Set by minimal two‑way light exchange across the recognition length,
-            <span class="formula">\u03C4_rec = \u03BB_rec / c</span>.
-          </p>
+        <div class="card constant-card">
+          <details>
+            <summary>
+              <span class="chevron">›</span>
+              <span class="summary-title">
+                <span class="label">Recognition Time</span>
+                <span class="name">τ<small class="mono">_rec</small></span>
+              </span>
+              <span class="value">7.33 fs</span>
+            </summary>
+            <div class="micro">Tick duration for one recognition update.</div>
+            <div class="details-content">
+              <p class="small">Defined by minimal two‑way light exchange across <span class="mono">λ_rec</span>: <span class="formula">τ_rec = λ_rec / c</span>.</p>
+              <ul class="small">
+                <li>Eight‑beat cycle across 3 spatial dimensions fixes stability.</li>
+                <li>Anchors time conversions for all ledger rates.</li>
+              </ul>
+            </div>
+          </details>
         </div>
 
-        <div class="card">
-          <div class="label">Recognition Length</div>
-          <h3>\u03BB<span class="mono">_rec</span> = <span class="value">2.20 µm</span></h3>
-          <p>
-            Minimal ledger separation for stable recognition. Fixed by the 8‑beat cycle in 3 spatial dimensions and dual‑balance
-            constraints. Related to recognition time by <span class="formula">\u03BB_rec = c \u03C4_rec</span>.
-          </p>
+        <div class="card constant-card">
+          <details>
+            <summary>
+              <span class="chevron">›</span>
+              <span class="summary-title">
+                <span class="label">Recognition Length</span>
+                <span class="name">λ<small class="mono">_rec</small></span>
+              </span>
+              <span class="value">2.20 µm</span>
+            </summary>
+            <div class="micro">Minimal stable separation for recognition exchange.</div>
+            <div class="details-content">
+              <p class="small">Fixed by the recognition cycle and dual‑balance constraints; tied to time by <span class="formula">λ_rec = c τ_rec</span>.</p>
+              <ul class="small">
+                <li>Sets spatial bandwidth of the ledger.</li>
+                <li>Determines <span class="mono">E_coh</span> through <span class="mono">ħ c / λ_rec</span>.</li>
+              </ul>
+            </div>
+          </details>
         </div>
 
-        <div class="card">
-          <div class="label">Ledger Alphabet</div>
-          <h3>A<span class="mono">_L</span> = {1, φ, …}</h3>
-          <p>
-            Allowed scaling digits of the ledger. The golden ratio <span class="mono">φ</span> appears as the unique self‑similar
-            fixed point of dual‑balance on <span class="formula">J(x) = \u00BD(x + 1/x)</span>, enforcing path‑exchange invariance.
-          </p>
+        <div class="card constant-card">
+          <details>
+            <summary>
+              <span class="chevron">›</span>
+              <span class="summary-title">
+                <span class="label">Ledger Alphabet</span>
+                <span class="name">A<small class="mono">_L</small></span>
+              </span>
+              <span class="value">{1, φ, …}</span>
+            </summary>
+            <div class="micro">Permitted self‑similar scaling digits.</div>
+            <div class="details-content">
+              <p class="small">From dual‑balance on <span class="formula">J(x) = ½(x + 1/x)</span>, the unique self‑similar fixed point is <span class="mono">φ</span>.</p>
+              <ul class="small">
+                <li>Controls exponent structure in mass and interaction laws.</li>
+                <li>Enforces path‑exchange invariance.</li>
+              </ul>
+            </div>
+          </details>
         </div>
 
-        <div class="card">
-          <div class="label">Sector Factors</div>
-          <h3>B<span class="mono">_i</span> ∈ {1, 2, 3, 4, 6, 8, 9, 12}</h3>
-          <p>
-            Discrete multiplicities from topological/representation sectors of recognition paths. These appear as prefactors in the
-            mass and interaction formulas and are fixed by the ledgers combinatorics.
-          </p>
+        <div class="card constant-card">
+          <details>
+            <summary>
+              <span class="chevron">›</span>
+              <span class="summary-title">
+                <span class="label">Sector Factors</span>
+                <span class="name">B<small class="mono">_i</small></span>
+              </span>
+              <span class="value">{1,2,3,4,6,8,9,12}</span>
+            </summary>
+            <div class="micro">Discrete multiplicities from path topology/representation.</div>
+            <div class="details-content">
+              <p class="small">Integer prefactors capturing sector multiplicity in recognition paths and compositions.</p>
+              <ul class="small">
+                <li>Enter linearly in <span class="formula">m = B · E_coh · φ^(r + f)</span>.</li>
+                <li>Fixed by ledger combinatorics; not tuned.</li>
+              </ul>
+            </div>
+          </details>
         </div>
 
-        <div class="card">
-          <div class="label">Ledger Gap</div>
-          <h3>\u03B4<span class="mono">_gap</span> = <span class="value">0.006115</span></h3>
-          <p>
-            A small, quantized incomputability gap (the 45‑Gap) that enters as controlled corrections to otherwise exact ledger counts.
-            It regularizes path sums and explains tiny observed offsets where applicable.
-          </p>
+        <div class="card constant-card">
+          <details>
+            <summary>
+              <span class="chevron">›</span>
+              <span class="summary-title">
+                <span class="label">Ledger Gap</span>
+                <span class="name">δ<small class="mono">_gap</small></span>
+              </span>
+              <span class="value">0.006115</span>
+            </summary>
+            <div class="micro">Quantized incomputability (the 45‑Gap) used for tiny corrections.</div>
+            <div class="details-content">
+              <p class="small">Appears as controlled offsets to discrete counts and as small exponents <span class="mono">f</span> in mass scaling.</p>
+              <ul class="small">
+                <li>Regularizes path sums without introducing continuous knobs.</li>
+                <li>Magnitude and sign are fixed by ledger logic.</li>
+              </ul>
+            </div>
+          </details>
         </div>
       </div>
 
