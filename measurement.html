@@ -20,133 +20,239 @@
       background: #ffffff;
     }
 
-    /* Hero Section - Similar to predictions.html */
-    .hero {
-      min-height: 80vh;
-      background: linear-gradient(135deg, #1e3a8a 0%, #312e81 50%, #1e3a8a 100%);
+    /* Apple-style Text Hero */
+    .text-hero {
+      min-height: 50vh;
+      background: #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 4rem 2rem;
+    }
+
+    .text-hero-content {
+      max-width: 1400px;
+      width: 100%;
+    }
+
+    .text-hero-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-family: 'Space Grotesk', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .hero-left {
+      font-size: clamp(4rem, 10vw, 8rem);
+      font-weight: 800;
+      color: #1a1a2e;
+      letter-spacing: -0.03em;
+    }
+
+    .hero-right {
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 600;
+      color: #4b5563;
+      letter-spacing: -0.02em;
+    }
+
+    /* Animated Measurement Section */
+    .measurement-animation {
+      min-height: 70vh;
+      background: linear-gradient(135deg, #0f1423 0%, #1a1a2e 50%, #0f1423 100%);
       position: relative;
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    /* Animated background grid */
-    .hero-grid {
-      position: absolute;
+    .measurement-container {
+      position: relative;
       width: 100%;
       height: 100%;
-      background-image: 
-        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
-      background-size: 50px 50px;
-      animation: grid-move 20s linear infinite;
+      max-width: 1400px;
+      padding: 4rem 2rem;
     }
 
-    @keyframes grid-move {
-      0% { transform: translate(0, 0); }
-      100% { transform: translate(50px, 50px); }
+    /* Animated Ruler */
+    .animated-ruler {
+      position: absolute;
+      top: 10%;
+      left: 5%;
+      width: 300px;
+      height: 60px;
+      opacity: 0.3;
+      animation: ruler-slide 10s ease-in-out infinite;
     }
 
-    /* Floating measurement values */
-    .floating-values {
+    @keyframes ruler-slide {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(200px); }
+    }
+
+    .ruler-body {
+      width: 100%;
+      height: 40px;
+      background: linear-gradient(90deg, #fbbf24, #f59e0b);
+      position: relative;
+      border-radius: 4px;
+    }
+
+    .ruler-body::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 9px,
+        rgba(0, 0, 0, 0.3) 9px,
+        rgba(0, 0, 0, 0.3) 10px
+      );
+    }
+
+    .ruler-indicator {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      width: 2px;
+      height: 60px;
+      background: #ff0000;
+      animation: indicator-move 2s ease-in-out infinite;
+    }
+
+    @keyframes indicator-move {
+      0%, 100% { left: 20%; }
+      50% { left: 80%; }
+    }
+
+    /* Floating Constants */
+    .constants-field {
       position: absolute;
       width: 100%;
       height: 100%;
       pointer-events: none;
     }
 
-    .float-value {
+    .constant-bubble {
       position: absolute;
-      font-family: 'JetBrains Mono', monospace;
-      color: rgba(255, 255, 255, 0.1);
-      font-size: 1.5rem;
-      font-weight: 600;
-      animation: float-up 15s linear infinite;
-    }
-
-    @keyframes float-up {
-      0% {
-        transform: translateY(100vh) rotate(0deg);
-        opacity: 0;
-      }
-      10% {
-        opacity: 0.1;
-      }
-      90% {
-        opacity: 0.1;
-      }
-      100% {
-        transform: translateY(-100vh) rotate(360deg);
-        opacity: 0;
-      }
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 10;
-      text-align: center;
-      padding: 2rem;
-      max-width: 1000px;
-    }
-
-    .hero-badge {
-      display: inline-block;
-      padding: 0.5rem 1.5rem;
+      padding: 0.75rem 1.5rem;
       background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 50px;
       color: white;
-      font-size: 0.875rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.125rem;
       font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
+      animation: float-bubble 20s ease-in-out infinite;
+    }
+
+    .constant-bubble::after {
+      content: ' = ' attr(data-value);
+      color: #fbbf24;
+      font-size: 0.875rem;
+      margin-left: 0.5rem;
+    }
+
+    .constant-bubble:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+    .constant-bubble:nth-child(2) { top: 30%; right: 15%; animation-delay: 3s; }
+    .constant-bubble:nth-child(3) { bottom: 30%; left: 20%; animation-delay: 6s; }
+    .constant-bubble:nth-child(4) { bottom: 20%; right: 10%; animation-delay: 9s; }
+    .constant-bubble:nth-child(5) { top: 50%; left: 60%; animation-delay: 12s; }
+    .constant-bubble:nth-child(6) { top: 15%; right: 40%; animation-delay: 15s; }
+
+    @keyframes float-bubble {
+      0%, 100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.8;
+      }
+      25% {
+        transform: translate(30px, -20px) scale(1.1);
+        opacity: 1;
+      }
+      50% {
+        transform: translate(-20px, 30px) scale(0.95);
+        opacity: 0.9;
+      }
+      75% {
+        transform: translate(-30px, -10px) scale(1.05);
+        opacity: 1;
+      }
+    }
+
+    /* Measurement Grid */
+    .measurement-grid-animated {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0.2;
+      pointer-events: none;
+    }
+
+    .grid-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Central Message */
+    .measurement-message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 10;
+    }
+
+    .message-main {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.5rem;
+      opacity: 0.9;
+    }
+
+    .message-sub {
+      font-size: clamp(1.25rem, 3vw, 2rem);
+      color: #fbbf24;
+      font-weight: 600;
       margin-bottom: 2rem;
     }
 
-    .hero-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(3rem, 7vw, 5rem);
-      font-weight: 800;
-      color: white;
-      margin-bottom: 1.5rem;
-      letter-spacing: -0.02em;
-      line-height: 1.1;
+    .live-readout {
+      display: inline-block;
+      padding: 1rem 2rem;
+      background: rgba(251, 191, 36, 0.1);
+      border: 2px solid #fbbf24;
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
     }
 
-    .hero-subtitle {
-      font-size: clamp(1.25rem, 3vw, 1.75rem);
-      color: rgba(255, 255, 255, 0.9);
-      margin-bottom: 3rem;
-      line-height: 1.4;
-      font-weight: 300;
-    }
-
-    .hero-stats {
-      display: flex;
-      gap: 3rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .stat-item {
-      text-align: center;
-    }
-
-    .stat-value {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: #fbbf24;
-      margin-bottom: 0.5rem;
-      text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
-    }
-
-    .stat-label {
+    .readout-label {
+      display: block;
       font-size: 0.875rem;
       color: rgba(255, 255, 255, 0.7);
       text-transform: uppercase;
       letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+
+    .readout-value {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fbbf24;
+      text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+      transition: opacity 0.3s ease;
     }
 
     /* Content Sections - Similar to logical-foundations.html */
@@ -609,33 +715,56 @@
 <body>
   <div id="header-placeholder"></div>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-grid"></div>
-    
-    <!-- Floating measurement values -->
-    <div class="floating-values" id="floatingValues"></div>
-    
-    <div class="hero-content">
-      <div class="hero-badge">Direct Reality Measurement</div>
-      <h1 class="hero-title">Revolutionary Metrology</h1>
-      <p class="hero-subtitle">
-        We're Not Building a Theory of Reality.<br>
-        We're Measuring Reality Itself.
-      </p>
+  <!-- New Apple-style Hero -->
+  <section class="text-hero">
+    <div class="text-hero-content">
+      <h1 class="text-hero-title">
+        <span class="hero-left">Why</span>
+        <span class="hero-right">Finally an answer</span>
+      </h1>
+    </div>
+  </section>
+
+  <!-- Animated Measurement Section -->
+  <section class="measurement-animation">
+    <div class="measurement-container">
+      <!-- Animated ruler -->
+      <div class="animated-ruler">
+        <div class="ruler-body"></div>
+        <div class="ruler-indicator"></div>
+      </div>
       
-      <div class="hero-stats">
-        <div class="stat-item">
-          <div class="stat-value">137.035999</div>
-          <div class="stat-label">Fine Structure</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-value">0</div>
-          <div class="stat-label">Free Parameters</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-value">∞</div>
-          <div class="stat-label">Precision</div>
+      <!-- Floating constants -->
+      <div class="constants-field">
+        <div class="constant-bubble" data-value="137.035999">α⁻¹</div>
+        <div class="constant-bubble" data-value="1.618033">φ</div>
+        <div class="constant-bubble" data-value="0.511">e⁻</div>
+        <div class="constant-bubble" data-value="938.272">p⁺</div>
+        <div class="constant-bubble" data-value="2.718281">e</div>
+        <div class="constant-bubble" data-value="3.141592">π</div>
+      </div>
+      
+      <!-- Measurement grid -->
+      <div class="measurement-grid-animated">
+        <svg class="grid-svg" viewBox="0 0 1000 400">
+          <defs>
+            <linearGradient id="gridGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#4169E1;stop-opacity:0.3" />
+              <stop offset="50%" style="stop-color:#fbbf24;stop-opacity:0.2" />
+              <stop offset="100%" style="stop-color:#4169E1;stop-opacity:0.3" />
+            </linearGradient>
+          </defs>
+          <!-- Grid lines will be added via JavaScript -->
+        </svg>
+    </div>
+      
+      <!-- Central message -->
+      <div class="measurement-message">
+        <p class="message-main">We're Not Building a Theory of Reality</p>
+        <p class="message-sub">We're Measuring Reality Itself</p>
+        <div class="live-readout">
+          <span class="readout-label">Reality Reading</span>
+          <span class="readout-value" id="liveReadout">137.035999</span>
         </div>
       </div>
     </div>
@@ -917,7 +1046,7 @@
             <li>What do the instruments read?</li>
             <li>What does the ledger require?</li>
             <li>How can we measure this?</li>
-          </ul>
+      </ul>
         </div>
       </div>
       
@@ -958,32 +1087,51 @@
   <div id="footer-placeholder"></div>
 
   <script>
-    // Generate floating measurement values
-    const values = ['137.035999', '0.511 MeV', 'φ = 1.618', '2^D = 8', 'Ω_dm = 0.2649', 'α⁻¹', 'E_coh', 'κ', 'J(x)', 'Rung 45'];
-    const floatingContainer = document.getElementById('floatingValues');
-    
-    function createFloatingValue() {
-      const span = document.createElement('span');
-      span.className = 'float-value';
-      span.textContent = values[Math.floor(Math.random() * values.length)];
-      span.style.left = Math.random() * 100 + '%';
-      span.style.animationDelay = Math.random() * 15 + 's';
-      span.style.animationDuration = (15 + Math.random() * 10) + 's';
-      floatingContainer.appendChild(span);
+    // Animate grid lines
+    const gridSvg = document.querySelector('.grid-svg');
+    if (gridSvg) {
+      // Create horizontal lines
+      for (let i = 0; i < 10; i++) {
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', '0');
+        line.setAttribute('y1', i * 40);
+        line.setAttribute('x2', '1000');
+        line.setAttribute('y2', i * 40);
+        line.setAttribute('stroke', 'url(#gridGradient)');
+        line.setAttribute('stroke-width', '1');
+        line.setAttribute('opacity', '0.5');
+        gridSvg.appendChild(line);
+      }
       
-      // Remove element after animation
-      setTimeout(() => {
-        span.remove();
-      }, 25000);
+      // Create vertical lines
+      for (let i = 0; i < 25; i++) {
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', i * 40);
+        line.setAttribute('y1', '0');
+        line.setAttribute('x2', i * 40);
+        line.setAttribute('y2', '400');
+        line.setAttribute('stroke', 'url(#gridGradient)');
+        line.setAttribute('stroke-width', '1');
+        line.setAttribute('opacity', '0.5');
+        gridSvg.appendChild(line);
+      }
     }
     
-    // Create initial floating values
-    for (let i = 0; i < 8; i++) {
-      setTimeout(() => createFloatingValue(), i * 2000);
-    }
+    // Animate readout value
+    const readout = document.getElementById('liveReadout');
+    const values = ['137.035999', '0.511', '938.272', '1.618033', '2.718281', '3.141592'];
+    let currentIndex = 0;
     
-    // Continue creating floating values
-    setInterval(createFloatingValue, 3000);
+    if (readout) {
+      setInterval(() => {
+        currentIndex = (currentIndex + 1) % values.length;
+        readout.style.opacity = '0';
+        setTimeout(() => {
+          readout.textContent = values[currentIndex];
+          readout.style.opacity = '1';
+        }, 300);
+      }, 3000);
+    }
   </script>
 
   <script src="/assets/js/main.js"></script>
