@@ -115,13 +115,27 @@ body {
 
 .hero-title {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: clamp(2.5rem, 7vw, 5rem);
+    font-size: clamp(3rem, 8vw, 6rem);
     font-weight: 700;
-    color: #ffffff;
+    background: linear-gradient(90deg, #ffffff, #f0f0f0, #e8e8e8, #f0f0f0, #ffffff);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s ease-in-out infinite;
     margin-bottom: 1.5rem;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
     letter-spacing: -0.02em;
     line-height: 1.1;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -100% 0;
+    }
+    100% {
+        background-position: 100% 0;
+    }
 }
 
 .hero-subtitle {
