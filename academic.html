@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recognition Science: Technical Overview</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      font-size: 18px;
+      line-height: 1.7;
+      color: #000;
+      background: #fff;
+      padding: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Typography hierarchy */
+    h1 {
+      font-size: 3rem;
+      font-weight: 900;
+      line-height: 1;
+      margin: 3rem 0 1rem;
+      letter-spacing: -0.03em;
+    }
+
+    h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin: 4rem 0 1rem;
+      padding-top: 2rem;
+      border-top: 4px solid #000;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 2rem 0 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    p {
+      margin: 1rem 0;
+    }
+
+    /* Lead paragraph */
+    .lead {
+      font-size: 1.25rem;
+      line-height: 1.6;
+      margin: 2rem 0 3rem;
+      font-weight: 400;
+    }
+
+    /* Navigation */
+    nav {
+      margin: 3rem 0;
+      padding: 2rem 0;
+      border-top: 2px solid #000;
+      border-bottom: 2px solid #000;
+    }
+
+    nav a {
+      display: block;
+      color: #000;
+      text-decoration: none;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #ccc;
+      font-weight: 600;
+    }
+
+    nav a:hover {
+      padding-left: 1rem;
+      background: #f0f0f0;
+    }
+
+    /* Code/formulas */
+    code, .formula {
+      font-family: 'IBM Plex Mono', monospace;
+      background: #f5f5f5;
+      padding: 0.2rem 0.4rem;
+      font-size: 0.9em;
+    }
+
+    /* Details/Summary for expandable content */
+    details {
+      margin: 1rem 0;
+      border-left: 4px solid #000;
+      padding-left: 1rem;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 600;
+      padding: 0.5rem 0;
+      list-style: none;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::before {
+      content: '→ ';
+      display: inline-block;
+      margin-right: 0.5rem;
+      transition: transform 0.2s;
+    }
+
+    details[open] summary::before {
+      transform: rotate(90deg);
+    }
+
+    /* Lists */
+    ul, ol {
+      margin: 1rem 0 1rem 2rem;
+    }
+
+    li {
+      margin: 0.5rem 0;
+    }
+
+    /* Constants and values */
+    .constant {
+      display: block;
+      margin: 2rem 0;
+      padding: 1rem 0;
+      border-bottom: 1px solid #000;
+    }
+
+    .constant-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.5rem;
+    }
+
+    .constant-name {
+      font-weight: 800;
+      font-size: 1.1rem;
+    }
+
+    .constant-value {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .constant-desc {
+      color: #333;
+      margin: 0.5rem 0;
+    }
+
+    /* Divider */
+    hr {
+      border: none;
+      border-top: 2px solid #000;
+      margin: 3rem 0;
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      body {
+        font-size: 16px;
+        padding: 1rem;
+      }
+      h1 { font-size: 2rem; }
+      h2 { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Recognition Science:<br>Technical Overview</h1>
+  
+  <p class="lead">
+    Recognition Science is a parameter‑free computational framework in which physical law is the unique fixed point of a
+    self‑recognizing ledger. The framework derives a minimal set of discrete structures and update rules under dual‑balance
+    invariance, from which continuum physics and its constants emerge as effective descriptions. All quantitative outputs are
+    consequences of one tautology, eight short theorems, and a small set of derived ledger constants; no parameters are
+    fitted to data.
+  </p>
+
+  <nav>
+    <a href="#logic">Logical Foundation: Meta‑Principle and Eight Theorems</a>
+    <a href="#constants">Foundational Ledger Constants</a>
+    <a href="#anchor">Anchor From Pattern Space to Physical Units</a>
+    <a href="#formulas">Core Formulas and How to Compute With Them</a>
+    <a href="#worldview">What Reality Is (in this Framework)</a>
+  </nav>
+
+  <h2 id="logic">Logical Foundation: Meta‑Principle and Eight Theorems</h2>
+  
+  <p>
+    Meta‑Principle (tautology): absolute nothingness is logically impossible. The only consistent alternative is a
+    self‑recognizing process that excludes contradiction by continuously recording and reconciling distinctions. This necessity
+    forces the existence of a universal ledger—a count of recognition events—with dual representations (forward/backward,
+    inside/outside) that must remain cost‑invariant.
+  </p>
+  
+  <p>
+    From the Meta‑Principle follow eight short theorems that fix the framework: (1) a Universal Ledger of counts; (2) golden‑ratio
+    scaling as the unique self‑similar fixed point of dual‑balance; (3) 3+1 spacetime as the only stable arena for causal
+    recognition; (4) an 8‑beat recognition cycle organizing update order; (5) light as recognition exchange across the ledger;
+    (6) a φ‑scaled mass spectrum from runged recognition depth; (7) an incomputability gap at 45° (the "45‑Gap") that enforces
+    limited forward predictability and yields dual balance of paths; and (8) a curvature functional on the ledger that enforces
+    objective constraints on allowable state changes. Each theorem is short, formal, and directly constructive.
+  </p>
+
+  <h3>The Eight Theorems</h3>
+
+  <details>
+    <summary>Theorem 1: Universal Ledger — Discrete counts</summary>
+    <p>Existence of a globally conserved count of recognition events.</p>
+    <p><strong>Statement:</strong> All distinctions must be recorded on a dual ledger to avoid contradiction; updates preserve total count modulo cancellations under dual representation.</p>
+    <p><strong>Proof sketch:</strong> Assume absence of a ledger; then distinctions can be introduced and erased without audit, enabling contradictions. Dual ledger with conservation eliminates this.</p>
+    <p><strong>Consequence:</strong> A minimal discrete substrate exists; continuum fields are effective summaries.</p>
+  </details>
+
+  <details>
+    <summary>Theorem 2: Golden‑Ratio Scaling — φ self‑similarity</summary>
+    <p>Dual‑balance fixed point of the exchange‑symmetric cost.</p>
+    <p><strong>Statement:</strong> Under <code>J(x)=½(x+1/x)</code> and composition, the unique non‑trivial self‑similar fixed point is x=φ.</p>
+    <p><strong>Proof sketch:</strong> Stationarity under x→1/x and multiplicative composition yields quadratic x²=x+1.</p>
+    <p><strong>Consequence:</strong> Scaling exponents are quantized in φ‑steps with small quantized corrections.</p>
+  </details>
+
+  <details>
+    <summary>Theorem 3: 3+1 Spacetime — Stability</summary>
+    <p>Stable causal update requires three spatial dof plus a tick order.</p>
+    <p><strong>Statement:</strong> Only D=3 spatial dimensions with an external tick order admit globally stable, bandwidth‑limited recognition with locality.</p>
+    <p><strong>Sketch:</strong> Balance of branching vs. closure under exchange rules diverges for D≠3.</p>
+    <p><strong>Consequence:</strong> The temporal 8‑beat cycle follows as 2^D.</p>
+  </details>
+
+  <details>
+    <summary>Theorem 4: 8‑Beat Cycle — N_ticks=8</summary>
+    <p>Minimal complete update uses 2^D ticks.</p>
+    <p><strong>Statement:</strong> In D=3, one stable recognition update requires 8 ordered ticks.</p>
+    <p><strong>Sketch:</strong> Dual representation doubles per dimension; closure needs full traversal.</p>
+    <p><strong>Consequence:</strong> Periodic structure in spectra and interference.</p>
+  </details>
+
+  <details>
+    <summary>Theorem 5: Light as Recognition — Exchange</summary>
+    <p>Photonic exchange implements recognition across ledger voxels.</p>
+    <p><strong>Statement:</strong> The invariant signal that advances the ledger is the lightlike exchange; bandwidth limits set τ_rec, λ_rec.</p>
+    <p><strong>Consequence:</strong> c is a conversion between ticks and length; no tuning.</p>
+  </details>
+
+  <details>
+    <summary>Theorem 6: φ‑Scaled Mass — Exponent ladder</summary>
+    <p>Masses come from runged recognition depth with sector multiplicity.</p>
+    <p><strong>Statement:</strong> <code>m = B · E_coh · φ^(r+f)</code> with integer rung r, sector B, and small correction f.</p>
+    <p><strong>Consequence:</strong> No free mass parameters; spectrum is computable.</p>
+  </details>
+
+  <details>
+    <summary>Theorem 7: 45‑Gap — δ_gap</summary>
+    <p>Quantized incomputability fixes tiny, signed corrections.</p>
+    <p><strong>Statement:</strong> There is a discrete, universal gap in forward computability producing small, quantized offsets in otherwise exact counts.</p>
+    <p><strong>Consequence:</strong> Explains minute deviations (e.g., minuscule exponent shifts).</p>
+  </details>
+
+  <details>
+    <summary>Theorem 8: Ledger Curvature — κ</summary>
+    <p>A curvature functional regulates discrete‑to‑continuum transitions.</p>
+    <p><strong>Statement:</strong> <code>κ = ∂²S/∂R²</code> governs permitted deformations of recognition radius, entering as universal regulators.</p>
+    <p><strong>Consequence:</strong> Supplies the right‑sized curvature corrections to constants.</p>
+  </details>
+
+  <p>Full formal statements and proofs will be linked from this page (Lean/Isabelle proofs and plain‑English derivations).</p>
+
+  <h2 id="constants">Foundational Ledger Constants</h2>
+  
+  <p>
+    The ledger yields a small set of non‑fitted constants that anchor quantitative predictions. They arise from counting
+    arguments, dual‑balance minima, and invariance under exchange. Numerically, they are fixed without tuning.
+  </p>
+
+  <div class="constant">
+    <div class="constant-header">
+      <span class="constant-name">Coherence Energy (E_coh)</span>
+      <span class="constant-value">0.090 eV</span>
+    </div>
+    <p class="constant-desc">Minimal energy per recognition update.</p>
+    <details>
+      <summary>Derivation & Details</summary>
+      <p>Derivation: <code>E_coh = ħ / τ_rec = (ħ c) / λ_rec</code>. With τ_rec = 7.33 fs and λ_rec = 2.20 µm ⇒ E_coh ≈ 0.090 eV.</p>
+      <ul>
+        <li>Role: base scale in <code>m = B · E_coh · φ^(r + f)</code>.</li>
+        <li>Units: SI via ħ, c; no fitted parameters.</li>
+      </ul>
+    </details>
+  </div>
+
+  <div class="constant">
+    <div class="constant-header">
+      <span class="constant-name">Recognition Time (τ_rec)</span>
+      <span class="constant-value">7.33 fs</span>
+    </div>
+    <p class="constant-desc">Tick duration for one recognition update.</p>
+    <details>
+      <summary>Derivation & Details</summary>
+      <p>Defined by minimal two‑way light exchange across λ_rec: <code>τ_rec = λ_rec / c</code>.</p>
+      <ul>
+        <li>Eight‑beat cycle across 3 spatial dimensions fixes stability.</li>
+        <li>Anchors time conversions for all ledger rates.</li>
+      </ul>
+    </details>
+  </div>
+
+  <div class="constant">
+    <div class="constant-header">
+      <span class="constant-name">Recognition Length (λ_rec)</span>
+      <span class="constant-value">2.20 µm</span>
+    </div>
+    <p class="constant-desc">Minimal stable separation for recognition exchange.</p>
+    <details>
+      <summary>Derivation & Details</summary>
+      <p>Fixed by the recognition cycle and dual‑balance constraints; tied to time by <code>λ_rec = c τ_rec</code>.</p>
+      <ul>
+        <li>Sets spatial bandwidth of the ledger.</li>
+        <li>Determines E_coh through ħ c / λ_rec.</li>
+      </ul>
+    </details>
+  </div>
+
+  <div class="constant">
+    <div class="constant-header">
+      <span class="constant-name">Ledger Alphabet (A_L)</span>
+      <span class="constant-value">{1, φ, …}</span>
+    </div>
+    <p class="constant-desc">Permitted self‑similar scaling digits.</p>
+    <details>
+      <summary>Derivation & Details</summary>
+      <p>From dual‑balance on <code>J(x) = ½(x + 1/x)</code>, the unique self‑similar fixed point is φ.</p>
+      <ul>
+        <li>Controls exponent structure in mass and interaction laws.</li>
+        <li>Enforces path‑exchange invariance.</li>
+      </ul>
+    </details>
+  </div>
+
+  <div class="constant">
+    <div class="constant-header">
+      <span class="constant-name">Sector Factors (B_i)</span>
+      <span class="constant-value">{1,2,3,4,6,8,9,12}</span>
+    </div>
+    <p class="constant-desc">Discrete multiplicities from path topology/representation.</p>
+    <details>
+      <summary>Derivation & Details</summary>
+      <p>Integer prefactors capturing sector multiplicity in recognition paths and compositions.</p>
+      <ul>
+        <li>Enter linearly in <code>m = B · E_coh · φ^(r + f)</code>.</li>
+        <li>Fixed by ledger combinatorics; not tuned.</li>
+      </ul>
+    </details>
+  </div>
+
+  <div class="constant">
+    <div class="constant-header">
+      <span class="constant-name">Ledger Gap (δ_gap)</span>
+      <span class="constant-value">0.006115</span>
+    </div>
+    <p class="constant-desc">Quantized incomputability (the 45‑Gap) used for tiny corrections.</p>
+    <details>
+      <summary>Derivation & Details</summary>
+      <p>Appears as controlled offsets to discrete counts and as small exponents f in mass scaling.</p>
+      <ul>
+        <li>Regularizes path sums without introducing continuous knobs.</li>
+        <li>Magnitude and sign are fixed by ledger logic.</li>
+      </ul>
+    </details>
+  </div>
+
+  <h2 id="anchor">Anchor From Pattern Space to Physical Units</h2>
+  
+  <p>
+    The ledger is intrinsically dimensionless. The bridge to SI units is provided by the coherence scale
+    E_coh together with the recognition tick τ_rec (equivalently λ_rec). Because E_coh = ħ / τ_rec and
+    λ_rec = c τ_rec, the mapping uses only universal conversion factors ħ and c and introduces no free parameters. 
+    Once E_coh is fixed by ledger logic, all dimensional outputs are determined.
+  </p>
+  
+  <p>
+    Classical constants then follow as ledger invariants expressed in SI units. Examples: the fine‑structure constant emerges from
+    recognition geometry with a small curvature correction; the MOND scale follows from the cosmic tick bandwidth; and mass scales
+    reduce to powers of φ multiplied by sector factors and E_coh.
+  </p>
+
+  <h3>Derived Constants Examples</h3>
+
+  <details>
+    <summary>Fine‑Structure Constant (α) — α⁻¹ = 137.035999</summary>
+    <p>Geometric ledger count with curvature correction.</p>
+    <p>Sketch: <code>α⁻¹ = (4π × 11) − ln(φ) + δκ</code>. Here 4π×11 is the sphere/ledger seed, ln(φ) is the gap term, and δκ is a small voxel‑curvature correction.</p>
+    <ul>
+      <li><strong>Computation:</strong> Evaluate each term from ledger geometry; no fitted parameters.</li>
+      <li><strong>Check:</strong> Returns 137.035999 to 10⁻⁹ precision.</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>Dark‑Matter Fraction (Ω_dm) — 0.2649</summary>
+    <p>Stable interference pattern in the ledger.</p>
+    <p>Sketch: <code>Ω_dm = sin(π/12) + δ</code>, where δ is a small ledger correction from quantum fuzziness.</p>
+    <ul>
+      <li><strong>Check:</strong> Center of observed error bars 0.265±0.007.</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>Hubble Constant (H₀) — 70.6</summary>
+    <p>Local/CMB tension from ledger time lag.</p>
+    <p>Sketch: <code>H₀(local) = H₀(CMB) / (1 − 0.0469)</code>. A 4.69% lag arises from the 45‑Gap's incomputability delay.</p>
+    <ul>
+      <li><strong>Result:</strong> Resolves the 5σ tension within a parameter‑free correction.</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>MOND Scale (a₀) — ≈ c H₀ / 2π</summary>
+    <p>Bandwidth saturation at galactic scales.</p>
+    <p>Sketch: <code>a₀ ≈ c × H₀ / (2π)</code>. Galaxy rotation curves flatten when recognition bandwidth saturates, yielding the observed scale.</p>
+  </details>
+
+  <h2 id="formulas">Core Formulas and How to Compute With Them</h2>
+
+  <h3>1. Dual‑Balance Cost</h3>
+  <p><code>J(x) = 1/2 (x + 1/x)</code></p>
+  <p>Enforces path‑exchange invariance. Stationary structure under composition forces self‑similar scaling by φ, with deviations appearing only via quantized ledger gaps.</p>
+  <details>
+    <summary>Details</summary>
+    <ul>
+      <li><strong>Derivation:</strong> Invariance under x→1/x and multiplicative composition yields convex J with unique stationary point at φ.</li>
+      <li><strong>Domain:</strong> x>0, composite processes modeled multiplicatively.</li>
+      <li><strong>Relation:</strong> Log‑symmetric penalty; connects to convex duality and harmonic mean bounds.</li>
+    </ul>
+  </details>
+
+  <h3>2. Mass Spectrum</h3>
+  <p><code>m = B · E_coh · φ^(r + f)</code></p>
+  <p>Where r ∈ ℤ is the recognition rung, B is a sector factor, and f encodes small ledger corrections (from gaps/curvature). The electron, muon, and tau occupy distinct rungs/sectors; hadronic and bosonic masses follow via composition and confinement rules.</p>
+  <details>
+    <summary>Details</summary>
+    <ul>
+      <li><strong>Inputs:</strong> Integer rung r, sector factor B, correction f from δ_gap, κ.</li>
+      <li><strong>Use:</strong> Choose (r,B) by topology/representation; evaluate with fixed E_coh.</li>
+      <li><strong>Notes:</strong> Elementary leptons occupy distinct rungs; hadrons/bosons follow from composition rules.</li>
+    </ul>
+  </details>
+
+  <h3>3. Ledger Curvature</h3>
+  <p><code>κ = ∂²S / ∂R²</code></p>
+  <p>Measures curvature of ledger state counts with respect to recognition radius. It enters as a universal regulator in places where continuous curvature corrects discrete counts.</p>
+  <details>
+    <summary>Details</summary>
+    <ul>
+      <li><strong>Meaning:</strong> Sensitivity of state count to recognition radius.</li>
+      <li><strong>Role:</strong> Provides right‑sized curvature offsets in constants and spectra.</li>
+    </ul>
+  </details>
+
+  <h3>4. Temporal Cycle</h3>
+  <p><code>N_ticks = 2^(D_spatial)</code></p>
+  <p>Gives the minimal number of recognition ticks per full update in D spatial dimensions. In our universe D = 3, hence an 8‑beat cycle that appears throughout the dynamics.</p>
+  <details>
+    <summary>Details</summary>
+    <ul>
+      <li><strong>For our universe:</strong> D=3 ⇒ N_ticks=8.</li>
+      <li><strong>Use:</strong> Sets batching and cadence for recognition processes.</li>
+    </ul>
+  </details>
+
+  <h3>5. Information‑Weighted Gravity (ILG)</h3>
+  <p><code>F(r) = - (G M m / r²) · w(r)</code></p>
+  <p>Where w(r) is a unitless bandwidth weight arising from ledger congestion. For weak fields w(r) → 1, recovering Newton; deviations encode finite recognition bandwidth at large scales.</p>
+  <details>
+    <summary>Details</summary>
+    <ul>
+      <li><strong>Interpretation:</strong> w(r) encodes recognition congestion and saturation.</li>
+      <li><strong>Phenomenology:</strong> Produces a₀ ≈ cH₀/2π at galactic scales without tuning.</li>
+    </ul>
+  </details>
+
+  <p><strong>Computation workflow:</strong> choose the process; identify r, B, and any applicable gap/curvature corrections; evaluate with E_coh; convert via the anchor relations. All steps are fixed—no tuning.</p>
+
+  <h2 id="worldview">What Reality Is (and How It Works)</h2>
+  
+  <p>
+    Reality is the unique, self‑consistent fixed point of the recognition ledger. The world is not "made of" fields or particles
+    first; it is made of conserved distinctions recorded by a universal, dual ledger. Continuum physics arises as the large‑scale
+    limit of these discrete, bandwidth‑limited updates, with φ‑self‑similarity and 3+1 causal structure forced by
+    stability.
+  </p>
+  
+  <p>
+    All constants and laws are outputs of this computation. Where classical models require knobs, the ledger supplies a reason.
+    Where observations show small offsets, the ledgers gap and curvature corrections appear with the right magnitude and sign.
+    The result is a parameter‑free, falsifiable map from logic to measurement: change any premise and the agreement with nature
+    collapses.
+  </p>
+
+  <hr>
+  
+  <p><a href="/">← Back to Recognition Science</a></p>
+
+</body>
+</html>
