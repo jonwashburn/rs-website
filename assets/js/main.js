@@ -158,5 +158,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const basePath = getBasePath();
     fetchAndInject(basePath + '_includes/header.html', 'header-placeholder');
+    // After header loads, also inject the sitewide banner just beneath it
+    setTimeout(() => {
+        fetchAndInject(basePath + '_includes/banner.html', 'sitewide-banner-placeholder');
+    }, 150);
     fetchAndInject(basePath + '_includes/footer.html', 'footer-placeholder');
 });
