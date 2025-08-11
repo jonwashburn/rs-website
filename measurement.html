@@ -4,256 +4,367 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Revolutionary Metrology - Recognition Science</title>
-  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <style>
-    /* The universe measuring itself */
-    body {
-      background: #ffffff;
-      overflow-x: hidden;
+    /* Reset and base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    /* Hero - the moment of recognition */
+    body {
+      background: #ffffff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: #1f2937;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* Amazing animated hero */
     .measurement-hero {
-      padding: 8rem 0 4rem;
-      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%);
+      min-height: 100vh;
+      background: #ffffff;
       position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       overflow: hidden;
     }
 
-    .measurement-hero::before {
-      content: '';
+    /* Animated measurement grid background */
+    .measurement-grid {
       position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle at 30% 40%, rgba(139, 92, 246, 0.03) 0%, transparent 50%),
-                  radial-gradient(circle at 70% 60%, rgba(59, 130, 246, 0.03) 0%, transparent 50%);
-      animation: cosmic-drift 30s ease-in-out infinite;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.4;
     }
 
-    @keyframes cosmic-drift {
-      0%, 100% { transform: rotate(0deg) scale(1); }
-      50% { transform: rotate(10deg) scale(1.1); }
+    .grid-line {
+      position: absolute;
+      background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.1), transparent);
+      animation: pulse 4s ease-in-out infinite;
     }
 
-    .measurement-hero h1 {
+    .grid-line.horizontal {
+      width: 100%;
+      height: 1px;
+      left: 0;
+    }
+
+    .grid-line.vertical {
+      width: 1px;
+      height: 100%;
+      top: 0;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* Floating measurement values */
+    .floating-measurements {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .measurement-float {
+      position: absolute;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      color: #8b5cf6;
+      opacity: 0;
+      animation: measureFloat 20s ease-in-out infinite;
+    }
+
+    @keyframes measureFloat {
+      0% {
+        opacity: 0;
+        transform: translateY(20px) scale(0.8);
+      }
+      10%, 90% {
+        opacity: 0.6;
+        transform: translateY(0) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.8);
+      }
+    }
+
+    /* Animated ruler/caliper visualization */
+    .caliper-viz {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 200px;
+      opacity: 0.1;
+    }
+
+    .caliper-arm {
+      position: absolute;
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(180deg, transparent, #8b5cf6, transparent);
+      animation: caliperMove 8s ease-in-out infinite;
+    }
+
+    .caliper-arm.left {
+      left: 20%;
+    }
+
+    .caliper-arm.right {
+      right: 20%;
+      animation-delay: 0.5s;
+    }
+
+    @keyframes caliperMove {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(20px); }
+    }
+
+    .measurement-line {
+      position: absolute;
+      top: 50%;
+      left: 20%;
+      right: 20%;
+      height: 1px;
+      background: linear-gradient(90deg, #8b5cf6, #10b981, #8b5cf6);
+      opacity: 0.3;
+      animation: measurePulse 3s ease-in-out infinite;
+    }
+
+    @keyframes measurePulse {
+      0%, 100% { transform: scaleX(1); opacity: 0.3; }
+      50% { transform: scaleX(1.1); opacity: 0.5; }
+    }
+
+    /* Hero content */
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 2rem;
+      max-width: 1000px;
+    }
+
+    .hero-title {
       font-family: 'Space Grotesk', sans-serif;
       font-size: clamp(3rem, 8vw, 6rem);
       font-weight: 700;
-      background: linear-gradient(135deg, #1e293b 0%, #475569 50%, #64748b 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 2rem;
-      letter-spacing: -0.02em;
+      color: #111827;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.03em;
+      line-height: 1;
       position: relative;
-      z-index: 1;
     }
 
-    .measurement-hero .subtitle {
+    .hero-title span {
+      display: inline-block;
+      animation: titleReveal 1s ease-out forwards;
+      animation-delay: calc(var(--word-index) * 0.1s);
+      opacity: 0;
+    }
+
+    @keyframes titleReveal {
+      from {
+        opacity: 0;
+        transform: translateY(30px) rotateX(-90deg);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) rotateX(0);
+      }
+    }
+
+    .hero-subtitle {
       font-size: clamp(1.2rem, 3vw, 1.8rem);
       color: #64748b;
       font-weight: 300;
-      line-height: 1.4;
-      position: relative;
-      z-index: 1;
+      line-height: 1.5;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeInUp 1s ease-out 0.5s forwards;
     }
 
-    /* Content sections with depth */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Animated measurement display */
+    .live-measurement {
+      display: inline-flex;
+      align-items: center;
+      gap: 2rem;
+      padding: 1.5rem 3rem;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(16, 185, 129, 0.05));
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      border-radius: 100px;
+      margin-top: 2rem;
+      opacity: 0;
+      animation: fadeInUp 1s ease-out 0.8s forwards;
+    }
+
+    .measurement-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      color: #8b5cf6;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .measurement-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #111827;
+      position: relative;
+    }
+
+    .measurement-value::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #8b5cf6, #10b981);
+      animation: scanLine 2s linear infinite;
+    }
+
+    @keyframes scanLine {
+      from { transform: translateX(-100%); }
+      to { transform: translateX(100%); }
+    }
+
+    /* Content sections */
     section {
-      padding: 4rem 0;
+      padding: 5rem 0;
       position: relative;
     }
 
     section:nth-child(even) {
-      background: linear-gradient(180deg, #fafafa 0%, #ffffff 100%);
+      background: #fafafa;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
     }
 
     h2 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 600;
-      color: #1e293b;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #111827;
       margin-bottom: 2rem;
-      position: relative;
-    }
-
-    h2::after {
-      content: '';
-      position: absolute;
-      bottom: -0.5rem;
-      left: 0;
-      width: 60px;
-      height: 3px;
-      background: linear-gradient(90deg, #8b5cf6 0%, transparent 100%);
     }
 
     h3 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.4rem;
-      color: #334155;
-      margin: 2rem 0 1rem;
+      font-size: 1.5rem;
+      color: #374151;
+      margin: 2.5rem 0 1rem;
       font-weight: 600;
     }
 
     p {
-      font-family: 'Plus Jakarta Sans', sans-serif;
       font-size: 1.1rem;
       line-height: 1.8;
-      color: #475569;
+      color: #4b5563;
       margin-bottom: 1.5rem;
     }
 
-    /* Highlight key concepts */
-    strong {
-      color: #1e293b;
-      font-weight: 600;
+    /* Keep all the existing content styles */
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin: 3rem 0;
     }
 
-    /* Lists with visual hierarchy - only for content lists, not navigation */
-    .reading ul {
-      margin: 2rem 0;
-    }
-
-    .reading ul li {
-      margin-bottom: 1.5rem;
-      padding-left: 2rem;
+    .comparison-card {
+      padding: 2rem;
+      border-radius: 16px;
       position: relative;
+      overflow: hidden;
     }
 
-    .reading ul li::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0.5rem;
-      width: 8px;
-      height: 8px;
-      background: #8b5cf6;
-      border-radius: 50%;
+    .comparison-card.traditional {
+      background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+      border: 1px solid #fecaca;
     }
 
-    /* Formula displays */
+    .comparison-card.recognition {
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      border: 1px solid #bbf7d0;
+    }
+
     .formula-inline {
       font-family: 'JetBrains Mono', monospace;
       background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
       padding: 0.2rem 0.5rem;
       border-radius: 4px;
-      color: #4c1d95;
-      font-size: 1rem;
+      color: #7c3aed;
     }
 
-    /* Discovery section - visual timeline */
-    .discovery-section {
-      background: linear-gradient(180deg, #faf5ff 0%, #f3e8ff 50%, #faf5ff 100%);
-      padding: 5rem 0;
-    }
-
-    .discovery-section p {
-      position: relative;
-      padding-left: 3rem;
-      margin-bottom: 2rem;
-    }
-
-    .discovery-section p::before {
-      content: '';
-      position: absolute;
-      left: 1rem;
-      top: 0.5rem;
-      width: 12px;
-      height: 12px;
-      background: #8b5cf6;
-      border-radius: 50%;
-      box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
-    }
-
-    .discovery-section p::after {
-      content: '';
-      position: absolute;
-      left: 1.4rem;
-      top: 1.5rem;
-      width: 2px;
-      height: calc(100% + 1rem);
-      background: linear-gradient(180deg, #8b5cf6 0%, transparent 100%);
-    }
-
-    .discovery-section p:last-child::after {
-      display: none;
-    }
-
-    /* Instruments section */
-    .instruments-section {
-      background: #ffffff;
-    }
-
-    .instrument-item {
-      margin: 3rem 0;
+    .highlight-box {
       padding: 2rem;
-      background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
-      border-radius: 16px;
-      border: 1px solid rgba(226, 232, 240, 0.5);
-      transition: all 0.3s ease;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
+      border-left: 4px solid #8b5cf6;
+      border-radius: 8px;
+      margin: 2rem 0;
     }
 
-    .instrument-item:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-    }
-
-    .instrument-item h3 {
-      color: #8b5cf6;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 1.2rem;
-      margin-bottom: 1rem;
-    }
-
-    /* Measurements display */
     .measurements-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 2rem;
       margin: 3rem 0;
     }
 
     .measurement-card {
-      padding: 1.5rem;
+      padding: 2rem;
       background: white;
-      border: 2px solid #e5e7eb;
+      border: 1px solid #e5e7eb;
       border-radius: 12px;
       transition: all 0.3s ease;
     }
 
     .measurement-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
       border-color: #8b5cf6;
+    }
+
+    .instrument-item {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      transition: all 0.3s;
+    }
+
+    .instrument-item:hover {
       transform: translateY(-2px);
-    }
-
-    .measurement-card h3 {
-      font-size: 1rem;
-      color: #8b5cf6;
-      margin-bottom: 0.5rem;
-      font-weight: 600;
-    }
-
-    .measurement-card .value {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 1.3rem;
-      color: #1e293b;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
-
-    .measurement-card p {
-      font-size: 0.9rem;
-      color: #64748b;
-      margin: 0;
-    }
-
-    /* Implications section */
-    .implications-section {
-      background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 100%);
-      padding: 5rem 0;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     }
 
     .implication-item {
@@ -261,8 +372,7 @@
       align-items: flex-start;
       margin: 2rem 0;
       padding: 2rem;
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(10px);
+      background: white;
       border-radius: 12px;
     }
 
@@ -281,280 +391,17 @@
       margin-right: 2rem;
     }
 
-    .implication-content h3 {
-      margin-top: 0;
-      color: #1e293b;
-    }
-
-    /* Closing section */
-    .closing-section {
-      padding: 6rem 0;
-      text-align: center;
-      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-    }
-
-    .closing-section p {
-      font-size: 1.3rem;
-      color: #334155;
-      max-width: 800px;
-      margin: 0 auto 2rem;
-      font-weight: 300;
-    }
-
-    .closing-section strong {
-      display: block;
-      font-size: 1.5rem;
-      margin: 2rem 0;
-      color: #1e293b;
-    }
-
-    .closing-links {
-      margin-top: 3rem;
-      padding-top: 3rem;
-      border-top: 1px solid #e5e7eb;
-    }
-
-    .closing-links a {
-      color: #8b5cf6;
-      text-decoration: none;
-      margin: 0 1rem;
-      font-weight: 500;
-      transition: all 0.3s ease;
-      display: inline-block;
-      padding: 0.5rem 0;
-      border-bottom: 2px solid transparent;
-    }
-
-    .closing-links a:hover {
-      border-bottom-color: #8b5cf6;
-      transform: translateY(-2px);
-    }
-
-    /* Mobile optimization */
-    @media (max-width: 768px) {
-      .measurement-hero {
-        padding: 5rem 0 3rem;
-      }
-
-      .measurements-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .implication-item {
-        flex-direction: column;
-      }
-
-      .implication-number {
-        margin-bottom: 1rem;
-      }
-    }
-
-    /* Comparison section */
-    .comparison-section {
-      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-      padding: 5rem 0;
-    }
-
-    .comparison-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      margin: 3rem 0;
-    }
-
-    .comparison-card {
-      padding: 2rem;
-      border-radius: 16px;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s ease;
-    }
-
-    .comparison-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-    }
-
-    .comparison-card.traditional {
-      background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-      border: 1px solid #fecaca;
-    }
-
-    .comparison-card.traditional::before {
-      background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
-    }
-
-    .comparison-card.recognition {
-      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-      border: 1px solid #bbf7d0;
-    }
-
-    .comparison-card.recognition::before {
-      background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%);
-    }
-
-    .card-header {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      color: #1e293b;
-    }
-
-    .card-content p {
-      font-style: italic;
-      margin-bottom: 1rem;
-      color: #475569;
-    }
-
-    .card-content ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .card-content li {
-      padding-left: 1.5rem;
-      margin-bottom: 0.5rem;
-      position: relative;
-    }
-
-    .card-content li::before {
-      content: '→';
-      position: absolute;
-      left: 0;
-      color: #8b5cf6;
-    }
-
-    .comparison-note {
-      margin-top: 2rem;
-      padding: 1.5rem;
-      background: rgba(255, 255, 255, 0.8);
-      border-radius: 12px;
-      font-style: italic;
-      text-align: center;
-    }
-
+    /* Responsive */
     @media (max-width: 768px) {
       .comparison-grid {
         grid-template-columns: 1fr;
       }
-    }
-
-    /* Visual formula displays */
-    .formula-display {
-      display: inline-block;
-      padding: 1rem 2rem;
-      margin: 1rem 0;
-      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-      color: white;
-      border-radius: 50px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 1.2rem;
-      font-weight: 600;
-      box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
-      animation: pulse-glow 3s ease-in-out infinite;
-    }
-
-    @keyframes pulse-glow {
-      0%, 100% { box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3); }
-      50% { box-shadow: 0 10px 40px rgba(139, 92, 246, 0.5); }
-    }
-
-    /* Interactive elements */
-    .interactive-badge {
-      display: inline-block;
-      padding: 0.5rem 1rem;
-      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-      color: #1e293b;
-      border-radius: 20px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      margin: 0 0.5rem;
-      animation: float 3s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
-    }
-
-    /* Number highlights */
-    .number-highlight {
-      display: inline-block;
-      padding: 0.2rem 0.6rem;
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
-      border: 1px solid rgba(139, 92, 246, 0.3);
-      border-radius: 8px;
-      font-family: 'JetBrains Mono', monospace;
-      font-weight: 600;
-      color: #7c3aed;
-    }
-
-    /* Animated background for key sections */
-    .animated-bg {
-      position: relative;
-      overflow: hidden;
-    }
-
-    .animated-bg::before {
-      content: '';
-      position: absolute;
-      top: -100%;
-      left: -100%;
-      width: 300%;
-      height: 300%;
-      background: radial-gradient(circle, rgba(139, 92, 246, 0.05) 0%, transparent 40%);
-      animation: rotate-bg 20s linear infinite;
-    }
-
-    @keyframes rotate-bg {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    /* Subtle animations */
-    @keyframes fade-in {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
+      
+      .live-measurement {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1.5rem;
       }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .container > * {
-      animation: fade-in 0.6s ease-out;
-    }
-
-    /* Visual separator */
-    .visual-separator {
-      width: 100%;
-      height: 2px;
-      background: linear-gradient(90deg, transparent 0%, #8b5cf6 50%, transparent 100%);
-      margin: 3rem 0;
-      opacity: 0.3;
-    }
-
-    /* Highlight box */
-    .highlight-box {
-      padding: 2rem;
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
-      border-left: 4px solid #8b5cf6;
-      border-radius: 8px;
-      margin: 2rem 0;
-    }
-
-    .highlight-box p {
-      margin: 0;
-      font-size: 1.2rem;
-      color: #334155;
     }
   </style>
 </head>
@@ -562,13 +409,40 @@
   <div id="header-placeholder"></div>
   
   <main>
+    <!-- Amazing animated hero -->
     <section class="measurement-hero">
-    <div class="container reading">
-        <h1>Revolutionary Metrology</h1>
-        <p class="subtitle">We're Not Building a Theory of Reality. We're Measuring Reality Itself.</p>
+      <!-- Animated measurement grid -->
+      <div class="measurement-grid" id="measurementGrid"></div>
+      
+      <!-- Floating measurements -->
+      <div class="floating-measurements" id="floatingMeasurements"></div>
+      
+      <!-- Caliper visualization -->
+      <div class="caliper-viz">
+        <div class="caliper-arm left"></div>
+        <div class="caliper-arm right"></div>
+        <div class="measurement-line"></div>
       </div>
-    </section>
+      
+      <!-- Hero content -->
+      <div class="hero-content">
+        <h1 class="hero-title">
+          <span style="--word-index: 0">Revolutionary</span>
+          <span style="--word-index: 1">Metrology</span>
+        </h1>
+        <p class="hero-subtitle">
+          We're Not Building a Theory of Reality.<br>
+          We're Measuring Reality Itself.
+        </p>
+        
+        <div class="live-measurement">
+          <span class="measurement-label">Reality Reading</span>
+          <span class="measurement-value" id="liveValue">137.035999</span>
+      </div>
+    </div>
+  </section>
 
+    <!-- All existing content sections remain the same -->
     <section>
     <div class="container reading">
         <h2>A Different Approach to Physics</h2>
@@ -615,17 +489,13 @@
           </div>
         </div>
         
-        <p class="comparison-note">A meter stick doesn't "fit" length—it defines it. We've found reality's meter sticks: ledger balance, the cost function <span class="formula-inline">J(x) = ½(x + 1/x)</span>, golden ratio scaling, the eight-beat cycle.</p>
-        
-        <div class="visual-separator"></div>
+        <p>A meter stick doesn't "fit" length—it defines it. We've found reality's meter sticks: ledger balance, the cost function <span class="formula-inline">J(x) = ½(x + 1/x)</span>, golden ratio scaling, the eight-beat cycle.</p>
         
         <div class="highlight-box">
-          <p><span class="interactive-badge">KEY POINT</span> The Standard Model has <span class="number-highlight">26</span> free parameters. String theory has <span class="number-highlight">10^500</span> possible configurations. Recognition Science has exactly <span class="number-highlight">0</span> free parameters.</p>
-      </div>
+          <p><strong>KEY POINT:</strong> The Standard Model has 26 free parameters. String theory has 10^500 possible configurations. Recognition Science has exactly 0 free parameters.</p>
+        </div>
         
         <p>Every number emerges from logical necessity. The fine-structure constant, the electron mass, the dark matter fraction—they're not inputs, they're outputs. They're what you get when you read reality's instruments correctly.</p>
-        
-        <div class="visual-separator"></div>
         
         <h3>The Same Measurement Works Everywhere</h3>
         <p>The same measurement apparatus explains:</p>
@@ -637,10 +507,8 @@
         </ul>
         <p>Not similar principles. Not analogous mathematics. The exact same ledger mechanics, unchanged, unmodified, with no new assumptions.</p>
         
-        <div class="visual-separator"></div>
-        
         <h3>It's Not a Theory—It's a Reading</h3>
-        <p>Theories can be wrong. Models can fail. But a measurement is what it is. When you read <span class="number-highlight">5.2</span> on a voltmeter, you're not theorizing about voltage—you're measuring it. We're doing the same thing with reality itself.</p>
+        <p>Theories can be wrong. Models can fail. But a measurement is what it is. When you read 5.2 on a voltmeter, you're not theorizing about voltage—you're measuring it. We're doing the same thing with reality itself.</p>
     </div>
   </section>
 
@@ -699,7 +567,7 @@
         <div class="instrument-item">
           <h3>Curvature κ</h3>
           <p>How "expensive" is it for reality to maintain a particular configuration? The ledger curvature κ quantifies this. Low curvature = stable. High curvature = transitional. This single parameter explains why some things last and others decay.</p>
-      </div>
+        </div>
     </div>
   </section>
 
@@ -737,7 +605,7 @@
             <div class="value">Rung 45</div>
             <p>At this energy level, the universe encounters incomputability. Experience emerges as reality's solution to navigate its own incompleteness.</p>
           </div>
-      </div>
+        </div>
     </div>
   </section>
 
@@ -773,7 +641,7 @@
             <h3>The Universe Is Self-Aware</h3>
             <p>To maintain a ledger, you must track what exists. To track what exists, you must recognize it. Recognition implies awareness. The universe isn't just computing—it's measuring itself, knowing itself, recognizing itself. We are the universe's way of reading its own measurements.</p>
           </div>
-      </div>
+        </div>
 
         <div class="implication-item">
           <div class="implication-number">2</div>
@@ -781,7 +649,7 @@
             <h3>Mathematics Is Discovered, Not Invented</h3>
             <p>The cost function, the golden ratio, the eight-beat cycle—we didn't create these. We found them. They were already there, built into reality's measurement system. Mathematics is the language reality uses to measure itself.</p>
           </div>
-    </div>
+        </div>
         
         <div class="implication-item">
           <div class="implication-number">3</div>
@@ -801,14 +669,14 @@
       </div>
     </section>
 
-    <section class="animated-bg">
+    <section>
       <div class="container reading">
         <h2>How to Verify This Yourself</h2>
         
         <p>The beautiful thing about measurements is that anyone can check them. You don't need to trust us. You don't need to believe the theory. You just need to check if the measurements work.</p>
         
         <div class="highlight-box">
-          <p>Take any particle mass. Apply the formula: <span class="formula-display">m = B · E_coh · φ^(r + f)</span></p>
+          <p>Take any particle mass. Apply the formula: <strong>m = B · E_coh · φ^(r + f)</strong></p>
           <p style="margin-top: 1rem;">No adjustable parameters. Does it match? <strong>It does.</strong></p>
         </div>
         
@@ -850,9 +718,7 @@
         
         <p>The method changes: From fitting and adjusting to measuring and verifying.</p>
         
-        <div class="visual-separator"></div>
-        
-        <p style="text-align: center; font-size: 1.2rem; color: #334155;">We're not theorizing about reality anymore. We're measuring it directly.<br>And what we're finding is that reality has been measuring itself all along.</p>
+        <p style="text-align: center; font-size: 1.2rem; color: #334155; margin-top: 3rem;">We're not theorizing about reality anymore. We're measuring it directly.<br>And what we're finding is that reality has been measuring itself all along.</p>
     </div>
   </section>
 
@@ -868,18 +734,104 @@
         
         <p>We're not building theories. We're reading instruments. And the instruments are reality itself.</p>
         
-        <div class="closing-links">
-          <p><em>Ready to see the measurements for yourself?</em></p>
-          <a href="/predictions.html">View Verified Predictions</a>
-          <a href="/constants.html">Explore the Constants</a>
-          <a href="/particle-masses.html">Check Particle Masses</a>
-          <a href="/logical-foundations.html">Understand the Logic</a>
+        <div style="margin-top: 3rem; padding-top: 3rem; border-top: 1px solid #e5e7eb; text-align: center;">
+          <p style="font-style: italic; margin-bottom: 2rem;">Ready to see the measurements for yourself?</p>
+          <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <a href="/predictions.html" style="padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #8b5cf6, #6366f1); color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">View Verified Predictions</a>
+            <a href="/constants.html" style="padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #8b5cf6, #6366f1); color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">Explore the Constants</a>
+            <a href="/particle-masses.html" style="padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #8b5cf6, #6366f1); color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">Check Particle Masses</a>
+            <a href="/logical-foundations.html" style="padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #8b5cf6, #6366f1); color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">Understand the Logic</a>
+          </div>
     </div>
   </div>
     </section>
   </main>
   
   <div id="footer-placeholder"></div>
+  
+  <script>
+    // Create animated measurement grid
+    function createMeasurementGrid() {
+      const grid = document.getElementById('measurementGrid');
+      
+      // Create horizontal lines
+      for (let i = 0; i < 10; i++) {
+        const line = document.createElement('div');
+        line.className = 'grid-line horizontal';
+        line.style.top = `${i * 10}%`;
+        line.style.animationDelay = `${i * 0.2}s`;
+        grid.appendChild(line);
+      }
+      
+      // Create vertical lines
+      for (let i = 0; i < 10; i++) {
+        const line = document.createElement('div');
+        line.className = 'grid-line vertical';
+        line.style.left = `${i * 10}%`;
+        line.style.animationDelay = `${i * 0.2 + 1}s`;
+        grid.appendChild(line);
+      }
+    }
+    
+    // Create floating measurements
+    function createFloatingMeasurements() {
+      const container = document.getElementById('floatingMeasurements');
+      const measurements = [
+        'α⁻¹ = 137.036',
+        'φ = 1.618...',
+        'E_coh = 0.090 eV',
+        'Ω_dm = 0.2649',
+        'N = 2³ = 8',
+        'm_e = 0.511 MeV',
+        'H₀ = 70.6',
+        'J(φ) = φ',
+        'κ = ∂²S/∂R²',
+        'c = 299792458'
+      ];
+      
+      measurements.forEach((text, i) => {
+        const elem = document.createElement('div');
+        elem.className = 'measurement-float';
+        elem.textContent = text;
+        elem.style.left = `${10 + (i % 5) * 20}%`;
+        elem.style.top = `${15 + Math.floor(i / 5) * 40}%`;
+        elem.style.animationDelay = `${i * 2}s`;
+        container.appendChild(elem);
+      });
+    }
+    
+    // Animate live measurement value
+    function animateLiveValue() {
+      const values = [
+        '137.035999',
+        '0.51099895',
+        '1.61803398',
+        '0.26490000',
+        '70.6000000',
+        '0.00116592'
+      ];
+      
+      const elem = document.getElementById('liveValue');
+      let index = 0;
+      
+      setInterval(() => {
+        elem.style.opacity = '0';
+        setTimeout(() => {
+          elem.textContent = values[index];
+          elem.style.opacity = '1';
+          index = (index + 1) % values.length;
+        }, 300);
+      }, 3000);
+    }
+    
+    // Initialize animations
+    window.addEventListener('load', () => {
+      createMeasurementGrid();
+      createFloatingMeasurements();
+      animateLiveValue();
+    });
+  </script>
+  
   <script src="/assets/js/main.js"></script>
 </body>
 </html>
