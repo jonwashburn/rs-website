@@ -1,0 +1,535 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: #0a0a0f;
+    color: #fff;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Matrix Rain Background */
+.matrix-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+    opacity: 0.15;
+}
+
+.matrix-column {
+    position: absolute;
+    top: -100%;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: #0f0;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    animation: matrixFall linear infinite;
+}
+
+@keyframes matrixFall {
+    to {
+        transform: translateY(200vh);
+    }
+}
+
+/* Flowing Particles in Margins */
+.particle-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.flowing-particle {
+    position: absolute;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.5rem;
+    color: rgba(139, 92, 246, 0.3);
+    pointer-events: none;
+    text-shadow: 0 0 10px currentColor;
+}
+
+/* Animated Grid Background */
+.grid-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(rgba(139, 92, 246, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(139, 92, 246, 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: gridMove 10s linear infinite;
+    z-index: 0;
+}
+
+@keyframes gridMove {
+    from { transform: translate(0, 0); }
+    to { transform: translate(50px, 50px); }
+}
+
+/* Hero Section - The Revelation */
+.hero {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    z-index: 2;
+}
+
+.hero-content {
+    text-align: center;
+    z-index: 2;
+    padding: 2rem;
+    max-width: 1200px;
+}
+
+.formula-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(3rem, 10vw, 8rem);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    letter-spacing: -0.03em;
+    line-height: 0.9;
+    position: relative;
+}
+
+.formula-title span {
+    display: inline-block;
+    background: linear-gradient(180deg, #fff 0%, #8b5cf6 50%, #10b981 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: textGlow 3s ease-in-out infinite;
+}
+
+@keyframes textGlow {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.5); }
+}
+
+.hero-subtitle {
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 3rem;
+    font-weight: 300;
+}
+
+.source-code-badge {
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    background: transparent;
+    border: 2px solid #10b981;
+    color: #10b981;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.source-code-badge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: #10b981;
+    transition: left 0.3s;
+    z-index: -1;
+}
+
+.source-code-badge:hover {
+    color: #000;
+}
+
+.source-code-badge:hover::before {
+    left: 0;
+}
+
+/* The Five Formulas Grid */
+.formulas-section {
+    position: relative;
+    padding: 5rem 0;
+    z-index: 2;
+    background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.5) 50%, transparent);
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.formulas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-top: 4rem;
+}
+
+.formula-card {
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    cursor: pointer;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.formula-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, transparent, rgba(139, 92, 246, 0.1));
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.formula-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(139, 92, 246, 0.5);
+    box-shadow: 0 20px 40px rgba(139, 92, 246, 0.2);
+}
+
+.formula-card:hover::before {
+    opacity: 1;
+}
+
+.formula-number {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-size: 3rem;
+    font-weight: 700;
+    color: rgba(139, 92, 246, 0.2);
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.formula-name {
+    font-size: 1.2rem;
+    color: #8b5cf6;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+.formula-equation {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.8rem;
+    color: #fff;
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.formula-equation::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #10b981, transparent);
+    animation: scanLine 3s linear infinite;
+}
+
+@keyframes scanLine {
+    to {
+        left: 100%;
+    }
+}
+
+.formula-description {
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.formula-impact {
+    color: #10b981;
+    font-size: 0.9rem;
+    font-style: italic;
+    margin-top: 1rem;
+}
+
+/* Interactive Formula Explorer */
+.explorer-section {
+    padding: 5rem 0;
+    position: relative;
+    z-index: 2;
+    background: transparent;
+}
+
+.explorer-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    text-align: center;
+    margin-bottom: 3rem;
+    color: #fff;
+}
+
+.explorer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+}
+
+.explorer-visualization {
+    position: relative;
+    height: 400px;
+    background: radial-gradient(circle at center, rgba(139, 92, 246, 0.1), transparent);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.formula-3d {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 3rem;
+    color: #8b5cf6;
+    transform-style: preserve-3d;
+    animation: rotate3d 10s linear infinite;
+}
+
+@keyframes rotate3d {
+    from {
+        transform: rotateX(0) rotateY(0);
+    }
+    to {
+        transform: rotateX(360deg) rotateY(360deg);
+    }
+}
+
+.explorer-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.control-button {
+    padding: 1rem 2rem;
+    background: rgba(139, 92, 246, 0.1);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.control-button:hover {
+    background: rgba(139, 92, 246, 0.2);
+    transform: translateX(10px);
+}
+
+.control-button::before {
+    content: '>';
+    position: absolute;
+    left: -20px;
+    transition: left 0.3s;
+}
+
+.control-button:hover::before {
+    left: 10px;
+}
+
+/* Reality Operating System Section */
+.os-section {
+    padding: 5rem 0;
+    position: relative;
+    z-index: 2;
+    background: transparent;
+}
+
+.terminal-window {
+    background: rgba(10, 10, 15, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid #10b981;
+    border-radius: 10px;
+    overflow: hidden;
+    max-width: 900px;
+    margin: 3rem auto;
+    box-shadow: 0 8px 32px 0 rgba(16, 185, 129, 0.2);
+}
+
+.terminal-header {
+    background: #10b981;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.terminal-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.terminal-body {
+    padding: 2rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: #10b981;
+    line-height: 1.8;
+}
+
+.terminal-line {
+    margin: 0.5rem 0;
+    opacity: 0;
+    animation: typeIn 0.1s forwards;
+}
+
+@keyframes typeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+.terminal-cursor {
+    display: inline-block;
+    width: 10px;
+    height: 20px;
+    background: #10b981;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+/* Proof Section */
+.proof-section {
+    padding: 5rem 0;
+    position: relative;
+    z-index: 2;
+    background: transparent;
+}
+
+.proof-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.proof-card {
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+}
+
+.proof-card:hover {
+    transform: scale(1.05);
+    border-color: #8b5cf6;
+}
+
+.proof-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.proof-title {
+    color: #8b5cf6;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.proof-description {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+/* CTA Section */
+.cta-section {
+    padding: 5rem 0;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    background: transparent;
+}
+
+.cta-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin-bottom: 2rem;
+    color: #fff;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+.cta-button {
+    padding: 1rem 2.5rem;
+    background: linear-gradient(135deg, #8b5cf6, #10b981);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 999px;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .explorer-grid {
+        grid-template-columns: 1fr;
+    }
+    .formulas-grid {
+        grid-template-columns: 1fr;
+    }
+}
