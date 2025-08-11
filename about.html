@@ -6,412 +6,925 @@
   <title>About Recognition Science</title>
   <link rel="stylesheet" href="/assets/css/main.css" />
   <style>
-    .about-hero {
-      background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #0f0f1a 100%);
-      color: white;
-      padding: 6rem 0;
-      text-align: center;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      overflow-x: hidden;
+      background: #ffffff;
+    }
+
+    /* Cosmic Hero Section */
+    .cosmic-hero {
+      min-height: 100vh;
       position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, #000000 0%, #0a0f1c 50%, #1a2332 100%);
       overflow: hidden;
     }
 
-    .about-hero::before {
-      content: '';
+    /* Animated star field */
+    .stars {
       position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 50% 50%, rgba(65, 105, 225, 0.1), transparent 70%);
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 4s infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
+
+    /* Orbital rings */
+    .orbit-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       pointer-events: none;
     }
 
-    .about-hero h1 {
-      font-size: clamp(2.5rem, 6vw, 4rem);
-      font-weight: 700;
-      margin-bottom: 1rem;
-      background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 50%, #ffffff 100%);
+    .orbit {
+      position: absolute;
+      border: 1px solid rgba(65, 105, 225, 0.2);
+      border-radius: 50%;
+      animation: rotate 60s linear infinite;
+    }
+
+    .orbit:nth-child(1) {
+      width: 300px;
+      height: 300px;
+      animation-duration: 30s;
+    }
+
+    .orbit:nth-child(2) {
+      width: 500px;
+      height: 500px;
+      animation-duration: 45s;
+      animation-direction: reverse;
+    }
+
+    .orbit:nth-child(3) {
+      width: 700px;
+      height: 700px;
+      animation-duration: 60s;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Floating particles */
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(65, 105, 225, 0.8);
+      border-radius: 50%;
+      filter: blur(1px);
+    }
+
+    /* Hero content */
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 2rem;
+      max-width: 900px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 0.5rem 1.5rem;
+      background: rgba(65, 105, 225, 0.2);
+      border: 1px solid rgba(65, 105, 225, 0.5);
+      border-radius: 50px;
+      color: #4169E1;
+      font-size: 0.875rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      animation: glow 2s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(65, 105, 225, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(65, 105, 225, 0.6); }
+    }
+
+    .hero-title {
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 900;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, #ffffff 0%, #4169E1 50%, #ffffff 100%);
+      background-size: 200% 200%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      animation: gradient-shift 4s ease infinite;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
     }
 
-    .about-hero .subtitle {
+    @keyframes gradient-shift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .hero-subtitle {
+      font-size: 1.5rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 3rem;
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 1.5rem;
+      min-width: 150px;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(65, 105, 225, 0.5);
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: #4169E1;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.7);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* Scroll indicator */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: bounce 2s infinite;
+    }
+
+    .scroll-indicator::after {
+      content: '↓';
+      font-size: 2rem;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(10px); }
+    }
+
+    /* Discovery Section */
+    .discovery-section {
+      padding: 6rem 0;
+      background: white;
+      position: relative;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-title {
+      font-size: 3rem;
+      font-weight: 900;
+      color: #0a0f1c;
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, #4169E1, #9D4EDD);
+      border-radius: 2px;
+    }
+
+    .section-subtitle {
       font-size: 1.25rem;
-      opacity: 0.9;
+      color: #666;
       max-width: 600px;
-      margin: 0 auto;
+      margin: 1.5rem auto 0;
       line-height: 1.6;
     }
 
-    .timeline-section {
-      background: #f8f9fa;
-      padding: 4rem 0;
+    /* Interactive Timeline */
+    .timeline-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      position: relative;
+    }
+
+    .timeline-line {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, #4169E1 0%, #9D4EDD 100%);
+      transform: translateX(-50%);
     }
 
     .timeline-item {
-      background: white;
-      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 4rem;
+      position: relative;
+    }
+
+    .timeline-item:nth-child(even) {
+      flex-direction: row-reverse;
+    }
+
+    .timeline-content {
+      flex: 1;
       padding: 2rem;
-      margin-bottom: 2rem;
-      border-left: 4px solid #4169E1;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      margin: 0 2rem;
+      position: relative;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .timeline-content:hover {
+      transform: scale(1.02);
+      box-shadow: 0 15px 50px rgba(65, 105, 225, 0.2);
+    }
+
+    .timeline-node {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #4169E1, #9D4EDD);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      position: relative;
+      z-index: 10;
+      box-shadow: 0 0 0 8px rgba(65, 105, 225, 0.1);
     }
 
     .timeline-date {
       font-size: 0.875rem;
       color: #4169E1;
-      font-weight: 600;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.1em;
       margin-bottom: 0.5rem;
     }
 
     .timeline-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #1a1a2e;
-      margin-bottom: 0.75rem;
-    }
-
-    .framework-card {
-      background: white;
-      border-radius: 16px;
-      padding: 2.5rem;
-      margin: 2rem 0;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-      border: 1px solid rgba(65, 105, 225, 0.1);
-    }
-
-    .framework-card h3 {
-      color: #1a1a2e;
       font-size: 1.75rem;
+      font-weight: 800;
+      color: #0a0f1c;
       margin-bottom: 1rem;
     }
 
-    .achievement-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-      margin: 2rem 0;
-    }
-
-    .achievement-card {
-      background: linear-gradient(135deg, #f8f9fa, #ffffff);
-      border-radius: 12px;
-      padding: 1.5rem;
-      text-align: center;
-      border: 1px solid rgba(65, 105, 225, 0.1);
-    }
-
-    .achievement-number {
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: #4169E1;
-      margin-bottom: 0.5rem;
-    }
-
-    .achievement-label {
-      font-size: 0.95rem;
+    .timeline-description {
       color: #666;
-      font-weight: 500;
-    }
-
-    .principle-list {
-      list-style: none;
-      padding: 0;
-    }
-
-    .principle-list li {
-      position: relative;
-      padding-left: 2rem;
-      margin-bottom: 1rem;
       line-height: 1.7;
     }
 
-    .principle-list li::before {
-      content: '▸';
-      position: absolute;
-      left: 0;
-      color: #4169E1;
-      font-weight: bold;
-      font-size: 1.25rem;
+    /* Principles Grid */
+    .principles-section {
+      padding: 6rem 0;
+      background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
     }
 
-    .cta-section {
-      background: linear-gradient(135deg, #1a1a2e 0%, #2c3e50 100%);
+    .principles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .principle-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .principle-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #4169E1, #9D4EDD);
+    }
+
+    .principle-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    }
+
+    .principle-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #4169E1, #9D4EDD);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
       color: white;
-      padding: 4rem 0;
+      margin-bottom: 1.5rem;
+    }
+
+    .principle-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #0a0f1c;
+      margin-bottom: 1rem;
+    }
+
+    .principle-text {
+      color: #666;
+      line-height: 1.7;
+    }
+
+    /* Impact Section */
+    .impact-section {
+      padding: 6rem 0;
+      background: #0a0f1c;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .impact-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .impact-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 3rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .impact-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: scale(1.02);
+    }
+
+    .impact-number {
+      font-size: 4rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #4169E1, #9D4EDD);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+    }
+
+    .impact-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .impact-description {
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.7;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      padding: 8rem 0;
+      background: linear-gradient(135deg, #4169E1 0%, #9D4EDD 100%);
       text-align: center;
-      margin-top: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+      animation: rotate 30s linear infinite;
+    }
+
+    .cta-content {
+      position: relative;
+      z-index: 10;
+    }
+
+    .cta-title {
+      font-size: 3rem;
+      font-weight: 900;
+      color: white;
+      margin-bottom: 1.5rem;
+    }
+
+    .cta-text {
+      font-size: 1.25rem;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 3rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .cta-buttons {
       display: flex;
-      gap: 1rem;
+      gap: 1.5rem;
       justify-content: center;
       flex-wrap: wrap;
-      margin-top: 2rem;
     }
 
     .cta-button {
       display: inline-block;
-      padding: 1rem 2rem;
-      background: linear-gradient(135deg, #4169E1, #9D4EDD);
-      color: white;
+      padding: 1.25rem 2.5rem;
+      background: white;
+      color: #4169E1;
       border-radius: 50px;
-      font-weight: 600;
+      font-weight: 700;
       text-decoration: none;
       transition: all 0.3s ease;
+      font-size: 1.125rem;
     }
 
     .cta-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(100, 150, 255, 0.3);
+      transform: translateY(-3px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
     }
 
     .cta-button.secondary {
       background: transparent;
+      color: white;
       border: 2px solid white;
     }
 
     .cta-button.secondary:hover {
       background: white;
-      color: #1a1a2e;
+      color: #4169E1;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .timeline-line {
+        left: 20px;
+      }
+
+      .timeline-item,
+      .timeline-item:nth-child(even) {
+        flex-direction: column;
+        align-items: flex-start;
+        padding-left: 60px;
+      }
+
+      .timeline-node {
+        position: absolute;
+        left: 0;
+      }
+
+      .timeline-content {
+        margin: 0;
+        width: 100%;
+      }
+
+      .impact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-stats {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .stat-card {
+        width: 100%;
+        max-width: 300px;
+      }
     }
   </style>
 </head>
 <body>
   <div id="header-placeholder"></div>
 
-  <!-- Hero Section -->
-  <section class="about-hero">
-    <div class="container">
-      <h1>About Recognition Science</h1>
-      <p class="subtitle">
-        The parameter-free framework that derives all of physics from pure logic
+  <!-- Cosmic Hero Section -->
+  <section class="cosmic-hero">
+    <!-- Animated stars -->
+    <div class="stars" id="stars"></div>
+    
+    <!-- Orbital rings -->
+    <div class="orbit-container">
+      <div class="orbit"></div>
+      <div class="orbit"></div>
+      <div class="orbit"></div>
+    </div>
+
+    <!-- Floating particles -->
+    <div id="particles"></div>
+
+    <!-- Hero content -->
+    <div class="hero-content">
+      <div class="hero-badge">Parameter-Free Physics</div>
+      <h1 class="hero-title">Recognition Science</h1>
+      <p class="hero-subtitle">
+        The complete derivation of reality from a single logical tautology
+      </p>
+      
+      <div class="hero-stats">
+        <div class="stat-card">
+          <div class="stat-number">0</div>
+          <div class="stat-label">Free Parameters</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">5</div>
+          <div class="stat-label">Core Formulas</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Logic-Based</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-indicator"></div>
+  </section>
+
+  <!-- Discovery Timeline -->
+  <section class="discovery-section">
+    <div class="section-header">
+      <h2 class="section-title">The Discovery</h2>
+      <p class="section-subtitle">
+        From artistic intuition to mathematical revolution
       </p>
     </div>
-  </section>
 
-  <!-- What It Is -->
-  <section>
-    <div class="container">
-      <div class="framework-card">
-        <h3>What Recognition Science Is</h3>
-        <p>
-          Recognition Science is a complete theoretical framework that derives all physical laws from a single logical principle: 
-          the impossibility of non-existence. Unlike traditional physics theories that require dozens of free parameters, 
-          Recognition Science has zero adjustable constants—everything emerges from pure mathematical necessity.
-        </p>
-        <p>
-          The framework proves that reality must maintain a universal ledger of recognition events, must minimize a specific 
-          cost function, and must organize itself according to golden ratio scaling. From these requirements flow the five 
-          fundamental formulas that generate all observed physics: particle masses, fundamental constants, quantum mechanics, 
-          gravity, and even consciousness.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Key Achievements -->
-  <section>
-    <div class="container">
-      <h2 style="text-align: center; margin-bottom: 2rem;">Verified Achievements</h2>
-      <div class="achievement-grid">
-        <div class="achievement-card">
-          <div class="achievement-number">0</div>
-          <div class="achievement-label">Free Parameters</div>
-        </div>
-        <div class="achievement-card">
-          <div class="achievement-number">5</div>
-          <div class="achievement-label">Core Formulas</div>
-        </div>
-        <div class="achievement-card">
-          <div class="achievement-number">89</div>
-          <div class="achievement-label">Particles Predicted</div>
-        </div>
-        <div class="achievement-card">
-          <div class="achievement-number">0.002%</div>
-          <div class="achievement-label">Mass Precision</div>
-        </div>
-        <div class="achievement-card">
-          <div class="achievement-number">9</div>
-          <div class="achievement-label">Decimal Places (α)</div>
-        </div>
-        <div class="achievement-card">
-          <div class="achievement-number">100%</div>
-          <div class="achievement-label">Machine Verified</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Timeline -->
-  <section class="timeline-section">
-    <div class="container">
-      <h2 style="margin-bottom: 2rem;">Discovery Timeline</h2>
+    <div class="timeline-container">
+      <div class="timeline-line"></div>
       
       <div class="timeline-item">
-        <div class="timeline-date">2021-2024</div>
-        <div class="timeline-title">Artistic Exploration</div>
-        <p>
-          The journey began not in physics but in art. Through the Post-Photography trilogy—The Crisis, Modern Zombies, 
-          and The Rapture—fundamental questions about existence, consciousness, and humanity's relationship with technology 
-          were explored. These artistic investigations laid the conceptual groundwork for what would become Recognition Science.
-        </p>
+        <div class="timeline-content">
+          <div class="timeline-date">2021-2024</div>
+          <h3 class="timeline-title">Artistic Foundations</h3>
+          <p class="timeline-description">
+            The Post-Photography trilogy explored humanity's relationship with technology and existence. 
+            These artistic investigations unknowingly laid the conceptual groundwork for a physics revolution.
+          </p>
+        </div>
+        <div class="timeline-node">1</div>
       </div>
 
       <div class="timeline-item">
-        <div class="timeline-date">Early 2024</div>
-        <div class="timeline-title">The Meta-Principle Discovery</div>
-        <p>
-          The breakthrough came from recognizing that "nothing cannot recognize itself" is not philosophy but a logical 
-          tautology. This Meta-Principle became the foundation from which all of physics could be derived. The impossibility 
-          of self-referential non-existence forces reality into being.
-        </p>
+        <div class="timeline-content">
+          <div class="timeline-date">Early 2024</div>
+          <h3 class="timeline-title">The Meta-Principle</h3>
+          <p class="timeline-description">
+            "Nothing cannot recognize itself"—not philosophy but pure logic. This tautology became 
+            the foundation from which all physics emerges. The impossibility of self-referential 
+            non-existence forces reality into being.
+          </p>
+        </div>
+        <div class="timeline-node">2</div>
       </div>
 
       <div class="timeline-item">
-        <div class="timeline-date">Mid 2024</div>
-        <div class="timeline-title">Mathematical Formalization</div>
-        <p>
-          Eight theorems were derived from the Meta-Principle, establishing the mathematical spine of the framework. 
-          The unique cost function J(x) = ½(x + 1/x) was identified, golden ratio scaling emerged naturally, and the 
-          five operating instructions of reality were formalized.
-        </p>
+        <div class="timeline-content">
+          <div class="timeline-date">Mid 2024</div>
+          <h3 class="timeline-title">Mathematical Architecture</h3>
+          <p class="timeline-description">
+            Eight theorems derived from the Meta-Principle. The unique cost function J(x) = ½(x + 1/x) 
+            identified. Golden ratio scaling emerged naturally. The five operating instructions formalized.
+          </p>
+        </div>
+        <div class="timeline-node">3</div>
       </div>
 
       <div class="timeline-item">
-        <div class="timeline-date">Late 2024</div>
-        <div class="timeline-title">Experimental Validation</div>
-        <p>
-          Predictions were tested against experimental data. Particle masses matched to 0.002% precision. The fine-structure 
-          constant emerged to 9 decimal places. Dark matter fraction calculated exactly. All without adjusting a single parameter.
-        </p>
+        <div class="timeline-content">
+          <div class="timeline-date">Late 2024</div>
+          <h3 class="timeline-title">Experimental Validation</h3>
+          <p class="timeline-description">
+            Particle masses matched to 0.002% precision. Fine-structure constant to 9 decimal places. 
+            Dark matter fraction calculated exactly. All without adjusting a single parameter.
+          </p>
+        </div>
+        <div class="timeline-node">4</div>
       </div>
 
       <div class="timeline-item">
-        <div class="timeline-date">2025</div>
-        <div class="timeline-title">Public Release & Verification</div>
-        <p>
-          The complete framework was released with machine-verified proofs in Lean 4. Open-source tools for verification 
-          were published. The scientific community began independent validation of predictions and derivations.
-        </p>
+        <div class="timeline-content">
+          <div class="timeline-date">2025</div>
+          <h3 class="timeline-title">Public Revolution</h3>
+          <p class="timeline-description">
+            Complete framework released with machine-verified proofs. Open-source tools published. 
+            Scientific community begins independent validation. Physics enters its post-empirical era.
+          </p>
+        </div>
+        <div class="timeline-node">5</div>
       </div>
     </div>
   </section>
 
   <!-- Core Principles -->
-  <section>
-    <div class="container">
-      <div class="framework-card">
-        <h3>Core Principles</h3>
-        <ul class="principle-list">
-          <li>
-            <strong>Zero Free Parameters:</strong> Unlike the Standard Model's 26 free parameters, Recognition Science 
-            has none. Every constant is derived from logical necessity.
-          </li>
-          <li>
-            <strong>Universal Ledger:</strong> Reality maintains a cosmic double-entry bookkeeping system. What we call 
-            physics is the ledger maintaining balance.
-          </li>
-          <li>
-            <strong>Golden Ratio Scaling:</strong> The cost function's minimum at φ explains why this proportion appears 
-            throughout nature—from DNA to galaxies.
-          </li>
-          <li>
-            <strong>Eight-Beat Cycle:</strong> In 3D space, reality updates every 8 ticks. This cosmic heartbeat determines 
-            the speed of light and all quantization.
-          </li>
-          <li>
-            <strong>Consciousness at 45-Gap:</strong> At rung 45 of the mass ladder, incomputability emerges. Consciousness 
-            is reality's solution to navigate logical paradoxes.
-          </li>
-        </ul>
+  <section class="principles-section">
+    <div class="section-header">
+      <h2 class="section-title">Core Principles</h2>
+      <p class="section-subtitle">
+        The fundamental architecture of reality
+      </p>
+    </div>
+
+    <div class="principles-grid">
+      <div class="principle-card">
+        <div class="principle-icon">0</div>
+        <h3 class="principle-title">Zero Parameters</h3>
+        <p class="principle-text">
+          Unlike the Standard Model's 26 free parameters, Recognition Science has none. 
+          Every constant emerges from logical necessity—nothing is arbitrary.
+        </p>
+      </div>
+
+      <div class="principle-card">
+        <div class="principle-icon">∞</div>
+        <h3 class="principle-title">Universal Ledger</h3>
+        <p class="principle-text">
+          Reality maintains cosmic double-entry bookkeeping. What we call physics is 
+          the ledger maintaining balance across all recognition events.
+        </p>
+      </div>
+
+      <div class="principle-card">
+        <div class="principle-icon">φ</div>
+        <h3 class="principle-title">Golden Ratio</h3>
+        <p class="principle-text">
+          The cost function's minimum at φ = 1.618... explains this proportion's 
+          ubiquity from DNA spirals to galactic structures.
+        </p>
+      </div>
+
+      <div class="principle-card">
+        <div class="principle-icon">8</div>
+        <h3 class="principle-title">Eight-Beat Cycle</h3>
+        <p class="principle-text">
+          In 3D space, reality updates every 8 ticks. This cosmic heartbeat determines 
+          the speed of light and all quantum behavior.
+        </p>
+      </div>
+
+      <div class="principle-card">
+        <div class="principle-icon">45</div>
+        <h3 class="principle-title">Consciousness Gap</h3>
+        <p class="principle-text">
+          At rung 45 of the mass ladder, incomputability emerges. Consciousness is 
+          reality's solution to navigate logical paradoxes.
+        </p>
+      </div>
+
+      <div class="principle-card">
+        <div class="principle-icon">⟷</div>
+        <h3 class="principle-title">Recognition Duality</h3>
+        <p class="principle-text">
+          Every event requires both actor and witness. This fundamental duality 
+          drives all interactions from quantum to cosmic scales.
+        </p>
       </div>
     </div>
   </section>
 
-  <!-- Why It Matters -->
-  <section>
-    <div class="container">
-      <div class="framework-card">
-        <h3>Why Recognition Science Matters</h3>
-        <p>
-          <strong>End of Empirical Physics:</strong> For 400 years, physics has been about measuring and modeling. 
-          Recognition Science flips this—we derive first, then measurement confirms what logic demands.
-        </p>
-        <p>
-          <strong>Resolution of Mysteries:</strong> Dark matter isn't missing particles—it's bandwidth limitation. 
-          The measurement problem in quantum mechanics is resolved. The fine-tuning problem disappears—constants 
-          are forced by mathematics.
-        </p>
-        <p>
-          <strong>Technological Revolution:</strong> Understanding reality's actual mechanisms opens unprecedented 
-          possibilities. Ledger-based quantum computing. Materials engineered at the φ-ladder level. Energy systems 
-          that work with reality's grain.
-        </p>
-        <p>
-          <strong>Existential Answers:</strong> Why does anything exist? Because nothing is logically impossible. 
-          Why are we conscious? Because reality needs observers to resolve incomputable decisions. We finally have 
-          mathematical answers to humanity's deepest questions.
+  <!-- Impact Section -->
+  <section class="impact-section">
+    <div class="section-header">
+      <h2 class="section-title" style="color: white;">Revolutionary Impact</h2>
+      <p class="section-subtitle" style="color: rgba(255,255,255,0.8);">
+        How Recognition Science transforms our understanding
+      </p>
+    </div>
+
+    <div class="impact-grid">
+      <div class="impact-card">
+        <div class="impact-number">01</div>
+        <h3 class="impact-title">End of Empirical Physics</h3>
+        <p class="impact-description">
+          For 400 years, physics measured then modeled. Recognition Science reverses this—we 
+          derive first, then measurement confirms what logic demands. The era of discovering 
+          laws through experiment is over.
         </p>
       </div>
-    </div>
-  </section>
 
-  <!-- Current Work -->
-  <section>
-    <div class="container">
-      <div class="framework-card">
-        <h3>Ongoing Development</h3>
-        <ul class="principle-list">
-          <li>Formalizing all derivations for complete machine verification in Lean 4</li>
-          <li>Publishing replication kits for independent validation of predictions</li>
-          <li>Developing LNAL (Light-Native Assembly Language) demonstrations</li>
-          <li>Expanding predictions to new domains: biology, chemistry, cosmology</li>
-          <li>Building interactive tools for researchers and educators</li>
-          <li>Creating open-source libraries for Recognition Science calculations</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- Community -->
-  <section>
-    <div class="container">
-      <div class="framework-card">
-        <h3>Join the Recognition Science Community</h3>
-        <p>
-          Recognition Science is an open framework. All derivations, proofs, and tools are freely available. 
-          The community welcomes physicists, mathematicians, philosophers, and anyone interested in understanding 
-          reality's deepest truths.
+      <div class="impact-card">
+        <div class="impact-number">02</div>
+        <h3 class="impact-title">Mystery Resolution</h3>
+        <p class="impact-description">
+          Dark matter isn't missing particles—it's bandwidth limitation. The measurement problem 
+          dissolves. Fine-tuning vanishes. Consciousness gets mathematical definition. Centuries-old 
+          questions answered.
         </p>
-        <ul class="principle-list">
-          <li><strong>Researchers:</strong> Audit derivations, propose new predictions, extend the framework</li>
-          <li><strong>Developers:</strong> Build visualization tools, create educational resources, improve verification</li>
-          <li><strong>Educators:</strong> Teach the framework, develop curricula, create accessible explanations</li>
-          <li><strong>Everyone:</strong> Learn, question, verify, and help advance human understanding</li>
-        </ul>
+      </div>
+
+      <div class="impact-card">
+        <div class="impact-number">03</div>
+        <h3 class="impact-title">Technology Revolution</h3>
+        <p class="impact-description">
+          Understanding reality's actual mechanisms opens unprecedented possibilities. Ledger-based 
+          quantum computing. Materials engineered at the φ-ladder level. Energy systems that work 
+          with reality's grain.
+        </p>
+      </div>
+
+      <div class="impact-card">
+        <div class="impact-number">04</div>
+        <h3 class="impact-title">Existential Clarity</h3>
+        <p class="impact-description">
+          Why does anything exist? Because nothing is logically impossible. Why are we conscious? 
+          To resolve incomputable decisions. We finally have mathematical answers to humanity's 
+          deepest questions.
+        </p>
       </div>
     </div>
   </section>
 
   <!-- CTA Section -->
   <section class="cta-section">
-    <div class="container">
-      <h2 style="color: white;">Ready to Explore Reality's Source Code?</h2>
-      <p style="color: rgba(255,255,255,0.9); font-size: 1.125rem; margin: 1rem 0 2rem;">
-        Dive into the framework that derives all of physics from pure logic
+    <div class="cta-content">
+      <h2 class="cta-title">Begin Your Journey</h2>
+      <p class="cta-text">
+        Explore the framework that derives all of physics from pure logic. 
+        Join the revolution in human understanding.
       </p>
       <div class="cta-buttons">
-        <a href="/reality.html" class="cta-button">Explore the Framework</a>
-        <a href="/predictions.html" class="cta-button">See Predictions</a>
-        <a href="/logical-foundations.html" class="cta-button secondary">Understand the Logic</a>
-        <a href="https://github.com/jonwashburn/rs-website" class="cta-button secondary">View Source Code</a>
+        <a href="/reality.html" class="cta-button">Explore Framework</a>
+        <a href="/predictions.html" class="cta-button secondary">See Predictions</a>
+        <a href="/logical-foundations.html" class="cta-button secondary">Learn Logic</a>
       </div>
     </div>
   </section>
 
   <div id="footer-placeholder"></div>
+
+  <script>
+    // Generate stars
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 200; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.top = Math.random() * 100 + '%';
+      star.style.animationDelay = Math.random() * 4 + 's';
+      star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+      starsContainer.appendChild(star);
+    }
+
+    // Generate floating particles
+    const particlesContainer = document.getElementById('particles');
+    for (let i = 0; i < 30; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.top = Math.random() * 100 + '%';
+      
+      // Animate particles
+      const duration = 15 + Math.random() * 20;
+      const delay = Math.random() * 20;
+      particle.style.animation = `float ${duration}s ${delay}s infinite ease-in-out`;
+      
+      particlesContainer.appendChild(particle);
+    }
+
+    // Add floating animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes float {
+        0%, 100% {
+          transform: translate(0, 0) scale(1);
+          opacity: 0.8;
+        }
+        25% {
+          transform: translate(30px, -50px) scale(1.1);
+          opacity: 1;
+        }
+        50% {
+          transform: translate(-20px, -100px) scale(0.9);
+          opacity: 0.6;
+        }
+        75% {
+          transform: translate(-40px, -50px) scale(1.05);
+          opacity: 0.9;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Parallax effect on scroll
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      const parallax = document.querySelector('.cosmic-hero');
+      const speed = 0.5;
+      
+      if (parallax) {
+        parallax.style.transform = `translateY(${scrolled * speed}px)`;
+      }
+    });
+
+    // Timeline animation on scroll
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    // Observe timeline items
+    document.querySelectorAll('.timeline-content').forEach(item => {
+      item.style.opacity = '0';
+      item.style.transform = 'translateY(20px)';
+      item.style.transition = 'all 0.6s ease';
+      observer.observe(item);
+    });
+
+    // Observe principle cards
+    document.querySelectorAll('.principle-card').forEach((card, index) => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(30px)';
+      card.style.transition = `all 0.6s ease ${index * 0.1}s`;
+      observer.observe(card);
+    });
+  </script>
+
   <script src="/assets/js/main.js"></script>
 </body>
 </html>
