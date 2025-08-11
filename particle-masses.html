@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Parameter-Free Particle Masses - Recognition Science</title>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
@@ -15,53 +16,6 @@
       color: #1a1a1a;
       background: #ffffff;
       margin: 0;
-    }
-
-    nav.header {
-      background: #000;
-      color: #fff;
-      padding: 1rem 2rem;
-      margin-bottom: 2rem;
-    }
-
-    nav.header .nav-content {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    nav.header a {
-      color: #fff !important;
-      text-decoration: none;
-      font-weight: 600;
-      border-bottom: none !important;
-      transition: opacity 0.2s;
-    }
-
-    nav.header a:hover {
-      opacity: 0.8;
-      border-bottom: none !important;
-    }
-
-    nav.header .nav-links {
-      display: flex;
-      gap: 2rem;
-      align-items: center;
-    }
-
-    .pdf-download {
-      background: #fff;
-      color: #000 !important;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      font-weight: 600;
-      transition: background 0.2s;
-    }
-
-    .pdf-download:hover {
-      background: #f0f0f0;
     }
 
     .content {
@@ -260,17 +214,66 @@
 </head>
 <body>
 
-  <nav class="header">
-    <div class="nav-content">
-      <a href="/">Recognition Science</a>
-      <div class="nav-links">
-        <a href="/meta-principle">Meta-Principle</a>
-        <a href="/technical-briefing">Technical Overview</a>
-        <a href="/predictions">Predictions</a>
-        <a href="Parameter_Free_Particle_Masses.pdf" class="pdf-download">📄 Download PDF</a>
-      </div>
+  <header class="site-header">
+    <div class="container header-container">
+        <div class="logo">
+            <a href="/index.html">Recognition Science</a>
+        </div>
+        <button class="mobile-menu-toggle" aria-label="Toggle navigation menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <nav class="global-nav" id="globalNav">
+            <ul>
+                <li class="dropdown" style="position: relative;">
+                    <a href="/reality.html" class="dropbtn" style="position: relative; display: inline-block;">
+                        Science
+                        <span style="position:absolute; left:0; right:0; bottom:-8px; height:8px; display:block;"></span>
+                    </a>
+                    <div class="dropdown-content" style="margin-top:0;">
+                        <a href="/logical-foundations.html">Logical Foundation</a>
+                        <a href="/constants.html">Constants</a>
+                        <a href="/formulas/">Formulas</a>
+                        <a href="/measurement.html">Measurement</a>
+                        <a href="/predictions.html">Validated Predictions</a>
+                        <a href="/future-predictions.html">Future Predictions</a>
+                        <a href="/particle-masses.html">Particle Masses</a>
+                        <a href="/encyclopedia/primes.html">Prime Numbers</a>
+                    </div>
+                </li>
+                
+                <li class="dropdown" style="position: relative;">
+                    <a href="/us.html" class="dropbtn" style="position: relative; display: inline-block;">
+                        Theory of Us
+                        <span style="position:absolute; left:0; right:0; bottom:-8px; height:8px; display:block;"></span>
+                    </a>
+                    <div class="dropdown-content" style="margin-top:0;">
+                        <a href="/us.html">Us</a>
+                        <a href="/us/religion.html">Religions</a>
+                        <a href="/us/philosophy.html">Philosophy</a>
+                        <a href="/us/ancient.html">Ancients</a>
+                        <a href="/astrology/">Astrology OS</a>
+                        <a href="/us/health.html">Health</a>
+                        <a href="/ethics.html">Ethics</a>
+                        <hr>
+                        <a href="/us/community.html">Community</a>
+                        <a href="/prophecy.html">Our Future</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="/questions/index.html" class="dropbtn">Questions</a>
+                </li>
+                <li>
+                    <a href="/about.html">About</a>
+                </li>
+                <li style="margin-left: auto;">
+                    <a href="Parameter_Free_Particle_Masses.pdf" style="background: #5a67d8; color: white; padding: 0.5rem 1rem; border-radius: 4px;">📄 Download PDF</a>
+                </li>
+            </ul>
+        </nav>
     </div>
-  </nav>
+  </header>
 
   <div class="content">
 
@@ -753,6 +756,22 @@ s = √[(Δm²<sub>31</sub>)<sub>exp</sub> / Δm̂²<sub>31</sub>],<br>
     
     <p><a href="/">← Back to Recognition Science</a></p>
   </div>
+
+  <script>
+    // Mobile menu toggle
+    document.addEventListener('DOMContentLoaded', function() {
+      const mobileToggle = document.querySelector('.mobile-menu-toggle');
+      const nav = document.querySelector('.global-nav');
+      
+      if (mobileToggle && nav) {
+        mobileToggle.addEventListener('click', function() {
+          nav.classList.toggle('active');
+          mobileToggle.classList.toggle('active');
+        });
+      }
+    });
+  </script>
+  <script src="assets/js/main.js"></script>
 
 </body>
 </html>
