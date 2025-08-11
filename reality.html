@@ -4,9 +4,536 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Reality | Recognition Science</title>
+  <link rel="stylesheet" href="main.css">
+  <style>
+    /* Epic Hero Section */
+    .reality-hero {
+      position: relative;
+      min-height: 100vh;
+      background: white;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Cosmic Grid Background */
+    .cosmic-grid {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .grid-line {
+      position: absolute;
+      background: linear-gradient(90deg, transparent, rgba(100, 150, 255, 0.1), transparent);
+      animation: gridPulse 8s ease-in-out infinite;
+    }
+
+    .grid-line.horizontal {
+      width: 100%;
+      height: 1px;
+      left: 0;
+    }
+
+    .grid-line.vertical {
+      width: 1px;
+      height: 100%;
+      top: 0;
+    }
+
+    @keyframes gridPulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.8; }
+    }
+
+    /* Floating Equations */
+    .equation-field {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .floating-equation {
+      position: absolute;
+      font-family: 'Times New Roman', serif;
+      font-style: italic;
+      color: rgba(50, 100, 200, 0.15);
+      font-size: clamp(14px, 2vw, 24px);
+      animation: floatEquation 20s linear infinite;
+      white-space: nowrap;
+    }
+
+    @keyframes floatEquation {
+      from {
+        transform: translateX(-100px) translateY(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.15;
+      }
+      90% {
+        opacity: 0.15;
+      }
+      to {
+        transform: translateX(calc(100vw + 100px)) translateY(-30px) rotate(5deg);
+        opacity: 0;
+      }
+    }
+
+    /* Reality Particles */
+    .reality-particles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .reality-particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: radial-gradient(circle, rgba(100, 150, 255, 0.8), transparent);
+      border-radius: 50%;
+      animation: particleFloat 15s linear infinite;
+    }
+
+    @keyframes particleFloat {
+      from {
+        transform: translateY(100vh) scale(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+        transform: translateY(80vh) scale(1);
+      }
+      90% {
+        opacity: 1;
+      }
+      to {
+        transform: translateY(-100px) scale(0.5);
+        opacity: 0;
+      }
+    }
+
+    /* Dimensional Layers */
+    .dimensional-layers {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      perspective: 1000px;
+    }
+
+    .dimension-ring {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 600px;
+      height: 600px;
+      margin-left: -300px;
+      margin-top: -300px;
+      border: 1px solid rgba(100, 150, 255, 0.1);
+      border-radius: 50%;
+      transform-style: preserve-3d;
+      animation: dimensionRotate 30s linear infinite;
+    }
+
+    .dimension-ring:nth-child(1) {
+      animation-duration: 25s;
+      transform: rotateX(60deg) rotateY(0deg);
+    }
+
+    .dimension-ring:nth-child(2) {
+      animation-duration: 35s;
+      animation-direction: reverse;
+      transform: rotateX(30deg) rotateY(45deg);
+      width: 500px;
+      height: 500px;
+      margin-left: -250px;
+      margin-top: -250px;
+    }
+
+    .dimension-ring:nth-child(3) {
+      animation-duration: 40s;
+      transform: rotateX(80deg) rotateZ(30deg);
+      width: 700px;
+      height: 700px;
+      margin-left: -350px;
+      margin-top: -350px;
+    }
+
+    @keyframes dimensionRotate {
+      from { transform: rotateX(60deg) rotateY(0deg) rotateZ(0deg); }
+      to { transform: rotateX(60deg) rotateY(360deg) rotateZ(360deg); }
+    }
+
+    /* Meta-Principle Visualization */
+    .meta-principle-viz {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .recognition-loop {
+      width: 200px;
+      height: 200px;
+      position: relative;
+      animation: recognitionPulse 4s ease-in-out infinite;
+    }
+
+    @keyframes recognitionPulse {
+      0%, 100% { 
+        transform: scale(1);
+        filter: blur(0px);
+      }
+      50% { 
+        transform: scale(1.1);
+        filter: blur(1px);
+      }
+    }
+
+    .recognition-loop svg {
+      width: 100%;
+      height: 100%;
+      opacity: 0.1;
+    }
+
+    .infinity-path {
+      stroke: url(#infinityGradient);
+      stroke-width: 2;
+      fill: none;
+      stroke-dasharray: 300;
+      stroke-dashoffset: 0;
+      animation: infinityDraw 8s linear infinite;
+    }
+
+    @keyframes infinityDraw {
+      to {
+        stroke-dashoffset: -600;
+      }
+    }
+
+    /* Hero Content */
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      max-width: 900px;
+      padding: 2rem;
+      animation: contentReveal 1.5s ease-out;
+    }
+
+    @keyframes contentReveal {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 0.5rem 1.5rem;
+      background: linear-gradient(135deg, rgba(100, 150, 255, 0.1), rgba(150, 100, 255, 0.1));
+      border: 1px solid rgba(100, 150, 255, 0.2);
+      border-radius: 50px;
+      font-size: 0.875rem;
+      color: #4169E1;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(10px);
+      animation: badgePulse 3s ease-in-out infinite;
+    }
+
+    @keyframes badgePulse {
+      0%, 100% { 
+        box-shadow: 0 0 0 0 rgba(100, 150, 255, 0.4);
+      }
+      50% { 
+        box-shadow: 0 0 20px 5px rgba(100, 150, 255, 0.2);
+      }
+    }
+
+    .hero-title {
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      margin: 0 0 1rem 0;
+      background: linear-gradient(
+        135deg,
+        #1a1a2e 0%,
+        #4169E1 25%,
+        #9D4EDD 50%,
+        #4169E1 75%,
+        #1a1a2e 100%
+      );
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradientShift 8s ease-in-out infinite;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.25rem, 3vw, 1.75rem);
+      color: #666;
+      margin: 0 0 2rem 0;
+      font-weight: 300;
+      line-height: 1.6;
+      opacity: 0;
+      animation: subtitleFade 1s ease-out 0.5s forwards;
+    }
+
+    @keyframes subtitleFade {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .meta-equation {
+      display: inline-block;
+      padding: 1.5rem 3rem;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(250, 250, 255, 0.95));
+      border: 2px solid rgba(100, 150, 255, 0.2);
+      border-radius: 20px;
+      font-family: 'Times New Roman', serif;
+      font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+      font-style: italic;
+      color: #2c3e50;
+      margin: 2rem 0;
+      position: relative;
+      backdrop-filter: blur(20px);
+      box-shadow: 
+        0 10px 40px rgba(100, 150, 255, 0.1),
+        inset 0 1px 1px rgba(255, 255, 255, 0.9);
+      animation: equationFloat 6s ease-in-out infinite;
+    }
+
+    @keyframes equationFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .meta-equation::before,
+    .meta-equation::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 20px;
+      padding: 2px;
+      background: linear-gradient(45deg, 
+        transparent,
+        rgba(100, 150, 255, 0.3),
+        transparent,
+        rgba(150, 100, 255, 0.3),
+        transparent
+      );
+      background-size: 400% 400%;
+      animation: borderGlow 4s linear infinite;
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    @keyframes borderGlow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 400% 50%; }
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: scrollBounce 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollBounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(10px); }
+    }
+
+    .scroll-indicator svg {
+      width: 30px;
+      height: 30px;
+      stroke: rgba(100, 150, 255, 0.5);
+      stroke-width: 2;
+      fill: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .dimension-ring {
+        width: 300px !important;
+        height: 300px !important;
+        margin-left: -150px !important;
+        margin-top: -150px !important;
+      }
+      
+      .hero-content {
+        padding: 1rem;
+      }
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Generate cosmic grid
+      const grid = document.querySelector('.cosmic-grid');
+      if (grid) {
+        // Horizontal lines
+        for (let i = 0; i < 20; i++) {
+          const line = document.createElement('div');
+          line.className = 'grid-line horizontal';
+          line.style.top = `${i * 5}%`;
+          line.style.animationDelay = `${i * 0.1}s`;
+          grid.appendChild(line);
+        }
+        // Vertical lines
+        for (let i = 0; i < 20; i++) {
+          const line = document.createElement('div');
+          line.className = 'grid-line vertical';
+          line.style.left = `${i * 5}%`;
+          line.style.animationDelay = `${i * 0.1 + 0.5}s`;
+          grid.appendChild(line);
+        }
+      }
+
+      // Generate floating equations
+      const equations = [
+        'E = mc²',
+        '∇²ψ = 0',
+        'F = ma',
+        'S = k log W',
+        '∂ψ/∂t = Ĥψ',
+        'Rμν - ½gμνR = 8πTμν',
+        '∮ B·dl = μ₀I',
+        'PV = nRT',
+        'ΔS ≥ 0',
+        'λ = h/p',
+        'ℏω = E',
+        'φ = (1+√5)/2',
+        '∇·E = ρ/ε₀',
+        'c² = a² + b²',
+        'e^(iπ) + 1 = 0',
+        '∫∫∫ ∇×F·dV = ∮∮ F×n·dS',
+        'H|ψ⟩ = E|ψ⟩',
+        'ds² = gμνdxμdxν',
+        '⟨x|p⟩ = e^(ipx/ℏ)',
+        'α ≈ 1/137'
+      ];
+
+      const equationField = document.querySelector('.equation-field');
+      if (equationField) {
+        equations.forEach((eq, i) => {
+          const equation = document.createElement('div');
+          equation.className = 'floating-equation';
+          equation.textContent = eq;
+          equation.style.top = `${Math.random() * 100}%`;
+          equation.style.animationDelay = `${i * 2}s`;
+          equation.style.animationDuration = `${20 + Math.random() * 10}s`;
+          equationField.appendChild(equation);
+        });
+      }
+
+      // Generate reality particles
+      const particleContainer = document.querySelector('.reality-particles');
+      if (particleContainer) {
+        for (let i = 0; i < 30; i++) {
+          const particle = document.createElement('div');
+          particle.className = 'reality-particle';
+          particle.style.left = `${Math.random() * 100}%`;
+          particle.style.animationDelay = `${Math.random() * 15}s`;
+          particle.style.animationDuration = `${15 + Math.random() * 10}s`;
+          particleContainer.appendChild(particle);
+        }
+      }
+
+      // Load header and footer
+      fetch('header.html')
+        .then(response => response.text())
+        .then(data => {
+          const placeholder = document.getElementById('header-placeholder');
+          if (placeholder) placeholder.innerHTML = data;
+        });
+
+      fetch('footer.html')
+        .then(response => response.text())
+        .then(data => {
+          const footer = document.createElement('div');
+          footer.innerHTML = data;
+          document.body.appendChild(footer);
+        });
+    });
+  </script>
 </head>
 <body>
   <div id="header-placeholder"></div>
+
+  <!-- Epic Hero Section -->
+  <section class="reality-hero">
+    <!-- Cosmic Grid -->
+    <div class="cosmic-grid"></div>
+
+    <!-- Floating Equations -->
+    <div class="equation-field"></div>
+
+    <!-- Reality Particles -->
+    <div class="reality-particles"></div>
+
+    <!-- Dimensional Layers -->
+    <div class="dimensional-layers">
+      <div class="dimension-ring"></div>
+      <div class="dimension-ring"></div>
+      <div class="dimension-ring"></div>
+    </div>
+
+    <!-- Meta-Principle Visualization -->
+    <div class="meta-principle-viz">
+      <div class="recognition-loop">
+        <svg viewBox="0 0 200 200">
+          <defs>
+            <linearGradient id="infinityGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#4169E1;stop-opacity:0.8" />
+              <stop offset="50%" style="stop-color:#9D4EDD;stop-opacity:0.8" />
+              <stop offset="100%" style="stop-color:#4169E1;stop-opacity:0.8" />
+            </linearGradient>
+          </defs>
+          <path class="infinity-path" d="M50,100 Q50,50 100,50 T150,100 Q150,150 100,150 T50,100" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- Hero Content -->
+    <div class="hero-content">
+      <div class="hero-badge">The Complete Framework</div>
+      <h1 class="hero-title">Reality</h1>
+      <p class="hero-subtitle">
+        From a single logical necessity to the entire universe<br>
+        Zero assumptions • Zero free parameters • Everything derived
+      </p>
+      <div class="meta-equation">
+        Nothing → Recognition → Everything
+      </div>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator">
+      <svg viewBox="0 0 24 24">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </div>
+  </section>
 
   <main>
     <section>
