@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>About Recognition Science</title>
   <link rel="stylesheet" href="/assets/css/main.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     * {
       margin: 0;
@@ -15,91 +16,86 @@
     body {
       overflow-x: hidden;
       background: #ffffff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
     }
 
-    /* Cosmic Hero Section */
-    .cosmic-hero {
+    /* Quantum Hero Section */
+    .quantum-hero {
       min-height: 100vh;
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(180deg, #000000 0%, #0a0f1c 50%, #1a2332 100%);
+      background: radial-gradient(ellipse at top, #f0f4ff 0%, #ffffff 50%);
       overflow: hidden;
     }
 
-    /* Animated star field */
-    .stars {
+    /* Quantum field visualization */
+    .quantum-field {
       position: absolute;
       width: 100%;
       height: 100%;
-      overflow: hidden;
+      opacity: 0.6;
     }
 
-    .star {
+    .field-wave {
       position: absolute;
-      width: 2px;
-      height: 2px;
-      background: white;
-      border-radius: 50%;
-      animation: twinkle 4s infinite;
+      width: 200%;
+      height: 200%;
+      top: -50%;
+      left: -50%;
     }
 
-    @keyframes twinkle {
-      0%, 100% { opacity: 0; }
-      50% { opacity: 1; }
+    .field-wave svg {
+      width: 100%;
+      height: 100%;
     }
 
-    /* Orbital rings */
-    .orbit-container {
+    .field-path {
+      fill: none;
+      stroke: url(#waveGradient);
+      stroke-width: 2;
+      opacity: 0.3;
+      animation: waveFlow 20s linear infinite;
+    }
+
+    @keyframes waveFlow {
+      0% { stroke-dashoffset: 0; }
+      100% { stroke-dashoffset: -1000; }
+    }
+
+    /* Floating phi symbols */
+    .phi-container {
       position: absolute;
       width: 100%;
       height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       pointer-events: none;
     }
 
-    .orbit {
+    .phi-symbol {
       position: absolute;
-      border: 1px solid rgba(65, 105, 225, 0.2);
-      border-radius: 50%;
-      animation: rotate 60s linear infinite;
+      font-size: 2rem;
+      color: rgba(65, 105, 225, 0.1);
+      animation: floatPhi 30s ease-in-out infinite;
+      font-family: 'Times New Roman', serif;
+      font-style: italic;
     }
 
-    .orbit:nth-child(1) {
-      width: 300px;
-      height: 300px;
-      animation-duration: 30s;
-    }
-
-    .orbit:nth-child(2) {
-      width: 500px;
-      height: 500px;
-      animation-duration: 45s;
-      animation-direction: reverse;
-    }
-
-    .orbit:nth-child(3) {
-      width: 700px;
-      height: 700px;
-      animation-duration: 60s;
-    }
-
-    @keyframes rotate {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    /* Floating particles */
-    .particle {
-      position: absolute;
-      width: 4px;
-      height: 4px;
-      background: rgba(65, 105, 225, 0.8);
-      border-radius: 50%;
-      filter: blur(1px);
+    @keyframes floatPhi {
+      0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.3;
+      }
+      50% {
+        transform: translate(100px, -200px) rotate(180deg);
+        opacity: 0.1;
+      }
+      90% {
+        opacity: 0.3;
+      }
     }
 
     /* Hero content */
@@ -107,202 +103,223 @@
       position: relative;
       z-index: 10;
       text-align: center;
-      padding: 2rem;
       max-width: 900px;
+      padding: 2rem;
     }
 
     .hero-badge {
       display: inline-block;
-      padding: 0.5rem 1.5rem;
-      background: rgba(65, 105, 225, 0.2);
-      border: 1px solid rgba(65, 105, 225, 0.5);
+      padding: 0.75rem 2rem;
+      background: white;
+      border: 2px solid #4169E1;
       border-radius: 50px;
       color: #4169E1;
-      font-size: 0.875rem;
       font-weight: 600;
+      font-size: 0.875rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       margin-bottom: 2rem;
-      animation: glow 2s ease-in-out infinite;
-    }
-
-    @keyframes glow {
-      0%, 100% { box-shadow: 0 0 20px rgba(65, 105, 225, 0.3); }
-      50% { box-shadow: 0 0 40px rgba(65, 105, 225, 0.6); }
+      box-shadow: 0 4px 20px rgba(65, 105, 225, 0.1);
     }
 
     .hero-title {
-      font-size: clamp(3rem, 8vw, 6rem);
-      font-weight: 900;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 800;
+      color: #0a0f1c;
       margin-bottom: 1.5rem;
-      background: linear-gradient(135deg, #ffffff 0%, #4169E1 50%, #ffffff 100%);
-      background-size: 200% 200%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: gradient-shift 4s ease infinite;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.03em;
       line-height: 1.1;
     }
 
-    @keyframes gradient-shift {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
+    .hero-title .gradient-text {
+      background: linear-gradient(135deg, #4169E1 0%, #9D4EDD 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .hero-subtitle {
       font-size: 1.5rem;
-      color: rgba(255, 255, 255, 0.8);
+      color: #64748b;
       margin-bottom: 3rem;
       line-height: 1.6;
-      font-weight: 300;
+      font-weight: 400;
     }
 
-    .hero-stats {
-      display: flex;
-      gap: 2rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .stat-card {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      padding: 1.5rem;
-      min-width: 150px;
-      transition: all 0.3s ease;
-    }
-
-    .stat-card:hover {
-      transform: translateY(-5px);
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(65, 105, 225, 0.5);
-    }
-
-    .stat-number {
-      font-size: 2.5rem;
-      font-weight: 900;
-      color: #4169E1;
-      margin-bottom: 0.5rem;
-    }
-
-    .stat-label {
-      font-size: 0.875rem;
-      color: rgba(255, 255, 255, 0.7);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-
-    /* Scroll indicator */
-    .scroll-indicator {
-      position: absolute;
-      bottom: 2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      animation: bounce 2s infinite;
-    }
-
-    .scroll-indicator::after {
-      content: '↓';
-      font-size: 2rem;
-      color: rgba(255, 255, 255, 0.5);
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(10px); }
-    }
-
-    /* Discovery Section */
-    .discovery-section {
+    /* Founder Section */
+    .founder-section {
       padding: 6rem 0;
       background: white;
       position: relative;
     }
 
+    .founder-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .founder-visual {
+      position: relative;
+    }
+
+    .founder-card {
+      background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+      border-radius: 24px;
+      padding: 3rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(65, 105, 225, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .founder-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #4169E1, #9D4EDD);
+    }
+
+    .founder-name {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #0a0f1c;
+      margin-bottom: 0.5rem;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .founder-title {
+      font-size: 1.25rem;
+      color: #4169E1;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .founder-location {
+      font-size: 1rem;
+      color: #64748b;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .founder-location::before {
+      content: '📍';
+    }
+
+    .founder-bio {
+      color: #475569;
+      line-height: 1.8;
+      font-size: 1.125rem;
+    }
+
+    .founder-content {
+      position: relative;
+    }
+
+    .content-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .content-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    }
+
+    .content-card h3 {
+      font-size: 1.75rem;
+      color: #0a0f1c;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .content-card p {
+      color: #64748b;
+      line-height: 1.7;
+    }
+
+    /* Discovery Timeline */
+    .discovery-section {
+      padding: 6rem 0;
+      background: linear-gradient(180deg, #f8f9ff 0%, #ffffff 100%);
+    }
+
     .section-header {
       text-align: center;
       margin-bottom: 4rem;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0 2rem;
     }
 
     .section-title {
       font-size: 3rem;
-      font-weight: 900;
+      font-weight: 800;
       color: #0a0f1c;
       margin-bottom: 1rem;
-      position: relative;
-      display: inline-block;
-    }
-
-    .section-title::after {
-      content: '';
-      position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60px;
-      height: 4px;
-      background: linear-gradient(90deg, #4169E1, #9D4EDD);
-      border-radius: 2px;
+      font-family: 'Space Grotesk', sans-serif;
     }
 
     .section-subtitle {
       font-size: 1.25rem;
-      color: #666;
-      max-width: 600px;
-      margin: 1.5rem auto 0;
+      color: #64748b;
       line-height: 1.6;
     }
 
-    /* Interactive Timeline */
-    .timeline-container {
+    /* Visual timeline */
+    .timeline-visual {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 2rem;
       position: relative;
     }
 
-    .timeline-line {
-      position: absolute;
-      left: 50%;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: linear-gradient(180deg, #4169E1 0%, #9D4EDD 100%);
-      transform: translateX(-50%);
+    .timeline-track {
+      position: relative;
+      padding: 2rem 0;
     }
 
     .timeline-item {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 2rem;
+      margin-bottom: 3rem;
       align-items: center;
-      margin-bottom: 4rem;
-      position: relative;
-    }
-
-    .timeline-item:nth-child(even) {
-      flex-direction: row-reverse;
     }
 
     .timeline-content {
-      flex: 1;
-      padding: 2rem;
       background: white;
+      padding: 2rem;
       border-radius: 16px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-      margin: 0 2rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
       position: relative;
-      transition: all 0.3s ease;
-      cursor: pointer;
     }
 
-    .timeline-content:hover {
-      transform: scale(1.02);
-      box-shadow: 0 15px 50px rgba(65, 105, 225, 0.2);
+    .timeline-content.left {
+      text-align: right;
     }
 
-    .timeline-node {
+    .timeline-content.right {
+      text-align: left;
+    }
+
+    .timeline-dot {
       width: 40px;
       height: 40px;
       background: linear-gradient(135deg, #4169E1, #9D4EDD);
@@ -312,9 +329,9 @@
       justify-content: center;
       color: white;
       font-weight: bold;
+      box-shadow: 0 0 0 8px rgba(65, 105, 225, 0.1);
       position: relative;
       z-index: 10;
-      box-shadow: 0 0 0 8px rgba(65, 105, 225, 0.1);
     }
 
     .timeline-date {
@@ -326,59 +343,89 @@
       margin-bottom: 0.5rem;
     }
 
-    .timeline-title {
-      font-size: 1.75rem;
-      font-weight: 800;
+    .timeline-event {
+      font-size: 1.5rem;
+      font-weight: 700;
       color: #0a0f1c;
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
     }
 
     .timeline-description {
-      color: #666;
-      line-height: 1.7;
+      color: #64748b;
+      line-height: 1.6;
     }
 
-    /* Principles Grid */
-    .principles-section {
+    /* Institute Section */
+    .institute-section {
       padding: 6rem 0;
-      background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
-    }
-
-    .principles-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 2rem;
-    }
-
-    .principle-card {
-      background: white;
-      border-radius: 20px;
-      padding: 2.5rem;
+      background: #0a0f1c;
+      color: white;
       position: relative;
       overflow: hidden;
-      transition: all 0.3s ease;
-      border: 1px solid rgba(0, 0, 0, 0.05);
     }
 
-    .principle-card::before {
+    .institute-section::before {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #4169E1, #9D4EDD);
+      bottom: 0;
+      background: radial-gradient(circle at 20% 50%, rgba(65, 105, 225, 0.2) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 50%, rgba(157, 78, 221, 0.2) 0%, transparent 50%);
+      pointer-events: none;
     }
 
-    .principle-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    .institute-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      position: relative;
+      z-index: 10;
     }
 
-    .principle-icon {
+    .institute-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .institute-title {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .institute-subtitle {
+      font-size: 1.25rem;
+      color: rgba(255, 255, 255, 0.8);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .institute-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .institute-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 2.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .institute-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-5px);
+      border-color: rgba(65, 105, 225, 0.5);
+    }
+
+    .institute-icon {
       width: 60px;
       height: 60px;
       background: linear-gradient(135deg, #4169E1, #9D4EDD);
@@ -387,57 +434,51 @@
       align-items: center;
       justify-content: center;
       font-size: 1.5rem;
-      color: white;
       margin-bottom: 1.5rem;
     }
 
-    .principle-title {
+    .institute-card-title {
       font-size: 1.5rem;
-      font-weight: 800;
-      color: #0a0f1c;
+      font-weight: 700;
       margin-bottom: 1rem;
     }
 
-    .principle-text {
-      color: #666;
+    .institute-card-text {
+      color: rgba(255, 255, 255, 0.8);
       line-height: 1.7;
     }
 
-    /* Impact Section */
-    .impact-section {
+    /* Framework Section */
+    .framework-section {
       padding: 6rem 0;
-      background: #0a0f1c;
-      color: white;
-      position: relative;
-      overflow: hidden;
+      background: white;
     }
 
-    .impact-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 3rem;
+    .framework-grid {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 2rem;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3rem;
     }
 
-    .impact-card {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
+    .framework-card {
+      background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+      border-radius: 24px;
       padding: 3rem;
+      border: 1px solid rgba(65, 105, 225, 0.1);
       position: relative;
       overflow: hidden;
       transition: all 0.3s ease;
     }
 
-    .impact-card:hover {
-      background: rgba(255, 255, 255, 0.08);
+    .framework-card:hover {
       transform: scale(1.02);
+      box-shadow: 0 20px 60px rgba(65, 105, 225, 0.15);
     }
 
-    .impact-number {
+    .framework-number {
       font-size: 4rem;
       font-weight: 900;
       background: linear-gradient(135deg, #4169E1, #9D4EDD);
@@ -445,17 +486,20 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
       margin-bottom: 1rem;
+      font-family: 'Space Grotesk', sans-serif;
     }
 
-    .impact-title {
+    .framework-title {
       font-size: 1.75rem;
       font-weight: 700;
+      color: #0a0f1c;
       margin-bottom: 1rem;
     }
 
-    .impact-description {
-      color: rgba(255, 255, 255, 0.8);
+    .framework-text {
+      color: #64748b;
       line-height: 1.7;
+      font-size: 1.125rem;
     }
 
     /* CTA Section */
@@ -467,36 +511,41 @@
       overflow: hidden;
     }
 
-    .cta-section::before {
-      content: '';
+    .cta-pattern {
       position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-      animation: rotate 30s linear infinite;
+      width: 100%;
+      height: 100%;
+      opacity: 0.1;
+      background-image: repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.1) 35px, rgba(255,255,255,.1) 70px);
+      animation: slide 20s linear infinite;
+    }
+
+    @keyframes slide {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(70px); }
     }
 
     .cta-content {
       position: relative;
       z-index: 10;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 2rem;
     }
 
     .cta-title {
-      font-size: 3rem;
+      font-size: 3.5rem;
       font-weight: 900;
       color: white;
       margin-bottom: 1.5rem;
+      font-family: 'Space Grotesk', sans-serif;
     }
 
     .cta-text {
-      font-size: 1.25rem;
+      font-size: 1.5rem;
       color: rgba(255, 255, 255, 0.9);
       margin-bottom: 3rem;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
+      line-height: 1.5;
     }
 
     .cta-buttons {
@@ -508,7 +557,7 @@
 
     .cta-button {
       display: inline-block;
-      padding: 1.25rem 2.5rem;
+      padding: 1.25rem 3rem;
       background: white;
       color: #4169E1;
       border-radius: 50px;
@@ -536,39 +585,28 @@
 
     /* Responsive */
     @media (max-width: 768px) {
-      .timeline-line {
-        left: 20px;
-      }
-
-      .timeline-item,
-      .timeline-item:nth-child(even) {
-        flex-direction: column;
-        align-items: flex-start;
-        padding-left: 60px;
-      }
-
-      .timeline-node {
-        position: absolute;
-        left: 0;
-      }
-
-      .timeline-content {
-        margin: 0;
-        width: 100%;
-      }
-
-      .impact-grid {
+      .founder-container {
         grid-template-columns: 1fr;
       }
 
-      .hero-stats {
-        flex-direction: column;
-        align-items: center;
+      .timeline-item {
+        grid-template-columns: 1fr;
       }
 
-      .stat-card {
-        width: 100%;
-        max-width: 300px;
+      .timeline-content.left {
+        text-align: left;
+      }
+
+      .timeline-dot {
+        margin: 1rem 0;
+      }
+
+      .framework-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-title {
+        font-size: clamp(2.5rem, 10vw, 4rem);
       }
     }
   </style>
@@ -576,236 +614,269 @@
 <body>
   <div id="header-placeholder"></div>
 
-  <!-- Cosmic Hero Section -->
-  <section class="cosmic-hero">
-    <!-- Animated stars -->
-    <div class="stars" id="stars"></div>
-    
-    <!-- Orbital rings -->
-    <div class="orbit-container">
-      <div class="orbit"></div>
-      <div class="orbit"></div>
-      <div class="orbit"></div>
-    </div>
-
-    <!-- Floating particles -->
-    <div id="particles"></div>
-
-    <!-- Hero content -->
-    <div class="hero-content">
-      <div class="hero-badge">Parameter-Free Physics</div>
-      <h1 class="hero-title">Recognition Science</h1>
-      <p class="hero-subtitle">
-        The complete derivation of reality from a single logical tautology
-      </p>
-      
-      <div class="hero-stats">
-        <div class="stat-card">
-          <div class="stat-number">0</div>
-          <div class="stat-label">Free Parameters</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">5</div>
-          <div class="stat-label">Core Formulas</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">100%</div>
-          <div class="stat-label">Logic-Based</div>
-        </div>
+  <!-- Quantum Hero Section -->
+  <section class="quantum-hero">
+    <!-- Quantum field visualization -->
+    <div class="quantum-field">
+      <div class="field-wave">
+        <svg>
+          <defs>
+            <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#4169E1;stop-opacity:0.3" />
+              <stop offset="50%" style="stop-color:#9D4EDD;stop-opacity:0.2" />
+              <stop offset="100%" style="stop-color:#4169E1;stop-opacity:0.3" />
+            </linearGradient>
+          </defs>
+          <path class="field-path" d="M0,200 Q200,100 400,200 T800,200" stroke-dasharray="5,5" />
+          <path class="field-path" d="M0,300 Q200,200 400,300 T800,300" stroke-dasharray="5,5" style="animation-delay: 0.5s" />
+          <path class="field-path" d="M0,400 Q200,300 400,400 T800,400" stroke-dasharray="5,5" style="animation-delay: 1s" />
+        </svg>
       </div>
     </div>
 
-    <div class="scroll-indicator"></div>
+    <!-- Floating phi symbols -->
+    <div class="phi-container" id="phiContainer"></div>
+
+    <!-- Hero content -->
+    <div class="hero-content">
+      <div class="hero-badge">The Complete Framework</div>
+      <h1 class="hero-title">
+        About <span class="gradient-text">Recognition Science</span>
+      </h1>
+      <p class="hero-subtitle">
+        The revolutionary framework that derives all of physics from a single logical principle
+      </p>
+    </div>
+  </section>
+
+  <!-- Founder Section -->
+  <section class="founder-section">
+    <div class="founder-container">
+      <div class="founder-visual">
+        <div class="founder-card">
+          <h2 class="founder-name">Jonathan Washburn</h2>
+          <div class="founder-title">Discoverer & Founder</div>
+          <div class="founder-location">Austin, Texas</div>
+          <p class="founder-bio">
+            Jonathan Washburn discovered Recognition Science in 2024, achieving what centuries of physics couldn't: 
+            a complete derivation of reality from pure logic. With zero free parameters, the framework predicts 
+            all particle masses, fundamental constants, and even consciousness itself.
+          </p>
+        </div>
+      </div>
+      
+      <div class="founder-content">
+        <div class="content-card">
+          <h3>The Discovery</h3>
+          <p>
+            In early 2024, Washburn made a breakthrough that would revolutionize physics. Starting from the logical 
+            impossibility of non-existence, he derived eight fundamental theorems that explain all of reality. 
+            The framework requires no adjustable parameters—everything emerges from logical necessity.
+          </p>
+        </div>
+        
+        <div class="content-card">
+          <h3>Recognition Science Institute</h3>
+          <p>
+            Founded by Washburn in 2024, the Recognition Science Institute serves as the hub for research, 
+            verification, and education about this revolutionary framework. The institute provides open-source 
+            tools, machine-verified proofs, and resources for scientists worldwide to validate and extend the theory.
+          </p>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- Discovery Timeline -->
   <section class="discovery-section">
     <div class="section-header">
-      <h2 class="section-title">The Discovery</h2>
+      <h2 class="section-title">The Journey of Discovery</h2>
       <p class="section-subtitle">
-        From artistic intuition to mathematical revolution
+        From artistic intuition to mathematical revolution—how Recognition Science emerged
       </p>
     </div>
 
-    <div class="timeline-container">
-      <div class="timeline-line"></div>
-      
-      <div class="timeline-item">
-        <div class="timeline-content">
-          <div class="timeline-date">2021-2024</div>
-          <h3 class="timeline-title">Artistic Foundations</h3>
-          <p class="timeline-description">
-            The Post-Photography trilogy explored humanity's relationship with technology and existence. 
-            These artistic investigations unknowingly laid the conceptual groundwork for a physics revolution.
-          </p>
+    <div class="timeline-visual">
+      <div class="timeline-track">
+        <div class="timeline-item">
+          <div class="timeline-content left">
+            <div class="timeline-date">2021-2023</div>
+            <div class="timeline-event">Artistic Foundation</div>
+            <p class="timeline-description">
+              Washburn's Post-Photography trilogy explored humanity's relationship with technology and existence, 
+              unknowingly laying conceptual groundwork for a physics revolution.
+            </p>
+          </div>
+          <div class="timeline-dot">1</div>
+          <div></div>
         </div>
-        <div class="timeline-node">1</div>
-      </div>
 
-      <div class="timeline-item">
-        <div class="timeline-content">
-          <div class="timeline-date">Early 2024</div>
-          <h3 class="timeline-title">The Meta-Principle</h3>
-          <p class="timeline-description">
-            "Nothing cannot recognize itself"—not philosophy but pure logic. This tautology became 
-            the foundation from which all physics emerges. The impossibility of self-referential 
-            non-existence forces reality into being.
-          </p>
+        <div class="timeline-item">
+          <div></div>
+          <div class="timeline-dot">2</div>
+          <div class="timeline-content right">
+            <div class="timeline-date">Early 2024</div>
+            <div class="timeline-event">The Meta-Principle</div>
+            <p class="timeline-description">
+              Discovery that "nothing cannot recognize itself" is not philosophy but pure logic. This tautology 
+              became the foundation from which all physics emerges.
+            </p>
+          </div>
         </div>
-        <div class="timeline-node">2</div>
-      </div>
 
-      <div class="timeline-item">
-        <div class="timeline-content">
-          <div class="timeline-date">Mid 2024</div>
-          <h3 class="timeline-title">Mathematical Architecture</h3>
-          <p class="timeline-description">
-            Eight theorems derived from the Meta-Principle. The unique cost function J(x) = ½(x + 1/x) 
-            identified. Golden ratio scaling emerged naturally. The five operating instructions formalized.
-          </p>
+        <div class="timeline-item">
+          <div class="timeline-content left">
+            <div class="timeline-date">Mid 2024</div>
+            <div class="timeline-event">Mathematical Architecture</div>
+            <p class="timeline-description">
+              Eight theorems derived from the Meta-Principle. The unique cost function J(x) = ½(x + 1/x) identified. 
+              Golden ratio scaling emerged naturally.
+            </p>
+          </div>
+          <div class="timeline-dot">3</div>
+          <div></div>
         </div>
-        <div class="timeline-node">3</div>
-      </div>
 
-      <div class="timeline-item">
-        <div class="timeline-content">
-          <div class="timeline-date">Late 2024</div>
-          <h3 class="timeline-title">Experimental Validation</h3>
-          <p class="timeline-description">
-            Particle masses matched to 0.002% precision. Fine-structure constant to 9 decimal places. 
-            Dark matter fraction calculated exactly. All without adjusting a single parameter.
-          </p>
+        <div class="timeline-item">
+          <div></div>
+          <div class="timeline-dot">4</div>
+          <div class="timeline-content right">
+            <div class="timeline-date">Late 2024</div>
+            <div class="timeline-event">Experimental Validation</div>
+            <p class="timeline-description">
+              Particle masses matched to 0.002% precision. Fine-structure constant to 9 decimal places. 
+              Dark matter fraction calculated exactly. All without adjusting parameters.
+            </p>
+          </div>
         </div>
-        <div class="timeline-node">4</div>
-      </div>
 
-      <div class="timeline-item">
-        <div class="timeline-content">
-          <div class="timeline-date">2025</div>
-          <h3 class="timeline-title">Public Revolution</h3>
-          <p class="timeline-description">
-            Complete framework released with machine-verified proofs. Open-source tools published. 
-            Scientific community begins independent validation. Physics enters its post-empirical era.
-          </p>
+        <div class="timeline-item">
+          <div class="timeline-content left">
+            <div class="timeline-date">2025</div>
+            <div class="timeline-event">Public Revolution</div>
+            <p class="timeline-description">
+              Complete framework released with machine-verified proofs. Recognition Science Institute established. 
+              Physics enters its post-empirical era.
+            </p>
+          </div>
+          <div class="timeline-dot">5</div>
+          <div></div>
         </div>
-        <div class="timeline-node">5</div>
       </div>
     </div>
   </section>
 
-  <!-- Core Principles -->
-  <section class="principles-section">
-    <div class="section-header">
-      <h2 class="section-title">Core Principles</h2>
-      <p class="section-subtitle">
-        The fundamental architecture of reality
-      </p>
-    </div>
-
-    <div class="principles-grid">
-      <div class="principle-card">
-        <div class="principle-icon">0</div>
-        <h3 class="principle-title">Zero Parameters</h3>
-        <p class="principle-text">
-          Unlike the Standard Model's 26 free parameters, Recognition Science has none. 
-          Every constant emerges from logical necessity—nothing is arbitrary.
+  <!-- Institute Section -->
+  <section class="institute-section">
+    <div class="institute-container">
+      <div class="institute-header">
+        <h2 class="institute-title">Recognition Science Institute</h2>
+        <p class="institute-subtitle">
+          Advancing humanity's understanding of reality through rigorous verification and open collaboration
         </p>
       </div>
 
-      <div class="principle-card">
-        <div class="principle-icon">∞</div>
-        <h3 class="principle-title">Universal Ledger</h3>
-        <p class="principle-text">
-          Reality maintains cosmic double-entry bookkeeping. What we call physics is 
-          the ledger maintaining balance across all recognition events.
-        </p>
-      </div>
+      <div class="institute-grid">
+        <div class="institute-card">
+          <div class="institute-icon">🔬</div>
+          <h3 class="institute-card-title">Research</h3>
+          <p class="institute-card-text">
+            Extending the framework to new domains, from quantum computing to consciousness studies. 
+            Every prediction machine-verified, every derivation open-source.
+          </p>
+        </div>
 
-      <div class="principle-card">
-        <div class="principle-icon">φ</div>
-        <h3 class="principle-title">Golden Ratio</h3>
-        <p class="principle-text">
-          The cost function's minimum at φ = 1.618... explains this proportion's 
-          ubiquity from DNA spirals to galactic structures.
-        </p>
-      </div>
+        <div class="institute-card">
+          <div class="institute-icon">✓</div>
+          <h3 class="institute-card-title">Verification</h3>
+          <p class="institute-card-text">
+            All proofs formally verified in Lean 4. Independent replication encouraged. 
+            Complete transparency in methodology and calculations.
+          </p>
+        </div>
 
-      <div class="principle-card">
-        <div class="principle-icon">8</div>
-        <h3 class="principle-title">Eight-Beat Cycle</h3>
-        <p class="principle-text">
-          In 3D space, reality updates every 8 ticks. This cosmic heartbeat determines 
-          the speed of light and all quantum behavior.
-        </p>
-      </div>
+        <div class="institute-card">
+          <div class="institute-icon">🎓</div>
+          <h3 class="institute-card-title">Education</h3>
+          <p class="institute-card-text">
+            Making Recognition Science accessible to everyone. From introductory materials to 
+            advanced mathematical proofs, resources for all levels.
+          </p>
+        </div>
 
-      <div class="principle-card">
-        <div class="principle-icon">45</div>
-        <h3 class="principle-title">Consciousness Gap</h3>
-        <p class="principle-text">
-          At rung 45 of the mass ladder, incomputability emerges. Consciousness is 
-          reality's solution to navigate logical paradoxes.
-        </p>
-      </div>
+        <div class="institute-card">
+          <div class="institute-icon">🌍</div>
+          <h3 class="institute-card-title">Community</h3>
+          <p class="institute-card-text">
+            Building a global community of researchers, educators, and enthusiasts. 
+            Collaborative exploration of reality's deepest truths.
+          </p>
+        </div>
 
-      <div class="principle-card">
-        <div class="principle-icon">⟷</div>
-        <h3 class="principle-title">Recognition Duality</h3>
-        <p class="principle-text">
-          Every event requires both actor and witness. This fundamental duality 
-          drives all interactions from quantum to cosmic scales.
-        </p>
+        <div class="institute-card">
+          <div class="institute-icon">⚡</div>
+          <h3 class="institute-card-title">Technology</h3>
+          <p class="institute-card-text">
+            Developing practical applications from Recognition Science principles. 
+            Quantum computing, materials science, and energy systems.
+          </p>
+        </div>
+
+        <div class="institute-card">
+          <div class="institute-icon">🔮</div>
+          <h3 class="institute-card-title">Future</h3>
+          <p class="institute-card-text">
+            Exploring implications for AI, consciousness, and humanity's cosmic role. 
+            Building technologies that work with reality's grain.
+          </p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Impact Section -->
-  <section class="impact-section">
+  <!-- Framework Impact -->
+  <section class="framework-section">
     <div class="section-header">
-      <h2 class="section-title" style="color: white;">Revolutionary Impact</h2>
-      <p class="section-subtitle" style="color: rgba(255,255,255,0.8);">
-        How Recognition Science transforms our understanding
+      <h2 class="section-title">Revolutionary Impact</h2>
+      <p class="section-subtitle">
+        How Recognition Science transforms our understanding of everything
       </p>
     </div>
 
-    <div class="impact-grid">
-      <div class="impact-card">
-        <div class="impact-number">01</div>
-        <h3 class="impact-title">End of Empirical Physics</h3>
-        <p class="impact-description">
-          For 400 years, physics measured then modeled. Recognition Science reverses this—we 
-          derive first, then measurement confirms what logic demands. The era of discovering 
-          laws through experiment is over.
+    <div class="framework-grid">
+      <div class="framework-card">
+        <div class="framework-number">0</div>
+        <h3 class="framework-title">Zero Parameters</h3>
+        <p class="framework-text">
+          Unlike the Standard Model's 26 free parameters or string theory's 10^500 configurations, 
+          Recognition Science has exactly zero adjustable constants. Everything emerges from logical necessity.
         </p>
       </div>
 
-      <div class="impact-card">
-        <div class="impact-number">02</div>
-        <h3 class="impact-title">Mystery Resolution</h3>
-        <p class="impact-description">
-          Dark matter isn't missing particles—it's bandwidth limitation. The measurement problem 
-          dissolves. Fine-tuning vanishes. Consciousness gets mathematical definition. Centuries-old 
-          questions answered.
+      <div class="framework-card">
+        <div class="framework-number">5</div>
+        <h3 class="framework-title">Core Formulas</h3>
+        <p class="framework-text">
+          Just five fundamental equations generate all of physics: mass generation, cost minimization, 
+          ledger curvature, recognition cycles, and modified gravity. Complete reality from minimal axioms.
         </p>
       </div>
 
-      <div class="impact-card">
-        <div class="impact-number">03</div>
-        <h3 class="impact-title">Technology Revolution</h3>
-        <p class="impact-description">
-          Understanding reality's actual mechanisms opens unprecedented possibilities. Ledger-based 
-          quantum computing. Materials engineered at the φ-ladder level. Energy systems that work 
-          with reality's grain.
+      <div class="framework-card">
+        <div class="framework-number">89</div>
+        <h3 class="framework-title">Particles Predicted</h3>
+        <p class="framework-text">
+          Every known particle mass calculated to extraordinary precision. From electrons to top quarks, 
+          all emerge from the same φ-ladder structure. No fitting, no adjustment—pure derivation.
         </p>
       </div>
 
-      <div class="impact-card">
-        <div class="impact-number">04</div>
-        <h3 class="impact-title">Existential Clarity</h3>
-        <p class="impact-description">
-          Why does anything exist? Because nothing is logically impossible. Why are we conscious? 
-          To resolve incomputable decisions. We finally have mathematical answers to humanity's 
-          deepest questions.
+      <div class="framework-card">
+        <div class="framework-number">∞</div>
+        <h3 class="framework-title">Universal Scope</h3>
+        <p class="framework-text">
+          From quantum to cosmic scales, from particles to consciousness, the same framework applies 
+          unchanged. One measurement system for all of reality.
         </p>
       </div>
     </div>
@@ -813,16 +884,16 @@
 
   <!-- CTA Section -->
   <section class="cta-section">
+    <div class="cta-pattern"></div>
     <div class="cta-content">
-      <h2 class="cta-title">Begin Your Journey</h2>
+      <h2 class="cta-title">Join the Revolution</h2>
       <p class="cta-text">
-        Explore the framework that derives all of physics from pure logic. 
-        Join the revolution in human understanding.
+        Explore the framework that changes everything we know about reality
       </p>
       <div class="cta-buttons">
         <a href="/reality.html" class="cta-button">Explore Framework</a>
         <a href="/predictions.html" class="cta-button secondary">See Predictions</a>
-        <a href="/logical-foundations.html" class="cta-button secondary">Learn Logic</a>
+        <a href="https://github.com/jonwashburn/rs-website" class="cta-button secondary">View Source</a>
       </div>
     </div>
   </section>
@@ -830,70 +901,31 @@
   <div id="footer-placeholder"></div>
 
   <script>
-    // Generate stars
-    const starsContainer = document.getElementById('stars');
-    for (let i = 0; i < 200; i++) {
-      const star = document.createElement('div');
-      star.className = 'star';
-      star.style.left = Math.random() * 100 + '%';
-      star.style.top = Math.random() * 100 + '%';
-      star.style.animationDelay = Math.random() * 4 + 's';
-      star.style.animationDuration = (Math.random() * 3 + 2) + 's';
-      starsContainer.appendChild(star);
+    // Generate floating phi symbols
+    const phiContainer = document.getElementById('phiContainer');
+    const phiSymbols = ['φ', 'Φ', '1.618', 'π', '∞', '√', '∫', '∂'];
+    
+    for (let i = 0; i < 15; i++) {
+      const phi = document.createElement('div');
+      phi.className = 'phi-symbol';
+      phi.textContent = phiSymbols[Math.floor(Math.random() * phiSymbols.length)];
+      phi.style.left = Math.random() * 100 + '%';
+      phi.style.top = Math.random() * 100 + '%';
+      phi.style.animationDelay = Math.random() * 30 + 's';
+      phi.style.fontSize = (1.5 + Math.random() * 2) + 'rem';
+      phiContainer.appendChild(phi);
     }
 
-    // Generate floating particles
-    const particlesContainer = document.getElementById('particles');
-    for (let i = 0; i < 30; i++) {
-      const particle = document.createElement('div');
-      particle.className = 'particle';
-      particle.style.left = Math.random() * 100 + '%';
-      particle.style.top = Math.random() * 100 + '%';
-      
-      // Animate particles
-      const duration = 15 + Math.random() * 20;
-      const delay = Math.random() * 20;
-      particle.style.animation = `float ${duration}s ${delay}s infinite ease-in-out`;
-      
-      particlesContainer.appendChild(particle);
-    }
-
-    // Add floating animation
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes float {
-        0%, 100% {
-          transform: translate(0, 0) scale(1);
-          opacity: 0.8;
-        }
-        25% {
-          transform: translate(30px, -50px) scale(1.1);
-          opacity: 1;
-        }
-        50% {
-          transform: translate(-20px, -100px) scale(0.9);
-          opacity: 0.6;
-        }
-        75% {
-          transform: translate(-40px, -50px) scale(1.05);
-          opacity: 0.9;
-        }
-      }
-    `;
-    document.head.appendChild(style);
-
-    // Parallax effect on scroll
+    // Parallax effect
     window.addEventListener('scroll', () => {
       const scrolled = window.pageYOffset;
-      const parallax = document.querySelector('.cosmic-hero');
-      const speed = 0.5;
-      
+      const parallax = document.querySelector('.quantum-field');
       if (parallax) {
-        parallax.style.transform = `translateY(${scrolled * speed}px)`;
+        parallax.style.transform = `translateY(${scrolled * 0.3}px)`;
       }
     });
 
-    // Timeline animation on scroll
+    // Intersection observer for animations
     const observerOptions = {
       threshold: 0.1,
       rootMargin: '0px 0px -100px 0px'
@@ -908,16 +940,8 @@
       });
     }, observerOptions);
 
-    // Observe timeline items
-    document.querySelectorAll('.timeline-content').forEach(item => {
-      item.style.opacity = '0';
-      item.style.transform = 'translateY(20px)';
-      item.style.transition = 'all 0.6s ease';
-      observer.observe(item);
-    });
-
-    // Observe principle cards
-    document.querySelectorAll('.principle-card').forEach((card, index) => {
+    // Observe content cards
+    document.querySelectorAll('.content-card, .timeline-content, .institute-card, .framework-card').forEach((card, index) => {
       card.style.opacity = '0';
       card.style.transform = 'translateY(30px)';
       card.style.transition = `all 0.6s ease ${index * 0.1}s`;
