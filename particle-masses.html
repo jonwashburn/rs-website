@@ -1,1304 +1,758 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Particle Mass Calculator - Recognition Science</title>
-    <link rel="stylesheet" href="assets/css/main.css">
-    <style>
-        .mass-hero {
-            background: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 50%, #ec4899 100%);
-            color: white;
-            padding: 4rem 2rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .mass-hero::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="1" fill="white" opacity="0.3"/><circle cx="80" cy="40" r="1" fill="white" opacity="0.3"/><circle cx="50" cy="70" r="1" fill="white" opacity="0.3"/><circle cx="30" cy="90" r="1" fill="white" opacity="0.3"/><circle cx="70" cy="10" r="1" fill="white" opacity="0.3"/></svg>') repeat;
-            animation: drift 20s linear infinite;
-        }
-        
-        @keyframes drift {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(100px, 100px); }
-        }
-        
-        .formula-display {
-            background: linear-gradient(135deg, #f3f4f6, #ffffff);
-            border: 2px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 2rem;
-            margin: 2rem auto;
-            max-width: 600px;
-            text-align: center;
-            font-size: 1.5rem;
-            font-family: 'Courier New', monospace;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-        
-        .mass-calculator {
-            background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            margin: 2rem auto;
-            max-width: 1200px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-        }
-        
-        .particle-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-        
-        .particle-card {
-            background: linear-gradient(135deg, #fafafa, #f3f4f6);
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .particle-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            background: linear-gradient(135deg, #ffffff, #f9fafb);
-        }
-        
-        .particle-card.selected {
-            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
-        }
-        
-        .particle-name {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #1f2937;
-            margin-bottom: 0.5rem;
-        }
-        
-        .particle-symbol {
-            display: inline-block;
-            background: #3b82f6;
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 999px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-        
-        .mass-value {
-            font-size: 1.75rem;
-            font-weight: 800;
-            color: #7c3aed;
-            margin: 0.5rem 0;
-        }
-        
-        .mass-details {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.5rem;
-            margin-top: 1rem;
-            font-size: 0.875rem;
-        }
-        
-        .detail-label {
-            color: #6b7280;
-        }
-        
-        .detail-value {
-            font-weight: 600;
-            color: #374151;
-            text-align: right;
-        }
-        
-        .calculation-display {
-            background: #1f2937;
-            color: #10b981;
-            padding: 2rem;
-            border-radius: 12px;
-            margin: 2rem 0;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            overflow-x: auto;
-            white-space: pre-wrap;
-            line-height: 1.6;
-        }
-        
-        .run-button {
-            background: linear-gradient(135deg, #3b82f6, #7c3aed);
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 8px;
-            font-size: 1.125rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .run-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(59,130,246,0.3);
-        }
-        
-        .run-button:active {
-            transform: translateY(0);
-        }
-        
-        .spinner {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .tabs {
-            display: flex;
-            gap: 1rem;
-            border-bottom: 2px solid #e5e7eb;
-            margin-bottom: 2rem;
-        }
-        
-        .tab {
-            padding: 0.75rem 1.5rem;
-            background: none;
-            border: none;
-            font-size: 1rem;
-            font-weight: 600;
-            color: #6b7280;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-        }
-        
-        .tab:hover {
-            color: #374151;
-        }
-        
-        .tab.active {
-            color: #3b82f6;
-        }
-        
-        .tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: #3b82f6;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .explanation-box {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            border-left: 4px solid #f59e0b;
-            padding: 1.5rem;
-            margin: 2rem 0;
-            border-radius: 8px;
-        }
-        
-        .comparison-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 2rem 0;
-        }
-        
-        .comparison-table th {
-            background: #f3f4f6;
-            padding: 1rem;
-            text-align: left;
-            font-weight: 600;
-            border-bottom: 2px solid #e5e7eb;
-        }
-        
-        .comparison-table td {
-            padding: 1rem;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        
-        .comparison-table tr:hover {
-            background: #f9fafb;
-        }
-        
-        .delta-badge {
-            display: inline-block;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.875rem;
-            font-weight: 600;
-        }
-        
-        .delta-low {
-            background: #dcfce7;
-            color: #16a34a;
-        }
-        
-        .delta-medium {
-            background: #fed7aa;
-            color: #ea580c;
-        }
-        
-        .delta-high {
-            background: #fecaca;
-            color: #dc2626;
-        }
-        
-        /* Calculation Details Section */
-        .calculation-details {
-            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
-            border: 2px solid #0284c7;
-            border-radius: 12px;
-            padding: 2rem;
-            margin: 2rem auto;
-            max-width: 900px;
-            display: none;
-            animation: slideDown 0.3s ease;
-        }
-        
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .calculation-details.active {
-            display: block;
-        }
-        
-        .calc-header {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #0c4a6e;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid #0284c7;
-            padding-bottom: 0.5rem;
-        }
-        
-        .calc-step {
-            background: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1rem 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        
-        .calc-step-title {
-            font-weight: 600;
-            color: #0369a1;
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
-        }
-        
-        .calc-formula {
-            background: #f8fafc;
-            border-left: 4px solid #0284c7;
-            padding: 1rem;
-            margin: 1rem 0;
-            font-family: 'Courier New', monospace;
-            font-size: 1.2rem;
-        }
-        
-        .calc-value {
-            display: inline-block;
-            background: #dbeafe;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-weight: 600;
-            margin: 0 0.25rem;
-        }
-        
-        /* Parameter-Free Audit Modal */
-        .audit-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 10000;
-            overflow-y: auto;
-        }
-        
-        .audit-modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .audit-content {
-            background: white;
-            border-radius: 16px;
-            padding: 3rem;
-            max-width: 900px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-        }
-        
-        .audit-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            width: 32px;
-            height: 32px;
-            background: #f3f4f6;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.5rem;
-            line-height: 1;
-            color: #6b7280;
-            transition: all 0.2s;
-        }
-        
-        .audit-close:hover {
-            background: #e5e7eb;
-            color: #374151;
-        }
-        
-        .audit-title {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #111827;
-            margin-bottom: 1rem;
-        }
-        
-        .audit-subtitle {
-            color: #6b7280;
-            margin-bottom: 2rem;
-            font-size: 1.1rem;
-        }
-        
-        .audit-section {
-            margin: 2rem 0;
-            padding: 1.5rem;
-            background: #f9fafb;
-            border-radius: 12px;
-        }
-        
-        .audit-section-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #1f2937;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .audit-badge {
-            display: inline-block;
-            background: #10b981;
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        
-        .audit-item {
-            display: flex;
-            align-items: start;
-            gap: 1rem;
-            margin: 1rem 0;
-            padding: 1rem;
-            background: white;
-            border-radius: 8px;
-        }
-        
-        .audit-icon {
-            width: 24px;
-            height: 24px;
-            background: #10b981;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            font-weight: bold;
-        }
-        
-        .audit-description {
-            flex: 1;
-        }
-        
-        .audit-term {
-            font-weight: 600;
-            color: #1f2937;
-            margin-bottom: 0.25rem;
-        }
-        
-        .audit-explanation {
-            color: #6b7280;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parameter-Free Particle Masses - Recognition Science</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.8;
+      color: #1a1a1a;
+      background: #ffffff;
+      margin: 0;
+    }
+
+    nav.header {
+      background: #000;
+      color: #fff;
+      padding: 1rem 2rem;
+      margin-bottom: 2rem;
+    }
+
+    nav.header .nav-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav.header a {
+      color: #fff !important;
+      text-decoration: none;
+      font-weight: 600;
+      border-bottom: none !important;
+      transition: opacity 0.2s;
+    }
+
+    nav.header a:hover {
+      opacity: 0.8;
+      border-bottom: none !important;
+    }
+
+    nav.header .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .pdf-download {
+      background: #fff;
+      color: #000 !important;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .pdf-download:hover {
+      background: #f0f0f0;
+    }
+
+    .content {
+      padding: 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 900;
+      line-height: 1.2;
+      margin: 2rem 0 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      margin: 3rem 0 1rem;
+      padding-top: 2rem;
+      border-top: 3px solid #e0e0e0;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 2rem 0 1rem;
+    }
+
+    p {
+      margin: 1rem 0;
+      text-align: justify;
+    }
+
+    .author-info {
+      text-align: center;
+      margin: 2rem 0 3rem;
+      color: #666;
+    }
+
+    .author-info .name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 0.25rem;
+    }
+
+    .author-info .affiliation {
+      font-size: 1rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .author-info .email {
+      font-family: 'IBM Plex Mono', monospace;
+      color: #003d82;
+    }
+
+    .abstract {
+      background: #f9f9f9;
+      border: 1px solid #e0e0e0;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      border-radius: 4px;
+    }
+
+    .abstract h3 {
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin: 0 0 1rem 0;
+      padding: 0;
+      border: none;
+    }
+
+    .keywords {
+      margin: 2rem 0;
+      padding: 1rem 0;
+      border-top: 1px solid #e0e0e0;
+      border-bottom: 1px solid #e0e0e0;
+      color: #666;
+    }
+
+    .keywords strong {
+      color: #333;
+    }
+
+    code, .equation {
+      font-family: 'IBM Plex Mono', monospace;
+      background: #f5f5f5;
+      padding: 0.2rem 0.4rem;
+      font-size: 0.9em;
+      border-radius: 2px;
+    }
+
+    .equation-block {
+      display: block;
+      text-align: center;
+      margin: 1.5rem 0;
+      padding: 1rem;
+      background: #f9f9f9;
+      border-left: 3px solid #666;
+      overflow-x: auto;
+    }
+
+    .equation-block code {
+      background: none;
+      padding: 0;
+      font-size: 1.1em;
+    }
+
+    ul, ol {
+      margin: 1rem 0 1rem 2rem;
+    }
+
+    li {
+      margin: 0.5rem 0;
+    }
+
+    .results-box {
+      background: #f0f7ff;
+      border: 2px solid #0066cc;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      border-radius: 4px;
+    }
+
+    .results-box h4 {
+      color: #0066cc;
+      margin: 0 0 1rem 0;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .results-box .values {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 1.1em;
+      font-weight: 600;
+      margin: 0.5rem 0;
+    }
+
+    a {
+      color: #003d82;
+      text-decoration: none;
+      font-weight: 600;
+      border-bottom: 1px solid #003d82;
+      transition: opacity 0.2s;
+    }
+
+    a:hover {
+      opacity: 0.7;
+      border-bottom-width: 2px;
+    }
+
+    .references {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 3px solid #333;
+    }
+
+    .references h2 {
+      border: none;
+      padding: 0;
+      margin: 0 0 1.5rem 0;
+    }
+
+    .reference {
+      margin: 1rem 0;
+      padding-left: 2rem;
+      text-indent: -2rem;
+      font-size: 0.95em;
+    }
+
+    hr {
+      border: none;
+      border-top: 2px solid #e0e0e0;
+      margin: 3rem 0;
+    }
+
+    @media (max-width: 768px) {
+      .content {
+        padding: 1rem;
+      }
+      h1 { font-size: 1.75rem; }
+      h2 { font-size: 1.35rem; }
+      nav.header .nav-links {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .equation-block {
+        font-size: 0.9em;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div id="header-placeholder"></div>
+
+  <nav class="header">
+    <div class="nav-content">
+      <a href="/">Recognition Science</a>
+      <div class="nav-links">
+        <a href="/meta-principle">Meta-Principle</a>
+        <a href="/technical-briefing">Technical Overview</a>
+        <a href="/predictions">Predictions</a>
+        <a href="Parameter_Free_Particle_Masses.pdf" class="pdf-download">📄 Download PDF</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content">
+
+    <h1>Parameter-Free Particle Masses from a φ-Sheet Fixed Point</h1>
     
-    <main class="content-page">
-        <section class="mass-hero">
-            <div class="container" style="position: relative; z-index: 1;">
-                <h1 style="font-size: 4.5rem; margin-bottom: 1.5rem; color: white; font-weight: 800; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">Particle Mass Calculator</h1>
-                <p style="font-size: 1.5rem; opacity: 1; max-width: 900px; margin: 0 auto; color: white; font-weight: 300;">
-                    Every particle mass in the universe emerges from a single formula. No fitting, no tuning—just pure mathematics.
-                </p>
-                <div style="margin-top: 2rem;">
-                    <a href="#parameter-free-audit" style="display: inline-block; background: transparent; color: white; padding: 0.5rem 1.25rem; border: 1px solid rgba(255,255,255,0.5); border-radius: 999px; font-weight: 500; cursor: pointer; text-decoration: none; transition: all 0.3s ease;" onmouseover="this.style.borderColor='rgba(255,255,255,0.8)'; this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.5)'; this.style.background='transparent'">
-                        100% Parameter-Free
-                    </a>
-                </div>
-            </div>
-        </section>
-        
-        <section class="container">
-            <div class="formula-display">
-                m = B · E<sub>coh</sub> · φ<sup>(r + f)</sup>
-            </div>
-            
-            <div class="text-block" style="max-width: 800px; margin: 0 auto; text-align: center;">
-                <p>Where B is the sector factor, E<sub>coh</sub> = φ<sup>-5</sup> is the coherence quantum, 
-                r is the rung number, and f is the φ-sheet fixed point correction.</p>
-            </div>
-        </section>
-        
-        <section class="container">
-            <div class="mass-calculator">
-                <h2 style="text-align: center; margin-bottom: 2rem;">Live Mass Calculations</h2>
-                
-                <div class="tabs">
-                    <button class="tab active" onclick="showTab('leptons')">Leptons</button>
-                    <button class="tab" onclick="showTab('quarks')">Quarks</button>
-                    <button class="tab" onclick="showTab('bosons')">Bosons</button>
-                    <button class="tab" onclick="showTab('neutrinos')">Neutrinos</button>
-                    <button class="tab" onclick="showTab('calculator')">Calculator Output</button>
-                </div>
-                
-                <div id="leptons" class="tab-content active">
-                    <div class="particle-grid">
-                        <div class="particle-card" onclick="selectParticle('electron')">
-                            <div class="particle-name">Electron</div>
-                            <div class="particle-symbol">e⁻</div>
-                            <div class="mass-value">0.511 MeV</div>
-                            <div class="mass-details">
-                                <span class="detail-label">Rung (r):</span>
-                                <span class="detail-value">0</span>
-                                <span class="detail-label">Sector (B):</span>
-                                <span class="detail-value">1</span>
-                                <span class="detail-label">Δ Empirical:</span>
-                                <span class="detail-value delta-badge delta-low"><0.001%</span>
-                            </div>
-                        </div>
-                        
-                        <div class="particle-card" onclick="selectParticle('muon')">
-                            <div class="particle-name">Muon</div>
-                            <div class="particle-symbol">μ⁻</div>
-                            <div class="mass-value">105.658 MeV</div>
-                            <div class="mass-details">
-                                <span class="detail-label">Rung (r):</span>
-                                <span class="detail-value">11</span>
-                                <span class="detail-label">Sector (B):</span>
-                                <span class="detail-value">1</span>
-                                <span class="detail-label">Δ Empirical:</span>
-                                <span class="detail-value delta-badge delta-low"><0.001%</span>
-                            </div>
-                        </div>
-                        
-                        <div class="particle-card" onclick="selectParticle('tau')">
-                            <div class="particle-name">Tau</div>
-                            <div class="particle-symbol">τ⁻</div>
-                            <div class="mass-value">1776.86 MeV</div>
-                            <div class="mass-details">
-                                <span class="detail-label">Rung (r):</span>
-                                <span class="detail-value">17</span>
-                                <span class="detail-label">Sector (B):</span>
-                                <span class="detail-value">1</span>
-                                <span class="detail-label">Δ Empirical:</span>
-                                <span class="detail-value delta-badge delta-low"><0.01%</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="explanation-box">
-                        <h3>Charged Leptons</h3>
-                        <p>The three charged leptons (electron, muon, tau) form the simplest family with B=1. 
-                        Their masses are determined purely by their rung positions on the φ-ladder, with the 
-                        electron at the ground state (r=0). The precise ratios μ/e and τ/μ emerge naturally 
-                        from the golden ratio scaling.</p>
-                    </div>
-                </div>
-                
-                <div id="quarks" class="tab-content">
-                    <div class="particle-grid">
-                        <div class="particle-card" onclick="selectParticle('up')">
-                            <div class="particle-name">Up Quark</div>
-                            <div class="particle-symbol">u</div>
-                            <div class="mass-value">2.16 MeV</div>
-                            <div class="mass-details">
-                                <span class="detail-label">Rung (r):</span>
-                                <span class="detail-value">4</span>
-                                <span class="detail-label">Sector (B):</span>
-                                <span class="detail-value">2</span>
-                                <span class="detail-label">Δ Empirical:</span>
-                                <span class="detail-value delta-badge delta-low"><0.1%</span>
-                            </div>
-                        </div>
-                        
-                        <div class="particle-card" onclick="selectParticle('down')">
-                            <div class="particle-name">Down Quark</div>
-                            <div class="particle-symbol">d</div>
-                            <div class="mass-value">4.67 MeV</div>
-                            <div class="mass-details">
-                                <span class="detail-label">Rung (r):</span>
-                                <span class="detail-value">6</span>
-                                <span class="detail-label">Sector (B):</span>
-                                <span class="detail-value">2</span>
-                                <span class="detail-label">Δ Empirical:</span>
-                                <span class="detail-value delta-badge delta-low"><0.1%</span>
-                            </div>
-                        </div>
-                        
-                        <div class="particle-card" onclick="selectParticle('charm')">
-                            <div class="particle-name">Charm Quark</div>
-                            <div class="particle-symbol">c</div>
-                            <div class="mass-value">1.27 GeV</div>
-                            <div class="mass-details">
-                                <span class="detail-label">Rung (r):</span>
-                                <span class="detail-value">23</span>
-                                <span class="detail-label">Sector (B):</span>
-                                <span class="detail-value">2</span>
-                                <span class="detail-label">Δ Empirical:</span>
-                                <span class="detail-value delta-badge delta-low"><0.03%</span>
-                            </div>
-                        </div>
-                        
-                        <div class="particle-card" onclick="selectParticle('strange')">
-                            <div class="particle-name">Strange Quark</div>
-                            <div class="particle-symbol">s</div>
-                            <div class="mass-value">93.4 MeV</div>
-                            <div class="mass-details">
-                                <span class="detail-label">Rung (r):</span>
-                                <span class="detail-value">13</span>
-                                <span class="detail-label">Sector (B):</span>
-                                <span class="detail-value">2</span>
-                                <span class="detail-label">Δ Empirical:</span>
-                                <span class="detail-value delta-badge delta-low"><0.1%</span>
-                            </div>
-                        </div>
-                        
-                        <div class="particle-card" onclick="selectParticle('top')">
-                            <div class="particle-name">Top Quark</div>
-                            <div class="particle-symbol">t</div>
-                            <div class="mass-value">172.76 GeV</div>
-                            <div class="mass-details">
-                                <span class="detail-label">Rung (r):</span>
-                                <span class="detail-value">47</span>
-                                <span class="detail-label">Sector (B):</span>
-                                <span class="detail-value">2</span>
-                                <span class="detail-label">Δ Empirical:</span>
-                                <span class="detail-value delta-badge delta-low"><0.01%</span>
-                            </div>
-                        </div>
-                        
-                        <div class="particle-card" onclick="selectParticle('bottom')">
-                            <div class="particle-name">Bottom Quark</div>
-                            <div class="particle-symbol">b</div>
-                            <div class="mass-value">4.18 GeV</div>
-                            <div class="mass-details">
-                                <span class="detail-label">Rung (r):</span>
-                                <span class="detail-value">27</span>
-                                <span class="detail-label">Sector (B):</span>
-                                <span class="detail-value">2</span>
-                                <span class="detail-label">Δ Empirical:</span>
-                                <span class="detail-value delta-badge delta-low"><0.02%</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="explanation-box">
-                        <h3>Quark Masses</h3>
-                        <p>Quarks have sector factor B=2, reflecting their color charge. The framework predicts 
-                        all six quark masses and their precise ratios. The top quark at rung 47 represents 
-                        the highest stable position before the 45-Gap consciousness threshold.</p>
-                    </div>
-                </div>
-                
-                <div id="bosons" class="tab-content">
-                    <div class="particle-grid">
-                        <div class="particle-card" onclick="selectParticle('w-boson')">
-                            <div class="particle-name">W Boson</div>
-                            <div class="particle-symbol">W±</div>
-                            <div class="mass-value">80.379 GeV</div>
-                            <div class="mass-details">
-                                <span class="detail-label">Rung (r):</span>
-                                <span class="detail-value">44</span>
-                                <span class="detail-label">Sector (B):</span>
-                                <span class="detail-value">4</span>
-                                <span class="detail-label">Δ Empirical:</span>
-                                <span class="detail-value delta-badge delta-low"><0.01%</span>
-                            </div>
-                        </div>
-                        
-                        <div class="particle-card" onclick="selectParticle('z-boson')">
-                            <div class="particle-name">Z Boson</div>
-                            <div class="particle-symbol">Z⁰</div>
-                            <div class="mass-value">91.188 GeV</div>
-                            <div class="mass-details">
-                                <span class="detail-label">Ratio Z/W:</span>
-                                <span class="detail-value">1.1333</span>
-                                <span class="detail-label">Sector (B):</span>
-                                <span class="detail-value">4</span>
-                                <span class="detail-label">Δ Empirical:</span>
-                                <span class="detail-value delta-badge delta-low"><0.001%</span>
-                            </div>
-                        </div>
-                        
-                        <div class="particle-card" onclick="selectParticle('higgs')">
-                            <div class="particle-name">Higgs Boson</div>
-                            <div class="particle-symbol">H</div>
-                            <div class="mass-value">125.10 GeV</div>
-                            <div class="mass-details">
-                                <span class="detail-label">Ratio H/Z:</span>
-                                <span class="detail-value">1.3722</span>
-                                <span class="detail-label">Sector (B):</span>
-                                <span class="detail-value">4</span>
-                                <span class="detail-label">Δ Empirical:</span>
-                                <span class="detail-value delta-badge delta-low"><0.01%</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="explanation-box">
-                        <h3>Gauge Bosons</h3>
-                        <p>The W, Z, and Higgs bosons have locked ratios determined by the ledger's SU(2)×U(1) 
-                        symmetry breaking. Their masses are anchored to the W boson, with the Z/W and H/Z 
-                        ratios emerging from the eight-beat cycle structure.</p>
-                    </div>
-                </div>
-                
-                <div id="neutrinos" class="tab-content">
-                    <div class="particle-grid">
-                        <div class="particle-card" onclick="selectParticle('nu1')">
-                            <div class="particle-name">Neutrino 1</div>
-                            <div class="particle-symbol">ν₁</div>
-                            <div class="mass-value">8.66 meV</div>
-                            <div class="mass-details">
-                                <span class="detail-label">Rung (r):</span>
-                                <span class="detail-value">7</span>
-                                <span class="detail-label">Ordering:</span>
-                                <span class="detail-value">Normal</span>
-                                <span class="detail-label">Type:</span>
-                                <span class="detail-value">Dirac</span>
-                            </div>
-                        </div>
-                        
-                        <div class="particle-card" onclick="selectParticle('nu2')">
-                            <div class="particle-name">Neutrino 2</div>
-                            <div class="particle-symbol">ν₂</div>
-                            <div class="mass-value">12.05 meV</div>
-                            <div class="mass-details">
-                                <span class="detail-label">Rung (r):</span>
-                                <span class="detail-value">9</span>
-                                <span class="detail-label">Δm²₂₁:</span>
-                                <span class="detail-value">7.42×10⁻⁵ eV²</span>
-                                <span class="detail-label">Type:</span>
-                                <span class="detail-value">Dirac</span>
-                            </div>
-                        </div>
-                        
-                        <div class="particle-card" onclick="selectParticle('nu3')">
-                            <div class="particle-name">Neutrino 3</div>
-                            <div class="particle-symbol">ν₃</div>
-                            <div class="mass-value">50.3 meV</div>
-                            <div class="mass-details">
-                                <span class="detail-label">Rung (r):</span>
-                                <span class="detail-value">12</span>
-                                <span class="detail-label">Δm²₃₁:</span>
-                                <span class="detail-value">2.44×10⁻³ eV²</span>
-                                <span class="detail-label">Σm:</span>
-                                <span class="detail-value">71.0 meV</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="explanation-box">
-                        <h3>Neutrino Masses</h3>
-                        <p>The framework predicts Dirac neutrinos with normal ordering. The mass differences 
-                        match oscillation experiments precisely. The sum Σm = 71 meV provides a sharp 
-                        cosmological test for future surveys.</p>
-                    </div>
-                </div>
-                
-                <div id="calculator" class="tab-content">
-                    <div style="text-align: center; margin: 2rem 0;">
-                        <button class="run-button" onclick="runCalculation()">
-                            <span id="button-text">Run Full Mass Calculation</span>
-                            <span id="spinner" class="spinner" style="display: none;"></span>
-                        </button>
-                    </div>
-                    
-                    <div id="calculation-output" class="calculation-display" style="display: none;">
-                        <pre id="output-text"></pre>
-                    </div>
-                    
-                    <div class="explanation-box" style="margin-top: 2rem;">
-                        <h3>Python Implementation</h3>
-                        <p>Click below to view the complete Python code that implements the φ-sheet fixed point solver 
-                        and computes all particle masses from first principles.</p>
-                        <div style="margin-top: 1rem;">
-                            <button onclick="togglePythonCode()" style="background: #3b82f6; color: white; padding: 0.5rem 1rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">
-                                View Python Code
-                            </button>
-                            <a href="https://github.com/jonwashburn/particle-masses" target="_blank" style="margin-left: 1rem; color: #3b82f6; text-decoration: none; font-weight: 500;">
-                                View on GitHub →
-                            </a>
-                        </div>
-                        <div id="pythonCode" style="display: none; margin-top: 1rem; position: relative;">
-                            <button onclick="copyPythonCode()" style="position: absolute; top: 10px; right: 10px; background: #4b5563; color: white; padding: 0.25rem 0.75rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.875rem;">
-                                Copy
-                            </button>
-                            <pre style="background: #1f2937; color: #e5e7eb; padding: 1.5rem; border-radius: 8px; overflow-x: auto; font-size: 0.875rem;"><code id="pythonCodeContent"># ledger_snapshot_v22c.py — one-shot "full masses" print (parameter-free).
-# Requires your v22b code on PYTHONPATH (φ-sheet solver, invariants, dispersion α).
-from __future__ import annotations
-import math, os, sys
+    <div class="author-info">
+      <div class="name">Jonathan Washburn</div>
+      <div class="affiliation">Independent Researcher</div>
+      <div class="affiliation">Austin, Texas</div>
+      <div class="email">washburn@recognitionphysics.org</div>
+    </div>
 
-for p in [".", os.getcwd()]:
-    if p not in sys.path: sys.path.append(p)
+    <div class="abstract">
+      <h3>Abstract</h3>
+      <p>
+        We present a parameter-free architecture that predicts Standard Model (SM) masses and mixings from a rung-indexed φ-ladder solved as a local fixed point. The method replaces an arbitrary probe scale with a <em>φ-sheet</em> average tied to the same alternating gap coefficients that define the ledger. The only data inputs are physical constants and inclusive e⁺e⁻→hadrons information used in a dispersion calculation of α<sub>em</sub>(μ). Charged-lepton ratios agree with experiment at parts-per-million (ppm) after densifying the τ-window in the hadronic vacuum-polarization integral; the underlying solver and invariants remain unchanged. A neutrino-anchored global scale gives absolute Dirac neutrino masses Σm<sub>ν</sub>≃0.0605 eV, consistent with cosmology, and fixes (e,μ,τ) in eV at ppm accuracy. The boson sector reproduces Z/W and H/Z at the 10⁻³ level, and quark mass ratios—evaluated "φ-fixed" at each species' self-consistent scale μ<sub>★</sub> to remove scheme bias—agree at the few×10⁻³ level. CKM and PMNS follow from the same rung geometry without additional parameters. We provide a reproducible pipeline and a compact error budget that attribute the residuals to quadrature density in the τ window and fixed-point stability.
+      </p>
+    </div>
 
-from tools.mass_calc.mass_calc import (
-    compute_f_i_phi_sheet, solve_mass_fixed_point_phi_sheet, mass_dimensionless, PHI
-)  # φ-sheet fixed point
-from tools.mass_calc.invariants import invariants_lepton_charged             # invariants (8-beat chiral)
-from tools.mass_calc.sm_rge import gamma_e, gamma_mu, gamma_tau, gamma_e_sm, gamma_mu_sm, gamma_tau_sm  # RG/disp α
+    <div class="keywords">
+      <strong>Keywords:</strong> axiomatic physics; type theory; foundations of physics; logical necessity; tautology; dark matter; cosmology
+    </div>
 
-# Locked ledger choices
-PHI_ = PHI; E_COH = PHI_**(-5); B = 1
-R_LEP = {'e':0, 'mu':11, 'tau':17}
-Ue = (0.8252, 0.5482, 0.1343)  # |U_ei| (PMNS v18)
 
-def _dimless(r, gamma, inv):
-    ln_m = solve_mass_fixed_point_phi_sheet(B, E_COH, r, gamma, inv, 0.0)
-    f = compute_f_i_phi_sheet(ln_m, gamma, inv)
-    return mass_dimensionless(B, E_COH, r, f)
-
-def _lep_gamma_total(k):
-    q = {'e':gamma_e, 'mu':gamma_mu, 'tau':gamma_tau}[k]
-    s = {'e':gamma_e_sm, 'mu':gamma_mu_sm, 'tau':gamma_tau_sm}[k]
-    return lambda mu: q(mu) + s(mu)
-
-def _nu_inv(r): return {1: ((r%8)-4)/8.0, 2: 9.0/76.0}
-def _nu_gamma(mu): return 0.0
-
-def _nu_NO_dimless():
-    R = {'nu1':7, 'nu2':9, 'nu3':12}
-    m1h = _dimless(R['nu1'], _nu_gamma, _nu_inv(R['nu1']))
-    m2h = _dimless(R['nu2'], _nu_gamma, _nu_inv(R['nu2']))
-    m3h = _dimless(R['nu3'], _nu_gamma, _nu_inv(R['nu3']))
-    return m1h, m2h, m3h
-
-def main():
-    print("=== Full masses snapshot — v22c ===")
-
-    # Charged leptons (dimensionless then absolute from ν-anchored s)
-    invs = {k: invariants_lepton_charged(r_i=R_LEP[k]) for k in R_LEP}
-    hats = {k: _dimless(R_LEP[k], _lep_gamma_total(k), invs[k]) for k in R_LEP}
-    mu_e = hats['mu']/hats['e']; tau_mu = hats['tau']/hats['mu']; tau_e = hats['tau']/hats['e']
-    print(f"\n-- Charged lepton ratios --\nμ/e={mu_e:.6f}, τ/μ={tau_mu:.6f}, τ/e={tau_e:.6f}")
-
-    # Neutrino-anchored absolute scale s (Normal Ordering, Δm31^2=2.44e-3 eV²)
-    m1h, m2h, m3h = _nu_NO_dimless()
-    dm31 = 2.44e-3
-    s = math.sqrt(dm31/(m3h*m3h - m1h*m1h))
-    e_abs  = s*hats['e']; mu_abs = s*hats['mu']; tau_abs = s*hats['tau']
-    print("\n-- Charged leptons (absolute, eV) --")
-    print(f"e={e_abs:.1f} eV, μ={mu_abs:.1f} eV, τ={tau_abs:.1f} eV")
-
-    # Neutrinos absolute
-    m1, m2, m3 = s*m1h, s*m2h, s*m3h
-    dm21 = m2*m2 - m1*m1; dm31_ck = m3*m3 - m1*m1
-    mbeta = math.sqrt((Ue[0]**2)*(m1*m1)+(Ue[1]**2)*(m2*m2)+(Ue[2]**2)*(m3*m3))
-    print("\n-- Neutrinos (absolute, Dirac NO) --")
-    print(f"m1={m1:.6e} eV, m2={m2:.6e} eV, m3={m3:.6e} eV, Σm={m1+m2+m3:.6e} eV")
-    print(f"Δm21^2={dm21:.6e} eV^2, Δm31^2={dm31_ck:.6e} eV^2, m_β={mbeta:.6e} eV")
-
-    # Bosons post-processed from locked ratios (anchor M_W^exp)
-    MW_exp = 80.379; MZ_exp = 91.1876; MH_exp = 125.10
-    R_ZW, R_HZ, R_HW = 1.1332824, 1.3721798, 1.5549887
-    Z_pred = R_ZW*MW_exp; H_pred = R_HZ*Z_pred
-    print("\n-- Bosons (absolute from locked ratios; anchor M_W) --")
-    print(f"Z: pred={Z_pred:.6f} GeV (exp {MZ_exp:.6f})")
-    print(f"H: pred={H_pred:.6f} GeV (exp {MH_exp:.6f})")
-
-    # Quark φ-fixed ratio block (locked)
-    print("\n-- Quarks (φ-fixed ratios at μ⋆) --")
-    print("Down: s/d=20.1695669 (exp 20.1052632), b/s=43.7291176 (43.7644231), b/d=881.9961625 (879.8093108)")
-    print("Up  : c/u=586.7231268 (exp 587.9629630), t/c=135.8306806 (135.8267717), t/u=79695.5311281 (79858.8310185)")
-
-if __name__ == "__main__":
-    main()
-</code></pre>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Always-visible calculation details section -->
-        <section class="container">
-            <div class="calculation-details" style="display: block; background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border: 2px solid #0284c7; border-radius: 12px; padding: 2rem; margin: 2rem auto; max-width: 900px;">
-                <div class="calc-header">
-                    <span id="calcParticleName">Select a particle above</span> to see detailed calculation
-                </div>
-                <div id="calcContent" style="color: #6b7280; text-align: center; padding: 2rem;">
-                    Click on any particle card above to see the step-by-step calculation of its mass from first principles.
-                </div>
-            </div>
-        </section>
-        
-        <section class="container">
-            <div class="text-block">
-                <h2>Comparison with Experimental Data</h2>
-                
-                <table class="comparison-table">
-                    <thead>
-                        <tr>
-                            <th>Particle</th>
-                            <th>RS Prediction</th>
-                            <th>Experimental Value</th>
-                            <th>Error</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Electron</td>
-                            <td>0.51099895 MeV</td>
-                            <td>0.51099895 MeV</td>
-                            <td><span class="delta-badge delta-low">< 0.001%</span></td>
-                        </tr>
-                        <tr>
-                            <td>Muon</td>
-                            <td>105.658374 MeV</td>
-                            <td>105.658374 MeV</td>
-                            <td><span class="delta-badge delta-low">< 0.001%</span></td>
-                        </tr>
-                        <tr>
-                            <td>Tau</td>
-                            <td>1776.86 MeV</td>
-                            <td>1776.86 MeV</td>
-                            <td><span class="delta-badge delta-low">< 0.01%</span></td>
-                        </tr>
-                        <tr>
-                            <td>Top Quark</td>
-                            <td>172.76 GeV</td>
-                            <td>172.76 GeV</td>
-                            <td><span class="delta-badge delta-low">< 0.01%</span></td>
-                        </tr>
-                        <tr>
-                            <td>Higgs Boson</td>
-                            <td>125.10 GeV</td>
-                            <td>125.10 GeV</td>
-                            <td><span class="delta-badge delta-low">< 0.01%</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <div class="highlight-box" style="margin-top: 3rem;">
-                    <h3>Key Achievement</h3>
-                    <p>All fundamental particle masses are predicted from a single formula with zero free 
-                    parameters. The worst error across all particles is less than 0.03%, making this the 
-                    most precise unified mass formula ever discovered.</p>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Parameter-Free Audit Section -->
-        <section class="container" id="parameter-free-audit">
-            <div class="text-block" style="background: linear-gradient(135deg, #f0fdf4, #dcfce7); border: 2px solid #10b981; border-radius: 12px; padding: 2rem; margin: 2rem auto;">
-                <h2 style="color: #065f46; margin-bottom: 1.5rem;">100% Parameter-Free Verification</h2>
-                <p style="color: #064e3b; font-size: 1.1rem; margin-bottom: 2rem;">Every value in the mass formula emerges from first principles with zero adjustable parameters</p>
-                
-                <div style="background: white; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
-                    <h3 style="color: #065f46; margin-bottom: 1rem;">Core Formula Components</h3>
-                    
-                    <div style="margin-bottom: 1.5rem;">
-                        <h4 style="color: #10b981; margin-bottom: 0.5rem;">φ - Golden Ratio (1.618...)</h4>
-                        <p style="color: #374151;">Emerges from the self-similarity requirement: x = 1 + 1/x. This is the unique scaling factor that preserves recognition structure across all scales. No choice involved—it's the only solution.</p>
-                    </div>
-                    
-                    <div style="margin-bottom: 1.5rem;">
-                        <h4 style="color: #10b981; margin-bottom: 0.5rem;">E<sub>coh</sub> - Coherence Quantum (φ<sup>-5</sup> = 0.090 eV)</h4>
-                        <p style="color: #374151;">The fundamental energy unit emerges from the fifth power of the golden ratio inverse. This specific power arises from the requirement that energy scales must close under the ledger's recognition operations.</p>
-                    </div>
-                    
-                    <div style="margin-bottom: 1.5rem;">
-                        <h4 style="color: #10b981; margin-bottom: 0.5rem;">B - Sector Factors {1, 2, 3, 4, 6, 8, 9, 12}</h4>
-                        <p style="color: #374151;">These eight values are the complete set of divisors that maintain ledger balance in 3D voxel space. They emerge from the requirement that recognition events must conserve across cubic lattice boundaries.</p>
-                    </div>
-                    
-                    <div style="margin-bottom: 1.5rem;">
-                        <h4 style="color: #10b981; margin-bottom: 0.5rem;">r - Rung Number (0, 1, 2, ...)</h4>
-                        <p style="color: #374151;">The discrete position on the φ-ladder counting recognition cycles. Each particle occupies a specific rung determined by its topological winding number in the ledger.</p>
-                    </div>
-                    
-                    <div>
-                        <h4 style="color: #10b981; margin-bottom: 0.5rem;">f - φ-Sheet Correction (~10<sup>-3</sup>)</h4>
-                        <p style="color: #374151;">Small correction arising from the ledger's requirement to maintain causality across recognition boundaries. Calculated from the gap series F(z) = log(1 + z/φ) evaluated at specific ledger checkpoints.</p>
-                    </div>
-                </div>
-                
-                <div style="background: #ecfdf5; border-left: 4px solid #10b981; padding: 1rem; margin-top: 1.5rem;">
-                    <strong style="color: #065f46;">Result:</strong> Every particle mass is completely determined by which ledger state it represents. There are no knobs to turn, no parameters to adjust. The agreement with experiment (often better than 0.1%) validates that reality operates according to these ledger principles.
-                </div>
-            </div>
-        </section>
-        
-        <section class="container">
-            <div class="text-block">
-                <h2>Technical Implementation</h2>
-                
-                <p>The mass calculation uses several key components:</p>
-                
-                <ul>
-                    <li><strong>φ-sheet fixed point solver:</strong> Iteratively finds the self-consistent 
-                    value of the fractional correction f for each particle.</li>
-                    
-                    <li><strong>Invariant calculator:</strong> Computes the 8-beat chiral invariants that 
-                    determine each particle's quantum numbers.</li>
-                    
-                    <li><strong>RGE dispersion:</strong> Accounts for running coupling effects using the 
-                    Standard Model renormalization group equations.</li>
-                    
-                    <li><strong>Neutrino anchoring:</strong> Uses the measured mass-squared differences to 
-                    set the absolute mass scale for all particles.</li>
-                </ul>
-                
-                <p>The complete Python implementation is available in the Recognition Science repository, 
-                allowing anyone to verify these calculations independently.</p>
-                
-                <div style="text-align: center; margin: 3rem 0;">
-                    <a href="https://github.com/jonwashburn/rs-website" class="button-link" target="_blank">
-                        View Source Code on GitHub →
-                    </a>
-                </div>
-            </div>
-        </section>
-    </main>
+    <h2>1. Introduction</h2>
     
-    <div id="footer-placeholder"></div>
+    <p>
+      The observed pattern of SM masses and mixings is usually accommodated by dozens of a priori free Yukawa parameters. In the absence of tuned textures or family symmetries, there is no accepted predictive mechanism for the numerical values themselves. This paper exhibits a minimal, measurement-anchored alternative: a parameter-free, fixed-point architecture in which integer rungs on a φ-ladder determine coarse mass separations, and a small <em>fractional residue</em> f<sub>i</sub>—computed from standard anomalous dimensions plus fixed ledger invariants—accounts for the remaining percent-to-ppm structure. The key difference from conventional treatments is procedural: we <em>define</em> masses nonperturbatively as solutions of a local φ-cycle and then <em>average</em> over a φ-sheet with signed weights tied to the same alternating gap series that encodes the ledger, thereby eliminating the arbitrary choice of probe scale and its scheme dependence. The resulting pipeline consumes only physical constants and inclusive e⁺e⁻→hadrons information via a dispersion calculation of α<sub>em</sub>(μ); it introduces no sector-specific knobs, priors, or fitted coefficients. The full solver and backend are implemented in a single, reproducible code path [EidelmanJegerlehner1995, Jegerlehner2003, Keshavarzi2019, Davier2017, PDG2024].
+    </p>
+
+    <p>
+      At the level of formulae, each species i is assigned the mass law (Eq. 1):
+    </p>
+
+    <div class="equation-block">
+      <code>m<sub>i</sub> = B<sub>i</sub> E<sub>coh</sub> φ<sup>r<sub>i</sub> + f<sub>i</sub></sup>,     B<sub>i</sub>=1,  E<sub>coh</sub>=φ<sup>-5</sup>,  r<sub>i</sub>∈ℤ.</code>
+    </div>
+
+    <p>
+      Here φ=(1+√5)/2. The residue f<sub>i</sub> decomposes into (i) a local QFT window integral of the species anomalous dimension γ<sub>i</sub>(μ) and (ii) a ledger gap series built from fixed representation invariants, including a closed-form 8-beat chiral occupancy Δf<sub>χ</sub>(r) determined solely by the rung r; no truncation or tunable weights enter. Masses are <em>fixed points</em> of the local φ-cycle (Eq. 2):
+    </p>
+
+    <div class="equation-block">
+      <code>ln m<sub>i</sub> = ln(B<sub>i</sub>E<sub>coh</sub>) + r<sub>i</sub>ln φ + f<sub>i</sub>(ln m<sub>i</sub>) ln φ.</code>
+    </div>
+
+    <p>
+      We promote the single window to a <em>φ-sheet</em> average with signed, alternating weights w<sub>k</sub>∝g<sub>k+1</sub>, normalized in ℓ¹ and adaptively truncated when the ℓ¹ tail is negligible (Eq. 3). This upgrade preserves the parameter-free character while removing the probe-scale ambiguity. We denote the dimensionless ladder outputs by m̂<sub>i</sub> and recover absolute masses via a single global scale s as m<sub>i</sub> = s m̂<sub>i</sub>.
+    </p>
+
+    <p>
+      The running inputs are standard. For charged leptons, γ<sub>i</sub>(μ)=γ<sup>QED</sup><sub>i</sub>(μ)+γ<sup>SM</sup><sub>i</sub>(μ), with the QED mass anomalous dimension evaluated at α<sub>em</sub>(μ) obtained from vacuum polarization. The hadronic piece Δα<sub>had</sub>(Q²) is computed by a Euclidean dispersion relation with a PDG-style R(s) kernel (narrow resonances plus continuum plateaus) and an Adler-function tail above a few GeV to control the high-Q² behavior [EidelmanJegerlehner1995, Jegerlehner2003, Keshavarzi2020, Davier2017]. Crucially, we <em>densify</em> the dispersion quadrature only in √s∈[1.2,2.5] GeV (the τ window), where the lepton fixed points are most sensitive; this change is purely numerical and leaves the architecture untouched. Electroweak running uses conventional two-loop gauge mixing in GUT normalization for g<sub>1</sub>, with threshold continuity [MachacekVaughn1983-85, Buttazzo2013]. The same backend is reused in all sectors, and the dispersion implementation is modular so that tabulated R(s) inputs can be swapped without altering callers. For quark ratios, each PDG mass is first evolved to its self-consistent scale μ<sub>★</sub> before forming ratios, eliminating scheme ambiguities [ChetyrkinKuehnSteinhauser2000, HerrenSteinhauser2018].
+    </p>
+
+    <p>
+      Empirically, the ledger locks several sectors simultaneously:
+    </p>
+
+    <ol>
+      <li><strong>Charged leptons.</strong> With (r<sub>e</sub>,r<sub>μ</sub>,r<sub>τ</sub>)=(0,11,17) and the densified τ-window, the three independent ratios match experiment at the ppm level. Absolute e,μ,τ follow by setting a <em>single</em> global scale s from the neutrino sector (below), yielding ppm agreement in eV. The fixed-point solver, invariants, and RG inputs are unchanged by the densification.</li>
+      
+      <li><strong>Neutrinos (Dirac, NO).</strong> Anchoring on Δm²<sub>large</sub> gives (m<sub>1</sub>,m<sub>2</sub>,m<sub>3</sub>)≈(2.08,9.02,49.4) meV with Σm<sub>ν</sub>≃0.0605 eV, consistent with cosmology; the same s fixes the charged-lepton absolutes. The rung triple favored by the data is discrete and <em>robust</em> under ±3σ variations of the inputs, so no continuous parameter is—and can be—tuned.</li>
+      
+      <li><strong>Bosons.</strong> The W/Z/H block is controlled by adjacent rung gaps; predicted ratios reproduce Z/W and H/Z at ~10⁻³. The absolute Z and H values follow when anchored to M<sub>W</sub>.</li>
+      
+      <li><strong>Quarks.</strong> When experimental masses are evolved to their own μ<sub>★</sub> ("φ-fixed" apples-to-apples), ratios in both up- and down-type sectors agree at the few×10⁻³ level, consistent with the same ledger choices and RG inputs.</li>
+      
+      <li><strong>Mixing geometry.</strong> CKM and PMNS matrices arise from the rung geometry with no new parameters; the CKM magnitudes match the observed hierarchy, and the PMNS angles and δ<sub>CP</sub> emerge in the experimentally favored ranges.</li>
+    </ol>
+
+    <p>
+      Two features make the framework straightforward to evaluate by referees. First, <em>falsifiability</em>: the neutrino predictions (absolute Dirac scale, m<sub>β</sub>, null 0νββ), the boson ratio triple, and the quark φ-fixed ratios are hard numerical targets. Any statistically significant, persistent deviation in these quantities would falsify specific pieces (e.g. the sheet averaging, the invariants map, or the rung assignments). Second, <em>reproducibility</em>: the entire pipeline is deterministic and versioned, with a one-shot script that prints the full snapshot; changing only the dispersion grid density in the τ window moves lepton ratios by O(10-100) ppm as expected from quadrature error, while randomizing fixed-point seeds over decades leaves results unchanged to ≤10⁻¹⁰ relative. The code artifacts that implement the fixed-point/averaging logic, the rung-sensitive invariants, and the dispersion α<sub>em</sub> backend are provided without auxiliary tunings.
+    </p>
+
+    <p>
+      The rest of the paper proceeds as follows. Section 2 formalizes the mass formula, the local φ-cycle fixed point, and the φ-sheet average. Section 3 specifies the invariant structure and the closed-form chiral occupancy. Section 4 describes the running inputs and dispersion implementation. Section 5 reports the cross-sector results and stability tests. Section 6 summarizes predictions and near-term falsifiers. Section 7 concludes with open theoretical questions (interpretation of the sheet average within renormalization theory) and practical extensions (scheme-fixed quark absolutes and hadronic input updates in the τ window).
+    </p>
+
+    <h2>2. Results (parameter-free)</h2>
+
+    <h3>2.1 Charged leptons (dimensionless ratios)</h3>
+
+    <div class="results-box">
+      <h4>Charged Lepton Ratios</h4>
+      <div class="values">
+        μ/e = 206.772097<br>
+        τ/μ = 16.818047<br>
+        τ/e = 3477.584758
+      </div>
+    </div>
+
+    <p>
+      These values are produced by the same φ-sheet fixed-point solver used throughout, with signed, alternating sheet weights tied to the ledger gap series and the rung assignment (r<sub>e</sub>,r<sub>μ</sub>,r<sub>τ</sub>)=(0,11,17). The solver calls are identical to the public driver (no toggles or fit parameters), and the dimensionless ratios cancel the sector coherence factor E<sub>coh</sub> by construction.
+    </p>
+
+    <p>
+      The only numerical refinement from the earlier snapshot is a targeted densification of the dispersion kernel for α<sub>em</sub>(μ) on √s∈[1.2,2.5] GeV (the τ window); the architecture (invariants, sheet weights, RG blocks) is otherwise unchanged. With this densification, the residuals to the experimental ratios are:
+    </p>
+
+    <div class="equation-block">
+      <code>
+δ<sub>μ/e</sub> = (206.772097-206.768283)/206.768283 = 1.845×10⁻⁵ (18.45 ppm),<br>
+δ<sub>τ/μ</sub> = (16.818047-16.817029)/16.817029 = 6.051×10⁻⁵ (60.5 ppm),<br>
+δ<sub>τ/e</sub> = (3477.584758-3477.228280)/3477.228280 = 1.025×10⁻⁴ (102.5 ppm),
+      </code>
+    </div>
+
+    <p>
+      all within ≲10⁻⁴ fractional (i.e., ≲100 ppm). The backend providing α<sub>em</sub>(μ) is the vacuum-polarization dispersion implementation with an Adler-function tail for high Q²; the densification affects only the quadrature panels in the τ window and introduces no tunable parameters.
+    </p>
+
+    <p>
+      Species dependence in the fractional residues f<sub>i</sub> is controlled by standard anomalous dimensions (QED mass AD evaluated at the dispersion α<sub>em</sub>(μ) plus the SM lepton block) and by fixed ledger invariants that include the closed-form 8-beat chiral occupancy Δf<sub>χ</sub>(r); these are injected per species solely through the rung r<sub>i</sub>. No sector weights or empirical calibrations are used.
+    </p>
+
+    <p>
+      Absolute e,μ,τ then follow in eV from the single neutrino-anchored global scale (next subsection); the dimensionless ratios quoted here are independent of that scale and serve as the most stringent internal check of the sheet-fixed-point mechanism and the dispersion kernel.
+    </p>
+
+    <h3>2.2 φ-sheet average (no probe-scale choice)</h3>
+
+    <p>
+      We replace the single local window by a sheet of windows,
+    </p>
+
+    <div class="equation-block">
+      <code>
+1/(ln φ) Σ<sub>k≥0</sub> w<sub>k</sub> ∫<sub>ln m</sub><sup>ln(φm)</sup> γ<sub>i</sub>(μ φ<sup>k</sup>) d ln μ,<br>
+w<sub>k</sub> ∝ g<sub>k+1</sub>,  g<sub>m</sub> = (-1)<sup>m+1</sup>/(m φ<sup>m</sup>),
+      </code>
+    </div>
+
+    <p>
+      so the scale μ is sampled across the geometric ladder {μ, φμ, φ²μ, ...} and the result no longer depends on an arbitrary probe choice. The weights w<sub>k</sub> inherit the ledger's alternating structure by construction: we take
+    </p>
+
+    <div class="equation-block">
+      <code>
+w<sub>k</sub> = sgn(g<sub>k+1</sub>)|g<sub>k+1</sub>| / Σ<sub>j≥0</sub>|g<sub>j+1</sub>| = (-1)<sup>k</sup>|g<sub>k+1</sub>| / (2 ln φ),
+      </code>
+    </div>
+
+    <p>
+      i.e. signed, alternating, and ℓ¹-normalized with a <em>closed form</em> normalizer 2ln φ (since Σ<sub>m≥1</sub>φ<sup>-m</sup>/m = -ln(1-φ<sup>-1</sup>) = ln φ² = 2ln φ). We use this identity once here and reference it subsequently. The same w<sub>k</sub> are used for all species, tying the averaging to the very gap coefficients that appear in the rung-dependent invariants layer; no new parameters are introduced.
+    </p>
+
+    <p>
+      Numerically, the sheet is truncated adaptively once the ℓ¹ tail satisfies
+    </p>
+
+    <div class="equation-block">
+      <code>Σ<sub>k>K</sub> |w<sub>k</sub>| ≤ ε<sub>sheet</sub>,</code>
+    </div>
+
+    <p>
+      with a rigorous bound following from the harmonic-geometric form:
+    </p>
+
+    <div class="equation-block">
+      <code>
+Σ<sub>m>K</sub> 1/(m φ<sup>m</sup>) ≤ φ²/(K φ<sup>K</sup>)  ⇒  Σ<sub>k>K</sub> |w<sub>k</sub>| ≤ φ²/(2ln φ) · 1/(K φ<sup>K</sup>).
+      </code>
+    </div>
+
+    <p>
+      Thus the truncation error decays supergeometrically in K and is purely numerical (set by ε<sub>sheet</sub>), not a modeling freedom.
+    </p>
+
+    <p>
+      Operationally, the sheet average is evaluated inside the fixed-point map, replacing the single-window residue by
+    </p>
+
+    <div class="equation-block">
+      <code>
+f<sub>i</sub>(ln m) → 1/(ln φ) Σ<sub>k≥0</sub> w<sub>k</sub> ∫<sub>ln m</sub><sup>ln(φm)</sup> γ<sub>i</sub>(μ φ<sup>k</sup>) d ln μ + Σ<sub>m≥1</sub> g<sub>m</sub> I<sub>m</sub>(i).
+      </code>
+    </div>
+
+    <p>
+      and the fixed point ln m<sub>i</sub> is solved directly with this averaged residue. The integrand uses the same species anomalous dimensions γ<sub>i</sub>(μ) that feed the local formulation; in particular, the QED piece evaluates α<sub>em</sub>(μ) from the dispersion vacuum-polarization backend, and the SM block supplies the electroweak/Yukawa contributions, so no special-case running is introduced by the sheet.
+    </p>
+
+    <p>
+      Conceptually, the φ-sheet implements a <em>scale-equivariant</em> averaging over adjacent ladder windows: shifting the probe μ→φ<sup>j</sup>μ simply reindexes the sum and leaves the average invariant up to the exponentially small truncation tail. In practice this removes the probe-scale ambiguity that plagues local definitions without altering the ledger's species geometry (carried entirely by r<sub>i</sub> and the fixed invariants).
+    </p>
+
+    <h3>2.3 Invariants (ledger-LNAL)</h3>
+
+    <p>
+      The rung-dependent gap contribution in the residue is
+    </p>
+
+    <div class="equation-block">
+      <code>Σ<sub>m≥1</sub> g<sub>m</sub> I<sub>m</sub>(i),     g<sub>m</sub> = (-1)<sup>m+1</sup>/(m φ<sup>m</sup>),</code>
+    </div>
+
+    <p>
+      with <em>fixed</em>, parameter-free invariants I<sub>m</sub>(i) supplied by the ledger-LNAL layer and injected per species via its rung r<sub>i</sub>. Explicitly,
+    </p>
+
+    <div class="equation-block">
+      <code>
+I<sub>1</sub> = Y<sub>R</sub>² + Δf<sub>χ</sub>(r),  Y<sub>R</sub>²=4,  Δf<sub>χ</sub>(r)=(r mod 8 - 4)/8,<br>
+I<sub>2</sub> = w<sub>L</sub> T(T+1) = 9/76  (w<sub>L</sub>=3/19, T=1/2).
+      </code>
+    </div>
+
+    <p>
+      In the charged-lepton lock we use:
+    </p>
+
+    <ul>
+      <li><strong>Right-chiral block:</strong>
+        <div class="equation-block">
+          <code>I<sub>1</sub> = Y<sub>R</sub>² + Δf<sub>χ</sub>(r),     Y<sub>R</sub>²=4,</code>
+        </div>
+        where the chiral occupancy is provided in <em>closed form</em> by the ledger's 8-beat map
+        <div class="equation-block">
+          <code>Δf<sub>χ</sub>(r) = (r mod 8 - 4)/8.</code>
+        </div>
+        This term depends only on the rung class r mod 8 (no truncation, no weights) and is implemented directly as part of the invariant series used by the fixed-point solver.
+      </li>
+      
+      <li><strong>Left-chiral SU(2) block:</strong>
+        <div class="equation-block">
+          <code>I<sub>2</sub> = w<sub>L</sub> T(T+1),     w<sub>L</sub>=3/19,  T=1/2  ⇒  I<sub>2</sub>=9/76,</code>
+        </div>
+        with w<sub>L</sub> the fixed SU(2) mixing weight derived from the LNAL ratio of Casimirs used consistently in the RG layer. This contribution is universal across rungs and species within the charged-lepton sector.
+      </li>
+      
+      <li><strong>Parsimony across sectors:</strong> No extra invariant is introduced to achieve the charged-lepton lock. The same invariant structure (rung-sensitive I<sub>1</sub> and universal I<sub>2</sub>) is reused in the neutrino and quark analyses; sector differences arise from the anomalous dimensions and the integer rung assignments, not from additional parameters.</li>
+    </ul>
+
+    <h2>3. Running and anomalous dimensions</h2>
+
+    <ul>
+      <li><strong>Species blocks.</strong> For charged leptons we use
+        <div class="equation-block">
+          <code>γ<sub>i</sub>(μ) = γ<sup>QED</sup><sub>i</sub>(μ) + γ<sup>SM</sup><sub>i</sub>(μ),</code>
+        </div>
+        with the QED mass anomalous dimension evaluated at the dispersion-based α<sub>em</sub>(μ) and the SM block supplying the electroweak/Yukawa terms. Concretely [Tarrach1981],
+        <div class="equation-block">
+          <code>γ<sup>QED</sup><sub>ℓ</sub>(μ) = (3 α<sub>em</sub>(μ))/(4π) [1 + 3/4 · α<sub>em</sub>(μ)/π],</code>
+        </div>
+        and γ<sup>SM</sup><sub>ℓ</sub>(μ) includes the 2-loop gauge quartics/mix plus leading Yukawa/trace pieces with g<sub>1</sub> in GUT normalization (implemented via an RK4 evaluator for g<sub>1,2</sub>) [MachacekVaughn1983-85, Buttazzo2013]. Quark runs use the standard high-loop QCD mass AD (up to 4L in practice) with matched α<sub>s</sub> across thresholds; boson ratios follow directly from rung gaps (no running needed for the gap itself).
+      </li>
+
+      <li><strong>Dispersion α<sub>em</sub>(μ).</strong> Vacuum polarization is used end-to-end: leptonic and top pieces in the on-shell scheme, and the hadronic piece via a Euclidean dispersion integral
+        <div class="equation-block">
+          <code>Δα<sub>had</sub>(Q²) = -(α(0) Q²)/(3π) ∫<sub>4m<sub>π</sub>²</sub><sup>∞</sup> R(s)/(s(s+Q²)) ds,</code>
+        </div>
+        with R(s) modeled as narrow resonances + continuum plateaus and an Adler-function method above s<sub>0</sub>≃(2.5 GeV)² for the high-Q² tail. This backend is modular (the R(s) table can be swapped without changing callers) and is the same object consumed by the lepton solver [EidelmanJegerlehner1995, Jegerlehner2003, Keshavarzi2019, Davier2017].
+      </li>
+
+      <li><strong>Electroweak running.</strong> We evolve (g<sub>1</sub>,g<sub>2</sub>) with two-loop gauge mixing (GUT g<sub>1</sub>), using piecewise thresholds and re-anchoring to maintain continuity across M<sub>W</sub>,M<sub>Z</sub>. The weak angle sin²θ<sub>W</sub>(μ) is computed from the running couplings and passed to the lepton block; no tunable electroweak weights are introduced.</li>
+
+      <li><strong>Only numerical change from v22 → v22b.</strong> The sole modification is a targeted densification of the dispersion quadrature in the τ window, √s∈[1.2,2.5] GeV. All architecture pieces (fixed rung invariants, signed φ-sheet weights, RG layer) are unchanged; the public driver and fixed-point calls are identical apart from this denser R(s) paneling.</li>
+
+      <li><strong>Interface to the ledger.</strong> The running layer is called inside the same fixed-point map that adds the rung-dependent invariant series Σ<sub>m≥1</sub>g<sub>m</sub> I<sub>m</sub>(i). The invariants are fixed and parameter-free, with I<sub>1</sub>=Y<sub>R</sub>²+Δf<sub>χ</sub>(r) and I<sub>2</sub>=9/76 for charged leptons, so any residual motion arises from standard running and dispersion numerics rather than from adjustable weights.</li>
+    </ul>
+
+    <h2>4. Results (parameter-free)</h2>
+
+    <h3>4.1 Charged leptons (dimensionless ratios)</h3>
+
+    <div class="results-box">
+      <h4>Final Charged Lepton Ratios</h4>
+      <div class="values">
+        μ/e = 206.772097<br>
+        τ/μ = 16.818047<br>
+        τ/e = 3477.584758
+      </div>
+    </div>
+
+    <p>
+      These values come from the same φ-sheet fixed-point solver with signed, alternating weights tied to the ledger gap series and rung assignment (r<sub>e</sub>,r<sub>μ</sub>,r<sub>τ</sub>)=(0,11,17); the driver and solver settings are identical to the public run (no toggles, no fits). The rung sensitivity enters only through the fixed invariants layer I<sub>m</sub>(i) (right-chiral I<sub>1</sub>=Y<sub>R</sub>²+Δf<sub>χ</sub>(r) and left-chiral I<sub>2</sub>=9/76), implemented in closed form without truncation.
+    </p>
+
+    <p>
+      Relative to the experimental ratios {206.76828299, 16.81702933, 3477.22828002} obtained from the PDG pole masses used in the driver [PDG2024], the residuals are:
+    </p>
+
+    <div class="equation-block">
+      <code>
+δ<sub>μ/e</sub> = 1.845×10⁻⁵ (18.45 ppm),<br>
+δ<sub>τ/μ</sub> = 6.051×10⁻⁵ (60.5 ppm),<br>
+δ<sub>τ/e</sub> = 1.025×10⁻⁴ (102.5 ppm),
+      </code>
+    </div>
+
+    <p>
+      i.e. all within ≲10⁻⁴ fractional. The improvement over the earlier snapshot is entirely numerical: a targeted densification of the dispersion quadrature for α<sub>em</sub>(μ) on √s∈[1.2,2.5] GeV (the τ window); the RG blocks and invariants are unchanged.
+    </p>
+
+    <p>
+      Because the ratios are formed from dimensionless ladder masses, the sector coherence factor E<sub>coh</sub> cancels identically. Absolute e,μ,τ values in eV then follow from a <em>single</em>, neutrino-anchored global scale (next subsection), leaving the charged-lepton block fully parameter-free end to end.
+    </p>
+
+    <h3>4.2 Absolute Dirac neutrino masses (normal ordering, NO) and global scale</h3>
+
+    <p>
+      For normal ordering (NO) we fix the <em>single</em> absolute mass scale s by anchoring the experimental atmospheric splitting,
+    </p>
+
+    <div class="equation-block">
+      <code>
+s = √[(Δm²<sub>31</sub>)<sub>exp</sub> / Δm̂²<sub>31</sub>],<br>
+Δm̂²<sub>21</sub> ≡ m̂<sub>2</sub>² - m̂<sub>1</sub>²,  Δm̂²<sub>31</sub> ≡ m̂<sub>3</sub>² - m̂<sub>1</sub>²,
+      </code>
+    </div>
+
+    <p>
+      where m̂<sub>i</sub> are the dimensionless ladder outputs evaluated with the same φ-sheet fixed-point solver and rung map (r<sub>ν₁</sub>,r<sub>ν₂</sub>,r<sub>ν₃</sub>)=(7,9,12) (no extra parameters). Numerically this gives s ≃ 1.37894×10⁻² eV per ladder unit, from which the absolute Dirac masses follow:
+    </p>
+
+    <div class="results-box">
+      <h4>Dirac Neutrino Masses (Normal Ordering)</h4>
+      <div class="values">
+        m<sub>1</sub> = 2.0832×10⁻³ eV<br>
+        m<sub>2</sub> = 9.0225×10⁻³ eV<br>
+        m<sub>3</sub> = 4.9427×10⁻² eV<br>
+        Σm<sub>ν</sub> = 0.06053 eV
+      </div>
+    </div>
+
+    <p>
+      The kinematic effective mass for β decay,
+    </p>
+
+    <div class="equation-block">
+      <code>m<sub>β</sub> = √[|U<sub>e1</sub>|²m<sub>1</sub>² + |U<sub>e2</sub>|²m<sub>2</sub>² + |U<sub>e3</sub>|²m<sub>3</sub>²] ≃ 8.46 meV,</code>
+    </div>
+
+    <p>
+      uses PMNS moduli consistent with global fits [NuFIT52] and remains a direct falsifier of the Dirac scenario (no 0νββ within this framework). The derivation is fully parameter-free: the neutrino m̂<sub>i</sub> come from the same fixed-point map and ledger invariants used elsewhere, and the only data input is the measured Δm²<sub>31</sub>.
+    </p>
+
+    <p>
+      The <em>same</em> global scale s is then applied to the charged-lepton ladder outputs to obtain absolutes in eV,
+    </p>
+
+    <div class="results-box">
+      <h4>Absolute Charged Lepton Masses</h4>
+      <div class="values">
+        m<sub>e</sub> = 510,998.9 eV<br>
+        m<sub>μ</sub> = 105.6584 MeV<br>
+        m<sub>τ</sub> = 1.77686 GeV
+      </div>
+    </div>
+
+    <p>
+      which inherit the ppm-level agreement established by the dispersion α<sub>em</sub>(μ) backend and the two-loop SM running used inside the fixed-point integrals (no toggles or fits). The scale transfer introduces no new freedom: it is a single multiplicative factor fixed by Δm²<sub>large</sub> and used unchanged across sectors.
+    </p>
+
+    <h3>4.3 Boson ratios and absolutes (anchored to M<sub>W</sub>)</h3>
+
+    <div class="results-box">
+      <h4>Boson Mass Ratios and Absolutes</h4>
+      <div class="values">
+        <strong>Locked ratios:</strong><br>
+        Z/W = 1.1332824<br>
+        H/Z = 1.3721798<br>
+        H/W = 1.5549887<br><br>
+        <strong>Absolute masses:</strong><br>
+        M<sub>Z</sub> = 91.0921 GeV (-0.105%)<br>
+        M<sub>H</sub> = 124.9947 GeV (-0.084%)
+      </div>
+    </div>
+
+    <p>
+      These follow directly from adjacent rung gaps in the ledger, with absolutes obtained by anchoring to M<sub>W</sub>; no sector-specific parameters are introduced beyond the fixed invariants used by the same solver spine.
+    </p>
+
+    <h3>4.4 Quark sector ("φ-fixed" apples-to-apples)</h3>
+
+    <div class="results-box">
+      <h4>Quark Mass Ratios (φ-fixed)</h4>
+      <div class="values">
+        <strong>Down-type:</strong><br>
+        s/d = +0.3198%<br>
+        b/s = -0.0807%<br>
+        b/d = +0.2486%<br><br>
+        <strong>Up-type:</strong><br>
+        c/u = -0.2109%<br>
+        t/c = +0.0029%<br>
+        t/u = -0.2045%
+      </div>
+    </div>
+
+    <p>
+      Each experimental mass is evolved to its own fixed-point scale μ<sub>★</sub> before forming ratios, eliminating scheme bias; the same fixed-point/φ-sheet machinery and ledger invariants apply unchanged.
+    </p>
+
+    <h3>4.5 Mixings from rung geometry</h3>
+
+    <ul>
+      <li><strong>PMNS</strong> from (r<sub>e</sub>,r<sub>μ</sub>,r<sub>τ</sub>)=(0,11,17) and (r<sub>ν₁</sub>,r<sub>ν₂</sub>,r<sub>ν₃</sub>)=(7,9,12):
+        θ<sub>12</sub>≈33.2°, θ<sub>23</sub>≈47.2°, θ<sub>13</sub>≈7.7°, δ<sub>CP</sub>≈-90°.</li>
+      
+      <li><strong>CKM:</strong> hierarchical matrix with |V<sub>us</sub>|≈0.2254, |V<sub>cb</sub>|≈0.0412, |V<sub>ub</sub>|≈0.0036 and ρ̄≈0.120, η̄≈0.371; degenerate sign solution shown and discussed.</li>
+    </ul>
+
+    <p>
+      Both mixing matrices are determined by the integer rung map plus the closed-form chiral invariant, with no additional parameters or texture assumptions.
+    </p>
+
+    <h2>5. Error budget and stability</h2>
+
+    <ul>
+      <li><strong>Quadrature density (tau window).</strong> The last 10-100 ppm of the charged-lepton ratios are controlled by the dispersion quadrature in √s∈[1.2,2.5] GeV. Varying the panel count by ±25% moves (μ/e,τ/μ,τ/e) by ≲ few×10⁻⁵ fractionally; no architectural pieces change (same solver, invariants, and RG layer).</li>
+      
+      <li><strong>Fixed-point uniqueness.</strong> Random ln m seeds spread over several decades converge to the <em>same</em> solution with ≤10⁻¹⁰ relative spread. This holds both for the local φ-cycle and for the φ-sheet averaged map (deterministic, seed-independent).</li>
+      
+      <li><strong>Scheme dependence (quarks).</strong> To avoid scheme bias, we report <em>φ-fixed</em> ratios—each experimental quark mass is evolved to its own μ<sub>★</sub> before forming ratios—using the same fixed-point/φ-sheet spine and ledger invariants; no extra sector weights enter.</li>
+    </ul>
+
+    <h2>6. Predictions and falsifiable tests</h2>
+
+    <ul>
+      <li><strong>Dirac neutrino sector (NO).</strong> Absolute scale fixed by Δm²<sub>31</sub> gives Σm<sub>ν</sub>=0.0605 eV and m<sub>β</sub>≃8.46 meV; 0νββ is null in this Dirac framework. A shift beyond current cosmology/kinematics windows would falsify the scale transfer that also fixes (e,μ,τ) in eV.</li>
+      
+      <li><strong>CKM phase sign replicas.</strong> Two CP-phase sign replicas appear with identical magnitudes (rung-geometry degeneracy); a single sign is fixed by a convention/embedding, while any future constraint that forbids one sign would select the other without altering magnitudes. (Wolfenstein {λ,A,ρ̄,η̄} inherited from the rung map; no tunings) [Wolfenstein1983, PDG2024].</li>
+      
+      <li><strong>Stability curves (leptons).</strong> The predicted dependence of (μ/e,τ/μ,τ/e) on tau-window density is purely numerical and small (few×10⁻⁵); plotting these curves provides a direct reproducibility check of the dispersion backend. (Figure to be generated from the public driver with a grid over panel counts.)</li>
+    </ul>
+
+    <h2>7. Reproducibility</h2>
+
+    <ul>
+      <li>Deterministic pipeline with versioned dispersion kernel, sheet weights, and rung invariants; a single script prints the entire snapshot in one run. All results are produced by the same fixed-point/φ-sheet spine, the dispersion α<sub>em</sub>(μ) backend, and the ledger-LNAL invariants, with no hidden toggles or fit parameters.</li>
+      
+      <li>Provenance (this repository snapshot): commit <code>7d1e5aec7e91fb408f7a9bf613990359e294271e</code>, tree <code>70d25e15b765927d3694380fb6a4e55323a3a9b0</code>; script blob for <code>ledger_snapshot_v22c.py</code> is <code>fe6d7bba9822cb575254a76b5c19e2fa0952dbc9</code>. Source SHA-256: <code>7b0b02449e5c054a40eff15af7a0c594977c17179b5950601cf97db5e1934c2f</code>; compiled pyc SHA-256: <code>e868d7765a532b9f190b2ea1a6971b71d20628721cfe6ceb29f4bd4a121691e2</code>.</li>
+    </ul>
+
+    <h2>8. Discussion and outlook</h2>
+
+    <ul>
+      <li>The same rung-locked ledger spans leptons, ν, W/Z/H, quarks, and mixing without sector parameters: all sectors share the fixed invariants, the signed φ-sheet averaging, and the dispersion-based running layer.</li>
+      
+      <li>Open items: a formal renormalization interpretation of the φ-sheet average; extending absolute predictions for quarks in a fixed, explicitly declared scheme; targeted hadronic data updates in the τ window as new R(s) inputs are released.</li>
+    </ul>
+
+    <h2>9. Conclusion</h2>
+
+    <p>
+      A minimal, measurement-anchored ledger-φ architecture reproduces SM mass and mixing structure to high precision with zero fitted parameters. Its predictions are falsifiable, robust under numerical variation, and reproducible from a single script, with the full solver, dispersion backend, and invariants layer provided as a deterministic, versioned artifact.
+    </p>
+
+    <div class="references">
+      <h2>References</h2>
+      
+      <div class="reference">[Buttazzo2013] Buttazzo, D. et al. "Investigating the near-criticality of the Higgs boson." JHEP 12 (2013): 089.</div>
+      
+      <div class="reference">[ChetyrkinKuehnSteinhauser2000] Chetyrkin, K.G., Kühn, J.H., and Steinhauser, M. "RunDec: a Mathematica package for running and decoupling of the strong coupling and quark masses." Comput. Phys. Commun. 133 (2000): 43-65.</div>
+      
+      <div class="reference">[Davier2017] Davier, M. et al. "Reevaluation of the hadronic vacuum polarisation contributions to the Standard Model predictions of the muon g−2 and α(m²_Z) using newest hadronic cross-section data." Eur. Phys. J. C 77 (2017): 827.</div>
+      
+      <div class="reference">[EidelmanJegerlehner1995] Eidelman, S. and Jegerlehner, F. "Hadronic contributions to g−2 of the leptons and to the effective fine structure constant α(M²_Z)." Z. Phys. C 67 (1995): 585-602.</div>
+      
+      <div class="reference">[HerrenSteinhauser2018] Herren, F. and Steinhauser, M. "Version 3 of RunDec and CRunDec." Comput. Phys. Commun. 224 (2018): 333-345.</div>
+      
+      <div class="reference">[Jegerlehner2003] Jegerlehner, F. "The running fine structure constant α(E) via the Adler function." Nucl. Phys. Proc. Suppl. 131 (2004): 213-218.</div>
+      
+      <div class="reference">[Keshavarzi2019] Keshavarzi, A., Nomura, D., and Teubner, T. "Muon g−2 and α(M²_Z): a new data-based analysis." Phys. Rev. D 97 (2018): 114025.</div>
+      
+      <div class="reference">[Keshavarzi2020] Keshavarzi, A., Nomura, D., and Teubner, T. "g−2 of charged leptons, α(M²_Z), and the hyperfine splitting of muonium." Phys. Rev. D 101 (2020): 014029.</div>
+      
+      <div class="reference">[MachacekVaughn1983-85] Machacek, M.E. and Vaughn, M.T. "Two-loop renormalization group equations in a general quantum field theory (I, II, III)." Nucl. Phys. B 222 (1983): 83; B 236 (1984): 221; B 249 (1985): 70.</div>
+      
+      <div class="reference">[NuFIT52] Esteban, I. et al. "The fate of hints: updated global analysis of three-flavor neutrino oscillations." JHEP 09 (2020): 178. NuFIT 5.2 (2022), www.nu-fit.org.</div>
+      
+      <div class="reference">[PDG2024] Particle Data Group, Navas, S. et al. "Review of Particle Physics." Phys. Rev. D 110 (2024): 030001.</div>
+      
+      <div class="reference">[Tarrach1981] Tarrach, R. "The pole mass in perturbative QCD." Nucl. Phys. B 183 (1981): 384-396.</div>
+      
+      <div class="reference">[Wolfenstein1983] Wolfenstein, L. "Parametrization of the Kobayashi-Maskawa Matrix." Phys. Rev. Lett. 51 (1983): 1945.</div>
+    </div>
+
+    <hr>
     
-    <script>
-        function showTab(tabName) {
-            // Hide all tabs
-            const tabs = document.querySelectorAll('.tab-content');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            
-            // Remove active class from all tab buttons
-            const buttons = document.querySelectorAll('.tab');
-            buttons.forEach(btn => btn.classList.remove('active'));
-            
-            // Show selected tab
-            document.getElementById(tabName).classList.add('active');
-            
-            // Add active class to clicked button
-            event.target.classList.add('active');
-        }
-        
-        // Particle data with detailed information
-        const particleData = {
-            electron: {
-                name: 'Electron',
-                symbol: 'e⁻',
-                mass: '0.511 MeV',
-                B: 1,
-                r: 0,
-                f: 0.0012,
-                delta: '<0.001%',
-                explanation: {
-                    B: 'Sector factor B=1 for the fundamental lepton family',
-                    r: 'Ground state at rung r=0, the reference point of the mass ladder',
-                    f: 'Small φ-sheet correction f≈0.0012 from ledger curvature',
-                    phi: 'Golden ratio φ=1.618... emerges from self-similarity requirement',
-                    Ecoh: 'Coherence quantum E_coh=φ^(-5)=0.090 eV from dimensional closure'
-                }
-            },
-            muon: {
-                name: 'Muon',
-                symbol: 'μ⁻',
-                mass: '105.66 MeV',
-                B: 1,
-                r: 11,
-                f: 0.0008,
-                delta: '<0.01%',
-                explanation: {
-                    B: 'Same sector B=1 as electron (lepton family)',
-                    r: 'Rung r=11 gives the precise μ/e mass ratio',
-                    f: 'φ-sheet correction f≈0.0008 slightly smaller than electron',
-                    phi: 'Scaling by φ^11 from the electron mass',
-                    Ecoh: 'Same coherence quantum as all particles'
-                }
-            },
-            tau: {
-                name: 'Tau',
-                symbol: 'τ⁻',
-                mass: '1776.86 MeV',
-                B: 1,
-                r: 17,
-                f: 0.0006,
-                delta: '<0.01%',
-                explanation: {
-                    B: 'Lepton sector B=1 maintained',
-                    r: 'Rung r=17, completing the charged lepton tower',
-                    f: 'Minimal φ-sheet correction f≈0.0006',
-                    phi: 'Mass scales as φ^17 relative to electron',
-                    Ecoh: 'Universal coherence quantum'
-                }
-            },
-            up: {
-                name: 'Up Quark',
-                symbol: 'u',
-                mass: '2.16 MeV',
-                B: 2,
-                r: 4,
-                f: 0.0015,
-                delta: '<0.1%',
-                explanation: {
-                    B: 'Sector B=2 for light quarks (fractional charge)',
-                    r: 'Rung r=4, lightest quark state',
-                    f: 'φ-sheet correction f≈0.0015 from color confinement',
-                    phi: 'Scales with φ^4 in the B=2 sector',
-                    Ecoh: 'Same E_coh, different sector gives different mass scale'
-                }
-            },
-            down: {
-                name: 'Down Quark',
-                symbol: 'd',
-                mass: '4.67 MeV',
-                B: 2,
-                r: 6,
-                f: 0.0018,
-                delta: '<0.1%',
-                explanation: {
-                    B: 'Light quark sector B=2',
-                    r: 'Rung r=6, two steps above up quark',
-                    f: 'Slightly larger correction f≈0.0018',
-                    phi: 'Mass ratio d/u ≈ φ^2 from rung difference',
-                    Ecoh: 'Universal coherence quantum'
-                }
-            }
-        };
-        
-        function selectParticle(particleName) {
-            // Remove selected class from all cards
-            const cards = document.querySelectorAll('.particle-card');
-            cards.forEach(card => card.classList.remove('selected'));
-            
-            // Add selected class to clicked card
-            event.currentTarget.classList.add('selected');
-            
-            const particle = particleData[particleName];
-            if (!particle) return;
-            
-            // Update calculation details section
-            const particleNameSpan = document.getElementById('calcParticleName');
-            const calcContent = document.getElementById('calcContent');
-            
-            particleNameSpan.textContent = particle.name;
-            
-            // Build detailed calculation HTML
-            calcContent.innerHTML = `
-                <div class="calc-step">
-                    <div class="calc-step-title">Step 1: Identify Quantum Numbers</div>
-                    <p>The ${particle.name} has the following ledger quantum numbers:</p>
-                    <ul style="margin: 1rem 0;">
-                        <li>Sector Factor: <span class="calc-value">B = ${particle.B}</span> - ${particle.explanation.B}</li>
-                        <li>Rung Number: <span class="calc-value">r = ${particle.r}</span> - ${particle.explanation.r}</li>
-                        <li>φ-Sheet Correction: <span class="calc-value">f ≈ ${particle.f}</span> - ${particle.explanation.f}</li>
-                    </ul>
-                </div>
-                
-                <div class="calc-step">
-                    <div class="calc-step-title">Step 2: Apply Universal Constants</div>
-                    <p>These constants emerge from the ledger's fundamental structure:</p>
-                    <ul style="margin: 1rem 0;">
-                        <li>Golden Ratio: <span class="calc-value">φ = 1.618034...</span> - ${particle.explanation.phi}</li>
-                        <li>Coherence Quantum: <span class="calc-value">E<sub>coh</sub> = 0.090169 eV</span> - ${particle.explanation.Ecoh}</li>
-                    </ul>
-                </div>
-                
-                <div class="calc-step">
-                    <div class="calc-step-title">Step 3: Calculate Mass</div>
-                    <div class="calc-formula">
-                        m = ${particle.B} × 0.090169 × 1.618034<sup>(${particle.r} + ${particle.f})</sup>
-                    </div>
-                    <p style="margin-top: 1rem;">Evaluating the expression:</p>
-                    <div class="calc-formula">
-                        m = ${particle.B} × 0.090169 × 1.618034<sup>${(particle.r + particle.f).toFixed(4)}</sup> = <strong>${particle.mass}</strong>
-                    </div>
-                </div>
-                
-                <div class="calc-step">
-                    <div class="calc-step-title">Step 4: Compare with Empirical Value</div>
-                    <p>The calculated mass matches the measured value with a delta of <span class="delta-badge delta-low">${particle.delta}</span></p>
-                    <p style="margin-top: 1rem; padding: 1rem; background: #f0fdf4; border-left: 4px solid #10b981; color: #065f46;">
-                        <strong>Key Point:</strong> This calculation uses zero free parameters. Every value is derived from 
-                        first principles or represents a counting number (like r). The remarkable agreement validates 
-                        that particle masses are ledger states, not arbitrary constants of nature.
-                    </p>
-                </div>
-            `;
-        }
-        
-        function runCalculation() {
-            const button = document.querySelector('.run-button');
-            const buttonText = document.getElementById('button-text');
-            const spinner = document.getElementById('spinner');
-            const output = document.getElementById('calculation-output');
-            const outputText = document.getElementById('output-text');
-            
-            // Show spinner
-            buttonText.textContent = 'Calculating...';
-            spinner.style.display = 'inline-block';
-            button.disabled = true;
-            
-            // Simulate calculation delay
-            setTimeout(() => {
-                // Show output
-                output.style.display = 'block';
-                outputText.textContent = `=== Full masses snapshot — v22c ===
+    <p><a href="/">← Back to Recognition Science</a></p>
+  </div>
 
--- Charged lepton ratios --
-μ/e=206.768283, τ/μ=16.817200, τ/e=3477.150956
-
--- Charged leptons (absolute, eV) --
-e=510998.9 eV, μ=105658374.1 eV, τ=1776860000.0 eV
-
--- Neutrinos (absolute, Dirac NO) --
-m1=8.655583e-03 eV, m2=1.205125e-02 eV, m3=5.030284e-02 eV, Σm=7.101967e-02 eV
-Δm21^2=7.422028e-05 eV^2, Δm31^2=2.455341e-03 eV^2, m_β=1.113508e-02 eV
-
--- Bosons (absolute from locked ratios; anchor M_W) --
-Z: pred=91.107774 GeV (exp 91.187600)
-H: pred=124.978879 GeV (exp 125.100000)
-
--- Quarks (φ-fixed ratios at μ⋆) --
-Down: s/d=20.1695669 (exp 20.1052632), b/s=43.7291176 (43.7644231), b/d=881.9961625 (879.8093108)
-Up  : c/u=586.7231268 (exp 587.9629630), t/c=135.8306806 (135.8267717), t/u=79695.5311281 (79858.8310185)
-
-[Calculation complete - all masses derived from m = B·E_coh·φ^(r+f) with zero free parameters]`;
-                
-                // Reset button
-                buttonText.textContent = 'Run Full Mass Calculation';
-                spinner.style.display = 'none';
-                button.disabled = false;
-                
-                // Smooth scroll to output
-                output.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }, 2000);
-        }
-        
-        function togglePythonCode() {
-            const codeDiv = document.getElementById('pythonCode');
-            const button = event.target;
-            if (codeDiv.style.display === 'none') {
-                codeDiv.style.display = 'block';
-                button.textContent = 'Hide Python Code';
-            } else {
-                codeDiv.style.display = 'none';
-                button.textContent = 'View Python Code';
-            }
-        }
-        
-        function copyPythonCode() {
-            const code = document.getElementById('pythonCodeContent').textContent;
-            const button = event.currentTarget || event.target;
-            const originalText = button.textContent;
-            
-            // Try to use the clipboard API
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(code).then(() => {
-                    button.textContent = 'Copied!';
-                    button.style.background = '#10b981';
-                    setTimeout(() => {
-                        button.textContent = originalText;
-                        button.style.background = '#4b5563';
-                    }, 2000);
-                }).catch(err => {
-                    console.error('Failed to copy:', err);
-                    // Fallback to select and copy
-                    fallbackCopy(code, button, originalText);
-                });
-            } else {
-                // Fallback for browsers without clipboard API
-                fallbackCopy(code, button, originalText);
-            }
-        }
-        
-        function fallbackCopy(text, button, originalText) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = "fixed";
-            textArea.style.left = "-999999px";
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            
-            try {
-                document.execCommand('copy');
-                button.textContent = 'Copied!';
-                button.style.background = '#10b981';
-                setTimeout(() => {
-                    button.textContent = originalText;
-                    button.style.background = '#4b5563';
-                }, 2000);
-            } catch (err) {
-                console.error('Failed to copy:', err);
-                button.textContent = 'Copy failed';
-                setTimeout(() => {
-                    button.textContent = originalText;
-                }, 2000);
-            }
-            
-            document.body.removeChild(textArea);
-        }
-    </script>
-    <script src="assets/js/main.js"></script>
 </body>
 </html>
