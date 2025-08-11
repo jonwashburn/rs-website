@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Revolutionary Metrology - Recognition Science</title>
-  <link rel="stylesheet" href="/assets/css/styles.css" />
+  <link rel="stylesheet" href="main.css" />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     /* Reset and base styles */
@@ -404,6 +404,25 @@
       }
     }
   </style>
+  <script>
+    // Load header and footer
+    document.addEventListener('DOMContentLoaded', function() {
+      fetch('header.html')
+        .then(response => response.text())
+        .then(data => {
+          const placeholder = document.getElementById('header-placeholder');
+          if (placeholder) placeholder.innerHTML = data;
+        });
+
+      fetch('footer.html')
+        .then(response => response.text())
+        .then(data => {
+          const footer = document.createElement('div');
+          footer.innerHTML = data;
+          document.body.appendChild(footer);
+        });
+    });
+  </script>
 </head>
 <body>
   <div id="header-placeholder"></div>
