@@ -59,20 +59,23 @@
     .expander-card summary { list-style: none; cursor: pointer; display: flex; align-items: baseline; gap: 0.75rem; }
     .expander-card summary::-webkit-details-marker { display: none; }
 
-    /* Clickable terms */
-    .term { background: none; border: none; padding: 0; cursor: pointer; color: #111827; font: inherit; border-bottom: 2px dotted #111827; }
-    .term:hover { background: #fff59d33; }
-    .term-inline { display: block; margin: 0.25rem 0 0.5rem 0; color: #374151; }
-    .term-kicker { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: #6b7280; margin-right: 0.5rem; }
-    .term-math { font-family: 'JetBrains Mono', monospace; background: #f3f4f6; padding: 0.15rem 0.35rem; border-radius: 6px; display: inline-block; color: #111827; margin-right: 0.35rem; }
+    /* Section toggles */
+    .toggle-section { background: none; border: 0; color: #111827; text-decoration: underline; font: inherit; cursor: pointer; padding: 0; margin-left: 0.5rem; }
+    .toggle-section:hover { background: #fff59d33; }
   </style>
 </head>
 <body>
   <div id="header-placeholder"></div>
 
   <main class="content-page">
-    <!-- Inline term expansion container (no off-canvas, no bouncing) -->
-    <div id="termInlineContainer"></div>
+    <!-- Minimal per-section toggles -->
+    <div class="container" style="padding-top:0;">
+      <small class="muted">Controls:</small>
+      <button class="toggle-section" data-target="#logic">Expand all theorems</button>
+      <button class="toggle-section" data-target="#constants">Expand all constants</button>
+      <button class="toggle-section" data-target="#anchor">Expand all anchor examples</button>
+      <button class="toggle-section" data-target="#formulas">Expand all formulas</button>
+    </div>
     <section class="container" id="overview">
       <h1>Recognition Science: A Technical Overview</h1>
       <p class="lead">
@@ -140,7 +143,7 @@
             </summary>
             <div class="micro">Dual‑balance fixed point of the exchange‑symmetric cost.</div>
             <div class="details-content">
-              <p class="small"><strong>Statement.</strong> Under <span class="formula">J(x)=½(x+1/x)</span> and composition, the unique non‑trivial self‑similar fixed point is <button class="term" data-term="phi">x=φ</button>.</p>
+              <p class="small"><strong>Statement.</strong> Under <span class="formula">J(x)=½(x+1/x)</span> and composition, the unique non‑trivial self‑similar fixed point is x=φ.</p>
               <ul class="small">
                 <li><strong>Proof sketch.</strong> Stationarity under <span class="mono">x→1/x</span> and multiplicative composition yields quadratic <span class="mono">x^2=x+1</span>.</li>
                 <li><strong>Consequence.</strong> Scaling exponents are quantized in φ‑steps with small quantized corrections.</li>
@@ -211,7 +214,7 @@
             </summary>
             <div class="micro">Masses come from runged recognition depth with sector multiplicity.</div>
             <div class="details-content">
-              <p class="small"><strong>Statement.</strong> <span class="formula">m = B · E_coh · φ^{r+f}</span> with integer rung <button class="term" data-term="rung">r</button>, sector <button class="term" data-term="B">B</button>, and small correction <button class="term" data-term="f">f</button>.</p>
+              <p class="small"><strong>Statement.</strong> <span class="formula">m = B · E_coh · φ^{r+f}</span> with integer rung r, sector B, and small correction f.</p>
               <ul class="small">
                 <li><strong>Consequence.</strong> No free mass parameters; spectrum is computable.</li>
               </ul>
@@ -410,9 +413,9 @@
         all dimensional outputs are determined.
       </p>
       <p>
-        Classical constants then follow as ledger invariants expressed in SI units. Examples: the <button class="term" data-term="alpha">fine‑structure constant</button> emerges from
+        Classical constants then follow as ledger invariants expressed in SI units. Examples: the fine‑structure constant emerges from
         recognition geometry with a small curvature correction; the MOND scale follows from the cosmic tick bandwidth; and mass scales
-        reduce to powers of <button class="term" data-term="phi">φ</button> multiplied by sector factors and <button class="term" data-term="E_coh">E_coh</button>.
+        reduce to powers of φ multiplied by sector factors and E_coh.
       </p>
 
       <!-- Expandable anchor derivations/examples -->
@@ -426,7 +429,7 @@
             </summary>
             <div class="micro">Geometric ledger count with curvature correction.</div>
             <div class="details-content">
-              <p class="small">Sketch: <span class="formula">α⁻¹ = (4π × 11) − ln(φ) + δκ</span>. Here <span class="mono">4π×11</span> is the sphere/ledger seed, <button class="term" data-term="lnphi">ln(φ)</button> is the gap term, and <button class="term" data-term="delta_kappa">δκ</button> is a small voxel‑curvature correction.</p>
+              <p class="small">Sketch: <span class="formula">α⁻¹ = (4π × 11) − ln(φ) + δκ</span>. Here <span class="mono">4π×11</span> is the sphere/ledger seed, ln(φ) is the gap term, and δκ is a small voxel‑curvature correction.</p>
               <ul class="small">
                 <li><strong>Computation.</strong> Evaluate each term from ledger geometry; no fitted parameters.</li>
                 <li><strong>Check.</strong> Returns <span class="mono">137.035999</span> to 10⁻⁹ precision.</li>
@@ -444,7 +447,7 @@
             </summary>
             <div class="micro">Stable interference pattern in the ledger.</div>
             <div class="details-content">
-              <p class="small">Sketch: <span class="formula">Ω_dm = sin(π/12) + δ</span>, where <button class="term" data-term="delta">δ</button> is a small ledger correction from quantum fuzziness.</p>
+              <p class="small">Sketch: <span class="formula">Ω_dm = sin(π/12) + δ</span>, where δ is a small ledger correction from quantum fuzziness.</p>
               <ul class="small">
                 <li><strong>Check.</strong> Center of observed error bars <span class="mono">0.265±0.007</span>.</li>
               </ul>
@@ -461,7 +464,7 @@
             </summary>
             <div class="micro">Local/CMB tension from ledger time lag.</div>
             <div class="details-content">
-              <p class="small">Sketch: <span class="formula">H₀(local) = H₀(CMB) / (1 − 0.0469)</span>. A <button class="term" data-term="lag">4.69%</button> lag arises from the <button class="term" data-term="45gap">45‑Gap</button>’s incomputability delay.</p>
+              <p class="small">Sketch: <span class="formula">H₀(local) = H₀(CMB) / (1 − 0.0469)</span>. A 4.69% lag arises from the 45‑Gap’s incomputability delay.</p>
               <ul class="small">
                 <li><strong>Result.</strong> Resolves the 5σ tension within a parameter‑free correction.</li>
               </ul>
@@ -608,122 +611,20 @@
 
   <script src="/assets/js/main.js"></script>
   <script>
-    // Simple term dictionary for deep dives (inline, no navigation)
-    const TERM_DB = {
-      'E_coh': {
-        title: 'Coherence Energy (E_coh)',
-        kicker: 'Foundational Constant',
-        body: `Minimal energy per recognition update.
-               Derivation: E_coh = ħ/τ_rec = (ħ c)/λ_rec.
-               Role: base scale in mass spectrum m = B·E_coh·φ^{r+f}.`,
-        math: ['E_coh = ħ / τ_rec', 'E_coh = (ħ c) / λ_rec'],
-        links: [{ href: '#constants', text: 'Constants' }, { href: '#formulas', text: 'Mass Ladder' }]
-      },
-      'phi': {
-        title: 'Golden Ratio (φ)',
-        kicker: 'Scaling Fixed Point',
-        body: `Unique self‑similar fixed point of dual‑balance cost J(x)=½(x+1/x).
-               Quantizes scaling exponents and underlies spectrum structure.`,
-        math: ['x^2 = x + 1', 'x = φ ≈ 1.618...'],
-        links: [{ href: '#logic', text: 'Golden‑Ratio Theorem' }]
-      },
-      'alpha': {
-        title: 'Fine‑Structure Constant (α)',
-        kicker: 'Derived Constant',
-        body: `Geometric ledger count with small curvature correction.
-               α⁻¹ = (4π·11) − ln(φ) + δκ.`,
-        math: ['α⁻¹ = (4π × 11) − ln(φ) + δκ'],
-        links: [{ href: '#anchor', text: 'Anchor Examples' }]
-      },
-      'B': {
-        title: 'Sector Factor (B_i)',
-        kicker: 'Combinatorial Multiplicity',
-        body: `Discrete multiplicity from path topology/representation; enters linearly in mass law.`,
-        math: ['B_i ∈ {1,2,3,4,6,8,9,12}'],
-        links: [{ href: '#constants', text: 'Sector Factors' }]
-      },
-      'rung': {
-        title: 'Recognition Rung (r)',
-        kicker: 'Exponent Index',
-        body: `Integer depth in the recognition ladder determining φ‑exponent in the mass spectrum.`,
-        math: ['m ∝ φ^{r}'],
-        links: [{ href: '#formulas', text: 'Mass Ladder' }]
-      },
-      'f': {
-        title: 'Small Correction (f)',
-        kicker: 'Gap/Curvature',
-        body: `Tiny, signed offset sourced by δ_gap and κ; explains minute deviations.`,
-        math: ['m ∝ φ^{r+f}'],
-        links: [{ href: '#constants', text: 'Ledger Gap' }]
-      },
-      'lnphi': {
-        title: 'ln(φ)',
-        kicker: 'Gap Term',
-        body: `Appears as the ledger gap contribution in α derivation.`,
-        math: ['ln(φ)'],
-        links: [{ href: '#anchor', text: 'α Derivation' }]
-      },
-      'delta_kappa': {
-        title: 'δκ',
-        kicker: 'Curvature Correction',
-        body: `Voxel curvature correction when mapping discrete geometry to continuum.`,
-        math: ['δκ'],
-        links: [{ href: '#formulas', text: 'Ledger Curvature' }]
-      },
-      'delta': {
-        title: 'δ (ledger correction)',
-        kicker: 'Quantum Fuzziness',
-        body: `Small adjustment to stable interference pattern in Ω_dm.`,
-        math: ['Ω_dm = sin(π/12) + δ'],
-        links: [{ href: '#anchor', text: 'Ω_dm Derivation' }]
-      },
-      '45gap': {
-        title: '45‑Gap',
-        kicker: 'Incomputability',
-        body: `Discrete universal gap creating a 4.69% timing lag relevant to H₀ and tiny exponent shifts.`,
-        math: ['lag ≈ 4.69%'],
-        links: [{ href: '#logic', text: '45‑Gap Theorem' }, { href: '#anchor', text: 'H₀ Tension' }]
-      }
-    };
-
-    const inlineContainer = document.getElementById('termInlineContainer');
-
-    function renderInlineTerm(key, anchorEl) {
-      const term = TERM_DB[key];
-      if (!term) return;
-      // Remove any existing inline expansion right after the same anchor
-      const existing = anchorEl.parentElement.querySelector('.term-inline');
-      if (existing) existing.remove();
-
-      const wrap = document.createElement('div');
-      wrap.className = 'term-inline';
-      const title = document.createElement('div');
-      title.innerHTML = `<span class="term-kicker">${term.kicker}</span> <strong>${term.title}</strong>`;
-      wrap.appendChild(title);
-      if (term.math && term.math.length) {
-        const mathRow = document.createElement('div');
-        term.math.forEach(m => {
-          const mEl = document.createElement('span');
-          mEl.className = 'term-math';
-          mEl.textContent = m;
-          mathRow.appendChild(mEl);
-        });
-        wrap.appendChild(mathRow);
-      }
-      const p = document.createElement('p');
-      p.textContent = term.body.replace(/\s+/g, ' ').trim();
-      wrap.appendChild(p);
-      // Insert directly after the anchor sentence
-      anchorEl.insertAdjacentElement('afterend', wrap);
+    // Expand/collapse helpers: open or close all details in a target section
+    function setDetailsIn(targetSelector, open) {
+      const root = document.querySelector(targetSelector);
+      if (!root) return;
+      root.querySelectorAll('details').forEach(d => { d.open = open; });
     }
-
     document.addEventListener('click', (e) => {
-      const t = e.target.closest('.term');
-      if (t) {
-        e.preventDefault();
-        const key = t.getAttribute('data-term');
-        renderInlineTerm(key, t);
-      }
+      const btn = e.target.closest('.toggle-section');
+      if (!btn) return;
+      const target = btn.getAttribute('data-target');
+      const root = document.querySelector(target);
+      if (!root) return;
+      const anyClosed = Array.from(root.querySelectorAll('details')).some(d => !d.open);
+      setDetailsIn(target, anyClosed);
     });
   </script>
 </body>
