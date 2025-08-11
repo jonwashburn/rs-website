@@ -71,7 +71,8 @@
         .hero-subtitle {
             font-size: 1.3rem;
             line-height: 1.8;
-            opacity: 0.9;
+            color: white;
+            opacity: 1;
             margin-bottom: 2rem;
         }
         
@@ -118,22 +119,9 @@
             padding: 0 2rem;
         }
         
-        /* Central timeline spine */
+        /* Removed central timeline spine for cleaner look */
         .timeline-spine {
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: linear-gradient(to bottom, #8b5cf6, #3b82f6, #00ffff);
-            transform: translateX(-50%);
-            z-index: 1;
-        }
-        
-        @media (max-width: 768px) {
-            .timeline-spine {
-                left: 30px;
-            }
+            display: none;
         }
         
         /* Prediction card */
@@ -307,6 +295,21 @@
         .explanation-section h4 {
             color: #8b5cf6;
             margin-bottom: 0.5rem;
+        }
+        
+        .explanation-badge {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            color: #6b7280;
+        }
+        
+        .explanation-badge .badge-label {
+            font-weight: 600;
+            color: #8b5cf6;
         }
         
         /* Interactive experiment simulator */
@@ -540,7 +543,7 @@
         <!-- Predictions Timeline -->
         <section class="predictions-container">
             <div class="predictions-timeline">
-                <div class="timeline-spine"></div>
+
                 
                 <!-- Prediction 1: Neutron Star -->
                 <div class="prediction-item">
@@ -553,13 +556,22 @@
                         <div class="prediction-formula">I = f(Recognition Pressure Cap)</div>
                         
                         <div class="prediction-explanation">
+                            <div class="explanation-badge">
+                                <span class="badge-label">Testing Soon:</span> This prediction will be tested within the next few years using current or near-future technology.
+                            </div>
                             <div class="explanation-section">
                                 <h4>How is this calculated?</h4>
                                 <p>The moment of inertia of a neutron star measures how resistant it is to being spun up or slowed down. Recognition Science predicts a very specific value for the maximum possible moment of inertia, which should be realized by the heaviest known pulsar.</p>
+                                <p>The calculation emerges from the framework's treatment of matter at extreme densities. When the ledger's information processing capacity is saturated, no additional matter can be recognized in that volume. This creates a hard upper limit on neutron star properties.</p>
                             </div>
                             <div class="explanation-section">
                                 <h4>What does this mean?</h4>
                                 <p><strong>Recognition Pressure Cap:</strong> There's a fundamental limit to how much matter can be packed into a given volume—not from physical repulsion but from the information processing capacity of the cosmic ledger. This "recognition pressure" provides a fundamental cap on density, fixing the maximum possible mass and moment of inertia for a neutron star.</p>
+                                <p>This differs completely from standard theories that rely on nuclear physics equations of state. Recognition Science says the limit isn't about how particles repel each other, but about how much information the universe can process in a given region.</p>
+                            </div>
+                            <div class="explanation-section">
+                                <h4>Why this matters</h4>
+                                <p>If confirmed, this would prove that spacetime itself has computational limits. It would mean the universe literally cannot "think" fast enough to handle matter beyond a certain density. This would be the first direct evidence that reality operates on information-theoretic principles rather than purely physical ones.</p>
                             </div>
                         </div>
                     </div>
@@ -645,13 +657,23 @@
                         <div class="prediction-formula">Rate = 0 (Dual-Parity Ledger Closure)</div>
                         
                         <div class="prediction-explanation">
+                            <div class="explanation-badge">
+                                <span class="badge-label">Critical Veto:</span> If this phenomenon is ever observed, it would completely falsify Recognition Science. The framework predicts this is absolutely forbidden by the structure of reality.
+                            </div>
                             <div class="explanation-section">
                                 <h4>How is this calculated?</h4>
-                                <p>Zero-neutrino double-beta decay would prove neutrinos are their own antiparticles. Recognition Science firmly predicts this process is forbidden.</p>
+                                <p>Zero-neutrino double-beta decay would prove neutrinos are their own antiparticles (Majorana particles). Recognition Science firmly predicts this process is forbidden.</p>
+                                <p>The calculation comes from the ledger's fundamental requirement for balance. Every recognition event must have a corresponding anti-event. Majorana particles would violate this dual-entry bookkeeping, creating entries that cannot be balanced.</p>
                             </div>
                             <div class="explanation-section">
                                 <h4>What does this mean?</h4>
                                 <p><strong>Dual-Parity Ledger Closure:</strong> This decay would create an un-erasable "accounting error" in the ledger. The framework's core axioms require perfect balance, making this decay strictly forbidden. Any observation would falsify Recognition Science.</p>
+                                <p>Think of it like trying to write a check to yourself from your own account and claiming you've created money. The universe's ledger system prevents such violations at the most fundamental level.</p>
+                            </div>
+                            <div class="explanation-section">
+                                <h4>Why this is a critical test</h4>
+                                <p>Many physicists expect to find Majorana neutrinos. Several experiments are actively searching for this decay. If found, it would revolutionize particle physics—and completely invalidate Recognition Science. This makes it a perfect falsification test: the framework makes a clear, unambiguous prediction that goes against many experts' expectations.</p>
+                                <p>The nEXO experiment will have the sensitivity to detect this decay if it exists at the predicted scales. When it finds nothing, it will be powerful evidence that the universe really does operate on ledger principles.</p>
                             </div>
                         </div>
                     </div>
@@ -684,20 +706,31 @@
                 <div class="prediction-item">
                     <div class="prediction-year">∞</div>
                     <div class="prediction-card" onclick="togglePrediction(this)">
-                        <span class="prediction-status status-critical">Forever Veto</span>
+                        <span class="prediction-status status-veto">Forever Veto</span>
                         <h3 class="prediction-title">Room-Temperature Superconductivity</h3>
                         <div class="prediction-value">T_c < 204 K at 1 atm (IMPOSSIBLE)</div>
                         <div class="prediction-test">Any 300K superconductor would falsify RS</div>
                         <div class="prediction-formula">T_c(max) = f(Ledger Phonon Budget)</div>
                         
                         <div class="prediction-explanation">
+                            <div class="explanation-badge">
+                                <span class="badge-label">Forever Veto:</span> This phenomenon is permanently impossible according to Recognition Science. No amount of clever engineering or new materials can overcome this fundamental limit.
+                            </div>
                             <div class="explanation-section">
                                 <h4>How is this calculated?</h4>
-                                <p>Recognition Science places a hard upper limit on superconducting temperature at normal pressure.</p>
+                                <p>Recognition Science places a hard upper limit on superconducting temperature at normal pressure. The calculation emerges from the ledger's energy budget for maintaining quantum coherence.</p>
+                                <p>Cooper pairs (the electron pairs that enable superconductivity) require a specific recognition pattern that becomes impossible above 204K at atmospheric pressure. The thermal noise at higher temperatures exceeds the ledger's ability to maintain the delicate quantum correlation between electrons.</p>
                             </div>
                             <div class="explanation-section">
                                 <h4>What does this mean?</h4>
                                 <p><strong>Ledger Phonon Budget:</strong> The framework's cost-functional proof sets a fundamental limit on vibrational energy for Cooper pairs. This budget is exhausted at 204K, making room-temperature superconductivity physically impossible at ambient pressure.</p>
+                                <p>It's like trying to have a quiet conversation in an increasingly noisy room. Above 204K, the thermal "noise" drowns out the quantum "conversation" between electrons that enables superconductivity. No material property can overcome this—it's baked into the computational structure of spacetime itself.</p>
+                            </div>
+                            <div class="explanation-section">
+                                <h4>Why this matters</h4>
+                                <p>The dream of room-temperature superconductors has driven decades of research and countless claimed breakthroughs. Recognition Science says this dream is impossible—not just difficult, but forbidden by the universe's operating system.</p>
+                                <p>Every claim of room-temperature superconductivity (like LK-99) provides a test of the framework. When these claims inevitably fail, they strengthen confidence that Recognition Science correctly describes reality's fundamental limits.</p>
+                                <p>Note: Higher temperatures ARE possible at extreme pressures, where the compressed lattice changes the ledger dynamics. But at normal atmospheric pressure, 204K is an absolute wall.</p>
                             </div>
                         </div>
                     </div>
@@ -705,60 +738,12 @@
             </div>
         </section>
 
-        <!-- Interactive Experiment Simulator -->
-        <section class="experiment-simulator">
-            <h2 class="simulator-title">Live Experiment Status</h2>
-            <div class="simulator-grid">
-                <div class="experiment-box">
-                    <div class="experiment-icon">🔬</div>
-                    <div class="experiment-name">PIXIE</div>
-                    <div class="experiment-status">Launch 2030</div>
-                </div>
-                <div class="experiment-box">
-                    <div class="experiment-icon">📡</div>
-                    <div class="experiment-name">SKA</div>
-                    <div class="experiment-status">Data 2027</div>
-                </div>
-                <div class="experiment-box">
-                    <div class="experiment-icon">🌌</div>
-                    <div class="experiment-name">CTA</div>
-                    <div class="experiment-status">Online 2025</div>
-                </div>
-                <div class="experiment-box">
-                    <div class="experiment-icon">⚛️</div>
-                    <div class="experiment-name">DUNE</div>
-                    <div class="experiment-status">Testing Now</div>
-                </div>
-                <div class="experiment-box">
-                    <div class="experiment-icon">🎯</div>
-                    <div class="experiment-name">nEXO</div>
-                    <div class="experiment-status">Building</div>
-                </div>
-                <div class="experiment-box">
-                    <div class="experiment-icon">🔭</div>
-                    <div class="experiment-name">NICER</div>
-                    <div class="experiment-status">Observing</div>
-                </div>
-            </div>
-        </section>
 
-        <!-- Confidence Meter -->
-        <section class="confidence-section">
-            <div class="confidence-meter">
-                <h2 class="confidence-title">Framework Confidence Level</h2>
-                <div class="confidence-bar">
-                    <div class="confidence-fill">
-                        <span class="confidence-value">95%</span>
-                    </div>
-                </div>
-                <p class="confidence-label">Based on 47 validated predictions with zero failures</p>
-            </div>
-        </section>
 
         <!-- Call to Action -->
         <section class="future-cta">
             <div class="cta-content">
-                <h2 class="cta-title">The Next Decade Will Decide Everything</h2>
+                <h2 class="cta-title">When Measurements Become Inevitable</h2>
                 <p class="cta-text">
                     These predictions aren't adjustable. They're not fits to data. 
                     They're parameter-free consequences of the Meta-Principle. 
