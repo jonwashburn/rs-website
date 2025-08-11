@@ -13,11 +13,14 @@ jobs:
       pages: write
       id-token: write
     steps:
-      - name: Force refresh
-        run: echo "Triggering a new deployment run..."
-
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Clean problematic files
+        run: |
+          find . -name "._*" -delete
+          find . -name ".DS_Store" -delete
+          echo "Cleaned AppleDouble files"
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -25,8 +28,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: "."
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4 
+        uses: actions/deploy-pages@v4
