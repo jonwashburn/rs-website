@@ -20,239 +20,237 @@
       background: #ffffff;
     }
 
-    /* Apple-style Text Hero */
-    .text-hero {
-      min-height: 50vh;
+    /* Bold Hero Section */
+    .bold-hero {
+      min-height: 90vh;
       background: #ffffff;
+      position: relative;
       display: flex;
-      align-items: center;
+      flex-direction: column;
       justify-content: center;
-      padding: 4rem 2rem;
+      overflow: hidden;
     }
 
-    .text-hero-content {
+    .hero-container {
       max-width: 1400px;
-      width: 100%;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
     }
 
-    .text-hero-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
+    /* Hero Text */
+    .hero-text {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-headline {
       font-family: 'Space Grotesk', sans-serif;
       margin: 0;
-      padding: 0;
+      line-height: 0.9;
     }
 
-    .hero-left {
-      font-size: clamp(4rem, 10vw, 8rem);
-      font-weight: 800;
-      color: #1a1a2e;
+    .hero-headline .line-1 {
+      display: block;
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 900;
+      color: #000000;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.2rem;
+    }
+
+    .hero-headline .line-2 {
+      display: block;
+      font-size: clamp(4rem, 9vw, 8rem);
+      font-weight: 900;
+      background: linear-gradient(135deg, #4169E1 0%, #1e3a8a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       letter-spacing: -0.03em;
     }
 
-    .hero-right {
-      font-size: clamp(2rem, 5vw, 4rem);
-      font-weight: 600;
-      color: #4b5563;
-      letter-spacing: -0.02em;
+    .hero-divider {
+      width: 120px;
+      height: 6px;
+      background: linear-gradient(90deg, #fbbf24, #f59e0b);
+      margin: 2rem 0;
+      border-radius: 3px;
     }
 
-    /* Animated Measurement Section */
-    .measurement-animation {
-      min-height: 70vh;
-      background: linear-gradient(135deg, #0f1423 0%, #1a1a2e 50%, #0f1423 100%);
+    .hero-tagline {
+      font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+      color: #4b5563;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .tagline-emphasis {
+      font-weight: 700;
+      color: #1f2937;
+      font-size: 1.1em;
+    }
+
+    /* Hero Visual */
+    .hero-visual {
       position: relative;
-      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .measurement-container {
+    .measurement-display {
+      background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+      border: 3px solid #1a1a2e;
+      border-radius: 24px;
+      padding: 3rem;
+      box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(0, 0, 0, 0.05);
       position: relative;
-      width: 100%;
-      height: 100%;
-      max-width: 1400px;
-      padding: 4rem 2rem;
+      z-index: 2;
     }
 
-    /* Animated Ruler */
-    .animated-ruler {
-      position: absolute;
-      top: 10%;
-      left: 5%;
-      width: 300px;
-      height: 60px;
-      opacity: 0.3;
-      animation: ruler-slide 10s ease-in-out infinite;
+    .display-screen {
+      text-align: center;
+      padding: 2rem;
+      background: #0a0f1c;
+      border-radius: 12px;
+      min-width: 300px;
     }
 
-    @keyframes ruler-slide {
-      0%, 100% { transform: translateX(0); }
-      50% { transform: translateX(200px); }
-    }
-
-    .ruler-body {
-      width: 100%;
-      height: 40px;
-      background: linear-gradient(90deg, #fbbf24, #f59e0b);
-      position: relative;
-      border-radius: 4px;
-    }
-
-    .ruler-body::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 100%;
-      background: repeating-linear-gradient(
-        90deg,
-        transparent,
-        transparent 9px,
-        rgba(0, 0, 0, 0.3) 9px,
-        rgba(0, 0, 0, 0.3) 10px
-      );
-    }
-
-    .ruler-indicator {
-      position: absolute;
-      top: -10px;
-      left: 50%;
-      width: 2px;
-      height: 60px;
-      background: #ff0000;
-      animation: indicator-move 2s ease-in-out infinite;
-    }
-
-    @keyframes indicator-move {
-      0%, 100% { left: 20%; }
-      50% { left: 80%; }
-    }
-
-    /* Floating Constants */
-    .constants-field {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-    }
-
-    .constant-bubble {
-      position: absolute;
-      padding: 0.75rem 1.5rem;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 50px;
-      color: white;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 1.125rem;
+    .display-label {
+      font-size: 0.75rem;
+      color: #4169E1;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      margin-bottom: 1rem;
       font-weight: 600;
-      animation: float-bubble 20s ease-in-out infinite;
     }
 
-    .constant-bubble::after {
-      content: ' = ' attr(data-value);
+    .display-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 3rem;
+      font-weight: 700;
       color: #fbbf24;
-      font-size: 0.875rem;
-      margin-left: 0.5rem;
+      text-shadow: 0 0 30px rgba(251, 191, 36, 0.5);
+      margin-bottom: 0.5rem;
+      transition: all 0.3s ease;
     }
 
-    .constant-bubble:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
-    .constant-bubble:nth-child(2) { top: 30%; right: 15%; animation-delay: 3s; }
-    .constant-bubble:nth-child(3) { bottom: 30%; left: 20%; animation-delay: 6s; }
-    .constant-bubble:nth-child(4) { bottom: 20%; right: 10%; animation-delay: 9s; }
-    .constant-bubble:nth-child(5) { top: 50%; left: 60%; animation-delay: 12s; }
-    .constant-bubble:nth-child(6) { top: 15%; right: 40%; animation-delay: 15s; }
-
-    @keyframes float-bubble {
-      0%, 100% {
-        transform: translate(0, 0) scale(1);
-        opacity: 0.8;
-      }
-      25% {
-        transform: translate(30px, -20px) scale(1.1);
-        opacity: 1;
-      }
-      50% {
-        transform: translate(-20px, 30px) scale(0.95);
-        opacity: 0.9;
-      }
-      75% {
-        transform: translate(-30px, -10px) scale(1.05);
-        opacity: 1;
-      }
+    .display-units {
+      font-size: 1.25rem;
+      color: #8b5cf6;
+      font-weight: 600;
     }
 
-    /* Measurement Grid */
-    .measurement-grid-animated {
+    .display-indicators {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-top: 1.5rem;
+    }
+
+    .indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #e5e7eb;
+      transition: all 0.3s ease;
+    }
+
+    .indicator.active {
+      background: #10b981;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    }
+
+    /* Orbiting Metrics */
+    .metrics-orbit {
       position: absolute;
-      width: 100%;
-      height: 100%;
-      opacity: 0.2;
+      width: 500px;
+      height: 500px;
       pointer-events: none;
     }
 
-    .grid-svg {
-      width: 100%;
-      height: 100%;
-    }
-
-    /* Central Message */
-    .measurement-message {
+    .metric-item {
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%) rotate(var(--angle)) translateX(200px) rotate(calc(-1 * var(--angle)));
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 1rem 1.5rem;
       text-align: center;
-      z-index: 10;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      animation: float-metric 20s ease-in-out infinite;
+      animation-delay: calc(var(--angle) / 120 * 2s);
     }
 
-    .message-main {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(1.5rem, 4vw, 2.5rem);
-      font-weight: 700;
-      color: white;
-      margin-bottom: 0.5rem;
-      opacity: 0.9;
+    @keyframes float-metric {
+      0%, 100% { transform: translate(-50%, -50%) rotate(var(--angle)) translateX(200px) rotate(calc(-1 * var(--angle))) scale(1); }
+      50% { transform: translate(-50%, -50%) rotate(var(--angle)) translateX(220px) rotate(calc(-1 * var(--angle))) scale(1.05); }
     }
 
-    .message-sub {
-      font-size: clamp(1.25rem, 3vw, 2rem);
-      color: #fbbf24;
-      font-weight: 600;
-      margin-bottom: 2rem;
-    }
-
-    .live-readout {
-      display: inline-block;
-      padding: 1rem 2rem;
-      background: rgba(251, 191, 36, 0.1);
-      border: 2px solid #fbbf24;
-      border-radius: 12px;
-      backdrop-filter: blur(10px);
-    }
-
-    .readout-label {
+    .metric-value {
       display: block;
-      font-size: 0.875rem;
-      color: rgba(255, 255, 255, 0.7);
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #1a1a2e;
+      margin-bottom: 0.25rem;
+    }
+
+    .metric-label {
+      display: block;
+      font-size: 0.75rem;
+      color: #6b7280;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      margin-bottom: 0.5rem;
     }
 
-    .readout-value {
-      display: block;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 2rem;
-      font-weight: 700;
+    /* Accent Bar */
+    .hero-accent-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #0a0f1c;
+      padding: 1rem 0;
+      overflow: hidden;
+    }
+
+    .accent-text {
       color: #fbbf24;
-      text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
-      transition: opacity 0.3s ease;
+      font-size: 0.875rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-align: center;
+      animation: scroll-text 20s linear infinite;
+      white-space: nowrap;
+    }
+
+    @keyframes scroll-text {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    /* Responsive */
+    @media (max-width: 968px) {
+      .hero-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .hero-divider {
+        margin: 2rem auto;
+      }
+
+      .metrics-orbit {
+        display: none;
+      }
     }
 
     /* Content Sections - Similar to logical-foundations.html */
@@ -715,58 +713,59 @@
 <body>
   <div id="header-placeholder"></div>
 
-  <!-- New Apple-style Hero -->
-  <section class="text-hero">
-    <div class="text-hero-content">
-      <h1 class="text-hero-title">
-        <span class="hero-left">Why</span>
-        <span class="hero-right">Finally an answer</span>
-      </h1>
-    </div>
-  </section>
-
-  <!-- Animated Measurement Section -->
-  <section class="measurement-animation">
-    <div class="measurement-container">
-      <!-- Animated ruler -->
-      <div class="animated-ruler">
-        <div class="ruler-body"></div>
-        <div class="ruler-indicator"></div>
+    <!-- Bold Hero Section -->
+  <section class="bold-hero">
+    <div class="hero-container">
+      <!-- Large Typography -->
+      <div class="hero-text">
+        <h1 class="hero-headline">
+          <span class="line-1">REVOLUTIONARY</span>
+          <span class="line-2">METROLOGY</span>
+        </h1>
+        <div class="hero-divider"></div>
+        <p class="hero-tagline">
+          We're not building a theory of reality.<br>
+          <span class="tagline-emphasis">We're measuring reality itself.</span>
+        </p>
       </div>
       
-      <!-- Floating constants -->
-      <div class="constants-field">
-        <div class="constant-bubble" data-value="137.035999">α⁻¹</div>
-        <div class="constant-bubble" data-value="1.618033">φ</div>
-        <div class="constant-bubble" data-value="0.511">e⁻</div>
-        <div class="constant-bubble" data-value="938.272">p⁺</div>
-        <div class="constant-bubble" data-value="2.718281">e</div>
-        <div class="constant-bubble" data-value="3.141592">π</div>
-      </div>
-      
-      <!-- Measurement grid -->
-      <div class="measurement-grid-animated">
-        <svg class="grid-svg" viewBox="0 0 1000 400">
-          <defs>
-            <linearGradient id="gridGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:#4169E1;stop-opacity:0.3" />
-              <stop offset="50%" style="stop-color:#fbbf24;stop-opacity:0.2" />
-              <stop offset="100%" style="stop-color:#4169E1;stop-opacity:0.3" />
-            </linearGradient>
-          </defs>
-          <!-- Grid lines will be added via JavaScript -->
-        </svg>
+      <!-- Visual Elements -->
+      <div class="hero-visual">
+        <div class="measurement-display">
+          <div class="display-screen">
+            <div class="display-label">FINE STRUCTURE CONSTANT</div>
+            <div class="display-value" id="heroValue">137.035999</div>
+            <div class="display-units">α⁻¹</div>
+          </div>
+          <div class="display-indicators">
+            <span class="indicator active"></span>
+            <span class="indicator"></span>
+            <span class="indicator"></span>
+            <span class="indicator"></span>
+          </div>
     </div>
-      
-      <!-- Central message -->
-      <div class="measurement-message">
-        <p class="message-main">We're Not Building a Theory of Reality</p>
-        <p class="message-sub">We're Measuring Reality Itself</p>
-        <div class="live-readout">
-          <span class="readout-label">Reality Reading</span>
-          <span class="readout-value" id="liveReadout">137.035999</span>
+        
+        <!-- Orbiting metrics -->
+        <div class="metrics-orbit">
+          <div class="metric-item" style="--angle: 0deg;">
+            <span class="metric-value">0</span>
+            <span class="metric-label">Parameters</span>
+          </div>
+          <div class="metric-item" style="--angle: 120deg;">
+            <span class="metric-value">∞</span>
+            <span class="metric-label">Precision</span>
+          </div>
+          <div class="metric-item" style="--angle: 240deg;">
+            <span class="metric-value">100%</span>
+            <span class="metric-label">Verified</span>
+          </div>
         </div>
       </div>
+    </div>
+    
+    <!-- Accent bar -->
+    <div class="hero-accent-bar">
+      <div class="accent-text">ZERO FREE PARAMETERS • INFINITE PRECISION • DIRECT MEASUREMENT</div>
     </div>
   </section>
 
@@ -1087,50 +1086,46 @@
   <div id="footer-placeholder"></div>
 
   <script>
-    // Animate grid lines
-    const gridSvg = document.querySelector('.grid-svg');
-    if (gridSvg) {
-      // Create horizontal lines
-      for (let i = 0; i < 10; i++) {
-        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        line.setAttribute('x1', '0');
-        line.setAttribute('y1', i * 40);
-        line.setAttribute('x2', '1000');
-        line.setAttribute('y2', i * 40);
-        line.setAttribute('stroke', 'url(#gridGradient)');
-        line.setAttribute('stroke-width', '1');
-        line.setAttribute('opacity', '0.5');
-        gridSvg.appendChild(line);
-      }
+    // Animate display value
+    const heroValue = document.getElementById('heroValue');
+    const measurements = [
+      { value: '137.035999', label: 'FINE STRUCTURE CONSTANT', unit: 'α⁻¹' },
+      { value: '0.51099895', label: 'ELECTRON MASS', unit: 'MeV' },
+      { value: '1.61803398', label: 'GOLDEN RATIO', unit: 'φ' },
+      { value: '938.27208', label: 'PROTON MASS', unit: 'MeV' },
+      { value: '0.00729735', label: 'FINE STRUCTURE', unit: 'α' },
+      { value: '2.71828182', label: 'EULER\'S NUMBER', unit: 'e' }
+    ];
+    let currentMeasurement = 0;
+    
+    if (heroValue) {
+      const displayLabel = document.querySelector('.display-label');
+      const displayUnits = document.querySelector('.display-units');
+      const indicators = document.querySelectorAll('.indicator');
       
-      // Create vertical lines
-      for (let i = 0; i < 25; i++) {
-        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        line.setAttribute('x1', i * 40);
-        line.setAttribute('y1', '0');
-        line.setAttribute('x2', i * 40);
-        line.setAttribute('y2', '400');
-        line.setAttribute('stroke', 'url(#gridGradient)');
-        line.setAttribute('stroke-width', '1');
-        line.setAttribute('opacity', '0.5');
-        gridSvg.appendChild(line);
-      }
-    }
-    
-    // Animate readout value
-    const readout = document.getElementById('liveReadout');
-    const values = ['137.035999', '0.511', '938.272', '1.618033', '2.718281', '3.141592'];
-    let currentIndex = 0;
-    
-    if (readout) {
       setInterval(() => {
-        currentIndex = (currentIndex + 1) % values.length;
-        readout.style.opacity = '0';
+        currentMeasurement = (currentMeasurement + 1) % measurements.length;
+        
+        // Fade out
+        heroValue.style.opacity = '0';
+        heroValue.style.transform = 'scale(0.95)';
+        
         setTimeout(() => {
-          readout.textContent = values[currentIndex];
-          readout.style.opacity = '1';
+          // Update values
+          heroValue.textContent = measurements[currentMeasurement].value;
+          displayLabel.textContent = measurements[currentMeasurement].label;
+          displayUnits.textContent = measurements[currentMeasurement].unit;
+          
+          // Update indicators
+          indicators.forEach((ind, i) => {
+            ind.classList.toggle('active', i === currentMeasurement % indicators.length);
+          });
+          
+          // Fade in
+          heroValue.style.opacity = '1';
+          heroValue.style.transform = 'scale(1)';
         }, 300);
-      }, 3000);
+      }, 4000);
     }
   </script>
 
