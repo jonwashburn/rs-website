@@ -479,9 +479,10 @@ input:focus, textarea:focus, select:focus {
    ============================================ */
    
 /* Constants Page */
-.constants-hero {
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    padding: 4rem 0;
+.constants-hero,
+.hero {
+    background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+    padding: 5rem 0;
     position: relative;
     overflow: hidden;
 }
@@ -492,29 +493,42 @@ input:focus, textarea:focus, select:focus {
     height: 100%;
     top: 0;
     left: 0;
-    opacity: 0.1;
-    font-family: var(--font-mono);
-    font-size: 2rem;
-    color: var(--accent-color);
+    pointer-events: none;
 }
 
-.floating-constants span {
+.floating-constant {
     position: absolute;
-    animation: float 20s infinite ease-in-out;
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    color: var(--accent-color);
+    opacity: 0.08;
+    font-weight: 600;
+    animation: float 25s infinite ease-in-out;
 }
 
-.floating-constants span:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
-.floating-constants span:nth-child(2) { top: 20%; left: 80%; animation-delay: 3s; }
-.floating-constants span:nth-child(3) { top: 60%; left: 25%; animation-delay: 6s; }
-.floating-constants span:nth-child(4) { top: 40%; left: 60%; animation-delay: 9s; }
-.floating-constants span:nth-child(5) { top: 80%; left: 45%; animation-delay: 12s; }
-.floating-constants span:nth-child(6) { top: 30%; left: 35%; animation-delay: 15s; }
-.floating-constants span:nth-child(7) { top: 70%; left: 70%; animation-delay: 18s; }
+.floating-constant:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+.floating-constant:nth-child(2) { top: 20%; right: 15%; animation-delay: 5s; }
+.floating-constant:nth-child(3) { bottom: 30%; left: 20%; animation-delay: 10s; }
+.floating-constant:nth-child(4) { top: 50%; right: 25%; animation-delay: 15s; }
+.floating-constant:nth-child(5) { bottom: 20%; right: 10%; animation-delay: 20s; }
 
 @keyframes float {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    33% { transform: translateY(-20px) rotate(5deg); }
-    66% { transform: translateY(20px) rotate(-5deg); }
+    0%, 100% { 
+        transform: translate(0, 0) rotate(0deg) scale(1);
+        opacity: 0.08;
+    }
+    25% { 
+        transform: translate(30px, -40px) rotate(10deg) scale(1.1);
+        opacity: 0.12;
+    }
+    50% { 
+        transform: translate(-20px, -60px) rotate(-5deg) scale(1);
+        opacity: 0.08;
+    }
+    75% { 
+        transform: translate(-40px, -20px) rotate(15deg) scale(0.9);
+        opacity: 0.05;
+    }
 }
 
 .hero-stats {
@@ -556,17 +570,68 @@ input:focus, textarea:focus, select:focus {
 .old-constants-buttons {
     display: flex;
     gap: 1rem;
-    margin: 2rem 0;
+    margin: 2rem auto 3rem;
     flex-wrap: wrap;
     justify-content: center;
+    max-width: 800px;
+}
+
+.old-constant-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: white;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: var(--text-color);
+    min-width: 120px;
+}
+
+.old-constant-btn:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.old-constant-btn.active {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+}
+
+.btn-symbol {
+    font-size: 2rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    margin-bottom: 0.5rem;
+    line-height: 1;
+}
+
+.btn-name {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.old-constant-display {
+    margin-top: 2rem;
 }
 
 .old-constant-content {
     display: none;
+    animation: fadeIn 0.3s ease;
 }
 
 .old-constant-content.active {
     display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .constant-header {
@@ -703,11 +768,54 @@ input:focus, textarea:focus, select:focus {
 .symphony-formula {
     font-size: 2rem;
     font-family: var(--font-mono);
-    margin: 2rem 0;
-    padding: 2rem;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    display: inline-block;
+    margin: 3rem auto;
+    padding: 2rem 3rem;
+    background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+    color: white;
+    border-radius: 16px;
+    display: block;
+    text-align: center;
+    max-width: fit-content;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+}
+
+.symphony-formula::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(180deg); }
+}
+
+.symphony-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Highlight Numbers */
+.highlight-number {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--accent-color);
+    background: rgba(139, 92, 246, 0.1);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    white-space: nowrap;
 }
 
 .cta-buttons {
@@ -979,6 +1087,84 @@ input:focus, textarea:focus, select:focus {
     margin: 0;
     font-size: 1.125rem;
     line-height: 1.6;
+}
+
+.mystery-text {
+    font-size: 1.1rem;
+    line-height: 1.7;
+}
+
+/* What This Changes Grid */
+.changes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+}
+
+.change-item {
+    background: var(--background-alt);
+    padding: 2rem;
+    border-radius: 12px;
+    border-left: 4px solid var(--accent-color);
+    transition: all 0.3s ease;
+}
+
+.change-item:hover {
+    transform: translateX(5px);
+    box-shadow: var(--shadow-md);
+}
+
+.change-item h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+}
+
+.change-item p {
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+/* Announcement Box */
+.announcement-box {
+    background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+    color: white;
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
+    margin: 2rem 0;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+}
+
+.announcement-box::before {
+    content: '✨';
+    position: absolute;
+    left: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2rem;
+    opacity: 0.3;
+}
+
+.announcement-box::after {
+    content: '✨';
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2rem;
+    opacity: 0.3;
+}
+
+.announcement-box p {
+    margin: 0;
+    font-size: 1.1rem;
+    position: relative;
+    z-index: 1;
 }
 
 /* Logical Foundations Page */
