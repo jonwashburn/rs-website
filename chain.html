@@ -155,11 +155,29 @@
     // Render Lean file with line numbers and hotspots
     async function loadLean() {
       const status = document.getElementById('status');
-      try {
-        status.textContent = 'Loading…';
-        const res = await fetch('Chain.lean');
-        if (!res.ok) throw new Error('Cannot load Chain.lean');
-        const text = await res.text();
+      status.textContent = 'Loading…';
+
+      // Try multiple sources to avoid GitHub Pages filtering unknown extensions
+      const candidates = [
+        'Chain.lean',
+        // Raw GitHub fallback
+        'https://raw.githubusercontent.com/jonwashburn/rs-website/main/Chain.lean'
+      ];
+
+      let text = null;
+      for (const url of candidates) {
+        try {
+          const res = await fetch(url, { cache: 'no-cache' });
+          if (res.ok) {
+            text = await res.text();
+            break;
+          }
+        } catch (_) { /* continue */ }
+      }
+      if (!text) {
+        status.textContent = 'Load failed';
+        return;
+      }
         const lines = text.split('\n');
         const container = document.getElementById('code');
         container.innerHTML = '';
@@ -187,9 +205,6 @@
         });
 
         status.textContent = '';
-      } catch (e) {
-        status.textContent = 'Load failed';
-      }
     }
 
     // Expansion handling
