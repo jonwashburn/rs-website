@@ -1,0 +1,345 @@
+/* Recognition Science - Clean Design System */
+
+/* ============================================
+   CSS VARIABLES & RESET
+   ============================================ */
+:root {
+    /* Colors */
+    --primary-color: #003d82;
+    --accent-color: #0066cc;
+    --text-color: #1a1a1a;
+    --text-muted: #6c757d;
+    --background: #ffffff;
+    --background-alt: #f8f9fa;
+    --border-color: #e0e0e0;
+    
+    /* Typography */
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'IBM Plex Mono', 'SF Mono', Monaco, monospace;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+    --shadow-lg: 0 10px 20px rgba(0,0,0,0.12);
+    
+    /* Spacing */
+    --space-xs: 0.5rem;
+    --space-sm: 1rem;
+    --space-md: 1.5rem;
+    --space-lg: 2rem;
+    --space-xl: 3rem;
+    --space-2xl: 4rem;
+    
+    /* Border Radius */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ============================================
+   BASE TYPOGRAPHY
+   ============================================ */
+body {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--background);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.2;
+    margin-top: 0;
+    margin-bottom: var(--space-md);
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.25rem; }
+h5 { font-size: 1.125rem; }
+h6 { font-size: 1rem; }
+
+p {
+    margin-bottom: var(--space-sm);
+}
+
+p:last-child {
+    margin-bottom: 0;
+}
+
+.lead {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+}
+
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+/* ============================================
+   LAYOUT CONTAINERS
+   ============================================ */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 var(--space-lg);
+}
+
+.section {
+    padding: var(--space-2xl) 0;
+}
+
+main {
+    min-height: 70vh;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+    background-color: var(--background);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+.btn-secondary:hover {
+    background-color: var(--background-alt);
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+/* ============================================
+   CARDS
+   ============================================ */
+.card {
+    background: var(--background);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+/* ============================================
+   HEADER & NAVIGATION
+   ============================================ */
+.site-header {
+    background: var(--background);
+    border-bottom: 1px solid var(--border-color);
+    padding: var(--space-sm) 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-link {
+    padding: var(--space-xs) var(--space-sm);
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.nav-link:hover {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+.text-muted { color: var(--text-muted); }
+
+.mt-1 { margin-top: var(--space-sm); }
+.mt-2 { margin-top: var(--space-md); }
+.mt-3 { margin-top: var(--space-lg); }
+.mt-4 { margin-top: var(--space-xl); }
+
+.mb-1 { margin-bottom: var(--space-sm); }
+.mb-2 { margin-bottom: var(--space-md); }
+.mb-3 { margin-bottom: var(--space-lg); }
+.mb-4 { margin-bottom: var(--space-xl); }
+
+.py-1 { padding-top: var(--space-sm); padding-bottom: var(--space-sm); }
+.py-2 { padding-top: var(--space-md); padding-bottom: var(--space-md); }
+.py-3 { padding-top: var(--space-lg); padding-bottom: var(--space-lg); }
+.py-4 { padding-top: var(--space-xl); padding-bottom: var(--space-xl); }
+
+/* ============================================
+   RESPONSIVE GRID
+   ============================================ */
+.grid {
+    display: grid;
+    gap: var(--space-lg);
+}
+
+.grid-2 {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.grid-3 {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.grid-4 {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+/* ============================================
+   FORMS
+   ============================================ */
+.form-control {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--text-color);
+    background-color: var(--background);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    transition: border-color 0.15s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+}
+
+/* ============================================
+   TABLES
+   ============================================ */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: var(--space-lg);
+}
+
+th, td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+th {
+    font-weight: 600;
+    background-color: var(--background-alt);
+}
+
+/* ============================================
+   CODE BLOCKS
+   ============================================ */
+code {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    background-color: var(--background-alt);
+    padding: 0.2em 0.4em;
+    border-radius: var(--radius-sm);
+}
+
+pre {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    background-color: var(--background-alt);
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+}
+
+pre code {
+    background-color: transparent;
+    padding: 0;
+}
+
+/* ============================================
+   MEDIA QUERIES
+   ============================================ */
+@media (max-width: 768px) {
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.5rem; }
+    h3 { font-size: 1.25rem; }
+    
+    .container {
+        padding: 0 var(--space-md);
+    }
+    
+    .section {
+        padding: var(--space-xl) 0;
+    }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+    .site-header,
+    .site-footer,
+    .no-print {
+        display: none;
+    }
+    
+    body {
+        font-size: 12pt;
+        line-height: 1.5;
+    }
+    
+    a {
+        color: var(--text-color);
+        text-decoration: underline;
+    }
+}
