@@ -8,514 +8,7 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <script>mermaid.initialize({ startOnLoad: false, theme: 'default' });</script>
-  <style>
-    /* 80s Nuclear Reactor / Real Genius Mode */
-    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap');
-    
-    :root {
-      --amber: #ffb000;
-      --green: #00ff41;
-      --red: #ff0040;
-      --cyan: #00ffff;
-      --dark-amber: #cc8800;
-      --bg-black: #0a0a0a;
-      --crt-green: #00ff41;
-      --warning-red: #ff3366;
-    }
-    
-    body.retro-mode {
-      background: #000;
-      color: var(--amber);
-      font-family: 'JetBrains Mono', monospace;
-      overflow-x: hidden;
-      position: relative;
-    }
-    
-    body.retro-mode::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: 
-        repeating-linear-gradient(
-          0deg,
-          rgba(0, 0, 0, 0.15),
-          rgba(0, 0, 0, 0.15) 1px,
-          transparent 1px,
-          transparent 2px
-        );
-      pointer-events: none;
-      z-index: 9999;
-      animation: scan 8s linear infinite;
-    }
-    
-    @keyframes scan {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(10px); }
-    }
-    
-    .retro-mode .terminal-header {
-      background: linear-gradient(90deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%);
-      border: 2px solid var(--amber);
-      border-bottom: 4px solid var(--amber);
-      padding: 20px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      margin-bottom: 30px;
-    }
-    
-    .retro-mode .terminal-header::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,176,0,0.3), transparent);
-      animation: sweep 3s infinite;
-    }
-    
-    @keyframes sweep {
-      0% { left: -100%; }
-      100% { left: 100%; }
-    }
-    
-    .retro-mode h1 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 900;
-      font-size: 2.5rem;
-      color: var(--amber);
-      text-shadow: 
-        0 0 10px var(--amber),
-        0 0 20px var(--amber),
-        0 0 30px var(--dark-amber);
-      letter-spacing: 0.2em;
-      margin: 0;
-      animation: glow 2s ease-in-out infinite alternate;
-    }
-    
-    @keyframes glow {
-      from { text-shadow: 0 0 10px var(--amber), 0 0 20px var(--amber), 0 0 30px var(--dark-amber); }
-      to { text-shadow: 0 0 20px var(--amber), 0 0 30px var(--amber), 0 0 40px var(--dark-amber); }
-    }
-    
-    .retro-mode .status-lights {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      margin: 20px 0;
-    }
-    
-    .retro-mode .status-light {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      border: 2px solid #333;
-      animation: blink 1s infinite;
-    }
-    
-    .retro-mode .status-light.green {
-      background: var(--green);
-      box-shadow: 0 0 10px var(--green);
-      animation-delay: 0s;
-    }
-    
-    .retro-mode .status-light.amber {
-      background: var(--amber);
-      box-shadow: 0 0 10px var(--amber);
-      animation-delay: 0.3s;
-    }
-    
-    .retro-mode .status-light.red {
-      background: var(--red);
-      box-shadow: 0 0 10px var(--red);
-      animation-delay: 0.6s;
-    }
-    
-    @keyframes blink {
-      0%, 50% { opacity: 1; }
-      51%, 100% { opacity: 0.3; }
-    }
-    
-    .retro-mode .terminal-window {
-      background: #0a0a0a;
-      border: 3px solid var(--amber);
-      border-radius: 0;
-      padding: 20px;
-      margin: 20px auto;
-      max-width: 1200px;
-      position: relative;
-      box-shadow: 
-        inset 0 0 20px rgba(255,176,0,0.1),
-        0 0 20px rgba(255,176,0,0.3);
-    }
-    
-    .retro-mode .terminal-window::before {
-      content: "▓▓▓ TERMINAL " attr(data-terminal-id) " ▓▓▓";
-      position: absolute;
-      top: -2px;
-      left: 20px;
-      background: #0a0a0a;
-      padding: 0 10px;
-      color: var(--amber);
-      font-size: 0.8rem;
-      letter-spacing: 0.2em;
-    }
-    
-    .retro-mode .monitor-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-      margin: 20px 0;
-    }
-    
-    .retro-mode .monitor {
-      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-      border: 2px solid var(--green);
-      padding: 15px;
-      position: relative;
-    }
-    
-    .retro-mode .monitor.alert {
-      border-color: var(--red);
-      animation: alert-flash 0.5s infinite;
-    }
-    
-    @keyframes alert-flash {
-      0%, 100% { border-color: var(--red); box-shadow: 0 0 10px var(--red); }
-      50% { border-color: #660000; box-shadow: none; }
-    }
-    
-    .retro-mode .monitor-header {
-      color: var(--green);
-      font-size: 0.9rem;
-      letter-spacing: 0.1em;
-      margin-bottom: 10px;
-      padding-bottom: 5px;
-      border-bottom: 1px solid var(--green);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .retro-mode .monitor-header .indicator {
-      width: 8px;
-      height: 8px;
-      background: var(--green);
-      border-radius: 50%;
-      animation: pulse 2s infinite;
-    }
-    
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
-    
-    .retro-mode .data-readout {
-      font-family: 'JetBrains Mono', monospace;
-      color: var(--amber);
-      line-height: 1.6;
-    }
-    
-    .retro-mode .data-readout .value {
-      color: var(--cyan);
-      font-weight: bold;
-    }
-    
-    .retro-mode .progress-bar {
-      height: 20px;
-      background: #1a1a1a;
-      border: 1px solid var(--green);
-      margin: 10px 0;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .retro-mode .progress-bar .fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--green) 0%, var(--cyan) 100%);
-      animation: progress-pulse 2s infinite;
-      transition: width 0.3s;
-    }
-    
-    @keyframes progress-pulse {
-      0%, 100% { opacity: 0.8; }
-      50% { opacity: 1; }
-    }
-    
-    .retro-mode .reactor-display {
-      text-align: center;
-      padding: 30px;
-      background: radial-gradient(ellipse at center, rgba(0,255,65,0.1) 0%, transparent 70%);
-    }
-    
-    .retro-mode .reactor-core {
-      width: 150px;
-      height: 150px;
-      margin: 0 auto;
-      position: relative;
-      animation: rotate 10s linear infinite;
-    }
-    
-    @keyframes rotate {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    
-    .retro-mode .reactor-core .ring {
-      position: absolute;
-      border: 2px solid var(--green);
-      border-radius: 50%;
-      box-shadow: 0 0 20px var(--green);
-    }
-    
-    .retro-mode .reactor-core .ring:nth-child(1) {
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-    }
-    
-    .retro-mode .reactor-core .ring:nth-child(2) {
-      width: 70%;
-      height: 70%;
-      top: 15%;
-      left: 15%;
-      animation-direction: reverse;
-    }
-    
-    .retro-mode .reactor-core .ring:nth-child(3) {
-      width: 40%;
-      height: 40%;
-      top: 30%;
-      left: 30%;
-    }
-    
-    .retro-mode code {
-      background: rgba(0,255,65,0.1);
-      color: var(--green);
-      padding: 2px 6px;
-      border: 1px solid var(--green);
-    }
-    
-    .retro-mode a {
-      color: var(--cyan);
-      text-decoration: none;
-    }
-    
-    .retro-mode a:hover {
-      text-shadow: 0 0 10px var(--cyan);
-    }
-    
-    /* Mode Toggle Switch - Embedded Square Design */
-    .mode-toggle {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin: 15px auto;
-      width: fit-content;
-      padding: 6px 12px;
-      background: rgba(0,0,0,0.8);
-      border-radius: 4px;
-      border: 1px solid var(--amber);
-    }
-    
-    body:not(.retro-mode) .mode-toggle {
-      background: rgba(255,255,255,0.95);
-      border: 1px solid #ddd;
-    }
-    
-    .toggle-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--amber);
-      letter-spacing: 0.05em;
-      user-select: none;
-    }
-    
-    body:not(.retro-mode) .toggle-label {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      color: #666;
-      font-size: 0.75rem;
-    }
-    
-    .toggle-switch {
-      position: relative;
-      width: 40px;
-      height: 20px;
-      background: #333;
-      border-radius: 2px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    
-    body:not(.retro-mode) .toggle-switch {
-      background: #ddd;
-    }
-    
-    .toggle-switch.active {
-      background: var(--green);
-    }
-    
-    body:not(.retro-mode) .toggle-switch.active {
-      background: #4CAF50;
-    }
-    
-    .toggle-slider {
-      position: absolute;
-      top: 2px;
-      left: 2px;
-      width: 16px;
-      height: 16px;
-      background: var(--amber);
-      border-radius: 2px;
-      transition: transform 0.3s;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-    }
-    
-    body:not(.retro-mode) .toggle-slider {
-      background: white;
-    }
-    
-    .toggle-switch.active .toggle-slider {
-      transform: translateX(20px);
-    }
-    
-    .retro-label {
-      cursor: pointer;
-    }
-    
-    .retro-label.clickable {
-      text-decoration: none;
-      color: var(--amber);
-    }
-    
-    .retro-label.clickable:hover {
-      text-shadow: 0 0 10px var(--amber);
-    }
-    
-    /* Easter Egg Link */
-    .easter-egg {
-      color: inherit !important;
-      text-decoration: none !important;
-      cursor: pointer;
-    }
-    
-    /* Video Container */
-    .video-container {
-      position: relative;
-      z-index: 10;
-      background: #000;
-      border: 3px solid var(--amber);
-      padding: 8px;
-      box-shadow: 0 0 20px rgba(255,176,0,0.4);
-      display: none;
-      margin: 16px auto;
-      width: min(100%, 960px);
-      border-radius: 4px;
-    }
-    .video-container.active {
-      display: block;
-    }
-    .video-frame {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      background: #000;
-      position: relative;
-      overflow: hidden;
-      border: 1px solid rgba(255,176,0,0.3);
-    }
-    .video-frame iframe {
-      width: 100%;
-      height: 100%;
-      border: 0;
-      display: block;
-    }
-    .video-close {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      background: var(--amber);
-      color: #000;
-      border: none;
-      padding: 6px 10px;
-      cursor: pointer;
-      font-family: 'JetBrains Mono', monospace;
-      font-weight: bold;
-      border-radius: 2px;
-      line-height: 1;
-    }
-    .video-close:hover {
-      background: var(--green);
-      box-shadow: 0 0 10px var(--green);
-    }
-    @media (max-width: 600px) {
-      .video-container {
-        width: 100%;
-        padding: 6px;
-        border-width: 2px;
-      }
-      .video-close {
-        padding: 8px 12px;
-        top: 6px;
-        right: 6px;
-      }
-    }
-    
-    /* Show/hide retro overlay based on mode */
-    body:not(.retro-mode) .retro-content {
-      display: none !important;
-    }
-    
-    /* In retro mode, style the normal content with retro theme */
-    body.retro-mode .normal-content .component-card {
-      background: #0a0a0a;
-      border: 2px solid var(--amber);
-      color: var(--amber);
-      box-shadow: 0 0 20px rgba(255,176,0,0.3);
-    }
-    
-    body.retro-mode .normal-content h1, 
-    body.retro-mode .normal-content h2, 
-    body.retro-mode .normal-content h3 {
-      color: var(--green);
-      text-shadow: 0 0 10px var(--green);
-    }
-    
-    body.retro-mode .normal-content .muted {
-      color: var(--amber);
-      opacity: 0.8;
-    }
-    
-    body.retro-mode .normal-content code {
-      background: rgba(0,255,65,0.1);
-      color: var(--green);
-      border: 1px solid var(--green);
-    }
-    
-    body.retro-mode .normal-content a {
-      color: var(--cyan);
-    }
-    
-    body.retro-mode .intro-section {
-      background: #000 !important;
-      border-bottom: 2px solid var(--amber);
-    }
-    
-    /* ASCII Art */
-    .ascii-art {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      line-height: 1;
-      color: var(--green);
-      white-space: pre;
-      margin: 20px 0;
-      text-align: center;
-    }
-  </style>
+  
   <link rel="stylesheet" href="/assets/css/academic-style.css?v=20250812">
 </head>
 <body class="retro-mode">
@@ -570,7 +63,7 @@
           <div class="ring"></div>
           <div class="ring"></div>
         </div>
-        <div style="margin-top: 20px; color: var(--green);">
+        <div>
           REACTOR STATUS: <span class="value">CRITICAL MASS ACHIEVED</span>
         </div>
       </div>
@@ -587,7 +80,7 @@
             LAST UPDATE: <span class="value" id="retro-update">—</span>
           </div>
           <div class="progress-bar">
-            <div class="fill" style="width: 95%"></div>
+            <div class="fill"></div>
           </div>
         </div>
         
@@ -649,15 +142,15 @@
   <!-- Normal Content -->
   <div class="normal-content">
     <!-- Header Section -->
-  <section class="intro-section" style="padding: 1.5rem 0; background: #fff;">
+  <section class="intro-section">
   <div class="container text-center">
     <div class="wrap">
       <h1>Recognition Science — Live Audit</h1>
         
-        <p class="lead" style="font-size: 1.1rem; color: #555; max-width: 900px; margin: 0.5rem auto 0;">
+        <p class="lead">
           Streaming live from the public audit repository
         </p>
-      <div class="hstack" style="margin-top:12px">
+      <div class="hstack">
         <span class="badge">parameter‑free</span>
         <span class="badge">live</span>
         <a class="badge" href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener">repo ↗</a>
@@ -671,7 +164,7 @@
           <div class="component-card" id="status">
       <h2>Status</h2>
       <div id="status-body">Loading...</div>
-      <div class="muted" style="margin-top:10px">
+      <div class="muted">
         <strong>What "accuracy" means here:</strong> parameter‑free derivations that match experiment across domains,
         reuse of the same gap series and gating without reweighting, and uniqueness/minimality theorems that remove hidden knobs.
       </div>
@@ -685,7 +178,7 @@
       <div class="component-card" id="pillars-card">
         <h3>Pillars</h3>
         <ul id="pillars">Loading...</ul>
-        <p class="muted" style="margin-top:8px">
+        <p class="muted">
           These pillars are not postulates but theorems. Together they force a rigid architecture (no free functions),
           enabling cross‑domain predictions from the same primitives.
         </p>
@@ -694,7 +187,7 @@
       <div class="component-card" id="ilg-card">
         <h3>ILG Kernel</h3>
         <div id="ilg">Loading...</div>
-        <div class="proof-box" style="margin-top:12px">
+        <div class="proof-box">
           <strong>Why this matters.</strong> A unique kernel that reduces to Newtonian gravity at high acceleration and produces
           the observed low‑acceleration floor (a₀) without new parameters explains galaxy rotation, growth, and lensing with the
           same law. The suppression S encodes parity‑gate combinatorics of the 1024‑tick breath; fixing it ties predictions together.
@@ -704,7 +197,7 @@
       <div class="component-card" id="lnal-card">
         <h3>LNAL</h3>
         <div id="lnal">Loading...</div>
-        <div class="proof-box" style="margin-top:12px">
+        <div class="proof-box">
           <strong>Meaning.</strong> Minimality means no smaller instruction set can generate all legal ledger walks, and completeness means
           every allowed recognition can be built from these opcodes. The ±4 alphabet bound prevents runaway cost and collapses.
         </div>
@@ -713,16 +206,16 @@
       <div class="component-card" id="rung-card">
         <h3>Rung Constructor</h3>
         <div id="rung">Loading...</div>
-        <div class="proof-box" style="margin-top:12px">
-          <h4 style="margin-top:0">Latest charged‑lepton snapshot (v9)</h4>
-          <p class="muted" style="margin:6px 0 10px">Parameter‑free ratios in dimensionless ladder units (driver unchanged)</p>
-          <ul style="margin:0 0 6px 18px">
+        <div class="proof-box">
+          <h4>Latest charged‑lepton snapshot (v9)</h4>
+          <p class="muted">Parameter‑free ratios in dimensionless ladder units (driver unchanged)</p>
+          <ul>
             <li>μ/e = +0.9715%</li>
             <li>τ/μ = −0.0789%</li>
             <li>τ/e = +0.9082%</li>
           </ul>
-          <p class="muted" style="margin:4px 0 0">Shift from v8 → v9 comes from signed φ‑sheet weights tied to g<sub>k+1</sub> (no new parameters).</p>
-          <p style="margin:8px 0 0"><a href="https://raw.githubusercontent.com/jonwashburn/audit/main/papers/snapshot-charged-lepton-masses-v9.tex" target="_blank" rel="noopener">View the v9 snapshot (TeX) ↗</a></p>
+          <p class="muted">Shift from v8 → v9 comes from signed φ‑sheet weights tied to g<sub>k+1</sub> (no new parameters).</p>
+          <p><a href="https://raw.githubusercontent.com/jonwashburn/audit/main/papers/snapshot-charged-lepton-masses-v9.tex" target="_blank" rel="noopener">View the v9 snapshot (TeX) ↗</a></p>
         </div>
       </div>
           </div>
@@ -748,41 +241,41 @@
     <!-- Validated Predictions -->
     <div class="component-card">
         <h3>Validated predictions (selection)</h3>
-        <ul style="margin:0 0 0 18px">
+        <ul>
           <li>Fine‑structure constant: α⁻¹ = 137.03599908 (no fit; geometric seed + gap + curvature closure)</li>
           <li>Dark‑matter fraction: Ω<sub>dm</sub> = 0.2649 (lattice eigenstructure + gap correction)</li>
         <li>Local H₀: 70.6 km s⁻¹ Mpc⁻¹ (ledger clock lag; between SH0ES and Planck)</li>
           <li>Muon g−2 residual: parameter‑free cancellation from dual tours in the 1024‑breath</li>
         </ul>
-        <p class="muted" style="margin-top:8px">Each comes from the same primitives (gap series, gating, φ‑scaling) without reweighting.</p>
+        <p class="muted">Each comes from the same primitives (gap series, gating, φ‑scaling) without reweighting.</p>
       </div>
     
     <!-- How to Verify -->
     <div class="component-card">
         <h3>How to verify</h3>
-        <ol style="margin:0 0 0 18px">
+        <ol>
           <li>Review the <a href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener">audit repository</a> (study guide, proofs, status).</li>
           <li>Run the ILG gate check: <code>python scripts/ilg_gates_check.py</code> (|B| and S).</li>
           <li>Inspect the charged‑lepton pipeline snapshot (v9) and confirm no sector‑specific knobs.</li>
         <li>Track live progress in the status section above.</li>
         </ol>
-        <div style="margin-top:12px">
+        <div>
           <strong>Run CI locally</strong>
-          <pre style="margin-top:6px"><code>git clone https://github.com/jonwashburn/audit
+          <pre><code>git clone https://github.com/jonwashburn/audit
 cd audit
 python3 scripts/ci_status.py</code></pre>
           <div class="muted">Writes <code>docs/ci_status.json</code> and the website will stream it.</div>
         </div>
-        <details style="margin-top:10px">
+        <details>
           <summary>What each check does</summary>
-          <ul style="margin:8px 0 0 18px">
+          <ul>
           <li><strong>Gates</strong>: parity‑gate schedule → <code>|B|=46</code>, <code>S=489/512</code></li>
           <li><strong>Growth</strong>: compute D and D/ΛCDM using μ(a,k) with derived <code>a0</code> and fixed <code>β=(T·N_gates)/S</code></li>
           <li><strong>Lensing</strong>: compute Σ(a,k)=μ(a,k) with the same parameters</li>
           <li><strong>Conservation</strong>: 2D/3D discrete Laplacian and divergence theorem checks</li>
           <li><strong>ILG Limits</strong>: Newtonian and deep-MOND limit verification</li>
           </ul>
-        <div class="muted" style="margin-top:6px">Full instructions: <a href="https://raw.githubusercontent.com/jonwashburn/audit/main/docs/CI-README.md" target="_blank" rel="noopener">CI README ↗</a></div>
+        <div class="muted">Full instructions: <a href="https://raw.githubusercontent.com/jonwashburn/audit/main/docs/CI-README.md" target="_blank" rel="noopener">CI README ↗</a></div>
         </details>
       </div>
     
@@ -950,16 +443,16 @@ python3 scripts/ci_status.py</code></pre>
 
     document.getElementById('status-body').innerHTML = `
       <div><span class="muted">Last updated:</span> ${lastUpdated}</div>
-      <div style="margin-top:8px">${status.thesis || 'Loading thesis...'}</div>
-      <div style="margin-top:8px">
+      <div>${status.thesis || 'Loading thesis...'}</div>
+      <div>
         Verdict: <span class="${verdictClass}">${verdictLevel}</span>${verdict.vouched ? ' (vouched)' : ''}
       </div>
-      <div class="muted" style="margin-top:4px">
+      <div class="muted">
         Evidence checks: <span class="${statusClass}">${overallStatus}</span>
         · <a href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener">audit repository</a>
       </div>
-      ${blockers.length ? `<div class="muted" style="margin-top:6px">Blockers (P0 outstanding): ${blockers.map(b => `<span class='tag warn'>${b}</span>`).join(' ')}</div>` : ''}
-      ${verdict.note ? `<div class="muted" style="margin-top:6px">${verdict.note}</div>` : ''}
+      ${blockers.length ? `<div class="muted">Blockers (P0 outstanding): ${blockers.map(b => `<span class='tag warn'>${b}</span>`).join(' ')}</div>` : ''}
+      ${verdict.note ? `<div class="muted">${verdict.note}</div>` : ''}
     `;
     
     // Update Pillars
@@ -979,10 +472,10 @@ python3 scripts/ci_status.py</code></pre>
     
     document.getElementById('ilg').innerHTML = `
       <div><code>S=${Srat}</code>, <code>β=(T·N)/S=${betaGates.toFixed(3)}</code>, <span class="muted">a0 from κ via c²/λ_rec · S/(T·N)</span></div>
-      <details style="margin-top:8px"><summary>Details</summary>
-        <div style="margin-top:6px">kernel: <code>${ilg.kernel || '—'}</code></div>
-        <div style="margin-top:6px">a0: <code>${ilg.a0_formula || '—'}</code></div>
-        <div class="muted" style="margin-top:6px">${ilg.status || '—'}</div>
+      <details><summary>Details</summary>
+        <div>kernel: <code>${ilg.kernel || '—'}</code></div>
+        <div>a0: <code>${ilg.a0_formula || '—'}</code></div>
+        <div class="muted">${ilg.status || '—'}</div>
       </details>
     `;
     
@@ -1029,24 +522,24 @@ python3 scripts/ci_status.py</code></pre>
       const metricsCard = createElement('div', 'component-card', 'metrics-card', `
         <h3>Metrics</h3>
         <div class="muted">Last updated: ${metrics.last_updated || '—'}</div>
-        <div style="margin-top:8px">Overall: <span class="${metrics.badges.all_green ? 'ok' : 'warn'}">${metrics.badges.all_green ? 'all‑green' : 'attention'}</span></div>
-        <div class="muted" style="margin-top:6px">No‑knobs: ${metrics.badges.no_knobs ? 'yes' : 'no'}</div>
-        <div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap:12px; margin-top:10px">
+        <div>Overall: <span class="${metrics.badges.all_green ? 'ok' : 'warn'}">${metrics.badges.all_green ? 'all‑green' : 'attention'}</span></div>
+        <div class="muted">No‑knobs: ${metrics.badges.no_knobs ? 'yes' : 'no'}</div>
+        <div>
           <div>
             <strong>Masses</strong>
-            <div class="muted" style="margin-top:4px">CL max |Δ|: ${metrics.masses?.charged_leptons_max_abs_pct?.toFixed(3) || '—'}%</div>
+            <div class="muted">CL max |Δ|: ${metrics.masses?.charged_leptons_max_abs_pct?.toFixed(3) || '—'}%</div>
             <div class="muted">Qdown max |Δ|: ${metrics.masses?.quarks_down_max_abs_pct?.toFixed(3) || '—'}%</div>
             <div class="muted">Qup max |Δ|: ${metrics.masses?.quarks_up_max_abs_pct?.toFixed(3) || '—'}%</div>
             <div class="muted">Bosons max |Δ|: ${metrics.masses?.bosons_max_abs_pct?.toFixed(3) || '—'}%</div>
           </div>
           <div>
             <strong>Growth</strong>
-            <div class="muted" style="margin-top:4px">max |D/Λ−1|: ${metrics.growth?.max_abs_ratio_dev?.toFixed(3) || '—'}</div>
+            <div class="muted">max |D/Λ−1|: ${metrics.growth?.max_abs_ratio_dev?.toFixed(3) || '—'}</div>
             <div class="muted">mean |D/Λ−1|: ${metrics.growth?.mean_abs_ratio_dev?.toFixed(3) || '—'}</div>
           </div>
           <div>
             <strong>Lensing</strong>
-            <div class="muted" style="margin-top:4px">max |Σ−1|: ${metrics.lensing?.max_abs_sigma_dev?.toFixed(3) || '—'}</div>
+            <div class="muted">max |Σ−1|: ${metrics.lensing?.max_abs_sigma_dev?.toFixed(3) || '—'}</div>
             <div class="muted">mean |Σ−1|: ${metrics.lensing?.mean_abs_sigma_dev?.toFixed(3) || '—'}</div>
           </div>
         </div>
@@ -1059,16 +552,16 @@ python3 scripts/ci_status.py</code></pre>
       const cosmoCard = createElement('div', 'component-card', 'cosmology-card', `
         <h3>Cosmology (Growth & Lensing)</h3>
         <div class="muted">Same μ(a,k) and gating parameters used in both panels</div>
-        <div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(320px,1fr)); gap:12px; margin-top:10px">
+        <div>
           ${growth.growth ? `
           <div class="component-card">
-            <h4 style="margin-top:0">Growth (live)</h4>
+            <h4>Growth (live)</h4>
             <div class="muted">Last updated: ${growth.last_updated || '—'}</div>
-        <div style="margin-top:8px">
+        <div>
               <strong>ILG Gates</strong>: |B|=${growth.ilg?.blocked || '—'}, S=${growth.ilg?.S || '—'}; β=${growth.ilg?.beta || '—'}
         </div>
-        <div style="margin-top:8px">
-          <table style="width:100%; border-collapse:collapse">
+        <div>
+          <table>
                 <thead><tr><th>k (h/Mpc)</th><th>D_LCDM</th><th>D_ILG</th><th>ratio</th></tr></thead>
                 <tbody>${growth.growth.map(r => 
                   `<tr><td>${r.k}</td><td>${r.D_LCDM?.toFixed(6) || '—'}</td><td>${r.D_ILG?.toFixed(6) || '—'}</td><td>${r.ratio?.toFixed(6) || '—'}</td></tr>`
@@ -1076,12 +569,12 @@ python3 scripts/ci_status.py</code></pre>
           </table>
         </div>
             ${growth.grid?.length ? `
-            <details style="margin-top:8px">
+            <details>
               <summary>Grid (ratio D_ILG/D_LCDM over a,k)</summary>
-              <div class="muted" style="margin:6px 0">
+              <div class="muted">
                 <a href="${urls.growth}" target="_blank" rel="noopener">demo_results.json ↗</a>
               </div>
-              <table style="width:100%; border-collapse:collapse">
+              <table>
                 <thead><tr><th>a</th><th>z</th><th>k (h/Mpc)</th><th>ratio</th></tr></thead>
                 <tbody>${growth.grid.map(g => 
                   `<tr><td>${g.a.toFixed(2)}</td><td>${g.z?.toFixed(3) || '—'}</td><td>${g.k}</td><td>${g.ratio.toFixed(6)}</td></tr>`
@@ -1092,13 +585,13 @@ python3 scripts/ci_status.py</code></pre>
           
           ${lensing.lensing ? `
           <div class="component-card">
-            <h4 style="margin-top:0">Lensing (live)</h4>
+            <h4>Lensing (live)</h4>
             <div class="muted">Last updated: ${lensing.last_updated || '—'}</div>
-            <div style="margin-top:8px">
+            <div>
               <strong>ILG Gates</strong>: |B|=${lensing.ilg?.blocked || '—'}, S=${lensing.ilg?.S || '—'}
             </div>
-            <div style="margin-top:8px">
-              <table style="width:100%; border-collapse:collapse">
+            <div>
+              <table>
                 <thead><tr><th>k (h/Mpc)</th><th>a</th><th>z</th><th>Sigma</th></tr></thead>
                 <tbody>${lensing.lensing.map(r => 
                   `<tr><td>${r.k}</td><td>${(r.a || 1).toFixed(3)}</td><td>${r.z?.toFixed(3) || '—'}</td><td>${r.Sigma.toFixed(6)}</td></tr>`
@@ -1106,12 +599,12 @@ python3 scripts/ci_status.py</code></pre>
               </table>
             </div>
             ${lensing.grid?.length ? `
-            <details style="margin-top:8px">
+            <details>
               <summary>Grid (Σ over a,k)</summary>
-              <div class="muted" style="margin:6px 0">
+              <div class="muted">
                 <a href="${urls.lensing}" target="_blank" rel="noopener">lensing_results.json ↗</a>
               </div>
-              <table style="width:100%; border-collapse:collapse">
+              <table>
                 <thead><tr><th>a</th><th>z</th><th>k (h/Mpc)</th><th>Sigma</th></tr></thead>
                 <tbody>${lensing.grid.map(g => 
                   `<tr><td>${g.a.toFixed(2)}</td><td>${g.z?.toFixed(3) || '—'}</td><td>${g.k}</td><td>${g.Sigma.toFixed(6)}</td></tr>`
@@ -1129,16 +622,16 @@ python3 scripts/ci_status.py</code></pre>
       const limitsCard = createElement('div', 'component-card', 'ilg-limits-card', `
         <h3>ILG Limits</h3>
         <div class="muted">Last updated: ${limits.last_updated || '—'}</div>
-        <div style="margin-top:8px">Newtonian probe μ(a=1,k=1): <code>${limits.newtonian_limit.mu_at_a1_k1?.toFixed(6) || '—'}</code></div>
-        <div class="muted" style="margin-top:6px">
+        <div>Newtonian probe μ(a=1,k=1): <code>${limits.newtonian_limit.mu_at_a1_k1?.toFixed(6) || '—'}</code></div>
+        <div class="muted">
           Deep probe (a=${limits.deep_limit_probe?.a || '—'}, k=${limits.deep_limit_probe?.k || '—'}): 
           x=${limits.deep_limit_probe?.x ? Number(limits.deep_limit_probe.x).toExponential(3) : '—'}, 
           μ=${limits.deep_limit_probe?.mu?.toFixed(6) || '—'}
         </div>
         ${limits.sweep?.length ? `
-        <details style="margin-top:8px">
+        <details>
           <summary>Sweep (x and μ over a,k)</summary>
-          <table style="width:100%; border-collapse:collapse">
+          <table>
             <thead><tr><th>a</th><th>k</th><th>x</th><th>μ</th></tr></thead>
             <tbody>${limits.sweep.map(s => 
               `<tr><td>${s.a.toFixed(2)}</td><td>${s.k}</td><td>${Number(s.x).toExponential(3)}</td><td>${Number(s.mu).toFixed(6)}</td></tr>`
@@ -1155,37 +648,37 @@ python3 scripts/ci_status.py</code></pre>
         <h3>Conservation Checks</h3>
         <div class="muted">Last updated: ${cons2d.last_updated || cons3d.last_updated || '—'}</div>
         ${cons2d.conservation_check_varying ? `
-        <div style="margin-top:8px">
+        <div>
           <h4>2D Varying-w</h4>
-          <div style="margin-top:4px">
+          <div>
             Discrete divergence theorem: 
             <span class="${cons2d.conservation_check_varying.passed ? 'ok' : 'warn'}">
               ${cons2d.conservation_check_varying.passed ? 'passed' : 'failed'}
             </span>
           </div>
-          <div class="muted" style="margin-top:4px">
+          <div class="muted">
             |sum-div − flux| = ${cons2d.conservation_check_varying.abs_residual?.toExponential(3) || '—'}
           </div>
         </div>` : ''}
         ${cons3d.conservation_check_3d ? `
-        <div style="margin-top:12px">
+        <div>
           <h4>3D Checks</h4>
-          <div style="margin-top:4px">
+          <div>
             Laplacian ΔΦ=6: 
             <span class="${cons3d.conservation_check_3d.constant_w_laplacian?.passed ? 'ok' : 'warn'}">
               ${cons3d.conservation_check_3d.constant_w_laplacian?.passed ? 'passed' : 'failed'}
             </span>
           </div>
-          <div class="muted" style="margin-top:4px">
+          <div class="muted">
             max |ΔΦ−6| = ${cons3d.conservation_check_3d.constant_w_laplacian?.max_abs_err?.toExponential(3) || '—'}
           </div>
-          <div style="margin-top:8px">
+          <div>
             Divergence theorem: 
             <span class="${cons3d.conservation_check_3d.varying_w_divergence?.passed ? 'ok' : 'warn'}">
               ${cons3d.conservation_check_3d.varying_w_divergence?.passed ? 'passed' : 'failed'}
             </span>
           </div>
-          <div class="muted" style="margin-top:4px">
+          <div class="muted">
             |sum-div − flux| = ${cons3d.conservation_check_3d.varying_w_divergence?.abs_residual?.toExponential(3) || '—'}
           </div>
         </div>` : ''}
@@ -1198,45 +691,45 @@ python3 scripts/ci_status.py</code></pre>
       const ciCard = createElement('div', 'component-card', 'ci-card', `
         <h3>CI Status</h3>
         <div class="muted">Last updated: ${ci.last_updated || '—'}</div>
-        <div style="margin-top:8px">
+        <div>
           Overall: <span class="${ci.summary.passed ? 'ok' : 'warn'}">${ci.summary.passed ? 'passed' : 'failed'}</span>
         </div>
-        <div class="muted" style="margin-top:6px">
+        <div class="muted">
           Includes: gates, growth JSON, lensing JSON, ILG limit checks, masses snapshot, and 2D/3D conservation checks.
         </div>
         ${ci.verdict ? `
-        <div class="muted" style="margin-top:6px">
+        <div class="muted">
           Verdict: <strong>${ci.verdict.level}</strong>${ci.verdict.vouched ? ' (vouched)' : ''}
-          ${ci.verdict.blockers?.length ? `<div style='margin-top:4px'>Blockers: ${ci.verdict.blockers.map(b => `<span class='tag warn'>${b}</span>`).join(' ')}</div>` : ''}
+          ${ci.verdict.blockers?.length ? `<div>Blockers: ${ci.verdict.blockers.map(b => `<span class='tag warn'>${b}</span>`).join(' ')}</div>` : ''}
         </div>` : ''}
         ${ci.ledger_snapshot?.present ? `
-        <div class="muted" style="margin-top:6px">
+        <div class="muted">
           Ledger snapshot: <a href="https://raw.githubusercontent.com/jonwashburn/audit/main/docs/ledger_snapshot_v22c.txt" target="_blank" rel="noopener">ledger_snapshot_v22c.txt</a>
         </div>` : ''}
-        <div class="muted" style="margin-top:6px">
+        <div class="muted">
           Uncertainties file: ${ci.uncertainties?.present ? (ci.uncertainties.nonzero ? 'present (non‑zero)' : 'present (zeros)') : 'missing'}
         </div>
         ${ci.explanations ? `
-        <details style="margin-top:8px">
+        <details>
           <summary>What each check means</summary>
-          <ul style="margin:6px 0 0 18px">
+          <ul>
             ${Object.entries(ci.explanations).map(([k,v]) => `<li><strong>${k}</strong>: ${v}</li>`).join('')}
           </ul>
-          <div style="margin-top:6px">
+          <div>
             <strong>Failed checks:</strong> ${ci.summary.failed_checks?.join(', ') || 'none'}
           </div>
         </details>` : ''}
         ${ci.checks ? `
-        <details style="margin-top:10px">
+        <details>
           <summary>Checks: purpose, method, results, meaning</summary>
-          <div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap:12px; margin-top:8px">
+          <div>
             ${Object.entries(ci.checks).map(([k,chk]) => `
               <div class="component-card">
-                <h4 style="margin-top:0">${k} ${chk.passed ? '<span class=ok>passed</span>' : '<span class=warn>failed</span>'}</h4>
+                <h4>${k} ${chk.passed ? '<span class=ok>passed</span>' : '<span class=warn>failed</span>'}</h4>
                 <div><strong>Purpose</strong>: ${chk.purpose || '—'}</div>
-                <div style="margin-top:4px"><strong>Method</strong>: ${chk.method || '—'}</div>
-                <div style="margin-top:4px"><strong>Result</strong>: <pre style="white-space:pre-wrap; font-size:0.9em;">${(chk.result || '').toString().slice(0,800)}</pre></div>
-                <div style="margin-top:4px"><strong>Meaning</strong>: ${chk.meaning || '—'}</div>
+                <div><strong>Method</strong>: ${chk.method || '—'}</div>
+                <div><strong>Result</strong>: <pre>${(chk.result || '').toString().slice(0,800)}</pre></div>
+                <div><strong>Meaning</strong>: ${chk.meaning || '—'}</div>
               </div>
             `).join('')}
           </div>
@@ -1255,10 +748,10 @@ python3 scripts/ci_status.py</code></pre>
       const massesCard = createElement('div', 'component-card', 'masses-card', `
         <h3>Masses (snapshot)</h3>
         <div class="muted">Last updated: ${masses.last_updated || '—'}</div>
-        <div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap:12px; margin-top:8px">
+        <div>
           <div>
             <strong>Charged leptons (${cl.version || '—'})</strong>
-            <ul style="margin:6px 0 0 18px">
+            <ul>
               <li>μ/e: ${cl.deltas_pct?.mu_over_e?.toFixed(3) || '—'}%</li>
               <li>τ/μ: ${cl.deltas_pct?.tau_over_mu?.toFixed(3) || '—'}%</li>
               <li>τ/e: ${cl.deltas_pct?.tau_over_e?.toFixed(3) || '—'}%</li>
@@ -1266,18 +759,18 @@ python3 scripts/ci_status.py</code></pre>
           </div>
           <div>
             <strong>Quarks (${q.version || '—'})</strong>
-            <ul style="margin:6px 0 0 18px">
+            <ul>
               <li>s/d: ${q.down?.deltas_pct?.s_over_d?.toFixed(3) || '—'}%</li>
               <li>b/s: ${q.down?.deltas_pct?.b_over_s?.toFixed(3) || '—'}%</li>
               <li>b/d: ${q.down?.deltas_pct?.b_over_d?.toFixed(3) || '—'}%</li>
-              <li style="margin-top:6px">c/u: ${q.up?.deltas_pct?.c_over_u?.toFixed(3) || '—'}%</li>
+              <li>c/u: ${q.up?.deltas_pct?.c_over_u?.toFixed(3) || '—'}%</li>
               <li>t/c: ${q.up?.deltas_pct?.t_over_c?.toFixed(3) || '—'}%</li>
               <li>t/u: ${q.up?.deltas_pct?.t_over_u?.toFixed(3) || '—'}%</li>
             </ul>
           </div>
           <div>
             <strong>Bosons (${b.version || '—'})</strong>
-            <ul style="margin:6px 0 0 18px">
+            <ul>
               <li>Z/W: ${b.deltas_pct?.Z_over_W?.toFixed(3) || '—'}%</li>
               <li>H/Z: ${b.deltas_pct?.H_over_Z?.toFixed(3) || '—'}%</li>
               <li>H/W: ${b.deltas_pct?.H_over_W?.toFixed(3) || '—'}%</li>
@@ -1285,7 +778,7 @@ python3 scripts/ci_status.py</code></pre>
           </div>
           <div>
             <strong>Neutrinos (${nu.version || '—'})</strong>
-            <ul style="margin:6px 0 0 18px">
+            <ul>
               <li>Ordering: ${nu.ordering || '—'}; rungs: ${nu.rungs?.join(', ') || '—'}</li>
               <li>m (meV): ${(() => {
                 const mv = nu.masses_meV || [];
@@ -1301,28 +794,28 @@ python3 scripts/ci_status.py</code></pre>
             </ul>
           </div>
         </div>
-        <div class="muted" style="margin-top:8px">
+        <div class="muted">
           Download: 
           <a href="https://raw.githubusercontent.com/jonwashburn/audit/main/docs/masses_snapshot.json" target="_blank" rel="noopener">JSON</a> · 
           <a href="https://raw.githubusercontent.com/jonwashburn/audit/main/docs/masses_snapshot.csv" target="_blank" rel="noopener">CSV</a> · 
           Archival TeX: <a href="https://raw.githubusercontent.com/jonwashburn/audit/main/papers/particle-masses-ai.tex" target="_blank" rel="noopener">AI snapshot (v21) ↗</a>
         </div>
         ${masses.ckm || masses.pmns ? `
-        <div style="margin-top:10px; display:grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap:12px">
+        <div>
           ${masses.ckm ? `
           <div>
             <strong>CKM |V| (${masses.ckm.version || '—'})</strong>
-            <table style="margin-top:6px; width:100%; border-collapse:collapse">
+            <table>
               <tbody>
                 ${masses.ckm.V.map((row, i) => 
                   `<tr>${row.map((v, j) => {
                     const unc = masses.ckm.V_unc?.[i]?.[j];
-                    return `<td style="padding:2px 6px">${v.toFixed(4)}${unc && unc !== 0 ? ` ± ${Number(unc).toPrecision(2)}` : ''}</td>`;
+                    return `<td>${v.toFixed(4)}${unc && unc !== 0 ? ` ± ${Number(unc).toPrecision(2)}` : ''}</td>`;
                   }).join('')}</tr>`
                 ).join('')}
               </tbody>
             </table>
-            <div class="muted" style="margin-top:6px">
+            <div class="muted">
               (λ, A, ρ̄, η̄) = (${masses.ckm.lambda?.toFixed(6) || '—'}, ${masses.ckm.A?.toFixed(3) || '—'}, 
               ${masses.ckm.rho_bar?.toFixed(3) || '—'}, ${masses.ckm.eta_bar?.toFixed(3) || '—'})
           </div>
@@ -1330,7 +823,7 @@ python3 scripts/ci_status.py</code></pre>
           ${masses.pmns ? `
           <div>
             <strong>PMNS (angles, ${masses.pmns.version || '—'})</strong>
-            <ul style="margin:6px 0 0 18px">
+            <ul>
               <li>θ12 = ${masses.pmns.theta12_deg?.toFixed(2) || '—'}°${masses.pmns.theta12_unc_deg ? ` ± ${masses.pmns.theta12_unc_deg.toFixed(2)}°` : ''}</li>
               <li>θ23 = ${masses.pmns.theta23_deg?.toFixed(2) || '—'}°${masses.pmns.theta23_unc_deg ? ` ± ${masses.pmns.theta23_unc_deg.toFixed(2)}°` : ''}</li>
               <li>θ13 = ${masses.pmns.theta13_deg?.toFixed(2) || '—'}°${masses.pmns.theta13_unc_deg ? ` ± ${masses.pmns.theta13_unc_deg.toFixed(2)}°` : ''}</li>

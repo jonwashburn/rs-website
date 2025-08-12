@@ -6,42 +6,16 @@
     <title>Astrology OS /// Recognition Science</title>
     <link rel="stylesheet" href="/assets/css/main.css">
   <link rel="stylesheet" href="/assets/css/academic-style.css?v=20250812">
-    <style>
-        .astrology-tool-section {
-            background-color: #f8f9fa;
-            border-radius: 12px;
-            padding: 2rem;
-            margin-top: 3rem;
-            box-shadow: var(--shadow-sm);
-        }
-        .input-section, .heatmap-section {
-            background-color: #ffffff;
-            padding: 2rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-            border: 1px solid var(--border-color);
-        }
-        #heatmap, #topWindows, #results {
-            margin-top: 2rem;
-        }
-        .calendar-heatmap { display: grid; grid-template-columns: repeat(31, 12px); gap: 2px; }
-        .heatmap-day { width: 12px; height: 12px; border-radius: 2px; background: rgba(0,128,0,0.05); }
-        .helper-text { margin-top: 0.5rem; color: #666; font-size: 0.95rem; }
-        .mode-badge { display: inline-block; padding: 0.25rem 0.5rem; border-radius: 999px; border: 1px solid var(--border-color); background: #f3f4f6; color: #333; font-size: 0.85rem; }
-        .callout { background: #fff; border-left: 4px solid #2f6fdd; padding: 0.75rem 1rem; margin: 1rem 0; border-radius: 6px; border: 1px solid var(--border-color); }
-        .legend { display: flex; align-items: center; gap: 8px; margin-top: 0.5rem; font-size: 0.9rem; color: #666; }
-        .legend .swatch { width: 16px; height: 12px; border-radius: 3px; background: rgba(0,128,0,0.2); }
-        .small-note { color:#666; font-size:0.9rem; margin-top:0.5rem; }
-    </style>
+    
 </head>
 <body>
     <div id="header-placeholder"></div>
 
     <main class="content-page academic-page">
-        <section class="intro-section" style="padding: 1.5rem 0; background: #fff;">
+        <section class="intro-section">
             <div class="container text-center">
-                <h1 style="font-size: 2.8rem; margin-bottom: 1rem;">The Astrology OS</h1>
-                <p class="lead" style="font-size: 1.4rem; color: #555; max-width: 800px; margin: 0 auto;">
+                <h1>The Astrology OS</h1>
+                <p class="lead">
                     A scientifically rigorous framework for temporal navigation, derived from the first principles of Recognition Science.
                 </p>
             </div>
@@ -49,7 +23,7 @@
 
         <section>
             <div class="container">
-                <div class="text-block" style="max-width: 800px; margin: 0 auto;">
+                <div class="text-block">
                     <h2>From Mysticism to Mathematics</h2>
                     <p>For millennia, humanity has looked to the stars for guidance, believing that the positions of celestial bodies hold sway over our lives. While traditional astrology has been dismissed by modern science, its persistence across cultures suggests a deeper, forgotten truth. Recognition Science reveals this truth not as a mystical influence, but as a precise, computational system of temporal navigation.</p>
                     <p>The **Astrology OS** is not a tool for divination or personality assessment. It is a scientifically-derived operating system for interacting with the Universal Ledger—the computational substrate of reality. It allows us to measure the "cost" of a given moment in time, providing a quantitative metric for the harmony or disharmony of the planetary state vector.</p>
@@ -103,10 +77,10 @@
                 </div>
 
                 <div class="astrology-tool-section">
-                    <div style="text-align: right; margin-bottom: 0.5rem;">
+                    <div>
                         <span id="apiModeBadge" class="mode-badge" title="Computation mode">Mode: Auto</span>
                     </div>
-                    <h2 class="text-center" style="margin-top: 0;">Calculate a Window Score</h2>
+                    <h2 class="text-center">Calculate a Window Score</h2>
                     <div class="input-section">
                         <label for="datetime">Select a Date and Time (UTC):</label>
                         <input type="datetime-local" id="datetime" name="datetime">
@@ -115,7 +89,7 @@
                          <p class="helper-text">How to use: Choose a meaningful time (launch, meeting, decision) and compare options. Prefer higher‑scoring windows when possible.</p>
                          <p class="small-note">Note: Uses UTC. For research, exact timestamps improve fidelity; birth time is a proxy for conception.</p>
                     </div>
-                    <div id="results" class="results" style="display:none;"></div>
+                    <div id="results" class="results"></div>
                 
                     <div class="heatmap-section">
                         <h2>Generate Yearly Heatmap</h2>
@@ -124,9 +98,9 @@
                         <button id="generateHeatmap" type="button">Generate Heatmap</button>
                      <p class="helper-text">What this shows: One square per day; greener = more optimal. The table lists the top 10 days by score. If the backend API is offline, a simplified client‑side model approximates daily scores.</p>
                     </div>
-                    <div id="heatmap" class="heatmap-results" style="display:none;"></div>
-                    <div id="heatmapLegend" class="legend" style="display:none;"></div>
-                    <div id="topWindows" class="top-windows-results" style="display:none;"></div>
+                    <div id="heatmap" class="heatmap-results"></div>
+                    <div id="heatmapLegend" class="legend"></div>
+                    <div id="topWindows" class="top-windows-results"></div>
                 </div>
             </div>
         </section>
@@ -274,7 +248,7 @@
                             resultsDiv.innerHTML = `<p>Error: ${data.error}</p>`;
                             return;
                         }
-                        const approxNote = data._approximate ? '<div style="margin-top:.5rem;font-size:.9rem;color:#666;">Approximate client-side estimate (API unavailable)</div>' : '';
+                        const approxNote = data._approximate ? '<div>Approximate client-side estimate (API unavailable)</div>' : '';
                         resultsDiv.innerHTML = `
                             <h3>Results for ${new Date(data.timestamp).toLocaleString()}</h3>
                             <div class="result-item"><span>Window Score:</span> <span class="result-value">${Number(data.window_score).toFixed(6)}</span></div>
@@ -309,7 +283,7 @@
                             heatmapDiv.innerHTML = `<p>Error: ${data.error}</p>`;
                             return;
                         }
-                        const approxNote = data._approximate ? '<div style="margin-top:.5rem;font-size:.9rem;color:#666;">Approximate client-side estimate (API unavailable)</div>' : '';
+                        const approxNote = data._approximate ? '<div>Approximate client-side estimate (API unavailable)</div>' : '';
                         heatmapDiv.innerHTML = '<h3>Yearly Heatmap</h3><p>Darker green indicates higher (more optimal) window scores.</p>' + approxNote;
                         const calendar = document.createElement('div');
                         calendar.className = 'calendar-heatmap';

@@ -6,357 +6,7 @@
     <title>Primes Playground — Recognition Science</title>
     <link rel="stylesheet" href="/assets/css/main.css">
   <link rel="stylesheet" href="/assets/css/academic-style.css?v=20250812">
-    <style>
-        /* Prime-specific styles */
-        :root {
-            --prime-gold: #FFD700;
-            --prime-purple: #6B46C1;
-            --prime-blue: #2563EB;
-            --prime-green: #10B981;
-            --prime-red: #EF4444;
-        }
-
-        body {
-            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
-            color: #ffffff;
-            min-height: 100vh;
-        }
-
-        h1, h2, h3, h4, h5, h6, p, li { color: #ffffff; }
-
-        .prime-hero {
-            text-align: center;
-            padding: 4rem 2rem;
-            background: radial-gradient(ellipse at center, rgba(107, 70, 193, 0.2) 0%, transparent 70%);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .prime-hero::before {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: repeating-conic-gradient(
-                from 0deg at 50% 50%,
-                transparent 0deg,
-                rgba(255, 215, 0, 0.03) 10deg,
-                transparent 20deg
-            );
-            animation: rotate-primes 60s linear infinite;
-        }
-
-        @keyframes rotate-primes {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .prime-hero h1 {
-            font-size: 4rem;
-            background: linear-gradient(135deg, var(--prime-gold) 0%, var(--prime-purple) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 1rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .prime-subtitle {
-            font-size: 1.5rem;
-            color: var(--prime-gold);
-            opacity: 0.9;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Prime spiral visualization */
-        .prime-spiral {
-            width: 600px;
-            height: 600px;
-            margin: 3rem auto;
-            position: relative;
-            background: radial-gradient(circle, rgba(107, 70, 193, 0.1) 0%, transparent 70%);
-        }
-
-        .spiral-canvas {
-            width: 100%;
-            height: 100%;
-            cursor: crosshair;
-        }
-
-        /* Interactive prime grid */
-        .prime-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-            gap: 0.5rem;
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .prime-cell {
-            aspect-ratio: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid transparent;
-            border-radius: 8px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            position: relative;
-            background: rgba(30, 41, 59, 0.5);
-        }
-
-        .prime-cell.prime {
-            background: linear-gradient(135deg, rgba(107, 70, 193, 0.3) 0%, rgba(255, 215, 0, 0.2) 100%);
-            border-color: var(--prime-gold);
-            color: var(--prime-gold);
-            animation: pulse-prime 3s ease-in-out infinite;
-        }
-
-        @keyframes pulse-prime {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.9; }
-        }
-
-        .prime-cell.composite {
-            color: #e5e7eb;
-            border-color: #334155;
-        }
-
-        .prime-cell.twin-prime {
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.4) 0%, rgba(16, 185, 129, 0.3) 100%);
-            border-color: var(--prime-blue);
-            box-shadow: 0 0 20px rgba(37, 99, 235, 0.5);
-        }
-
-        .prime-cell:hover {
-            transform: scale(1.1);
-            z-index: 10;
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
-        }
-
-        /* Prime factorization display */
-        .factorization-box {
-            background: rgba(30, 41, 59, 0.8);
-            border: 2px solid var(--prime-purple);
-            border-radius: 12px;
-            padding: 2rem;
-            margin: 2rem auto;
-            max-width: 800px;
-            text-align: center;
-        }
-
-        .factor-input {
-            font-size: 2rem;
-            padding: 1rem 1.25rem;
-            background: rgba(15, 23, 42, 0.9);
-            border: 2px solid var(--prime-gold);
-            color: white;
-            border-radius: 8px;
-            width: 480px;
-            max-width: 90vw;
-            text-align: center;
-        }
-
-        .factor-result {
-            margin-top: 2rem;
-            font-size: 1.5rem;
-            color: var(--prime-gold);
-            min-height: 3rem;
-        }
-
-        .factor-prime {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            margin: 0.25rem;
-            background: linear-gradient(135deg, rgba(107, 70, 193, 0.5) 0%, rgba(255, 215, 0, 0.3) 100%);
-            border: 1px solid var(--prime-gold);
-            border-radius: 20px;
-            animation: factor-appear 0.5s ease-out;
-        }
-
-        @keyframes factor-appear {
-            0% { transform: scale(0) rotate(180deg); opacity: 0; }
-            100% { transform: scale(1) rotate(0deg); opacity: 1; }
-        }
-
-        /* RS Connection sections */
-        .rs-connection {
-            background: linear-gradient(135deg, rgba(107, 70, 193, 0.1) 0%, rgba(30, 41, 59, 0.5) 100%);
-            border-left: 4px solid var(--prime-gold);
-            padding: 2rem;
-            margin: 2rem 0;
-            border-radius: 8px;
-        }
-
-        .rs-connection h3 {
-            color: var(--prime-gold);
-            margin-bottom: 1rem;
-        }
-        .rs-connection p, .rs-connection li { color: #ffffff; }
-
-        /* Prime wave animation */
-        .prime-wave {
-            height: 200px;
-            margin: 3rem 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .wave-canvas {
-            width: 100%;
-            height: 100%;
-        }
-
-        /* Interactive demos */
-        .demo-section {
-            background: rgba(30, 41, 59, 0.5);
-            border-radius: 12px;
-            padding: 2rem;
-            margin: 2rem 0;
-        }
-
-        .demo-controls {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin-bottom: 2rem;
-        }
-
-        .demo-button {
-            padding: 0.75rem 1.5rem;
-            background: linear-gradient(135deg, var(--prime-purple) 0%, var(--prime-blue) 100%);
-            border: none;
-            color: white;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-
-        .demo-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(107, 70, 193, 0.5);
-        }
-
-        .demo-button.active {
-            background: linear-gradient(135deg, var(--prime-gold) 0%, var(--prime-purple) 100%);
-        }
-
-        /* Ledger visualization */
-        .ledger-viz {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-
-        .ledger-side {
-            padding: 1.5rem;
-            background: rgba(13, 20, 33, 0.92);
-            border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.12);
-            color: #e5e7eb;
-        }
-
-        .ledger-side.debit { border-color: rgba(239, 68, 68, 0.5); }
-
-        .ledger-side.credit { border-color: rgba(16, 185, 129, 0.5); }
-
-        .ledger-entry {
-            padding: 0.5rem 0.75rem;
-            margin: 0.5rem 0;
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 6px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        /* Improve readability of RS Stack lists */
-        .ledger-side ul {
-            margin-left: 1rem;
-        }
-        .ledger-side li {
-            margin: 0.4rem 0;
-            line-height: 1.6;
-            font-size: 0.95rem;
-        }
-
-        /* Math formulas */
-        .formula-box {
-            background: rgba(15, 23, 42, 0.9);
-            border: 1px solid var(--prime-purple);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1rem 0;
-            font-family: 'Courier New', monospace;
-            overflow-x: auto;
-        }
-
-        .formula-box code {
-            color: var(--prime-gold);
-            font-size: 1.1rem;
-        }
-
-        /* Mobile responsive */
-        @media (max-width: 768px) {
-            .prime-hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .prime-spiral {
-                width: 100%;
-                height: 400px;
-            }
-            
-            .ledger-viz {
-                grid-template-columns: 1fr;
-            }
-            
-            .prime-grid {
-                grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
-            }
-        }
-
-        /* Glowing effect for special primes */
-        @keyframes glow-special {
-            0%, 100% { box-shadow: 0 0 5px var(--prime-gold), 0 0 10px var(--prime-gold); }
-            50% { box-shadow: 0 0 20px var(--prime-gold), 0 0 40px var(--prime-gold); }
-        }
-
-        .mersenne-prime {
-            animation: glow-special 2s ease-in-out infinite;
-        }
-
-        /* Loading animation */
-        .loading-primes {
-            text-align: center;
-            padding: 2rem;
-            font-size: 1.5rem;
-            color: var(--prime-gold);
-        }
-
-        .loading-primes::after {
-            content: "...";
-            animation: loading-dots 1.5s infinite;
-        }
-
-        @keyframes loading-dots {
-            0%, 20% { content: "."; }
-            40% { content: ".."; }
-            60%, 100% { content: "..."; }
-        }
-
-        /* Prime Atlas cards */
-        .atlas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-top: 1rem; }
-        .atlas-card { background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 215, 0, 0.25); border-radius: 12px; padding: 1rem; }
-        .atlas-card h4 { margin: 0 0 .5rem; color: var(--prime-gold); font-size: 1.05rem; }
-        .atlas-card p { margin: 0; color: #e6e9f4; line-height: 1.55; }
-    </style>
+    
 </head>
 <body class="academic-page">
     <div id="header-placeholder"></div>
@@ -367,7 +17,7 @@
     </div>
 
     <div class="container">
-        <section class="rs-connection" style="margin-top:2rem">
+        <section class="rs-connection">
             <h2>Why Primes Exist (in Recognition Science)</h2>
             <p>Imagine reality as an infinite ledger, keeping track of every recognition event since the dawn of time. In this cosmic accounting system, most transactions can be broken down into smaller parts—a 12 splits into threes and fours, a 15 into threes and fives. But then there are the primes: 2, 3, 5, 7, 11, 13... These stubborn numbers refuse to be divided. They stand alone, irreducible, like atoms of pure recognition that cannot be decomposed into anything simpler.</p>
             
@@ -377,7 +27,7 @@
             
             <div class="formula-box">
                 <code>J_bit = ln(φ)</code>
-                <span style="display:block; margin-top:6px">The golden ratio sets the cosmic exchange rate—each prime atom costs exactly one natural unit of recognition energy.</span>
+                <span>The golden ratio sets the cosmic exchange rate—each prime atom costs exactly one natural unit of recognition energy.</span>
             </div>
         </section>
 
@@ -386,14 +36,14 @@
             <p><strong>45 = 3² × 5</strong> is the first composite demanding simultaneous 9‑fold and 5‑fold symmetries. The fundamental time base is the <strong>8‑beat cycle</strong>. Since gcd(8,45)=1, the systems share only the identity subgroup; coherence requires lcm(8,45)=360 beats, exceeding the fundamental window.</p>
             <div class="formula-box">
                 <code>gcd(8,45)=1 → lcm(8,45)=360 ≫ 8</code>
-                <span style="display:block; margin-top:6px">Result: a necessary, measurable gap (e.g., ~4.6875% cosmic clock lag), a singleton bottom‑quark at rung 45, and the first emergence of uncomputability.</span>
+                <span>Result: a necessary, measurable gap (e.g., ~4.6875% cosmic clock lag), a singleton bottom‑quark at rung 45, and the first emergence of uncomputability.</span>
             </div>
-            <p>Read more: <a href="/consciousness.html" style="color:#93c5fd">The 45‑Gap</a></p>
+            <p>Read more: <a href="/consciousness.html">The 45‑Gap</a></p>
         </section>
 
         <section class="demo-section">
             <h2>Prime Atlas: Where Primes Hold the Architecture Together</h2>
-            <p style="margin: .25rem 0 1rem; color:#e6e9f4;">A quick survey of the indispensable roles primes play across the Recognition Science stack.</p>
+            <p>A quick survey of the indispensable roles primes play across the Recognition Science stack.</p>
             <div class="atlas-grid">
                 <div class="atlas-card">
                     <h4>Ledger layer</h4>
@@ -451,8 +101,6 @@
             </div>
         </section>
 
-        
-
         <section class="factorization-box">
             <h2>Prime Factorization Engine</h2>
             <p>Every composite number is a unique product of primes—the Fundamental Theorem of Arithmetic made visible.</p>
@@ -466,7 +114,7 @@
             <div class="prime-spiral">
                 <canvas class="spiral-canvas" id="spiralCanvas"></canvas>
             </div>
-            <div class="center" style="text-align:center;opacity:0.9;color:#cbd5e1;margin-top:0.5rem;font-size:0.9rem">
+            <div class="center">
                 Tip: zoom your page or resize the window to redraw the spiral at higher density
             </div>
         </section>
@@ -592,7 +240,7 @@
             
             <p>Consider this cosmic poetry: the same primes that frustrated ancient Greek geometers trying to measure the diagonal of a square are the ones that secure your credit card transactions. The same indivisibility that makes 13 "unlucky" in superstition makes it crucial in quantum error correction. The same prime gaps that create the Riemann Hypothesis create the gaps in atomic spectra where new elements can exist. It's all connected because it's all the same thing: recognition encountering its own limits and, in those limits, finding infinite creativity.</p>
             
-            <div class="rs-connection" style="background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(107, 70, 193, 0.2) 100%); border-color: var(--prime-gold);">
+            <div class="rs-connection">
                 <h3>✨ The Ultimate Recognition</h3>
                 <p>The Riemann Hypothesis—mathematics' most famous unsolved problem—asks whether all non-trivial zeros of the zeta function lie on a critical line. But Recognition Science reveals what this really means: it's asking whether reality's ledger is perfectly balanced, whether the cosmic books can be reconciled, whether the universe's recognition of itself is complete and consistent.</p>
                 
@@ -600,7 +248,7 @@
                 
                 <p>The primes aren't just witnesses to recognition—they're recognition itself in its purest form. Every prime number is a moment where the universe looks at itself and says, "I cannot pretend to be anything other than what I am." Every prime is authenticity made numerical, truth made countable, consciousness made calculable.</p>
                 
-                <p style="text-align: center; font-size: 1.2rem; margin-top: 2rem; color: #FFF6CC;">
+                <p>
                     <strong>Every prime is a universe recognizing itself for the first time.<br>
                     And since there are infinite primes, the universe is always new.</strong>
                 </p>
@@ -649,7 +297,7 @@
         function showFactorization(n) {
             const result = document.getElementById('factorResult');
             if (n === 1) {
-                result.innerHTML = '<span style="color: #64748B;">1 is the unity - neither prime nor composite</span>';
+                result.innerHTML = '<span>1 is the unity - neither prime nor composite</span>';
             } else if (isPrime(n)) {
                 result.innerHTML = `<span class="factor-prime">${n} is PRIME!</span>`;
             } else {

@@ -18,608 +18,7 @@
             }
         };
     </script>
-    <style>
-        /* Hero Section - The Prototype */
-        .predictions-hero {
-            min-height: 100vh;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
-            padding-top: 80px; /* Account for header */
-        }
-
-        /* Animated grid background */
-        .predictions-hero::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: 
-                linear-gradient(rgba(139, 92, 246, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(139, 92, 246, 0.1) 1px, transparent 1px);
-            background-size: 50px 50px;
-            animation: grid-move 20s linear infinite;
-        }
-
-        @keyframes grid-move {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(50px, 50px); }
-        }
-
-        /* Floating prediction values */
-        .floating-predictions {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-        }
-
-        .floating-value {
-            position: absolute;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            color: rgba(139, 92, 246, 0.6);
-            animation: float-up 15s linear infinite;
-        }
-
-        @keyframes float-up {
-            0% { 
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { 
-                transform: translateY(-100px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        .floating-value:nth-child(1) { left: 10%; animation-delay: 0s; }
-        .floating-value:nth-child(2) { left: 20%; animation-delay: 2s; }
-        .floating-value:nth-child(3) { left: 30%; animation-delay: 4s; }
-        .floating-value:nth-child(4) { left: 40%; animation-delay: 6s; }
-        .floating-value:nth-child(5) { left: 50%; animation-delay: 8s; }
-        .floating-value:nth-child(6) { left: 60%; animation-delay: 10s; }
-        .floating-value:nth-child(7) { left: 70%; animation-delay: 12s; }
-        .floating-value:nth-child(8) { left: 80%; animation-delay: 14s; }
-        .floating-value:nth-child(9) { left: 90%; animation-delay: 1s; }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            max-width: 1200px;
-            padding: 2rem;
-            transform: translateY(-40px); /* Lift content higher */
-        }
-
-        .hero-badge {
-            display: inline-block;
-            padding: 0.5rem 1.5rem;
-            background: rgba(139, 92, 246, 0.2);
-            border: 1px solid rgba(139, 92, 246, 0.5);
-            border-radius: 999px;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 2rem;
-            animation: pulse-glow 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.6); }
-        }
-
-        .hero-title {
-            font-size: 4rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, #fff 0%, #8b5cf6 50%, #3b82f6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: title-shimmer 3s ease-in-out infinite;
-        }
-
-        @keyframes title-shimmer {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.3); }
-        }
-
-        .hero-subtitle {
-            font-size: 1.5rem;
-            color: #94a3b8;
-            margin-bottom: 3rem;
-            line-height: 1.6;
-        }
-
-        /* Score display */
-        .prediction-score {
-            display: inline-flex;
-            align-items: center;
-            gap: 3rem;
-            padding: 2rem 3rem;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            margin-bottom: 3rem;
-        }
-
-        .score-item {
-            text-align: center;
-        }
-
-        .score-number {
-            font-size: 3rem;
-            font-weight: 700;
-            color: #8b5cf6;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        .score-label {
-            font-size: 0.9rem;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        /* Scroll indicator */
-        .scroll-indicator {
-            position: absolute;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(-10px); }
-        }
-
-        /* Predictions Dashboard */
-        .predictions-dashboard {
-            background: #f8fafc;
-            padding: 4rem 0;
-        }
-
-        .dashboard-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .dashboard-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 1rem;
-        }
-
-        .dashboard-subtitle {
-            font-size: 1.2rem;
-            color: #64748b;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        /* Filter tabs */
-        .filter-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 3rem;
-            flex-wrap: wrap;
-        }
-
-        .filter-tab {
-            padding: 0.75rem 1.5rem;
-            background: white;
-            border: 2px solid #e2e8f0;
-            border-radius: 999px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            color: #64748b;
-        }
-
-        .filter-tab:hover {
-            border-color: #8b5cf6;
-            color: #8b5cf6;
-            transform: translateY(-2px);
-        }
-
-        .filter-tab.active {
-            background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
-            color: white;
-            border-color: transparent;
-        }
-
-        /* Prediction Cards Grid */
-        .predictions-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        .prediction-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .prediction-card:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 10px 40px rgba(139, 92, 246, 0.2);
-        }
-
-        .prediction-card.expanded {
-            grid-column: 1 / -1;
-        }
-
-        /* Card header with accuracy indicator */
-        .card-header {
-            padding: 1.5rem;
-            background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
-            border-bottom: 2px solid #e2e8f0;
-            position: relative;
-        }
-
-        .accuracy-badge {
-            position: absolute;
-            top: 0.5rem;
-            right: 0.5rem;
-            padding: 0.2rem 0.6rem;
-            background: #10b981;
-            color: white;
-            border-radius: 999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            z-index: 10;
-            white-space: nowrap;
-        }
-
-        .accuracy-badge.perfect {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            animation: shine 2s linear infinite;
-        }
-
-        @keyframes shine {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 200% 50%; }
-        }
-
-        .card-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 0.5rem;
-        }
-
-        .card-category {
-            font-size: 0.9rem;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        /* Card body */
-        .card-body {
-            padding: 1.5rem;
-        }
-
-        .prediction-values {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .value-item {
-            padding: 1rem;
-            background: #f8fafc;
-            border-radius: 10px;
-            border: 1px solid #e2e8f0;
-        }
-
-        .value-label {
-            font-size: 0.8rem;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.5rem;
-        }
-
-        .value-number {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #1e293b;
-        }
-
-        .value-number.predicted {
-            color: #8b5cf6;
-        }
-
-        .value-number.observed {
-            color: #3b82f6;
-        }
-
-        /* Deviation meter */
-        .deviation-meter {
-            height: 8px;
-            background: #e2e8f0;
-            border-radius: 999px;
-            overflow: hidden;
-            margin-bottom: 0.5rem;
-        }
-
-        .deviation-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
-            border-radius: 999px;
-            transition: width 0.5s ease;
-        }
-
-        .deviation-label {
-            font-size: 0.9rem;
-            color: #64748b;
-            text-align: center;
-        }
-
-        /* Expanded card details */
-        .card-details {
-            display: none;
-            padding: 2rem;
-            background: #f8fafc;
-            border-top: 2px solid #e2e8f0;
-        }
-
-        .prediction-card.expanded .card-details {
-            display: block;
-        }
-
-        .formula-display {
-            background: #1e293b;
-            color: white;
-            padding: 2rem;
-            border-radius: 10px;
-            margin: 1.5rem 0;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.2rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .formula-display::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent 0%, rgba(139, 92, 246, 0.1) 50%, transparent 100%);
-            animation: formula-scan 3s linear infinite;
-        }
-
-        @keyframes formula-scan {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        .explanation-text {
-            line-height: 1.8;
-            color: #475569;
-            margin-bottom: 1.5rem;
-        }
-
-        .explanation-parts {
-            display: grid;
-            gap: 1rem;
-        }
-
-        .part-item {
-            padding: 1rem;
-            background: white;
-            border-radius: 10px;
-            border-left: 4px solid #8b5cf6;
-        }
-
-        .part-name {
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 0.5rem;
-        }
-
-        .part-description {
-            color: #64748b;
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        /* Interactive calculation demo */
-        .calc-demo {
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
-            margin: 2rem 0;
-            border: 2px solid #e2e8f0;
-        }
-
-        .calc-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        .calc-controls {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .calc-slider {
-            flex: 1;
-            min-width: 200px;
-        }
-
-        .slider-label {
-            font-size: 0.9rem;
-            color: #64748b;
-            margin-bottom: 0.5rem;
-        }
-
-        .slider-input {
-            width: 100%;
-            -webkit-appearance: none;
-            height: 6px;
-            border-radius: 999px;
-            background: #e2e8f0;
-            outline: none;
-        }
-
-        .slider-input::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
-            cursor: pointer;
-        }
-
-        .slider-value {
-            font-family: 'JetBrains Mono', monospace;
-            font-weight: 600;
-            color: #8b5cf6;
-        }
-
-        .calc-result {
-            text-align: center;
-            padding: 1.5rem;
-            background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
-            border-radius: 10px;
-        }
-
-        .result-label {
-            font-size: 0.9rem;
-            color: #64748b;
-            margin-bottom: 0.5rem;
-        }
-
-        .result-value {
-            font-size: 2rem;
-            font-weight: 700;
-            font-family: 'JetBrains Mono', monospace;
-            background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* Stats section */
-        .stats-section {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            padding: 4rem 0;
-            color: white;
-            text-align: center;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 3rem;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        .stat-item {
-            position: relative;
-        }
-
-        .stat-number {
-            font-size: 3rem;
-            font-weight: 700;
-            font-family: 'JetBrains Mono', monospace;
-            background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .stat-label {
-            font-size: 1rem;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-top: 0.5rem;
-        }
-
-        /* Mobile responsiveness */
-        @media (max-width: 768px) {
-            .hero-title {
-                font-size: 2.5rem;
-            }
-            
-            .hero-subtitle {
-                font-size: 1.2rem;
-            }
-            
-            .prediction-score {
-                flex-direction: column;
-                gap: 1.5rem;
-                padding: 1.5rem;
-            }
-            
-            .predictions-grid {
-                grid-template-columns: 1fr;
-                padding: 0 1rem;
-            }
-            
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 2rem;
-            }
-        }
-
-        /* Loading animation */
-        .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #e2e8f0;
-            border-top-color: #8b5cf6;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-    </style>
+    
 </head>
 <body>
     <div id="header-placeholder"></div>
@@ -712,7 +111,7 @@
                                 </div>
                             </div>
                             <div class="deviation-meter">
-                                <div class="deviation-fill" style="width: 99.9%"></div>
+                                <div class="deviation-fill"></div>
                             </div>
                             <div class="deviation-label">Agreement: 10⁻⁹ precision</div>
                         </div>
@@ -759,7 +158,7 @@
                                 </div>
                             </div>
                             <div class="deviation-meter">
-                                <div class="deviation-fill" style="width: 100%"></div>
+                                <div class="deviation-fill"></div>
                             </div>
                             <div class="deviation-label">Dead center of error bars</div>
                         </div>
@@ -802,7 +201,7 @@
                 </div>
                     </div>
                             <div class="deviation-meter">
-                                <div class="deviation-fill" style="width: 95%"></div>
+                                <div class="deviation-fill"></div>
                 </div>
                             <div class="deviation-label">Resolves 5σ tension</div>
                         </div>
@@ -845,7 +244,7 @@
                                 </div>
                                 </div>
                             <div class="deviation-meter">
-                                <div class="deviation-fill" style="width: 99.998%"></div>
+                                <div class="deviation-fill"></div>
                     </div>
                             <div class="deviation-label">5 decimal places</div>
                 </div>
@@ -892,7 +291,7 @@
                     </div>
                 </div>
                             <div class="deviation-meter">
-                                <div class="deviation-fill" style="width: 93%"></div>
+                                <div class="deviation-fill"></div>
                     </div>
                             <div class="deviation-label">Reduces tension to 0.2σ</div>
                 </div>
@@ -925,7 +324,7 @@
                     </div>
                 </div>
                             <div class="deviation-meter">
-                                <div class="deviation-fill" style="width: 100%"></div>
+                                <div class="deviation-fill"></div>
                     </div>
                             <div class="deviation-label">Exact match</div>
                 </div>
@@ -958,7 +357,7 @@
                     </div>
                 </div>
                             <div class="deviation-meter">
-                                <div class="deviation-fill" style="width: 99.99%"></div>
+                                <div class="deviation-fill"></div>
                     </div>
                             <div class="deviation-label">2 MeV precision</div>
                 </div>
@@ -983,7 +382,7 @@
                 </div>
                     </div>
                             <div class="deviation-meter">
-                                <div class="deviation-fill" style="width: 99.98%"></div>
+                                <div class="deviation-fill"></div>
                 </div>
                             <div class="deviation-label">0.1 nm precision</div>
                     </div>
@@ -1008,7 +407,7 @@
                     </div>
                 </div>
                             <div class="deviation-meter">
-                                <div class="deviation-fill" style="width: 99.9999%"></div>
+                                <div class="deviation-fill"></div>
                     </div>
                             <div class="deviation-label">Sub-second accuracy</div>
                 </div>
@@ -1033,7 +432,7 @@
                 </div>
                     </div>
                             <div class="deviation-meter">
-                                <div class="deviation-fill" style="width: 99.95%"></div>
+                                <div class="deviation-fill"></div>
                 </div>
                             <div class="deviation-label">0.05% precision</div>
                     </div>
@@ -1058,7 +457,7 @@
                     </div>
                 </div>
                             <div class="deviation-meter">
-                                <div class="deviation-fill" style="width: 100%"></div>
+                                <div class="deviation-fill"></div>
                     </div>
                             <div class="deviation-label">Perfect agreement</div>
                 </div>
@@ -1091,7 +490,7 @@
                                 </div>
                             </div>
                             <div class="deviation-meter">
-                                <div class="deviation-fill" style="width: 100%"></div>
+                                <div class="deviation-fill"></div>
                             </div>
                             <div class="deviation-label">Derives QM rules</div>
                         </div>
@@ -1111,7 +510,7 @@
         <!-- Stats Section -->
         <section class="stats-section">
             <div class="container">
-                <h2 style="font-size: 2.5rem; margin-bottom: 3rem;">The Bottom Line</h2>
+                <h2>The Bottom Line</h2>
                 <div class="stats-grid">
                     <div class="stat-item">
                         <div class="stat-number">1</div>
@@ -1142,21 +541,21 @@
         </section>
 
         <!-- Call to Action -->
-        <section style="background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%); padding: 4rem 0; text-align: center;">
+        <section>
             <div class="container">
-                <h2 style="font-size: 2.5rem; color: #1e293b; margin-bottom: 1rem;">Ready to Verify?</h2>
-                <p style="font-size: 1.2rem; color: #64748b; max-width: 600px; margin: 0 auto 2rem;">
+                <h2>Ready to Verify?</h2>
+                <p>
                     Every calculation is open source. Every derivation is machine-verified in Lean.
                     The framework is completely falsifiable—one wrong prediction breaks everything.
                 </p>
-                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                    <a href="/particle-masses.html" class="filter-tab" style="background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%); color: white; text-decoration: none;">
+                <div>
+                    <a href="/particle-masses.html" class="filter-tab">
                         Explore Particle Masses
                     </a>
-                    <a href="/logical-foundations.html" class="filter-tab" style="text-decoration: none;">
+                    <a href="/logical-foundations.html" class="filter-tab">
                         See Logical Foundations
                     </a>
-                    <a href="https://github.com/jonwashburn/meta-principle" target="_blank" class="filter-tab" style="text-decoration: none;">
+                    <a href="https://github.com/jonwashburn/meta-principle" target="_blank" class="filter-tab">
                         View Lean Proofs
                     </a>
                 </div>

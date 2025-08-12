@@ -6,831 +6,7 @@
     <title>The Axiomatic Bridging Method | Recognition Science</title>
     <link rel="stylesheet" href="assets/css/main.css?v=2024-12-bridging">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        body {
-            background: #ffffff;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 980px;
-            margin: 0 auto;
-            padding: 0 1.25rem;
-        }
-
-        /* Hero Section - Over the Top Math Style */
-        .bridging-hero {
-            min-height: 100vh;
-            background: 
-                radial-gradient(ellipse at top, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
-                radial-gradient(ellipse at bottom, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-                linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0f0f1f 100%);
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            margin-bottom: 4rem;
-        }
-
-        /* Floating equations in 3D space */
-        .math-universe {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            perspective: 1000px;
-            pointer-events: none;
-        }
-
-        .equation.floating {
-            position: absolute;
-            font-family: 'JetBrains Mono', monospace;
-            color: rgba(139, 92, 246, 0.3);
-            font-size: clamp(0.8rem, 2vw, 1.2rem);
-            animation: float3d var(--duration, 20s) ease-in-out infinite;
-            animation-delay: var(--delay, 0s);
-            transform-style: preserve-3d;
-        }
-
-        @keyframes float3d {
-            0%, 100% {
-                transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.3;
-            }
-            50% {
-                transform: translate3d(calc(100vw * 0.8), calc(100vh * -0.3), 200px) rotateX(180deg) rotateY(360deg);
-                opacity: 0.6;
-            }
-            90% {
-                opacity: 0.3;
-            }
-        }
-
-        .equation.floating:nth-child(1) { left: 5%; top: 10%; }
-        .equation.floating:nth-child(2) { right: 10%; top: 15%; }
-        .equation.floating:nth-child(3) { left: 15%; top: 30%; }
-        .equation.floating:nth-child(4) { right: 5%; top: 40%; }
-        .equation.floating:nth-child(5) { left: 10%; bottom: 30%; }
-        .equation.floating:nth-child(6) { right: 15%; bottom: 20%; }
-        .equation.floating:nth-child(7) { left: 20%; bottom: 15%; }
-        .equation.floating:nth-child(8) { right: 20%; bottom: 35%; }
-        .equation.floating:nth-child(9) { left: 8%; top: 50%; }
-        .equation.floating:nth-child(10) { right: 12%; top: 60%; }
-
-        /* SVG Bridge Visualization */
-        .bridge-viz {
-            position: absolute;
-            width: 100%;
-            max-width: 800px;
-            height: 400px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            opacity: 0.6;
-            z-index: 1;
-        }
-
-        .bridge-svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        .bridge-arc {
-            stroke-dasharray: 500;
-            stroke-dashoffset: 500;
-            animation: drawBridge 3s ease-in-out infinite;
-            animation-delay: var(--delay, 0s);
-        }
-
-        @keyframes drawBridge {
-            0%, 100% {
-                stroke-dashoffset: 500;
-                opacity: 0.3;
-            }
-            50% {
-                stroke-dashoffset: 0;
-                opacity: 1;
-            }
-        }
-
-        .math-side circle, .physics-side rect {
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        /* Matrix Rain Effect */
-        .matrix-rain {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: space-around;
-            opacity: 0.1;
-            pointer-events: none;
-        }
-
-        .rain-column {
-            font-family: 'JetBrains Mono', monospace;
-            color: #10b981;
-            font-size: 1.2rem;
-            writing-mode: vertical-rl;
-            animation: matrixRain 10s linear infinite;
-            animation-delay: var(--delay, 0s);
-        }
-
-        @keyframes matrixRain {
-            0% {
-                transform: translateY(-100%);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.1;
-            }
-            90% {
-                opacity: 0.1;
-            }
-            100% {
-                transform: translateY(100%);
-                opacity: 0;
-            }
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            padding: 2rem;
-        }
-
-        /* Glitch effect badge */
-        .hero-badge {
-            display: inline-block;
-            background: linear-gradient(45deg, #ff0080, #8b5cf6);
-            padding: 0.5rem 1.5rem;
-            border-radius: 4px;
-            color: white;
-            font-size: 0.9rem;
-            font-weight: 700;
-            font-family: 'JetBrains Mono', monospace;
-            letter-spacing: 0.1em;
-            margin-bottom: 2rem;
-            position: relative;
-            animation: glowPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes glowPulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.5); }
-            50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.8), 0 0 60px rgba(139, 92, 246, 0.4); }
-        }
-
-        .glitch {
-            position: relative;
-        }
-
-        .glitch::before,
-        .glitch::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, #ff0080, #8b5cf6);
-            padding: 0.5rem 1.5rem;
-            border-radius: 4px;
-        }
-
-        .glitch::before {
-            animation: glitch-1 0.5s infinite;
-            color: #00ffff;
-            z-index: -1;
-        }
-
-        .glitch::after {
-            animation: glitch-2 0.5s infinite;
-            color: #ff00ff;
-            z-index: -2;
-        }
-
-        @keyframes glitch-1 {
-            0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
-            20% { clip-path: inset(20% 0 30% 0); transform: translate(-2px, 2px); }
-            40% { clip-path: inset(50% 0 20% 0); transform: translate(2px, -2px); }
-            60% { clip-path: inset(10% 0 60% 0); transform: translate(-1px, 1px); }
-            80% { clip-path: inset(80% 0 5% 0); transform: translate(1px, -1px); }
-        }
-
-        @keyframes glitch-2 {
-            0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
-            20% { clip-path: inset(60% 0 10% 0); transform: translate(2px, 1px); }
-            40% { clip-path: inset(20% 0 40% 0); transform: translate(-2px, 2px); }
-            60% { clip-path: inset(30% 0 50% 0); transform: translate(1px, -2px); }
-            80% { clip-path: inset(10% 0 70% 0); transform: translate(-1px, -1px); }
-        }
-
-        /* Animated title */
-        .hero-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            letter-spacing: -0.02em;
-            line-height: 1;
-        }
-
-        .title-word {
-            display: inline-block;
-            background: linear-gradient(90deg, #8b5cf6, #3b82f6, #10b981, #8b5cf6);
-            background-size: 200% 100%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: gradientShift 3s ease-in-out infinite;
-            animation-delay: var(--delay, 0s);
-        }
-
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        /* Typewriter subtitle */
-        .hero-subtitle {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 300;
-            max-width: 700px;
-            margin: 0 auto 2rem;
-            line-height: 1.6;
-            position: relative;
-        }
-
-        .typewriter {
-            overflow: hidden;
-            white-space: normal;
-            display: inline-block;
-        }
-
-        @keyframes typing {
-            from { width: 0; }
-            to { width: 100%; }
-        }
-
-        @keyframes blink {
-            from, to { border-right: 3px solid transparent; }
-            50% { border-right: 3px solid #8b5cf6; }
-        }
-
-        /* Hero equation */
-        .hero-equation {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 3rem;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: clamp(1.5rem, 3vw, 2.5rem);
-            color: white;
-        }
-
-        .equation-part {
-            padding: 1rem 2rem;
-            background: rgba(139, 92, 246, 0.1);
-            border: 2px solid rgba(139, 92, 246, 0.3);
-            border-radius: 12px;
-            backdrop-filter: blur(10px);
-            animation: equationGlow 3s ease-in-out infinite;
-        }
-
-        .equation-arrow {
-            color: #10b981;
-            font-size: 2rem;
-            animation: arrowPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes equationGlow {
-            0%, 100% { 
-                box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
-                transform: translateY(0);
-            }
-            50% { 
-                box-shadow: 0 0 40px rgba(139, 92, 246, 0.4);
-                transform: translateY(-5px);
-            }
-        }
-
-        @keyframes arrowPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
-
-        /* Content Sections */
-        .content-section {
-            padding: 4rem 0;
-            position: relative;
-        }
-
-        .section-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: clamp(2rem, 4vw, 2.5rem);
-            color: #1a1a2e;
-            margin-bottom: 2rem;
-            font-weight: 600;
-        }
-
-        .reading {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 1.125rem;
-            line-height: 1.8;
-            color: #4a5568;
-        }
-
-        .reading p {
-            margin-bottom: 1.5rem;
-        }
-
-        .reading strong {
-            color: #1a1a2e;
-            font-weight: 600;
-        }
-
-        /* 4-Step Method Cards */
-        .method-grid {
-            display: grid;
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-
-        .method-card {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            border-left: 4px solid;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .method-card:nth-child(1) { border-left-color: #8b5cf6; }
-        .method-card:nth-child(2) { border-left-color: #3b82f6; }
-        .method-card:nth-child(3) { border-left-color: #10b981; }
-        .method-card:nth-child(4) { border-left-color: #f59e0b; }
-
-        .method-card:hover {
-            transform: translateX(5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
-        }
-
-        .step-number {
-            position: absolute;
-            top: -15px;
-            left: 30px;
-            width: 40px;
-            height: 40px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.2rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .method-card:nth-child(1) .step-number { color: #8b5cf6; border: 2px solid #8b5cf6; }
-        .method-card:nth-child(2) .step-number { color: #3b82f6; border: 2px solid #3b82f6; }
-        .method-card:nth-child(3) .step-number { color: #10b981; border: 2px solid #10b981; }
-        .method-card:nth-child(4) .step-number { color: #f59e0b; border: 2px solid #f59e0b; }
-
-        .step-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.5rem;
-            color: #1a1a2e;
-            margin-bottom: 1rem;
-            font-weight: 600;
-        }
-
-        .step-description {
-            color: #4a5568;
-            line-height: 1.7;
-            margin-bottom: 1.5rem;
-        }
-
-        .step-details {
-            background: #f8f9fa;
-            padding: 1.5rem;
-            border-radius: 12px;
-            margin-top: 1.5rem;
-        }
-
-        .step-details h4 {
-            color: #1a1a2e;
-            margin-bottom: 0.75rem;
-            font-size: 1.1rem;
-        }
-
-        .step-details ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .step-details li {
-            padding-left: 1.5rem;
-            position: relative;
-            margin-bottom: 0.5rem;
-            color: #4a5568;
-        }
-
-        .step-details li::before {
-            content: '→';
-            position: absolute;
-            left: 0;
-            color: #8b5cf6;
-            font-weight: bold;
-        }
-
-        /* Example Section */
-        .example-section {
-            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-            padding: 4rem 0;
-            margin: 4rem 0;
-        }
-
-        .example-card {
-            background: white;
-            padding: 3rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-            margin-bottom: 2rem;
-        }
-
-        .example-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.8rem;
-            color: #8b5cf6;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .example-badge {
-            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 999px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .translation-box {
-            background: #f0f7ff;
-            border-left: 3px solid #3b82f6;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            border-radius: 8px;
-        }
-
-        .translation-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .translation-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .translation-arrow {
-            color: #3b82f6;
-            font-size: 1.5rem;
-        }
-
-        .math-term {
-            font-family: 'JetBrains Mono', monospace;
-            background: white;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            color: #1a1a2e;
-            white-space: nowrap;
-        }
-
-        .physical-term {
-            font-weight: 600;
-            color: #3b82f6;
-        }
-
-        /* Keystone Section */
-        .keystone-section {
-            background: #1a1a2e;
-            color: white;
-            padding: 5rem 0;
-            margin-top: 4rem;
-        }
-
-        .keystone-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: clamp(2rem, 4vw, 3rem);
-            text-align: center;
-            margin-bottom: 3rem;
-            background: linear-gradient(90deg, #8b5cf6, #3b82f6, #10b981);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .keystone-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .keystone-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            padding: 2rem;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .keystone-card h3 {
-            color: #8b5cf6;
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
-        }
-
-        .keystone-card p {
-            color: rgba(255, 255, 255, 0.9);
-            line-height: 1.7;
-        }
-
-        /* CTA Section */
-        .cta-section {
-            text-align: center;
-            padding: 5rem 0;
-        }
-
-        .cta-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: clamp(2rem, 4vw, 2.5rem);
-            color: #1a1a2e;
-            margin-bottom: 1.5rem;
-        }
-
-        .cta-text {
-            font-size: 1.2rem;
-            color: #4a5568;
-            max-width: 700px;
-            margin: 0 auto 2rem;
-            line-height: 1.7;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 1rem 2rem;
-            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
-            color: white;
-            text-decoration: none;
-            border-radius: 999px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
-        }
-
-        .cta-button-secondary {
-            background: white;
-            color: #8b5cf6;
-            border: 2px solid #8b5cf6;
-        }
-
-        .cta-button-secondary:hover {
-            background: #8b5cf6;
-            color: white;
-        }
-
-        /* Complete Example Section */
-        .example-section {
-            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1f 100%);
-            padding: 5rem 0;
-            color: white;
-        }
-        
-        .example-section p,
-        .example-section li {
-            color: rgba(255, 255, 255, 0.9);
-        }
-        
-        .example-section .section-title {
-            color: white;
-        }
-        
-        .example-section .section-intro {
-            color: rgba(255, 255, 255, 0.9);
-        }
-        
-        .example-container {
-            background: rgba(26, 26, 46, 0.5);
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            border-radius: 16px;
-            overflow: hidden;
-            margin-top: 3rem;
-        }
-        
-        .example-header {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.1));
-            padding: 2rem;
-            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
-        }
-        
-        .example-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 999px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-        
-        .example-header h3 {
-            color: white;
-            font-size: 1.8rem;
-            margin: 0;
-        }
-        
-        .example-content {
-            padding: 3rem;
-        }
-        
-        .step-card {
-            background: rgba(139, 92, 246, 0.05);
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            border-radius: 12px;
-            padding: 2rem;
-            margin: 2rem 0;
-        }
-        
-        .step-card h4 {
-            color: #8b5cf6;
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            font-weight: 600;
-        }
-        
-        .substep {
-            margin: 1.5rem 0;
-            padding-left: 1rem;
-            border-left: 2px solid rgba(139, 92, 246, 0.3);
-        }
-        
-        .substep h5 {
-            color: #3b82f6;
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-        }
-        
-        .theorem-box {
-            background: rgba(59, 130, 246, 0.1);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-        }
-        
-        .theorem-box strong {
-            color: #3b82f6;
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-        
-        .equation-display {
-            text-align: center;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.3rem;
-            color: white;
-            margin: 1.5rem 0;
-            padding: 1rem;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-        }
-        
-        .property-box {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-        }
-        
-        .property-box strong {
-            color: #10b981;
-        }
-        
-        .final-theorem {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.2));
-            border: 2px solid rgba(139, 92, 246, 0.5);
-        }
-        
-        .qed {
-            text-align: right;
-            font-weight: bold;
-            color: #8b5cf6;
-            font-size: 1.2rem;
-            margin-top: 1rem;
-        }
-        
-        .insight-box {
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(139, 92, 246, 0.1));
-            border: 1px solid rgba(236, 72, 153, 0.3);
-            border-radius: 12px;
-            padding: 2rem;
-            margin-top: 3rem;
-        }
-        
-        .insight-box h4 {
-            color: #ec4899;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .example-content blockquote {
-            background: rgba(139, 92, 246, 0.1);
-            border-left: 4px solid #8b5cf6;
-            padding: 1rem 1.5rem;
-            margin: 1.5rem 0;
-            font-style: italic;
-        }
-        
-        .example-content ul, .example-content ol {
-            margin: 1rem 0;
-            padding-left: 2rem;
-        }
-        
-        .example-content li {
-            margin: 0.5rem 0;
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .bridging-hero {
-                min-height: 100vh;
-            }
-            
-            .hero-title {
-                font-size: 2.5rem;
-            }
-            
-            .hero-equation {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            .equation-part {
-                font-size: 1.2rem;
-                padding: 0.75rem 1.5rem;
-            }
-            
-            .bridge-viz {
-                display: none;
-            }
-            
-            .math-universe {
-                opacity: 0.05;
-            }
-            
-            .method-card {
-                padding: 2rem 1.5rem;
-            }
-            
-            .translation-item {
-                flex-direction: column;
-                text-align: center;
-            }
-        }
-    </style>
+    
   <link rel="stylesheet" href="/assets/css/academic-style.css?v=20250812">
 </head>
 <body class="academic-page">
@@ -840,16 +16,16 @@
     <section class="bridging-hero">
         <!-- Mathematical equations floating in 3D space -->
         <div class="math-universe">
-            <div class="equation floating" style="--delay: 0s; --duration: 20s;">ζ(s) = ∑<sub>n=1</sub><sup>∞</sup> n<sup>-s</sup></div>
-            <div class="equation floating" style="--delay: 2s; --duration: 18s;">∮<sub>C</sub> f(z)dz = 2πi·Res(f)</div>
-            <div class="equation floating" style="--delay: 4s; --duration: 22s;">∇²ψ + k²ψ = 0</div>
-            <div class="equation floating" style="--delay: 6s; --duration: 19s;">e<sup>iπ</sup> + 1 = 0</div>
-            <div class="equation floating" style="--delay: 8s; --duration: 21s;">∫<sub>-∞</sub><sup>∞</sup> e<sup>-x²</sup>dx = √π</div>
-            <div class="equation floating" style="--delay: 10s; --duration: 23s;">det(λI - A) = 0</div>
-            <div class="equation floating" style="--delay: 12s; --duration: 20s;">∂S/∂t + H = 0</div>
-            <div class="equation floating" style="--delay: 3s; --duration: 17s;">Tr(AB) = Tr(BA)</div>
-            <div class="equation floating" style="--delay: 5s; --duration: 24s;">∇ × E = -∂B/∂t</div>
-            <div class="equation floating" style="--delay: 7s; --duration: 18s;">φ = (1+√5)/2</div>
+            <div class="equation floating">ζ(s) = ∑<sub>n=1</sub><sup>∞</sup> n<sup>-s</sup></div>
+            <div class="equation floating">∮<sub>C</sub> f(z)dz = 2πi·Res(f)</div>
+            <div class="equation floating">∇²ψ + k²ψ = 0</div>
+            <div class="equation floating">e<sup>iπ</sup> + 1 = 0</div>
+            <div class="equation floating">∫<sub>-∞</sub><sup>∞</sup> e<sup>-x²</sup>dx = √π</div>
+            <div class="equation floating">det(λI - A) = 0</div>
+            <div class="equation floating">∂S/∂t + H = 0</div>
+            <div class="equation floating">Tr(AB) = Tr(BA)</div>
+            <div class="equation floating">∇ × E = -∂B/∂t</div>
+            <div class="equation floating">φ = (1+√5)/2</div>
         </div>
 
         <!-- The Bridge Visualization -->
@@ -866,9 +42,9 @@
                 <!-- Bridge paths -->
                 <g class="bridge-paths">
                     <path d="M 230 200 Q 400 150 570 200" fill="none" stroke="url(#bridgeGradient)" stroke-width="2" class="bridge-arc" />
-                    <path d="M 230 200 Q 400 180 570 200" fill="none" stroke="url(#bridgeGradient)" stroke-width="1.5" class="bridge-arc" style="animation-delay: 0.2s" />
-                    <path d="M 230 200 Q 400 220 570 200" fill="none" stroke="url(#bridgeGradient)" stroke-width="1.5" class="bridge-arc" style="animation-delay: 0.4s" />
-                    <path d="M 230 200 Q 400 250 570 200" fill="none" stroke="url(#bridgeGradient)" stroke-width="1" class="bridge-arc" style="animation-delay: 0.6s" />
+                    <path d="M 230 200 Q 400 180 570 200" fill="none" stroke="url(#bridgeGradient)" stroke-width="1.5" class="bridge-arc" />
+                    <path d="M 230 200 Q 400 220 570 200" fill="none" stroke="url(#bridgeGradient)" stroke-width="1.5" class="bridge-arc" />
+                    <path d="M 230 200 Q 400 250 570 200" fill="none" stroke="url(#bridgeGradient)" stroke-width="1" class="bridge-arc" />
                 </g>
                 
                 <!-- Physics side -->
@@ -882,17 +58,17 @@
                 <!-- Gradients -->
                 <defs>
                     <linearGradient id="mathGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
+                        <stop offset="0%" />
+                        <stop offset="100%" />
                     </linearGradient>
                     <linearGradient id="bridgeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:0.8" />
-                        <stop offset="50%" style="stop-color:#10b981;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0.8" />
+                        <stop offset="0%" />
+                        <stop offset="50%" />
+                        <stop offset="100%" />
                     </linearGradient>
                     <linearGradient id="physicsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#10b981;stop-opacity:1" />
+                        <stop offset="0%" />
+                        <stop offset="100%" />
                     </linearGradient>
                 </defs>
             </svg>
@@ -900,21 +76,21 @@
 
         <!-- Matrix rain effect -->
         <div class="matrix-rain">
-            <div class="rain-column" style="--delay: 0s;">∫∂∇∑∏√∞≈≠±×÷</div>
-            <div class="rain-column" style="--delay: 0.5s;">αβγδεζηθικλμν</div>
-            <div class="rain-column" style="--delay: 1s;">∀∃∈∉⊂⊃⊆⊇∪∩</div>
-            <div class="rain-column" style="--delay: 1.5s;">⟨⟩⊗⊕⊖⊙⊛†‡∂∇</div>
-            <div class="rain-column" style="--delay: 2s;">ℂℍℕℙℚℝℤ℧℮ℏ</div>
-            <div class="rain-column" style="--delay: 2.5s;">∮∯∰∱∲∳⨋⨌⨍⨎⨏</div>
+            <div class="rain-column">∫∂∇∑∏√∞≈≠±×÷</div>
+            <div class="rain-column">αβγδεζηθικλμν</div>
+            <div class="rain-column">∀∃∈∉⊂⊃⊆⊇∪∩</div>
+            <div class="rain-column">⟨⟩⊗⊕⊖⊙⊛†‡∂∇</div>
+            <div class="rain-column">ℂℍℕℙℚℝℤ℧℮ℏ</div>
+            <div class="rain-column">∮∯∰∱∲∳⨋⨌⨍⨎⨏</div>
         </div>
         
         <div class="hero-content">
             <div class="hero-badge glitch" data-text="METHOD OVERVIEW">METHOD OVERVIEW</div>
             <h1 class="hero-title">
-                <span class="title-word" style="--delay: 0.1s;">The</span>
-                <span class="title-word" style="--delay: 0.2s;">Axiomatic</span>
-                <span class="title-word" style="--delay: 0.3s;">Bridging</span>
-                <span class="title-word" style="--delay: 0.4s;">Method</span>
+                <span class="title-word">The</span>
+                <span class="title-word">Axiomatic</span>
+                <span class="title-word">Bridging</span>
+                <span class="title-word">Method</span>
             </h1>
             <p class="hero-subtitle typewriter">
                 Translating abstract mathematics into a physically constrained model, then back to rigorous mathematics
@@ -941,7 +117,7 @@
     <section class="content-section">
         <div class="container">
             <h2 class="section-title">The Four-Step Process</h2>
-            <p class="reading" style="margin-bottom: 3rem;">This method provides a structured way to solve difficult mathematical problems by temporarily translating them into a different, more constrained conceptual system.</p>
+            <p class="reading">This method provides a structured way to solve difficult mathematical problems by temporarily translating them into a different, more constrained conceptual system.</p>
             
             <div class="method-grid">
                 <!-- Step 1 -->
@@ -1057,7 +233,7 @@
                     </div>
                 </div>
                 
-                <p class="reading" style="margin-top: 2rem;">Under this translation, the question "Where are the zeros?" becomes "Where can perfect balance occur in the constrained model?" One motivation (to be formalized mathematically) is that balance should occur along an equilibrium axis. This is a guiding heuristic, not a proof in itself.</p>
+                <p class="reading">Under this translation, the question "Where are the zeros?" becomes "Where can perfect balance occur in the constrained model?" One motivation (to be formalized mathematically) is that balance should occur along an equilibrium axis. This is a guiding heuristic, not a proof in itself.</p>
             </div>
         </div>
     </section>
@@ -1066,7 +242,7 @@
     <section class="keystone-section">
         <div class="container">
             <h2 class="keystone-title">Forging the Keystone (Conceptual)</h2>
-            <p style="text-align: center; color: rgba(255,255,255,0.9); max-width: 700px; margin: 0 auto 3rem; font-size: 1.2rem;">
+            <p>
                 The following components are presented as a conceptual scaffolding for research, not as claims of completed proofs:
             </p>
             
@@ -1087,7 +263,7 @@
                 </div>
             </div>
             
-            <p style="text-align: center; color: rgba(255,255,255,0.8); max-width: 700px; margin: 3rem auto 0; font-size: 1.1rem;">
+            <p>
                 The aim is to derive mathematically checkable statements inspired by physical constraints. Any resulting theorems must be proven within standard mathematical frameworks.
             </p>
         </div>
@@ -1100,17 +276,17 @@
             
             <p>The Axiomatic Bridging Method is not limited to number theory. It may be applied to domains where added constraints help structure otherwise intractable searches. The following sketches are exploratory illustrations, not results:</p>
             
-            <h3 style="color: #8b5cf6; margin: 2rem 0 1rem;">Protein Folding (Levinthal's Paradox)</h3>
+            <h3>Protein Folding (Levinthal's Paradox)</h3>
             <p><strong>Problem:</strong> How does a protein find its functional shape in microseconds when random search would take billions of years?</p>
             <p><strong>Translation:</strong> Protein chain → Ledger program executing a cost-minimization cascade</p>
             <p><strong>Heuristic:</strong> The protein may follow a deterministically constrained path of least total cost, rather than a random search</p>
             
-            <h3 style="color: #8b5cf6; margin: 2rem 0 1rem;">P vs NP</h3>
+            <h3>P vs NP</h3>
             <p><strong>Problem:</strong> Can every problem whose solution can be verified quickly also be solved quickly?</p>
             <p><strong>Translation:</strong> Computational complexity → Ledger processing bandwidth at different scales</p>
             <p><strong>Heuristic:</strong> Some classes may be efficiently solvable at a physically microscopic scale while remaining hard at macroscopic scales</p>
             
-            <h3 style="color: #8b5cf6; margin: 2rem 0 1rem;">Consciousness and Free Will</h3>
+            <h3>Consciousness and Free Will</h3>
             <p><strong>Problem:</strong> How does subjective experience emerge from objective physics?</p>
             <p><strong>Translation:</strong> Consciousness → Navigation through undecidable ledger branches</p>
             <p><strong>Heuristic:</strong> Subjective agency may correspond to navigation through undecidable branches under bounded physical constraints</p>
@@ -1240,7 +416,7 @@
                                 <li>But T̂(s) is a strict contraction off the critical line</li>
                                 <li>Therefore zeros can only occur on ℜs = 1/2</li>
                             </ol>
-                            <p class="qed" style="opacity:0.5;">Research target — not a proof.</p>
+                            <p class="qed">Research target — not a proof.</p>
                         </div>
                     </div>
                     
@@ -1248,7 +424,7 @@
                         <h4>The Working Insight</h4>
                         <p>Physically motivated axioms can help navigate obstacles that block purely formal approaches by suggesting specific structures to test. Any such structures must ultimately be validated with conventional, fully rigorous proofs.</p>
                         
-                        <p style="margin-top: 1.5rem;">The function we quantified is the <strong>net phase shift created by the interference of all irreducible ledger paths as they propagate through the cosmic voxel lattice</strong>—the "heartbeat of the ledger":</p>
+                        <p>The function we quantified is the <strong>net phase shift created by the interference of all irreducible ledger paths as they propagate through the cosmic voxel lattice</strong>—the "heartbeat of the ledger":</p>
                         <div class="equation-display">θ(t) := arg Θ*(½ + it)</div>
                     </div>
                 </div>
