@@ -312,6 +312,15 @@
       <button class="term" data-def="Unlike gauge theories where symmetries leave degrees of freedom, or string theory with its landscape problem, these theorems converge on a single consistent framework">Why uniqueness matters</button>.
     </p>
 
+  <!-- Lean proof snippet showing formal theorem statements -->
+  <div style="background:#1a1f2e;border-radius:6px;padding:1rem;margin:1.5rem 0;font-family:'JetBrains Mono',monospace;font-size:0.85rem;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+      <div style="color:#93a1a1;font-size:0.8rem;">Formal Lean Theorems — click any line for details</div>
+      <a href="/chain.html" style="color:#3b82f6;font-size:0.8rem;text-decoration:none;">View full proof →</a>
+    </div>
+    <div id="theorem-snippet" style="line-height:1.6;"></div>
+  </div>
+
   <details>
     <summary>Theorem 1: Universal Ledger — Discrete counts</summary>
     <p>Existence of a globally conserved count of recognition events.</p>
@@ -1089,6 +1098,91 @@
         }
       }
     });
+
+    // Lean theorem snippet - compact clickable version
+    (function(){
+      const out = document.getElementById('theorem-snippet');
+      if (!out) return;
+
+      const theorems = [
+        'theorem ledger_exists (M : RecognitionStructure) : ∃ L : Ledger M, True',
+        'theorem φ_is_fixed_point : recurrence 1 φ ∧ φ > 0',
+        'theorem spacetime_is_3plus1 : stable_arena → dimensions = (3, 1)',
+        'theorem period_exactly_8 : ∃ w : CompleteWalk, w.period = 8',
+        'theorem light_is_recognition : electromagnetic = ledger_exchange',
+        'theorem mass_spectrum : m = B·E_coh·φ^(r+f)',
+        'theorem incomputability_at_45 : ∃ gap : Gap, gap.angle = π/4',
+        'theorem curvature_functional : F[r] = ∂²N/∂r² constrains evolution'
+      ];
+
+      const explain = {
+        0: '<p><strong>Theorem 1:</strong> Every recognition structure admits a ledger. The proof constructs it explicitly using integer costs for each recognition edge.</p>',
+        1: '<p><strong>Theorem 2:</strong> The golden ratio φ = (1+√5)/2 is the unique non-trivial fixed point of x = 1 + 1/x, proven by solving the quadratic.</p>',
+        2: '<p><strong>Theorem 3:</strong> Only 3 spatial dimensions support stable, local recognition. Lower dims overconstrain; higher dims diverge.</p>',
+        3: '<p><strong>Theorem 4:</strong> Complete update traversal of a 3-cube requires exactly 8 steps, proven via Gray code construction.</p>',
+        4: '<p><strong>Theorem 5:</strong> Light emerges as recognition information exchange across the ledger, with c as the propagation rate.</p>',
+        5: '<p><strong>Theorem 6:</strong> All masses follow m = B·E_coh·φ^(r+f) where r is integer depth and f is a small correction.</p>',
+        6: '<p><strong>Theorem 7:</strong> A 45° incomputability gap in the ledger update function creates quantum uncertainty and path duality.</p>',
+        7: '<p><strong>Theorem 8:</strong> The curvature of ledger state density constrains allowable updates, yielding effective gravitational dynamics.</p>'
+      };
+
+      theorems.forEach((t,i) => {
+        const row = document.createElement('div');
+        row.style.color = '#a8b9cc';
+        row.style.padding = '0.3rem 0.5rem';
+        row.style.cursor = 'pointer';
+        row.style.transition = 'all 0.15s ease';
+        row.textContent = `${i+1}. ${t}`;
+        row.dataset.idx = String(i);
+        
+        row.addEventListener('mouseenter', () => {
+          row.style.background = 'rgba(59,130,246,0.1)';
+          row.style.color = '#ffffff';
+        });
+        
+        row.addEventListener('mouseleave', () => {
+          if (!row.classList.contains('active')) {
+            row.style.background = '';
+            row.style.color = '#a8b9cc';
+          }
+        });
+        
+        out.appendChild(row);
+      });
+
+      out.addEventListener('click', (e) => {
+        const row = e.target;
+        if (!row.dataset?.idx) return;
+        
+        // Clear other expansions
+        out.querySelectorAll('.theorem-exp').forEach(exp => exp.remove());
+        out.querySelectorAll('.active').forEach(r => {
+          r.classList.remove('active');
+          r.style.background = '';
+          r.style.color = '#a8b9cc';
+        });
+        
+        if (row.classList.contains('active')) {
+          row.classList.remove('active');
+          return;
+        }
+        
+        row.classList.add('active');
+        row.style.background = 'rgba(59,130,246,0.15)';
+        row.style.color = '#ffffff';
+        
+        const exp = document.createElement('div');
+        exp.className = 'theorem-exp';
+        exp.style.background = '#0b1220';
+        exp.style.color = '#93a1a1';
+        exp.style.borderLeft = '3px solid #3b82f6';
+        exp.style.padding = '0.75rem';
+        exp.style.margin = '0.5rem 0';
+        exp.style.fontSize = '0.85rem';
+        exp.innerHTML = explain[row.dataset.idx] || '<p>Proof details in full chain.</p>';
+        row.insertAdjacentElement('afterend', exp);
+      });
+    })();
   </script>
 
   <script>
