@@ -721,11 +721,123 @@ input:focus, textarea:focus, select:focus {
 .homepage .hero {
     text-align: center;
     padding: 4rem 0;
+    background: var(--background-alt);
 }
 
-.homepage .hero-title {
+.homepage .hero:nth-child(even) {
+    background: white;
+}
+
+.homepage .hero h2 {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    color: var(--primary-color);
+}
+
+.homepage .hero h3 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin: 2rem 0 1rem;
+    color: var(--text-color);
+}
+
+.homepage .hero p {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    max-width: 800px;
+    margin: 0 auto 2rem;
+}
+
+/* Homepage Stats Grid */
+.homepage .hero > div > div:has(> div > div:first-child:contains("0")) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 600px;
+    margin: 3rem auto;
+}
+
+/* Theory of Us Parallax */
+.theory-of-us-parallax {
+    position: relative;
+    min-height: 600px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
+    color: white;
+    padding: 4rem 0;
+}
+
+.parallax-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.parallax-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+}
+
+/* Unified Grid */
+.unified-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+}
+
+.unified-item {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.unified-item:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.unified-icon {
     font-size: 3rem;
     margin-bottom: 1rem;
+}
+
+/* Prophecy Grid */
+.prophecy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+}
+
+.prophecy-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+}
+
+.prophecy-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.prophecy-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--accent-color);
 }
 
 /* Theory Pages */
@@ -1003,6 +1115,149 @@ input:focus, textarea:focus, select:focus {
 .lean-snippet pre {
     margin: 0;
     white-space: pre;
+}
+
+/* Questions Page Styles */
+.number-comparison {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+}
+
+.number {
+    text-align: center;
+}
+
+.big-num {
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    font-family: var(--font-mono);
+    display: block;
+    line-height: 1;
+}
+
+.num-label {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.5rem;
+}
+
+.arrow-between {
+    font-size: 2rem;
+    color: var(--text-muted);
+}
+
+/* Universal Algorithm Feature */
+.ua-feature {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: white;
+    padding: 4rem 0;
+    position: relative;
+    overflow: hidden;
+    margin: 3rem 0;
+}
+
+.bg-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+}
+
+.ua-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 1;
+}
+
+.ua-lede {
+    max-width: 800px;
+    margin: 0 auto 3rem;
+    text-align: center;
+    font-size: 1.125rem;
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+    opacity: 0.9;
+}
+
+.ua-highlights {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+    position: relative;
+    z-index: 1;
+}
+
+.ua-block {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.ua-block h3 {
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+}
+
+.ua-cta {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.ua-cta a {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: var(--accent-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.ua-cta a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3);
+}
+
+/* FAQ Section */
+.faq-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+}
+
+.faq-item {
+    background: var(--background-alt);
+    padding: 2rem;
+    border-radius: 12px;
+}
+
+.faq-item h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.faq-item p {
+    margin: 0;
+    line-height: 1.6;
 }
 
 /* ============================================
