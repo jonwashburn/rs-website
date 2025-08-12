@@ -1100,10 +1100,14 @@
     });
 
     // Lean theorem snippet - compact clickable version
-    document.addEventListener('DOMContentLoaded', function() {
-      setTimeout(function() {
+    window.addEventListener('load', function() {
+      // Use window.load to ensure everything including dynamic content is loaded
+      const initTheorems = function() {
         const out = document.getElementById('theorem-snippet');
-        if (!out) return;
+        if (!out) {
+          console.error('theorem-snippet element not found');
+          return;
+        }
 
       const theorems = [
         'theorem ledger_exists (M : RecognitionStructure) : ∃ L : Ledger M, True',
@@ -1183,7 +1187,11 @@
         exp.innerHTML = explain[row.dataset.idx] || '<p>Proof details in full chain.</p>';
         row.insertAdjacentElement('afterend', exp);
       });
-      }, 100); // Small delay to ensure DOM is ready
+      };
+      
+      // Try to initialize immediately and also after a delay for safety
+      initTheorems();
+      setTimeout(initTheorems, 500);
     });
   </script>
 
