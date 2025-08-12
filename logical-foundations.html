@@ -631,6 +631,32 @@
     </div>
   </header>
 
+  <!-- Indisputable Chain (Lean) — interactive snippet -->
+  <section class="section alt" id="indisputable-chain">
+    <div class="container reading">
+      <h2>Machine‑Checked Foundations: The Indisputable Chain</h2>
+      <p>
+        What follows is not a metaphor or a marketing diagram. It is the literal Lean code that formalizes the
+        chain from tautology → ledger → unique cost J → golden ratio φ → eight‑tick period. Click the highlighted
+        lines to see what each lemma or definition does and how it locks into the whole.
+      </p>
+
+      <div class="code-wrap" style="border:1px solid var(--line);border-radius:10px;overflow:hidden;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:0.6rem 0.9rem;background:#0f172a;color:#cbd5e1;font-size:0.95rem;">
+          <div>Chain.lean — minimal proof backbone</div>
+          <div id="chain-status" aria-live="polite"></div>
+        </div>
+        <div id="chain-snippet" style="font-family:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;font-size:13px;line-height:1.6;background:#0b1220;color:#e6edf3;overflow:auto;"></div>
+      </div>
+
+      <p style="margin-top:1rem;color:var(--muted)">
+        Why this matters: if the code compiles, the logic holds. There are no dials to tune and no appeals to authority—
+        only a referee (Lean) that either accepts each step or points to the exact failure. Explore the full interactive version on
+        <a href="/chain.html">this dedicated page</a>.
+      </p>
+    </div>
+  </section>
+
   <!-- The Dream of First Principles -->
   <section class="section" id="dream">
     <div class="container reading">
@@ -887,5 +913,45 @@
 
   <div id="footer-placeholder"></div>
   <script src="/assets/js/main.js"></script>
+  <script>
+    // Minimal reader: load first ~120 lines of Chain.lean (or fallback) and tag hotspots
+    (async function(){
+      const out = document.getElementById('chain-snippet');
+      const status = document.getElementById('chain-status');
+      if (!out || !status) return;
+      status.textContent = 'Loading…';
+      const candidates = ['/Chain.lean', '/Chain.lean.txt', 'https://raw.githubusercontent.com/jonwashburn/rs-website/main/Chain.lean'];
+      let text = null;
+      for (const u of candidates){
+        try{ const r = await fetch(u,{cache:'no-cache'}); if(r.ok){ text = await r.text(); break; } }catch(e){}
+      }
+      if(!text){ text = '/-!\n# The Indisputable Chain: Recognition Science from Pure Logic\n-/' }
+      const lines = text.split('\n').slice(0,120);
+      const patterns = [
+        {k:'MetaPrinciple', p:'theorem MetaPrinciple'},
+        {k:'RecognitionStructure', p:'structure RecognitionStructure'},
+        {k:'Ledger', p:'structure Ledger (M : RecognitionStructure)'},
+        {k:'J_def', p:'def J (x : ℝ) : ℝ'},
+        {k:'phi', p:'def φ : ℝ'},
+        {k:'period', p:'theorem period_exactly_8'},
+      ];
+      const body = document.createElement('div');
+      lines.forEach((t,i)=>{
+        const row = document.createElement('div');
+        row.style.display='grid';row.style.gridTemplateColumns='3ch 1fr';row.style.gap='0.75rem';row.style.padding='0.15rem 0.9rem';row.style.borderBottom='1px solid rgba(255,255,255,0.06)';
+        const ln = document.createElement('div'); ln.textContent=String(i+1).padStart(2,' '); ln.style.color='#64748b'; ln.style.userSelect='none'; ln.style.textAlign='right';
+        const code = document.createElement('div'); code.textContent=t.replace(/\t/g,'  ');
+        row.appendChild(ln); row.appendChild(code); body.appendChild(row);
+      });
+      out.appendChild(body);
+      // Highlight a few lines
+      const textArr = lines;
+      patterns.forEach(m=>{
+        const idx = textArr.findIndex(l=>l.includes(m.p));
+        if(idx>=0){ const el = body.children[idx]; el.style.background='rgba(59,130,246,0.14)'; }
+      });
+      status.textContent = '';
+    })();
+  </script>
 </body>
 </html>
