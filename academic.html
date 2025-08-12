@@ -104,6 +104,16 @@
       padding: 0 2px;
       margin: 0 -2px;
     }
+    
+    /* Keep term highlighted when its expansion is active */
+    .term.active {
+      background: rgba(0, 61, 130, 0.12);
+      color: #003d82;
+      border-radius: 2px;
+      padding: 0 2px;
+      margin: 0 -2px;
+      font-weight: 500;
+    }
 
     /* Inline expansions */
     .expansion {
@@ -970,6 +980,17 @@
 
     // Handle term clicks with progressive disclosure
     document.addEventListener('click', function(e) {
+      // Close expansions when clicking outside (but not on deeper toggle or expansion content)
+      if (!e.target.closest('.term') && !e.target.closest('.expansion') && !e.target.closest('.deeper-toggle')) {
+        document.querySelectorAll('.expansion.active').forEach(exp => {
+          exp.classList.remove('active');
+          exp.innerHTML = '';
+        });
+        document.querySelectorAll('.term.active').forEach(term => {
+          term.classList.remove('active');
+        });
+      }
+      
       if (e.target.classList.contains('term')) {
         const def = e.target.getAttribute('data-def');
         const termText = e.target.textContent;
@@ -987,11 +1008,15 @@
           e.target.parentElement.insertAdjacentElement('afterend', expansion);
         }
         
-        // Toggle expansion
+        // Toggle expansion and term highlighting
         if (expansion.classList.contains('active') && expansion.innerHTML.includes(def)) {
           expansion.classList.remove('active');
           expansion.innerHTML = '';
+          e.target.classList.remove('active'); // Remove highlight from term
         } else {
+          // Remove active class from any other terms
+          document.querySelectorAll('.term.active').forEach(t => t.classList.remove('active'));
+          e.target.classList.add('active'); // Add highlight to clicked term
           // Build content with "Need more clarity?" helper
           let content = `<div>${def}</div>`;
           
