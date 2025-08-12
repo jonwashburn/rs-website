@@ -1101,8 +1101,9 @@
 
     // Lean theorem snippet - compact clickable version
     document.addEventListener('DOMContentLoaded', function() {
-      const out = document.getElementById('theorem-snippet');
-      if (!out) return;
+      setTimeout(function() {
+        const out = document.getElementById('theorem-snippet');
+        if (!out) return;
 
       const theorems = [
         'theorem ledger_exists (M : RecognitionStructure) : ∃ L : Ledger M, True',
@@ -1182,6 +1183,7 @@
         exp.innerHTML = explain[row.dataset.idx] || '<p>Proof details in full chain.</p>';
         row.insertAdjacentElement('afterend', exp);
       });
+      }, 100); // Small delay to ensure DOM is ready
     });
   </script>
 
