@@ -34,6 +34,53 @@ body {
 .text-center {
     text-align: center;
 }
+/* Encyclopedia two-column layout */
+.enc-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 2rem;
+}
+
+.enc-sidebar {
+    border-right: 1px solid var(--border-color);
+    padding-right: 1rem;
+}
+
+.enc-sidebar h3 {
+    font-size: 1rem;
+    margin: 0 0 .5rem 0;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+}
+
+.enc-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.25rem 0;
+}
+
+.enc-sidebar li {
+    margin: 0;
+}
+
+.enc-sidebar a {
+    display: block;
+    padding: .4rem 0;
+    color: #333;
+}
+
+@media (max-width: 900px) {
+    .enc-layout {
+        grid-template-columns: 1fr;
+    }
+    .enc-sidebar {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 0 0 1rem 0;
+        margin-bottom: 1rem;
+    }
+}
 
 /* Modern section spacing */
 section {
@@ -44,6 +91,69 @@ section {
     section {
         padding: 2rem 0; /* was 2.5rem */
     }
+}
+
+/* Tighter spacing for content pages (encyclopedia, papers, technical pages) */
+.content-page section {
+    padding: 1rem 0 !important;
+}
+
+@media (max-width: 768px) {
+    .content-page section {
+        padding: 0.75rem 0 !important;
+    }
+}
+
+/* Slightly tighter hero on content pages */
+.content-page .hero-section {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+}
+
+/* Match academic page column width */
+.content-page .container {
+    max-width: 900px;
+}
+
+/* One step smaller typography on content pages */
+.content-page p {
+    font-size: 1.0625rem; /* was 1.125rem */
+}
+
+.content-page h1 {
+    font-size: clamp(2.25rem, 6vw, 3.6rem); /* slightly smaller than global */
+}
+
+.content-page h2 {
+    font-size: clamp(1.85rem, 4.5vw, 2.2rem); /* slightly smaller than global */
+    margin-top: 1.5rem; /* reduce from default 2rem */
+    margin-bottom: 1rem;
+}
+
+.content-page h3 {
+    font-size: 1.05rem; /* slightly smaller */
+    margin-top: 1.25rem; /* reduce from default */
+    margin-bottom: 0.75rem;
+}
+
+/* Figure styling for hero/media blocks */
+.hero-figure {
+    margin: 0.75rem auto 0;
+    text-align: center;
+}
+
+.hero-figure img {
+    max-width: 880px;
+    width: 100%;
+    height: auto;
+    box-shadow: var(--shadow-sm);
+    border-radius: 8px;
+}
+
+.hero-figure figcaption {
+    font-size: 0.95rem;
+    color: #666;
+    margin-top: 0.5rem;
 }
 
 h1, h2, h3 {
