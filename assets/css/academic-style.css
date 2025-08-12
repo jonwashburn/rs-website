@@ -9,12 +9,23 @@
   background: #fff;
 }
 
-/* Main content container */
+/* Main content container - tight column for readability */
 .academic-page .container,
-.academic-page .content {
+.academic-page .content,
+.academic-page main,
+.academic-page article,
+.academic-page .main-content,
+.academic-page .page-content {
   padding: 2rem;
-  max-width: 1100px;
+  max-width: 900px;
   margin: 0 auto;
+}
+
+/* Ensure nested containers don't double the padding */
+.academic-page .container .container,
+.academic-page .content .content {
+  padding: 0;
+  max-width: 100%;
 }
 
 /* Typography hierarchy */
@@ -217,10 +228,23 @@ main.academic-page .hero-section {
   box-shadow: 0 1px 2px rgba(0,0,0,0.06);
 }
 
+/* Apply to body-level academic-page too */
+body.academic-page > div,
+body.academic-page > main,
+body.academic-page > article {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
 /* Mobile responsive */
 @media (max-width: 768px) {
   .academic-page .container,
-  .academic-page .content {
+  .academic-page .content,
+  .academic-page main,
+  .academic-page article,
+  body.academic-page > div,
+  body.academic-page > main {
     padding: 1rem;
   }
   
