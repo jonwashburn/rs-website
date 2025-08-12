@@ -1105,11 +1105,13 @@
     window.addEventListener('load', function() {
       // Use window.load to ensure everything including dynamic content is loaded
       const initTheorems = function() {
+        console.log('initTheorems called');
         const out = document.getElementById('theorem-snippet');
         if (!out) {
           console.error('theorem-snippet element not found');
           return;
         }
+        console.log('theorem-snippet found:', out);
 
       const theorems = [
         'theorem ledger_exists (M : RecognitionStructure) : ∃ L : Ledger M, True',
@@ -1156,6 +1158,8 @@
         
         out.appendChild(row);
       });
+      
+      console.log('Added', theorems.length, 'theorem rows to snippet container');
 
       out.addEventListener('click', (e) => {
         const row = e.target;
