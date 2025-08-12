@@ -1114,6 +1114,11 @@
           console.error('theorem-snippet element not found');
           return;
         }
+        
+        // Prevent double initialization
+        if (out.hasChildNodes()) {
+          return;
+        }
 
       const theorems = [
         'theorem ledger_exists (M : RecognitionStructure) : ∃ L : Ledger M, True',
