@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Indisputable Chain (Lean) — Recognition Science</title>
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body { background: #fff; color: #000; }
+    .content { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+    h1 { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; font-size: 2.25rem; font-weight: 900; letter-spacing: -0.02em; margin: 2rem 0 0.5rem; }
+    .lede { color: #333; margin-bottom: 1.25rem; line-height: 1.7; }
+    .tip { background: #fffbf0; border-left: 3px solid #ffcc80; padding: 0.75rem 1rem; color: #555; margin-bottom: 1.25rem; }
+
+    /* Code viewer */
+    .code-wrap { border: 1px solid rgba(0,0,0,0.08); border-radius: 8px; overflow: hidden; background: #0b1220; color: #e6edf3; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
+    .code-header { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0.9rem; background: #0f172a; color: #cbd5e1; font-size: 0.9rem; }
+    .code-body { font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 13px; line-height: 1.6; overflow: auto; }
+    .code-line { display: grid; grid-template-columns: 3ch 1fr; gap: 0.75rem; padding: 0.15rem 0.9rem; white-space: pre; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .code-line:last-child { border-bottom: 0; }
+    .ln { color: #64748b; user-select: none; text-align: right; }
+    .code-text { color: #e6edf3; }
+    .hotspot { background: rgba(59,130,246,0.08); cursor: pointer; }
+    .hotspot:hover { background: rgba(59,130,246,0.14); }
+    .code-line.active { background: rgba(59,130,246,0.18); }
+
+    /* Inline explanations (in-place, below the clicked line) */
+    .expansion { display: none; background: #f8fafc; color: #0b1220; border-left: 3px solid #003d82; padding: 0.75rem 1rem; font-size: 0.95rem; }
+    .expansion.active { display: block; }
+    .expansion p { margin: 0.35rem 0; }
+    .expansion .more { color: #003d82; text-decoration: none; border-bottom: 1px solid #003d82; }
+
+    /* Right-rail quick index */
+    .grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+    @media (min-width: 1000px) {
+      .grid { grid-template-columns: 1fr 280px; align-items: start; }
+      .rail { position: sticky; top: 84px; height: max-content; }
+    }
+    .rail { border: 1px solid rgba(0,0,0,0.08); border-radius: 8px; padding: 0.75rem 0.9rem; }
+    .rail h3 { font-size: 0.95rem; margin: 0 0 0.5rem; font-weight: 700; }
+    .rail ul { list-style: none; margin: 0; padding: 0; }
+    .rail li { margin: 0.25rem 0; }
+    .rail a { color: #003d82; border-bottom: 1px solid #003d82; text-decoration: none; font-weight: 400; }
+    .rail a:hover { opacity: 0.7; border-bottom-width: 2px; }
+  </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <div class="content">
+    <h1>The Indisputable Chain (Lean)</h1>
+    <p class="lede">Formal, machine‑checkable proofs of the Recognition Science foundation. This page loads the actual Lean source from <code>Chain.lean</code> and lets you click through the proof chain. Every highlighted line is interactive—click it to see what that snippet proves, how it connects, and why it is necessary.</p>
+    <p class="tip">Scientist’s reading tip: read the code as you would a short paper. Click hotspots to see the mathematical intent and how it completes the logical chain. No axioms are assumed—every constraint is derived.</p>
+
+    <div class="grid">
+      <div>
+        <div class="code-wrap" id="viewer">
+          <div class="code-header">
+            <div>Chain.lean — complete proof chain</div>
+            <div id="status" aria-live="polite"></div>
+          </div>
+          <div class="code-body" id="code"></div>
+        </div>
+      </div>
+      <aside class="rail">
+        <h3>Quick index</h3>
+        <ul id="quick-index">
+          <li><a href="#" data-jump="MetaPrinciple">Meta‑Principle</a></li>
+          <li><a href="#" data-jump="RecognitionStructure">Recognition structure</a></li>
+          <li><a href="#" data-jump="Ledger">Ledger necessity</a></li>
+          <li><a href="#" data-jump="J_def">Unique cost J</a></li>
+          <li><a href="#" data-jump="φ_def">Golden ratio φ</a></li>
+          <li><a href="#" data-jump="k_equals_one">k = 1 minimal</a></li>
+          <li><a href="#" data-jump="period_exactly_8">8‑tick period</a></li>
+          <li><a href="#" data-jump="Chain">Final theorem</a></li>
+        </ul>
+      </aside>
+    </div>
+  </div>
+
+  <div id="footer-placeholder"></div>
+  <script src="assets/js/main.js"></script>
+  <script>
+    // Markers: key snippets to annotate (pattern → key)
+    const markers = [
+      { key: 'imports', pattern: 'import Mathlib.Data.Real.Basic' },
+      { key: 'symmetric_as_sum_function', pattern: 'lemma symmetric_as_sum_function' },
+      { key: 'bounded_symmetric_is_linear', pattern: 'lemma bounded_symmetric_is_linear' },
+      { key: 'CostUniqueness', pattern: 'theorem CostUniqueness' },
+      { key: 'MetaPrinciple', pattern: 'theorem MetaPrinciple' },
+      { key: 'RecognitionStructure', pattern: 'structure RecognitionStructure where' },
+      { key: 'must_be_well_founded', pattern: 'theorem must_be_well_founded' },
+      { key: 'Ledger', pattern: 'structure Ledger (M : RecognitionStructure) where' },
+      { key: 'constructLedger', pattern: 'def constructLedger' },
+      { key: 'ledger_exists', pattern: 'theorem ledger_exists' },
+      { key: 'ledger_unique', pattern: 'theorem ledger_unique' },
+      { key: 'ledger_delta_rigid', pattern: 'theorem ledger_delta_rigid' },
+      { key: 'ledger_necessity_strong', pattern: 'theorem ledger_necessity_strong' },
+      { key: 'must_have_atomic_unit', pattern: 'theorem must_have_atomic_unit' },
+      { key: 'J_def', pattern: 'def J (x : ℝ) : ℝ' },
+      { key: 'CostRequirements', pattern: 'structure CostRequirements (F : ℝ → ℝ)' },
+      { key: 'J_works', pattern: 'theorem J_works' },
+      { key: 'J_unique', pattern: 'theorem J_unique' },
+      { key: 'φ_def', pattern: 'def φ : ℝ' },
+      { key: 'φ_is_fixed_point', pattern: 'theorem φ_is_fixed_point' },
+      { key: 'TickModel', pattern: 'structure TickModel where' },
+      { key: 'no_fractional_k', pattern: 'theorem no_fractional_k' },
+      { key: 'k_equals_one', pattern: 'theorem k_equals_one' },
+      { key: 'Cube_def', pattern: 'def Cube := Fin 2 × Fin 2 × Fin 2' },
+      { key: 'Adj_def', pattern: 'def Adj (u v : Cube) : Prop' },
+      { key: 'HamWalk', pattern: 'structure HamWalk where' },
+      { key: 'CompleteWalk', pattern: 'structure CompleteWalk where' },
+      { key: 'period_at_least_8', pattern: 'theorem period_at_least_8' },
+      { key: 'gray_ham', pattern: 'theorem gray_ham' },
+      { key: 'period_exactly_8', pattern: 'theorem period_exactly_8' },
+      { key: 'Chain', pattern: 'theorem Chain' },
+    ];
+
+    // Scientist-facing explanations (succinct, high-signal)
+    const explain = {
+      imports: `<p><strong>Context:</strong> Pulls standard real analysis, convexity, and tactics from mathlib. Nothing bespoke—only mainstream Lean libraries.</p>`,
+      symmetric_as_sum_function: `<p><strong>Idea:</strong> Any cost symmetric under x↔1/x can be written as G(x+1/x). This reduces symmetry to a single even argument t=x+1/x—key to deriving J.</p>`,
+      bounded_symmetric_is_linear: `<p><strong>Claim:</strong> With symmetry, convexity in log-scale, and a mild growth bound, costs must be linear in x+1/x: c(x+1/x)+d. This pins the functional form up to two constants.</p>`,
+      CostUniqueness: `<p><strong>Uniqueness:</strong> Normalizing F(1)=0 and the sharp bound sets c=1/2, d=−1, yielding J(x)=½(x+1/x)−1. This is the unique admissible cost.</p>`,
+      MetaPrinciple: `<p><strong>Tautology:</strong> "Nothing cannot recognize itself" as Empty has no inhabitants. Forces minimal existence of a recognizer/recognized relation.</p>`,
+      RecognitionStructure: `<p><strong>Structure:</strong> What recognition must be to avoid paradox: nontriviality, well‑foundedness (no infinite regress), and local finiteness so counts are finite per node.</p>`,
+      must_be_well_founded: `<p><strong>Necessity:</strong> Infinite ascending chains break auditing. Well‑foundedness is required to prevent contradictions.</p>`,
+      Ledger: `<p><strong>Ledger:</strong> The only consistent accounting: double‑entry with atomic unit δ & conservation. Implemented as an ordered abelian group (ℤ in the canonical model).</p>`,
+      constructLedger: `<p><strong>Construction:</strong> Builds the ledger concretely with integer counts: incoming/outgoing edges, δ=1. Shows existence.</p>`,
+      ledger_exists: `<p><strong>Existence:</strong> Every recognition structure admits a ledger. Nothing model‑specific.</p>`,
+      ledger_unique: `<p><strong>Uniqueness:</strong> Ledgers are isomorphic; δ>0 kills the negative isomorphism, so essentially unique.</p>`,
+      ledger_delta_rigid: `<p><strong>Rigidity:</strong> δ, the least positive unit, is invariant under order automorphisms. Anchors the unit scale.</p>`,
+      ledger_necessity_strong: `<p><strong>Combined:</strong> Existence + uniqueness gives the <em>necessary</em> ledger for any recognition structure.</p>`,
+      must_have_atomic_unit: `<p><strong>Atomicity:</strong> Without a minimal δ, you can subdivide forever; costs lose meaning. Proves necessity of an indivisible unit.</p>`,
+      J_def: `<p><strong>Definition:</strong> J(x)=½(x+1/x)−1, normalized so J(1)=0. This is the only cost satisfying the requirements.</p>`,
+      CostRequirements: `<p><strong>Requirements:</strong> Symmetry, normalization, positivity, bounded growth, and log‑convexity. These exactly characterize J.</p>`,
+      J_works: `<p><strong>Verification:</strong> Shows J meets every requirement. Convexity arises because J(exp t)=cosh t−1.</p>`,
+      J_unique: `<p><strong>Only J:</strong> Any cost satisfying the requirements must equal J. No free functional degrees of freedom remain.</p>`,
+      φ_def: `<p><strong>Golden ratio:</strong> φ=(1+√5)/2. Appears as the nontrivial self‑similar fixed point of the recurrence.</p>`,
+      φ_is_fixed_point: `<p><strong>Fixed point:</strong> Solves x=1+1/x with x>0. This is the unique stable self‑similar scale.</p>`,
+      TickModel: `<p><strong>Ticks:</strong> Local model with atomic postings δ per tick—enforces integer counts of sub‑recognitions.</p>`,
+      no_fractional_k: `<p><strong>Integer k:</strong> Discreteness forces k∈ℕ in x=1+k/x. No fractional freedom—kills tuning.</p>`,
+      k_equals_one: `<p><strong>k=1 minimal:</strong> Using strict convexity of cosh, the k‑partition cost is minimized at k=1. Picks φ uniquely.</p>`,
+      Cube_def: `<p><strong>3‑cube:</strong> Encodes three spatial degrees; visiting all vertices models complete update coverage.</p>`,
+      Adj_def: `<p><strong>Adjacency:</strong> Flip exactly one coordinate per step—locality constraint.</p>`,
+      HamWalk: `<p><strong>Hamiltonian walk:</strong> Periodic path touching adjacent vertices only.</p>`,
+      CompleteWalk: `<p><strong>Complete pass:</strong> Must visit all 8 vertices—represents a full update.</p>`,
+      period_at_least_8: `<p><strong>Lower bound:</strong> Surjectivity → period ≥ number of vertices = 8. Cannot be fewer.</p>`,
+      gray_ham: `<p><strong>Construction:</strong> Exhibit a Gray code with period 8 satisfying adjacency—achievability.</p>`,
+      period_exactly_8: `<p><strong>Exactness:</strong> Combine lower bound and construction → minimal period is exactly 8.</p>`,
+      Chain: `<p><strong>Final theorem:</strong> Assembles the entire chain: tautology → structure → ledger (necessary & unique) → unique cost J → unique scale φ → unique period 8.</p>`
+    };
+
+    // Render Lean file with line numbers and hotspots
+    async function loadLean() {
+      const status = document.getElementById('status');
+      try {
+        status.textContent = 'Loading…';
+        const res = await fetch('Chain.lean');
+        if (!res.ok) throw new Error('Cannot load Chain.lean');
+        const text = await res.text();
+        const lines = text.split('\n');
+        const container = document.getElementById('code');
+        container.innerHTML = '';
+
+        // Build DOM lines
+        lines.forEach((t, i) => {
+          const line = document.createElement('div');
+          line.className = 'code-line';
+          line.dataset.idx = String(i + 1);
+          const ln = document.createElement('div'); ln.className = 'ln'; ln.textContent = String(i + 1).padStart(2, ' ');
+          const code = document.createElement('div'); code.className = 'code-text'; code.textContent = t.replace(/\t/g, '  ');
+          line.appendChild(ln); line.appendChild(code);
+          container.appendChild(line);
+        });
+
+        // Tag hotspots
+        markers.forEach(m => {
+          const idx = lines.findIndex(l => l.includes(m.pattern));
+          if (idx >= 0) {
+            const el = container.children[idx];
+            el.classList.add('hotspot');
+            el.setAttribute('data-key', m.key);
+            el.title = 'Click for explanation';
+          }
+        });
+
+        status.textContent = '';
+      } catch (e) {
+        status.textContent = 'Load failed';
+      }
+    }
+
+    // Expansion handling
+    function clearActives(exceptLine) {
+      document.querySelectorAll('.code-line.active').forEach(l => { if (l !== exceptLine) l.classList.remove('active'); });
+      document.querySelectorAll('.expansion.active').forEach(x => { if (!exceptLine || x.previousElementSibling !== exceptLine) x.remove(); });
+    }
+
+    document.addEventListener('click', (e) => {
+      const line = e.target.closest('.code-line');
+      if (!line) return;
+      const key = line.getAttribute('data-key');
+      if (!key) return; // not a hotspot
+
+      // Toggle expansion below this line
+      const isActive = line.classList.contains('active');
+      clearActives(isActive ? null : line);
+      if (isActive) { line.classList.remove('active'); return; }
+      line.classList.add('active');
+
+      const exp = document.createElement('div');
+      exp.className = 'expansion active';
+      exp.innerHTML = explain[key] || '<p>No notes yet.</p>';
+      line.insertAdjacentElement('afterend', exp);
+    });
+
+    // Quick index jumps
+    document.getElementById('quick-index').addEventListener('click', (e) => {
+      const a = e.target.closest('a');
+      if (!a) return;
+      e.preventDefault();
+      const key = a.getAttribute('data-jump');
+      const target = document.querySelector(`.code-line[data-key="${key}"]`);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target.click();
+      }
+    });
+
+    loadLean();
+  </script>
+</body>
+</html>
+
+
