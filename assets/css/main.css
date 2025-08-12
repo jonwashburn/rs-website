@@ -133,7 +133,8 @@ a:hover {
 /* Sitewide audit banner (pink) consistent with homepage */
 .audit-banner { 
     background: #ffffff; 
-    /* removed borders for cleaner look */
+    border-top: 1px solid #ff1493; /* restore pink borders */
+    border-bottom: 1px solid #ff1493;
     margin: 0;
     width: 100%;
 }
@@ -151,13 +152,13 @@ a:hover {
     align-items: center;
     justify-content: center; 
     color: #333; 
-    text-decoration: none; 
+    text-decoration: none !important; /* prevent hover underline */
     width: 100%; 
     min-width: 0;
     text-align: center;
     font-size: 0.95rem;
 }
-.audit-link:hover { color: #ff1493; }
+.audit-link:hover { color: #ff1493; text-decoration: none !important; }
 .audit-title { font-weight: 600; letter-spacing: 0.1px; color: #ff1493; }
 .audit-sep { opacity: 0.4; color: #ff1493; }
 .audit-phase { font-size: 0.9rem; color: #555; min-width: max-content; }
@@ -217,7 +218,7 @@ a:hover {
     font-size: 1.5rem;
     font-weight: 800;
     color: #000;
-    text-decoration: none;
+    text-decoration: none !important; /* suppress global a:hover underline */
     letter-spacing: -0.03em;
     text-align: center;
     transition: all 0.2s ease;
@@ -228,7 +229,7 @@ a:hover {
 .logo a:focus {
     transform: translateY(-1px);
     color: var(--accent-color);
-    text-decoration: none; /* prevent global a:hover underline */
+    text-decoration: none !important;
 }
 
 .global-nav ul {
@@ -362,7 +363,7 @@ a:hover {
             top: 100%;
             left: 0;
             background: white;
-            border-top: 1px solid rgba(0,0,0,0.1);
+            border-top: none;
             z-index: 9998; /* High z-index to appear above page content */
         }
         
@@ -810,7 +811,7 @@ a:hover {
         padding: 0.6rem 1rem;
         font-size: 0.85rem;
         border-right: none;
-        border-bottom: 1px solid #333;
+        border-bottom: none; /* remove mobile nav separator line */
         flex: 1;
         text-align: center;
         min-width: 120px;
