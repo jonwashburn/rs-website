@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[TITLE] - Recognition Science Encyclopedia</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/site-template.css">
+    <meta name="description" content="[DESCRIPTION - one sentence summary]">
+    <style>
+        /* Encyclopedia article styles - Copy this block to all encyclopedia pages */
+        .enc-breadcrumb {
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .enc-breadcrumb a {
+            color: var(--color-text-muted);
+            text-decoration: none;
+        }
+
+        .enc-breadcrumb a:hover {
+            color: var(--color-accent);
+        }
+
+        .enc-breadcrumb span {
+            margin: 0 0.5rem;
+            color: var(--color-text-muted);
+        }
+
+        /* Article metadata */
+        .article-meta {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--color-border-light);
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .meta-item::before {
+            content: "•";
+            color: var(--color-accent);
+        }
+
+        .meta-item:first-child::before {
+            display: none;
+        }
+
+        /* Article content */
+        .article-section {
+            margin: 2.5rem 0;
+        }
+
+        .article-section h2 {
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .article-section h3 {
+            color: var(--color-primary);
+            margin: 1.5rem 0 0.75rem;
+            font-size: 1.125rem;
+        }
+
+        /* Definition box */
+        .definition-box {
+            background: var(--color-bg-subtle);
+            border-left: 3px solid var(--color-primary);
+            border-radius: 0 8px 8px 0;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .definition-box h3 {
+            color: var(--color-primary);
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+        }
+
+        .definition-box p {
+            margin: 0;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        /* Key concepts list */
+        .key-concepts {
+            background: white;
+            border: 1px solid var(--color-border-light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .key-concepts h3 {
+            color: var(--color-primary);
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+
+        .key-concepts ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .key-concepts li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--color-border-light);
+        }
+
+        .key-concepts li:last-child {
+            border-bottom: none;
+        }
+
+        .key-concepts strong {
+            color: var(--color-primary);
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        /* Step-by-step process */
+        .process-steps {
+            counter-reset: step;
+            margin: 2rem 0;
+        }
+
+        .process-step {
+            position: relative;
+            padding-left: 3rem;
+            margin-bottom: 1.5rem;
+            counter-increment: step;
+        }
+
+        .process-step::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2rem;
+            height: 2rem;
+            background: var(--color-accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .process-step h4 {
+            color: var(--color-primary);
+            margin: 0 0 0.5rem;
+            font-size: 1.05rem;
+        }
+
+        .process-step p {
+            margin: 0;
+            color: var(--color-text-body);
+        }
+
+        /* Formula box */
+        .formula-box {
+            background: var(--color-bg-subtle);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            font-family: var(--font-mono);
+            font-size: 1.125rem;
+            text-align: center;
+        }
+
+        .formula-box .caption {
+            font-family: var(--font-sans);
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+            margin-top: 0.75rem;
+        }
+
+        /* Related links */
+        .related-box {
+            background: var(--color-bg-card);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .related-box h3 {
+            color: var(--color-primary);
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1.125rem;
+        }
+
+        .related-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .related-link {
+            display: flex;
+            align-items: center;
+            color: var(--color-text-body);
+            text-decoration: none;
+            transition: color 0.15s ease;
+        }
+
+        .related-link:hover {
+            color: var(--color-accent);
+        }
+
+        .related-link::before {
+            content: "→";
+            color: var(--color-accent);
+            margin-right: 0.5rem;
+        }
+
+        /* Figure styles */
+        .article-figure {
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .article-figure img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .article-figure figcaption {
+            margin-top: 0.75rem;
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+            font-style: italic;
+        }
+
+        /* FAQ styles */
+        .faq-item {
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--color-bg-subtle);
+            border-radius: 8px;
+        }
+
+        .faq-item h4 {
+            color: var(--color-primary);
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+        }
+
+        .faq-item p {
+            margin: 0;
+            color: var(--color-text-body);
+        }
+
+        /* Example box */
+        .example-box {
+            background: white;
+            border: 1px solid var(--color-border-light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .example-box h4 {
+            color: var(--color-primary);
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+
+        /* Page-specific styles can go here */
+    </style>
+</head>
+<body class="template-page">
+    <div id="header-placeholder"></div>
+
+    <!-- Hero -->
+    <section class="template-hero">
+        <div class="template-hero-content">
+            <div class="enc-breadcrumb">
+                <a href="/encyclopedia/">Encyclopedia</a>
+                <span>/</span>
+                <a href="/encyclopedia/[CATEGORY].html">[Category]</a>
+                <span>/</span>
+                [Article Name]
+            </div>
+            <h1 class="template-hero-title">[Article Title]</h1>
+            <p class="template-hero-lead">
+                [Brief, compelling description - one or two sentences]
+            </p>
+            <div class="article-meta">
+                <div class="meta-item">Category: [Physics/Mathematics/Constants/etc]</div>
+                <div class="meta-item">Difficulty: [Basic/Intermediate/Advanced]</div>
+                <div class="meta-item">Reading time: [X] min</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Definition (if applicable) -->
+    <section class="template-section">
+        <div class="template-container">
+            <div class="definition-box">
+                <h3>Definition</h3>
+                <p>
+                    [Precise technical definition of the concept]
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- In Plain English -->
+    <section class="template-section">
+        <div class="template-container">
+            <div class="template-reading">
+                <h2>In Plain English</h2>
+                <p>
+                    [Accessible explanation for general audience]
+                </p>
+                <p>
+                    [Additional context and intuitive understanding]
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Concepts (if applicable) -->
+    <section class="template-section">
+        <div class="template-container">
+            <div class="key-concepts">
+                <h3>Key Points</h3>
+                <ul>
+                    <li>
+                        <strong>Point 1:</strong> 
+                        Explanation of first key point
+                    </li>
+                    <li>
+                        <strong>Point 2:</strong> 
+                        Explanation of second key point
+                    </li>
+                    <li>
+                        <strong>Point 3:</strong> 
+                        Explanation of third key point
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Details -->
+    <section class="template-section">
+        <div class="template-container">
+            <h2 class="template-section-title">Technical Details</h2>
+            
+            <div class="article-section">
+                <h3>[Subsection Title]</h3>
+                <p>
+                    [Technical explanation with appropriate depth]
+                </p>
+                
+                <!-- Example formula -->
+                <div class="formula-box">
+                    <code>[Formula or equation]</code>
+                    <div class="caption">Where [variable definitions]</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Examples (if applicable) -->
+    <section class="template-section">
+        <div class="template-container">
+            <h2 class="template-section-title">Examples</h2>
+            
+            <div class="example-box">
+                <h4>Example 1: [Title]</h4>
+                <p>
+                    [Description of example and its significance]
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Steps (if applicable) -->
+    <section class="template-section">
+        <div class="template-container">
+            <h2 class="template-section-title template-accent-text">[Process Title]</h2>
+            
+            <div class="process-steps">
+                <div class="process-step">
+                    <h4>Step Title</h4>
+                    <p>Description of what happens in this step</p>
+                </div>
+                
+                <div class="process-step">
+                    <h4>Step Title</h4>
+                    <p>Description of what happens in this step</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ (if applicable) -->
+    <section class="template-section">
+        <div class="template-container">
+            <h2 class="template-section-title">Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <h4>[Question]?</h4>
+                <p>[Answer]</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Topics -->
+    <section class="template-section">
+        <div class="template-container">
+            <div class="related-box">
+                <h3>Related Topics</h3>
+                <div class="related-links">
+                    <a href="/encyclopedia/[page].html" class="related-link">[Related Topic 1]</a>
+                    <a href="/encyclopedia/[page].html" class="related-link">[Related Topic 2]</a>
+                    <a href="/encyclopedia/[page].html" class="related-link">[Related Topic 3]</a>
+                    <a href="/encyclopedia/[page].html" class="related-link">[Related Topic 4]</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="footer-placeholder"></div>
+    <script src="/assets/js/main.js"></script>
+</body>
+</html>

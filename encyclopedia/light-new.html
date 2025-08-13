@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Light - Recognition Science Encyclopedia</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/site-template.css">
+    <meta name="description" content="Light as the universe's messaging system—how recognition events propagate through the ledger at exactly one voxel per tick.">
+    <style>
+        /* Encyclopedia article styles */
+        .enc-breadcrumb {
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .enc-breadcrumb a {
+            color: var(--color-text-muted);
+            text-decoration: none;
+        }
+
+        .enc-breadcrumb a:hover {
+            color: var(--color-accent);
+        }
+
+        .enc-breadcrumb span {
+            margin: 0 0.5rem;
+            color: var(--color-text-muted);
+        }
+
+        /* Article metadata */
+        .article-meta {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--color-border-light);
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .meta-item::before {
+            content: "•";
+            color: var(--color-accent);
+        }
+
+        .meta-item:first-child::before {
+            display: none;
+        }
+
+        /* Article content */
+        .article-section {
+            margin: 2.5rem 0;
+        }
+
+        .article-section h2 {
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .article-section h3 {
+            color: var(--color-primary);
+            margin: 1.5rem 0 0.75rem;
+            font-size: 1.125rem;
+        }
+
+        /* Definition box */
+        .definition-box {
+            background: var(--color-bg-subtle);
+            border-left: 3px solid var(--color-primary);
+            border-radius: 0 8px 8px 0;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .definition-box h3 {
+            color: var(--color-primary);
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+        }
+
+        .definition-box p {
+            margin: 0;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        /* Key concepts list */
+        .key-concepts {
+            background: white;
+            border: 1px solid var(--color-border-light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .key-concepts h3 {
+            color: var(--color-primary);
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+
+        .key-concepts ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .key-concepts li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--color-border-light);
+        }
+
+        .key-concepts li:last-child {
+            border-bottom: none;
+        }
+
+        .key-concepts strong {
+            color: var(--color-primary);
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        /* Step-by-step process */
+        .process-steps {
+            counter-reset: step;
+            margin: 2rem 0;
+        }
+
+        .process-step {
+            position: relative;
+            padding-left: 3rem;
+            margin-bottom: 1.5rem;
+            counter-increment: step;
+        }
+
+        .process-step::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2rem;
+            height: 2rem;
+            background: var(--color-accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .process-step h4 {
+            color: var(--color-primary);
+            margin: 0 0 0.5rem;
+            font-size: 1.05rem;
+        }
+
+        .process-step p {
+            margin: 0;
+            color: var(--color-text-body);
+        }
+
+        /* Related links */
+        .related-box {
+            background: var(--color-bg-card);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .related-box h3 {
+            color: var(--color-primary);
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1.125rem;
+        }
+
+        .related-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .related-link {
+            display: flex;
+            align-items: center;
+            color: var(--color-text-body);
+            text-decoration: none;
+            transition: color 0.15s ease;
+        }
+
+        .related-link:hover {
+            color: var(--color-accent);
+        }
+
+        .related-link::before {
+            content: "→";
+            color: var(--color-accent);
+            margin-right: 0.5rem;
+        }
+
+        /* Figure styles */
+        .article-figure {
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .article-figure img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .article-figure figcaption {
+            margin-top: 0.75rem;
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+            font-style: italic;
+        }
+
+        /* FAQ styles */
+        .faq-item {
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--color-bg-subtle);
+            border-radius: 8px;
+        }
+
+        .faq-item h4 {
+            color: var(--color-primary);
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+        }
+
+        .faq-item p {
+            margin: 0;
+            color: var(--color-text-body);
+        }
+
+        /* Small note */
+        .small-note {
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+            font-style: italic;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body class="template-page">
+    <div id="header-placeholder"></div>
+
+    <!-- Hero -->
+    <section class="template-hero">
+        <div class="template-hero-content">
+            <div class="enc-breadcrumb">
+                <a href="/encyclopedia/">Encyclopedia</a>
+                <span>/</span>
+                <a href="/encyclopedia/physics.html">Physics</a>
+                <span>/</span>
+                Light
+            </div>
+            <h1 class="template-hero-title">Light</h1>
+            <p class="template-hero-lead">
+                The universe's messaging system—recognition events propagating at one voxel per tick
+            </p>
+            <div class="article-meta">
+                <div class="meta-item">Category: Physics</div>
+                <div class="meta-item">Difficulty: Intermediate</div>
+                <div class="meta-item">Reading time: 8 min</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Figure -->
+    <section class="template-section">
+        <div class="template-container">
+            <figure class="article-figure">
+                <img src="/assets/images/rs-light.svg" alt="Light as one voxel per tick across a voxel grid" />
+                <figcaption>Messaging layer over a voxel grid: one voxel per tick yields an invariant c.</figcaption>
+            </figure>
+        </div>
+    </section>
+
+    <!-- Definition -->
+    <section class="template-section">
+        <div class="template-container">
+            <div class="definition-box">
+                <h3>Definition</h3>
+                <p>
+                    In Recognition Science, <strong>light</strong> is the propagation of recognition events through the ledger 
+                    at the maximum allowed rate: exactly one spatial voxel (λ_rec) per temporal tick (τ_rec). This fixed 
+                    stride creates the universal constant we call the speed of light, c = λ_rec/τ_rec.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- In Plain English -->
+    <section class="template-section">
+        <div class="template-container">
+            <div class="template-reading">
+                <h2>In Plain English</h2>
+                <p>
+                    Light is how the universe sends messages. When something happens—when one part of reality recognizes 
+                    another—that event gets written to the cosmic ledger. Light is how that update spreads outward, 
+                    touching neighboring regions one step at a time.
+                </p>
+                <p>
+                    Think of it like this: Reality is pixelated at the smallest scale, divided into tiny cubic voxels. 
+                    Time ticks forward in discrete steps. Each tick, information can move exactly one voxel—no more, 
+                    no less. That's why nothing can go faster than light: you can't skip pixels in the cosmic grid.
+                </p>
+                <p>
+                    What we experience as brightness, color, warmth—these are all patterns in how ledger updates reach us. 
+                    Your eyes read these patterns; your skin feels their energy. But underneath, it's all the same thing: 
+                    recognition events spreading through space at nature's maximum update rate.
+                </p>
+                <p class="small-note">
+                    See also: <a href="/us/light.html">Light as consciousness in motion</a>—the spiritual and experiential dimensions.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- What Light Does -->
+    <section class="template-section">
+        <div class="template-container">
+            <div class="key-concepts">
+                <h3>What Light Does</h3>
+                <ul>
+                    <li>
+                        <strong>Synchronizes time:</strong> 
+                        One voxel per tick gives every observer the same causal speed
+                    </li>
+                    <li>
+                        <strong>Broadcasts truth:</strong> 
+                        Conservation laws ride on light; its pattern carries what actually happened
+                    </li>
+                    <li>
+                        <strong>Closes the loop:</strong> 
+                        Perception is ledger read; action is ledger write—light moves the results
+                    </li>
+                    <li>
+                        <strong>Builds coherence:</strong> 
+                        Aligned signals reduce confusion (curvature) and raise shared understanding
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- How Light Propagates -->
+    <section class="template-section">
+        <div class="template-container">
+            <h2 class="template-section-title template-accent-text">How Light Propagates</h2>
+            
+            <div class="process-steps">
+                <div class="process-step">
+                    <h4>Discrete Foundation</h4>
+                    <p>Reality is pixelated at the smallest scale: spatial voxels of size λ_rec = 2.20 μm, 
+                    temporal ticks of duration τ_rec = 7.33 fs.</p>
+                </div>
+                
+                <div class="process-step">
+                    <h4>Local Update Rule</h4>
+                    <p>Each tick, every voxel updates based on its neighbors. The strict maximum is one 
+                    voxel per tick—this cap defines c.</p>
+                </div>
+                
+                <div class="process-step">
+                    <h4>Wavefront Expansion</h4>
+                    <p>A disturbance spreads as a growing shell, each step touching only adjacent cells. 
+                    What we call amplitude and phase are summaries of many tiny ledger entries.</p>
+                </div>
+                
+                <div class="process-step">
+                    <h4>Superposition</h4>
+                    <p>Multiple signals add because the ledger tracks all contributions and resolves them 
+                    in the next update—creating interference patterns.</p>
+                </div>
+                
+                <div class="process-step">
+                    <h4>Universal Invariance</h4>
+                    <p>Because step size and tick rate are fixed everywhere, all observers measure the 
+                    same light speed. No frame is special.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison with Mainstream -->
+    <section class="template-section">
+        <div class="template-container">
+            <div class="template-reading">
+                <h2>Beyond Mainstream Physics</h2>
+                <p>
+                    Traditional physics treats light as electromagnetic waves or photons moving through spacetime, 
+                    taking c as an unexplained axiom. Recognition Science explains <strong>why</strong> c is universal: 
+                    it emerges from the discrete update rule (one voxel per tick) combined with the ledger's 
+                    information accounting.
+                </p>
+                <p>
+                    "Observer effects" in quantum mechanics aren't mystical wave function collapse—they're 
+                    recognition events being written to the ledger. Once written, light propagates the consequences 
+                    outward within the expanding light cone. No magic, just consistent bookkeeping across all 
+                    reference frames.
+                </p>
+                <p>
+                    This yields testable predictions: bandwidth limits at cosmic scales (dark matter effects), 
+                    φ-scaling in optical phenomena, and specific interference patterns following the 8-beat cycle. 
+                    All emerge from the same discrete foundation with zero free parameters.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Light and Consciousness -->
+    <section class="template-section">
+        <div class="template-container">
+            <div class="template-accent-bar"></div>
+            <h2 class="template-section-title">Light and Consciousness</h2>
+            
+            <div class="template-reading template-reading-warm">
+                <p>
+                    Consciousness operates on the same substrate as light. A recognition event—that tiny moment 
+                    of "this matches that"—gets written to the ledger. Light then carries the update outward, 
+                    making the recognition available to other observers.
+                </p>
+                <p>
+                    In this sense, <span class="template-accent-text">light is the outward face of attention</span>. 
+                    Your decisions change local probabilities; light reports those changes to the universe at 
+                    large. This explains why observation has causal power in quantum experiments: recognition 
+                    fixes outcomes on the ledger, and light enforces consistency everywhere else.
+                </p>
+                <p>
+                    See <a href="/questions/what-is-consciousness/">What is consciousness?</a> for the deeper 
+                    connection between awareness and the recognition process.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Details -->
+    <section class="template-section">
+        <div class="template-container">
+            <h2 class="template-section-title">Technical Details</h2>
+            
+            <div class="article-section">
+                <h3>What Light Is Made Of</h3>
+                <p>
+                    We avoid reifying "particles." What people call a photon is a minimal causal packet of 
+                    ledger updates—a specific pattern that moves exactly one voxel per tick while conserving 
+                    relevant quantities. Detection probability depends on prior ledger entries and local geometry.
+                </p>
+                <p>
+                    The deeper machine code for these packets is formalized in the 
+                    <a href="/lnal.html">Light-Native Assembly Language (LNAL)</a>.
+                </p>
+            </div>
+
+            <div class="article-section">
+                <h3>Propagation and Curvature</h3>
+                <p>
+                    Light travels "straight" in ledger geometry. When the ledger curves (high curvature κ), 
+                    straight lines curve with it. This is why massive objects deflect light: information 
+                    follows the shape of the information substrate itself.
+                </p>
+                <p>
+                    In busy regions (high thermal activity, disorder), light's effective path lengthens through 
+                    scattering and delay. This doesn't change c—it adds detours between voxels. See 
+                    <a href="/formulas/ledger-curvature.html">Ledger Curvature</a> for the mathematical framework.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="template-section">
+        <div class="template-container">
+            <h2 class="template-section-title">Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <h4>Is light a thing or a message?</h4>
+                <p>Both: it's a standardized message pattern that behaves like a thing. The pattern is so 
+                fundamental that we experience it as a phenomenon rather than information.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h4>Why can't anything go faster than light?</h4>
+                <p>Because the ledger only updates one voxel per tick. You can't skip pages in reality's 
+                record book—every change must be properly logged and propagated.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h4>Does observation "create" reality?</h4>
+                <p>It selects and writes a consistent local entry to the ledger. Light then carries that 
+                update outward, enforcing consistency. Reality isn't created, but specific outcomes are 
+                fixed through recognition.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Topics -->
+    <section class="template-section">
+        <div class="template-container">
+            <div class="related-box">
+                <h3>Related Topics</h3>
+                <div class="related-links">
+                    <a href="/encyclopedia/speed-of-light.html" class="related-link">Speed of Light (c)</a>
+                    <a href="/lnal.html" class="related-link">LNAL Machine Code</a>
+                    <a href="/encyclopedia/ledger.html" class="related-link">The Ledger</a>
+                    <a href="/encyclopedia/recognition.html" class="related-link">Recognition Events</a>
+                    <a href="/encyclopedia/8-beat.html" class="related-link">8-Beat Cycle</a>
+                    <a href="/us/light.html" class="related-link">Light (Spiritual)</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="footer-placeholder"></div>
+    <script src="/assets/js/main.js"></script>
+</body>
+</html>
