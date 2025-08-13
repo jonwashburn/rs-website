@@ -32,8 +32,25 @@
     }
     </script>
     <style>
-        .method-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-top: 1rem; }
-        .method-card { background: var(--color-bg-card); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 1rem 1.25rem; }
+        .method-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .method-card { 
+          background: var(--color-bg-card); 
+          border: 1px solid rgba(255,255,255,0.08); 
+          border-radius: 10px; 
+          padding: 1rem 1.25rem; 
+          overflow-x: auto;
+          overflow-y: visible;
+        }
+        .method-card p {
+          overflow-wrap: break-word;
+          word-wrap: break-word;
+        }
+        .method-card .mjx-container {
+          overflow-x: auto;
+          max-width: 100%;
+          display: block;
+          margin: 0.5rem 0;
+        }
         .badge { display: inline-block; background: var(--color-accent); color: #fff; padding: 0.15rem 0.5rem; border-radius: 999px; font-size: 0.75rem; }
         .note { font-size: 0.9rem; color: var(--color-text-muted); }
         .download-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem; margin-top: 1rem; }
@@ -43,6 +60,13 @@
         .mjx-chtml { white-space: nowrap; }
         @media (max-width: 768px) {
           .mjx-container { font-size: 85%; }
+          .method-grid { 
+            grid-template-columns: 1fr; 
+            gap: 0.75rem; 
+          }
+          .method-card {
+            padding: 0.875rem 1rem;
+          }
         }
         /* Podcast badge */
         .podcast-badge {
