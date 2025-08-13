@@ -14,26 +14,25 @@
             cursor: pointer;
             position: relative;
             background: none;
-            padding: 0;
+            padding: 0 2px;          /* prevent layout shift on hover */
+            margin: 0 -2px;          /* keep flow width identical */
             font: inherit;
             color: inherit;
+            border-radius: 2px;
+            box-shadow: inset 0 0 0 1px rgba(255, 0, 110, 0.10); /* faintest possible box */
             transition: all 0.15s ease;
         }
 
         .term:hover {
             background: rgba(255, 0, 110, 0.08);
             color: var(--color-accent);
-            border-radius: 2px;
-            padding: 0 2px;
-            margin: 0 -2px;
+            box-shadow: inset 0 0 0 1px rgba(255, 0, 110, 0.25);
         }
         
         .term.active {
             background: rgba(255, 0, 110, 0.12);
             color: var(--color-accent);
-            border-radius: 2px;
-            padding: 0 2px;
-            margin: 0 -2px;
+            box-shadow: inset 0 0 0 1px var(--color-accent);
             font-weight: 500;
         }
 
