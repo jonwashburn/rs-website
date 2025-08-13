@@ -38,10 +38,40 @@
         .note { font-size: 0.9rem; color: var(--color-text-muted); }
         .download-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem; margin-top: 1rem; }
         .inline-code { font-family: var(--font-mono); background: rgba(255,255,255,0.06); padding: 0.1rem 0.35rem; border-radius: 4px; }
+        /* Podcast badge */
+        .audio-badge {
+          position: fixed;
+          top: 0.75rem;
+          right: 0.75rem;
+          z-index: 1000;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.35rem 0.75rem;
+          border: 2px solid var(--color-accent);
+          color: var(--color-accent);
+          background: transparent;
+          border-radius: 999px;
+          cursor: pointer;
+          user-select: none;
+          backdrop-filter: blur(2px);
+        }
+        .audio-badge svg { width: 14px; height: 14px; fill: currentColor; }
+        .audio-badge:hover { background: rgba(255,0,110,0.08); }
+        .audio-badge .label { font-size: 0.8rem; letter-spacing: 0.01em; }
+        .audio-badge.playing { color: #fff; background: var(--color-accent); }
     </style>
   </head>
   <body class="template-page">
     <div id="header-placeholder"></div>
+    <!-- Podcast badge + audio -->
+    <div id="podcastBadge" class="audio-badge" role="button" aria-label="Play 5‑minute podcast about the proof" tabindex="0">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+      <span class="label">Listen • 5:00</span>
+    </div>
+    <audio id="podcastAudio" preload="none">
+      <source src="/Decoding%20the%20Riemann%20Hypothesis_%20Control%20Theory%27s%20Unexpected%20Attack%20on%20Prime%20Numbers.mp3" type="audio/mpeg" />
+    </audio>
 
     <!-- Hero -->
     <section class="template-hero template-hero-framed">
@@ -175,6 +205,25 @@
 
     <div id="footer-placeholder"></div>
     <script src="/assets/js/main.js"></script>
+    <script>
+      (function(){
+        const badge = document.getElementById('podcastBadge');
+        const audio = document.getElementById('podcastAudio');
+        const label = badge.querySelector('.label');
+        let started = false;
+        function play(){
+          if (!started) { started = true; audio.load(); }
+          audio.play();
+        }
+        function pause(){ audio.pause(); }
+        function toggle(){ audio.paused ? play() : pause(); }
+        badge.addEventListener('click', toggle);
+        badge.addEventListener('keydown', (e)=>{ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }});
+        audio.addEventListener('play', ()=>{ badge.classList.add('playing'); label.textContent = 'Pause • playing'; badge.querySelector('svg').innerHTML = '<rect x="6" y="5" width="4" height="14"></rect><rect x="14" y="5" width="4" height="14"></rect>'; });
+        audio.addEventListener('pause', ()=>{ badge.classList.remove('playing'); label.textContent = 'Listen • 5:00'; badge.querySelector('svg').innerHTML = '<path d="M8 5v14l11-7z"/>'; });
+        audio.addEventListener('ended', ()=>{ badge.classList.remove('playing'); label.textContent = 'Listen • 5:00'; badge.querySelector('svg').innerHTML = '<path d="M8 5v14l11-7z"/>'; });
+      })();
+    </script>
   </body>
 </html>
 
