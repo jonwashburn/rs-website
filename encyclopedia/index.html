@@ -3,59 +3,396 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Encyclopedia /// Recognition Science</title>
-  <link rel="stylesheet" href="/assets/css/main.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/site-template.css">
+    <title>Encyclopedia - Recognition Science</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/site-template.css">
+    <meta name="description" content="Core concepts, constants, and theorems of Recognition Science explained with clarity and precision.">
+    <style>
+        /* Encyclopedia-specific styles */
+        .enc-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .enc-category {
+            background: white;
+            border: 1px solid var(--color-border-light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .enc-category:hover {
+            border-color: var(--color-accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .enc-category h3 {
+            color: var(--color-primary);
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .enc-category p {
+            color: var(--color-text-muted);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .enc-category ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .enc-category li {
+            margin: 0.5rem 0;
+        }
+
+        .enc-category a {
+            color: var(--color-text-body);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: color 0.15s ease;
+        }
+
+        .enc-category a:hover {
+            color: var(--color-accent);
+        }
+
+        .enc-category a::before {
+            content: "→";
+            color: var(--color-accent);
+            margin-right: 0.5rem;
+            opacity: 0;
+            transition: all 0.15s ease;
+        }
+
+        .enc-category a:hover::before {
+            opacity: 1;
+            transform: translateX(2px);
+        }
+
+        /* Featured articles section */
+        .featured-articles {
+            margin: 3rem 0;
+        }
+
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .featured-card {
+            background: var(--color-bg-card);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border-left: 3px solid var(--color-accent);
+            transition: all 0.2s ease;
+        }
+
+        .featured-card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .featured-card h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .featured-card h3 a {
+            color: var(--color-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: baseline;
+        }
+
+        .featured-card h3 a:hover {
+            color: var(--color-accent);
+        }
+
+        .featured-badge {
+            background: var(--color-accent);
+            color: white;
+            font-size: 0.625rem;
+            padding: 0.125rem 0.5rem;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-left: 0.75rem;
+            font-weight: 600;
+        }
+
+        .featured-card p {
+            color: var(--color-text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Search placeholder */
+        .search-box {
+            background: var(--color-bg-subtle);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .search-box p {
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* Quick reference */
+        .quick-ref {
+            background: white;
+            border: 1px solid var(--color-border-light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .quick-ref h3 {
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+            font-size: 1.125rem;
+        }
+
+        .quick-ref-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .quick-ref-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .quick-ref-item code {
+            background: var(--color-bg-subtle);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            margin-right: 0.5rem;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .quick-ref-item a {
+            color: var(--color-text-body);
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+
+        .quick-ref-item a:hover {
+            color: var(--color-accent);
+        }
+    </style>
 </head>
 <body class="template-page">
     <div id="header-placeholder"></div>
-    <main class="content-page academic-page">
-        <section class="hero-section text-center">
-            <div class="template-container">
-                <h1>Encyclopedia</h1>
-                <p class="subtitle">Core concepts, constants, and theorems of Recognition Science</p>
-            </div>
-        </section>
-    <section>
-      <div class="template-container">
-        <div class="enc-layout">
-          <aside class="enc-sidebar" aria-label="Encyclopedia navigation">
-            <nav>
-              <h3>Browse</h3>
-              <ul>
-                <li><a href="/encyclopedia/fundamentals.html">Fundamentals</a></li>
-                <li><a href="/encyclopedia/constants.html">Constants</a></li>
-                <li><a href="/encyclopedia/formulas.html">Formulas</a></li>
-                <li><a href="/encyclopedia/physics.html">Physics</a></li>
-                <li><a href="/encyclopedia/math.html">Mathematics</a></li>
-                <li><a href="/encyclopedia/computation.html">Computation</a></li>
-              </ul>
-              <h3>Quick links</h3>
-              <ul>
-                <li><a href="/encyclopedia/light.html">Light</a></li>
-                <li><a href="/encyclopedia/speed-of-light.html">Speed of light (c)</a></li>
-                <li><a href="/constants/coherence-quantum.html">E_coh</a></li>
-                <li><a href="/theorems/golden-ratio.html">Golden ratio (φ)</a></li>
-                <li><a href="/encyclopedia/primes.html">Primes</a></li>
-              </ul>
-            </nav>
-          </aside>
-          <div class="enc-content">
-            <ul class="paper-list">
-              <li><h3><a href="/constants/recognition-length.html">Recognition Length (λ_rec)</a></h3><p>Fundamental pixel size of reality.</p></li>
-              <li><h3><a href="/theorems/golden-ratio.html">Golden Ratio (φ)</a></h3><p>Universal scaling constant from self-similarity.</p></li>
-              <li><h3><a href="/theorems/8-beat-cycle.html">8‑Beat Cycle</a></h3><p>Temporal rhythm fixed by 3D space.</p></li>
-              <li><h3><a href="/constants/ledger-alphabet.html">Ledger Alphabet (L)</a></h3><p>Self‑similar scaling digits of interactions.</p></li>
-              <li><h3><a href="/encyclopedia/light.html">Light</a></h3><p>The universe’s messaging layer: why c is universal and how signals propagate.</p></li>
-              <li><h3><a href="/encyclopedia/speed-of-light.html">Speed of Light (c)</a></h3><p>Why one voxel per tick fixes a universal speed.</p></li>
-              <li><h3><a href="/encyclopedia/primes.html">Primes Playground</a></h3><p>Interactive exploration of primes as reality's atoms — irreducible Ledger updates.</p></li>
-            </ul>
-          </div>
+
+    <!-- Hero -->
+    <section class="template-hero template-hero-framed">
+        <div class="template-hero-content">
+            <p class="template-hero-badge">KNOWLEDGE BASE</p>
+            <h1 class="template-hero-title">Recognition Science <span class="template-accent-text">Encyclopedia</span></h1>
+            <p class="template-hero-lead">
+                Core concepts, constants, and theorems explained with clarity and precision
+            </p>
         </div>
-      </div>
     </section>
-    </main>
+
+    <!-- Search Placeholder -->
+    <section class="template-section">
+        <div class="template-container">
+            <div class="search-box">
+                <p>🔍 Search functionality coming soon. Browse by category below.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="template-section">
+        <div class="template-container">
+            <h2 class="template-section-title">Browse by Category</h2>
+            
+            <div class="enc-categories">
+                <div class="enc-category">
+                    <h3>Fundamentals</h3>
+                    <p>Core principles and foundational concepts</p>
+                    <ul>
+                        <li><a href="/encyclopedia/fundamentals.html">Overview</a></li>
+                        <li><a href="/logical-foundations.html">Meta-Principle</a></li>
+                        <li><a href="/encyclopedia/recognition.html">Recognition</a></li>
+                        <li><a href="/encyclopedia/ledger.html">The Ledger</a></li>
+                    </ul>
+                </div>
+
+                <div class="enc-category">
+                    <h3>Constants</h3>
+                    <p>Fundamental values that define reality</p>
+                    <ul>
+                        <li><a href="/constants.html">All Constants</a></li>
+                        <li><a href="/encyclopedia/coherence-energy.html">E_coh (0.090 eV)</a></li>
+                        <li><a href="/encyclopedia/recognition-length.html">λ_rec (2.20 μm)</a></li>
+                        <li><a href="/encyclopedia/golden-ratio.html">φ (1.618...)</a></li>
+                    </ul>
+                </div>
+
+                <div class="enc-category">
+                    <h3>Physics</h3>
+                    <p>How recognition creates physical law</p>
+                    <ul>
+                        <li><a href="/encyclopedia/physics.html">Overview</a></li>
+                        <li><a href="/encyclopedia/light.html">Light</a></li>
+                        <li><a href="/encyclopedia/speed-of-light.html">Speed of Light</a></li>
+                        <li><a href="/encyclopedia/mass.html">Mass Spectrum</a></li>
+                    </ul>
+                </div>
+
+                <div class="enc-category">
+                    <h3>Mathematics</h3>
+                    <p>Mathematical structures and proofs</p>
+                    <ul>
+                        <li><a href="/encyclopedia/math.html">Overview</a></li>
+                        <li><a href="/encyclopedia/cost-function.html">J(x) Function</a></li>
+                        <li><a href="/encyclopedia/8-beat.html">8-Beat Cycle</a></li>
+                        <li><a href="/encyclopedia/primes.html">Prime Numbers</a></li>
+                    </ul>
+                </div>
+
+                <div class="enc-category">
+                    <h3>Formulas</h3>
+                    <p>Key equations and their derivations</p>
+                    <ul>
+                        <li><a href="/formulas/">All Formulas</a></li>
+                        <li><a href="/encyclopedia/fine-structure.html">Fine Structure</a></li>
+                        <li><a href="/encyclopedia/dark-matter.html">Dark Matter</a></li>
+                        <li><a href="/encyclopedia/mass-formula.html">Mass Formula</a></li>
+                    </ul>
+                </div>
+
+                <div class="enc-category">
+                    <h3>Computation</h3>
+                    <p>Information theory and ledger mechanics</p>
+                    <ul>
+                        <li><a href="/encyclopedia/computation.html">Overview</a></li>
+                        <li><a href="/encyclopedia/bandwidth.html">Bandwidth Limits</a></li>
+                        <li><a href="/encyclopedia/45-gap.html">45-Gap</a></li>
+                        <li><a href="/encyclopedia/curvature.html">Curvature</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Articles -->
+    <section class="template-section">
+        <div class="template-container">
+            <div class="template-accent-bar"></div>
+            <h2 class="template-section-title">Featured Articles</h2>
+            
+            <div class="featured-grid">
+                <div class="featured-card">
+                    <h3>
+                        <a href="/encyclopedia/light.html">
+                            Light
+                            <span class="featured-badge">Essential</span>
+                        </a>
+                    </h3>
+                    <p>The universe's messaging system—how recognition events propagate through the ledger at exactly one voxel per tick, creating what we observe as electromagnetic phenomena.</p>
+                </div>
+
+                <div class="featured-card">
+                    <h3>
+                        <a href="/encyclopedia/golden-ratio.html">
+                            Golden Ratio (φ)
+                            <span class="featured-badge">Core</span>
+                        </a>
+                    </h3>
+                    <p>The unique self-similar fixed point of dual-balance operations. Appears throughout the framework as the natural scaling factor for mass, energy, and interaction strengths.</p>
+                </div>
+
+                <div class="featured-card">
+                    <h3>
+                        <a href="/encyclopedia/primes.html">
+                            Prime Numbers
+                            <span class="featured-badge">Interactive</span>
+                        </a>
+                    </h3>
+                    <p>Explore primes as reality's atoms—irreducible ledger updates that cannot be factored. Interactive visualizations reveal their role in the recognition structure.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Reference -->
+    <section class="template-section">
+        <div class="template-container">
+            <div class="quick-ref">
+                <h3>Quick Reference</h3>
+                <div class="quick-ref-grid">
+                    <div class="quick-ref-item">
+                        <code>c</code>
+                        <a href="/encyclopedia/speed-of-light.html">Speed of light</a>
+                    </div>
+                    <div class="quick-ref-item">
+                        <code>φ</code>
+                        <a href="/encyclopedia/golden-ratio.html">Golden ratio</a>
+                    </div>
+                    <div class="quick-ref-item">
+                        <code>E_coh</code>
+                        <a href="/encyclopedia/coherence-energy.html">Coherence energy</a>
+                    </div>
+                    <div class="quick-ref-item">
+                        <code>λ_rec</code>
+                        <a href="/encyclopedia/recognition-length.html">Recognition length</a>
+                    </div>
+                    <div class="quick-ref-item">
+                        <code>τ_rec</code>
+                        <a href="/encyclopedia/recognition-time.html">Recognition time</a>
+                    </div>
+                    <div class="quick-ref-item">
+                        <code>α</code>
+                        <a href="/encyclopedia/fine-structure.html">Fine structure</a>
+                    </div>
+                    <div class="quick-ref-item">
+                        <code>Ω_dm</code>
+                        <a href="/encyclopedia/dark-matter.html">Dark matter</a>
+                    </div>
+                    <div class="quick-ref-item">
+                        <code>J(x)</code>
+                        <a href="/encyclopedia/cost-function.html">Cost function</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="template-section">
+        <div class="template-container">
+            <div class="template-reading template-reading-warm">
+                <h3 style="margin-bottom: 1rem;">Start Your Journey</h3>
+                <p>
+                    New to Recognition Science? Begin with <a href="/encyclopedia/fundamentals.html">Fundamentals</a> 
+                    for the big picture, then explore <a href="/encyclopedia/light.html">Light</a> to see how the framework 
+                    explains familiar phenomena. For the mathematically inclined, dive into the 
+                    <a href="/chain.html">formal proofs</a> or explore our <a href="/predictions.html">validated predictions</a>.
+                </p>
+            </div>
+        </div>
+    </section>
+
     <div id="footer-placeholder"></div>
     <script src="/assets/js/main.js"></script>
 </body>

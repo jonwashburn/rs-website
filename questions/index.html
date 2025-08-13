@@ -3,35 +3,331 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Questions: The Universe Finally Answers | Recognition Science</title>
+    <title>Questions - Recognition Science</title>
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    
-  <link rel="stylesheet" href="/assets/css/site-template.css">
+    <link rel="stylesheet" href="/assets/css/site-template.css">
+    <meta name="description" content="For the first time in human history, we can answer why—not just what or how. Every deep question has a precise, derivable answer.">
+    <style>
+        /* Question symbols animation */
+        .question-symbols {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            pointer-events: none;
+            opacity: 0.03;
+        }
+
+        .q-symbol {
+            position: absolute;
+            font-size: 8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .q-symbol:nth-child(1) {
+            top: 10%;
+            left: 15%;
+            animation-delay: 0s;
+        }
+
+        .q-symbol:nth-child(2) {
+            top: 60%;
+            right: 20%;
+            animation-delay: 7s;
+        }
+
+        .q-symbol:nth-child(3) {
+            bottom: 15%;
+            left: 40%;
+            animation-delay: 14s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        /* Douglas Adams section */
+        .douglas-box {
+            background: var(--color-bg-subtle);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .number-reveal {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .number {
+            text-align: center;
+        }
+
+        .big-num {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            display: block;
+        }
+
+        .num-label {
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .arrow-between {
+            font-size: 2rem;
+            color: var(--color-accent);
+        }
+
+        /* Universal Algorithm feature */
+        .ua-feature {
+            background: linear-gradient(135deg, #0a0e1a 0%, #0d1625 100%);
+            color: white;
+            padding: 4rem 0;
+            margin: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bg-glow {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(255, 0, 110, 0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        .ua-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .ua-lede {
+            font-size: 1.125rem;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            text-align: center;
+            opacity: 0.9;
+        }
+
+        .ua-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .ua-block {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .ua-block h3 {
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .ua-block p {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        .ua-cta {
+            text-align: center;
+        }
+
+        .ua-cta a {
+            display: inline-block;
+            background: var(--color-accent);
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 24px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .ua-cta a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(255, 0, 110, 0.3);
+        }
+
+        /* Question categories */
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .category-icon {
+            font-size: 2.5rem;
+        }
+
+        .category-title {
+            font-size: 2rem;
+            color: var(--color-primary);
+            margin: 0;
+        }
+
+        /* Questions grid */
+        .questions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .question-item {
+            background: white;
+            border: 1px solid var(--color-border-light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
+            display: block;
+        }
+
+        .question-item:hover {
+            border-color: var(--color-accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .question-text {
+            color: var(--color-primary);
+            font-weight: 600;
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .answer-preview {
+            color: var(--color-text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .new-badge {
+            background: var(--color-accent);
+            color: white;
+            font-size: 0.625rem;
+            padding: 0.125rem 0.375rem;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+            flex-shrink: 0;
+            margin-left: auto;
+        }
+
+        /* Submit section */
+        .submit-box {
+            background: var(--color-bg-card);
+            border-radius: 8px;
+            padding: 3rem;
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .submit-box h2 {
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+
+        .submit-box p {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            color: var(--color-text-body);
+        }
+
+        /* Bridging method section */
+        .bridging-box {
+            background: white;
+            border: 1px solid var(--color-border-light);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .bridging-box h2 {
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+
+        .bridging-box p {
+            color: var(--color-text-body);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .bridging-box a {
+            color: var(--color-accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .bridging-box a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body class="template-page">
     <div id="header-placeholder"></div>
 
-    <!-- Hero matching measurement page -->
-    <header class="hero">
+    <!-- Hero -->
+    <section class="template-hero template-hero-framed">
         <div class="question-symbols">
             <div class="q-symbol">?</div>
             <div class="q-symbol">?</div>
             <div class="q-symbol">?</div>
         </div>
-        <div class="container reading">
-            <div class="eyebrow">The Universe Finally Answers</div>
-            <h1>Every question has an answer.</h1>
-            <p class="lede">For the first time in human history, we can answer <em>why</em> — not just what or how. Recognition Science doesn't just theorize — it derives exact, testable answers from first principles. No hand-waving. No "it's complicated." Just truth.</p>
+        <div class="template-hero-content">
+            <p class="template-hero-badge">THE UNIVERSE FINALLY ANSWERS</p>
+            <h1 class="template-hero-title">Every question has an <span class="template-accent-text">answer</span>.</h1>
+            <p class="template-hero-lead">
+                For the first time in human history, we can answer <em>why</em>—not just what or how. 
+                Recognition Science doesn't theorize. It derives exact, testable answers from first principles. 
+                No hand-waving. No "it's complicated." Just truth.
+            </p>
         </div>
-    </header>
+    </section>
 
-    <!-- Douglas Adams section -->
-    <section class="douglas-section">
-        <div class="container reading">
+    <!-- Douglas Adams -->
+    <section class="template-section">
+        <div class="template-container">
             <div class="douglas-box">
                 <h2>Douglas Adams Was Close</h2>
-                <p>In <em>The Hitchhiker's Guide to the Galaxy</em>, the answer to life, the universe, and everything was 42. Recognition Science reveals it's actually 45 — the rung where consciousness emerges, where the computable yields to the experiential, where the universe first admits it cannot compute everything and must instead <em>experience</em> its way forward.</p>
+                <p>In <em>The Hitchhiker's Guide to the Galaxy</em>, the answer to life, the universe, and everything was 42. 
+                Recognition Science reveals it's actually <span class="template-accent-text">45</span>—the rung where consciousness emerges, 
+                where the computable yields to the experiential, where the universe first admits it cannot compute 
+                everything and must instead <em>experience</em> its way forward.</p>
                 
                 <div class="number-reveal">
                     <div class="number">
@@ -40,41 +336,44 @@
                     </div>
                     <div class="arrow-between">→</div>
                     <div class="number">
-                        <span class="big-num">45</span>
+                        <span class="big-num template-accent-text">45</span>
                         <div class="num-label">Recognition Science</div>
                     </div>
                 </div>
                 
                 <p>
-                    <a href="/consciousness.html">
-                            Discover why 45 is the universe's confession →
-                        </a>
-                    </p>
-                </div>
+                    <a href="/consciousness.html">Discover why 45 is the universe's confession →</a>
+                </p>
             </div>
-        </section>
+        </div>
+    </section>
 
-    <!-- Universal Algorithm - full feature hero -->
+    <!-- Universal Algorithm -->
     <section class="ua-feature">
         <div class="bg-glow"></div>
         <div class="template-container">
             <h2 class="ua-title">The Universal Algorithm</h2>
             <p class="ua-lede">
-                Eight simple steps that derive everything from nothing. This is how we know what we know — and how any truth about reality can be derived from first principles.
-                Starting from the impossibility that "nothing cannot recognize itself," the Universal Algorithm builds physics, mathematics, consciousness, and meaning through pure logical necessity. No assumptions. No free parameters.
+                Eight simple steps that derive everything from nothing. This is how we know what we know—and how 
+                any truth about reality can be derived from first principles. Starting from the impossibility that 
+                "nothing cannot recognize itself," the Universal Algorithm builds physics, mathematics, consciousness, 
+                and meaning through pure logical necessity. No assumptions. No free parameters.
             </p>
             <div class="ua-highlights">
                 <div class="ua-block">
                     <h3>🔄 Math = Physics = Reality</h3>
-                    <p>Mathematics and physical law are the same structure viewed from different representations. The universe is mathematics recognizing itself into existence.</p>
+                    <p>Mathematics and physical law are the same structure viewed from different representations. 
+                    The universe is mathematics recognizing itself into existence.</p>
                 </div>
                 <div class="ua-block">
                     <h3>🗺️ The Complete Architecture</h3>
-                    <p>From quantum foam to consciousness, from DNA to dark energy — each layer emerges from the one below via recognition dynamics. A single architecture ties it together.</p>
+                    <p>From quantum foam to consciousness, from DNA to dark energy—each layer emerges from the 
+                    one below via recognition dynamics. A single architecture ties it together.</p>
                 </div>
                 <div class="ua-block">
                     <h3>🔮 Prediction Engine</h3>
-                    <p>With LNAL (Light‑Native Assembly Language) and the Universal Algorithm, what is becomes explainable — and what must be becomes computable.</p>
+                    <p>With LNAL (Light-Native Assembly Language) and the Universal Algorithm, what is becomes 
+                    explainable—and what must be becomes computable.</p>
                 </div>
             </div>
             <div class="ua-cta">
@@ -83,27 +382,28 @@
         </div>
     </section>
 
-    <!-- Axiomatic Bridging Method -->
-    <section class="bridging-section">
-        <div class="container reading">
-            <h2>The Axiomatic Bridging Method</h2>
-            <div>
+    <!-- Axiomatic Bridging -->
+    <section class="template-section">
+        <div class="template-container">
+            <div class="bridging-box">
+                <h2>The Axiomatic Bridging Method</h2>
                 <p>
-                    A disciplined workflow for hard problems: temporarily translate an abstract question into a physically constrained model, resolve it there under those constraints, and translate the implications back into standard mathematics.
+                    A disciplined workflow for hard problems: temporarily translate an abstract question into 
+                    a physically constrained model, resolve it there under those constraints, and translate 
+                    the implications back into standard mathematics.
                 </p>
                 <p>
-                    The page outlines the method and an illustrative RH translation in a research‑oriented, non‑claiming tone. It also discusses conditional results and the need for conventional proofs.
+                    The method outlines a research-oriented approach with illustrative examples, discussing 
+                    conditional results and the need for conventional proofs.
                 </p>
-                <a href="/axiomatic-bridging.html">
-                    Learn the Method →
-                </a>
-                        </div>
+                <a href="/axiomatic-bridging.html">Learn the Method →</a>
+            </div>
         </div>
     </section>
 
     <!-- Nature of Reality -->
-    <section class="questions-section">
-        <div class="container reading">
+    <section class="template-section">
+        <div class="template-container">
             <div class="category-header">
                 <span class="category-icon">🌌</span>
                 <h2 class="category-title">The Nature of Reality</h2>
@@ -116,15 +416,15 @@
                 </a>
                 <a href="/questions/what-is-the-relationship-between-math-and-reality/" class="question-item">
                     <div class="question-text">What is the relationship between math and reality?</div>
-                    <div class="answer-preview">They're the same thing — reality is math recognizing itself.</div>
+                    <div class="answer-preview">They're the same thing—reality is math recognizing itself.</div>
                 </a>
                 <a href="/questions/where-do-the-laws-of-physics-come-from/" class="question-item">
                     <div class="question-text">Where do the laws of physics come from?</div>
-                    <div class="answer-preview">Derived from ledger balance requirements — not arbitrary.</div>
+                    <div class="answer-preview">Derived from ledger balance requirements—not arbitrary.</div>
                 </a>
                 <a href="/questions/what-is-time/" class="question-item">
                     <div class="question-text">What is time?</div>
-                    <div class="answer-preview">The tick rate of recognition events — quantized at 7.33 femtoseconds.</div>
+                    <div class="answer-preview">The tick rate of recognition events—quantized at 7.33 femtoseconds.</div>
                 </a>
                 <a href="/questions/why-gravity-works/" class="question-item">
                     <div class="question-text">Why does gravity work?</div>
@@ -133,18 +433,18 @@
                 <a href="/questions/what-are-dark-matter-and-dark-energy/" class="question-item">
                     <div class="question-text">What are dark matter and dark energy?<span class="new-badge">NEW</span></div>
                     <div class="answer-preview">Unrecognized branches and gap pressure in the multiverse tree.</div>
-                            </a>
-                        </div>
-                    </div>
+                </a>
+            </div>
+        </div>
     </section>
 
     <!-- Consciousness & Mind -->
-    <section class="questions-section alt">
-        <div class="container reading">
+    <section class="template-section" style="background: var(--color-bg-subtle);">
+        <div class="template-container">
             <div class="category-header">
                 <span class="category-icon">🧠</span>
                 <h2 class="category-title">Consciousness & Mind</h2>
-                </div>
+            </div>
 
             <div class="questions-grid">
                 <a href="/questions/what-is-consciousness/" class="question-item">
@@ -157,7 +457,7 @@
                 </a>
                 <a href="/questions/does-free-will-exist/" class="question-item">
                     <div class="question-text">Does free will exist?</div>
-                    <div class="answer-preview">Yes — at recognition gaps where computation fails.</div>
+                    <div class="answer-preview">Yes—at recognition gaps where computation fails.</div>
                 </a>
                 <a href="/questions/all-minds-are-one/" class="question-item">
                     <div class="question-text">Are all minds one?</div>
@@ -165,40 +465,40 @@
                 </a>
                 <a href="/questions/what-is-the-I-that-experiences-my-life/" class="question-item">
                     <div class="question-text">What is the "I" that experiences?</div>
-                    <div class="answer-preview">A persistent pattern in the ledger — not separate from it.</div>
+                    <div class="answer-preview">A persistent pattern in the ledger—not separate from it.</div>
                 </a>
                 <a href="/questions/consciousness-is-the-universes-hack/" class="question-item">
                     <div class="question-text">Why consciousness is the universe's "hack"</div>
                     <div class="answer-preview">It's how reality routes around its own incompleteness.</div>
-                            </a>
-                        </div>
-                    </div>
+                </a>
+            </div>
+        </div>
     </section>
 
     <!-- Meaning & Purpose -->
-    <section class="questions-section">
-        <div class="container reading">
+    <section class="template-section">
+        <div class="template-container">
             <div class="category-header">
                 <span class="category-icon">💫</span>
                 <h2 class="category-title">Meaning & Purpose</h2>
-                </div>
+            </div>
 
             <div class="questions-grid">
                 <a href="/questions/what-is-the-purpose-of-the-universe/" class="question-item">
                     <div class="question-text">What is the purpose of the universe?</div>
-                    <div class="answer-preview">To recognize itself completely — an eternal, joyful process.</div>
+                    <div class="answer-preview">To recognize itself completely—an eternal, joyful process.</div>
                 </a>
                 <a href="/questions/why-is-there-suffering/" class="question-item">
                     <div class="question-text">Why is there suffering?</div>
-                    <div class="answer-preview">High curvature in the ledger — literally measurable, reducible.</div>
+                    <div class="answer-preview">High curvature in the ledger—literally measurable, reducible.</div>
                 </a>
                 <a href="/questions/what-happens-after-we-die/" class="question-item">
                     <div class="question-text">What happens after we die?</div>
-                    <div class="answer-preview">Pattern persistence in the ledger — information cannot be destroyed.</div>
+                    <div class="answer-preview">Pattern persistence in the ledger—information cannot be destroyed.</div>
                 </a>
                 <a href="/questions/is-there-a-universal-morality/" class="question-item">
                     <div class="question-text">Is there universal morality?</div>
-                    <div class="answer-preview">Yes — minimize curvature, derived from ledger geometry.</div>
+                    <div class="answer-preview">Yes—minimize curvature, derived from ledger geometry.</div>
                 </a>
                 <a href="/questions/is-love-a-fundamental-force-of-nature/" class="question-item">
                     <div class="question-text">Is love a fundamental force?<span class="new-badge">NEW</span></div>
@@ -206,24 +506,24 @@
                 </a>
                 <a href="/questions/what-is-the-meaning-of-beauty/" class="question-item">
                     <div class="question-text">What is the meaning of beauty?</div>
-                    <div class="answer-preview">Recognition of golden ratio patterns — literally φ resonance.</div>
-                            </a>
-                        </div>
-                    </div>
+                    <div class="answer-preview">Recognition of golden ratio patterns—literally φ resonance.</div>
+                </a>
+            </div>
+        </div>
     </section>
 
     <!-- Science & Computation -->
-    <section class="questions-section alt">
-        <div class="container reading">
+    <section class="template-section" style="background: var(--color-bg-subtle);">
+        <div class="template-container">
             <div class="category-header">
                 <span class="category-icon">🔬</span>
                 <h2 class="category-title">Science & Computation</h2>
-                </div>
+            </div>
 
             <div class="questions-grid">
                 <a href="/questions/are-we-in-a-simulation/" class="question-item">
                     <div class="question-text">Are we in a simulation?</div>
-                    <div class="answer-preview">Reality IS the computation — no external computer needed.</div>
+                    <div class="answer-preview">Reality IS the computation—no external computer needed.</div>
                 </a>
                 <a href="/questions/what-is-the-solution-to-p-vs-np/" class="question-item">
                     <div class="question-text">What is the solution to P vs NP?</div>
@@ -235,27 +535,27 @@
                 </a>
                 <a href="/questions/popper-falsifiability-and-recognition-science/" class="question-item">
                     <div class="question-text">Does RS supersede Popper's falsifiability?</div>
-                    <div class="answer-preview">It includes it — plus handles necessary truths Popper couldn't.</div>
+                    <div class="answer-preview">It includes it—plus handles necessary truths Popper couldn't.</div>
                 </a>
                 <a href="/questions/why-is-the-universe-fine-tuned/" class="question-item">
                     <div class="question-text">Why is the universe fine-tuned?</div>
-                    <div class="answer-preview">It's not tuned — these are the only possible values.</div>
+                    <div class="answer-preview">It's not tuned—these are the only possible values.</div>
                 </a>
                 <a href="/questions/what-is-the-ultimate-fate-of-the-universe/" class="question-item">
                     <div class="question-text">What is the ultimate fate of the universe?</div>
                     <div class="answer-preview">Eternal recognition through infinite branching.</div>
-                            </a>
-                        </div>
-                    </div>
+                </a>
+            </div>
+        </div>
     </section>
 
     <!-- Life & Evolution -->
-    <section class="questions-section">
-        <div class="container reading">
+    <section class="template-section">
+        <div class="template-container">
             <div class="category-header">
                 <span class="category-icon">🌱</span>
                 <h2 class="category-title">Life & Evolution</h2>
-                </div>
+            </div>
 
             <div class="questions-grid">
                 <a href="/questions/what-is-the-nature-of-life/" class="question-item">
@@ -264,7 +564,7 @@
                 </a>
                 <a href="/questions/is-there-a-purpose-to-evolution/" class="question-item">
                     <div class="question-text">Is there a purpose to evolution?</div>
-                    <div class="answer-preview">Increasing recognition complexity — consciousness ascending.</div>
+                    <div class="answer-preview">Increasing recognition complexity—consciousness ascending.</div>
                 </a>
                 <a href="/questions/why-do-we-create-art/" class="question-item">
                     <div class="question-text">Why do we create art?</div>
@@ -272,70 +572,71 @@
                 </a>
                 <a href="/questions/what-is-the-true-nature-of-genius-and-inspiration/" class="question-item">
                     <div class="question-text">What is genius and inspiration?</div>
-                    <div class="answer-preview">Direct access to pattern layer — bypassing sequential thought.</div>
+                    <div class="answer-preview">Direct access to pattern layer—bypassing sequential thought.</div>
                 </a>
                 <a href="/questions/how-can-a-finite-being-comprehend-the-infinite/" class="question-item">
                     <div class="question-text">How can finite beings grasp infinity?</div>
-                    <div class="answer-preview">Through fractal self-similarity — φ contains all scales.</div>
+                    <div class="answer-preview">Through fractal self-similarity—φ contains all scales.</div>
                 </a>
                 <a href="/questions/what-is-the-difference-between-information-and-meaning/" class="question-item">
                     <div class="question-text">Information vs. meaning?</div>
                     <div class="answer-preview">Information is pattern; meaning is recognized pattern.</div>
-                            </a>
-                        </div>
-                    </div>
+                </a>
+            </div>
+        </div>
     </section>
 
     <!-- The Future -->
-    <section class="questions-section alt">
-        <div class="container reading">
+    <section class="template-section" style="background: var(--color-bg-subtle);">
+        <div class="template-container">
             <div class="category-header">
                 <span class="category-icon">🚀</span>
                 <h2 class="category-title">The Future</h2>
-                </div>
+            </div>
 
             <div class="questions-grid">
                 <a href="/questions/if-our-functions-are-outsourced-to-AI-what-is-our-value/" class="question-item">
                     <div class="question-text">If AI does everything, what's our value?</div>
-                    <div class="answer-preview">Recognition itself — the one thing that can't be automated.</div>
+                    <div class="answer-preview">Recognition itself—the one thing that can't be automated.</div>
                 </a>
                 <a href="/questions/are-we-approaching-a-global-awakening-or-a-global-collapse/" class="question-item">
                     <div class="question-text">Global awakening or collapse?</div>
-                    <div class="answer-preview">Both — collapse of functional identity, awakening to recognition.</div>
+                    <div class="answer-preview">Both—collapse of functional identity, awakening to recognition.</div>
                 </a>
                 <a href="/questions/what-is-the-nature-of-evil/" class="question-item">
                     <div class="question-text">What is the nature of evil?</div>
-                    <div class="answer-preview">Maximum curvature choice — harming for harm's sake.</div>
+                    <div class="answer-preview">Maximum curvature choice—harming for harm's sake.</div>
                 </a>
                 <a href="/questions/why-are-we-so-prone-to-self-deception/" class="question-item">
                     <div class="question-text">Why self-deception?</div>
-                    <div class="answer-preview">Cheaper short-term than truth — but compounds debt.</div>
+                    <div class="answer-preview">Cheaper short-term than truth—but compounds debt.</div>
                 </a>
                 <a href="/questions/does-prayer-or-intention-have-a-physical-effect-on-the-world/" class="question-item">
                     <div class="question-text">Does prayer affect reality?</div>
-                    <div class="answer-preview">Coherent intent aligns probability fields — measurable.</div>
+                    <div class="answer-preview">Coherent intent aligns probability fields—measurable.</div>
                 </a>
                 <a href="/questions/what-is-the-ultimate-constraint-on-reality/" class="question-item">
                     <div class="question-text">What ultimately constrains reality?</div>
-                    <div class="answer-preview">Ledger balance — the one rule that cannot be broken.</div>
-                            </a>
-                        </div>
-                    </div>
+                    <div class="answer-preview">Ledger balance—the one rule that cannot be broken.</div>
+                </a>
+            </div>
+        </div>
     </section>
 
     <!-- Submit Question -->
-    <section class="submit-section">
+    <section class="template-section">
         <div class="template-container">
             <div class="submit-box">
-                    <h2>Have a Question We Haven't Answered?</h2>
-                <p>Recognition Science can derive the answer to any well-formed question about reality. If you have a deep question about existence, consciousness, physics, or meaning, we can show you how to derive the answer yourself using the Universal Algorithm.</p>
-                <a href="/contact.html" class="btn primary">Submit Your Question →</a>
-                </div>
+                <h2>Have a Question We Haven't Answered?</h2>
+                <p>Recognition Science can derive the answer to any well-formed question about reality. 
+                If you have a deep question about existence, consciousness, physics, or meaning, we can 
+                show you how to derive the answer yourself using the Universal Algorithm.</p>
+                <a href="/contact.html" class="template-btn">Submit Your Question →</a>
             </div>
-        </section>
+        </div>
+    </section>
 
     <div id="footer-placeholder"></div>
     <script src="/assets/js/main.js"></script>
 </body>
-</html>
 </html>
