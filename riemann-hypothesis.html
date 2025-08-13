@@ -38,21 +38,35 @@
         .note { font-size: 0.9rem; color: var(--color-text-muted); }
         .download-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem; margin-top: 1rem; }
         .inline-code { font-family: var(--font-mono); background: rgba(255,255,255,0.06); padding: 0.1rem 0.35rem; border-radius: 4px; }
+        /* Fix MathJax bleeding */
+        .mjx-container { overflow-x: auto; overflow-y: visible; }
+        .mjx-chtml { white-space: nowrap; }
+        @media (max-width: 768px) {
+          .mjx-container { font-size: 85%; }
+        }
         /* Podcast badge */
-        .template-hero { position: relative; }
         .podcast-badge {
-          position: absolute; top: 14px; right: 14px; z-index: 5;
+          position: fixed; top: 20px; right: 20px; z-index: 1000;
           display: inline-flex; align-items: center; gap: 0.5rem;
           border: 2px solid var(--color-accent); color: var(--color-accent);
-          background: transparent; border-radius: 999px; padding: 0.35rem 0.6rem;
-          cursor: pointer; font: inherit; line-height: 1; transition: transform 0.15s ease;
+          background: rgba(18, 18, 20, 0.95); border-radius: 999px; 
+          padding: 0.35rem 0.6rem;
+          cursor: pointer; font: inherit; line-height: 1; 
+          transition: all 0.15s ease;
+          box-shadow: 0 2px 8px rgba(255, 0, 110, 0.2);
         }
-        .podcast-badge:hover { transform: translateY(-1px); }
+        .podcast-badge:hover { 
+          transform: translateY(-1px); 
+          background: var(--color-accent);
+          color: white;
+          box-shadow: 0 4px 12px rgba(255, 0, 110, 0.4);
+        }
+        .podcast-badge:hover svg { stroke: white; }
         .podcast-icon { width: 16px; height: 16px; display: inline-block; }
         .podcast-label { font-size: 0.8rem; }
         @media (max-width: 640px) {
           .podcast-label { display: none; }
-          .podcast-badge { padding: 0.35rem; }
+          .podcast-badge { padding: 0.35rem; top: 10px; right: 10px; }
         }
     </style>
   </head>
@@ -200,7 +214,7 @@
     <script src="/assets/js/main.js"></script>
     <!-- Lightweight audio player -->
     <audio id="podcastAudio" preload="metadata">
-      <source src="/Decoding%20the%20Riemann%20Hypothesis_%20Control%20Theory%27s%20Unexpected%20Attack%20on%20Prime%20Numbers.mp3" type="audio/mpeg">
+      <source src="/Decoding the Riemann Hypothesis_ Control Theory's Unexpected Attack on Prime Numbers.mp3" type="audio/mpeg">
     </audio>
     <script>
       (function(){
