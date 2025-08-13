@@ -8,19 +8,62 @@
   <link rel="stylesheet" href="/assets/css/site-template.css">
   <meta name="description" content="Translate hard math into constrained physics, force the solution by necessity, then translate it back to pure mathematics.">
   <style>
-    /* Top-right badge linking to the RH proof */
-    .template-hero { position: relative; }
-    .proof-badge {
-      position: absolute; top: 14px; right: 14px; z-index: 5;
-      display: inline-flex; align-items: center; gap: 0.45rem;
-      border: 2px solid var(--color-accent); color: var(--color-accent);
-      background: transparent; border-radius: 999px; padding: 0.35rem 0.6rem;
-      cursor: pointer; text-decoration: none; line-height: 1; font-size: 0.85rem;
-      transition: transform 0.15s ease;
+    /* RH proof announcement banner */
+    .proof-announcement {
+      background: linear-gradient(135deg, rgba(255,0,110,0.1) 0%, rgba(255,0,110,0.05) 100%);
+      border: 1px solid var(--color-accent);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 2rem auto;
+      max-width: 600px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
     }
-    .proof-badge:hover { transform: translateY(-1px); }
-    .proof-icon { width: 16px; height: 16px; display: inline-block; }
-    @media (max-width: 640px) { .proof-badge span { display: none; } .proof-badge { padding: 0.35rem; } }
+    .proof-announcement::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,0,110,0.1) 0%, transparent 70%);
+      animation: pulse 4s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(0.8); opacity: 0; }
+      50% { transform: scale(1.2); opacity: 1; }
+    }
+    .proof-announcement-content {
+      position: relative;
+      z-index: 1;
+    }
+    .proof-announcement h3 {
+      color: var(--color-accent);
+      margin: 0 0 0.5rem 0;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .proof-announcement p {
+      margin: 0 0 1rem 0;
+      color: var(--color-text);
+      font-size: 0.95rem;
+    }
+    .proof-announcement .template-btn {
+      background: var(--color-accent);
+      color: white;
+      border: none;
+      padding: 0.6rem 1.5rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      display: inline-block;
+    }
+    .proof-announcement .template-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255,0,110,0.4);
+    }
     /* Callout + grid helpers from manifesto */
     .callout { background: var(--color-bg-warm); border-left: 3px solid var(--color-accent); padding: 1rem 1.25rem; border-radius: 0 8px 8px 0; }
     .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 1rem; }
@@ -32,12 +75,6 @@
 
   <!-- Hero -->
   <section class="template-hero template-hero-framed">
-    <a class="proof-badge" href="/riemann-hypothesis.html" aria-label="Read the Riemann Hypothesis proof">
-      <svg class="proof-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="9 18 15 12 9 6"></polyline>
-      </svg>
-      <span>Read our RH proof</span>
-    </a>
     <div class="template-hero-content">
       <p class="template-hero-badge">Revolutionary Method</p>
       <h1 class="template-hero-title">The Axiomatic Bridging Method</h1>
@@ -46,6 +83,15 @@
       </p>
     </div>
   </section>
+
+  <!-- RH Proof Announcement -->
+  <div class="proof-announcement">
+    <div class="proof-announcement-content">
+      <h3>🎯 First Victory: Riemann Hypothesis Solved</h3>
+      <p>Using this method, we've proven the Riemann Hypothesis via prime-grid lossless models and Schur-determinant splitting</p>
+      <a href="/riemann-hypothesis.html" class="template-btn">Read the Complete Proof</a>
+    </div>
+  </div>
 
   <!-- What It Is -->
   <section class="template-section">
