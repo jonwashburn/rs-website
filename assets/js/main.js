@@ -1,5 +1,33 @@
 document.addEventListener("DOMContentLoaded", function() {
 
+    // Force-refresh critical stylesheets across the site to avoid CDN/browser cache staleness
+    function bumpStylesheetCache() {
+        try {
+            const versionTag = 'v=20250813-1';
+            const targets = [
+                '/assets/css/main.css',
+                '/assets/css/site-template.css',
+                '/assets/css/academic-style.css',
+                '/assets/css/encyclopedia.css'
+            ];
+            const links = document.querySelectorAll('link[rel="stylesheet"][href]');
+            links.forEach(link => {
+                const href = link.getAttribute('href');
+                if (!href) return;
+                const isTarget = targets.some(t => href.endsWith(t) || href.includes(t + '?'));
+                if (!isTarget) return;
+                const base = href.split('?')[0];
+                const next = `${base}?${versionTag}`;
+                if (href !== next) {
+                    link.setAttribute('href', next);
+                }
+            });
+        } catch (_) {}
+    }
+
+    // Run immediately to swap in fresh CSS post-load
+    bumpStylesheetCache();
+
     function toggleMobileMenu() {
         const nav = document.getElementById('globalNav');
         if (!nav) return;
