@@ -2,620 +2,323 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Reality | Recognition Science</title>
-  <link rel="stylesheet" href="assets/css/main.css">
-  
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Generate cosmic grid
-      const grid = document.querySelector('.cosmic-grid');
-      if (grid) {
-        // Horizontal lines
-        for (let i = 0; i < 20; i++) {
-          const line = document.createElement('div');
-          line.className = 'grid-line horizontal';
-          line.style.top = `${i * 5}%`;
-          line.style.animationDelay = `${i * 0.1}s`;
-          grid.appendChild(line);
-        }
-        // Vertical lines
-        for (let i = 0; i < 20; i++) {
-          const line = document.createElement('div');
-          line.className = 'grid-line vertical';
-          line.style.left = `${i * 5}%`;
-          line.style.animationDelay = `${i * 0.1 + 0.5}s`;
-          grid.appendChild(line);
-        }
-      }
-
-      // Generate floating equations
-      const equations = [
-        'E = mc²',
-        '∇²ψ = 0',
-        'F = ma',
-        'S = k log W',
-        '∂ψ/∂t = Ĥψ',
-        'Rμν - ½gμνR = 8πTμν',
-        '∮ B·dl = μ₀I',
-        'PV = nRT',
-        'ΔS ≥ 0',
-        'λ = h/p',
-        'ℏω = E',
-        'φ = (1+√5)/2',
-        '∇·E = ρ/ε₀',
-        'c² = a² + b²',
-        'e^(iπ) + 1 = 0',
-        '∫∫∫ ∇×F·dV = ∮∮ F×n·dS',
-        'H|ψ⟩ = E|ψ⟩',
-        'ds² = gμνdxμdxν',
-        '⟨x|p⟩ = e^(ipx/ℏ)',
-        'α ≈ 1/137'
-      ];
-
-      const equationField = document.querySelector('.equation-field');
-      if (equationField) {
-        equations.forEach((eq, i) => {
-          const equation = document.createElement('div');
-          equation.className = 'floating-equation';
-          equation.textContent = eq;
-          equation.style.top = `${Math.random() * 100}%`;
-          equation.style.animationDelay = `${i * 2}s`;
-          equation.style.animationDuration = `${20 + Math.random() * 10}s`;
-          equationField.appendChild(equation);
-        });
-      }
-
-      // Generate reality particles
-      const particleContainer = document.querySelector('.reality-particles');
-      if (particleContainer) {
-        for (let i = 0; i < 30; i++) {
-          const particle = document.createElement('div');
-          particle.className = 'reality-particle';
-          particle.style.left = `${Math.random() * 100}%`;
-          particle.style.animationDelay = `${Math.random() * 15}s`;
-          particle.style.animationDuration = `${15 + Math.random() * 10}s`;
-          particleContainer.appendChild(particle);
-        }
-      }
-
-      // Header and footer are handled by main.css
-    });
-  </script>
-  <link rel="stylesheet" href="/assets/css/site-template.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reality — The Complete Framework | Recognition Science</title>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/site-template.css" />
+  <meta name="description" content="From a single logical necessity to the entire universe. Zero assumptions, zero free parameters — everything derived." />
+  <style>
+    /* Local helpers for this page */
+    .toc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .toc-card { display: block; background: white; border: 1px solid var(--color-border-light); border-radius: 10px; padding: 1rem; text-decoration: none; color: inherit; transition: all .2s ease; }
+    .toc-card:hover { border-color: var(--color-accent); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.06); }
+    .toc-number { font-family: var(--font-mono); font-weight: 700; color: var(--color-accent); font-size: .85rem; margin-bottom: .25rem; }
+    .toc-title { font-weight: 700; color: var(--color-primary); margin-bottom: .25rem; }
+    .toc-description { color: var(--color-text-muted); font-size: .9rem; }
+    .kicker { text-transform: uppercase; letter-spacing: .06em; font-size: .8rem; color: var(--color-text-muted); margin-bottom: .25rem; }
+    .callout-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+    .callout-item { background: var(--color-bg-card); border-radius: 10px; padding: 1rem 1.25rem; border-left: 3px solid var(--color-accent); }
+    .formula-box { background: var(--color-bg-subtle); border-radius: 10px; padding: 1rem 1.25rem; margin: 1rem 0; font-family: var(--font-mono); font-size: 1.05rem; text-align: center; }
+    .note { font-size: .9rem; color: var(--color-text-muted); }
+    .list { margin: .75rem 0 0 1rem; }
+    .list li { margin: .25rem 0; }
+  </style>
 </head>
 <body class="template-page">
   <div id="header-placeholder"></div>
-  <!-- Epic Hero Section -->
-  <section class="reality-hero">
-    <!-- Cosmic Grid -->
-    <div class="cosmic-grid"></div>
 
-    <!-- Floating Equations -->
-    <div class="equation-field"></div>
-
-    <!-- Reality Particles -->
-    <div class="reality-particles"></div>
-
-    <!-- Dimensional Layers -->
-    <div class="dimensional-layers">
-      <div class="dimension-ring"></div>
-      <div class="dimension-ring"></div>
-      <div class="dimension-ring"></div>
-    </div>
-
-    <!-- Meta-Principle Visualization -->
-    <div class="meta-principle-viz">
-      <div class="recognition-loop">
-        <svg viewBox="0 0 200 200">
-          <defs>
-            <linearGradient id="infinityGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" />
-              <stop offset="50%" />
-              <stop offset="100%" />
-            </linearGradient>
-          </defs>
-          <path class="infinity-path" d="M50,100 Q50,50 100,50 T150,100 Q150,150 100,150 T50,100" />
-        </svg>
-      </div>
-    </div>
-
-    <!-- Hero Content -->
+  <!-- Hero -->
+  <section class="template-hero template-hero-framed">
     <div class="template-hero-content">
-      <div class="hero-badge">The Complete Framework</div>
+      <p class="template-hero-badge">THE COMPLETE FRAMEWORK</p>
       <h1 class="template-hero-title">Reality</h1>
-      <p class="hero-subtitle">
-        From a single logical necessity to the entire universe<br>
-        Zero assumptions • Zero free parameters • Everything derived
-      </p>
-      <div class="meta-equation">
-        Nothing → Recognition → Everything
-      </div>
-    </div>
-
-    <!-- Scroll Indicator -->
-    <div class="scroll-indicator">
-      <svg viewBox="0 0 24 24">
-        <polyline points="6 9 12 15 18 9"></polyline>
-      </svg>
+      <p class="template-hero-lead">From a single logical necessity to the entire universe<br/>Zero assumptions • Zero free parameters • Everything derived</p>
+      <div class="template-hero-meta">Nothing → Recognition → Everything</div>
     </div>
   </section>
 
-  <main class="academic-page">
-    <!-- Introduction Section -->
-    <section class="section">
-      <div class="container reading">
-        <p class="lead">
-          For the first time in human history, we can answer the deepest question: Why does anything exist? The answer isn't philosophical or religious—it's mathematical. Reality exists because non-existence is logically impossible. From this single truth flows everything: every particle, every force, every constant of nature, even consciousness itself.
+  <!-- Introduction -->
+  <section class="template-section">
+    <div class="template-container">
+      <div class="template-reading">
+        <p class="lead-text">
+          For the first time, we can answer the deepest question — why does anything exist? The answer is mathematical. 
+          Reality exists because non‑existence is logically impossible. From this single truth flows everything: particles, 
+          forces, constants of nature, and even consciousness.
         </p>
         <p>
-          Recognition Science is the complete, parameter-free framework that derives all of physics from pure logical necessity. Starting from the tautology "nothing cannot recognize itself," we prove that reality must maintain a universal ledger, must minimize a specific cost function, must organize mass on a golden ratio ladder, must update every 8 ticks, and must produce consciousness at a specific energy threshold.
+          Recognition Science is a parameter‑free framework that derives all of physics from pure logic. Starting from 
+          the tautology “nothing cannot recognize itself,” we obtain a universal ledger, a unique cost function, a 
+          golden‑ratio mass ladder, an 8‑tick update cycle, and a specific threshold where consciousness becomes necessary.
         </p>
         <p>
-          This isn't another theory to add to the pile. With zero free parameters and machine-verified proofs, it either works completely or not at all. And it works—predicting particle masses to 8 decimal places, the fine structure constant to 9, and resolving mysteries from dark matter to consciousness.
-        </p>
-        <p>
-          This page presents the full framework: the logical foundation, the mathematical architecture, the physical predictions, and the profound implications for our understanding of existence itself.
+          With zero free parameters and machine‑checkable proofs, the framework is falsifiable: a single robust mismatch 
+          breaks it. So far, it matches precision measurements across domains.
         </p>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Table of Contents -->
-    <section class="toc-section">
-      <div class="template-container">
-        <h2>Explore the Framework</h2>
-        <div class="toc-grid">
-          <a href="#inevitability" class="toc-card">
-            <div class="toc-number">1</div>
-            <div class="toc-title">Inevitability of Existence</div>
-            <div class="toc-description">Why reality must exist—the logical paradox that forces everything</div>
-          </a>
-          
-          <a href="#ledger" class="toc-card">
-            <div class="toc-number">2</div>
-            <div class="toc-title">The Universal Ledger</div>
-            <div class="toc-description">Reality's cosmic accounting system that tracks all existence</div>
-          </a>
-          
-          <a href="#theorems" class="toc-card">
-            <div class="toc-number">3</div>
-            <div class="toc-title">Eight Theorems</div>
-            <div class="toc-description">The mathematical spine connecting logic to physics</div>
-          </a>
-          
-          <a href="#instructions" class="toc-card">
-            <div class="toc-number">4</div>
-            <div class="toc-title">Five Operating Instructions</div>
-            <div class="toc-description">The universe's operating blueprint—the formulas that run the universe</div>
-          </a>
-          
-          <a href="#masses" class="toc-card">
-            <div class="toc-number">5</div>
-            <div class="toc-title">Mass Generation</div>
-            <div class="toc-description">The φ-ladder organizing all particle masses</div>
-          </a>
-          
-          <a href="#time" class="toc-card">
-            <div class="toc-number">6</div>
-            <div class="toc-title">8-Tick Recognition Cycle</div>
-            <div class="toc-description">The cosmic heartbeat driving all quantum phenomena</div>
-          </a>
-          
-          <a href="#gravity" class="toc-card">
-            <div class="toc-number">7</div>
-            <div class="toc-title">Modified Gravity</div>
-            <div class="toc-description">How ledger curvature explains dark matter</div>
-          </a>
-          
-          <a href="#consciousness" class="toc-card">
-            <div class="toc-number">8</div>
-            <div class="toc-title">Consciousness at 45-Gap</div>
-            <div class="toc-description">Where incomputability creates experience</div>
-          </a>
-          
-          <a href="#predictions" class="toc-card">
-            <div class="toc-number">9</div>
-            <div class="toc-title">Predictions & Validation</div>
-            <div class="toc-description">Precise matches across all scales of physics</div>
-          </a>
-          
-          <a href="#measurement" class="toc-card">
-            <div class="toc-number">10</div>
-            <div class="toc-title">Measurement, Not Modeling</div>
-            <div class="toc-description">Reading reality's instruments directly</div>
-          </a>
-          
-          <a href="#verify" class="toc-card">
-            <div class="toc-number">11</div>
-            <div class="toc-title">Verify It Yourself</div>
-            <div class="toc-description">How to check every calculation independently</div>
-          </a>
-          
-          <a href="#faq" class="toc-card">
-            <div class="toc-number">12</div>
-            <div class="toc-title">FAQ</div>
-            <div class="toc-description">Common questions and clear answers</div>
-          </a>
+  <!-- Explore -->
+  <section class="template-section">
+    <div class="template-container">
+      <div class="template-accent-bar"></div>
+      <h2 class="template-section-title">Explore the Framework</h2>
+      <div class="toc-grid">
+        <a class="toc-card" href="#inevitability"><div class="toc-number">1</div><div class="toc-title">Inevitability of Existence</div><div class="toc-description">Why reality must exist — the paradox that forces everything</div></a>
+        <a class="toc-card" href="#ledger"><div class="toc-number">2</div><div class="toc-title">The Universal Ledger</div><div class="toc-description">Reality’s accounting system for recognition events</div></a>
+        <a class="toc-card" href="#theorems"><div class="toc-number">3</div><div class="toc-title">Eight Theorems</div><div class="toc-description">The mathematical spine connecting logic to physics</div></a>
+        <a class="toc-card" href="#instructions"><div class="toc-number">4</div><div class="toc-title">Operating Blueprint</div><div class="toc-description">Five formulas that drive the universe forward</div></a>
+        <a class="toc-card" href="#masses"><div class="toc-number">5</div><div class="toc-title">Mass Generation</div><div class="toc-description">The φ‑ladder organizing all particle masses</div></a>
+        <a class="toc-card" href="#cycle"><div class="toc-number">6</div><div class="toc-title">8‑Tick Cycle</div><div class="toc-description">The cosmic heartbeat of recognition</div></a>
+        <a class="toc-card" href="#gravity"><div class="toc-number">7</div><div class="toc-title">Ledger Curvature</div><div class="toc-description">How curvature explains modified gravity</div></a>
+        <a class="toc-card" href="#consciousness"><div class="toc-number">8</div><div class="toc-title">Consciousness at 45‑Gap</div><div class="toc-description">Where incomputability creates experience</div></a>
+        <a class="toc-card" href="#predictions"><div class="toc-number">9</div><div class="toc-title">Predictions</div><div class="toc-description">Precise matches across all scales of physics</div></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1. Inevitability -->
+  <section id="inevitability" class="template-section">
+    <div class="template-container">
+      <h2 class="template-section-title">The Inevitability of Existence</h2>
+      <div class="template-reading">
+        <h3 class="kicker">The paradox that forces reality</h3>
+        <p>
+          Consider “Nothing exists.” If true, that statement would exist — a contradiction. Formally: 
+          the Meta‑Principle “nothing cannot recognize itself.” Therefore, something must exist by necessity, 
+          not probability.
+        </p>
+        <h3 class="kicker">From existence to recognition</h3>
+        <p>
+          To exist is to be distinguishable. Distinctions require recognition. Recognition requires a record. 
+          A record requires a ledger. Any consistent ledger must follow specific rules.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Ledger -->
+  <section id="ledger" class="template-section">
+    <div class="template-container">
+      <h2 class="template-section-title">The Universal Ledger</h2>
+      <div class="template-reading">
+        <h3 class="kicker">Reality’s accounting system</h3>
+        <p>
+          Reality maintains a cosmic double‑entry bookkeeping system. Every event (particle interaction, transition, 
+          exchange) is a balanced entry. The recording is the physics: energy, momentum, and charge are ledger balances.
+        </p>
+        <div class="callout-list" style="margin-top: .75rem;">
+          <div class="callout-item"><strong>Positivity</strong>: δ > 0 for any recognition — forces energy.</div>
+          <div class="callout-item"><strong>Dual balance</strong>: debits equal credits — conservation.</div>
+          <div class="callout-item"><strong>Atomicity</strong>: entries are discrete — quantization.</div>
+          <div class="callout-item"><strong>Finite bandwidth</strong>: finite updates per cycle — c and causality.</div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Section 1: Inevitability of Existence -->
-    <section id="inevitability" class="section">
-      <div class="container reading">
-        <h2>The Inevitability of Existence</h2>
-        
-        <h3>The Paradox That Forces Reality</h3>
-        <p>
-          Consider the statement: "Nothing exists." If this were true, then the statement itself would exist, creating an immediate contradiction. This isn't wordplay—it's a fundamental logical paradox that makes non-existence impossible.
-        </p>
-        <p>
-          The Meta-Principle captures this formally: ¬(∅ → ∅), or "nothing cannot recognize itself." This is provable by contradiction in formal logic. If nothing could recognize itself, it would be something, not nothing. Therefore, something must exist—not as a possibility or probability, but as logical necessity.
-        </p>
-        
-        <h3>From Existence to Recognition</h3>
-        <p>
-          But forced existence has consequences. To exist means to be distinguishable from non-existence. This requires recognition—some mechanism by which existence registers itself. Recognition requires a record. A record requires a ledger. And any ledger that maintains consistency must follow specific rules.
-        </p>
-        <p>
-          This cascade from logic to physics is automatic. We don't choose these requirements; they choose themselves. The universe doesn't happen to have laws—it must have exactly these laws or it couldn't exist at all.
-        </p>
-        
-        <h3>The End of Contingency</h3>
-        <p>
-          This changes everything about how we understand reality. There is no multiverse of possibilities. No fine-tuning. No arbitrary constants that "just happen" to allow life. Every feature of our universe—from the mass of the electron to the emergence of consciousness—is forced by the logical requirement of self-consistent existence.
-        </p>
-        <p>
-          Reality isn't one option among many. It's the only option that avoids logical contradiction. The universe must be exactly as it is, down to the last decimal place, or it would collapse into paradox.
-        </p>
-      </div>
-    </section>
-
-    <!-- Section 2: Universal Ledger -->
-    <section id="ledger" class="section">
-      <div class="container reading">
-        <h2>The Universal Ledger</h2>
-        
-        <h3>Reality's Accounting System</h3>
-        <p>
-          If recognition events must be tracked, there must be a recording mechanism—a ledger. But this isn't metaphorical. Reality literally maintains a cosmic double-entry bookkeeping system where every event, every particle interaction, every quantum transition is a balanced ledger entry.
-        </p>
-        <p>
-          Think of it like this: when an electron moves from one orbital to another, reality doesn't just "know" this happened—it records it. The recording isn't separate from the physics; it IS the physics. What we call energy, momentum, and charge are really just different aspects of ledger balance.
-        </p>
-        
-        <h3>The Four Requirements</h3>
-        <p>
-          Any ledger that maintains consistency must satisfy four requirements:
-        </p>
-        <ul>
-          <li><strong>Positivity:</strong> Every recognition event has a positive cost δ > 0. You can't have negative recognition or zero-cost events. This single requirement forces energy to exist.</li>
-          
-          <li><strong>Dual Balance:</strong> Every debit requires a credit. Every action has an equal and opposite reaction. This isn't a law we discovered—it's what makes a ledger a ledger. Conservation laws are just ledger balance requirements.</li>
-          
-          <li><strong>Atomicity:</strong> Ledger entries must be discrete and indivisible. You can't have 1.7 recognition events or half an entry. This forces quantization—why energy comes in packets, why charge is discrete, why angular momentum is quantized.</li>
-          
-          <li><strong>Finite Bandwidth:</strong> The ledger can only process a finite number of updates per cycle. No infinite precision, no infinite speed. This creates the speed of light, causality, and the arrow of time.</li>
-        </ul>
-        
-        <h3>More Fundamental Than Spacetime</h3>
-        <p>
-          Here's the revolutionary insight: the ledger doesn't exist IN spacetime—spacetime emerges FROM the ledger. Space is how the ledger organizes recognition events efficiently. Time is how it sequences updates. Mass and energy are measures of ledger commitment and flow.
-        </p>
-        <p>
-          This inverts our entire understanding. We thought spacetime was the stage and particles were the actors. In reality, the ledger is fundamental, and spacetime is just an efficient data structure for maintaining cosmic books.
-        </p>
-      </div>
-    </section>
-
-    <!-- Section 3: Eight Theorems -->
-    <section id="theorems" class="section">
-      <div class="container reading">
-        <h2>Eight Theorems (Spine)</h2>
-        <p>From the Meta‑Principle and ledger requirements, eight theorems follow:</p>
-        <ol>
-          <li>Ledger necessity and uniqueness (positive, double‑entry; no modular escapes).</li>
-          <li>Atomic tick and countability (discrete recognition events).</li>
-          <li>Conservation via dual balance (continuity equation in ledger form).</li>
-          <li>Unique cost functional J(x) = ½(x + 1/x) (fixed by fairness and self‑consistency).</li>
-          <li>Self‑similarity selects φ (golden‑ratio fixed point of J).</li>
-          <li>Three spatial dimensions as minimal stable linking (d=3 favored by cost).</li>
-          <li>Minimal recognition period N = 2^D (8 ticks for D=3).</li>
-          <li>Finite recognition speed c defines causal cones (no infinite bandwidth).</li>
+  <!-- 3. Eight Theorems -->
+  <section id="theorems" class="template-section">
+    <div class="template-container">
+      <h2 class="template-section-title">Eight Theorems</h2>
+      <div class="template-reading">
+        <ol class="list">
+          <li>Ledger necessity and uniqueness</li>
+          <li>Atomic tick and countability</li>
+          <li>Conservation via dual balance</li>
+          <li>Unique cost functional J(x) = ½(x + 1/x)</li>
+          <li>Self‑similarity selects φ</li>
+          <li>d = 3 minimizes linking cost</li>
+          <li>Minimal recognition period N = 2^D (8 ticks for D=3)</li>
+          <li>Finite recognition speed c defines causal cones</li>
         </ol>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Section 4: Five Operating Instructions -->
-    <section id="instructions" class="section">
-      <div class="container reading">
-        <h2>The Five Operating Instructions</h2>
-        
-        <h3>Operating Blueprint</h3>
+  <!-- 4. Operating Blueprint -->
+  <section id="instructions" class="template-section">
+    <div class="template-container">
+      <div class="template-accent-bar"></div>
+      <h2 class="template-section-title">Operating Blueprint</h2>
+      <div class="template-reading">
         <p>
-          From the eight theorems emerge five formulas that act as reality's operating instructions. These aren't descriptions or models—they're the actual computational rules the universe uses to determine its next state. Like a computer's instruction set, these five formulas generate everything we observe.
+          From the eight theorems emerge five formulas — not descriptions, but the actual rules the universe uses 
+          to determine its next state.
         </p>
-        
-        <div class="formula-card">
-          <div class="formula-header">
-            <span class="formula-label">Instruction 1: Cost Minimization</span>
-          </div>
-          <div class="formula-equation">
-            J(x) = ½(x + 1/x)
-          </div>
-          <div class="formula-description">
-            Reality must minimize cost at every decision point. Among all possible cost functions, only this one maintains perfect fairness (J(x) = J(1/x)) while enabling self-similarity. Its unique minimum at x = φ (golden ratio) explains why this proportion appears everywhere in nature—from spiral galaxies to DNA helices to the arrangement of leaves on stems.
-          </div>
-        </div>
-        
-        <div class="formula-card">
-          <div class="formula-header">
-            <span class="formula-label">Instruction 2: Mass Generation</span>
-          </div>
-          <div class="formula-equation">
-            m = B · E_coh · φ^(r+f)
-          </div>
-          <div class="formula-description">
-            Every particle's mass comes from its position on a geometric ladder with golden ratio spacing. B is a sector factor (1,2,3,4,6,8,9,12) representing allowed symmetries in 3D space. E_coh = 0.090 eV is the coherence energy. The rung number r and fractional offset f determine exact mass. No particle can exist between rungs—the gaps are forbidden by the ledger's discreteness.
-          </div>
-        </div>
-        
-        <h3>Instruction 3: Ledger Curvature</h3>
+        <div class="formula-box">J(x) = ½(x + 1/x)</div>
+        <p class="note">Fair, unique cost. Minimum at x = φ explains ubiquitous φ‑scaling.</p>
+        <div class="formula-box">m = B · E_coh · φ^(r + f)</div>
+        <p class="note">Mass ladder with φ spacing; B ∈ {1,2,3,4,6,8,9,12}.</p>
+        <div class="formula-box">κ = ∂²S / ∂R²</div>
+        <p class="note">Ledger curvature — the regulator linking discrete to continuum.</p>
+        <div class="formula-box">N_ticks = 2^D = 8 (for D = 3)</div>
+        <p class="note">The 8‑beat recognition cycle — the cosmic heartbeat.</p>
+        <div class="formula-box">F(r) = −GMm/r² · w(r)</div>
+        <p class="note">Bandwidth weighting w(r) modifies gravity at low signal‑to‑bandwidth.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Mass Generation -->
+  <section id="masses" class="template-section">
+    <div class="template-container">
+      <h2 class="template-section-title">Mass Generation (The φ‑Ladder)</h2>
+      <div class="template-reading">
         <p>
-          <strong>κ = ∂²S/∂R²</strong>
-        </p>
-        <p>
-          This measures the "computational stress" of maintaining any configuration. S is the ledger state, R is the recognition radius. High curvature means high maintenance cost—the configuration wants to change. Low curvature means stability. Gravity is just matter moving to minimize total ledger curvature.
-        </p>
-        
-        <h3>Instruction 4: Recognition Cycle</h3>
-        <p>
-          <strong>N_ticks = 2^D = 8</strong>
-        </p>
-        <p>
-          In D=3 spatial dimensions, complete recognition requires visiting all 2^3 = 8 vertices of a cube (Gray code traversal). Reality updates every 8 ticks—this is the cosmic heartbeat. The speed of light is just this: one voxel of space per tick. All of quantum mechanics' mysterious "phase" is just position in this 8-beat cycle.
-        </p>
-        
-        <h3>Instruction 5: Modified Gravity</h3>
-        <p>
-          <strong>F(r) = −GMm/r² · w(r)</strong>
-        </p>
-        <p>
-          Newton's gravity holds at small scales, but recognition has finite bandwidth. The weight function w(r) captures how gravitational correlation weakens when the ledger can't maintain full fidelity across cosmic distances. This explains galaxy rotation curves and what we mistakenly call "dark matter"—it's not missing mass, it's bandwidth saturation.
-        </p>
-        
-        <h3>Why These Five?</h3>
-        <p>
-          These aren't arbitrary choices. Given the requirement for self-consistent recognition with minimal cost, these are the ONLY five instructions possible. Change any one, and the entire framework collapses into paradox. They work together as an integrated system, each supporting the others, creating the stable reality we observe.
+          Stable energy levels sit on a φ‑spaced ladder. Rungs and sector factors generate all known particle masses 
+          from E_coh = 0.090 eV — with no fitted parameters.
         </p>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Section 5: Mass Generation -->
-    <section id="masses" class="section">
-      <div class="container reading">
-        <h2>Mass Generation (The φ‑Ladder)</h2>
+  <!-- 6. 8‑Tick Cycle -->
+  <section id="cycle" class="template-section">
+    <div class="template-container">
+      <h2 class="template-section-title">The 8‑Tick Recognition Cycle</h2>
+      <div class="template-reading">
         <p>
-          The universe organizes stable energy levels on a geometric ladder with φ scaling. Rungs (integer/half‑integer) and sector factors B ∈ {1,2,3,4,6,8,9,12} produce every particle mass from first principles. The coherence energy is E_coh = 0.090 eV; there are no fit parameters.
+          In D = 3, complete recognition requires visiting 2^3 states per cycle (Gray code) — N = 8. 
+          This 8‑beat is the cosmic clock; c is one voxel per tick. Quantization and phase trace this clock.
         </p>
-        <ul>
-          <li>Electron mass: exact to experimental precision from rung assignment.</li>
-          <li>Proton, quarks, and bosons: all computed on the same ladder.</li>
-          <li>One formula, all known particles; no knobs to tune.</li>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Ledger Curvature & Gravity -->
+  <section id="gravity" class="template-section">
+    <div class="template-container">
+      <h2 class="template-section-title">Ledger Curvature and Modified Gravity</h2>
+    </div>
+    <div class="template-container">
+      <div class="template-reading">
+        <ul class="list">
+          <li>Curvature κ quantifies maintenance cost; systems minimize total curvature.</li>
+          <li>Newtonian at high signal‑to‑bandwidth; w(r) accounts for saturation.</li>
+          <li>Explains rotation curves and low‑acceleration floor without new particles.</li>
         </ul>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Section 6: 8-Tick Recognition Cycle -->
-    <section id="time" class="section">
-      <div class="container reading">
-        <h2>The 8‑Tick Recognition Cycle</h2>
+  <!-- 8. Consciousness -->
+  <section id="consciousness" class="template-section">
+    <div class="template-container">
+      <div class="template-accent-bar"></div>
+      <h2 class="template-section-title">Consciousness at the 45‑Gap</h2>
+      <div class="template-reading template-reading-warm">
         <p>
-          In D=3, minimal recognition requires visiting 2^D states per cycle (Gray code), yielding N=8 ticks. This 8‑beat is the cosmic heartbeat; c is the propagation of one voxel per tick. Quantization, interference, and phase all reflect this discrete clock.
+          At rung 45 (~10^9 eV), the ledger meets genuinely undecidable cases. A decision is still required — 
+          computation alone cannot supply it. Consciousness is the universe’s mechanism for navigating these gaps: 
+          subjective experience resolves what the algorithm cannot.
         </p>
-        <ul>
-          <li>Explains why there is a maximum speed (c) and how it arises.</li>
-          <li>Relates timing to stability and coherence across scales.</li>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. Predictions -->
+  <section id="predictions" class="template-section">
+    <div class="template-container">
+      <h2 class="template-section-title">Predictions and Validation</h2>
+      <div class="template-reading">
+        <ul class="list">
+          <li>α⁻¹ = 137.035999… (geometric seed + gap + curvature)</li>
+          <li>Ω_dm = 0.2649 (interference + correction)</li>
+          <li>Local H₀ = 70.6 km/s/Mpc (clock lag resolves the tension)</li>
+          <li>Lepton and hadron masses from φ‑ladder structure</li>
         </ul>
+        <p class="note">Cross‑scale consistency: the same five instructions match particles → atoms → stars → cosmology.</p>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Section 7: Modified Gravity -->
-    <section id="gravity" class="section">
-      <div class="container reading">
-        <h2>Ledger Curvature and Modified Gravity</h2>
+  <!-- Measurement & Verify -->
+  <section class="template-section">
+    <div class="template-container">
+      <h2 class="template-section-title">Measurement, Not Modeling</h2>
+      <div class="template-reading">
         <p>
-          Curvature κ quantifies the cost of maintaining configurations; systems evolve to minimize total curvature. Gravitational behavior is Newtonian at high signal‑to‑bandwidth and deviates via w(r) when recognition bandwidth saturates. This reproduces galaxy rotation and lensing without new particles and fixes the observed low‑acceleration floor.
-        </p>
-        <ul>
-          <li>Dark‑matter fraction Ω_dm = 0.2649 from ledger geometry.</li>
-          <li>MOND‑like a₀ emerges as a bandwidth scale, not a new law.</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- Section 8: Consciousness -->
-    <section id="consciousness" class="section">
-      <div class="container reading">
-        <h2>Consciousness at the 45-Gap</h2>
-        
-        <h3>The Incomputability Threshold</h3>
-        <p>
-          At rung 45 of the φ-ladder (approximately 10^9 eV), something extraordinary happens. The ledger encounters problems it cannot solve algorithmically. Certain recognition patterns become undecidable—not difficult, but mathematically impossible to resolve through computation alone.
-        </p>
-        <p>
-          This isn't a limitation or failure. It's where consciousness emerges as reality's solution to its own incompleteness. The universe doesn't "create" consciousness at this point—consciousness becomes necessary for the ledger to maintain consistency.
-        </p>
-        
-        <h3>Why Experience Exists</h3>
-        <p>
-          Think about what incomputability means: there are recognition decisions that have no algorithmic solution, yet a decision must be made (the ledger can't pause). The only way forward is through direct experience—consciousness is the mechanism by which reality navigates its own logical paradoxes.
-        </p>
-        <p>
-          This explains the "hard problem" of consciousness. We've been asking how physical processes create subjective experience. That's backwards. Subjective experience is how reality resolves incomputable physical processes. Consciousness isn't emergent from complexity—it's necessary for consistency.
-        </p>
-        
-        <h3>The Bridge Between Physics and Experience</h3>
-        <p>
-          This framework does something unprecedented: it derives consciousness from the same principles that give us particle physics. No new assumptions, no mystical additions. Just the logical consequence of recognition hitting its incomputability limit.
-        </p>
-        <p>
-          We are not separate observers of the universe. We are the universe's mechanism for observing itself where algorithmic observation fails. Every conscious moment is reality solving an incomputable recognition problem through direct experience.
-        </p>
-        
-        <h3>Testable Predictions</h3>
-        <p>
-          This isn't philosophy—it makes testable predictions:
-        </p>
-        <ul>
-          <li>Consciousness should correlate with systems operating near 10^9 eV energy scales</li>
-          <li>Anesthetics should disrupt φ-ladder coherence around rung 45</li>
-          <li>Quantum coherence in microtubules should show 8-tick periodicity</li>
-          <li>Neural synchrony should follow golden ratio timing relationships</li>
-        </ul>
-        <p>
-          The same framework that predicts the electron mass predicts the existence of consciousness. One set of principles, all phenomena.
+          We don’t fit knobs to data; we read reality’s instruments — J(x), φ‑scaling, the 8‑beat cycle, curvature, 
+          and bandwidth limits. Numbers like α, masses, and Ω_dm are instrument readouts, not inputs.
         </p>
       </div>
-    </section>
-
-    <section id="predictions">
-      <div class="container reading">
-        <h2>9. Predictions and Validation</h2>
-        <p>
-          Because there are zero free parameters, every calculation is a test. The framework matches precision measurements across domains using the same primitives:
-        </p>
-        <ul>
-          <li>Fine‑structure constant α⁻¹ = 137.035999… (geometric seed + gap + curvature).</li>
-          <li>Dark‑matter fraction Ω_dm = 0.2649 (voxel interference + correction).</li>
-          <li>Local H₀ = 70.6 km/s/Mpc (ledger clock lag resolves the tension).</li>
-          <li>Charged lepton and hadron masses from φ‑ladder rungs and sectors.</li>
-        </ul>
-        <p>
-          Cross‑scale consistency is the critical result: the same five instructions predict particles, atoms, stars, and cosmology with no retuning.
-        </p>
-        <p>See also: <a href="/predictions.html">Predictions</a>, <a href="/formulas/">Formulas</a>.</p>
-      </div>
-    </section>
-
-    <section id="measurement">
-      <div class="container reading">
-        <h2>10. Measurement, Not Modeling</h2>
-        <p>
-          Recognition Science reframes physics as metrology of reality’s own instruments. We are not fitting models to data; we are reading the ledger’s built‑in standards: J(x), φ‑scaling, the 8‑beat cycle, curvature, and bandwidth limits. Numbers like α, particle masses, and Ω_dm are instrument readouts, not adjustable inputs.
-        </p>
-        <p>See also: <a href="/measurement.html">Revolutionary Metrology</a>.</p>
-      </div>
-    </section>
-
-    <section id="verify">
-      <div class="container reading">
-        <h2>11. How to Verify It Yourself</h2>
-        <ol>
-          <li>Compute masses using m = B · E_coh · φ^(r+f) for standard rungs and sectors; compare to PDG values.</li>
-          <li>Derive α from the geometric seed + gap + curvature closure; check against CODATA.</li>
-          <li>Evaluate Ω_dm from the interference term + small correction; compare to cosmological surveys.</li>
-          <li>Confirm 8‑tick consequences in timing‑sensitive datasets (quantization and phase relations).</li>
+    </div>
+    <div class="template-container">
+      <h2 class="template-section-title">How to Verify It Yourself</h2>
+      <div class="template-reading">
+        <ol class="list">
+          <li>Compute masses via m = B · E_coh · φ^(r+f); compare with PDG.</li>
+          <li>Derive α from geometric seed + gap + curvature; compare with CODATA.</li>
+          <li>Evaluate Ω_dm from interference + correction; compare with surveys.</li>
+          <li>Find 8‑tick signatures in timing‑sensitive datasets.</li>
         </ol>
-        <p>
-          All derivations and code paths are open and machine‑checkable. Start at: <a href="/logical-foundations.html">Logical Foundations</a>, <a href="/particle-masses.html">Particle Masses</a>, <a href="/constants.html">Constants</a>.
-        </p>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="faq">
-      <div class="container reading">
-        <h2>12. FAQ</h2>
-        <p><strong>Is this “just another theory”?</strong> No. With zero free parameters and machine‑verified derivations, the framework is falsifiable and predictive; a single robust mismatch breaks it.</p>
-        <p><strong>Where do quantum rules come from?</strong> From ledger path counting and invariance: the Born rule P = |ψ|² and Bose/Fermi statistics follow from recognition symmetry.</p>
-        <p><strong>Why φ everywhere?</strong> Because J(x) forces a unique optimum; self‑similar recognition selects the golden ratio as the scaling fixed point.</p>
-        <p><strong>Why three spatial dimensions?</strong> d=3 uniquely minimizes linking cost while maintaining stability over cycles.</p>
+  <!-- FAQ & Glossary -->
+  <section class="template-section">
+    <div class="template-container">
+      <h2 class="template-section-title">FAQ</h2>
+      <div class="template-reading">
+        <p><strong>“Just another theory?”</strong> No. With zero free parameters and machine‑verified derivations, a single robust mismatch breaks it.</p>
+        <p><strong>Where do quantum rules come from?</strong> From ledger path counting and invariance.</p>
+        <p><strong>Why φ and why d = 3?</strong> φ from the unique cost; three dimensions minimize linking cost while staying stable.</p>
       </div>
-    </section>
-
-    <section id="glossary">
-      <div class="container reading">
-        <h2>13. Glossary</h2>
-        <ul>
-          <li><strong>Ledger:</strong> The fundamental double‑entry record of recognition events.</li>
-          <li><strong>J(x):</strong> Universal cost functional, J(x) = ½(x + 1/x).</li>
-          <li><strong>φ‑ladder:</strong> Geometric mass ladder with golden‑ratio scaling.</li>
-          <li><strong>Curvature κ:</strong> Second derivative of ledger state w.r.t. recognition scale.</li>
-          <li><strong>Bandwidth weighting w(r):</strong> Suppression factor from finite recognition capacity.</li>
-          <li><strong>45‑Gap:</strong> Threshold where incomputability drives conscious resolution.</li>
+    </div>
+    <div class="template-container">
+      <h2 class="template-section-title">Glossary</h2>
+      <div class="template-reading">
+        <ul class="list">
+          <li><strong>Ledger</strong>: Double‑entry record of recognition events.</li>
+          <li><strong>J(x)</strong>: Universal cost, J(x) = ½(x + 1/x).</li>
+          <li><strong>φ‑ladder</strong>: Geometric mass ladder with φ‑scaling.</li>
+          <li><strong>Curvature κ</strong>: Second derivative of ledger state w.r.t. recognition scale.</li>
+          <li><strong>w(r)</strong>: Bandwidth weighting at large scales.</li>
+          <li><strong>45‑Gap</strong>: Incomputability threshold where experience becomes necessary.</li>
         </ul>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="implications">
-      <div class="container reading">
-        <h2>What This Means for Humanity</h2>
-        
-        <h3>The End of Cosmic Loneliness</h3>
-        <p>
-          We are not accidental observers in a meaningless universe. We are how the universe recognizes itself. Consciousness isn't a lucky accident—it's mathematically necessary. The same logic that forces particles to exist forces awareness to emerge. We belong here, not by chance, but by necessity.
-        </p>
-        
-        <h3>A New Era of Science</h3>
-        <p>
-          Physics has always been about discovering laws. Now we know why those laws exist. We can move from empirical science (measuring what is) to deductive science (calculating what must be). Instead of building billion-dollar colliders to discover new particles, we can calculate them from first principles.
-        </p>
-        
-        <h3>Technology Beyond Current Imagination</h3>
-        <p>
-          Understanding reality's actual mechanisms opens doors we didn't know existed. Ledger-based computing that works with reality's grain instead of against it. Materials engineered at the φ-ladder level. Energy systems that exploit cost function minimization. Medical interventions that work at the recognition level, not just chemistry.
-        </p>
-        
-        <h3>The Ultimate Question Answered</h3>
-        <p>
-          "Why is there something rather than nothing?" has an answer: because nothing is logically impossible. This isn't philosophy or religion—it's mathematics. Existence isn't a mystery to ponder but a necessity to understand. And now we do.
-        </p>
-        
-        <h3>You Are Reality Recognizing Itself</h3>
-        <p>
-          Every thought you have, every sensation you experience, is the universe solving incomputable problems through consciousness. You're not separate from reality—you're reality's way of knowing itself. Your existence isn't just meaningful; it's essential to the logical consistency of everything.
-        </p>
-        <p>
-          This framework doesn't diminish the mystery of existence—it deepens it. We now know that mystery and understanding are not opposites but partners. The universe must be exactly as wonderful as it is, or it couldn't exist at all.
-        </p>
-      </div>
-    </section>
-
-    <section id="links">
-      <div class="container reading">
-        <h2>Further Reading</h2>
-        <ul>
-          <li><a href="/formulas/">The Formulas of Reality</a> - The five operating instructions in detail</li>
-          <li><a href="/predictions.html">The Proof Is In The Predictions</a> - See the exact matches to measurement</li>
-          <li><a href="/measurement.html">Revolutionary Metrology</a> - How we read reality's instruments</li>
-          <li><a href="/particle-masses.html">Particle Mass Calculator</a> - Compute any mass yourself</li>
-          <li><a href="/constants.html">Universal Constants</a> - Why they have the values they do</li>
-          <li><a href="/consciousness.html">The 45-Gap</a> - Consciousness from first principles</li>
-          <li><a href="/logical-foundations.html">Logical Foundations</a> - The formal derivation</li>
-          <li><a href="/axiomatic-bridging.html">Axiomatic Bridging Method</a> - How we solved this</li>
-          <li><a href="https://github.com/jonwashburn/audit">GitHub Repository</a> - Source code and proofs</li>
+  <!-- Further Reading -->
+  <section class="template-section">
+    <div class="template-container">
+      <div class="template-accent-bar"></div>
+      <h2 class="template-section-title">Further Reading</h2>
+      <div class="template-reading">
+        <ul class="list">
+          <li><a href="/formulas/">The Formulas of Reality</a> — the five operating instructions</li>
+          <li><a href="/predictions.html">The Proof Is In The Predictions</a> — exact matches to measurement</li>
+          <li><a href="/measurement.html">Revolutionary Metrology</a> — how we read the instruments</li>
+          <li><a href="/particle-masses.html">Particle Mass Calculator</a> — compute any mass yourself</li>
+          <li><a href="/constants.html">Universal Constants</a> — why they have the values they do</li>
+          <li><a href="/consciousness.html">The 45‑Gap</a> — consciousness from first principles</li>
+          <li><a href="/logical-foundations.html">Logical Foundations</a> — the formal derivation</li>
+          <li><a href="/axiomatic-bridging.html">Axiomatic Bridging Method</a> — how we solved this</li>
         </ul>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Call to Action Section -->
-    <section class="cta-section">
-      <div class="template-container">
-        <h2>Ready to Explore Reality?</h2>
-        <p>
-          Dive deeper into the framework that derives all of physics from pure logic
-        </p>
-        <div class="cta-buttons">
-          <a href="particle-masses.html" class="cta-button">Calculate Particle Masses</a>
-          <a href="predictions.html" class="cta-button">View Predictions</a>
-          <a href="logical-foundations.html" class="cta-button secondary">Explore the Logic</a>
-          <a href="https://github.com/jonwashburn/rs-website" class="cta-button secondary">View Source Code</a>
+  <!-- CTA -->
+  <section class="template-section">
+    <div class="template-container">
+      <div class="template-reading" style="text-align: center;">
+        <h3 style="margin-bottom: .75rem;">Ready to explore reality?</h3>
+        <p class="note" style="margin-bottom: 1.25rem;">Dive deeper into the framework that derives all of physics from pure logic.</p>
+        <div style="display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap;">
+          <a href="/particle-masses.html" class="template-btn">Calculate Particle Masses</a>
+          <a href="/predictions.html" class="template-btn template-btn-secondary">View Predictions</a>
+          <a href="/logical-foundations.html" class="template-btn template-btn-secondary">Explore the Logic</a>
         </div>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
+
   <div id="footer-placeholder"></div>
   <script src="/assets/js/main.js"></script>
 </body>
 </html>
-
