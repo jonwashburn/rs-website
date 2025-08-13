@@ -18,650 +18,151 @@
     };
   </script>
   <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
-  
-  <style>
-    /* Podcast badge */
-    .podcast-badge {
-      position: fixed; top: 20px; right: 20px; z-index: 1000;
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      border: 2px solid var(--color-accent, #d4af37); color: var(--color-accent, #d4af37);
-      background: #ffffff; border-radius: 999px; 
-      padding: 0.35rem 0.6rem;
-      cursor: pointer; transition: all 0.2s; text-decoration: none;
-      font-family: inherit; font-size: inherit;
-      box-shadow: 0 2px 8px rgba(212, 175, 55, 0.2);
-    }
-    .podcast-badge:hover { 
-      transform: translateY(-1px); 
-      background: var(--color-accent, #d4af37);
-      color: white;
-      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
-    }
-    .podcast-badge:hover svg { stroke: white; }
-    .podcast-icon { width: 16px; height: 16px; display: inline-block; }
-    .podcast-label { font-size: 0.8rem; }
-    @media (max-width: 640px) {
-      .podcast-label { display: none; }
-      .podcast-badge { padding: 0.35rem; top: 10px; right: 10px; }
-    }
-    
-    /* Hero Section */
-    .hero-section {
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-      color: white;
-      padding: 6rem 0;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .hero-section::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
-      animation: pulse 20s ease-in-out infinite;
-    }
-    
-    @keyframes pulse {
-      0%, 100% { transform: scale(1) rotate(0deg); }
-      50% { transform: scale(1.1) rotate(180deg); }
-    }
-    
-    .hero-content {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 0 2rem;
-      position: relative;
-      z-index: 1;
-    }
-    
-    .hero-title {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, #ffffff 0%, #d4af37 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .hero-subtitle {
-      font-size: 1.5rem;
-      opacity: 0.95;
-      margin-bottom: 1rem;
-      font-weight: 300;
-    }
-    
-    .hero-description {
-      font-size: 1.1rem;
-      opacity: 0.8;
-      margin-bottom: 2.5rem;
-      max-width: 700px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    
-    .hero-buttons {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    
-    .btn-primary, .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 1rem 2rem;
-      border-radius: 50px;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      font-weight: 500;
-      font-size: 1.05rem;
-    }
-    
-    .btn-primary {
-      background: #d4af37;
-      color: #1a1a2e;
-      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
-    }
-    
-    .btn-primary:hover {
-      background: #e5c158;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
-    }
-    
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.1);
-      color: white;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      backdrop-filter: blur(10px);
-    }
-    
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.2);
-      border-color: #d4af37;
-      transform: translateY(-2px);
-    }
-    
-    /* Feature Cards */
-    .features-section {
-      padding: 4rem 0;
-      background: #f8f9fa;
-    }
-    
-    .feature-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 2rem;
-    }
-    
-    .feature-card {
-      background: white;
-      border-radius: 16px;
-      padding: 2.5rem;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-      border: 1px solid #e0e0e0;
-    }
-    
-    .feature-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #d4af37, #e5c158);
-      transform: scaleX(0);
-      transition: transform 0.3s ease;
-    }
-    
-    .feature-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
-      border-color: #d4af37;
-    }
-    
-    .feature-card:hover::before {
-      transform: scaleX(1);
-    }
-    
-    .feature-icon {
-      font-size: 3rem;
-      margin-bottom: 1.2rem;
-      display: block;
-    }
-    
-    .feature-title {
-      font-size: 1.4rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-      color: #1a1a2e;
-    }
-    
-    .feature-description {
-      color: #666;
-      line-height: 1.7;
-      font-size: 1.05rem;
-    }
-    
-    /* Results Preview */
-    .results-section {
-      padding: 5rem 0;
-      background: white;
-    }
-    
-    .results-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 2rem;
-    }
-    
-    .results-header {
-      text-align: center;
-      margin-bottom: 3rem;
-    }
-    
-    .results-title {
-      font-size: 2.5rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-      color: #1a1a2e;
-    }
-    
-    .results-subtitle {
-      font-size: 1.2rem;
-      color: #666;
-    }
-    
-    .results-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-      margin-bottom: 3rem;
-    }
-    
-    .result-card {
-      background: #f8f9fa;
-      border-radius: 12px;
-      padding: 2rem;
-      text-align: center;
-      transition: all 0.3s ease;
-      border: 2px solid transparent;
-    }
-    
-    .result-card:hover {
-      border-color: #d4af37;
-      transform: scale(1.05);
-    }
-    
-    .result-value {
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: #d4af37;
-      margin-bottom: 0.5rem;
-      font-family: 'Courier New', monospace;
-    }
-    
-    .result-label {
-      color: #666;
-      font-size: 1rem;
-      font-weight: 500;
-    }
-    
-    .result-accuracy {
-      color: #28a745;
-      font-size: 0.9rem;
-      margin-top: 0.5rem;
-    }
-    
-    /* Equation Section */
-    .equation-section {
-      padding: 4rem 0;
-      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    }
-    
-    .equation-container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 0 2rem;
-      text-align: center;
-    }
-    
-    .equation-title {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 2rem;
-      color: #1a1a2e;
-    }
-    
-    .equation-box {
-      background: white;
-      border-radius: 12px;
-      padding: 3rem;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-      border: 2px solid #d4af37;
-    }
-    
-    .equation-main {
-      font-size: 1.8rem;
-      margin-bottom: 2rem;
-      font-family: 'Times New Roman', serif;
-      color: #1a1a2e;
-    }
-    
-    .equation-legend {
-      text-align: left;
-      max-width: 500px;
-      margin: 0 auto;
-    }
-    
-    .equation-legend-item {
-      margin-bottom: 1rem;
-      color: #555;
-      line-height: 1.6;
-    }
-    
-    /* CTA Section */
-    .cta-section {
-      padding: 5rem 0;
-      background: #1a1a2e;
-      color: white;
-      text-align: center;
-    }
-    
-    .cta-content {
-      max-width: 700px;
-      margin: 0 auto;
-      padding: 0 2rem;
-    }
-    
-    .cta-title {
-      font-size: 2.2rem;
-      margin-bottom: 1rem;
-    }
-    
-    .cta-description {
-      font-size: 1.2rem;
-      margin-bottom: 2rem;
-      opacity: 0.9;
-    }
-    
-    /* Responsive */
-    @media (max-width: 768px) {
-      .hero-title {
-        font-size: 2rem;
-      }
-      
-      .hero-subtitle {
-        font-size: 1.2rem;
-      }
-      
-      .hero-buttons {
-        flex-direction: column;
-        align-items: center;
-      }
-      
-      .btn-primary, .btn-secondary {
-        width: 250px;
-        justify-content: center;
-      }
-      
-      .results-title {
-        font-size: 2rem;
-      }
-      
-      .equation-main {
-        font-size: 1.4rem;
-      }
-    }
-  </style>
 </head>
 <body class="template-page">
   <div id="header-placeholder"></div>
+  <div id="sitewide-banner-placeholder"></div>
 
-  <!-- Audio Player Badge -->
-  <button class="podcast-badge" id="podcastBadge" aria-pressed="false" aria-label="Play particle masses audio">
-    <svg class="podcast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <polygon id="iconPlay" points="8,5 19,12 8,19 8,5"></polygon>
-      <g id="iconPause" style="display:none"><line x1="9" y1="5" x2="9" y2="19"></line><line x1="15" y1="5" x2="15" y2="19"></line></g>
-    </svg>
-    <span class="podcast-label">Listen • 7 min</span>
-  </button>
-
-  <!-- Hero Section -->
-  <section class="hero-section">
-    <div class="hero-content">
-      <h1 class="hero-title">Parameter-Free Particle Masses</h1>
-      <p class="hero-subtitle">Every particle mass from one equation. Zero fits.</p>
-      <p class="hero-description">
-        We've discovered that all Standard Model particle masses follow a single mathematical pattern based on the golden ratio φ. 
-        No adjustable parameters. No empirical fitting. Just pure mathematical necessity.
-      </p>
-      <div class="hero-buttons">
-        <a href="particle-masses-paper.html" class="btn-primary">
-          📖 Read Full Paper
-        </a>
-        <a href="https://recognitionphysics.org/Parameter_Free_Particle_Masses.pdf" class="btn-secondary" target="_blank">
-          📄 Download PDF
-        </a>
+  <!-- Hero -->
+  <section class="template-hero">
+    <div class="template-container">
+      <h1 class="template-hero-title">Parameter‑Free Particle Masses</h1>
+      <p class="template-hero-subtitle">Every particle mass from one equation. Zero fits.</p>
+      <p class="template-hero-lead">We've discovered that all Standard Model particle masses follow a single mathematical pattern based on the golden ratio φ. No adjustable parameters. No empirical fitting. Just pure mathematical necessity.</p>
+      <div class="template-cta">
+        <a href="particle-masses-paper.html" class="template-btn">📖 Read the Full Paper</a>
+        <a href="https://recognitionphysics.org/Parameter_Free_Particle_Masses.pdf" class="template-btn template-btn-outline" target="_blank">📄 Download PDF</a>
       </div>
     </div>
   </section>
 
-  <!-- Feature Cards -->
-  <section class="features-section">
-    <div class="feature-grid">
-      <div class="feature-card">
-        <span class="feature-icon">🎯</span>
-        <h3 class="feature-title">Parts-Per-Million Accuracy</h3>
-        <p class="feature-description">
-          Charged lepton mass ratios predicted to 18-102 parts per million. No empirical tuning—just the φ-ladder structure and quantum field theory.
-        </p>
-      </div>
-      
-      <div class="feature-card">
-        <span class="feature-icon">🔗</span>
-        <h3 class="feature-title">Universal Framework</h3>
-        <p class="feature-description">
-          One equation governs electrons, quarks, neutrinos, and bosons. The same golden-ratio ladder explains all Standard Model masses.
-        </p>
-      </div>
-      
-      <div class="feature-card">
-        <span class="feature-icon">🔬</span>
-        <h3 class="feature-title">Falsifiable Predictions</h3>
-        <p class="feature-description">
-          Sharp predictions for neutrino masses, boson ratios, and mixing angles. Tomorrow's experiments will confirm or refute—no wiggle room.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- The Core Equation -->
-  <section class="equation-section">
-    <div class="equation-container">
-      <h2 class="equation-title">The Mass Law</h2>
-      <div class="equation-box">
-        <div class="equation-main">
-          m = B · E<sub>coh</sub> · φ<sup>(r + f)</sup>
+  <!-- Highlights -->
+  <section class="template-section">
+    <div class="template-container">
+      <div class="template-grid template-grid-auto">
+        <div class="template-card">
+          <h3>🎯 Parts‑Per‑Million Accuracy</h3>
+          <p>Charged lepton mass ratios predicted to 18–102 ppm. No empirical tuning—just the φ‑ladder structure and quantum field theory.</p>
         </div>
-        <div class="equation-legend">
-          <div class="equation-legend-item">
-            <strong>B</strong> — Sector factor (1 for leptons, 2 for quarks, 4 for W/Z)
-          </div>
-          <div class="equation-legend-item">
-            <strong>E<sub>coh</sub></strong> — Coherence quantum = φ<sup>−5</sup>
-          </div>
-          <div class="equation-legend-item">
-            <strong>r</strong> — Integer rung on the φ-ladder
-          </div>
-          <div class="equation-legend-item">
-            <strong>f</strong> — Small correction from quantum running (~1%)
-          </div>
+        <div class="template-card">
+          <h3>🔗 Universal Framework</h3>
+          <p>One equation governs electrons, quarks, neutrinos, and bosons. The same golden‑ratio ladder explains all Standard Model masses.</p>
+        </div>
+        <div class="template-card">
+          <h3>🔬 Falsifiable Predictions</h3>
+          <p>Sharp predictions for neutrino masses, boson ratios, and mixing angles. Tomorrow's experiments will confirm or refute—no wiggle room.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Results Preview -->
-  <section class="results-section">
-    <div class="results-container">
-      <div class="results-header">
-        <h2 class="results-title">Key Results</h2>
-        <p class="results-subtitle">All from the same parameter-free framework</p>
+  <!-- The Mass Law -->
+  <section class="template-section">
+    <div class="template-container">
+      <h2 class="template-section-title">The Mass Law</h2>
+      <div class="template-card template-accent-border">
+        <p class="template-lead"><strong>m = B · E<sub>coh</sub> · φ<sup>(r + f)</sup></strong></p>
+        <ul class="template-reading">
+          <li><strong>B</strong> — Sector factor (1 for leptons, 2 for quarks, 4 for W/Z)</li>
+          <li><strong>E<sub>coh</sub></strong> — Coherence quantum = φ<sup>−5</sup></li>
+          <li><strong>r</strong> — Integer rung on the φ‑ladder</li>
+          <li><strong>f</strong> — Small correction from quantum running (~1%)</li>
+        </ul>
       </div>
-      
-      <div class="results-grid">
-        <div class="result-card">
-          <div class="result-value">206.768</div>
-          <div class="result-label">Muon/Electron Mass Ratio</div>
-          <div class="result-accuracy">✓ 18 ppm accuracy</div>
+    </div>
+  </section>
+
+  <!-- Key Results -->
+  <section class="template-section">
+    <div class="template-container">
+      <h2 class="template-section-title">Key Results</h2>
+      <p class="template-reading">All from the same parameter‑free framework</p>
+      <div class="template-grid template-grid-auto">
+        <div class="template-card">
+          <h3>206.768</h3>
+          <p>Muon/Electron Mass Ratio</p>
+          <p class="template-accent-text">✓ 18 ppm accuracy</p>
         </div>
-        
-        <div class="result-card">
-          <div class="result-value">0.0605 eV</div>
-          <div class="result-label">Sum of Neutrino Masses</div>
-          <div class="result-accuracy">✓ Cosmology consistent</div>
+        <div class="template-card">
+          <h3>0.0605 eV</h3>
+          <p>Sum of Neutrino Masses</p>
+          <p class="template-accent-text">✓ Cosmology consistent</p>
         </div>
-        
-        <div class="result-card">
-          <div class="result-value">1.1333</div>
-          <div class="result-label">Z/W Boson Ratio</div>
-          <div class="result-accuracy">✓ 0.1% accuracy</div>
+        <div class="template-card">
+          <h3>1.1333</h3>
+          <p>Z/W Boson Ratio</p>
+          <p class="template-accent-text">✓ 0.1% accuracy</p>
         </div>
-        
-        <div class="result-card">
-          <div class="result-value">33.2°</div>
-          <div class="result-label">Solar Mixing Angle</div>
-          <div class="result-accuracy">✓ From rung geometry</div>
+        <div class="template-card">
+          <h3>33.2°</h3>
+          <p>Solar Mixing Angle</p>
+          <p class="template-accent-text">✓ From rung geometry</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- What Makes This Different -->
+  <!-- What Makes This Revolutionary -->
   <section class="template-section">
     <div class="template-container">
       <h2 class="template-section-title">What Makes This Revolutionary</h2>
-      
-      <div class="template-reading">
-        <h3>🚫 No Free Parameters</h3>
-        <p>
-          Traditional physics uses dozens of adjustable numbers to match particle masses. We use zero. 
-          Every mass emerges from the golden ratio structure and fixed mathematical rules.
-        </p>
-      </div>
-      
-      <div class="template-reading">
-        <h3>🔄 Internal Consistency</h3>
-        <p>
-          The absolute energy scale is set internally from the Z/W boson ratio—no experimental inputs needed. 
-          This makes neutrino masses pure predictions, not fitted values.
-        </p>
-      </div>
-      
-      <div class="template-reading">
-        <h3>📐 Geometric Origin</h3>
-        <p>
-          Mass ratios arise from positions on a φ-ladder, like notes on a musical scale. 
-          The pattern isn't invented—it's discovered from the ledger's mathematical structure.
-        </p>
+      <div class="template-grid template-grid-auto">
+        <div class="template-card">
+          <h3>🚫 No Free Parameters</h3>
+          <p>Traditional physics uses dozens of adjustable numbers to match particle masses. We use zero. Every mass emerges from the golden‑ratio structure and fixed mathematical rules.</p>
+        </div>
+        <div class="template-card">
+          <h3>🔄 Internal Consistency</h3>
+          <p>The absolute energy scale is set internally from the Z/W boson ratio—no experimental inputs needed. This makes neutrino masses pure predictions, not fitted values.</p>
+        </div>
+        <div class="template-card">
+          <h3>📐 Geometric Origin</h3>
+          <p>Mass ratios arise from positions on a φ‑ladder, like notes on a musical scale. The pattern isn't invented—it's discovered from the ledger's mathematical structure.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Technical Overview -->
-  <section class="template-section" style="background: #f8f9fa;">
+  <!-- Technical Highlights -->
+  <section class="template-section">
     <div class="template-container">
       <h2 class="template-section-title">Technical Highlights</h2>
-      
-      <div class="template-columns">
-        <div class="template-column">
-          <h3>φ-Sheet Averaging</h3>
-          <p>
-            Eliminates arbitrary energy scale choices by averaging over a geometric series of scales 
-            weighted by the ledger's gap coefficients. The probe-scale ambiguity vanishes.
-          </p>
+      <div class="template-grid template-grid-2">
+        <div class="template-card">
+          <h3>φ‑Sheet Averaging</h3>
+          <p>Eliminates arbitrary energy scale choices by averaging over a geometric series of scales weighted by the ledger's gap coefficients. The probe‑scale ambiguity vanishes.</p>
         </div>
-        
-        <div class="template-column">
-          <h3>Fixed-Point Solution</h3>
-          <p>
-            Masses are self-consistent solutions where the quantum corrections exactly balance 
-            the ladder position. No iterative fitting—just solve for the fixed point.
-          </p>
+        <div class="template-card">
+          <h3>Fixed‑Point Solution</h3>
+          <p>Masses are self‑consistent solutions where the quantum corrections exactly balance the ladder position. No iterative fitting—just solve for the fixed point.</p>
         </div>
-      </div>
-      
-      <div class="template-columns">
-        <div class="template-column">
+        <div class="template-card">
           <h3>Ledger Invariants</h3>
-          <p>
-            Species-specific quantum numbers from the Recognition Science ledger. The 8-beat 
-            chiral occupancy Δf<sub>χ</sub>(r) depends only on rung position modulo 8.
-          </p>
+          <p>Species‑specific quantum numbers from the Recognition Science ledger. The 8‑beat chiral occupancy Δf<sub>χ</sub>(r) depends only on rung position modulo 8.</p>
         </div>
-        
-        <div class="template-column">
-          <h3>RS Force-Ladder Tilt</h3>
-          <p>
-            The weak mixing angle evolution uses only φ and the recognition energy—no 
-            empirical couplings. Pure first-principles from the ledger structure.
-          </p>
+        <div class="template-card">
+          <h3>RS Force‑Ladder Tilt</h3>
+          <p>The weak mixing angle evolution uses only φ and the recognition energy—no empirical couplings. Pure first‑principles from the ledger structure.</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Call to Action -->
-  <section class="cta-section">
-    <div class="cta-content">
-      <h2 class="cta-title">Explore the Full Framework</h2>
-      <p class="cta-description">
-        Dive deep into the mathematics, see all results, and understand how one equation explains all particle masses.
-      </p>
-      <div class="hero-buttons">
-        <a href="particle-masses-paper.html" class="btn-primary">
-          Read the Full Paper
-        </a>
-        <a href="https://github.com/jonwashburn/particle-masses" class="btn-secondary" target="_blank">
-          View Code & Data
-        </a>
+  <section class="template-section">
+    <div class="template-hero">
+      <div class="template-container">
+        <h2 class="template-section-title accent">Explore the Full Framework</h2>
+        <p class="template-lead">Dive deep into the mathematics, see all results, and understand how one equation explains all particle masses.</p>
+        <div class="template-cta">
+          <a href="particle-masses-paper.html" class="template-btn">Read the Full Paper</a>
+          <a href="https://github.com/jonwashburn/particle-masses" class="template-btn template-btn-outline" target="_blank">View Code & Data</a>
+        </div>
       </div>
     </div>
   </section>
 
   <div id="footer-placeholder"></div>
-  
-  <script>
-    // Load header and footer
-    fetch('/components/header.html')
-      .then(response => response.text())
-      .then(data => document.getElementById('header-placeholder').innerHTML = data);
-    
-    fetch('/components/footer.html')
-      .then(response => response.text())
-      .then(data => document.getElementById('footer-placeholder').innerHTML = data);
-  </script>
-  
-  <!-- Lightweight audio player -->
-  <audio id="podcastAudio" preload="metadata"></audio>
-  <script>
-    (function(){
-      const btn = document.getElementById('podcastBadge');
-      const audio = document.getElementById('podcastAudio');
-      const playIcon = document.getElementById('iconPlay');
-      const pauseIcon = document.getElementById('iconPause');
-      const label = btn ? btn.querySelector('.podcast-label') : null;
-      if (!btn || !audio) return;
-
-      // Robustly set the source using URL encoding for spaces and apostrophes
-      const audioPath = "/Unlocking the Universe's Code_ Golden Ratio Predicts Fundamental Particle Masses.mp3";
-      audio.src = encodeURI(audioPath);
-
-      // Toggle visual state
-      function setVisual(playing) {
-        btn.setAttribute('aria-pressed', playing);
-        if (playIcon) playIcon.style.display = playing ? 'none' : 'block';
-        if (pauseIcon) pauseIcon.style.display = playing ? 'block' : 'none';
-        if (label) label.textContent = playing ? 'Pause' : 'Listen • 7 min';
-      }
-      setVisual(false);
-
-      // Play/pause handler
-      btn.addEventListener('click', () => {
-        // Ensure the audio is loaded before play (Safari quirk)
-        if (audio.readyState < 2) { try { audio.load(); } catch (_) {} }
-        if (audio.paused) {
-          audio.play()
-            .then(() => setVisual(true))
-            .catch(err => { 
-              console.warn('Audio play failed:', err);
-              if (label) label.textContent = 'Enable audio';
-            });
-        } else {
-          audio.pause();
-          setVisual(false);
-        }
-      });
-
-      // Reset when ended
-      audio.addEventListener('ended', () => setVisual(false));
-      audio.addEventListener('error', () => {
-        if (label) label.textContent = 'Audio not found';
-      });
-    })();
-  </script>
+  <script src="/assets/js/main.js"></script>
 </body>
 </html>
