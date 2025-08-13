@@ -107,7 +107,7 @@
         }
 
         .quick-index h3 {
-            font-size: 0.875rem;
+            font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             color: var(--color-text-muted);
@@ -147,7 +147,7 @@
             background: #0b1220;
             border-left: 3px solid var(--color-accent);
             margin: 0.5rem 0 0.5rem 4.5rem;
-            font-size: 0.875rem;
+            font-size: 0.75rem; /* smaller than code font */
             color: #e2e8f0;
             line-height: 1.6;
             border-radius: 0 4px 4px 0;
@@ -161,6 +161,48 @@
         .expansion strong {
             color: #ffffff;
             font-weight: 600;
+        }
+
+        .expansion h4 {
+            margin: 0.25rem 0 0.25rem 0;
+            color: var(--color-accent);
+            font-size: 0.85em;
+            letter-spacing: 0.02em;
+        }
+
+        .expansion .badge {
+            display: inline-block;
+            background: var(--color-accent);
+            color: #fff;
+            font-size: 0.65rem;
+            padding: 0.1rem 0.5rem;
+            border-radius: 999px;
+            margin-right: 0.4rem;
+        }
+
+        .expansion .tag {
+            display: inline-block;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #e2e8f0;
+            font-size: 0.65rem;
+            padding: 0.08rem 0.4rem;
+            border-radius: 6px;
+            margin-right: 0.25rem;
+        }
+
+        .expansion .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        .expansion .card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            padding: 0.6rem 0.75rem;
         }
 
         .expansion a {
@@ -208,6 +250,7 @@
 
             .expansion {
                 margin-left: 0;
+                font-size: 0.7rem;
             }
 
             .code-text {
@@ -543,10 +586,10 @@
             const exp = document.createElement('div');
             exp.className = 'expansion active';
             if (key && explain[key]) {
-                exp.innerHTML = explain[key];
+                exp.innerHTML = decorate(explain[key], key);
             } else {
                 const textLine = line.querySelector('.code-text')?.textContent || '';
-                exp.innerHTML = genericExplain(kind || 'def', name || '', textLine);
+                exp.innerHTML = decorate(genericExplain(kind || 'def', name || '', textLine), kind || 'def');
             }
             line.insertAdjacentElement('afterend', exp);
         });
@@ -567,28 +610,47 @@
         // Generic explanation generator for arbitrary code items
         function genericExplain(kind, name, text) {
             const safe = (s) => (s || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            const head = `<p><strong>${kind}</strong> <code>${safe(name)}</code></p>`;
+            const head = `<p><span class="badge">${kind.toUpperCase()}</span> <code>${safe(name)}</code></p>`;
             let body = '';
             switch (kind) {
                 case 'structure':
-                    body = `<p>Declares a typed record bundling fields and invariants. In Lean, <em>structures</em> model mathematical objects with named components.</p>`;
+                    body = `<p><strong>What it is:</strong> Declares a typed record bundling fields and invariants. In Lean, <em>structures</em> model mathematical objects with named components.</p>
+                            <p><strong>Why it matters:</strong> Structures anchor the ontology of the proof: once a thing is a structure, every theorem can refer to its components by name. This prevents hand‑waving.</p>`;
                     break;
                 case 'def':
-                    body = `<p>Introduces a definition. In Lean, <em>def</em> binds a name to a term with a precise type, enabling reuse downstream.</p>`;
+                    body = `<p><strong>What it is:</strong> Introduces a definition. In Lean, <em>def</em> binds a name to a term with a precise type.</p>
+                            <p><strong>Why it matters:</strong> Definitions are executable contracts. They eliminate ambiguity and make downstream reasoning composable.</p>`;
                     break;
                 case 'theorem':
                 case 'lemma':
-                    body = `<p>States a proposition and provides a proof term that the typechecker validates. Machine‑checked = no gaps.</p>`;
+                    body = `<p><strong>What it is:</strong> States a proposition and provides a proof term that the typechecker validates.</p>
+                            <p><strong>Why it matters:</strong> Machine‑checked means there are no rhetorical shortcuts—only logic that compiles.</p>`;
                     break;
                 case 'namespace':
-                    body = `<p>Opens a scope for related declarations, avoiding name collisions and clarifying provenance.</p>`;
+                    body = `<p><strong>What it is:</strong> Opens a scope for related declarations, avoiding name collisions and clarifying provenance.</p>`;
                     break;
                 default:
-                    body = `<p>Lean item. Parsed, typed, and checked by the kernel for full correctness.</p>`;
+                    body = `<p><strong>Lean item:</strong> Parsed, typed, and checked by the kernel for full correctness.</p>`;
             }
-            const linePreview = `<pre style="white-space:pre-wrap;">${safe(text)}</pre>`;
-            const links = `<p>See also: <a href="/glossary.html">Glossary</a>, <a href="/logical-foundations.html">Foundations</a>, <a href="/formulas/">Formulas</a></p>`;
+            const linePreview = `<div class="card"><h4>Source</h4><pre style="white-space:pre-wrap;">${safe(text)}</pre></div>`;
+            const links = `<div class="grid">
+                <div class="card"><h4>See also</h4><p><a href="/glossary.html">Glossary</a><br><a href="/logical-foundations.html">Foundations</a><br><a href="/formulas/">Formulas</a></p></div>
+                <div class="card"><h4>Role in the Chain</h4><p class="template-text-muted">Connects tautology → ledger → cost → φ → 8‑tick.</p></div>
+            </div>`;
             return head + body + linePreview + links;
+        }
+
+        // Decorate explanation with color accents and “why it matters / how it fits” prompts
+        function decorate(html, key) {
+            const prompts = {
+                MetaPrinciple: `<div class="card"><h4>Why it matters</h4><p>Everything starts here: a tautology that forbids absolute nothingness. It seeds the existence of a recognizer/recognized relation.</p></div>` ,
+                Ledger: `<div class="card"><h4>Why it matters</h4><p>Double‑entry is not a metaphor—it's the only way to keep contradictions out. Every conservation law is this, wearing physics' clothes.</p></div>`,
+                J_def: `<div class="card"><h4>Why it matters</h4><p>J pins the universe's sense of fairness. It kills tuning: there is no other convex, symmetric choice with the right invariances.</p></div>`,
+                φ_def: `<div class="card"><h4>Why it matters</h4><p>φ is the scaling DNA. It plants the ladder that becomes masses, wavelengths, and timing relationships.</p></div>`,
+                period_exactly_8: `<div class="card"><h4>Why it matters</h4><p>Eight is not numerology—it’s the minimal complete pass through 3D recognition. This is the clock behind quantum phase.</p></div>`
+            };
+            const extra = prompts[key] ? `<div class="grid">${prompts[key]}</div>` : '';
+            return html + extra;
         }
 
         // Load on page ready
