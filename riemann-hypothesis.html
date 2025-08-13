@@ -49,7 +49,7 @@
           position: fixed; top: 20px; right: 20px; z-index: 1000;
           display: inline-flex; align-items: center; gap: 0.5rem;
           border: 2px solid var(--color-accent); color: var(--color-accent);
-          background: rgba(18, 18, 20, 0.95); border-radius: 999px; 
+          background: #ffffff; border-radius: 999px; 
           padding: 0.35rem 0.6rem;
           cursor: pointer; font: inherit; line-height: 1; 
           transition: all 0.15s ease;
@@ -213,32 +213,54 @@
     <div id="footer-placeholder"></div>
     <script src="/assets/js/main.js"></script>
     <!-- Lightweight audio player -->
-    <audio id="podcastAudio" preload="metadata">
-      <source src="/Decoding the Riemann Hypothesis_ Control Theory's Unexpected Attack on Prime Numbers.mp3" type="audio/mpeg">
-    </audio>
+    <audio id="podcastAudio" preload="metadata"></audio>
     <script>
       (function(){
         const btn = document.getElementById('podcastBadge');
         const audio = document.getElementById('podcastAudio');
         const playIcon = document.getElementById('iconPlay');
         const pauseIcon = document.getElementById('iconPause');
+        const label = btn ? btn.querySelector('.podcast-label') : null;
         if (!btn || !audio) return;
+
+        // Robustly set the source using URL encoding for spaces and apostrophes
+        const audioPath = "/Decoding the Riemann Hypothesis_ Control Theory's Unexpected Attack on Prime Numbers.mp3";
+        audio.src = encodeURI(audioPath);
+
         function setVisual(isPlaying){
           if (isPlaying) {
             playIcon.style.display = 'none';
             pauseIcon.style.display = 'inline';
             btn.setAttribute('aria-pressed','true');
+            if (label) label.textContent = 'Pause';
           } else {
             playIcon.style.display = 'inline';
             pauseIcon.style.display = 'none';
             btn.setAttribute('aria-pressed','false');
+            if (label) label.textContent = 'Listen • 5 min';
           }
         }
+
         btn.addEventListener('click', () => {
-          if (audio.paused) { audio.play().then(()=>setVisual(true)).catch(()=>{}); }
-          else { audio.pause(); setVisual(false); }
+          // Ensure the audio is loaded before play (Safari quirk)
+          if (audio.readyState < 2) { try { audio.load(); } catch (_) {} }
+          if (audio.paused) {
+            audio.play()
+              .then(()=> setVisual(true))
+              .catch((err)=>{
+                console.warn('Audio play failed:', err);
+                if (label) label.textContent = 'Enable audio';
+              });
+          } else {
+            audio.pause();
+            setVisual(false);
+          }
         });
+
         audio.addEventListener('ended', () => setVisual(false));
+        audio.addEventListener('error', () => {
+          if (label) label.textContent = 'Audio not found';
+        });
       })();
     </script>
   </body>
