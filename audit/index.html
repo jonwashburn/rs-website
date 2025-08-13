@@ -19,7 +19,20 @@
     <div class="toggle-switch" onclick="toggleAuditMode()">
       <div class="toggle-slider"></div>
     </div>
-    <span class="toggle-label">REAL GENIUS</span>
+    <span class="toggle-label genius-label" id="genius-label">REAL GENIUS</span>
+  </div>
+  
+  <!-- Video Container -->
+  <div class="video-overlay" id="video-overlay">
+    <button class="video-close" onclick="closeVideo()">✕ CLOSE</button>
+    <div class="video-wrapper">
+      <iframe id="youtube-video"
+              src=""
+              title="Real Genius"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+      </iframe>
+    </div>
   </div>
 
   <!-- Forensic Mode (Default) -->
@@ -536,7 +549,7 @@ CONSEQUENCE: Universe.exe initialized.
       top: 80px;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 1000;
+      z-index: 100;
       display: flex;
       align-items: center;
       gap: 1rem;
@@ -579,6 +592,72 @@ CONSEQUENCE: Universe.exe initialized.
     
     .toggle-switch.active .toggle-slider {
       transform: translateX(24px);
+    }
+    
+    .genius-label {
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .genius-label:hover {
+      color: var(--color-accent);
+      text-shadow: 0 0 5px currentColor;
+    }
+    
+    /* Video Overlay */
+    .video-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 2rem;
+    }
+    
+    .video-overlay.active {
+      display: flex;
+    }
+    
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    }
+    
+    .video-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 2px solid var(--color-accent);
+      border-radius: 8px;
+    }
+    
+    .video-close {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      background: var(--color-accent);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      z-index: 2001;
+    }
+    
+    .video-close:hover {
+      background: var(--color-accent-light);
+      transform: scale(1.05);
     }
     
     /* Forensic Mode Styles */
@@ -1351,6 +1430,23 @@ CONSEQUENCE: Universe.exe initialized.
       }
     }
     
+    // Play video
+    function playVideo() {
+      const overlay = document.getElementById('video-overlay');
+      const iframe = document.getElementById('youtube-video');
+      // Real Genius laser scene
+      iframe.src = 'https://www.youtube.com/embed/0ds0wYpc1eM?autoplay=1&rel=0&modestbranding=1';
+      overlay.classList.add('active');
+    }
+    
+    // Close video
+    function closeVideo() {
+      const overlay = document.getElementById('video-overlay');
+      const iframe = document.getElementById('youtube-video');
+      iframe.src = ''; // Stop video
+      overlay.classList.remove('active');
+    }
+    
     // Initialize Genius Mode
     function initGeniusMode() {
       // Start oscilloscope
@@ -1457,6 +1553,19 @@ CONSEQUENCE: Universe.exe initialized.
     window.addEventListener('DOMContentLoaded', () => {
       mermaid.run({ nodes: document.querySelectorAll('.mermaid') });
       loadAuditData();
+      
+      // Add click handler for REAL GENIUS text
+      const geniusLabel = document.getElementById('genius-label');
+      if (geniusLabel) {
+        geniusLabel.addEventListener('click', playVideo);
+      }
+      
+      // Close video on escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeVideo();
+        }
+      });
     });
   </script>
 </body>
