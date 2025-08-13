@@ -15,7 +15,7 @@
     <div class="abstract"><p><strong>Abstract:</strong> This page presents the full, crawlable text of the particle mass paper (v22c). It implements a parameter–free, fixed–point architecture in which rung indices on a φ–ladder determine coarse mass separations and a small residue f is computed from standard anomalous dimensions plus fixed ledger invariants. A φ–sheet average removes the probe–scale ambiguity. Charged–lepton ratios agree with experiment at ppm precision; a neutrino–anchored global scale fixes absolute Dirac neutrino masses; boson ratios are locked; quark ratios evaluated φ–fixed at μ⋆ agree at few×10⁻³. CKM and PMNS follow from the same rung geometry. The sections below include the complete content as authored.</p></div>
     <p><a href="/particle-masses.html">← Back to Particle Mass Calculator</a></p>
     <h2>Full Paper (source-form text)</h2>
-    <div class="source">
+        <div class="source">
 \\documentclass[11pt]{article}
 \\usepackage[utf8]{inputenc}
 \\usepackage[T1]{fontenc}
@@ -45,7 +45,7 @@ We present a parameter--free architecture that predicts Standard Model (SM) mass
 
 
 \\section{Introduction}
-The observed pattern of SM masses and mixings is usually accommodated by dozens of a priori free Yukawa parameters. In the absence of tuned textures or family symmetries, there is no accepted predictive mechanism for the numerical values themselves. This paper exhibits a minimal, measurement--anchored alternative: a parameter--free, fixed--point architecture in which integer rungs on a $\\varphi$--ladder determine coarse mass separations, and a small \\emph{fractional residue} $f_i$—computed from standard anomalous dimensions plus fixed ledger invariants—accounts for the remaining percent--to--ppm structure. The key difference from conventional treatments is procedural: we \\emph{define} masses nonperturbatively as solutions of a local $\\varphi$--cycle and then \\emph{average} over a $\\varphi$--sheet with signed weights tied to the same alternating gap series that encodes the ledger, thereby eliminating the arbitrary choice of probe scale and its scheme dependence. The resulting pipeline consumes only physical constants and inclusive $e^+e^-\\!\\to{\\rm hadrons}$ information via a dispersion calculation of $\\alpha_{\\rm em}(\\mu)$; it introduces no sector--specific knobs, priors, or fitted coefficients. The full solver and backend are implemented in a single, reproducible code path \\cite{EidelmanJegerlehner1995,Jegerlehner2003,Keshavarzi2019,Davier2017,PDG2024}.
+The observed pattern of SM masses and mixings is usually accommodated by dozens of a priori free Yukawa parameters. In the absence of tuned textures or family symmetries, there is no accepted predictive mechanism for the numerical values themselves. This paper exhibits a minimal, measurement--anchored alternative: a parameter--free, fixed--point architecture in which integer rungs on a $\\varphi$--ladder determine coarse mass separations, and a small \\emph{fractional residue} $f_i$—computed from standard anomalous dimensions plus fixed ledger invariants—accounts for the remaining percent--to--ppm structure. The key difference from conventional treatments is procedural: we \\emph{define} masses nonperturbatively as solutions of a local $\\varphi$--cycle and then \\emph{average} over a $\\varphi$--sheet with signed weights tied to the same alternating gap series that encodes the ledger, thereby eliminating the arbitrary choice of probe scale and its scheme dependence. The resulting pipeline consumes only physical constants and inclusive $e^+e^-\\!\\to{\\rm hadrons}$ information via a dispersion calculation of $\\alpha_{\\rm em}(\\mu)$; it introduces no sector--specific knobs, priors, or fitted coefficients. The full solver and backend are implemented in a single, reproducible code path \\cite{EidelmanJegerlehner1995,Jegerlehner2003,Keshavarzi2020,Davier2017,PDG2024}.
 
 At the level of formulae, each species $i$ is assigned the mass law (Eq.~\\eqref{eq:mass-law})
 \\begin{equation}\\label{eq:mass-law}
@@ -62,7 +62,7 @@ The running inputs are standard. For charged leptons, $\\gamma_i(\\mu)=\\gamma^{
 Empirically, the ledger locks several sectors simultaneously:
 \\begin{enumerate}
   \\item \\textbf{Charged leptons.} With $(r_e,r_\\mu,r_\\tau)=(0,11,17)$ and the densified $\\tau$--window, the three independent ratios match experiment at the ppm level. Absolute $e,\\mu,\\tau$ follow by setting a \\emph{single} global scale $s$ from the neutrino sector (below), yielding ppm agreement in eV. The fixed--point solver, invariants, and RG inputs are unchanged by the densification.
-  \\item \\textbf{Neutrinos (Dirac, NO).} Anchoring on $\\Delta m^2_{\\rm large}$ gives $(m_1,m_2,m_3)\\approx(2.08,9.02,49.4)$\\,meV with $\\Sigma m_\\nu\\simeq0.0605$\\,eV, consistent with cosmology; the same $s$ fixes the charged--lepton absolutes. The rung triple favored by the data is discrete and \\emph{robust} under $\\pm 3\\sigma$ variations of the inputs, so no continuous parameter is—and can be—tuned.
+  \\item \\textbf{Neutrinos (Dirac, NO).} Anchoring on $\\Delta m^2_{31}$ gives $(m_1,m_2,m_3)\\approx(2.08,9.02,49.4)$\\,meV with $\\Sigma m_\\nu\\simeq0.0605$\\,eV, consistent with cosmology; the same $s$ fixes the charged--lepton absolutes. The rung triple favored by the data is discrete and \\emph{robust} under $\\pm 3\\sigma$ variations of the inputs, so no continuous parameter is—and can be—tuned.
   \\item \\textbf{Bosons.} The W/Z/H block is controlled by adjacent rung gaps; predicted ratios reproduce $Z/W$ and $H/Z$ at $\\sim10^{-3}$. The absolute $Z$ and $H$ values follow when anchored to $M_W$. 
   \\item \\textbf{Quarks.} When experimental masses are evolved to their own $\\mu_\\star$ (``$\\varphi$--fixed'' apples--to--apples), ratios in both up-- and down--type sectors agree at the few$\\times10^{-3}$ level, consistent with the same ledger choices and RG inputs. 
   \\item \\textbf{Mixing geometry.} CKM and PMNS matrices arise from the rung geometry with no new parameters; the CKM magnitudes match the observed hierarchy, and the PMNS angles and $\\delta_{\\rm CP}$ emerge in the experimentally favored ranges.
@@ -121,6 +121,9 @@ with a rigorous bound following from the harmonic–geometric form:
 \\]
 Thus the truncation error decays supergeometrically in $K$ and is purely numerical (set by $\\varepsilon_{\\rm sheet}$), not a modeling freedom.
 
+\\paragraph{Why the $\\varphi$--sheet.}
+Among all $\\ell^1$ sequences $\\{w_k\\}$ the choice $w_k\\propto g_{k+1}$ (with $g_m$ the ledger gap coefficients) is the unique one that (i) keeps the same analytic structure that defines the gap series, (ii) is shift--invariant under $\\mu\\!\\to\\!\\varphi^j\\mu$ (reindex $k\\mapsto k{-}j$), and (iii) introduces no new scale or depth parameter (absolute summability $\\Rightarrow$ adaptive truncation). Hence the probe scale drops out without adding freedom.
+
 Operationally, the sheet average is evaluated inside the fixed--point map, replacing the single--window residue by
 \\begin{equation}\\label{eq:invariants}
 f_i(\\ln m)\\;\\to\\;\\frac{1}{\\ln\\varphi}\\sum_{k\\ge0} w_k\\!\\!\\int_{\\ln m}^{\\ln(\\varphi m)}\\!\\!\\gamma_i(\\mu\\,\\varphi^k)\\, d\\ln\\mu \\;+\\;\\sum_{m\\ge1} g_m I_m(i).
@@ -176,7 +179,7 @@ In the charged--lepton lock we use:
   \\[
   \\Delta\\alpha_{\\rm had}(Q^2)\\;=\\;-\\frac{\\alpha(0)\\,Q^2}{3\\pi}\\int_{4m_\\pi^2}^{\\infty}\\!\\frac{R(s)}{s(s+Q^2)}\\,ds,
   \\]
-  with $R(s)$ modeled as narrow resonances $+$ continuum plateaus and an Adler--function method above $s_0\\simeq(2.5\\,{\\rm GeV})^2$ for the high--$Q^2$ tail.\\;This backend is modular (the $R(s)$ table can be swapped without changing callers) and is the same object consumed by the lepton solver \\cite{EidelmanJegerlehner1995,Jegerlehner2003,Keshavarzi2019,Davier2017}.
+  with $R(s)$ modeled as narrow resonances $+$ continuum plateaus and an Adler--function method above $s_0\\simeq(2.5\\,{\\rm GeV})^2$ for the high--$Q^2$ tail.\\;This backend is modular (the $R(s)$ table can be swapped without changing callers) and is the same object consumed by the lepton solver \\cite{EidelmanJegerlehner1995,Jegerlehner2003,Keshavarzi2020,Davier2017}.
 
   \\item \\textbf{Electroweak running.} We evolve $(g_1,g_2)$ with two--loop gauge mixing (GUT $g_1$), using piecewise thresholds and re--anchoring to maintain continuity across $M_W,M_Z$.\\;The weak angle $\\sin^2\\theta_W(\\mu)$ is computed from the running couplings and passed to the lepton block; no tunable electroweak weights are introduced.
 
@@ -259,6 +262,13 @@ Each experimental mass is evolved to its own fixed--point scale $\\mu_\\star$ be
 \\end{itemize}
 Both mixing matrices are determined by the integer rung map plus the closed--form chiral invariant, with no additional parameters or texture assumptions.
 
+\\paragraph{Mixing from rung geometry (operational map).}
+Given up--type rungs $\\{r^u_i\\}$ and down--type rungs $\\{r^d_j\\}$ define a raw overlap
+\\[
+M_{ij}=\\sigma_{ij}\\,\\varphi^{-|r^u_i-r^d_j|}\\,,\\qquad \\sigma_{ij}\\in\\{\\pm1\\}\\text{ fixed by the 8--beat parity of }(r^u_i-r^d_j)\\bmod 8.
+\\]
+Normalize rows and columns to unit $\\ell^2$ norm and project to the nearest unitary by polar decomposition, $V = M (M^\\dagger M)^{-1/2}$ (or Gram--Schmidt on columns). Apply the same construction to leptons with $(r_e,r_\\mu,r_\\tau)=(0,11,17)$ and $(r_{\\nu_1},r_{\\nu_2},r_{\\nu_3})=(7,9,12)$.
+
 \\section{Error budget and stability}
 \\begin{itemize}
   \\item \\textbf{Quadrature density (tau window).} The last $10$--$100$\\,ppm of the charged--lepton ratios are controlled by the dispersion quadrature in $\\sqrt{s}\\!\\in[1.2,2.5]$\\,GeV. Varying the panel count by $\\pm25\\%$ moves $(\\mu/e,\\tau/\\mu,\\tau/e)$ by $\\lesssim$ few$\\times 10^{-5}$ fractionally; no architectural pieces change (same solver, invariants, and RG layer).
@@ -286,6 +296,10 @@ Both mixing matrices are determined by the integer rung map plus the closed--for
 
 \\section{Conclusion}
 A minimal, measurement–anchored ledger–$\\varphi$ architecture reproduces SM mass and mixing structure to high precision with zero fitted parameters. Its predictions are falsifiable, robust under numerical variation, and reproducible from a single script, with the full solver, dispersion backend, and invariants layer provided as a deterministic, versioned artifact.
+
+\\paragraph{Scope.} The present construction applies to elementary SM fields (charged leptons, neutrinos in a Dirac realization, quarks, and gauge/Higgs bosons). It is not intended to model composite resonances or bound--state masses.
+
+\\paragraph{Baseline factor $B$.} For charged leptons we fix $B_i\\equiv 1$ (single ledger channel), exactly as implemented in the solver. No coherent multi--channel sum is used in this sector. If a sector requires $B>1$ in future, we will enumerate the channels explicitly in the table for that sector.
 
 \\bibliographystyle{unsrt}
 \\bibliography{references}

@@ -406,39 +406,63 @@
     
     /* Video Container */
     .video-container {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 20000;
+      position: relative;
+      z-index: 10;
       background: #000;
       border: 3px solid var(--amber);
-      padding: 5px;
-      box-shadow: 0 0 50px rgba(255,176,0,0.8);
+      padding: 8px;
+      box-shadow: 0 0 20px rgba(255,176,0,0.4);
       display: none;
+      margin: 16px auto;
+      width: min(100%, 960px);
+      border-radius: 4px;
     }
-    
     .video-container.active {
       display: block;
     }
-    
+    .video-frame {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,176,0,0.3);
+    }
+    .video-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
     .video-close {
       position: absolute;
-      top: -30px;
-      right: -30px;
+      top: 8px;
+      right: 8px;
       background: var(--amber);
       color: #000;
       border: none;
-      padding: 5px 10px;
+      padding: 6px 10px;
       cursor: pointer;
       font-family: 'Share Tech Mono', monospace;
       font-weight: bold;
       border-radius: 2px;
+      line-height: 1;
     }
-    
     .video-close:hover {
       background: var(--green);
       box-shadow: 0 0 10px var(--green);
+    }
+    @media (max-width: 600px) {
+      .video-container {
+        width: 100%;
+        padding: 6px;
+        border-width: 2px;
+      }
+      .video-close {
+        padding: 8px 12px;
+        top: 6px;
+        right: 6px;
+      }
     }
     
     /* Show/hide retro overlay based on mode */
@@ -507,13 +531,15 @@
   </div>
   
   <!-- Video Container for Easter Egg -->
-  <div class="video-container" id="video-container">
-    <button class="video-close" onclick="closeVideo()">X CLOSE</button>
-    <iframe id="youtube-video" width="640" height="360" 
-            src="" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen></iframe>
+  <div class="video-container" id="video-container" aria-hidden="true">
+    <button class="video-close" onclick="closeVideo()" aria-label="Close video">CLOSE ✕</button>
+    <div class="video-frame">
+      <iframe id="youtube-video"
+              src=""
+              title="Real Genius"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen></iframe>
+    </div>
   </div>
 
   <!-- Retro Content Header -->
@@ -623,38 +649,38 @@
   <div class="normal-content">
     <!-- Header Section -->
   <section class="intro-section" style="padding: 1.5rem 0; background: #fff;">
-    <div class="container text-center">
-      <div class="wrap">
-        <h1>Recognition Science — Live Audit</h1>
+  <div class="container text-center">
+    <div class="wrap">
+      <h1>Recognition Science — Live Audit</h1>
         
         <p class="lead" style="font-size: 1.1rem; color: #555; max-width: 900px; margin: 0.5rem auto 0;">
           Streaming live from the public audit repository
         </p>
-        <div class="hstack" style="margin-top:12px">
-          <span class="badge">parameter‑free</span>
-          <span class="badge">live</span>
-          <a class="badge" href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener">repo ↗</a>
-        </div>
+      <div class="hstack" style="margin-top:12px">
+        <span class="badge">parameter‑free</span>
+        <span class="badge">live</span>
+        <a class="badge" href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener">repo ↗</a>
       </div>
     </div>
-  </section>
+  </div>
+</section>
   
   <main class="content-page">
     <!-- Primary Status Section -->
-    <div class="component-card" id="status">
+          <div class="component-card" id="status">
       <h2>Status</h2>
       <div id="status-body">Loading...</div>
       <div class="muted" style="margin-top:10px">
         <strong>What "accuracy" means here:</strong> parameter‑free derivations that match experiment across domains,
         reuse of the same gap series and gating without reweighting, and uniqueness/minimality theorems that remove hidden knobs.
       </div>
-    </div>
+          </div>
     
     <!-- Metrics Card (will be inserted here dynamically) -->
     <div id="metrics-placeholder"></div>
     
     <!-- Core Framework Grid -->
-    <div class="grid">
+      <div class="grid">
       <div class="component-card" id="pillars-card">
         <h3>Pillars</h3>
         <ul id="pillars">Loading...</ul>
@@ -698,7 +724,7 @@
           <p style="margin:8px 0 0"><a href="https://raw.githubusercontent.com/jonwashburn/audit/main/papers/snapshot-charged-lepton-masses-v9.tex" target="_blank" rel="noopener">View the v9 snapshot (TeX) ↗</a></p>
         </div>
       </div>
-    </div>
+          </div>
     
     <!-- Dynamic Sections Placeholder -->
     <div id="cosmology-placeholder"></div>
@@ -708,59 +734,59 @@
     <div id="masses-placeholder"></div>
     
     <!-- Planning and Actions -->
-    <div class="component-card" id="loose-card">
+      <div class="component-card" id="loose-card">
       <h3>Loose Ends</h3>
       <ul id="loose">Loading...</ul>
-    </div>
+          </div>
     
-    <div class="component-card" id="next-card">
+      <div class="component-card" id="next-card">
       <h3>Next Actions</h3>
       <ul id="next">Loading...</ul>
-    </div>
+          </div>
     
     <!-- Validated Predictions -->
     <div class="component-card">
-      <h3>Validated predictions (selection)</h3>
-      <ul style="margin:0 0 0 18px">
-        <li>Fine‑structure constant: α⁻¹ = 137.03599908 (no fit; geometric seed + gap + curvature closure)</li>
-        <li>Dark‑matter fraction: Ω<sub>dm</sub> = 0.2649 (lattice eigenstructure + gap correction)</li>
+        <h3>Validated predictions (selection)</h3>
+        <ul style="margin:0 0 0 18px">
+          <li>Fine‑structure constant: α⁻¹ = 137.03599908 (no fit; geometric seed + gap + curvature closure)</li>
+          <li>Dark‑matter fraction: Ω<sub>dm</sub> = 0.2649 (lattice eigenstructure + gap correction)</li>
         <li>Local H₀: 70.6 km s⁻¹ Mpc⁻¹ (ledger clock lag; between SH0ES and Planck)</li>
-        <li>Muon g−2 residual: parameter‑free cancellation from dual tours in the 1024‑breath</li>
-      </ul>
-      <p class="muted" style="margin-top:8px">Each comes from the same primitives (gap series, gating, φ‑scaling) without reweighting.</p>
-    </div>
+          <li>Muon g−2 residual: parameter‑free cancellation from dual tours in the 1024‑breath</li>
+        </ul>
+        <p class="muted" style="margin-top:8px">Each comes from the same primitives (gap series, gating, φ‑scaling) without reweighting.</p>
+      </div>
     
     <!-- How to Verify -->
     <div class="component-card">
-      <h3>How to verify</h3>
-      <ol style="margin:0 0 0 18px">
-        <li>Review the <a href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener">audit repository</a> (study guide, proofs, status).</li>
-        <li>Run the ILG gate check: <code>python scripts/ilg_gates_check.py</code> (|B| and S).</li>
-        <li>Inspect the charged‑lepton pipeline snapshot (v9) and confirm no sector‑specific knobs.</li>
+        <h3>How to verify</h3>
+        <ol style="margin:0 0 0 18px">
+          <li>Review the <a href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener">audit repository</a> (study guide, proofs, status).</li>
+          <li>Run the ILG gate check: <code>python scripts/ilg_gates_check.py</code> (|B| and S).</li>
+          <li>Inspect the charged‑lepton pipeline snapshot (v9) and confirm no sector‑specific knobs.</li>
         <li>Track live progress in the status section above.</li>
-      </ol>
-      <div style="margin-top:12px">
-        <strong>Run CI locally</strong>
-        <pre style="margin-top:6px"><code>git clone https://github.com/jonwashburn/audit
+        </ol>
+        <div style="margin-top:12px">
+          <strong>Run CI locally</strong>
+          <pre style="margin-top:6px"><code>git clone https://github.com/jonwashburn/audit
 cd audit
 python3 scripts/ci_status.py</code></pre>
-        <div class="muted">Writes <code>docs/ci_status.json</code> and the website will stream it.</div>
-      </div>
-      <details style="margin-top:10px">
-        <summary>What each check does</summary>
-        <ul style="margin:8px 0 0 18px">
+          <div class="muted">Writes <code>docs/ci_status.json</code> and the website will stream it.</div>
+        </div>
+        <details style="margin-top:10px">
+          <summary>What each check does</summary>
+          <ul style="margin:8px 0 0 18px">
           <li><strong>Gates</strong>: parity‑gate schedule → <code>|B|=46</code>, <code>S=489/512</code></li>
           <li><strong>Growth</strong>: compute D and D/ΛCDM using μ(a,k) with derived <code>a0</code> and fixed <code>β=(T·N_gates)/S</code></li>
           <li><strong>Lensing</strong>: compute Σ(a,k)=μ(a,k) with the same parameters</li>
           <li><strong>Conservation</strong>: 2D/3D discrete Laplacian and divergence theorem checks</li>
           <li><strong>ILG Limits</strong>: Newtonian and deep-MOND limit verification</li>
-        </ul>
+          </ul>
         <div class="muted" style="margin-top:6px">Full instructions: <a href="https://raw.githubusercontent.com/jonwashburn/audit/main/docs/CI-README.md" target="_blank" rel="noopener">CI README ↗</a></div>
-      </details>
-    </div>
+        </details>
+      </div>
     
     <!-- Architecture Diagram -->
-    <div class="component-card" id="arch-card">
+      <div class="component-card" id="arch-card">
       <h3>Architecture</h3>
       <div class="muted">Rendered from Mermaid diagram</div>
       <div class="mermaid" id="mmd">
@@ -780,10 +806,10 @@ python3 scripts/ci_status.py</code></pre>
         Mass --> Pred["α, masses, Ω_dm, …"]
         ILG --> Pred
       </div>
-    </div>
+          </div>
     
     <!-- Study Guide -->
-    <div class="component-card" id="guide-card">
+      <div class="component-card" id="guide-card">
       <h3>Study Guide (Markdown)</h3>
       <div class="muted">Rendered from audit/docs/Recognition-Science-Study-Guide.md</div>
       <div id="guide">Loading...</div>
@@ -825,16 +851,23 @@ python3 scripts/ci_status.py</code></pre>
     const container = document.getElementById('video-container');
     const iframe = document.getElementById('youtube-video');
     // Add autoplay=1 to URL to start playing immediately
-    iframe.src = 'https://www.youtube.com/embed/0ds0wYpc1eM?autoplay=1';
+    iframe.src = 'https://www.youtube.com/embed/0ds0wYpc1eM?autoplay=1&rel=0&modestbranding=1';
     container.classList.add('active');
+    container.setAttribute('aria-hidden', 'false');
+    // Scroll into view on open (helps mobile)
+    setTimeout(() => {
+      container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
   }
   
   // Close video function
   function closeVideo() {
     const container = document.getElementById('video-container');
     const iframe = document.getElementById('youtube-video');
-    iframe.src = ''; // Stop the video
+    // Stop and clear to release audio/video on mobile
+    iframe.src = '';
     container.classList.remove('active');
+    container.setAttribute('aria-hidden', 'true');
   }
   
   // Initialize the easter egg on page load
@@ -909,14 +942,23 @@ python3 scripts/ci_status.py</code></pre>
     const lastUpdated = ci.last_updated || status.last_updated || '—';
     const overallStatus = (ci.summary && ci.summary.passed) ? 'passed' : 'failed';
     const statusClass = (ci.summary && ci.summary.passed) ? 'ok' : 'warn';
-    
+    const verdict = ci.verdict || {};
+    const verdictLevel = verdict.level || (ci.summary?.passed ? 'evidence-passing' : 'failing');
+    const verdictClass = verdict.vouched ? 'ok' : (verdictLevel === 'evidence-passing' ? 'warn' : 'warn');
+    const blockers = Array.isArray(verdict.blockers) ? verdict.blockers : [];
+
     document.getElementById('status-body').innerHTML = `
       <div><span class="muted">Last updated:</span> ${lastUpdated}</div>
       <div style="margin-top:8px">${status.thesis || 'Loading thesis...'}</div>
-      <div style="margin-top:8px" class="muted">
-        <a href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener">View audit repository</a> 
-        · Overall: <span class="${statusClass}">${overallStatus}</span>
+      <div style="margin-top:8px">
+        Verdict: <span class="${verdictClass}">${verdictLevel}</span>${verdict.vouched ? ' (vouched)' : ''}
       </div>
+      <div class="muted" style="margin-top:4px">
+        Evidence checks: <span class="${statusClass}">${overallStatus}</span>
+        · <a href="https://github.com/jonwashburn/audit" target="_blank" rel="noopener">audit repository</a>
+      </div>
+      ${blockers.length ? `<div class="muted" style="margin-top:6px">Blockers (P0 outstanding): ${blockers.map(b => `<span class='tag warn'>${b}</span>`).join(' ')}</div>` : ''}
+      ${verdict.note ? `<div class="muted" style="margin-top:6px">${verdict.note}</div>` : ''}
     `;
     
     // Update Pillars
@@ -964,13 +1006,13 @@ python3 scripts/ci_status.py</code></pre>
       const loose = status.loose_ends.map(x => 
         `<li><span class="tag">${x.id}</span> ${x.item} — <span class="muted">${x.priority}</span> <span class="${x.status==='open'?'warn':'ok'}">${x.status}</span></li>`
       ).join('');
-      document.getElementById('loose').innerHTML = loose;
+    document.getElementById('loose').innerHTML = loose;
     }
     
     // Update Next Actions
     if (status.next_actions) {
-      const next = status.next_actions.map(t => `<li>${t}</li>`).join('');
-      document.getElementById('next').innerHTML = next;
+    const next = status.next_actions.map(t => `<li>${t}</li>`).join('');
+    document.getElementById('next').innerHTML = next;
     }
     
     // Clear all dynamic placeholders first to prevent duplication
@@ -1021,17 +1063,17 @@ python3 scripts/ci_status.py</code></pre>
           <div class="component-card">
             <h4 style="margin-top:0">Growth (live)</h4>
             <div class="muted">Last updated: ${growth.last_updated || '—'}</div>
-            <div style="margin-top:8px">
+        <div style="margin-top:8px">
               <strong>ILG Gates</strong>: |B|=${growth.ilg?.blocked || '—'}, S=${growth.ilg?.S || '—'}; β=${growth.ilg?.beta || '—'}
-            </div>
-            <div style="margin-top:8px">
-              <table style="width:100%; border-collapse:collapse">
+        </div>
+        <div style="margin-top:8px">
+          <table style="width:100%; border-collapse:collapse">
                 <thead><tr><th>k (h/Mpc)</th><th>D_LCDM</th><th>D_ILG</th><th>ratio</th></tr></thead>
                 <tbody>${growth.growth.map(r => 
                   `<tr><td>${r.k}</td><td>${r.D_LCDM?.toFixed(6) || '—'}</td><td>${r.D_ILG?.toFixed(6) || '—'}</td><td>${r.ratio?.toFixed(6) || '—'}</td></tr>`
                 ).join('')}</tbody>
-              </table>
-            </div>
+          </table>
+        </div>
             ${growth.grid?.length ? `
             <details style="margin-top:8px">
               <summary>Grid (ratio D_ILG/D_LCDM over a,k)</summary>
@@ -1150,7 +1192,7 @@ python3 scripts/ci_status.py</code></pre>
       document.getElementById('conservation-placeholder').appendChild(consCard);
     }
     
-    // Render CI Status
+    // Render CI Status & Checks (purpose/method/result/meaning)
     if (ci.summary) {
       const ciCard = createElement('div', 'component-card', 'ci-card', `
         <h3>CI Status</h3>
@@ -1161,6 +1203,11 @@ python3 scripts/ci_status.py</code></pre>
         <div class="muted" style="margin-top:6px">
           Includes: gates, growth JSON, lensing JSON, ILG limit checks, masses snapshot, and 2D/3D conservation checks.
         </div>
+        ${ci.verdict ? `
+        <div class="muted" style="margin-top:6px">
+          Verdict: <strong>${ci.verdict.level}</strong>${ci.verdict.vouched ? ' (vouched)' : ''}
+          ${ci.verdict.blockers?.length ? `<div style='margin-top:4px'>Blockers: ${ci.verdict.blockers.map(b => `<span class='tag warn'>${b}</span>`).join(' ')}</div>` : ''}
+        </div>` : ''}
         ${ci.ledger_snapshot?.present ? `
         <div class="muted" style="margin-top:6px">
           Ledger snapshot: <a href="https://raw.githubusercontent.com/jonwashburn/audit/main/docs/ledger_snapshot_v22c.txt" target="_blank" rel="noopener">ledger_snapshot_v22c.txt</a>
@@ -1176,6 +1223,21 @@ python3 scripts/ci_status.py</code></pre>
           </ul>
           <div style="margin-top:6px">
             <strong>Failed checks:</strong> ${ci.summary.failed_checks?.join(', ') || 'none'}
+          </div>
+        </details>` : ''}
+        ${ci.checks ? `
+        <details style="margin-top:10px">
+          <summary>Checks: purpose, method, results, meaning</summary>
+          <div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap:12px; margin-top:8px">
+            ${Object.entries(ci.checks).map(([k,chk]) => `
+              <div class="component-card">
+                <h4 style="margin-top:0">${k} ${chk.passed ? '<span class=ok>passed</span>' : '<span class=warn>failed</span>'}</h4>
+                <div><strong>Purpose</strong>: ${chk.purpose || '—'}</div>
+                <div style="margin-top:4px"><strong>Method</strong>: ${chk.method || '—'}</div>
+                <div style="margin-top:4px"><strong>Result</strong>: <pre style="white-space:pre-wrap; font-size:0.9em;">${(chk.result || '').toString().slice(0,800)}</pre></div>
+                <div style="margin-top:4px"><strong>Meaning</strong>: ${chk.meaning || '—'}</div>
+              </div>
+            `).join('')}
           </div>
         </details>` : ''}
       `);
@@ -1262,7 +1324,7 @@ python3 scripts/ci_status.py</code></pre>
             <div class="muted" style="margin-top:6px">
               (λ, A, ρ̄, η̄) = (${masses.ckm.lambda?.toFixed(6) || '—'}, ${masses.ckm.A?.toFixed(3) || '—'}, 
               ${masses.ckm.rho_bar?.toFixed(3) || '—'}, ${masses.ckm.eta_bar?.toFixed(3) || '—'})
-            </div>
+          </div>
           </div>` : ''}
           ${masses.pmns ? `
           <div>
