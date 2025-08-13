@@ -1,5 +1,35 @@
 <footer class="site-footer">
     <div class="container">
         <p>&copy; 2025 Recognition Science Institute. All rights reserved. · <a href="/about.html">About</a></p>
+        <p class="template-text-muted" id="deploy-info" style="margin-top:0.5rem; font-size: 0.8rem;">
+            Deploy: <span id="deploy-ts">loading…</span> · <span id="deploy-sha"></span> · run <span id="deploy-run"></span>
+        </p>
     </div>
 </footer>
+<script>
+  (function(){
+    const elTs = document.getElementById('deploy-ts');
+    const elSha = document.getElementById('deploy-sha');
+    const elRun = document.getElementById('deploy-run');
+    const base = (function(){
+      const p = window.location.pathname;
+      if (p === '/' || p === '' || p === '/index.html') return '';
+      const segs = p.split('/').filter(Boolean);
+      const isFile = segs[segs.length-1]?.includes('.');
+      const depth = isFile ? segs.length - 1 : segs.length;
+      return '../'.repeat(depth);
+    })();
+    fetch(base + 'deploy.json?' + Date.now(), { cache: 'no-store' })
+      .then(r => r.ok ? r.json() : null)
+      .then(j => {
+        if (!j) throw new Error('no deploy.json');
+        elTs.textContent = j.timestamp || 'n/a';
+        elSha.textContent = (j.sha || '').slice(0,7);
+        elRun.textContent = j.run_number || 'n/a';
+      })
+      .catch(() => {
+        const wrap = document.getElementById('deploy-info');
+        if (wrap) wrap.style.display = 'none';
+      });
+  })();
+</script>
