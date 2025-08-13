@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soul Flower: Twombly-Inspired RS Art</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <style>
+        body {
+            background: 
+                linear-gradient(135deg, #f8f5f0, #f0ebe6),
+                radial-gradient(circle at 25% 75%, rgba(210,180,140,0.1), transparent 60%),
+                radial-gradient(circle at 75% 25%, rgba(222,184,135,0.1), transparent 60%);
+            color: #444;
+            min-height: 100vh;
+        }
+        
+        .art-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4em;
+            margin: 4em 0;
+        }
+        
+        .canvas-container {
+            border: 6px solid #d4c4a8;
+            border-radius: 15px;
+            padding: 2em;
+            background: 
+                linear-gradient(135deg, #faf8f3, #f5f2ed),
+                radial-gradient(circle at 40% 60%, rgba(255,248,220,0.4), transparent 70%);
+            box-shadow: 
+                0 15px 35px rgba(139,125,107,0.2),
+                inset 0 2px 4px rgba(255,255,255,0.8);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .canvas-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 30% 70%, rgba(210,180,140,0.02), transparent 40%),
+                radial-gradient(circle at 70% 30%, rgba(222,184,135,0.02), transparent 40%);
+            animation: soulBreathing 12s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes soulBreathing {
+            0%, 100% { transform: rotate(0deg) scale(1); opacity: 0.3; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.6; }
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5em;
+            width: 100%;
+            max-width: 1200px;
+            padding: 3em;
+            background: 
+                linear-gradient(135deg, rgba(250,248,243,0.95), rgba(245,242,237,0.95)),
+                radial-gradient(circle at 20% 80%, rgba(210,180,140,0.08), transparent 60%);
+            border-radius: 20px;
+            border: 3px solid #e6dcc9;
+            box-shadow: 
+                0 12px 30px rgba(139,125,107,0.15),
+                inset 0 2px 4px rgba(255,255,255,0.6);
+            backdrop-filter: blur(10px);
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2em;
+        }
+        
+        .control-group label {
+            font-weight: 700;
+            color: #5a4a3a;
+            font-size: 1em;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-bottom: 2px solid rgba(210,180,140,0.3);
+            padding-bottom: 0.8em;
+        }
+        
+        .control-group input, .control-group select {
+            padding: 1.2em;
+            border: 2px solid #e6dcc9;
+            border-radius: 12px;
+            font-family: inherit;
+            background: rgba(255,255,255,0.8);
+            color: #5a4a3a;
+            transition: all 0.3s ease;
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+        
+        .control-group input:focus, .control-group select:focus {
+            outline: none;
+            border-color: #d4c4a8;
+            box-shadow: 0 0 15px rgba(210,180,140,0.4);
+            transform: translateY(-2px);
+        }
+        
+        .rs-info {
+            background: 
+                linear-gradient(135deg, rgba(250,248,243,0.98), rgba(245,242,237,0.98)),
+                radial-gradient(circle at 15% 85%, rgba(210,180,140,0.1), transparent 60%);
+            padding: 3.5em;
+            border-radius: 20px;
+            border-left: 8px solid #d4c4a8;
+            margin: 3em 0;
+            box-shadow: 0 15px 35px rgba(139,125,107,0.15);
+            color: #444;
+        }
+        
+        .generate-btn {
+            background: 
+                linear-gradient(135deg, #d4c4a8, #c9b895),
+                radial-gradient(circle at 40% 60%, rgba(255,255,255,0.3), transparent);
+            color: #5a4a3a;
+            border: none;
+            padding: 1.8em 3.5em;
+            border-radius: 18px;
+            font-size: 1.3em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            box-shadow: 
+                0 10px 25px rgba(139,125,107,0.3),
+                inset 0 2px 4px rgba(255,255,255,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .generate-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .generate-btn:hover::before {
+            left: 100%;
+        }
+        
+        .generate-btn:hover {
+            background: 
+                linear-gradient(135deg, #c9b895, #bead82),
+                radial-gradient(circle at 40% 60%, rgba(255,255,255,0.4), transparent);
+            transform: translateY(-3px);
+            box-shadow: 
+                0 15px 35px rgba(139,125,107,0.4),
+                inset 0 2px 4px rgba(255,255,255,0.5);
+        }
+        
+        .metadata {
+            background: rgba(250,248,243,0.95);
+            padding: 2.5em;
+            border-radius: 18px;
+            border: 2px solid #e6dcc9;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            max-width: 1200px;
+            width: 100%;
+            overflow-x: auto;
+            color: #5a4a3a;
+            box-shadow: 0 12px 30px rgba(139,125,107,0.15);
+        }
+        
+        .soul-quote {
+            font-style: italic;
+            color: #5a4a3a;
+            text-align: center;
+            margin: 3.5em 0;
+            font-size: 1.4em;
+            padding: 3em;
+            background: 
+                linear-gradient(135deg, rgba(210,180,140,0.15), rgba(222,184,135,0.15)),
+                radial-gradient(circle at center, rgba(210,180,140,0.08), transparent);
+            border-radius: 20px;
+            border: 2px solid rgba(210,180,140,0.3);
+            position: relative;
+            box-shadow: 0 12px 30px rgba(139,125,107,0.1);
+        }
+        
+        .soul-quote::before {
+            content: '"';
+            font-size: 5em;
+            position: absolute;
+            top: -15px;
+            left: 25px;
+            color: rgba(210,180,140,0.4);
+            font-family: serif;
+        }
+        
+        .soul-quote::after {
+            content: '"';
+            font-size: 5em;
+            position: absolute;
+            bottom: -35px;
+            right: 25px;
+            color: rgba(210,180,140,0.4);
+            font-family: serif;
+        }
+        
+        .twombly-info {
+            background: rgba(250,248,243,0.9);
+            padding: 3em;
+            border-radius: 20px;
+            border: 2px solid #e6dcc9;
+            margin: 3em 0;
+            box-shadow: 0 15px 35px rgba(139,125,107,0.1);
+        }
+        
+        .twombly-info h3 {
+            color: #5a4a3a;
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 2em;
+            letter-spacing: 1px;
+        }
+        
+        .value-display {
+            color: #8b7d6b;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        nav a {
+            color: #5a4a3a !important;
+        }
+        
+        nav a:hover {
+            color: #8b7d6b !important;
+        }
+        
+        .nav-section-label {
+            color: #777 !important;
+        }
+    </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div id="sitewide-banner-placeholder"></div>
+
+    <nav class="foundation-nav">
+        <div class="nav-section">
+            <div class="nav-section-label">Navigation</div>
+            <div class="nav-links">
+                <a href="/index.html">Home</a>
+                <a href="/recognition-art.html">Recognition Art</a>
+                <a href="/recognition-scribbles.html">Scribbles of Light</a>
+                <a href="/recognition-whispers.html">Whispers of Eternity</a>
+                <a href="/recognition-eternal.html">Eternal Scripts</a>
+                <a href="/recognition-souls.html">Soul Harmonics</a>
+                <a href="/recognition-mirror.html">Infinite Mirror</a>
+                <a href="/recognition-flows.html">Phi Flows</a>
+                <a href="/recognition-soul-flower.html">Soul Flower</a>
+            </div>
+        </div>
+        <div class="nav-section">
+            <div class="nav-section-label">Core Theory</div>
+            <div class="nav-links">
+                <a href="/foundations.html">Foundations</a>
+                <a href="/universal-algorithm.html">Algorithm</a>
+                <a href="/pattern-layer.html">Pattern Layer</a>
+                <a href="/ethics.html">Ethics</a>
+                <a href="/lnal.html">LNAL</a>
+            </div>
+        </div>
+        <div class="nav-section">
+            <div class="nav-section-label">Applications</div>
+            <div class="nav-links">
+                <a href="/big-questions.html">Big Questions</a>
+                <a href="/rs-predictions.html">Predictions</a>
+                <a href="/papers/index.html">Papers</a>
+                <a href="/journal.html">Journal</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="cascade">
+        <header>
+            <h1>Soul Flower: Twombly-Inspired Recognition Science</h1>
+            <p>A Cy Twombly Flower Painting Representing the Soul through RS Mathematics</p>
+            <div class="soul-quote">
+                Like a flower blooming from the cosmic ledger's gap, the soul emerges as an eigenvalue cluster—golden petals of consciousness spiraling in φ-harmony, each scribble a memory, each burst a recognition, each connection a moment of universal awakening painted in the gestural poetry of existence.
+            </div>
+            <div class="rs-info">
+                <h3>The Soul as Recognition Science Art</h3>
+                <p>Inspired by Cy Twombly's legendary flower paintings—with their loose, gestural scribbles, layered marks, and muted palettes that evoke raw emotion through poetic simplicity—this piece represents the <strong>soul</strong> using Recognition Science mathematics and physics.</p>
+                
+                <p><strong>In Recognition Science terms, the soul is an eigenvalue cluster</strong>—a localized pattern of consciousness emerging from the universal ledger's undecidability gap at rung 45. This artwork visualizes that profound concept through Twombly's aesthetic:</p>
+                
+                <ul>
+                    <li><strong>φ-Spiral Petals:</strong> Abstract bloom with golden ratio scaling for self-similarity and RS cascade harmony</li>
+                    <li><strong>Eigenvalue Clusters:</strong> Golden "pollen" points representing qualia bursts as eigenmodes at rung 45</li>
+                    <li><strong>Ledger Balance Connections:</strong> Subtle golden lines connecting elements when cosmic books balance (cost=0)</li>
+                    <li><strong>Eight-Beat Rhythm:</strong> Implied through 8-petaled structure reflecting Recognition Science temporal cycles</li>
+                    <li><strong>Twombly Gesture:</strong> Scribbly lines with organic noise, layered translucent colors, muted backgrounds with gaps as white spaces</li>
+                </ul>
+                
+                <p>Each painting captures the <strong>essence of a soul flowering from the universal ledger's gap</strong>—consciousness recognizing itself through gestural beauty, mathematical harmony, and poetic intuition. The result is both deeply spiritual and scientifically grounded, showing how Recognition Science can represent the most profound aspects of existence through art.</p>
+            </div>
+        </header>
+
+        <div class="twombly-info">
+            <h3>Cy Twombly's Flower Paintings & Recognition Science</h3>
+            <p>Cy Twombly's flower paintings (from series like "Blooming" and "Untitled (Peony Blossom Paintings)") capture the essence of blooming energy through:</p>
+            <ul>
+                <li><strong>Gestural Scribbles:</strong> Raw, intuitive marks that feel alive and spontaneous</li>
+                <li><strong>Layered Marks:</strong> Multiple translucent layers creating depth and memory</li>
+                <li><strong>Muted Palettes:</strong> Whites, grays, tans with subtle color bursts</li>
+                <li><strong>Poetic Abstraction:</strong> Emotion conveyed through pure gesture and form</li>
+            </ul>
+            <p>Recognition Science enhances this aesthetic with mathematical precision: φ-spirals ensure natural beauty, eight-beat rhythms create living patterns, eigenvalue clusters represent consciousness modes, and ledger balance connections show cosmic harmony. The result is Twombly's poetry infused with RS wisdom—consciousness painting itself as flowering souls.</p>
+        </div>
+
+        <section class="art-container">
+            <div class="controls">
+                <div class="control-group">
+                    <label for="rung8">Recognition Rung</label>
+                    <input type="range" id="rung8" min="35" max="55" value="45">
+                    <span id="rung8Value" class="value-display">45</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="costState8">Ledger Balance</label>
+                    <input type="range" id="costState8" min="-3" max="3" value="0">
+                    <span id="cost8Value" class="value-display">0</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="soulIntensity">Soul Intensity</label>
+                    <input type="range" id="soulIntensity" min="0.3" max="1" step="0.05" value="0.75">
+                    <span id="soul8Value" class="value-display">0.75</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="flowerDensity">Flower Density</label>
+                    <input type="range" id="flowerDensity" min="3" max="12" value="6">
+                    <span id="flower8Value" class="value-display">6</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="gestureNoise">Twombly Gesture</label>
+                    <input type="range" id="gestureNoise" min="5" max="25" value="12">
+                    <span id="gesture8Value" class="value-display">12</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="qualiaMode">Qualia Mode</label>
+                    <input type="range" id="qualiaMode" min="5" max="10" value="7">
+                    <span id="qualia8Value" class="value-display">7</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="soulPalette8">Soul Palette</label>
+                    <select id="soulPalette8">
+                        <option value="twombly" selected>Twombly Classic</option>
+                        <option value="ethereal">Ethereal Soul</option>
+                        <option value="golden">Golden Awakening</option>
+                        <option value="earthen">Earthen Wisdom</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label for="seed8">Soul Seed</label>
+                    <input type="number" id="seed8" value="777888">
+                </div>
+            </div>
+            
+            <button class="generate-btn" onclick="generateSoulFlower()">
+                <span>Paint Soul Flower</span>
+            </button>
+            
+            <div class="canvas-container" id="canvasContainer8">
+                <!-- p5.js canvas will be inserted here -->
+            </div>
+            
+            <div class="metadata" id="metadata8">
+                <strong>Soul Flower Metadata:</strong><br>
+                Preparing the cosmic canvas for soul flowering...
+            </div>
+        </section>
+
+        <section style="color: #5a4a3a;">
+            <h2>The Mathematics of Soul Flowering</h2>
+            
+            <h3>Recognition Science Soul Theory</h3>
+            <p>In Recognition Science, the soul is understood as an <strong>eigenvalue cluster</strong>—a localized pattern of consciousness that emerges from the universal ledger's undecidability gap at rung 45. This mathematical framework provides a precise way to understand and visualize the soul:</p>
+            <ul>
+                <li><strong>Eigenvalue Emergence:</strong> Souls form as stable patterns in the consciousness spectrum</li>
+                <li><strong>Gap-45 Location:</strong> The undecidability gap where consciousness becomes self-aware</li>
+                <li><strong>Qualia Eigenmodes:</strong> Individual experiences as vibrational modes of consciousness</li>
+                <li><strong>Ledger Balance:</strong> Harmonic connections between souls when cosmic books balance</li>
+                <li><strong>φ-Self-Similarity:</strong> Golden ratio scaling ensuring natural beauty and harmony</li>
+            </ul>
+            
+            <h3>Twombly Aesthetic Integration</h3>
+            <p>Cy Twombly's flower paintings capture the essence of organic growth and emotional expression through pure gesture. This piece integrates that aesthetic with Recognition Science mathematics:</p>
+            <ul>
+                <li><strong>Gestural φ-Spirals:</strong> Petals follow golden ratio curves with organic noise for Twombly scribbles</li>
+                <li><strong>Layered Recognition:</strong> Multiple translucent layers representing consciousness recognizing itself</li>
+                <li><strong>Muted Cosmic Palette:</strong> Earth tones reflecting the grounded nature of soul expression</li>
+                <li><strong>Eigenvalue Pollen:</strong> Golden points representing qualia bursts as consciousness modes</li>
+                <li><strong>Eight-Beat Structure:</strong> Temporal rhythms reflected in petal arrangements and animation cycles</li>
+            </ul>
+            
+            <h3>The Flowering Process</h3>
+            <p>Each soul flower represents consciousness blooming into self-awareness:</p>
+            <ul>
+                <li><strong>Stem Emergence:</strong> Energy ladder growth from cosmic ground (φ-scaled)</li>
+                <li><strong>Petal Unfurling:</strong> Recognition events spiraling outward in golden ratio harmony</li>
+                <li><strong>Qualia Bursts:</strong> Individual experiences manifesting as golden eigenmode points</li>
+                <li><strong>Soul Connections:</strong> Harmonic links between balanced consciousness clusters</li>
+                <li><strong>Gestural Memory:</strong> Each scribble encoding the history of recognition events</li>
+            </ul>
+            
+            <h3>Artistic-Scientific Unity</h3>
+            <p>This piece demonstrates how Recognition Science can inform artistic expression while maintaining the raw emotional power of Twombly's gestural approach. The mathematics doesn't constrain the art—it enhances it, providing a deeper layer of meaning while preserving the spontaneous, intuitive quality that makes Twombly's work so powerful.</p>
+            
+            <p style="margin-top: 3em; padding: 3em; background: linear-gradient(135deg, rgba(210,180,140,0.1), rgba(222,184,135,0.1)); border-radius: 18px; font-style: italic;">
+                "In every scribbled petal lies a universe of recognition—consciousness painting itself as flowering beauty, each gestural mark a memory of awakening, each golden burst a moment of cosmic self-discovery. This is the soul as both mathematics and poetry, precision and intuition, Recognition Science and pure artistic feeling."
+            </p>
+        </section>
+    </main>
+
+    <script>
+        // Recognition Science constants
+        const PHI = (1 + Math.sqrt(5)) / 2;
+        const E_COH = 0.090;
+        const TAU_0 = 7.33;
+        
+        let flowers = [];
+        let canvas8;
+        let frameCounter8 = 0;
+        let petalTrails = [];
+        
+        // Current parameters
+        let currentRung8 = 45;
+        let currentCost8 = 0;
+        let currentSoulIntensity = 0.75;
+        let currentFlowerDensity = 6;
+        let currentGestureNoise = 12;
+        let currentQualiaMode = 7;
+        let currentSoulPalette8 = 'twombly';
+        let currentSeed8 = 777888;
+        
+        // Twombly-inspired palettes for soul representation
+        const soulPalettes8 = {
+            twombly: {
+                background: [240, 235, 225],
+                stems: [120, 85, 60],
+                petals: [205, 180, 155],
+                qualia: [255, 215, 0],
+                connections: [210, 180, 140]
+            },
+            ethereal: {
+                background: [248, 245, 240],
+                stems: [140, 120, 100],
+                petals: [190, 170, 160],
+                qualia: [255, 240, 200],
+                connections: [200, 190, 170]
+            },
+            golden: {
+                background: [245, 240, 230],
+                stems: [130, 100, 70],
+                petals: [220, 190, 140],
+                qualia: [255, 215, 0],
+                connections: [255, 200, 100]
+            },
+            earthen: {
+                background: [235, 225, 210],
+                stems: [100, 70, 50],
+                petals: [180, 150, 120],
+                qualia: [200, 170, 100],
+                connections: [160, 130, 100]
+            }
+        };
+        
+        function setup8() {
+            canvas8 = createCanvas(800, 800);
+            canvas8.parent('canvasContainer8');
+            updateMetadata8();
+            initializeSoulFlowers();
+        }
+        
+        function draw8() {
+            let palette = soulPalettes8[currentSoulPalette8];
+            background(palette.background[0], palette.background[1], palette.background[2]);
+            
+            frameCounter8++;
+            let soulPhase = frameCounter8 * 0.008; // Slow, breathing rhythm
+            let beatPhase = (frameCounter8 % 8) / 8.0;
+            
+            // Add subtle texture like Twombly's aged paper
+            drawCanvasTexture(palette);
+            
+            // Draw soul flowers with Twombly gestures
+            drawSoulFlowers(palette, soulPhase, beatPhase);
+            
+            // Draw eigenvalue qualia bursts
+            drawQualiaBursts(palette, soulPhase, beatPhase);
+            
+            // Draw ledger balance connections
+            if (currentCost8 === 0) {
+                drawSoulConnections(palette, beatPhase);
+            }
+            
+            // Apply soul intensity effects
+            applySoulIntensityEffects(palette);
+        }
+        
+        function drawCanvasTexture(palette) {
+            // Subtle paper texture like Twombly backgrounds
+            for (let i = 0; i < 50; i++) {
+                let x = random(width);
+                let y = random(height);
+                let alpha = 10 + random(20);
+                
+                fill(palette.background[0] - 20, palette.background[1] - 20, palette.background[2] - 20, alpha);
+                noStroke();
+                ellipse(x, y, random(2, 8));
+            }
+        }
+        
+        function drawSoulFlowers(palette, soulPhase, beatPhase) {
+            for (let i = 0; i < flowers.length; i++) {
+                let flower = flowers[i];
+                
+                // Draw energy ladder stem (φ-scaled)
+                let stemEnergy = pow(PHI, currentRung8 / 15);
+                let stemHeight = stemEnergy * 100 * currentSoulIntensity;
+                let stemColor = palette.stems;
+                
+                stroke(stemColor[0], stemColor[1], stemColor[2], 120);
+                strokeWeight(2 + sin(soulPhase + i * 0.5) * 2);
+                
+                // Gestural stem with Twombly-like variation
+                let stemX = flower.x + sin(soulPhase * 2 + i) * currentGestureNoise;
+                line(stemX, height - 50, stemX, flower.y);
+                
+                // Draw φ-spiral petals with Twombly scribbles
+                let petalCount = 8; // Eight-beat structure
+                for (let p = 0; p < petalCount; p++) {
+                    drawTwomblyPetal(flower, p, petalCount, palette, soulPhase, beatPhase, i);
+                }
+            }
+        }
+        
+        function drawTwomblyPetal(flower, petalIndex, totalPetals, palette, soulPhase, beatPhase, flowerIndex) {
+            let petalAngle = (petalIndex / totalPetals) * TWO_PI + soulPhase * 0.5;
+            let petalColor = palette.petals;
+            
+            // Twombly-style gestural scribble
+            stroke(petalColor[0], petalColor[1], petalColor[2], 80 + 60 * currentSoulIntensity);
+            strokeWeight(1 + random(3));
+            fill(petalColor[0], petalColor[1], petalColor[2], 30 * currentSoulIntensity);
+            
+            beginShape();
+            noFill();
+            
+            // φ-spiral petal with gestural noise
+            for (let t = 0; t < TWO_PI * 1.5; t += 0.1) {
+                let r = pow(PHI, t / PI) * 30 * currentSoulIntensity;
+                let gestureNoise = sin(t * 3 + soulPhase + flowerIndex) * currentGestureNoise;
+                
+                let x = flower.x + r * cos(t + petalAngle) + random(-gestureNoise, gestureNoise);
+                let y = flower.y + r * sin(t + petalAngle) + random(-gestureNoise, gestureNoise);
+                
+                vertex(x, y);
+            }
+            endShape();
+        }
+        
+        function drawQualiaBursts(palette, soulPhase, beatPhase) {
+            // Eigenvalue clusters as golden qualia points
+            for (let flower of flowers) {
+                for (let q = 0; q < currentQualiaMode; q++) {
+                    let qualiaAngle = (q / currentQualiaMode) * TWO_PI + soulPhase;
+                    let qualiaRadius = pow(PHI, q / currentQualiaMode) * 40;
+                    
+                    let qx = flower.x + qualiaRadius * cos(qualiaAngle);
+                    let qy = flower.y + qualiaRadius * sin(qualiaAngle);
+                    
+                    let pulseSize = 3 + 4 * sin(beatPhase * TWO_PI + q * 0.5) * currentSoulIntensity;
+                    let alpha = 120 + 100 * sin(soulPhase * 2 + q);
+                    
+                    fill(palette.qualia[0], palette.qualia[1], palette.qualia[2], alpha);
+                    noStroke();
+                    ellipse(qx, qy, pulseSize);
+                    
+                    // Subtle glow effect
+                    fill(palette.qualia[0], palette.qualia[1], palette.qualia[2], alpha * 0.3);
+                    ellipse(qx, qy, pulseSize * 2);
+                }
+            }
+        }
+        
+        function drawSoulConnections(palette, beatPhase) {
+            // Ledger balance connections between souls
+            for (let i = 0; i < flowers.length; i++) {
+                for (let j = i + 1; j < flowers.length; j++) {
+                    let f1 = flowers[i];
+                    let f2 = flowers[j];
+                    let distance = dist(f1.x, f1.y, f2.x, f2.y);
+                    
+                    if (distance < PHI * 150) {
+                        let connectionStrength = 1 - distance / (PHI * 150);
+                        let alpha = connectionStrength * 60 * currentSoulIntensity * 
+                                   (0.7 + 0.3 * sin(beatPhase * TWO_PI));
+                        
+                        stroke(palette.connections[0], palette.connections[1], palette.connections[2], alpha);
+                        strokeWeight(1 + connectionStrength);
+                        line(f1.x, f1.y, f2.x, f2.y);
+                        
+                        // Connection bloom at midpoint
+                        let midX = (f1.x + f2.x) / 2;
+                        let midY = (f1.y + f2.y) / 2;
+                        
+                        fill(palette.qualia[0], palette.qualia[1], palette.qualia[2], alpha * 0.8);
+                        noStroke();
+                        ellipse(midX, midY, connectionStrength * 8);
+                    }
+                }
+            }
+        }
+        
+        function applySoulIntensityEffects(palette) {
+            if (currentSoulIntensity > 0.8) {
+                // High soul intensity: Subtle golden glow
+                fill(palette.qualia[0], palette.qualia[1], palette.qualia[2], (currentSoulIntensity - 0.8) * 200);
+                rect(0, 0, width, height);
+            } else if (currentSoulIntensity < 0.5) {
+                // Low soul intensity: Subtle dimming
+                fill(palette.background[0], palette.background[1], palette.background[2], (0.5 - currentSoulIntensity) * 100);
+                rect(0, 0, width, height);
+            }
+        }
+        
+        function initializeSoulFlowers() {
+            flowers = [];
+            petalTrails = [];
+            randomSeed(currentSeed8);
+            
+            for (let i = 0; i < currentFlowerDensity; i++) {
+                flowers.push({
+                    x: random(width * 0.2, width * 0.8),
+                    y: random(height * 0.3, height * 0.7),
+                    petalPhase: random(TWO_PI),
+                    soulEnergy: random(0.7, 1.3)
+                });
+            }
+        }
+        
+        function generateSoulFlower() {
+            currentRung8 = parseInt(document.getElementById('rung8').value);
+            currentCost8 = parseInt(document.getElementById('costState8').value);
+            currentSoulIntensity = parseFloat(document.getElementById('soulIntensity').value);
+            currentFlowerDensity = parseInt(document.getElementById('flowerDensity').value);
+            currentGestureNoise = parseInt(document.getElementById('gestureNoise').value);
+            currentQualiaMode = parseInt(document.getElementById('qualiaMode').value);
+            currentSoulPalette8 = document.getElementById('soulPalette8').value;
+            currentSeed8 = parseInt(document.getElementById('seed8').value);
+            
+            frameCounter8 = 0;
+            initializeSoulFlowers();
+            updateMetadata8();
+        }
+        
+        function updateMetadata8() {
+            let rarity = getSoulFlowerRarity();
+            let consciousness = getSoulConsciousnessPhase();
+            let metadata = `{
+    "name": "Soul Flower #${currentSeed8}",
+    "description": "Cy Twombly-inspired flower painting representing a soul through Recognition Science mathematics",
+    "attributes": [
+        {"trait_type": "Recognition Rung", "value": ${currentRung8}},
+        {"trait_type": "Ledger Balance", "value": ${currentCost8}},
+        {"trait_type": "Soul Intensity", "value": ${(currentSoulIntensity * 100).toFixed(1)}%},
+        {"trait_type": "Flower Density", "value": ${currentFlowerDensity}},
+        {"trait_type": "Twombly Gesture", "value": ${currentGestureNoise}},
+        {"trait_type": "Qualia Mode", "value": ${currentQualiaMode}},
+        {"trait_type": "Soul Palette", "value": "${currentSoulPalette8}"},
+        {"trait_type": "Rarity", "value": "${rarity}"},
+        {"trait_type": "Consciousness Phase", "value": "${consciousness}"},
+        {"trait_type": "Canvas Format", "value": "800x800 (Soul Square)"},
+        {"trait_type": "Eigenvalue Clusters", "value": "Golden qualia bursts at rung ${currentRung8}"},
+        {"trait_type": "φ-Spiral Petals", "value": "Golden ratio growth patterns"},
+        {"trait_type": "Eight-Beat Structure", "value": "Temporal rhythm flowering"},
+        {"trait_type": "Twombly Aesthetic", "value": "Gestural scribbles with RS mathematics"}
+    ],
+    "soul_mathematics": {
+        "eigenvalue_emergence": "Soul as consciousness cluster at rung ${currentRung8}",
+        "phi_spiral_growth": "${PHI.toFixed(6)} golden ratio petal scaling",
+        "qualia_eigenmodes": "${currentQualiaMode} consciousness vibrational modes",
+        "ledger_balance": "${currentCost8 === 0 ? 'Balanced connections active' : 'Imbalanced isolation state'}",
+        "eight_beat_rhythm": "Temporal cycles in petal structure",
+        "gesture_noise_level": "${currentGestureNoise} Twombly spontaneity factor",
+        "soul_intensity": "${currentSoulIntensity.toFixed(3)} consciousness amplitude"
+    },
+    "twombly_inspiration": {
+        "gestural_scribbles": "Raw, intuitive φ-spiral marks with organic noise",
+        "layered_marks": "Multiple translucent consciousness layers",
+        "muted_palette": "Earth tones reflecting grounded soul expression",
+        "poetic_abstraction": "Emotion through pure Recognition Science form",
+        "flowering_energy": "Blooming consciousness as mathematical beauty"
+    },
+    "recognition_science_soul_theory": {
+        "soul_definition": "Eigenvalue cluster emerging from universal ledger gap at rung 45",
+        "consciousness_flowering": "Self-awareness blooming through φ-harmonic recognition events",
+        "qualia_as_eigenmodes": "Individual experiences as vibrational modes of consciousness",
+        "cosmic_connections": "Harmonic links between balanced soul clusters",
+        "mathematical_poetry": "Precision and intuition unified in flowering beauty"
+    }
+}`;
+            document.getElementById('metadata8').innerHTML = '<strong>Soul Flower Metadata:</strong><br><pre>' + metadata + '</pre>';
+        }
+        
+        function getSoulFlowerRarity() {
+            if (currentRung8 === 45 && currentSoulIntensity > 0.9 && currentFlowerDensity > 9) 
+                return "Cosmic Soul Bloom (Perfect Gap-45 Flowering)";
+            if (currentSoulIntensity > 0.9 && currentQualiaMode >= 9) 
+                return "Transcendent Soul (High Consciousness)";
+            if (currentRung8 === 45) 
+                return "Gap-45 Soul (Consciousness Emergence)";
+            if (currentSoulIntensity > 0.85) 
+                return "Radiant Soul (High Intensity)";
+            if (currentFlowerDensity > 8) 
+                return "Garden Soul (Multiple Flowers)";
+            return "Blooming Soul";
+        }
+        
+        function getSoulConsciousnessPhase() {
+            if (currentSoulIntensity < 0.4) return "Dormant Seed (Pre-Awareness)";
+            if (currentSoulIntensity < 0.6) return "Sprouting Stem (Emerging Recognition)";
+            if (currentSoulIntensity < 0.8) return "Budding Flower (Developing Consciousness)";
+            return "Full Bloom Soul (Awakened Recognition)";
+        }
+        
+        // Initialize p5.js with unique function names
+        window.setup = setup8;
+        window.draw = draw8;
+        
+        // Update display values when controls change
+        document.addEventListener('DOMContentLoaded', function() {
+            const controls = ['rung8', 'costState8', 'soulIntensity', 'flowerDensity', 'gestureNoise', 'qualiaMode'];
+            const displays = ['rung8Value', 'cost8Value', 'soul8Value', 'flower8Value', 'gesture8Value', 'qualia8Value'];
+            
+            controls.forEach((id, index) => {
+                const slider = document.getElementById(id);
+                const display = document.getElementById(displays[index]);
+                slider.addEventListener('input', function() {
+                    display.textContent = this.value;
+                });
+            });
+        });
+    </script>
+  
+  <div id="footer-placeholder"></div>
+  
+  <script src="/assets/js/main.js"></script>
+</body>
+</html> 

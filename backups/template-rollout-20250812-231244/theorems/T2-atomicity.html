@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Theorem 2 · Atomicity & Countability /// Recognition Science</title>
+  <link rel="stylesheet" href="/assets/css/template-core.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <main class="content-page academic-page">
+    <section class="hero-section text-center">
+      <div class="container">
+        <h1>Theorem 2: Atomicity & Countability</h1>
+        <p class="subtitle">Exactly one unit posting per tick; concurrency at one tick is impossible</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="container text-block">
+        <h2>Statement</h2>
+        <p><strong>Atomic tick.</strong> There exists an indivisible unit step τ₀ such that per tick exactly one elementary posting of size δ occurs. Two distinct postings at the same tick are impossible under double‑entry and conservation.</p>
+
+        <h2>In plain English</h2>
+        <p>
+          Time, at the ledger level, clicks like a metronome. Each click, one thing happens. Not two. If two “happened at once,” either you’ve
+          secretly changed the coin size (now it’s 2δ) or you’ve created a bookkeeping glitch that breaks conservation. So events are countable—
+          like frames in a film—and the universe has a smallest beat, τ₀.
+        </p>
+        <ul>
+          <li><strong>Why inevitable:</strong> two‑at‑once merges into a bigger coin (illegal) or leaves pages unbalanced (illegal).</li>
+          <li><strong>What it buys:</strong> clean cause→effect ordering and the discrete rhythm used in T7’s 8‑beat cycle.</li>
+        </ul>
+
+        <h2>Formal setting</h2>
+        <ul>
+          <li><strong>Ledger (T1):</strong> a linearly ordered abelian group with generator δ > 0 and page maps ϕ, ψ respecting double‑entry.</li>
+          <li><strong>Tick index:</strong> a total order (ℤ or ℕ) labeling posting events; finiteness excludes dense orderings for effective updates.</li>
+          <li><strong>Closed chain conservation:</strong> sums over closed finite chains telescope to 0.</li>
+        </ul>
+
+        <h2>Key lemmas (outline)</h2>
+        <ol>
+          <li><strong>Granularity lemma:</strong> If two postings share the same tick, they can be merged to a single δ‑sized posting only by violating the positive cone or by redefining δ (forbidden by T1’s δ‑nonrescalability).</li>
+          <li><strong>Conservation lemma:</strong> Two independent postings at one tick generically create an unmatched credit/debit, producing a nonzero loop on a finite closed chain, contradicting conservation.</li>
+          <li><strong>Order lemma:</strong> If ticks were dense, there would be no minimal separation between postings, contradicting T1’s Archimedean order induced by δ and finiteness.</li>
+        </ol>
+
+        <h2>Proof sketch</h2>
+        <p>Assume by contradiction two distinct postings occur at the same tick t. Either (i) they combine to an effective posting of size 2δ, rescaling δ against T1, or (ii) they target disjoint pages, generating a non‑telescoping surplus/deficit around the nearest closed chain, violating conservation. Therefore exactly one δ‑posting occurs per tick. Countability follows from the total order on ticks with a minimal separation τ₀.</p>
+
+        <h2>Edge cases</h2>
+        <ul>
+          <li><strong>Parallelism:</strong> Apparent concurrency resolves to a total posting order at ledger granularity; micro‑ordering below τ₀ is undefined/irrelevant.</li>
+          <li><strong>Composite operations:</strong> Multi‑edge updates decompose into a tick‑ordered list of δ‑postings.</li>
+        </ul>
+
+        <h2>Implications</h2>
+        <ul>
+          <li><strong>T7 minimal period:</strong> The 3‑cube requires at least |V| = 8 ticks; atomicity fixes the step size.</li>
+          <li><strong>T5 integer split‑count:</strong> Per‑tick splits are integer‑valued; minimizing total cost over k ≥ 1 selects k = 1 and φ.</li>
+          <li><strong>Discrete continuity (T3):</strong> The continuity equation arises from sums over tick‑ordered chains.</li>
+        </ul>
+
+        <h2>Related</h2>
+        <p>
+          <a class="button-link" href="/theorems/T1-ledger-necessity.html">T1 Ledger Necessity</a>
+          <a class="button-link secondary" href="/theorems/T3-conservation.html">T3 Conservation</a>
+          <a class="button-link secondary" href="/theorems/T7-T-equals-8.html">T7 Minimal Period</a>
+        </p>
+
+        <p><a href="/eight-theorems.html">← Back to The 8 Theorems</a></p>
+      </div>
+    </section>
+  </main>
+  <div id="footer-placeholder"></div>
+  <script src="/assets/js/main.js"></script>
+</body>
+</html>
+

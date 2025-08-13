@@ -27,13 +27,13 @@ def update_css_links_safely(content, filename):
     template_css_added = False
     
     for line in lines:
-        # Skip old CSS files
-        if re.search(r'<link[^>]+href="[^"]*(?:main\.css|academic-style\.css|encyclopedia\.css)[^"]*"[^>]*>', line):
+        # Keep main.css but remove other old CSS files
+        if re.search(r'<link[^>]+href="[^"]*(?:academic-style\.css|encyclopedia\.css)[^"]*"[^>]*>', line):
             continue
         
-        # Add template CSS before </head> if not already added
-        if '</head>' in line and not template_css_added and 'template-core.css' not in content:
-            new_lines.append('  <link rel="stylesheet" href="/assets/css/template-core.css">')
+        # Add template CSS after main.css and before </head>
+        if '</head>' in line and not template_css_added and 'site-template.css' not in content:
+            new_lines.append('  <link rel="stylesheet" href="/assets/css/site-template.css">')
             template_css_added = True
         
         new_lines.append(line)
@@ -42,21 +42,35 @@ def update_css_links_safely(content, filename):
 
 def apply_class_updates(content):
     """Apply class updates more safely"""
-    # Only update specific known patterns
+    # Add template- prefix to avoid conflicts
     updates = [
         # Hero sections
-        (r'<section\s+class="hero">', '<section class="hero hero-framed">'),
-        (r'<section\s+class="cosmic-hero">', '<section class="hero hero-framed">'),
+        (r'<section\s+class="hero">', '<section class="template-hero template-hero-framed">'),
+        (r'<section\s+class="cosmic-hero">', '<section class="template-hero template-hero-framed">'),
+        (r'class="hero-content"', 'class="template-hero-content"'),
+        (r'class="hero-title"', 'class="template-hero-title"'),
+        (r'class="hero-lead"', 'class="template-hero-lead"'),
         
         # Content sections
-        (r'<section\s+class="content-section">', '<section class="section">'),
-        (r'<section\s+class="page-section">', '<section class="section">'),
+        (r'<section\s+class="content-section">', '<section class="template-section">'),
+        (r'<section\s+class="page-section">', '<section class="template-section">'),
         
         # Containers
-        (r'<div\s+class="wrapper">', '<div class="container">'),
-        (r'<div\s+class="content-wrapper">', '<div class="container">'),
+        (r'class="wrapper"', 'class="template-container"'),
+        (r'class="content-wrapper"', 'class="template-container"'),
+        (r'class="container"', 'class="template-container"'),
         
-        # Don't change constants page specific classes
+        # Titles
+        (r'class="section-title"', 'class="template-section-title"'),
+        (r'class="page-title"', 'class="template-section-title"'),
+        
+        # Content blocks
+        (r'class="content-block"', 'class="template-reading"'),
+        (r'class="reading"', 'class="template-reading"'),
+        
+        # Body class
+        (r'<body class="academic-page">', '<body class="template-page">'),
+        (r'<body>', '<body class="template-page">'),
     ]
     
     for old, new in updates:

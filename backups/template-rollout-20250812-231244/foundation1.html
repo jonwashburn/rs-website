@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Foundation 1: Discrete Recognition</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/assets/css/template-core.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div id="sitewide-banner-placeholder"></div>
+
+  <div class="grid-container">
+    <header>
+      <h1>FOUNDATION 1: DISCRETE RECOGNITION</h1>
+      <p>∃ tick: ℕ, tick >0 (countable updates)</p>
+    </header>
+    <nav class="foundation-nav">
+      <a href="/index.html">Home</a>
+      <a href="/papers/index.html">Papers</a>
+      <a href="/journal.html">Journal</a>
+      <a href="/foundations.html">Foundations</a>
+      <a href="/pattern-layer.html">Pattern Layer</a>
+      <a href="/resources.html">Resources</a>
+      <a href="/about.html">About</a>
+    </nav>
+    <main class="cascade academic-page">
+      <section>
+        <h2>Plain English Explanation</h2>
+        <p>Recognition happens in discrete 'ticks' rather than continuously. Just as a movie is frames, reality updates in countable steps. This derives from the meta-principle: to distinguish 'something' from 'nothing,' there must be separation in time—hence discrete updates.</p>
+      </section>
+      <section>
+        <h2>Lean Code: Core Definitions</h2>
+        <pre><code>def TimeStep := Nat</code></pre>
+        <p>Explanation: Time is just natural numbers—discrete ticks starting from 0.</p>
+      </section>
+      <section>
+        <h2>Lean Theorem: Finite Systems Periodic</h2>
+        <pre><code>theorem finite_system_periodic {State : Type} :
+  PhysicallyRealizable State → ∀ (process : DiscreteProcess State),
+  ∃ (period : Nat) (h : Finite State), period > 0 ∧ period ≤ card State h ∧
+    ∀ (start : State) (t : Nat), process.evolve^[t + period] start = process.evolve^[t] start := by
+  ...</code></pre>
+        <p>Explanation: In finite systems (like our universe's information bounds), processes must repeat after some period—proving time's discreteness prevents infinite loops.</p>
+      </section>
+    </main>
+    <footer>
+      <p>© 2025 Recognition Science Institute</p>
+    </footer>
+  </div>
+  
+  <div id="footer-placeholder"></div>
+  
+  <script src="/assets/js/main.js"></script>
+</body>
+</html> 

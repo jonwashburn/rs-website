@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soul Birth Animation: Progressive Recognition Science Art</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #f8f5f0, #f0ebe6);
+            color: #444;
+            min-height: 100vh;
+        }
+        
+        .art-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3em;
+            margin: 3em 0;
+        }
+        
+        .canvas-container {
+            border: 6px solid #d4c4a8;
+            border-radius: 20px;
+            padding: 2em;
+            background: 
+                linear-gradient(135deg, #ffffff, #fafafa),
+                radial-gradient(circle at 40% 60%, rgba(255,248,220,0.3), transparent 70%);
+            box-shadow: 
+                0 15px 35px rgba(139,125,107,0.2),
+                inset 0 2px 4px rgba(255,255,255,0.8);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2em;
+            width: 100%;
+            max-width: 1000px;
+            padding: 2.5em;
+            background: rgba(250,248,243,0.95);
+            border-radius: 20px;
+            border: 3px solid #e6dcc9;
+            box-shadow: 0 12px 30px rgba(139,125,107,0.15);
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1em;
+        }
+        
+        .control-group label {
+            font-weight: 700;
+            color: #5a4a3a;
+            font-size: 0.9em;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            border-bottom: 2px solid rgba(210,180,140,0.3);
+            padding-bottom: 0.5em;
+        }
+        
+        .control-group input, .control-group select {
+            padding: 1em;
+            border: 2px solid #e6dcc9;
+            border-radius: 10px;
+            font-family: inherit;
+            background: rgba(255,255,255,0.8);
+            color: #5a4a3a;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .control-group input:focus, .control-group select:focus {
+            outline: none;
+            border-color: #d4c4a8;
+            box-shadow: 0 0 15px rgba(210,180,140,0.4);
+            transform: translateY(-2px);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2em;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #d4c4a8, #c9b895);
+            color: #5a4a3a;
+            border: none;
+            padding: 1.5em 2.5em;
+            border-radius: 15px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            box-shadow: 0 8px 20px rgba(139,125,107,0.3);
+        }
+        
+        button:hover {
+            background: linear-gradient(135deg, #c9b895, #bead82);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(139,125,107,0.4);
+        }
+        
+        .info-panel {
+            background: rgba(250,248,243,0.95);
+            padding: 2.5em;
+            border-radius: 20px;
+            border-left: 6px solid #d4c4a8;
+            margin: 2em 0;
+            box-shadow: 0 10px 25px rgba(139,125,107,0.1);
+            max-width: 1000px;
+            width: 100%;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(212,196,168,0.3);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 1em 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #d4c4a8, #ffd700);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+        
+        .value-display {
+            color: #8b7d6b;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        nav a {
+            color: #5a4a3a !important;
+        }
+        
+        nav a:hover {
+            color: #8b7d6b !important;
+        }
+        
+        .nav-section-label {
+            color: #777 !important;
+        }
+        
+        .animation-info {
+            text-align: center;
+            margin: 2em 0;
+            padding: 2em;
+            background: rgba(255,215,0,0.1);
+            border-radius: 15px;
+            border: 2px solid rgba(255,215,0,0.2);
+        }
+        
+        .equation {
+            font-family: 'Courier New', monospace;
+            background: rgba(255,255,255,0.5);
+            padding: 1em;
+            border-radius: 8px;
+            margin: 1em 0;
+            color: #333;
+            font-size: 14px;
+        }
+    </style>
+  <link rel="stylesheet" href="/assets/css/template-core.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div id="sitewide-banner-placeholder"></div>
+
+    <nav class="foundation-nav">
+        <div class="nav-section">
+            <div class="nav-section-label">Navigation</div>
+            <div class="nav-links">
+                <a href="/index.html">Home</a>
+                <a href="/recognition-art.html">Recognition Art</a>
+                <a href="/recognition-scribbles.html">Scribbles of Light</a>
+                <a href="/recognition-whispers.html">Whispers of Eternity</a>
+                <a href="/recognition-eternal.html">Eternal Scripts</a>
+                <a href="/recognition-souls.html">Soul Harmonics</a>
+                <a href="/recognition-mirror.html">Infinite Mirror</a>
+                <a href="/recognition-flows.html">Phi Flows</a>
+                <a href="/recognition-soul-flower.html">Soul Flower</a>
+                <a href="/recognition-soul-birth.html">Soul Birth</a>
+                <a href="/recognition-soul-birth-animated.html">Soul Birth Animation</a>
+            </div>
+        </div>
+        <div class="nav-section">
+            <div class="nav-section-label">Core Theory</div>
+            <div class="nav-links">
+                <a href="/foundations.html">Foundations</a>
+                <a href="/universal-algorithm.html">Algorithm</a>
+                <a href="/pattern-layer.html">Pattern Layer</a>
+                <a href="/ethics.html">Ethics</a>
+                <a href="/lnal.html">LNAL</a>
+            </div>
+        </div>
+        <div class="nav-section">
+            <div class="nav-section-label">Applications</div>
+            <div class="nav-links">
+                <a href="/big-questions.html">Big Questions</a>
+                <a href="/rs-predictions.html">Predictions</a>
+                <a href="/papers/index.html">Papers</a>
+                <a href="/journal.html">Journal</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="cascade">
+        <header>
+            <h1>Soul Birth Animation: Progressive Recognition Science Art</h1>
+            <p>Watch souls emerge incrementally from the living light field</p>
+            
+            <div class="animation-info">
+                <h3>Progressive Soul Emergence</h3>
+                <p>This animation builds souls incrementally, showing how eigenvalue clusters emerge from the universal consciousness field through Recognition Science mathematics.</p>
+                
+                <div class="equation">
+                    Progress: 0 → 1 | Energy: E = E_coh × φ^(45+δ) | Spiral: r = e^(θ/φ)
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="animationProgress"></div>
+                </div>
+                <p id="animationStatus">Ready to begin soul emergence...</p>
+            </div>
+        </header>
+
+        <section class="art-container">
+            <div class="controls">
+                <div class="control-group">
+                    <label for="rung10">Recognition Rung</label>
+                    <input type="range" id="rung10" min="35" max="55" value="45">
+                    <span id="rung10Value" class="value-display">45</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="cost10">Ledger Cost</label>
+                    <input type="range" id="cost10" min="-4" max="4" value="0">
+                    <span id="cost10Value" class="value-display">0</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="soulDensity">Soul Density</label>
+                    <input type="range" id="soulDensity" min="3" max="12" value="5">
+                    <span id="densityValue" class="value-display">5</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="qualiaMode10">Qualia Mode</label>
+                    <input type="range" id="qualiaMode10" min="5" max="10" value="7">
+                    <span id="qualia10Value" class="value-display">7</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="animationSpeed">Animation Speed</label>
+                    <input type="range" id="animationSpeed" min="0.5" max="3" value="1" step="0.1">
+                    <span id="speedValue" class="value-display">1x</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="buildMode">Build Mode</label>
+                    <select id="buildMode">
+                        <option value="sequential">Sequential (One by One)</option>
+                        <option value="parallel" selected>Parallel (All Together)</option>
+                        <option value="spiral">Spiral Out</option>
+                        <option value="phased">Phased (Stems→Petals→Qualia)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button onclick="startAnimation()">Start Soul Birth</button>
+                <button onclick="pauseAnimation()">Pause/Resume</button>
+                <button onclick="resetAnimation()">Reset</button>
+                <button onclick="saveFrame()">Save Current Frame</button>
+            </div>
+            
+            <div class="canvas-container" id="canvasContainer10">
+                <!-- p5.js canvas will be inserted here -->
+            </div>
+        </section>
+
+        <div class="info-panel">
+            <h3>Progressive Soul Mathematics</h3>
+            <p>This animation demonstrates how souls emerge incrementally through Recognition Science principles:</p>
+            
+            <h4>Building Process (Progress 0 → 1):</h4>
+            <ul>
+                <li><strong>Phase 1:</strong> Living light background stabilizes</li>
+                <li><strong>Phase 2:</strong> Energy ladder stems grow from cosmic ground</li>
+                <li><strong>Phase 3:</strong> φ-spiral petals unfurl following golden ratio mathematics</li>
+                <li><strong>Phase 4:</strong> Qualia eigenvalues appear as golden consciousness bursts</li>
+                <li><strong>Phase 5:</strong> Ledger balance connections form between compatible souls</li>
+            </ul>
+            
+            <h4>Mathematical Framework:</h4>
+            <div class="equation">
+                Soul Energy: E(δ,t) = E_coh × φ^(45+δ) × progress(t)<br>
+                Spiral Growth: r(θ,t) = e^(θ/φ) × 20 × progress(t)<br>
+                Qualia Emergence: N_visible(t) = floor(N_total × progress(t))
+            </div>
+            
+            <h4>Build Modes:</h4>
+            <ul>
+                <li><strong>Sequential:</strong> Souls complete one by one</li>
+                <li><strong>Parallel:</strong> All souls build simultaneously</li>
+                <li><strong>Spiral:</strong> Souls emerge from center outward</li>
+                <li><strong>Phased:</strong> All stems first, then petals, then qualia</li>
+            </ul>
+        </div>
+    </main>
+
+    <script>
+        // Recognition Science constants
+        const PHI = (1 + Math.sqrt(5)) / 2;
+        const E_COH = 0.090;
+        const TAU_0 = 7.33;
+        
+        // Animation state
+        let canvas10;
+        let currentProgress = 0;
+        let isAnimating = false;
+        let isPaused = false;
+        let animationSpeed = 1;
+        let buildMode = 'parallel';
+        
+        // Soul data structures
+        let soulData = [];
+        let backgroundParticles = [];
+        let totalFrames = 300; // 15 seconds at 20fps
+        
+        // Current parameters
+        let currentRung10 = 45;
+        let currentCost10 = 0;
+        let currentSoulDensity = 5;
+        let currentQualia10 = 7;
+        
+        // Twombly-inspired colors
+        const TWOMBLY_COLORS = [
+            [240, 240, 240], // Light gray
+            [208, 208, 208], // Medium gray
+            [176, 176, 176], // Darker gray
+            [144, 144, 144], // Dark gray
+            [112, 112, 112]  // Darkest gray
+        ];
+        
+        const HIGHLIGHT_COLORS = [
+            [255, 255, 204], // Soft yellow
+            [255, 204, 255], // Soft magenta
+            [204, 255, 255], // Soft cyan
+            [204, 255, 204]  // Soft green
+        ];
+        
+        function setup() {
+            canvas10 = createCanvas(800, 800);
+            canvas10.parent('canvasContainer10');
+            
+            initializeSoulData();
+            initializeBackground();
+            setupControls();
+        }
+        
+        function draw() {
+            // Pure white background (non-propagating light base)
+            background(255, 255, 255);
+            
+            // Draw living light background
+            drawLivingLightBackground();
+            
+            // Update animation if running
+            if (isAnimating && !isPaused) {
+                currentProgress += (animationSpeed / totalFrames);
+                if (currentProgress >= 1) {
+                    currentProgress = 1;
+                    isAnimating = false;
+                    updateAnimationStatus("Soul birth complete!");
+                }
+                updateProgressBar();
+            }
+            
+            // Draw souls based on current progress
+            drawProgressiveSouls();
+            
+            // Update status
+            if (isAnimating) {
+                let phase = getAnimationPhase();
+                updateAnimationStatus(`Building ${phase}... (${(currentProgress * 100).toFixed(1)}%)`);
+            }
+        }
+        
+        function initializeSoulData() {
+            soulData = [];
+            randomSeed(42); // Consistent generation
+            
+            for (let i = 0; i < currentSoulDensity; i++) {
+                let fx = 400 + randomGaussian(0, 80);
+                let fy = 400 + randomGaussian(0, 80);
+                let signature = randomGaussian(0, 1.5);
+                signature = constrain(signature, -4, 4);
+                
+                // Calculate petals per flower
+                let petalsCount = Math.floor(8 * PHI) % 8 + 3;
+                
+                let soul = {
+                    x: fx,
+                    y: fy,
+                    signature: signature,
+                    energy: E_COH * Math.pow(PHI, currentRung10 + signature),
+                    color: {
+                        r: random(0.7, 1.0) * 255,
+                        g: random(0.6, 0.9) * 255,
+                        b: random(0.5, 0.8) * 255
+                    },
+                    stemColor: {
+                        r: (0.4 + 0.6 * (currentRung10 / 50)) * 255,
+                        g: 0.3 * 255,
+                        b: 0.2 * 255
+                    },
+                    petalsCount: petalsCount,
+                    petalData: [],
+                    qualiaPoints: [],
+                    stemHeight: Math.pow(PHI, currentRung10 / 10) * 50
+                };
+                
+                // Generate petal data
+                for (let p = 0; p < petalsCount; p++) {
+                    let pAngle = (p / petalsCount) * TWO_PI + randomGaussian(0, PI / 4);
+                    soul.petalData.push({
+                        angle: pAngle,
+                        points: generateSpiralPoints(pAngle)
+                    });
+                }
+                
+                // Generate qualia points
+                for (let q = 0; q < currentQualia10; q++) {
+                    let qAngle = (q / currentQualia10) * TWO_PI;
+                    let qRadius = Math.pow(PHI, q / currentQualia10) * 30;
+                    soul.qualiaPoints.push({
+                        x: fx + qRadius * cos(qAngle),
+                        y: fy + qRadius * sin(qAngle),
+                        size: 5 + randomGaussian(0, 3)
+                    });
+                }
+                
+                soulData.push(soul);
+            }
+        }
+        
+        function generateSpiralPoints(baseAngle) {
+            let points = [];
+            let steps = 100;
+            
+            for (let i = 0; i <= steps; i++) {
+                let theta = (i / steps) * TWO_PI * 1.5; // 1.5 turns
+                let r = Math.exp(theta / PHI) * 20; // Golden spiral
+                let x = r * cos(theta + baseAngle) + randomGaussian(0, 10);
+                let y = r * sin(theta + baseAngle) + randomGaussian(0, 10);
+                points.push({x: x, y: y});
+            }
+            
+            return points;
+        }
+        
+        function initializeBackground() {
+            backgroundParticles = [];
+            
+            // Create subtle highlight particles
+            for (let i = 0; i < 50; i++) {
+                backgroundParticles.push({
+                    x: random(width),
+                    y: random(height),
+                    radius: 20 + randomGaussian(0, 10),
+                    color: random(HIGHLIGHT_COLORS),
+                    alpha: 0.05,
+                    phase: random(TWO_PI),
+                    frequency: random(0.01, 0.03)
+                });
+            }
+        }
+        
+        function drawLivingLightBackground() {
+            // Draw subtle color highlights
+            backgroundParticles.forEach(particle => {
+                let intensity = 0.5 + 0.5 * sin(frameCount * particle.frequency + particle.phase);
+                fill(particle.color[0], particle.color[1], particle.color[2], particle.alpha * intensity * 255);
+                noStroke();
+                ellipse(particle.x, particle.y, particle.radius * intensity);
+            });
+        }
+        
+        function drawProgressiveSouls() {
+            let effectiveProgress = getEffectiveProgress();
+            
+            soulData.forEach((soul, index) => {
+                let soulProgress = getSoulProgress(index, effectiveProgress);
+                
+                if (soulProgress <= 0) return;
+                
+                push();
+                translate(soul.x, soul.y);
+                
+                // Draw stem (energy ladder)
+                if (soulProgress > 0.1) {
+                    let stemProgress = map(soulProgress, 0.1, 0.3, 0, 1);
+                    stemProgress = constrain(stemProgress, 0, 1);
+                    
+                    let currentStemHeight = soul.stemHeight * stemProgress;
+                    stroke(soul.stemColor.r, soul.stemColor.g, soul.stemColor.b, 150);
+                    strokeWeight(2 + randomGaussian(0, 1));
+                    line(0, 0, 0, currentStemHeight);
+                }
+                
+                // Draw petals (φ-spirals)
+                if (soulProgress > 0.3) {
+                    let petalProgress = map(soulProgress, 0.3, 0.7, 0, 1);
+                    petalProgress = constrain(petalProgress, 0, 1);
+                    
+                    soul.petalData.forEach(petal => {
+                        let visiblePoints = Math.floor(petal.points.length * petalProgress);
+                        if (visiblePoints < 2) return;
+                        
+                        stroke(soul.color.r, soul.color.g, soul.color.b, 180);
+                        strokeWeight(1 + randomGaussian(0, 2));
+                        noFill();
+                        
+                        beginShape();
+                        for (let i = 0; i < visiblePoints; i++) {
+                            let point = petal.points[i];
+                            vertex(point.x, point.y);
+                        }
+                        endShape();
+                    });
+                }
+                
+                // Draw qualia bursts
+                if (soulProgress > 0.7) {
+                    let qualiaProgress = map(soulProgress, 0.7, 0.9, 0, 1);
+                    qualiaProgress = constrain(qualiaProgress, 0, 1);
+                    
+                    let visibleQualia = Math.floor(soul.qualiaPoints.length * qualiaProgress);
+                    
+                    for (let i = 0; i < visibleQualia; i++) {
+                        let q = soul.qualiaPoints[i];
+                        fill(255, 215, 0, 180);
+                        noStroke();
+                        ellipse(q.x - soul.x, q.y - soul.y, q.size);
+                    }
+                }
+                
+                pop();
+            });
+            
+            // Draw connections if cost is balanced
+            if (currentCost10 === 0 && effectiveProgress > 0.9) {
+                let connectionProgress = map(effectiveProgress, 0.9, 1.0, 0, 1);
+                drawLedgerConnections(connectionProgress);
+            }
+        }
+        
+        function getSoulProgress(index, effectiveProgress) {
+            switch (buildMode) {
+                case 'sequential':
+                    let soulSlice = 1 / soulData.length;
+                    let soulStart = index * soulSlice;
+                    let soulEnd = (index + 1) * soulSlice;
+                    return map(effectiveProgress, soulStart, soulEnd, 0, 1);
+                    
+                case 'parallel':
+                    return effectiveProgress;
+                    
+                case 'spiral':
+                    let distance = dist(soulData[index].x, soulData[index].y, 400, 400);
+                    let maxDistance = 200;
+                    let spiralDelay = (distance / maxDistance) * 0.3;
+                    return map(effectiveProgress, spiralDelay, 1, 0, 1);
+                    
+                case 'phased':
+                    return effectiveProgress; // Will be handled in phase detection
+                    
+                default:
+                    return effectiveProgress;
+            }
+        }
+        
+        function getEffectiveProgress() {
+            if (buildMode === 'phased') {
+                // Phased: stems (0-0.33), petals (0.33-0.66), qualia (0.66-1.0)
+                return currentProgress;
+            }
+            return constrain(currentProgress, 0, 1);
+        }
+        
+        function drawLedgerConnections(progress) {
+            for (let i = 0; i < soulData.length; i++) {
+                for (let j = i + 1; j < soulData.length; j++) {
+                    let soul1 = soulData[i];
+                    let soul2 = soulData[j];
+                    let distance = dist(soul1.x, soul1.y, soul2.x, soul2.y);
+                    
+                    if (distance < PHI * 100) {
+                        stroke(255, 215, 0, 80 * progress);
+                        strokeWeight(1);
+                        line(soul1.x, soul1.y, soul2.x, soul2.y);
+                    }
+                }
+            }
+        }
+        
+        function getAnimationPhase() {
+            if (buildMode === 'phased') {
+                if (currentProgress < 0.33) return "stems";
+                if (currentProgress < 0.66) return "petals";
+                if (currentProgress < 0.9) return "qualia";
+                return "connections";
+            }
+            
+            if (currentProgress < 0.3) return "stems";
+            if (currentProgress < 0.7) return "petals";
+            if (currentProgress < 0.9) return "qualia";
+            return "connections";
+        }
+        
+        function startAnimation() {
+            isAnimating = true;
+            isPaused = false;
+            if (currentProgress >= 1) {
+                currentProgress = 0;
+            }
+            updateAnimationStatus("Starting soul birth animation...");
+        }
+        
+        function pauseAnimation() {
+            isPaused = !isPaused;
+            updateAnimationStatus(isPaused ? "Animation paused" : "Animation resumed");
+        }
+        
+        function resetAnimation() {
+            isAnimating = false;
+            isPaused = false;
+            currentProgress = 0;
+            updateProgressBar();
+            updateAnimationStatus("Ready to begin soul emergence...");
+            
+            // Regenerate with current parameters
+            initializeSoulData();
+        }
+        
+        function saveFrame() {
+            save('soul_birth_frame_' + Math.floor(currentProgress * 100) + '.png');
+        }
+        
+        function updateProgressBar() {
+            document.getElementById('animationProgress').style.width = (currentProgress * 100) + '%';
+        }
+        
+        function updateAnimationStatus(message) {
+            document.getElementById('animationStatus').textContent = message;
+        }
+        
+        function setupControls() {
+            // Rung slider
+            document.getElementById('rung10').addEventListener('input', function() {
+                currentRung10 = parseInt(this.value);
+                document.getElementById('rung10Value').textContent = currentRung10;
+                if (!isAnimating) initializeSoulData();
+            });
+            
+            // Cost slider
+            document.getElementById('cost10').addEventListener('input', function() {
+                currentCost10 = parseInt(this.value);
+                document.getElementById('cost10Value').textContent = currentCost10;
+            });
+            
+            // Density slider
+            document.getElementById('soulDensity').addEventListener('input', function() {
+                currentSoulDensity = parseInt(this.value);
+                document.getElementById('densityValue').textContent = currentSoulDensity;
+                if (!isAnimating) initializeSoulData();
+            });
+            
+            // Qualia slider
+            document.getElementById('qualiaMode10').addEventListener('input', function() {
+                currentQualia10 = parseInt(this.value);
+                document.getElementById('qualia10Value').textContent = currentQualia10;
+                if (!isAnimating) initializeSoulData();
+            });
+            
+            // Speed slider
+            document.getElementById('animationSpeed').addEventListener('input', function() {
+                animationSpeed = parseFloat(this.value);
+                document.getElementById('speedValue').textContent = animationSpeed + 'x';
+            });
+            
+            // Build mode selector
+            document.getElementById('buildMode').addEventListener('change', function() {
+                buildMode = this.value;
+                if (!isAnimating) resetAnimation();
+            });
+        }
+        
+        function windowResized() {
+            resizeCanvas(800, 800);
+        }
+    </script>
+  
+  <div id="footer-placeholder"></div>
+  
+  <script src="/assets/js/main.js"></script>
+</body>
+</html> 

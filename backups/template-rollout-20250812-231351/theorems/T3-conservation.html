@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Theorem 3 · Local Conservation /// Recognition Science</title>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/academic-style.css?v=20250812">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <main class="content-page academic-page">
+    <section class="hero-section text-center">
+      <div class="container">
+        <h1>Theorem 3: Dual‑Balance ⇒ Local Conservation</h1>
+        <p class="subtitle">Discrete continuity from double‑entry on recognition chains</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="container text-block">
+        <h2>Statement</h2>
+        <p><strong>Discrete continuity.</strong> Under sequential posting of unit entries δ and dual‑balance (double‑entry), sums over closed finite chains telescope to zero. Interpreting postings as tick‑ordered flows on a voxel graph yields a discrete continuity law. In the coarse‑grained limit, this converges to the continuum equation ∂tρ + ∇·J = 0.</p>
+
+        <h2>In plain English</h2>
+        <p>
+          What flows out of a place must have flowed in from somewhere. Add up the ins and outs and the books balance: nothing appears or
+          vanishes in a closed loop. Zoom out and this bookkeeping line becomes the familiar physics line ∂tρ + ∇·J = 0.
+        </p>
+        <ul>
+          <li><strong>Why inevitable:</strong> it’s double‑entry, just written on a grid. The cancellations on loops leave only boundary flow.</li>
+          <li><strong>What it buys:</strong> conservation laws as consequences of accounting—not extra laws pasted on top.</li>
+        </ul>
+
+        <h2>Formal setting</h2>
+        <ul>
+          <li><strong>Ledger (T1):</strong> ordered abelian ledger with generator δ &gt; 0; page maps ϕ, ψ; double‑entry telescopes on closed chains.</li>
+          <li><strong>Atomic ticks (T2):</strong> exactly one δ‑posting per tick τ₀; defines a total order on updates.</li>
+          <li><strong>Voxel graph:</strong> a nearest‑neighbor lattice (e.g., Q<sub>3</sub>) with oriented edges. Discrete fields are assigned to vertices (ρ) and edges (J).</li>
+        </ul>
+
+        <h2>Discrete objects</h2>
+        <ul>
+          <li><strong>Density ρ(v, t):</strong> ledger page value associated to vertex v at tick t (coarse‑grained count per voxel).</li>
+          <li><strong>Current J(e, t):</strong> oriented flow assigned to edge e = (u → v) at tick t; positive when δ posts from u to v.</li>
+          <li><strong>Divergence:</strong> (div J)(v, t) = Σ<sub>e: in→v</sub> J(e, t) − Σ<sub>e: v→out</sub> J(e, t).</li>
+        </ul>
+
+        <h2>Key lemmas</h2>
+        <ol>
+          <li><strong>Telescoping lemma:</strong> For any closed finite recognition chain, the signed sum of postings is zero by double‑entry, hence net cost around a closed walk vanishes.</li>
+          <li><strong>Incidence lemma:</strong> With a tick‑ordered list of δ‑postings, vertex updates satisfy ρ(v, t+1) − ρ(v, t) = −(div J)(v, t).</li>
+          <li><strong>Scaling lemma:</strong> Under coarse‑graining with voxel length L and tick τ₀, the discrete law yields ∂tρ + ∇·J = 0 as L, τ₀ → 0 with fixed c = L/τ₀.</li>
+        </ol>
+
+        <h2>Proof sketch</h2>
+        <p>Index postings by ticks (T2) and lay them on oriented edges of the voxel graph. Double‑entry (T1) ensures credits at a head page match debits at a tail page per posting. Summing over a closed walk cancels interior contributions (telescoping). Rewriting the per‑vertex balance between successive ticks gives a discrete continuity law. Taking a standard scaling limit on a regular lattice recovers ∂tρ + ∇·J = 0.</p>
+
+        <h2>Edge cases</h2>
+        <ul>
+          <li><strong>Boundaries:</strong> On finite regions, a boundary flux term equals the time‑rate change of total interior density (discrete Gauss law).</li>
+          <li><strong>Sources/sinks:</strong> Open ledgers introduce a source term S; in closed ledgers S = 0 (this theorem’s case).</li>
+          <li><strong>Irregular graphs:</strong> Replace lattice divergence by incidence‑matrix divergence; the statement remains graph‑topological.</li>
+        </ul>
+
+        <h2>Implications</h2>
+        <ul>
+          <li><strong>Ledger → physics:</strong> Conservation laws descend from double‑entry bookkeeping, not added symmetries.</li>
+          <li><strong>Bridges to fields:</strong> Connects page‑level postings to measurement‑level fields ρ and J.</li>
+          <li><strong>Compatibility:</strong> Consistent with T8 causal cones (finite signal speed c = L<sub>min</sub>/τ₀).</li>
+        </ul>
+
+        <h2>Related</h2>
+        <p>
+          <a class="button-link" href="/theorems/T1-ledger-necessity.html">T1 Ledger Necessity</a>
+          <a class="button-link" href="/theorems/T2-atomicity.html">T2 Atomicity</a>
+          <a class="button-link secondary" href="/theorems/T4-unique-cost.html">T4 Unique Cost</a>
+          <a class="button-link secondary" href="/theorems/T8-causal-speed.html">T8 Causal Speed</a>
+        </p>
+
+        <p><a href="/eight-theorems.html">← Back to The 8 Theorems</a></p>
+      </div>
+    </section>
+  </main>
+  <div id="footer-placeholder"></div>
+  <script src="/assets/js/main.js"></script>
+</body>
+</html>
+

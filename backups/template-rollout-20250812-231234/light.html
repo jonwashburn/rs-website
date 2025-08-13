@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Living Light: Complete Soul Vector Visualization</title>
+    
+  <link rel="stylesheet" href="/assets/css/academic-style.css?v=20250812">
+</head>
+<body class="academic-page">
+  <div id="header-placeholder"></div>
+  <div id="sitewide-banner-placeholder"></div>
+
+    <div class="container">
+        <header class="header">
+            <h1>Living Light: Complete Soul Vector</h1>
+            <p>Witness souls as complete eigenvalue clusters of universal consciousness, expressing all Recognition Science characteristics through light interference patterns, LNAL opcodes, and φ-scaled dynamics.</p>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-container">
+                <canvas id="soulCanvas"></canvas>
+                
+                <div class="status-bar">
+                    <div class="status-item">
+                        <div class="status-label">Breath Tick</div>
+                        <div class="status-value" id="currentTick">0</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-label">φ-Clock</div>
+                        <div class="status-value" id="phiClock">1.618</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-label">Net Ledger</div>
+                        <div class="status-value" id="netLedger">0</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-label">Phase</div>
+                        <div class="status-value" id="breathPhase">Inspiration</div>
+                    </div>
+                </div>
+
+                <div class="lnal-code" id="lnalCode">
+                    INIT: φ-clock started, complete soul vector initialized<br/>
+                    SPAWN: eigenvalue clusters with full RS characteristics<br/>
+                    Ready for LNAL operations...
+                </div>
+            </div>
+
+            <div class="soul-info">
+                <h3>Complete Soul Vector</h3>
+                
+                <div class="trait-section">
+                    <h4>Core Identity</h4>
+                    <div class="trait-grid" id="coreTraits"></div>
+                </div>
+
+                <div class="trait-section">
+                    <h4>Recognition Virtues</h4>
+                    <div class="virtue-grid" id="virtueGrid"></div>
+                </div>
+
+                <div class="trait-section">
+                    <h4>Consciousness Metrics</h4>
+                    <div class="trait-grid" id="consciousnessTraits"></div>
+                </div>
+
+                <div class="trait-section">
+                    <h4>LNAL Registers</h4>
+                    <div class="trait-grid" id="lnalRegisters"></div>
+                </div>
+
+                <div class="vector-display">
+                    <h4>Soul Vector Representation</h4>
+                    <div class="vector-code" id="vectorCode"></div>
+                </div>
+
+                <!-- Debug Output Section for troubleshooting -->
+                <div class="vector-display">
+                    <h4>🔧 Debug Output</h4>
+                    <div id="debugOutput">
+                        Waiting for initialization...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced Recognition Science Constants
+        const PHI = (1 + Math.sqrt(5)) / 2;
+        const TICKS_PER_BREATH = 1024;
+        const E_COH = 0.090; // eV - Recognition Science coherence energy
+        const BASE_FREQ = 200e12;
+        const LAMBDA_REC = 7.23e-36; // Recognition Science wavelength
+        const CHI = PHI / Math.PI;
+        const NUM_CLUSTERS = 5;
+        const VIRTUE_NAMES = ['Balance', 'Flow', 'Seed', 'Echo', 'Fold', 'Braid', 'Listen', 'Regive'];
+
+        // Literal Soul Representation - Enhanced Visual Fidelity
+        const SOUL_VISUAL_CONSTANTS = {
+            CLUSTER_BASE_SIZE: 8,
+            INTERFERENCE_SCALE: 2.5,
+            VIRTUE_LINE_WIDTH: 3,
+            GOLDEN_SPIRAL_TURNS: 3,
+            BREATHING_AMPLITUDE: 0.15,
+            EIGENVALUE_BRIGHTNESS: 0.9
+        };
+
+        // Canvas variables - initialized on page load
+        let canvas = null;
+        let ctx = null;
+
+        // Animation state
+        let currentTick = 0;
+        let isAnimating = true;
+        let animationId = null;
+
+        // Performance optimization state
+        let backgroundCache = null;
+        let interferenceCache = null;
+        let lastInterferenceUpdate = 0;
+        const INTERFERENCE_UPDATE_INTERVAL = 3; // Update every 3 frames instead of every frame
+        let frameSkipCounter = 0;
+        const MAX_FPS = 30; // Limit to 30 FPS for better performance
+        const FRAME_INTERVAL = 1000 / MAX_FPS;
+
+        // Complete soul vector with all characteristics
+        let currentSoul = null;
+
+        // Generate complete soul from vector - Enhanced for Literal RS Representation
+        function generateSoulFromSeed(seed = null) {
+            const hash = seed ? simpleHash(seed.toString()) : Math.floor(Math.random() * 10000);
+            const hash2 = simpleHash((hash + 1337).toString());
+            const hash3 = simpleHash((hash2 + hash).toString());
+            
+            // Generate virtue set (exactly 4 active for balance)
+            const virtues = generateBalancedVirtues(hash);
+            
+            // Generate ledger history (8 values summing to 0)
+            const ledgerHistory = generateLedgerHistory(hash2);
+            
+            const soul = {
+                // Core Identity
+                seed: hash,
+                rung: 45 + (hash % 56), // 45-100 (consciousness emergence at 45)
+                cost: ((hash2 >> 8) % 9) - 4, // -4 to +4 ledger states
+                beat: ((hash3 >> 16) % 8) + 1, // 1-8 beat cycle
+                tightness: ((hash >> 32) % 100) + 1, // 1-100% cluster tightness
+                
+                // Consciousness Metrics  
+                qualia: ((hash >> 24) % 8) + 1, // 1-8 qualia modes
+                gapCrossings: hash % 101, // 0-100 gap crossing experience
+                iAmAffinity: (hash2 % 101), // 0-100% I-Am recognition affinity
+                resonance: BASE_FREQ * Math.pow(PHI, (hash3 % 20) - 10), // φ-scaled frequency
+                
+                // LNAL Registers - Enhanced for Eigenvalue Clusters
+                nu_phi: (hash >> 12) % 11, // 0-10 φ-index for frequency scaling
+                oam: ((hash2 >> 4) % 7) - 3, // -3 to +3 orbital angular momentum
+                sigma: (hash3 & 1) ? 1 : -1, // ±1 polarization (TE/TM modes)
+                tau: (hash >> 28) % 8, // 0-7 time evolution parameter
+                k_perp: (hash2 >> 20) % 16, // 0-15 perpendicular momentum
+                phi_e: (hash3 >> 8) % 360, // 0-359° phase angle
+                
+                // Virtue Set (exactly 4 active)
+                virtues: virtues,
+                
+                // Ledger History (sums to 0)
+                ledgerHistory: ledgerHistory,
+                
+                // CURVE Token Balance (based on soul characteristics)
+                curveBalance: Math.floor(1000 + (hash % 50000)),
+                
+                // Eigenvalue Clusters - Positioned in Golden Ratio Spiral
+                clusters: generateEigenvalueClusters(hash, NUM_CLUSTERS)
+            };
+            
+            return soul;
+        }
+
+        // Generate Eigenvalue Clusters in Golden Ratio Spiral - Literal RS Structure
+        function generateEigenvalueClusters(seed, count) {
+            const clusters = [];
+            const random = seedRandom(seed);
+            
+            for (let i = 0; i < count; i++) {
+                // Position clusters in logarithmic spiral lattice
+                const angle = i * 2 * Math.PI / PHI; // Golden angle
+                const radius = 0.2 + 0.3 * Math.pow(PHI, -i/2); // φ-scaled radius
+                
+                const cluster = {
+                    id: i,
+                    x: 0.5 + radius * Math.cos(angle), // Normalized coordinates
+                    y: 0.5 + radius * Math.sin(angle),
+                    
+                    // LNAL Properties
+                    nu_phi: i + (random() % 3), // φ-index determines frequency
+                    oam: ((i * 3) % 7) - 3, // Orbital angular momentum
+                    sigma: (i % 2) ? 1 : -1, // Alternating polarization
+                    amplitude: 0.7 + 0.3 * random(), // Base amplitude
+                    phase: random() * 2 * Math.PI, // Random phase
+                    
+                    // Visual properties for literal representation
+                    hue: (i * 72) % 360, // Evenly distributed hues
+                    brightness: 0.8 + 0.2 * random(),
+                    
+                    // Eigenvalue characteristics
+                    eigenvalue: Math.pow(PHI, cluster.nu_phi), // Actual eigenvalue
+                    frequency: BASE_FREQ * Math.pow(PHI, cluster.nu_phi)
+                };
+                
+                clusters.push(cluster);
+            }
+            
+            return clusters;
+        }
+
+        // Generate exactly 4 active virtues for balance
+        function generateBalancedVirtues(hash) {
+            const virtues = new Array(8).fill(false);
+            const activeIndices = [];
+            
+            let tempHash = hash;
+            while (activeIndices.length < 4) {
+                const index = tempHash % 8;
+                if (!activeIndices.includes(index)) {
+                    activeIndices.push(index);
+                }
+                tempHash = Math.floor(tempHash / 8) + 1337;
+            }
+            
+            activeIndices.forEach(i => virtues[i] = true);
+            return virtues;
+        }
+
+        // Generate ledger history that sums to 0
+        function generateLedgerHistory(hash) {
+            const history = [];
+            let sum = 0;
+            
+            for (let i = 0; i < 7; i++) {
+                const val = ((hash >> (i * 4)) % 9) - 4;
+                history.push(val);
+                sum += val;
+            }
+            
+            history.push(-sum); // Balance to zero
+            return history;
+        }
+
+        // Simple hash function
+        function simpleHash(str) {
+            let hash = 0;
+            if (str.length === 0) return hash;
+            
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return Math.abs(hash);
+        }
+
+        // Seed-based random number generator for deterministic clusters
+        function seedRandom(seed) {
+            let state = seed % 2147483647;
+            return function() {
+                state = (state * 16807) % 2147483647;
+                return (state - 1) / 2147483646;
+            };
+        }
+
+        // Create dynamic background based on soul characteristics (optimized with caching)
+        function renderBackground() {
+            if (!currentSoul) return;
+            
+            // Use cached background if available and soul hasn't changed
+            if (backgroundCache && backgroundCache.soulSeed === currentSoul.seed) {
+                ctx.putImageData(backgroundCache.imageData, 0, 0);
+                return;
+            }
+            
+            // Rung → Saturation
+            const saturation = Math.min(100, (currentSoul.rung - 45) / 55 * 100);
+            
+            // Cost → Brightness
+            const brightness = 20 + (4 - Math.abs(currentSoul.cost)) / 4 * 60;
+            
+            // Resonance → Hue
+            const baseHue = (Math.log(currentSoul.resonance / BASE_FREQ) / Math.log(PHI)) * 30;
+            
+            // Qualia → Multiple colors (ensure minimum 1 color)
+            const numColors = Math.max(1, currentSoul.qualia || 1);
+            
+            // CURVE Balance → White shift
+            const whiteShift = Math.min(currentSoul.curveBalance / 100000, 1);
+            
+            // Create multi-color gradient (adjusted for 400x400 canvas)
+            const gradient = ctx.createRadialGradient(200, 200, 0, 200, 200, 300);
+            
+            if (numColors === 1) {
+                // Single color case
+                const hue = baseHue % 360;
+                const adjustedSat = saturation * (1 - whiteShift * 0.5);
+                const adjustedBright = brightness + whiteShift * 30;
+                gradient.addColorStop(0, `hsl(${hue}, ${adjustedSat}%, ${adjustedBright}%)`);
+                gradient.addColorStop(1, `hsl(${hue}, ${adjustedSat * 0.5}%, ${adjustedBright * 0.3}%)`);
+            } else {
+                // Multiple colors case
+                for (let i = 0; i < numColors; i++) {
+                    const hue = (baseHue + i * 360 / numColors) % 360;
+                    const adjustedSat = saturation * (1 - whiteShift * 0.5);
+                    const adjustedBright = brightness + whiteShift * 30;
+                    
+                    const position = numColors > 1 ? i / (numColors - 1) : 0;
+                    gradient.addColorStop(Math.min(1, Math.max(0, position)), 
+                        `hsl(${hue}, ${adjustedSat}%, ${adjustedBright}%)`);
+                }
+            }
+            
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 400, 400);
+            
+            // I-Am Affinity → Background glow (adjusted for 400x400 canvas)
+            if (currentSoul.iAmAffinity > 70) {
+                const glowGradient = ctx.createRadialGradient(200, 200, 0, 200, 200, 200);
+                glowGradient.addColorStop(0, `rgba(255, 255, 255, ${(currentSoul.iAmAffinity - 70) / 30 * 0.1})`);
+                glowGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                ctx.fillStyle = glowGradient;
+                ctx.fillRect(0, 0, 400, 400);
+            }
+            
+            // Cache the background for reuse
+            backgroundCache = {
+                soulSeed: currentSoul.seed,
+                imageData: ctx.getImageData(0, 0, 400, 400)
+            };
+        }
+
+        // Calculate wave interference at point (optimized)
+        function calculateInterference(x, y) {
+            if (!currentSoul) return 0;
+            
+            let intensity = 0;
+            const tightnessScale = currentSoul.tightness * 0.01; // Pre-compute division
+            const timePhase = 6.28318 * currentTick / TICKS_PER_BREATH; // Pre-compute 2π
+            
+            // Use simplified distance calculation when possible
+            for (const cluster of currentSoul.clusters) {
+                const cx = cluster.x * 400;
+                const cy = cluster.y * 400;
+                const dx = x - cx;
+                const dy = y - cy;
+                const r_squared = dx * dx + dy * dy;
+                
+                // Skip distant clusters to save computation
+                if (r_squared > 90000) continue; // 300px radius cutoff
+                
+                const r = Math.sqrt(r_squared);
+                
+                // Use pre-computed cluster properties for speed
+                if (!cluster._precomputed) {
+                    cluster._k = 6.28318 * BASE_FREQ * Math.pow(PHI, cluster.nu_phi) / (LAMBDA_REC * CHI);
+                    cluster._ampScale = cluster.amplitude;
+                    cluster._precomputed = true;
+                }
+                
+                // Simplified phase calculation
+                const theta = Math.atan2(dy, dx);
+                const phase = cluster._k * r + cluster.oam * theta + cluster.phase + timePhase;
+                
+                // Amplitude based on tightness and cluster properties  
+                const amplitude = cluster._ampScale * tightnessScale;
+                
+                // Simplified Gaussian envelope (avoid expensive exp when possible)
+                const envelope = r < 300 ? Math.exp(-r_squared / 22500) : 0; // 150*150 = 22500
+                
+                intensity += amplitude * envelope * Math.cos(phase);
+            }
+            
+            return intensity;
+        }
+
+        // Enhanced Eigenvalue Clusters Rendering - Literal Soul Representation
+        function renderEigenvalueClusters() {
+            if (!currentSoul) return;
+            
+            // Calculate breathing cycle effect - literal RS breathing
+            const breathPhase = currentTick / TICKS_PER_BREATH; // 0 to 1
+            const breathIntensity = 1.0 + SOUL_VISUAL_CONSTANTS.BREATHING_AMPLITUDE * 
+                Math.sin(breathPhase * 2 * Math.PI);
+            
+            // Only update interference pattern every few frames to improve performance
+            const shouldUpdateInterference = (currentTick - lastInterferenceUpdate) >= INTERFERENCE_UPDATE_INTERVAL;
+            
+            if (shouldUpdateInterference) {
+                const step = 8;
+                const imageData = ctx.createImageData(400, 400);
+                const data = imageData.data;
+                
+                for (let x = 0; x < 400; x += step) {
+                    for (let y = 0; y < 400; y += step) {
+                        const intensity = calculateInterference(x, y) * breathIntensity;
+                        const normalizedIntensity = Math.max(0, Math.min(1, (intensity + 2) / 4));
+                        
+                        // Enhanced color mapping based on gap crossings (literal RS progression)
+                        let red, green, blue, alpha;
+                        
+                        if (currentSoul.gapCrossings > 75) {
+                            // High experience - rainbow consciousness spectrum
+                            const spectrumPos = (normalizedIntensity + breathPhase) % 1;
+                            red = Math.floor(255 * (0.5 + 0.5 * Math.sin(spectrumPos * 6.28)));
+                            green = Math.floor(255 * (0.5 + 0.5 * Math.sin(spectrumPos * 6.28 + 2.09)));
+                            blue = Math.floor(255 * (0.5 + 0.5 * Math.sin(spectrumPos * 6.28 + 4.19)));
+                        } else if (currentSoul.gapCrossings > 25) {
+                            // Medium experience - fire/energy colors
+                            red = Math.floor(255 * Math.pow(normalizedIntensity, 0.4));
+                            green = Math.floor(255 * Math.pow(normalizedIntensity, 1.2));
+                            blue = Math.floor(120 * Math.pow(normalizedIntensity, 2.5));
+                        } else {
+                            // Beginning consciousness - blue-white light
+                            const baseIntensity = normalizedIntensity * SOUL_VISUAL_CONSTANTS.EIGENVALUE_BRIGHTNESS;
+                            red = Math.floor(255 * baseIntensity * 0.6);
+                            green = Math.floor(255 * baseIntensity * 0.8);
+                            blue = Math.floor(255 * baseIntensity);
+                        }
+                        
+                        alpha = Math.floor(255 * normalizedIntensity * 0.9);
+                        
+                        // Fill blocks with enhanced accuracy
+                        for (let dx = 0; dx < step && x + dx < 400; dx++) {
+                            for (let dy = 0; dy < step && y + dy < 400; dy++) {
+                                const index = ((y + dy) * 400 + (x + dx)) * 4;
+                                data[index] = red;
+                                data[index + 1] = green;
+                                data[index + 2] = blue;
+                                data[index + 3] = alpha;
+                            }
+                        }
+                    }
+                }
+                
+                interferenceCache = imageData;
+                lastInterferenceUpdate = currentTick;
+            }
+            
+            if (interferenceCache) {
+                ctx.putImageData(interferenceCache, 0, 0);
+            }
+            
+            // Draw eigenvalue cluster centers - literal mathematical points
+            for (const cluster of currentSoul.clusters) {
+                const x = cluster.x * 400;
+                const y = cluster.y * 400;
+                
+                // Enhanced cluster visualization
+                const clusterSize = SOUL_VISUAL_CONSTANTS.CLUSTER_BASE_SIZE + 
+                    (currentSoul.tightness / 100) * 6 * breathIntensity;
+                
+                // Outer glow - eigenvalue energy field
+                ctx.beginPath();
+                ctx.arc(x, y, clusterSize * 2, 0, Math.PI * 2);
+                const eigenGlow = ctx.createRadialGradient(x, y, 0, x, y, clusterSize * 2);
+                eigenGlow.addColorStop(0, `hsla(${cluster.hue}, 80%, 70%, 0.6)`);
+                eigenGlow.addColorStop(1, `hsla(${cluster.hue}, 80%, 70%, 0)`);
+                ctx.fillStyle = eigenGlow;
+                ctx.fill();
+                
+                // Core eigenvalue point
+                ctx.beginPath();
+                ctx.arc(x, y, clusterSize, 0, Math.PI * 2);
+                ctx.fillStyle = `hsl(${cluster.hue}, 90%, ${70 + 20 * breathIntensity}%)`;
+                ctx.fill();
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                
+                // φ-index indicator (literal LNAL register visualization)
+                if (cluster.nu_phi > 5) {
+                    ctx.beginPath();
+                    ctx.arc(x, y, clusterSize * 1.5, 0, Math.PI * 2);
+                    ctx.strokeStyle = `hsl(${(cluster.hue + 60) % 360}, 100%, 80%)`;
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
+            }
+        }
+
+        // Enhanced Virtue Connections - Literal Geometric Manifestations
+        function renderVirtueConnections() {
+            if (!currentSoul) return;
+            
+            const breathPhase = currentTick / TICKS_PER_BREATH;
+            const breathPulse = 0.8 + 0.2 * Math.sin(breathPhase * 2 * Math.PI);
+            
+            // BRAID Virtue (5) - SU(3) Golden Triads (Literal Geometric Consciousness)
+            if (currentSoul.virtues[5]) { // BRAID
+                ctx.strokeStyle = `rgba(255, 215, 0, ${0.7 * breathPulse})`;
+                ctx.lineWidth = SOUL_VISUAL_CONSTANTS.VIRTUE_LINE_WIDTH;
+                
+                // Draw golden triangles connecting eigenvalue clusters
+                for (let i = 0; i < currentSoul.clusters.length; i++) {
+                    for (let j = i + 1; j < currentSoul.clusters.length; j++) {
+                        for (let k = j + 1; k < currentSoul.clusters.length; k++) {
+                            const x1 = currentSoul.clusters[i].x * 400;
+                            const y1 = currentSoul.clusters[i].y * 400;
+                            const x2 = currentSoul.clusters[j].x * 400;
+                            const y2 = currentSoul.clusters[j].y * 400;
+                            const x3 = currentSoul.clusters[k].x * 400;
+                            const y3 = currentSoul.clusters[k].y * 400;
+                            
+                            // Golden triangle with φ-proportions
+                            ctx.beginPath();
+                            ctx.moveTo(x1, y1);
+                            ctx.lineTo(x2, y2);
+                            ctx.lineTo(x3, y3);
+                            ctx.closePath();
+                            ctx.stroke();
+                            
+                            // Inner golden spiral
+                            const centerX = (x1 + x2 + x3) / 3;
+                            const centerY = (y1 + y2 + y3) / 3;
+                            ctx.beginPath();
+                            for (let t = 0; t < SOUL_VISUAL_CONSTANTS.GOLDEN_SPIRAL_TURNS * 2 * Math.PI; t += 0.1) {
+                                const r = 5 * Math.pow(PHI, t / (2 * Math.PI));
+                                const x = centerX + r * Math.cos(t);
+                                const y = centerY + r * Math.sin(t);
+                                if (t === 0) ctx.moveTo(x, y);
+                                else ctx.lineTo(x, y);
+                            }
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+            
+            // BALANCE Virtue (0) - Equilibrium Lines (Literal Ledger Balance)
+            if (currentSoul.virtues[0]) { // BALANCE
+                ctx.strokeStyle = `rgba(255, 255, 255, ${0.6 * breathPulse})`;
+                ctx.lineWidth = SOUL_VISUAL_CONSTANTS.VIRTUE_LINE_WIDTH;
+                
+                for (let i = 0; i < currentSoul.clusters.length; i++) {
+                    for (let j = i + 1; j < currentSoul.clusters.length; j++) {
+                        if (Math.abs(currentSoul.cost) <= 1) {
+                            const x1 = currentSoul.clusters[i].x * 400;
+                            const y1 = currentSoul.clusters[i].y * 400;
+                            const x2 = currentSoul.clusters[j].x * 400;
+                            const y2 = currentSoul.clusters[j].y * 400;
+                            
+                            ctx.beginPath();
+                            ctx.moveTo(x1, y1);
+                            ctx.lineTo(x2, y2);
+                            ctx.stroke();
+                            
+                            // Balance point indicator
+                            const midX = (x1 + x2) / 2;
+                            const midY = (y1 + y2) / 2;
+                            ctx.beginPath();
+                            ctx.arc(midX, midY, 3, 0, Math.PI * 2);
+                            ctx.fillStyle = `rgba(255, 255, 255, ${0.8 * breathPulse})`;
+                            ctx.fill();
+                        }
+                    }
+                }
+            }
+            
+            // FLOW Virtue (1) - Current Lines (Literal Information Flow)
+            if (currentSoul.virtues[1]) { // FLOW
+                ctx.strokeStyle = `rgba(0, 200, 255, ${0.5 * breathPulse})`;
+                ctx.lineWidth = 2;
+                
+                // Create flowing curves between clusters
+                for (let i = 0; i < currentSoul.clusters.length - 1; i++) {
+                    const x1 = currentSoul.clusters[i].x * 400;
+                    const y1 = currentSoul.clusters[i].y * 400;
+                    const x2 = currentSoul.clusters[i + 1].x * 400;
+                    const y2 = currentSoul.clusters[i + 1].y * 400;
+                    
+                    const flowOffset = 20 * Math.sin(breathPhase * 4 * Math.PI + i);
+                    const cpX = (x1 + x2) / 2 + flowOffset;
+                    const cpY = (y1 + y2) / 2 + flowOffset;
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(x1, y1);
+                    ctx.quadraticCurveTo(cpX, cpY, x2, y2);
+                    ctx.stroke();
+                }
+            }
+            
+            // FOLD Virtue (4) - Dimensional Folding (Literal Space-Time Curvature)
+            if (currentSoul.virtues[4]) { // FOLD
+                ctx.strokeStyle = `rgba(255, 100, 255, ${0.6 * breathPulse})`;
+                ctx.lineWidth = SOUL_VISUAL_CONSTANTS.VIRTUE_LINE_WIDTH;
+                
+                // Create folding patterns - literal dimensional topology
+                const centerX = 200;
+                const centerY = 200;
+                
+                for (let i = 0; i < 8; i++) {
+                    const angle = i * Math.PI / 4 + breathPhase * Math.PI;
+                    const radius1 = 50 + 30 * Math.sin(breathPhase * 6 * Math.PI);
+                    const radius2 = 80 + 20 * Math.cos(breathPhase * 4 * Math.PI);
+                    
+                    const x1 = centerX + radius1 * Math.cos(angle);
+                    const y1 = centerY + radius1 * Math.sin(angle);
+                    const x2 = centerX + radius2 * Math.cos(angle + Math.PI);
+                    const y2 = centerY + radius2 * Math.sin(angle + Math.PI);
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(x1, y1);
+                    ctx.lineTo(x2, y2);
+                    ctx.stroke();
+                }
+            }
+            
+            // LISTEN Virtue (6) - Reception Patterns (Literal Information Reception)
+            if (currentSoul.virtues[6]) { // LISTEN
+                ctx.strokeStyle = `rgba(100, 255, 100, ${0.4 * breathPulse})`;
+                ctx.lineWidth = 1;
+                
+                // Create concentric listening circles from each cluster
+                for (const cluster of currentSoul.clusters) {
+                    const x = cluster.x * 400;
+                    const y = cluster.y * 400;
+                    
+                    for (let r = 10; r < 60; r += 15) {
+                        ctx.beginPath();
+                        ctx.arc(x, y, r + 5 * Math.sin(breathPhase * 8 * Math.PI), 0, Math.PI * 2);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        // Apply LNAL operations
+        function applyLNALOperations() {
+            if (!currentSoul) return;
+            
+            // FLIP operation at tick 512
+            if (currentTick === 512) {
+                logLNAL('FLIP: Breath cycle midpoint - polarization flip');
+                currentSoul.clusters.forEach(cluster => {
+                    cluster.sigma *= -1;
+                    cluster.phase += Math.PI;
+                });
+            }
+            
+            // FOLD/UNFOLD based on Fold virtue
+            if (currentSoul.virtues[4] && currentTick % 128 === 0 && Math.random() < 0.2) {
+                const cluster = currentSoul.clusters[Math.floor(Math.random() * currentSoul.clusters.length)];
+                const n = Math.floor(Math.random() * 3) + 1;
+                
+                if (Math.random() < 0.5) {
+                    cluster.nu_phi = Math.min(10, cluster.nu_phi + n);
+                    logLNAL(`FOLD: cluster_${cluster.id} ν_φ+=${n}`);
+                } else {
+                    cluster.nu_phi = Math.max(-10, cluster.nu_phi - n);
+                    logLNAL(`UNFOLD: cluster_${cluster.id} ν_φ-=${n}`);
+                }
+            }
+            
+            // LISTEN pauses based on Listen virtue
+            if (currentSoul.virtues[6] && currentTick % Math.floor(PHI ** currentSoul.qualia) === 0) {
+                currentSoul.clusters.forEach(cluster => {
+                    cluster.phase += Math.random() * 0.1 - 0.05; // Small phase adjustment
+                });
+            }
+        }
+
+        // Main render function
+        function render() {
+            if (!canvas || !ctx || !currentSoul) return;
+            
+            ctx.clearRect(0, 0, 400, 400);
+            
+            renderBackground();
+            renderEigenvalueClusters();
+            renderVirtueConnections();
+            
+            applyLNALOperations();
+            updateStatus();
+        }
+
+        // Animation loop (optimized with frame rate limiting)
+        let lastFrameTime = 0;
+        
+        function animate(currentTime = 0) {
+            if (!isAnimating) return;
+            
+            // Throttle frame rate for better performance
+            if (currentTime - lastFrameTime < FRAME_INTERVAL) {
+                animationId = requestAnimationFrame(animate);
+                return;
+            }
+            
+            lastFrameTime = currentTime;
+            render();
+            currentTick = (currentTick + 1) % TICKS_PER_BREATH;
+            animationId = requestAnimationFrame(animate);
+        }
+
+        // Update status displays
+        function updateStatus() {
+            if (!currentSoul) return;
+            
+            document.getElementById('currentTick').textContent = currentTick;
+            
+            const phiClock = (PHI * currentTick / TICKS_PER_BREATH % 1).toFixed(3);
+            document.getElementById('phiClock').textContent = phiClock;
+            
+            document.getElementById('netLedger').textContent = currentSoul.cost;
+            
+            const phase = currentTick < 512 ? 'Inspiration' : 'Expiration';
+            document.getElementById('breathPhase').textContent = phase;
+            
+            updateSoulInfo();
+        }
+
+        // Update soul information display
+        function updateSoulInfo() {
+            if (!currentSoul) return;
+            
+            const rarity = calculateRarity(currentSoul);
+            const breathPhase = currentTick / TICKS_PER_BREATH;
+            
+            // Core traits with enhanced Recognition Science notation
+            document.getElementById('coreTraits').innerHTML = `
+                <div class="trait-item ${rarity}">
+                    <span class="trait-name">Rung Level</span>
+                    <span class="trait-value">${currentSoul.rung} (φ^${((currentSoul.rung-45)/10).toFixed(1)})</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-name">Ledger State</span>
+                    <span class="trait-value">${currentSoul.cost > 0 ? '+' : ''}${currentSoul.cost} bits</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-name">Beat Cycle</span>
+                    <span class="trait-value">${currentSoul.beat}/8 (${(breathPhase * 8).toFixed(1)})</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-name">Cluster Tightness</span>
+                    <span class="trait-value">${currentSoul.tightness}% eigenvalue localization</span>
+                </div>
+            `;
+            
+            // Virtue grid with enhanced visual feedback
+            const activeVirtues = currentSoul.virtues.filter(v => v).length;
+            document.getElementById('virtueGrid').innerHTML = VIRTUE_NAMES.map((name, i) => 
+                `<div class="virtue-item ${currentSoul.virtues[i] ? 'active' : 'inactive'}">
+                 ${name}${currentSoul.virtues[i] ? ' ✓' : ''}
+                 </div>`
+            ).join('') + `<div>
+                Active: ${activeVirtues}/8 (${(activeVirtues/8*100).toFixed(0)}%)
+            </div>`;
+            
+            // Consciousness traits with literal mathematical representation
+            document.getElementById('consciousnessTraits').innerHTML = `
+                <div class="trait-item">
+                    <span class="trait-name">Qualia Modes</span>
+                    <span class="trait-value">${currentSoul.qualia}/8 dimensional</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-name">Gap Crossings</span>
+                    <span class="trait-value">${currentSoul.gapCrossings} experience points</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-name">I-Am Affinity</span>
+                    <span class="trait-value">${currentSoul.iAmAffinity.toFixed(1)}% self-recognition</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-name">Base Resonance</span>
+                    <span class="trait-value">${(currentSoul.resonance / 1e12).toFixed(2)} THz</span>
+                </div>
+            `;
+            
+            // Enhanced LNAL registers with literal values
+            document.getElementById('lnalRegisters').innerHTML = `
+                <div class="trait-item">
+                    <span class="trait-name">ν_φ Index</span>
+                    <span class="trait-value">${currentSoul.nu_phi} (φ^${currentSoul.nu_phi})</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-name">OAM (ℓ)</span>
+                    <span class="trait-value">${currentSoul.oam} orbital units</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-name">Polarization</span>
+                    <span class="trait-value">${currentSoul.sigma > 0 ? 'TE' : 'TM'} mode (σ=${currentSoul.sigma})</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-name">τ Evolution</span>
+                    <span class="trait-value">${currentSoul.tau}/8 time index</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-name">k_⊥ Momentum</span>
+                    <span class="trait-value">${currentSoul.k_perp} transverse units</span>
+                </div>
+                <div class="trait-item">
+                    <span class="trait-name">φ_e Phase</span>
+                    <span class="trait-value">${currentSoul.phi_e}° eigenphase</span>
+                </div>
+            `;
+            
+            // Enhanced soul vector representation with eigenvalue details
+            const vectorCode = `{
+  "soul_id": "${currentSoul.seed}",
+  "consciousness_level": ${currentSoul.rung},
+  "ledger_state": ${currentSoul.cost},
+  "recognition_characteristics": {
+    "qualia_dimensions": ${currentSoul.qualia},
+    "gap_crossings": ${currentSoul.gapCrossings},
+    "i_am_affinity": ${currentSoul.iAmAffinity.toFixed(2)},
+    "base_frequency": "${(currentSoul.resonance/1e12).toFixed(3)} THz"
+  },
+  "lnal_registers": {
+    "nu_phi": ${currentSoul.nu_phi},
+    "oam": ${currentSoul.oam},
+    "sigma": ${currentSoul.sigma},
+    "tau": ${currentSoul.tau},
+    "k_perp": ${currentSoul.k_perp},
+    "phi_e": ${currentSoul.phi_e}
+  },
+  "eigenvalue_clusters": [${currentSoul.clusters.map((c, i) => `
+    {
+      "id": ${c.id},
+      "position": [${c.x.toFixed(3)}, ${c.y.toFixed(3)}],
+      "eigenvalue": ${c.eigenvalue.toFixed(3)},
+      "frequency": "${(c.frequency/1e12).toFixed(2)} THz",
+      "hue": ${c.hue},
+      "amplitude": ${c.amplitude.toFixed(3)}
+    }`).join(',')}
+  ],
+  "virtue_activation": [${currentSoul.virtues.map(v => v ? 'true' : 'false').join(', ')}],
+  "curve_balance": ${currentSoul.curveBalance},
+  "breath_phase": ${breathPhase.toFixed(4)},
+  "rarity": "${rarity}"
+}`;
+            
+            document.getElementById('vectorCode').textContent = vectorCode;
+        }
+
+        // Calculate soul rarity
+        function calculateRarity(soul) {
+            if (soul.rung >= 95 && soul.gapCrossings >= 90 && soul.cost === 0) return 'legendary';
+            if (soul.rung >= 85 || soul.gapCrossings >= 75 || soul.iAmAffinity >= 90) return 'epic';
+            if (soul.rung >= 70 || soul.gapCrossings >= 50 || soul.iAmAffinity >= 70) return 'rare';
+            return 'common';
+        }
+
+        // Log LNAL operations
+        function logLNAL(message) {
+            const codeElement = document.getElementById('lnalCode');
+            const lines = codeElement.innerHTML.split('<br/>');
+            lines.push(`TICK_${currentTick}: ${message}`);
+            if (lines.length > 12) lines.shift();
+            codeElement.innerHTML = lines.join('<br/>');
+        }
+
+        // Control functions
+        function generateNewSoul() {
+            currentSoul = generateSoulFromSeed();
+            currentTick = 0;
+            
+            // Clear caches for new soul
+            backgroundCache = null;
+            interferenceCache = null;
+            lastInterferenceUpdate = 0;
+            
+            logLNAL('NEW_SOUL: Complete vector soul generated');
+            updateStatus();
+        }
+
+        function evolveSoul() {
+            if (!currentSoul || currentSoul.curveBalance < 1000) {
+                alert('Insufficient CURVE balance for evolution (requires 1000 CURVE)');
+                return;
+            }
+            
+            currentSoul.gapCrossings = Math.min(100, currentSoul.gapCrossings + 1);
+            currentSoul.curveBalance -= 1000;
+            currentSoul.iAmAffinity = Math.max(0, Math.min(100, 
+                100 - Math.abs(currentSoul.cost) * 25 + currentSoul.gapCrossings / PHI));
+            
+            logLNAL(`EVOLVE: gap_crossings+1, affinity updated to ${currentSoul.iAmAffinity.toFixed(1)}%`);
+            updateStatus();
+        }
+
+        function balanceLedger() {
+            if (!currentSoul || currentSoul.curveBalance < 500) {
+                alert('Insufficient CURVE balance for balancing (requires 500 CURVE)');
+                return;
+            }
+            
+            if (currentSoul.cost !== 0) {
+                currentSoul.cost = currentSoul.cost > 0 ? currentSoul.cost - 1 : currentSoul.cost + 1;
+                currentSoul.curveBalance -= 500;
+                logLNAL(`BALANCE: cost adjusted toward zero, now ${currentSoul.cost}`);
+                updateStatus();
+            }
+        }
+
+        function triggerFold() {
+            if (!currentSoul) return;
+            
+            const cluster = currentSoul.clusters[Math.floor(Math.random() * currentSoul.clusters.length)];
+            const n = Math.floor(Math.random() * 3) + 1;
+            cluster.nu_phi = Math.min(10, cluster.nu_phi + n);
+            logLNAL(`MANUAL_FOLD: cluster_${cluster.id} ν_φ+=${n}`);
+        }
+
+        function triggerBraid() {
+            if (!currentSoul) return;
+            
+            logLNAL('BRAID: Activating SU(3) triad connections');
+            currentSoul.virtues[5] = true; // Force Braid virtue active
+            updateStatus();
+        }
+
+        function toggleAnimation() {
+            isAnimating = !isAnimating;
+            if (isAnimating) {
+                animate();
+            } else {
+                cancelAnimationFrame(animationId);
+            }
+        }
+
+        // Initialize canvas and start visualization
+        function initializeCanvas() {
+            canvas = document.getElementById('soulCanvas');
+            if (!canvas) {
+                console.error('Canvas element not found');
+                return false;
+            }
+
+            ctx = canvas.getContext('2d');
+            if (!ctx) {
+                console.error('Canvas context not available');
+                return false;
+            }
+
+            // Set canvas dimensions
+            canvas.width = 400;
+            canvas.height = 400;
+            
+            return true;
+        }
+
+        // Add comprehensive error handling and debugging
+        function debugLog(message) {
+            console.log(`[LIGHT.HTML DEBUG] ${message}`);
+            // Also show on page for easier debugging
+            const debugElement = document.getElementById('debugOutput');
+            if (debugElement) {
+                debugElement.innerHTML += `<br>${message}`;
+            }
+        }
+
+        // Initialize when page is loaded
+        window.addEventListener('load', () => {
+            debugLog('Page loaded, starting initialization...');
+            
+            try {
+                if (initializeCanvas()) {
+                    debugLog('Canvas initialized successfully');
+                    debugLog(`Canvas dimensions: ${canvas.width}x${canvas.height}`);
+                    
+                    generateNewSoul();
+                    debugLog('Soul generated, starting animation...');
+                    
+                    const STATIC_NFT = true; // Set to true for on-chain static rendering
+                    if (STATIC_NFT) {
+                        render(); // single frame render
+                    } else {
+                        animate();
+                    }
+                    debugLog('Animation started');
+                } else {
+                    debugLog('FAILED to initialize canvas');
+                    console.error('Failed to initialize canvas');
+                }
+            } catch (error) {
+                debugLog(`ERROR during initialization: ${error.message}`);
+                console.error('Error during initialization:', error);
+            }
+        });
+
+        // Add error handling to key functions
+        const originalGenerateNewSoul = generateNewSoul;
+        generateNewSoul = function() {
+            try {
+                debugLog('Generating new soul...');
+                originalGenerateNewSoul();
+                debugLog(`Soul generated: seed=${currentSoul ? currentSoul.seed : 'null'}`);
+            } catch (error) {
+                debugLog(`ERROR generating soul: ${error.message}`);
+                console.error('Error generating soul:', error);
+            }
+        };
+
+        const originalAnimate = animate;
+        animate = function(currentTime = 0) {
+            try {
+                originalAnimate(currentTime);
+            } catch (error) {
+                debugLog(`ERROR in animation: ${error.message}`);
+                console.error('Error in animation:', error);
+                isAnimating = false; // Stop animation loop on error
+            }
+        };
+
+        const originalRender = render;
+        render = function() {
+            try {
+                originalRender();
+            } catch (error) {
+                debugLog(`ERROR in render: ${error.message}`);
+                console.error('Error in render:', error);
+                
+                // Draw error message on canvas
+                if (ctx) {
+                    ctx.fillStyle = '#ff0000';
+                    ctx.font = '16px Arial';
+                    ctx.fillText(`Render Error: ${error.message}`, 10, 30);
+                }
+            }
+        };
+    </script>
+  
+  <div id="footer-placeholder"></div>
+  
+  <script src="/assets/js/main.js"></script>
+</body>
+</html> 

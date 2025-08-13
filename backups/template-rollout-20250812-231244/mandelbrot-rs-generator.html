@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RS Mandelbrot Generator - Infinite Beauty</title>
+    
+  <link rel="stylesheet" href="/assets/css/template-core.css">
+</head>
+<body class="academic-page">
+  <div id="header-placeholder"></div>
+  <div id="sitewide-banner-placeholder"></div>
+
+    <h1>Recognition Science Mandelbrot Generator</h1>
+    <div class="subtitle">Infinite Fractal Beauty • Virtue-Driven Colors • Phi-Scaled Complexity</div>
+    
+    <div class="controls">
+        <button onclick="generateNew()">Generate New</button>
+        <button onclick="generateFromSeed()">Use Seed</button>
+        <input type="number" id="seedInput" placeholder="Enter seed..." min="1" max="99999">
+        <button onclick="shareSeed()">Share Current</button>
+        <button onclick="autoZoom()">Auto Zoom</button>
+    </div>
+    
+    <div class="params">
+        <div class="param-group">
+            <label>Zoom Level: <span id="zoomDisplay">1x</span></label>
+            <input type="range" id="zoomSlider" min="1" max="1000" value="1" oninput="updateZoom()">
+        </div>
+        <div class="param-group">
+            <label>Iterations: <span id="iterDisplay">256</span></label>
+            <input type="range" id="iterSlider" min="50" max="1000" value="256" oninput="updateIter()">
+        </div>
+        <div class="param-group">
+            <label>Color Mode:</label>
+            <select id="colorMode" onchange="regenerate()">
+                <option value="virtue">Virtue Harmony</option>
+                <option value="fire">Fire & Ice</option>
+                <option value="cosmic">Cosmic Deep</option>
+                <option value="phi">Golden Phi</option>
+            </select>
+        </div>
+    </div>
+    
+    <canvas id="canvas" width="800" height="800"></canvas>
+    <div class="info" id="seedDisplay">Seed: Loading...</div>
+    <a id="download" href="#" download="mandelbrot-rs.png">Download Image</a>
+
+    <script>
+        const PHI = (1 + Math.sqrt(5)) / 2;
+        const VIRTUES = ['Love', 'Justice', 'Forgiveness', 'Wisdom', 'Courage', 'Temperance', 'Prudence', 'Compassion', 'Gratitude', 'Patience', 'Humility', 'Hope', 'Creativity', 'Sacrifice'];
+        
+        let currentSeed = Math.floor(Math.random() * 99999);
+        let canvas, ctx;
+        let centerX = -0.7, centerY = 0;
+        let zoom = 1;
+        let maxIter = 256;
+        let isGenerating = false;
+        let autoZooming = false;
+        
+        function seededRand(seed) {
+            seed = (seed * 9301 + 49297) % 233280;
+            return seed / 233280;
+        }
+        
+        function hslToRgb(h, s, l) {
+            h /= 360;
+            s /= 100;
+            l /= 100;
+            let r, g, b;
+            if (s === 0) {
+                r = g = b = l;
+            } else {
+                const hue2rgb = (p, q, t) => {
+                    if (t < 0) t += 1;
+                    if (t > 1) t -= 1;
+                    if (t < 1/6) return p + (q - p) * 6 * t;
+                    if (t < 1/2) return q;
+                    if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                    return p;
+                };
+                const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                const p = 2 * l - q;
+                r = hue2rgb(p, q, h + 1/3);
+                g = hue2rgb(p, q, h);
+                b = hue2rgb(p, q, h - 1/3);
+            }
+            return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+        }
+        
+        function mandelbrot(cx, cy, maxIter) {
+            let zx = 0, zy = 0;
+            let n = 0;
+            while (n < maxIter) {
+                if (zx * zx + zy * zy > 4) break;
+                let temp = zx * zx - zy * zy + cx;
+                zy = 2 * zx * zy + cy;
+                zx = temp;
+                n++;
+            }
+            return n;
+        }
+        
+        function getVirtueColor(iter, maxIter, virtueScores, colorMode) {
+            if (iter === maxIter) return [0, 0, 0]; // Black for set interior
+            
+            let t = iter / maxIter;
+            let rgb;
+            
+            switch(colorMode) {
+                case 'virtue':
+                    // Map iterations to virtues
+                    let virtueIndex = Math.floor(t * 14);
+                    let baseHue = virtueIndex * (360 / 14);
+                    let saturation = 60 + virtueScores[virtueIndex] * 40;
+                    let lightness = 30 + t * 50;
+                    rgb = hslToRgb(baseHue, saturation, lightness);
+                    break;
+                    
+                case 'fire':
+                    if (t < 0.3) rgb = hslToRgb(0, 100, t * 150); // Red-orange
+                    else if (t < 0.7) rgb = hslToRgb(240, 100, (t - 0.3) * 150); // Blue
+                    else rgb = hslToRgb(280, 100, (t - 0.7) * 150); // Purple
+                    break;
+                    
+                case 'cosmic':
+                    rgb = hslToRgb(240 + t * 120, 80, 20 + t * 60);
+                    break;
+                    
+                case 'phi':
+                    let phiHue = (t * PHI * 360) % 360;
+                    rgb = hslToRgb(phiHue, 70, 40 + t * 40);
+                    break;
+                    
+                default:
+                    rgb = [t * 255, (1-t) * 255, Math.sin(t * Math.PI) * 255];
+            }
+            
+            return rgb;
+        }
+        
+        function generateMandelbrot() {
+            if (isGenerating) return;
+            isGenerating = true;
+            
+            document.getElementById('seedDisplay').textContent = `Seed: ${currentSeed} • Generating...`;
+            
+            let virtueScores = VIRTUES.map((_, i) => seededRand(currentSeed + i * 10));
+            let colorMode = document.getElementById('colorMode').value;
+            
+            // RS-influenced center and zoom
+            let rsOffsetX = (virtueScores[1] - 0.5) * 0.5; // Justice influences X
+            let rsOffsetY = (virtueScores[11] - 0.5) * 0.5; // Hope influences Y
+            centerX = -0.7 + rsOffsetX;
+            centerY = 0 + rsOffsetY;
+            
+            let width = canvas.width;
+            let height = canvas.height;
+            let imageData = ctx.createImageData(width, height);
+            let data = imageData.data;
+            
+            let scale = 4 / (zoom * Math.min(width, height));
+            
+            // Progressive rendering
+            let row = 0;
+            function renderRow() {
+                if (row >= height) {
+                    ctx.putImageData(imageData, 0, 0);
+                    isGenerating = false;
+                    document.getElementById('seedDisplay').textContent = `Seed: ${currentSeed} • Complete • Zoom: ${zoom.toFixed(1)}x`;
+                    updateDownload();
+                    return;
+                }
+                
+                for (let col = 0; col < width; col++) {
+                    let x = centerX + (col - width / 2) * scale;
+                    let y = centerY + (row - height / 2) * scale;
+                    
+                    let iter = mandelbrot(x, y, maxIter);
+                    let color = getVirtueColor(iter, maxIter, virtueScores, colorMode);
+                    
+                    let idx = (row * width + col) * 4;
+                    data[idx] = color[0];     // R
+                    data[idx + 1] = color[1]; // G
+                    data[idx + 2] = color[2]; // B
+                    data[idx + 3] = 255;      // A
+                }
+                
+                // Update progress every 10 rows
+                if (row % 10 === 0) {
+                    ctx.putImageData(imageData, 0, 0);
+                    document.getElementById('seedDisplay').textContent = `Generating... ${Math.round(row/height*100)}%`;
+                }
+                
+                row++;
+                setTimeout(renderRow, 1); // Allow UI updates
+            }
+            
+            renderRow();
+        }
+        
+        function generateNew() {
+            currentSeed = Math.floor(Math.random() * 99999);
+            zoom = 1;
+            document.getElementById('zoomSlider').value = 1;
+            document.getElementById('zoomDisplay').textContent = '1x';
+            generateMandelbrot();
+        }
+        
+        function generateFromSeed() {
+            let seed = parseInt(document.getElementById('seedInput').value);
+            if (seed && seed > 0 && seed < 100000) {
+                currentSeed = seed;
+                generateMandelbrot();
+            } else {
+                alert('Please enter a valid seed (1-99999)');
+            }
+        }
+        
+        function shareSeed() {
+            let url = new URL(window.location);
+            url.searchParams.set('seed', currentSeed);
+            url.searchParams.set('zoom', zoom);
+            navigator.clipboard.writeText(url.href).then(() => alert('URL copied to clipboard!'));
+        }
+        
+        function updateZoom() {
+            zoom = parseFloat(document.getElementById('zoomSlider').value);
+            document.getElementById('zoomDisplay').textContent = zoom.toFixed(1) + 'x';
+        }
+        
+        function updateIter() {
+            maxIter = parseInt(document.getElementById('iterSlider').value);
+            document.getElementById('iterDisplay').textContent = maxIter;
+        }
+        
+        function regenerate() {
+            if (!isGenerating) generateMandelbrot();
+        }
+        
+        function autoZoom() {
+            if (autoZooming) {
+                autoZooming = false;
+                return;
+            }
+            
+            autoZooming = true;
+            let startZoom = zoom;
+            let targetZoom = startZoom * PHI ** 3; // Phi-scaled zoom
+            let steps = 30;
+            let currentStep = 0;
+            
+            function zoomStep() {
+                if (!autoZooming || currentStep >= steps) {
+                    autoZooming = false;
+                    return;
+                }
+                
+                let progress = currentStep / steps;
+                zoom = startZoom + (targetZoom - startZoom) * progress;
+                document.getElementById('zoomSlider').value = Math.min(zoom, 1000);
+                document.getElementById('zoomDisplay').textContent = zoom.toFixed(1) + 'x';
+                
+                generateMandelbrot();
+                currentStep++;
+                setTimeout(zoomStep, 2000); // 2 second intervals
+            }
+            
+            zoomStep();
+        }
+        
+        function updateDownload() {
+            document.getElementById('download').href = canvas.toDataURL('image/png');
+            document.getElementById('download').download = `mandelbrot-rs-${currentSeed}-${zoom.toFixed(1)}x.png`;
+        }
+        
+        // Canvas click to zoom
+        function handleCanvasClick(event) {
+            if (isGenerating) return;
+            
+            let rect = canvas.getBoundingClientRect();
+            let x = event.clientX - rect.left;
+            let y = event.clientY - rect.top;
+            
+            // Convert screen coords to Mandelbrot coords
+            let scale = 4 / (zoom * Math.min(canvas.width, canvas.height));
+            let newCenterX = centerX + (x - canvas.width / 2) * scale;
+            let newCenterY = centerY + (y - canvas.height / 2) * scale;
+            
+            centerX = newCenterX;
+            centerY = newCenterY;
+            zoom *= PHI; // Phi-based zoom
+            
+            document.getElementById('zoomSlider').value = Math.min(zoom, 1000);
+            document.getElementById('zoomDisplay').textContent = zoom.toFixed(1) + 'x';
+            
+            generateMandelbrot();
+        }
+        
+        // Initialize
+        window.addEventListener('load', () => {
+            canvas = document.getElementById('canvas');
+            ctx = canvas.getContext('2d');
+            canvas.addEventListener('click', handleCanvasClick);
+            
+            let params = new URLSearchParams(window.location.search);
+            let seedParam = params.get('seed');
+            let zoomParam = params.get('zoom');
+            
+            if (seedParam && !isNaN(seedParam)) {
+                currentSeed = parseInt(seedParam);
+            }
+            if (zoomParam && !isNaN(zoomParam)) {
+                zoom = parseFloat(zoomParam);
+                document.getElementById('zoomSlider').value = Math.min(zoom, 1000);
+                document.getElementById('zoomDisplay').textContent = zoom.toFixed(1) + 'x';
+            }
+            
+            generateMandelbrot();
+        });
+    </script>
+  
+  <div id="footer-placeholder"></div>
+  
+  <script src="/assets/js/main.js"></script>
+</body>
+</html> 

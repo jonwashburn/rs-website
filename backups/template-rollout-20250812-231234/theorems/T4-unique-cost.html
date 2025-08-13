@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Theorem 4 · Uniqueness of the Cost Functional /// Recognition Science</title>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/academic-style.css?v=20250812">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <main class="content-page academic-page">
+    <section class="hero-section text-center">
+      <div class="container">
+        <h1>Theorem 4: Uniqueness of the Cost Functional</h1>
+        <p class="subtitle">J(x) = ½(x + 1/x) under symmetry, finiteness, and normalization</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="container text-block">
+        <h2>Statement</h2>
+        <p><strong>Uniqueness.</strong> The only analytic, dual‑balanced, ledger‑finite cost functional on ℝ&gt;0 is J(x) = ½(x + 1/x).</p>
+
+        <h2>In plain English</h2>
+        <p>
+          There’s exactly one fair “effort meter.” It treats too much and too little as equally costly, doesn’t blow up faster than your ledger
+          can pay, and prefers balance. That meter is J(x) = ½(x + 1/x). No knobs. No hidden dials.
+        </p>
+        <ul>
+          <li><strong>Why inevitable:</strong> symmetry (x ↔ 1/x) + smoothness + “no outrageous growth” leave only this form.</li>
+          <li><strong>What it buys:</strong> a single convex cost that punishes extremes and underwrites φ in T5.</li>
+        </ul>
+
+        <h2>Formal setting</h2>
+        <ul>
+          <li><strong>Domain:</strong> x &gt; 0; J : (0, ∞) → ℝ.</li>
+          <li><strong>Dual symmetry:</strong> J(x) = J(1/x) (ledger dual‑balance).</li>
+          <li><strong>Normalization and positivity:</strong> J(1) = 0 and J(x) &gt; 0 for x ≠ 1.</li>
+          <li><strong>Ledger finiteness (growth bound):</strong> ∃K &gt; 0 s.t. J(x) ≤ K (x + 1/x) for all x &gt; 0.</li>
+          <li><strong>Regularity:</strong> J is analytic on ℂ \ {0} (equivalently, convex on the log‑axis suffices to force analyticity here).</li>
+        </ul>
+
+        <h2>Key lemmas</h2>
+        <ol>
+          <li><strong>Symmetric Laurent representation:</strong> Dual symmetry and analyticity imply a Laurent expansion
+            J(x) = Σ<sub>n ≥ 1</sub> c<sub>n</sub>(xⁿ + x<sup>−n</sup>).</li>
+          <li><strong>Finiteness kills higher modes:</strong> If any c<sub>m</sub> with m ≥ 2 is non‑zero, then J(x)/(x + 1/x) ~ c<sub>m</sub>x^{m−1} as x → ∞, violating the growth bound. Hence c<sub>n≥2</sub> = 0.</li>
+          <li><strong>Normalization/positivity fix c₁:</strong> J(1) = 0 enforces no constant term; J(x) &gt; 0 for x ≠ 1 with symmetry implies c₁ = ½.</li>
+          <li><strong>Convexity barrier:</strong> Any piecewise or logarithmic modification breaks analyticity or convexity on the log‑axis, so cannot satisfy all axioms simultaneously.</li>
+        </ol>
+
+        <h2>Proof sketch</h2>
+        <p>Expand any analytic, dual‑symmetric candidate as a symmetric Laurent series. The ledger‑finiteness bound excludes all |n| ≥ 2 terms by asymptotic comparison, leaving only c₁(x + 1/x). Normalization and positivity determine c₁ = ½. Attempts to add piecewise corrections or logarithmic tails either violate convexity on the log‑axis or break analyticity, so the form is unique.</p>
+
+        <h2>Edge cases</h2>
+        <ul>
+          <li><strong>Non‑analytic candidates:</strong> |log x| or piecewise plasmic forms introduce cusps; they violate the regularity/convexity requirement.</li>
+          <li><strong>Modular costs:</strong> Reducing costs modulo m admits nonzero closed loops of net zero, contradicting MP via T1/T3; excluded.</li>
+          <li><strong>Rescaling δ:</strong> T1 forbids order‑preserving rescalings of the generator; the ½ factor is fixed by normalization, not by δ drift.</li>
+        </ul>
+
+        <h2>Implications</h2>
+        <ul>
+          <li><strong>Single convex cost:</strong> Establishes a unique convex energy‑like measure governing recognition.</li>
+          <li><strong>Supports T5:</strong> Global cost minimization over integer k in x<sub>n+1</sub> = 1 + k/x<sub>n</sub> selects k = 1 and φ.</li>
+          <li><strong>Bridges discrete/continuum:</strong> Plays well with T3’s continuity equation and T8’s causal cones.</li>
+        </ul>
+
+        <h2>Related</h2>
+        <p>
+          <a class="button-link" href="/theorems/T1-ledger-necessity.html">T1 Ledger Necessity</a>
+          <a class="button-link" href="/theorems/T2-atomicity.html">T2 Atomicity</a>
+          <a class="button-link" href="/theorems/T3-conservation.html">T3 Conservation</a>
+          <a class="button-link secondary" href="/theorems/T5-k-equals-1-phi.html">T5 k = 1 and φ</a>
+        </p>
+
+        <p><a href="/eight-theorems.html">← Back to The 8 Theorems</a></p>
+      </div>
+    </section>
+  </main>
+  <div id="footer-placeholder"></div>
+  <script src="/assets/js/main.js"></script>
+</body>
+</html>
+

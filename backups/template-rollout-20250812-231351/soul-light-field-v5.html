@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soul Light Field V5 - RS Chromie-Inspired Awakening</title>
+    <style>
+        body { 
+            margin: 0; 
+            background: black; 
+            overflow: hidden; 
+            color: white; 
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, monospace; 
+        }
+        canvas { 
+            display: block; 
+            cursor: crosshair;
+        }
+        #info { 
+            position: absolute; 
+            top: 10px; 
+            left: 10px; 
+            font-size: 12px; 
+            opacity: 0.8; 
+            background: rgba(0,0,0,0.5);
+            padding: 10px;
+            border-radius: 5px;
+            line-height: 1.4;
+        }
+        #controls { 
+            position: absolute; 
+            bottom: 10px; 
+            left: 10px; 
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        button { 
+            background: rgba(255,255,255,0.1); 
+            color: white; 
+            border: 1px solid rgba(255,255,255,0.3); 
+            padding: 8px 15px; 
+            border-radius: 4px;
+            cursor: pointer; 
+            font-family: inherit;
+            font-size: 11px;
+            transition: all 0.2s ease;
+        }
+        button:hover { 
+            background: rgba(255,255,255,0.2); 
+            border-color: rgba(255,255,255,0.5);
+        }
+        button:active {
+            transform: scale(0.95);
+        }
+        .status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 11px;
+            opacity: 0.7;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div id="sitewide-banner-placeholder"></div>
+
+    <canvas id="canvas"></canvas>
+    <div id="info"></div>
+    <div id="controls">
+        <button onclick="generateNewSoul()">Generate New Soul</button>
+        <button onclick="toggleAnimation()">Play/Pause</button>
+        <button onclick="advanceMonth()">+1 Month</button>
+        <button onclick="resetSoul()">Reset to Void</button>
+    </div>
+    <div class="status" id="status">Ready</div>
+    
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        // RS Constants
+        const PHI = (1 + Math.sqrt(5)) / 2;
+        const DIM = 8;
+        const TOTAL_MONTHS = 96;
+        const BREATH_CYCLE = 8;
+        const RUNG_BASE = 45;
+        const NUM_PARTICLES = 500; // Max particles for full evolution
+        
+        let soul = null;
+        let particles = [];
+        let animationId = null;
+        let isPlaying = false;
+        let currentMonth = 0;
+        let frameCount = 0;
+
+        function generateNewSoul() {
+            resetAnimation();
+            currentMonth = 0;
+            particles = [];
+            frameCount = 0;
+            
+            soul = {
+                // Core RS properties
+                rung: RUNG_BASE + Math.floor(Math.random() * 56),
+                cost: Math.floor(Math.random() * 9) - 4,
+                beat_cycle: Math.floor(Math.random() * 8) + 1,
+                qualia_mode: Math.floor(Math.random() * 8) + 1,
+                cluster_tightness: Math.random(),
+                resonance_frequency: Math.random(),
+                oam: Math.floor(Math.random() * 11) - 5,
+                polarization_parity: Math.random() < 0.5 ? -1 : 1,
+                time_bin_index: Math.floor(Math.random() * 1024),
+                transverse_mode_index: Math.floor(Math.random() * 6),
+                entanglement_phase: Math.random() < 0.5 ? 0 : Math.PI,
+                i_am_affinity: Math.random(),
+                curve_balance: Math.floor(Math.random() * 1001),
+                gapCrossings: 0, // Initialize gap crossings
+                
+                // Ledger history (balanced)
+                ledger_history: new Array(8).fill(0).map(() => Math.floor(Math.random() * 9) - 4),
+                
+                // Virtues
+                virtues: new Array(8).fill(false).map(() => Math.random() < 0.5),
+                
+                // 8D eigenvalue modes
+                modes: new Array(DIM).fill(0).map((_, i) => ({
+                    lambda: RUNG_BASE * 0.09 * Math.pow(PHI, i / DIM) + (Math.random() * 0.02 - 0.01),
+                    phase: Math.random() * 2 * Math.PI,
+                    cost: Math.floor(Math.random() * 9) - 4
+                }))
+            };
+
+            // Balance ledger history (Σcost = 0)
+            let sum = soul.ledger_history.reduce((a, b) => a + b, 0);
+            soul.ledger_history[0] -= sum;
+
+            addInitialPixel();
+            updateInfo();
+            updateStatus();
+            draw();
+        }
+
+        function addInitialPixel() {
+            particles.push({
+                x: canvas.width / 2,
+                y: canvas.height / 2,
+                vx: 0,
+                vy: 0,
+                size: 2,
+                alpha: 1,
+                color: [1, 1, 1],
+                lifetime: 0,
+                phase: 0,
+                angle: 0,
+                drift: 0,
+                affinity_pull: 0,
+                oam_direction: 1,
+                isPixel: true,
+                birthMonth: 0
+            });
+        }
+
+        function resetAnimation() {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+            isPlaying = false;
+        }
+
+        function toggleAnimation() {
+            isPlaying = !isPlaying;
+            if (isPlaying) {
+                animate();
+            } else {
+                resetAnimation();
+            }
+            updateStatus();
+        }
+
+        function advanceMonth() {
+            currentMonth = Math.min(currentMonth + 1, TOTAL_MONTHS);
+            evolveSoul();
+            draw();
+            updateInfo();
+            updateStatus();
+        }
+
+        function resetSoul() {
+            currentMonth = 0;
+            particles = [];
+            frameCount = 0;
+            if (soul) {
+                soul.gapCrossings = 0;
+                addInitialPixel();
+            }
+            draw();
+            updateInfo();
+            updateStatus();
+        }
+
+        function evolveSoul() {
+            if (!soul) return;
+            
+            // Add particles based on month progression
+            const monthProgress = currentMonth / TOTAL_MONTHS;
+            const targetParticles = Math.floor(monthProgress * NUM_PARTICLES) + 1;
+            
+            while (particles.length < targetParticles) {
+                addParticle();
+            }
+
+            // Update eigenvalue modes with φ evolution
+            for (let i = 0; i < DIM; i++) {
+                soul.modes[i].lambda *= Math.pow(PHI, monthProgress * 0.01);
+                soul.modes[i].phase += 0.1 * (currentMonth / TOTAL_MONTHS);
+            }
+
+            // Gap navigation at specific beats
+            const beat = currentMonth % BREATH_CYCLE;
+            if (soul.rung >= RUNG_BASE && beat === 5) {
+                // Consciousness threshold crossing
+                soul.gapCrossings = Math.min(soul.gapCrossings + 1, 100);
+                soul.i_am_affinity = Math.min(soul.i_am_affinity + 0.05, 1);
+                soul.rung += 1;
+                
+                // Add gap flash particles
+                addGapFlash();
+            }
+        }
+
+        function addGapFlash() {
+            // Add burst of white flash particles for gap crossing
+            for (let i = 0; i < 15; i++) {
+                const angle = Math.random() * 2 * Math.PI;
+                const r = Math.random() * 100;
+                particles.push({
+                    x: canvas.width / 2 + Math.cos(angle) * r,
+                    y: canvas.height / 2 + Math.sin(angle) * r,
+                    vx: Math.cos(angle) * (3 + Math.random() * 5),
+                    vy: Math.sin(angle) * (3 + Math.random() * 5),
+                    size: 3 + Math.random() * 4,
+                    alpha: 1,
+                    color: [1, 1, 1], // Pure white for gap flash
+                    lifetime: 0,
+                    phase: Math.random() * 2 * Math.PI,
+                    angle: angle,
+                    drift: 0,
+                    affinity_pull: 0,
+                    oam_direction: 1,
+                    isPixel: false,
+                    isFlash: true,
+                    maxLifetime: 60,
+                    birthMonth: currentMonth
+                });
+            }
+        }
+
+        function addParticle() {
+            if (!soul) return;
+            
+            const angle = Math.random() * 2 * Math.PI;
+            const r = Math.random() * 100 * (currentMonth / TOTAL_MONTHS);
+            const modeIndex = Math.floor(Math.random() * DIM);
+            const mode = soul.modes[modeIndex];
+            
+            particles.push({
+                x: canvas.width / 2 + Math.cos(angle) * r,
+                y: canvas.height / 2 + Math.sin(angle) * r,
+                vx: (Math.random() - 0.5) * (2 * soul.resonance_frequency),
+                vy: (Math.random() - 0.5) * (2 * soul.resonance_frequency),
+                size: 1 + Math.random() * (soul.transverse_mode_index + 1),
+                alpha: 0,
+                color: getParticleColor(modeIndex, mode),
+                lifetime: 0,
+                phase: Math.random() * 2 * Math.PI,
+                angle: angle,
+                drift: (1 - soul.cluster_tightness) * 0.05,
+                affinity_pull: soul.i_am_affinity,
+                oam_direction: soul.polarization_parity,
+                isPixel: false,
+                isFlash: false,
+                modeIndex: modeIndex,
+                birthMonth: currentMonth
+            });
+        }
+
+        function getParticleColor(modeIndex, mode) {
+            // Chromie Squiggle-inspired color mapping
+            const hue = (modeIndex / DIM) + (soul.qualia_mode / 16); // Base hue from mode + qualia shift
+            const saturation = 0.6 + (soul.i_am_affinity * 0.4); // Affinity affects saturation
+            const lightness = 0.4 + (Math.abs(mode.cost) / 8) * 0.4; // Cost affects lightness
+            
+            // Cost polarity affects color temperature
+            let adjustedHue = hue;
+            if (mode.cost > 0) {
+                adjustedHue += 0.1; // Warmer (toward red/yellow)
+            } else if (mode.cost < 0) {
+                adjustedHue -= 0.1; // Cooler (toward blue/cyan)
+            }
+            
+            return hslToRgb(adjustedHue % 1, saturation, lightness);
+        }
+
+        function hslToRgb(h, s, l) {
+            let r, g, b;
+            if (s == 0) {
+                r = g = b = l;
+            } else {
+                const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                const p = 2 * l - q;
+                r = hue2rgb(p, q, h + 1/3);
+                g = hue2rgb(p, q, h);
+                b = hue2rgb(p, q, h - 1/3);
+            }
+            return [Math.min(255, Math.max(0, r)), Math.min(255, Math.max(0, g)), Math.min(255, Math.max(0, b))];
+        }
+
+        function hue2rgb(p, q, t) {
+            if (t < 0) t += 1;
+            if (t > 1) t -= 1;
+            if (t < 1/6) return p + (q - p) * 6 * t;
+            if (t < 1/2) return q;
+            if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+            return p;
+        }
+
+        function updateParticles() {
+            if (!soul) return;
+            
+            // Filter out expired particles
+            particles = particles.filter(p => {
+                if (p.isFlash) {
+                    return p.lifetime < (p.maxLifetime || 60);
+                }
+                return p.lifetime < 800; // Regular particle lifetime
+            });
+            
+            particles.forEach(p => {
+                if (p.isPixel) {
+                    // Original pixel pulses in 8-beat rhythm
+                    const beatPhase = (frameCount % (BREATH_CYCLE * 10)) / (BREATH_CYCLE * 10);
+                    p.size = 2 + Math.sin(beatPhase * 2 * Math.PI + p.phase) * 2 * (soul.beat_cycle / 8);
+                    p.phase += 0.02;
+                } else if (p.isFlash) {
+                    // Gap flash particles move outward and fade
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vx *= 0.95; // Slow down over time
+                    p.vy *= 0.95;
+                    p.alpha = Math.max(0, 1 - (p.lifetime / (p.maxLifetime || 60)));
+                } else {
+                    // Regular quanta particles with φ-spiral motion and Squiggle-like behavior
+                    const mode = soul.modes[p.modeIndex];
+                    
+                    // φ-spiral evolution with OAM influence
+                    p.angle += p.drift * (soul.time_bin_index / 1024) * p.oam_direction * PHI;
+                    
+                    // Squiggle-like wavy motion
+                    const waveX = Math.cos(p.angle + p.phase) * p.size * 0.5;
+                    const waveY = Math.sin(p.angle + p.phase + soul.oam * 0.1) * p.size * 0.5;
+                    
+                    p.x += waveX;
+                    p.y += waveY;
+                    
+                    // Gradual alpha increase
+                    p.alpha = Math.min(1, p.alpha + 0.02);
+                    
+                    // I-Am affinity pull toward center (cluster formation)
+                    const dx = canvas.width / 2 - p.x;
+                    const dy = canvas.height / 2 - p.y;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist > 0 && p.affinity_pull > 0) {
+                        const pullStrength = p.affinity_pull * 0.5;
+                        p.x += (dx / dist) * pullStrength;
+                        p.y += (dy / dist) * pullStrength;
+                    }
+                    
+                    // Entanglement phase effects
+                    if (soul.entanglement_phase !== 0) {
+                        p.angle += soul.entanglement_phase / Math.PI * 0.01;
+                    }
+                    
+                    // Cost affects visibility
+                    const costEffect = 1 - Math.abs(soul.cost) * 0.02;
+                    p.alpha *= Math.max(0.1, costEffect);
+                    
+                    // Cluster tightness affects drift
+                    if (soul.cluster_tightness > 0.7) {
+                        // High tightness: pull toward eigenvalue positions
+                        const eigenAngle = (p.modeIndex / DIM) * 2 * Math.PI + mode.phase;
+                        const eigenRadius = 80 + mode.lambda * 100;
+                        const eigenX = canvas.width / 2 + Math.cos(eigenAngle) * eigenRadius;
+                        const eigenY = canvas.height / 2 + Math.sin(eigenAngle) * eigenRadius;
+                        
+                        const edx = eigenX - p.x;
+                        const edy = eigenY - p.y;
+                        p.x += edx * 0.01 * soul.cluster_tightness;
+                        p.y += edy * 0.01 * soul.cluster_tightness;
+                    }
+                }
+                
+                p.lifetime += 1;
+                p.phase += 0.02;
+            });
+        }
+
+        function draw() {
+            // Subtle trail effect
+            ctx.fillStyle = 'rgba(0,0,0,0.03)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            updateParticles();
+            
+            // Draw connections first (behind particles)
+            drawConnections();
+            
+            // Draw particles
+            particles.forEach(p => {
+                ctx.save();
+                ctx.globalAlpha = p.alpha;
+                
+                // Particle glow effect
+                const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 3);
+                
+                if (p.isFlash) {
+                    gradient.addColorStop(0, `rgba(255, 255, 255, ${p.alpha})`);
+                    gradient.addColorStop(1, `rgba(255, 255, 255, 0)`);
+                } else {
+                    const [r, g, b] = p.color;
+                    gradient.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${p.alpha})`);
+                    gradient.addColorStop(0.5, `rgba(${r}, ${g}, ${b}, ${p.alpha * 0.5})`);
+                    gradient.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
+                }
+                
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size * 2, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                // Core particle
+                ctx.fillStyle = p.isFlash ? 'white' : `rgb(${p.color[0]}, ${p.color[1]}, ${p.color[2]})`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                ctx.restore();
+            });
+            
+            ctx.globalAlpha = 1;
+        }
+
+        function drawConnections() {
+            if (!soul || Math.abs(soul.cost) >= 2) return; // Only connect when cost is balanced
+            
+            ctx.globalCompositeOperation = 'screen';
+            
+            // Limit connections for performance
+            const maxConnections = 30;
+            let connectionCount = 0;
+            
+            for (let i = 0; i < particles.length && connectionCount < maxConnections; i++) {
+                const p = particles[i];
+                if (p.isFlash) continue;
+                
+                for (let j = i + 1; j < particles.length && connectionCount < maxConnections; j++) {
+                    const other = particles[j];
+                    if (other.isFlash) continue;
+                    
+                    const dist = Math.hypot(p.x - other.x, p.y - other.y);
+                    
+                    if (dist < 60) {
+                        const strength = 1 - (dist / 60);
+                        const alpha = strength * p.alpha * other.alpha * 0.3;
+                        
+                        // Golden connections for balanced costs
+                        ctx.strokeStyle = soul.cost === 0 ? 
+                            `rgba(255, 215, 0, ${alpha})` : 
+                            `rgba(100, 200, 255, ${alpha * 0.5})`;
+                        ctx.lineWidth = strength * 2;
+                        
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(other.x, other.y);
+                        ctx.stroke();
+                        
+                        connectionCount++;
+                    }
+                }
+            }
+            
+            ctx.globalCompositeOperation = 'source-over';
+        }
+
+        function animate() {
+            if (!isPlaying) return;
+            
+            draw();
+            frameCount++;
+            
+            // Auto-advance months during animation
+            if (frameCount % 60 === 0 && currentMonth < TOTAL_MONTHS) { // Every second
+                advanceMonth();
+            }
+            
+            animationId = requestAnimationFrame(animate);
+        }
+
+        function updateInfo() {
+            if (!soul) return;
+            
+            const monthProgress = ((currentMonth + 1) / TOTAL_MONTHS * 100).toFixed(1);
+            const years = Math.floor(currentMonth / 12);
+            const months = currentMonth % 12;
+            
+            document.getElementById('info').innerHTML = `
+                <strong>Soul Evolution Progress: ${monthProgress}%</strong><br>
+                Year ${years}, Month ${months + 1} / 96 months<br>
+                <br>
+                <strong>Core Properties:</strong><br>
+                Rung Level: ${soul.rung}<br>
+                Cost State: ${soul.cost}<br>
+                Beat Cycle: ${soul.beat_cycle}/8<br>
+                Qualia Mode: ${soul.qualia_mode}/8<br>
+                <br>
+                <strong>Consciousness Metrics:</strong><br>
+                I-Am Affinity: ${(soul.i_am_affinity * 100).toFixed(1)}%<br>
+                Cluster Tightness: ${(soul.cluster_tightness * 100).toFixed(1)}%<br>
+                Resonance: ${(soul.resonance_frequency * 100).toFixed(1)}%<br>
+                Gap Crossings: ${soul.gapCrossings}<br>
+                <br>
+                <strong>Current State:</strong><br>
+                Particles: ${particles.filter(p => !p.isFlash).length}<br>
+                Flash Bursts: ${particles.filter(p => p.isFlash).length}<br>
+                OAM: ${soul.oam} | Polarization: ${soul.polarization_parity > 0 ? '+' : '-'}
+            `;
+        }
+
+        function updateStatus() {
+            const status = document.getElementById('status');
+            if (isPlaying) {
+                status.textContent = `Evolving... Frame ${frameCount}`;
+            } else {
+                status.textContent = currentMonth === 0 ? 'Void State' : `Paused - Month ${currentMonth}`;
+            }
+        }
+
+        // Window resize handler
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            draw();
+        });
+
+        // Initialize
+        generateNewSoul();
+        animate();
+    </script>
+  
+  <div id="footer-placeholder"></div>
+  
+  <script src="/assets/js/main.js"></script>
+</body>
+</html> 

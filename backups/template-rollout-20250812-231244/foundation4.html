@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Foundation 4: Unitary Evolution</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/assets/css/template-core.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div id="sitewide-banner-placeholder"></div>
+
+  <div class="grid-container">
+    <header>
+      <h1>FOUNDATION 4: UNITARY EVOLUTION</h1>
+      <p>Preserves inner product (info conservation)</p>
+    </header>
+    <nav class="foundation-nav">
+      <a href="/index.html">Home</a>
+      <a href="/papers/index.html">Papers</a>
+      <a href="/journal.html">Journal</a>
+      <a href="/foundations.html">Foundations</a>
+      <a href="/pattern-layer.html">Pattern Layer</a>
+      <a href="/resources.html">Resources</a>
+      <a href="/about.html">About</a>
+    </nav>
+    <main class="cascade academic-page">
+      <section>
+        <h2>Plain English Explanation</h2>
+        <p>Information is conserved—recognition transforms but doesn't destroy data. Like quantum evolution, changes are reversible. Derives from positive cost: energy conservation implies info preservation.</p>
+      </section>
+      <section>
+        <h2>Lean Code: Unitary Transform</h2>
+        <pre><code>structure UnitaryTransform (n : Nat) where
+  forward : QuantumState n → QuantumState n
+  backward : QuantumState n → QuantumState n
+  left_inv : ∀ ψ, backward (forward ψ) = ψ
+  right_inv : ∀ ψ, forward (backward ψ) = ψ</code></pre>
+        <p>Explanation: Transformations that are reversible, preserving state.</p>
+      </section>
+      <section>
+        <h2>Lean Theorem: Info Conservation</h2>
+        <pre><code>theorem information_conservation {A B : Type}
+  (hA : Finite A) (hB : Finite B) (_ : Recognition A B) :
+  ∃ (n : Nat), n = information_content A hA + information_content B hB := by
+  refine ⟨hA.n + hB.n, ?_⟩
+  rfl</code></pre>
+        <p>Explanation: Recognition preserves total information amount.</p>
+      </section>
+    </main>
+    <footer>
+      <p>© 2025 Recognition Science Institute</p>
+    </footer>
+  </div>
+  
+  <div id="footer-placeholder"></div>
+  
+  <script src="/assets/js/main.js"></script>
+</body>
+</html> 

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mappan Replica Generator V2</title>
+    
+  <link rel="stylesheet" href="/assets/css/template-core.css">
+</head>
+<body class="academic-page">
+  <div id="header-placeholder"></div>
+  <div id="sitewide-banner-placeholder"></div>
+
+    <h1>Mappan Sketchbook B Generator V2</h1>
+    <div class="subtitle">Enhanced Variety • Dynamic Palettes • Variable Geometry</div>
+    
+    <div class="controls">
+        <button onclick="generateImage()">Generate New</button>
+        <button onclick="generateFromSeed()">Use Seed</button>
+        <input type="number" id="seedInput" placeholder="Enter seed..." min="1" max="99999">
+        <button onclick="shareSeed()">Share Current</button>
+    </div>
+    
+    <canvas id="canvas" width="1024" height="1024"></canvas>
+    <div class="info" id="seedDisplay">Seed: Loading...</div>
+    <a id="download" href="#" download="mappan-v2.png">Download Image</a>
+
+    <script>
+        const SIZE = 1024;
+        const PHI = (1 + Math.sqrt(5)) / 2;
+        const VIRTUES = ['Love', 'Justice', 'Forgiveness', 'Wisdom', 'Courage', 'Temperance', 'Prudence', 'Compassion', 'Gratitude', 'Patience', 'Humility', 'Hope', 'Creativity', 'Sacrifice'];
+        
+        let currentSeed = 0;
+        
+        // Simple seeded random
+        function seededRand(seed) {
+            seed = (seed * 9301 + 49297) % 233280;
+            return seed / 233280;
+        }
+        
+        // Perlin-like noise for organic variations
+        function simpleNoise(x, seed = 0) {
+            x = x * 0.01 + seed;
+            return (Math.sin(x * 12.9898) * 43758.5453) % 1;
+        }
+        
+        // Convert HSL to hex
+        function hslToHex(h, s, l) {
+            h = h % 360;
+            s /= 100;
+            l /= 100;
+            const a = s * Math.min(l, 1 - l);
+            const f = n => {
+                const k = (n + h / 30) % 12;
+                const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+                return Math.round(255 * color).toString(16).padStart(2, '0');
+            };
+            return `#${f(0)}${f(8)}${f(4)}`;
+        }
+        
+        // Generate dynamic palette from master hue
+        function generatePalette(seed) {
+            const masterHue = seededRand(seed) * 360;
+            const mode = Math.floor(seededRand(seed + 100) * 3); // 0=complementary, 1=triadic, 2=monochrome
+            
+            let bg, stripes, arrow;
+            
+            if (mode === 0) { // Complementary
+                bg = hslToHex(masterHue, 80 + seededRand(seed + 1) * 20, 45 + seededRand(seed + 2) * 20);
+                const compHue = (masterHue + 180) % 360;
+                stripes = [
+                    hslToHex(compHue, 90, 60),
+                    hslToHex(compHue + 30, 85, 55),
+                    hslToHex(compHue - 30, 85, 55),
+                    hslToHex(masterHue + 45, 75, 70),
+                    hslToHex(masterHue - 45, 75, 70),
+                    hslToHex(compHue + 60, 80, 50)
+                ];
+            } else if (mode === 1) { // Triadic
+                bg = hslToHex(masterHue, 85, 50);
+                stripes = [
+                    hslToHex(masterHue + 120, 90, 60),
+                    hslToHex(masterHue + 240, 90, 60),
+                    hslToHex(masterHue + 60, 80, 65),
+                    hslToHex(masterHue + 180, 80, 65),
+                    hslToHex(masterHue + 300, 80, 65),
+                    hslToHex(masterHue + 90, 75, 55)
+                ];
+            } else { // Monochrome
+                bg = hslToHex(masterHue, 70, 40);
+                stripes = [
+                    hslToHex(masterHue, 90, 70),
+                    hslToHex(masterHue, 85, 60),
+                    hslToHex(masterHue, 80, 75),
+                    hslToHex(masterHue, 95, 55),
+                    hslToHex(masterHue, 75, 65),
+                    hslToHex(masterHue, 85, 50)
+                ];
+            }
+            
+            arrow = '#000000';
+            
+            return { bg, stripes, arrow, mode: ['Complementary', 'Triadic', 'Monochrome'][mode] };
+        }
+        
+        // Convert hex to RGB
+        function hexToRgb(hex) {
+            hex = hex.replace('#', '');
+            return { 
+                r: parseInt(hex.substr(0,2), 16), 
+                g: parseInt(hex.substr(2,2), 16), 
+                b: parseInt(hex.substr(4,2), 16) 
+            };
+        }
+        
+        // Adjust color brightness
+        function adjustColor(color, amount) {
+            let col = hexToRgb(color);
+            col.r = Math.max(0, Math.min(255, col.r + amount));
+            col.g = Math.max(0, Math.min(255, col.g + amount));
+            col.b = Math.max(0, Math.min(255, col.b + amount));
+            return `rgb(${col.r},${col.g},${col.b})`;
+        }
+        
+        // Enhanced texture with better blending
+        function addTexture(ctx) {
+            const imageData = ctx.getImageData(0, 0, SIZE, SIZE);
+            const data = imageData.data;
+            for (let i = 0; i < data.length; i += 4) {
+                const noise = (Math.random() - 0.5) * 12;
+                data[i] = Math.max(0, Math.min(255, data[i] + noise));
+                data[i+1] = Math.max(0, Math.min(255, data[i+1] + noise));
+                data[i+2] = Math.max(0, Math.min(255, data[i+2] + noise));
+            }
+            ctx.putImageData(imageData, 0, 0);
+        }
+        
+        // Enhanced rotated rectangle with variable angles
+        function drawRotatedRect(ctx, x, y, w, h, angle, color, eigenvalue = 1, angleVariation = 0) {
+            ctx.save();
+            ctx.translate(x + w/2, y + h/2);
+            ctx.rotate((angle + angleVariation) * Math.PI / 180);
+            
+            // Create gradient for depth
+            const grad = ctx.createLinearGradient(0, -h/2, 0, h/2);
+            grad.addColorStop(0, adjustColor(color, 15));
+            grad.addColorStop(0.5, adjustColor(color, Math.sin(eigenvalue) * 8));
+            grad.addColorStop(1, adjustColor(color, -25));
+            
+            ctx.fillStyle = grad;
+            ctx.fillRect(-w/2, -h/2, w, h);
+            
+            // Add slight edge variation
+            const edgeNoise = eigenvalue * 1.5;
+            ctx.strokeStyle = adjustColor(color, -40);
+            ctx.lineWidth = 0.8 + Math.sin(eigenvalue) * 0.3;
+            ctx.strokeRect(-w/2 + edgeNoise, -h/2, w - edgeNoise*2, h);
+            
+            ctx.restore();
+        }
+        
+        // Enhanced chevron with more variety
+        function drawChevron(ctx, x, y, size, color, angle, courage, shapeVariant = 0) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(angle * Math.PI / 180);
+            
+            const boldness = 0.8 + courage * 0.4;
+            const adjustedSize = size * boldness;
+            
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            
+            if (shapeVariant < 0.3) { // Diamond/chevron
+                ctx.moveTo(-adjustedSize/2, 0);
+                ctx.lineTo(0, -adjustedSize/2);
+                ctx.lineTo(adjustedSize/2, 0);
+                ctx.lineTo(0, adjustedSize/2);
+            } else if (shapeVariant < 0.6) { // Arrow
+                ctx.moveTo(-adjustedSize/3, -adjustedSize/4);
+                ctx.lineTo(adjustedSize/2, 0);
+                ctx.lineTo(-adjustedSize/3, adjustedSize/4);
+                ctx.lineTo(-adjustedSize/6, 0);
+            } else { // Triangle
+                ctx.moveTo(0, -adjustedSize/2);
+                ctx.lineTo(adjustedSize/2, adjustedSize/2);
+                ctx.lineTo(-adjustedSize/2, adjustedSize/2);
+            }
+            
+            ctx.closePath();
+            ctx.fill();
+            
+            ctx.strokeStyle = adjustColor(color, 20);
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            
+            ctx.restore();
+        }
+        
+        function generateImage(seedOverride = null) {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            
+            currentSeed = seedOverride || Math.floor(Math.random() * 99999);
+            
+            // Recognition Science parameters
+            const delta = seededRand(currentSeed) * 8 - 4;
+            const virtueScores = VIRTUES.map((_, i) => seededRand(currentSeed + i * 10));
+            const eigenvalues = new Array(8).fill(0).map((_, i) => PHI ** (i / 4));
+            
+            // Generate dynamic palette
+            const palette = generatePalette(currentSeed);
+            
+            // Background with radial gradient
+            const bgGrad = ctx.createRadialGradient(SIZE/2, SIZE/2, 0, SIZE/2, SIZE/2, SIZE*0.8);
+            bgGrad.addColorStop(0, palette.bg);
+            bgGrad.addColorStop(1, adjustColor(palette.bg, -15));
+            ctx.fillStyle = bgGrad;
+            ctx.fillRect(0, 0, SIZE, SIZE);
+            
+            // Variable composition area (delta + phi influence)
+            const deltaOffset = delta * 0.03;
+            const phiRatio = seededRand(currentSeed + 50) > 0.5 ? PHI : 1/PHI;
+            
+            const zoneX = SIZE * (0.08 + seededRand(currentSeed+1) * 0.25 + deltaOffset);
+            const zoneY = SIZE * (0.1 + seededRand(currentSeed+2) * 0.2 + deltaOffset);
+            const zoneW = SIZE * (0.4 + seededRand(currentSeed+3) * 0.35) * phiRatio;
+            const zoneH = SIZE * (0.45 + seededRand(currentSeed+4) * 0.3);
+            
+            // Variable base angle with Justice influence
+            const baseAngle = -60 + seededRand(currentSeed+5) * 120 + virtueScores[1] * 30;
+            
+            // Variable stripe count (3-10) influenced by Wisdom
+            const stripeCount = 3 + Math.floor(virtueScores[3] * 7);
+            
+            // Draw stripes with individual angle variations
+            for (let i = 0; i < stripeCount; i++) {
+                const color = palette.stripes[i % palette.stripes.length];
+                const eigenvalue = eigenvalues[i % 8];
+                
+                // Individual stripe angle variation (fan effect)
+                const angleVariation = (seededRand(currentSeed + 200 + i) - 0.5) * 20; // ±10°
+                
+                // Position with micro-offsets using noise
+                const stripeSpacing = zoneW / Math.max(1, stripeCount - 1);
+                const noiseOffset = simpleNoise(i * 5, currentSeed) * 20 - 10;
+                const x = zoneX + i * stripeSpacing + noiseOffset;
+                
+                // Spacing variation for clustering effect
+                const spacingVariation = seededRand(currentSeed + 300 + i) * 0.3 + 0.85;
+                const y = zoneY + (noiseOffset * 0.5);
+                
+                // Variable width influenced by Courage and Temperance
+                const width = (zoneW / stripeCount) * (0.7 + virtueScores[4] * 0.5) * spacingVariation;
+                
+                // Height with eigenvalue and Prudence influence
+                const stripeHeight = zoneH * 1.1 * (1 + (eigenvalue % 1) * 0.4) * (0.9 + virtueScores[6] * 0.2);
+                
+                drawRotatedRect(ctx, x, y, width, stripeHeight, baseAngle, color, eigenvalue, angleVariation);
+            }
+            
+            // Variable arrow count and shapes
+            const arrowCount = 1 + Math.floor(virtueScores[11] * 3); // Hope: 1-4 arrows
+            
+            for (let i = 0; i < arrowCount; i++) {
+                const chevX = zoneX + zoneW * (0.2 + seededRand(currentSeed+400+i) * 0.6);
+                const chevY = zoneY + zoneH * (0.2 + seededRand(currentSeed+401+i) * 0.6);
+                const chevSize = Math.min(zoneW, zoneH) * (0.15 + seededRand(currentSeed+402+i) * 0.4);
+                const chevAngle = baseAngle + seededRand(currentSeed+403+i) * 180;
+                const shapeVariant = seededRand(currentSeed+404+i);
+                
+                drawChevron(ctx, chevX, chevY, chevSize, palette.arrow, chevAngle, virtueScores[4], shapeVariant);
+            }
+            
+            // Occasional composition rotation for extreme Justice values
+            if (virtueScores[1] > 0.85 || virtueScores[1] < 0.15) {
+                const rotationAngle = (virtueScores[1] - 0.5) * 60; // ±30°
+                ctx.save();
+                ctx.translate(SIZE/2, SIZE/2);
+                ctx.rotate(rotationAngle * Math.PI / 180);
+                ctx.translate(-SIZE/2, -SIZE/2);
+                // Note: Would need to redraw here for rotation, keeping simple for now
+                ctx.restore();
+            }
+            
+            // Add texture
+            addTexture(ctx);
+            
+            // Variable blur based on Temperance
+            const blurAmount = 0.3 + virtueScores[5] * 0.4;
+            ctx.filter = `blur(${blurAmount}px)`;
+            ctx.drawImage(canvas, 0, 0);
+            ctx.filter = 'none';
+            
+            // Professional frame
+            ctx.strokeStyle = adjustColor(palette.bg, -60);
+            ctx.lineWidth = 4;
+            ctx.strokeRect(2, 2, SIZE-4, SIZE-4);
+            
+            // Update UI
+            document.getElementById('seedDisplay').textContent = `Seed: ${currentSeed} • Palette: ${palette.mode} • Stripes: ${stripeCount} • Arrows: ${arrowCount}`;
+            document.getElementById('download').href = canvas.toDataURL('image/png');
+            document.getElementById('download').download = `mappan-v2-${currentSeed}.png`;
+            
+            // Update URL
+            const url = new URL(window.location);
+            url.searchParams.set('seed', currentSeed);
+            window.history.replaceState({}, '', url);
+        }
+        
+        function generateFromSeed() {
+            const seedInput = document.getElementById('seedInput');
+            const seed = parseInt(seedInput.value);
+            if (seed && seed > 0 && seed < 100000) {
+                generateImage(seed);
+            } else {
+                alert('Please enter a valid seed (1-99999)');
+            }
+        }
+        
+        function shareSeed() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                alert('URL copied to clipboard!');
+            });
+        }
+        
+        // Check for seed in URL on load
+        window.addEventListener('load', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const seedParam = urlParams.get('seed');
+            if (seedParam) {
+                const seed = parseInt(seedParam);
+                if (seed > 0 && seed < 100000) {
+                    generateImage(seed);
+                    return;
+                }
+            }
+            generateImage(); // Default generation
+        });
+    </script>
+  
+  <div id="footer-placeholder"></div>
+  
+  <script src="/assets/js/main.js"></script>
+</body>
+</html> 
