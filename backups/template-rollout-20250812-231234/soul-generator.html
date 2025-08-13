@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soul Generator - Recognition Science</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        .soul-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2em;
+        }
+        
+        .soul-header {
+            text-align: center;
+            margin-bottom: 2em;
+            padding: 2em;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            border-radius: 12px;
+        }
+        
+        .soul-generator {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2em;
+            margin-top: 2em;
+        }
+        
+        .soul-controls {
+            background: white;
+            padding: 2em;
+            border: 2px solid #000;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+        
+        .soul-visualization {
+            background: #000;
+            border: 2px solid #000;
+            border-radius: 8px;
+            height: 500px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .generate-btn {
+            background: #007AFF;
+            color: white;
+            border: none;
+            padding: 1em 2em;
+            font-size: 1.1em;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 1.5em;
+            transition: all 0.2s ease;
+        }
+        
+        .generate-btn:hover {
+            background: #0056CC;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 122, 255, 0.3);
+        }
+        
+        .soul-data {
+            background: #f8f9fa;
+            padding: 1em;
+            border-radius: 6px;
+            margin: 1em 0;
+            font-family: 'SF Mono', monospace;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+        
+        .virtue-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1em;
+            margin: 1em 0;
+        }
+        
+        .virtue-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 1em;
+            text-align: center;
+        }
+        
+        .virtue-score {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #007AFF;
+            margin: 0.5em 0;
+        }
+        
+        .virtue-name {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 0.5em;
+        }
+        
+        @media (max-width: 768px) {
+            .soul-generator {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div id="sitewide-banner-placeholder"></div>
+
+    <div class="soul-container">
+        <div class="soul-header">
+            <h1>🌟 Recognition Science Soul Generator</h1>
+            <p>Generate unique souls using Light-Native Assembly Language (LNAL) and Recognition Science mathematics</p>
+        </div>
+
+        <div class="soul-generator">
+            <div class="soul-controls">
+                <button class="generate-btn" onclick="generateSoul()">🌟 Generate Soul</button>
+                
+                <div id="soulInfo" style="display: none;">
+                    <h3>Soul Parameters</h3>
+                    <div class="soul-data" id="soulData"></div>
+                    
+                    <h3>Ethical Virtues</h3>
+                    <div class="virtue-grid" id="virtueGrid"></div>
+                    
+                    <h3>Rarity</h3>
+                    <div class="soul-data" id="rarityData"></div>
+                </div>
+            </div>
+            
+            <div class="soul-visualization">
+                <canvas id="soulCanvas" width="600" height="500"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Recognition Science Constants
+        const PHI = 1.618033988749;
+        const GAP_45 = 45;
+        const E_COH = 0.511; // MeV
+        
+        // 14 Virtues from Recognition Science
+        const VIRTUES = [
+            { name: 'Love', desc: 'Unconditional positive recognition flow' },
+            { name: 'Justice', desc: 'Balanced ledger symmetry' },
+            { name: 'Forgiveness', desc: 'Debt resolution and healing' },
+            { name: 'Wisdom', desc: 'Pattern recognition across scales' },
+            { name: 'Courage', desc: 'Forward movement despite uncertainty' },
+            { name: 'Temperance', desc: 'Balanced energy distribution' },
+            { name: 'Prudence', desc: 'Optimal path selection' },
+            { name: 'Compassion', desc: 'Shared recognition resonance' },
+            { name: 'Gratitude', desc: 'Positive feedback amplification' },
+            { name: 'Patience', desc: 'Temporal coherence maintenance' },
+            { name: 'Humility', desc: 'Recognition of interconnection' },
+            { name: 'Hope', desc: 'Future possibility enhancement' },
+            { name: 'Creativity', desc: 'Novel pattern generation' },
+            { name: 'Sacrifice', desc: 'Self-giving for greater harmony' }
+        ];
+        
+        // Simple LNAL Simulator
+        class SimpleLNALSimulator {
+            constructor() {
+                this.registers = new Array(8).fill(0);
+                this.operations = [];
+                this.eigenvalues = [];
+            }
+            
+            fold(value, register) {
+                this.registers[register] = (this.registers[register] + value) % 8;
+                this.operations.push(`FOLD ${value.toFixed(2)} → R${register}`);
+            }
+            
+            braid(registers) {
+                const temp = this.registers[registers[0]];
+                this.registers[registers[0]] = this.registers[registers[1]];
+                this.registers[registers[1]] = this.registers[registers[2]];
+                this.registers[registers[2]] = temp;
+                this.operations.push(`BRAID [${registers.join(',')}]`);
+            }
+            
+            balance(register) {
+                this.registers[register] = -this.registers[register];
+                this.operations.push(`BALANCE R${register}`);
+            }
+            
+            generateEigenvalues(delta, energy) {
+                for (let k = 0; k < 8; k++) {
+                    const lambda = energy * Math.pow(PHI, k / 8);
+                    this.eigenvalues.push(lambda);
+                }
+            }
+        }
+        
+        // Soul Generator Function
+        function generateSoul() {
+            console.log('🌟 Generating new soul...');
+            
+            // Create LNAL simulator
+            const lnal = new SimpleLNALSimulator();
+            
+            // Generate random delta
+            const delta = parseFloat((Math.random() * 8 - 4).toFixed(2));
+            
+            // Calculate soul energy
+            const energy = E_COH * Math.pow(PHI, GAP_45 + delta);
+            
+            // Run LNAL operations
+            lnal.fold(GAP_45 + delta, 0);
+            lnal.generateEigenvalues(delta, energy);
+            
+            // Additional random operations
+            const numOps = 3 + Math.floor(Math.random() * 5);
+            for (let i = 0; i < numOps; i++) {
+                const opType = Math.floor(Math.random() * 3);
+                switch(opType) {
+                    case 0:
+                        lnal.fold(Math.random() * 2 - 1, Math.floor(Math.random() * 8));
+                        break;
+                    case 1:
+                        const regs = [0,1,2].map(() => Math.floor(Math.random() * 8));
+                        lnal.braid(regs);
+                        break;
+                    case 2:
+                        lnal.balance(Math.floor(Math.random() * 8));
+                        break;
+                }
+            }
+            
+            // Calculate virtue scores
+            const virtueScores = VIRTUES.map((virtue, i) => {
+                const base = Math.abs(lnal.registers[i % 8]) / 8;
+                const eigenInfluence = Math.abs(lnal.eigenvalues[i % 8]) / energy;
+                const score = Math.min(1, (base + eigenInfluence) / 2 + Math.random() * 0.2);
+                return {
+                    name: virtue.name,
+                    desc: virtue.desc,
+                    score: score,
+                    percentage: Math.round(score * 100)
+                };
+            });
+            
+            // Calculate rarity
+            const avgScore = virtueScores.reduce((sum, v) => sum + v.score, 0) / virtueScores.length;
+            let rarity = 'Common';
+            if (avgScore > 0.9) rarity = 'Mythic';
+            else if (avgScore > 0.8) rarity = 'Legendary';
+            else if (avgScore > 0.7) rarity = 'Epic';
+            else if (avgScore > 0.6) rarity = 'Rare';
+            
+            // Generate unique soul ID
+            const soulId = Math.random().toString(36).substr(2, 9).toUpperCase();
+            
+            // Update UI
+            updateSoulDisplay(delta, energy, lnal, virtueScores, rarity, soulId);
+            
+            // Visualize soul
+            visualizeSoul(lnal.eigenvalues, delta, virtueScores);
+            
+            console.log('✅ Soul generated successfully!');
+        }
+        
+        function updateSoulDisplay(delta, energy, lnal, virtues, rarity, soulId) {
+            // Show soul info
+            document.getElementById('soulInfo').style.display = 'block';
+            
+            // Update soul data
+            document.getElementById('soulData').innerHTML = `
+                <strong>Soul ID:</strong> ${soulId}<br>
+                <strong>δ (Delta):</strong> ${delta}<br>
+                <strong>Energy:</strong> ${energy.toFixed(6)} eV<br>
+                <strong>Eigenvalues:</strong> ${lnal.eigenvalues.length}<br>
+                <strong>LNAL Operations:</strong> ${lnal.operations.length}
+            `;
+            
+            // Update virtue grid
+            const virtueGrid = document.getElementById('virtueGrid');
+            virtueGrid.innerHTML = virtues.map(virtue => `
+                <div class="virtue-card">
+                    <div class="virtue-name">${virtue.name}</div>
+                    <div class="virtue-score">${virtue.percentage}%</div>
+                </div>
+            `).join('');
+            
+            // Update rarity
+            document.getElementById('rarityData').innerHTML = `
+                <strong>Rarity:</strong> ${rarity}<br>
+                <strong>Average Virtue:</strong> ${Math.round(virtues.reduce((sum, v) => sum + v.percentage, 0) / virtues.length)}%
+            `;
+        }
+        
+        function visualizeSoul(eigenvalues, delta, virtues) {
+            const canvas = document.getElementById('soulCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Clear canvas
+            ctx.fillStyle = '#000011';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            
+            // Draw central core
+            const coreRadius = 20 + Math.abs(delta) * 5;
+            const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, coreRadius);
+            gradient.addColorStop(0, '#FFD700');
+            gradient.addColorStop(0.5, '#FF6B35');
+            gradient.addColorStop(1, '#4169E1');
+            
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, coreRadius, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Draw eigenvalue orbits
+            eigenvalues.forEach((eigenvalue, i) => {
+                const angle = (i / eigenvalues.length) * Math.PI * 2;
+                const radius = 60 + i * 15;
+                const x = centerX + Math.cos(angle) * radius;
+                const y = centerY + Math.sin(angle) * radius;
+                
+                // Eigenvalue particle
+                ctx.fillStyle = `hsl(${(i * 45) % 360}, 70%, 60%)`;
+                ctx.beginPath();
+                ctx.arc(x, y, 8, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Orbit path
+                ctx.strokeStyle = `hsl(${(i * 45) % 360}, 50%, 40%)`;
+                ctx.lineWidth = 1;
+                ctx.setLineDash([5, 5]);
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.setLineDash([]);
+            });
+            
+            // Draw virtue influences as particles
+            virtues.forEach((virtue, i) => {
+                if (virtue.score > 0.5) {
+                    for (let j = 0; j < Math.floor(virtue.score * 20); j++) {
+                        const angle = Math.random() * Math.PI * 2;
+                        const distance = 30 + Math.random() * 200;
+                        const x = centerX + Math.cos(angle) * distance;
+                        const y = centerY + Math.sin(angle) * distance;
+                        
+                        ctx.fillStyle = `hsla(${(i * 25) % 360}, 60%, 70%, ${virtue.score})`;
+                        ctx.beginPath();
+                        ctx.arc(x, y, 2, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+            });
+        }
+        
+        // Initialize
+        console.log('Soul Generator initialized');
+    </script>
+  
+  <div id="footer-placeholder"></div>
+  
+  <script src="/assets/js/main.js"></script>
+</body>
+</html> 

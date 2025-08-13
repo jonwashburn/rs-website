@@ -1,478 +1,307 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Particle Mass Calculator - Recognition Science</title>
-    <link rel="stylesheet" href="assets/css/main.css">
-    <style>
-        .mass-hero {
-            background: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 50%, #ec4899 100%);
-            color: white;
-            padding: 4rem 2rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .mass-hero::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="1" fill="white" opacity="0.3"/><circle cx="80" cy="40" r="1" fill="white" opacity="0.3"/><circle cx="50" cy="70" r="1" fill="white" opacity="0.3"/><circle cx="30" cy="90" r="1" fill="white" opacity="0.3"/><circle cx="70" cy="10" r="1" fill="white" opacity="0.3"/></svg>') repeat;
-            animation: drift 20s linear infinite;
-        }
-        
-        @keyframes drift {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(100px, 100px); }
-        }
-        
-        .formula-display {
-            background: linear-gradient(135deg, #f3f4f6, #ffffff);
-            border: 2px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 2rem;
-            margin: 2rem auto;
-            max-width: 600px;
-            text-align: center;
-            font-size: 1.5rem;
-            font-family: 'Courier New', monospace;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-        
-        .mass-calculator {
-            background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            margin: 2rem auto;
-            max-width: 1200px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-        }
-        
-        .particle-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-        
-        .particle-card {
-            background: linear-gradient(135deg, #fafafa, #f3f4f6);
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .particle-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            background: linear-gradient(135deg, #ffffff, #f9fafb);
-        }
-        
-        .particle-card.selected {
-            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
-        }
-        
-        .particle-name {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #1f2937;
-            margin-bottom: 0.5rem;
-        }
-        
-        .particle-symbol {
-            display: inline-block;
-            background: #3b82f6;
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 999px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-        
-        .mass-value {
-            font-size: 1.75rem;
-            font-weight: 800;
-            color: #7c3aed;
-            margin: 0.5rem 0;
-        }
-        
-        .mass-details {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.5rem;
-            margin-top: 1rem;
-            font-size: 0.875rem;
-        }
-        
-        .detail-label {
-            color: #6b7280;
-        }
-        
-        .detail-value {
-            font-weight: 600;
-            color: #374151;
-            text-align: right;
-        }
-        
-        .calculation-display {
-            background: #1f2937;
-            color: #10b981;
-            padding: 2rem;
-            border-radius: 12px;
-            margin: 2rem 0;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            overflow-x: auto;
-            white-space: pre-wrap;
-            line-height: 1.6;
-        }
-        
-        .run-button {
-            background: linear-gradient(135deg, #3b82f6, #7c3aed);
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 8px;
-            font-size: 1.125rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .run-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(59,130,246,0.3);
-        }
-        
-        .run-button:active {
-            transform: translateY(0);
-        }
-        
-        .spinner {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .tabs {
-            display: flex;
-            gap: 1rem;
-            border-bottom: 2px solid #e5e7eb;
-            margin-bottom: 2rem;
-        }
-        
-        .tab {
-            padding: 0.75rem 1.5rem;
-            background: none;
-            border: none;
-            font-size: 1rem;
-            font-weight: 600;
-            color: #6b7280;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-        }
-        
-        .tab:hover {
-            color: #374151;
-        }
-        
-        .tab.active {
-            color: #3b82f6;
-        }
-        
-        .tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: #3b82f6;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .explanation-box {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            border-left: 4px solid #f59e0b;
-            padding: 1.5rem;
-            margin: 2rem 0;
-            border-radius: 8px;
-        }
-        
-        .comparison-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 2rem 0;
-        }
-        
-        .comparison-table th {
-            background: #f3f4f6;
-            padding: 1rem;
-            text-align: left;
-            font-weight: 600;
-            border-bottom: 2px solid #e5e7eb;
-        }
-        
-        .comparison-table td {
-            padding: 1rem;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        
-        .comparison-table tr:hover {
-            background: #f9fafb;
-        }
-        
-        .delta-badge {
-            display: inline-block;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.875rem;
-            font-weight: 600;
-        }
-        
-        .delta-low {
-            background: #dcfce7;
-            color: #16a34a;
-        }
-        
-        .delta-medium {
-            background: #fed7aa;
-            color: #ea580c;
-        }
-        
-        .delta-high {
-            background: #fecaca;
-            color: #dc2626;
-        }
-        
-        /* Calculation Details Section */
-        .calculation-details {
-            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
-            border: 2px solid #0284c7;
-            border-radius: 12px;
-            padding: 2rem;
-            margin: 2rem auto;
-            max-width: 900px;
-            display: none;
-            animation: slideDown 0.3s ease;
-        }
-        
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .calculation-details.active {
-            display: block;
-        }
-        
-        .calc-header {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #0c4a6e;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid #0284c7;
-            padding-bottom: 0.5rem;
-        }
-        
-        .calc-step {
-            background: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1rem 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        
-        .calc-step-title {
-            font-weight: 600;
-            color: #0369a1;
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
-        }
-        
-        .calc-formula {
-            background: #f8fafc;
-            border-left: 4px solid #0284c7;
-            padding: 1rem;
-            margin: 1rem 0;
-            font-family: 'Courier New', monospace;
-            font-size: 1.2rem;
-        }
-        
-        .calc-value {
-            display: inline-block;
-            background: #dbeafe;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-weight: 600;
-            margin: 0 0.25rem;
-        }
-        
-        /* Parameter-Free Audit Modal */
-        .audit-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 10000;
-            overflow-y: auto;
-        }
-        
-        .audit-modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .audit-content {
-            background: white;
-            border-radius: 16px;
-            padding: 3rem;
-            max-width: 900px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-        }
-        
-        .audit-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            width: 32px;
-            height: 32px;
-            background: #f3f4f6;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.5rem;
-            line-height: 1;
-            color: #6b7280;
-            transition: all 0.2s;
-        }
-        
-        .audit-close:hover {
-            background: #e5e7eb;
-            color: #374151;
-        }
-        
-        .audit-title {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #111827;
-            margin-bottom: 1rem;
-        }
-        
-        .audit-subtitle {
-            color: #6b7280;
-            margin-bottom: 2rem;
-            font-size: 1.1rem;
-        }
-        
-        .audit-section {
-            margin: 2rem 0;
-            padding: 1.5rem;
-            background: #f9fafb;
-            border-radius: 12px;
-        }
-        
-        .audit-section-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #1f2937;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .audit-badge {
-            display: inline-block;
-            background: #10b981;
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        
-        .audit-item {
-            display: flex;
-            align-items: start;
-            gap: 1rem;
-            margin: 1rem 0;
-            padding: 1rem;
-            background: white;
-            border-radius: 8px;
-        }
-        
-        .audit-icon {
-            width: 24px;
-            height: 24px;
-            background: #10b981;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            font-weight: bold;
-        }
-        
-        .audit-description {
-            flex: 1;
-        }
-        
-        .audit-term {
-            font-weight: 600;
-            color: #1f2937;
-            margin-bottom: 0.25rem;
-        }
-        
-        .audit-explanation {
-            color: #6b7280;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parameter-Free Particle Masses | Recognition Science</title>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/site-template.css">
 </head>
-<body>
-    <div id="header-placeholder"></div>
+<body class="template-page">
+  <div id="header-placeholder"></div>
+
+  <!-- Hero Section -->
+  <section class="template-hero">
+    <div class="template-container">
+      <h1 class="template-hero-title">Parameter-Free Particle Masses</h1>
+      <p class="template-hero-lead">
+        From a φ-ladder fixed point approach with no fitted parameters
+      </p>
+    </div>
+  </section>
+
+  <!-- Editor's Note -->
+  <section class="template-section">
+    <div class="template-container">
+      <div class="template-reading template-reading-warm">
+        <p>
+          <strong>Editor's Note:</strong> This paper presents a parameter-free architecture that predicts 
+          Standard Model masses and mixings from first principles. Using a φ-ladder fixed point approach 
+          with no fitted parameters, the framework achieves parts-per-million accuracy for charged lepton 
+          ratios and provides falsifiable predictions for neutrino masses, boson ratios, and quark masses. 
+          All results emerge from the same ledger structure that underlies Recognition Science.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Paper Title and Author -->
+  <section class="template-section">
+    <div class="template-container">
+      <div class="template-paper-header">
+        <h2 class="template-paper-title">Parameter-Free Particle Masses from a φ-Sheet Fixed Point</h2>
+        
+        <div class="template-author-info">
+          <div class="template-author-name">Jonathan Washburn</div>
+          <div class="template-author-affiliation">Independent Researcher</div>
+          <div class="template-author-affiliation">Austin, Texas</div>
+          <div class="template-author-email">washburn@recognitionphysics.org</div>
+        </div>
+        
+        <div class="template-paper-download">
+          <a href="Parameter_Free_Particle_Masses.pdf" class="template-btn">
+            📄 Download Full Paper (PDF)
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Abstract -->
+  <section class="template-section">
+    <div class="template-container">
+      <div class="template-abstract">
+        <h3 class="template-section-title accent">Abstract</h3>
+        <div class="template-reading">
+          <p>
+            We present a parameter-free architecture that predicts Standard Model (SM) masses and mixings 
+            from a rung-indexed φ-ladder solved as a local fixed point. The method replaces an arbitrary 
+            probe scale with a <em>φ-sheet</em> average tied to the same alternating gap coefficients that 
+            define the ledger. The only data inputs are physical constants and inclusive e⁺e⁻→hadrons 
+            information used in a dispersion calculation of α<sub>em</sub>(μ). Charged-lepton ratios agree 
+            with experiment at parts-per-million (ppm) after densifying the τ-window in the hadronic 
+            vacuum-polarization integral; the underlying solver and invariants remain unchanged. A 
+            neutrino-anchored global scale gives absolute Dirac neutrino masses Σm<sub>ν</sub>≃0.0605 eV, 
+            consistent with cosmology, and fixes (e,μ,τ) in eV at ppm accuracy. The boson sector reproduces 
+            Z/W and H/Z at the 10⁻³ level, and quark mass ratios—evaluated "φ-fixed" at each species' 
+            self-consistent scale μ<sub>★</sub> to remove scheme bias—agree at the few×10⁻³ level. CKM and 
+            PMNS follow from the same rung geometry without additional parameters. We provide a reproducible 
+            pipeline and a compact error budget that attribute the residuals to quadrature density in the τ 
+            window and fixed-point stability.
+          </p>
+          
+          <p class="template-keywords">
+            <strong>Keywords:</strong> axiomatic physics; type theory; foundations of physics; logical 
+            necessity; tautology; dark matter; cosmology
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Introduction -->
+  <section class="template-section">
+    <div class="template-container">
+      <h2 class="template-section-title">1. Introduction</h2>
+      
+      <div class="template-reading">
+        <p>
+          The observed pattern of SM masses and mixings is usually accommodated by dozens of a priori free 
+          Yukawa parameters. In the absence of tuned textures or family symmetries, there is no accepted 
+          predictive mechanism for the numerical values themselves. This paper exhibits a minimal, 
+          measurement-anchored alternative: a parameter-free, fixed-point architecture in which integer 
+          rungs on a φ-ladder determine coarse mass separations, and a small <em>fractional residue</em> 
+          f<sub>i</sub>—computed from standard anomalous dimensions plus fixed ledger invariants—accounts 
+          for the remaining percent-to-ppm structure.
+        </p>
+        
+        <p>
+          The key difference from conventional treatments is procedural: we <em>define</em> masses 
+          nonperturbatively as solutions of a local φ-cycle and then <em>average</em> over a φ-sheet with 
+          signed weights tied to the same alternating gap series that encodes the ledger, thereby 
+          eliminating the arbitrary choice of probe scale and its scheme dependence.
+        </p>
+      </div>
+      
+      <div class="template-reading">
+        <p>At the level of formulae, each species i is assigned the mass law (Eq. 1):</p>
+        
+        <div class="template-equation">
+          m<sub>i</sub> = B<sub>i</sub> E<sub>coh</sub> φ<sup>r<sub>i</sub> + f<sub>i</sub></sup>,     
+          B<sub>i</sub>=1,  E<sub>coh</sub>=φ<sup>-5</sup>,  r<sub>i</sub>∈ℤ.
+        </div>
+        
+        <p>
+          Here φ=(1+√5)/2. The residue f<sub>i</sub> decomposes into (i) a local QFT window integral of 
+          the species anomalous dimension γ<sub>i</sub>(μ) and (ii) a ledger gap series built from fixed 
+          representation invariants, including a closed-form 8-beat chiral occupancy Δf<sub>χ</sub>(r) 
+          determined solely by the rung r; no truncation or tunable weights enter.
+        </p>
+        
+        <p>Masses are <em>fixed points</em> of the local φ-cycle (Eq. 2):</p>
+        
+        <div class="template-equation">
+          ln m<sub>i</sub> = ln(B<sub>i</sub>E<sub>coh</sub>) + r<sub>i</sub>ln φ + 
+          f<sub>i</sub>(ln m<sub>i</sub>) ln φ.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Results -->
+  <section class="template-section">
+    <div class="template-container">
+      <h2 class="template-section-title">2. Results (parameter-free)</h2>
+      
+      <h3>2.1 Charged leptons (dimensionless ratios)</h3>
+      
+      <div class="template-results-box">
+        <h4>Charged Lepton Ratios</h4>
+        <div class="template-values">
+          <div>μ/e = <span class="template-accent-text">206.772097</span></div>
+          <div>τ/μ = <span class="template-accent-text">16.818047</span></div>
+          <div>τ/e = <span class="template-accent-text">3477.584758</span></div>
+        </div>
+      </div>
+      
+      <div class="template-reading">
+        <p>
+          These values are produced by the same φ-sheet fixed-point solver used throughout, with signed, 
+          alternating sheet weights tied to the ledger gap series and the rung assignment 
+          <span class="template-accent-text">(r<sub>e</sub>,r<sub>μ</sub>,r<sub>τ</sub>)=(0,11,17)</span>.
+        </p>
+        
+        <p>With this densification, the residuals to the experimental ratios are:</p>
+        
+        <div class="template-equation">
+          δ<sub>μ/e</sub> = 1.845×10⁻⁵ (18.45 ppm)<br>
+          δ<sub>τ/μ</sub> = 6.051×10⁻⁵ (60.5 ppm)<br>
+          δ<sub>τ/e</sub> = 1.025×10⁻⁴ (102.5 ppm)
+        </div>
+        
+        <p>all within ≲10⁻⁴ fractional (i.e., ≲100 ppm).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- More Results -->
+  <section class="template-section">
+    <div class="template-container">
+      <h3>2.2 Absolute Dirac neutrino masses (normal ordering, NO)</h3>
+      
+      <div class="template-results-box">
+        <h4>Dirac Neutrino Masses (Normal Ordering)</h4>
+        <div class="template-values">
+          <div>m<sub>1</sub> = <span class="template-accent-text">2.0832×10⁻³</span> eV</div>
+          <div>m<sub>2</sub> = <span class="template-accent-text">9.0225×10⁻³</span> eV</div>
+          <div>m<sub>3</sub> = <span class="template-accent-text">4.9427×10⁻²</span> eV</div>
+          <div>Σm<sub>ν</sub> = <span class="template-accent-text">0.06053</span> eV</div>
+        </div>
+      </div>
+      
+      <div class="template-reading">
+        <p>
+          The kinematic effective mass for β decay, m<sub>β</sub> ≃ 8.46 meV, uses PMNS moduli consistent 
+          with global fits and remains a direct falsifier of the Dirac scenario (no 0νββ within this 
+          framework).
+        </p>
+      </div>
+      
+      <h3>2.3 Boson ratios and absolutes</h3>
+      
+      <div class="template-results-box">
+        <h4>Boson Mass Ratios and Absolutes</h4>
+        <div class="template-values">
+          <div><strong>Locked ratios:</strong></div>
+          <div>Z/W = <span class="template-accent-text">1.1332824</span></div>
+          <div>H/Z = <span class="template-accent-text">1.3721798</span></div>
+          <div>H/W = <span class="template-accent-text">1.5549887</span></div>
+          <div style="margin-top: 1rem;"><strong>Absolute masses:</strong></div>
+          <div>M<sub>Z</sub> = 91.0921 GeV (-0.105%)</div>
+          <div>M<sub>H</sub> = 124.9947 GeV (-0.084%)</div>
+        </div>
+      </div>
+      
+      <h3>2.4 Quark sector ("φ-fixed" ratios)</h3>
+      
+      <div class="template-results-box">
+        <h4>Quark Mass Ratios (φ-fixed)</h4>
+        <div class="template-values">
+          <div><strong>Down-type:</strong></div>
+          <div>s/d = +0.3198%</div>
+          <div>b/s = -0.0807%</div>
+          <div>b/d = +0.2486%</div>
+          <div style="margin-top: 1rem;"><strong>Up-type:</strong></div>
+          <div>c/u = -0.2109%</div>
+          <div>t/c = +0.0029%</div>
+          <div>t/u = -0.2045%</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Predictions -->
+  <section class="template-section">
+    <div class="template-container">
+      <h2 class="template-section-title">3. Predictions and Falsifiable Tests</h2>
+      
+      <div class="template-reading template-accent-border">
+        <div class="template-accent-bar"></div>
+        <ul>
+          <li>
+            <strong>Dirac neutrino sector (NO):</strong> Absolute scale fixed by Δm²<sub>31</sub> gives 
+            Σm<sub>ν</sub>=0.0605 eV and m<sub>β</sub>≃8.46 meV; 0νββ is null in this Dirac framework. 
+            A shift beyond current cosmology/kinematics windows would falsify the scale transfer that also 
+            fixes (e,μ,τ) in eV.
+          </li>
+          
+          <li>
+            <strong>CKM phase sign replicas:</strong> Two CP-phase sign replicas appear with identical 
+            magnitudes (rung-geometry degeneracy); a single sign is fixed by a convention/embedding, while 
+            any future constraint that forbids one sign would select the other without altering magnitudes.
+          </li>
+          
+          <li>
+            <strong>Stability curves (leptons):</strong> The predicted dependence of (μ/e,τ/μ,τ/e) on 
+            tau-window density is purely numerical and small (few×10⁻⁵); plotting these curves provides 
+            a direct reproducibility check of the dispersion backend.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- References -->
+  <section class="template-section">
+    <div class="template-container">
+      <h2 class="template-section-title">References</h2>
+      
+      <div class="template-references">
+        <div class="template-reference">
+          [Buttazzo2013] Buttazzo, D. et al. "Investigating the near-criticality of the Higgs boson." 
+          JHEP 12 (2013): 089.
+        </div>
+        
+        <div class="template-reference">
+          [ChetyrkinKuehnSteinhauser2000] Chetyrkin, K.G., Kühn, J.H., and Steinhauser, M. "RunDec: 
+          a Mathematica package for running and decoupling of the strong coupling and quark masses." 
+          Comput. Phys. Commun. 133 (2000): 43-65.
+        </div>
+        
+        <div class="template-reference">
+          [Davier2017] Davier, M. et al. "Reevaluation of the hadronic vacuum polarisation contributions 
+          to the Standard Model predictions of the muon g−2 and α(m²_Z) using newest hadronic 
+          cross-section data." Eur. Phys. J. C 77 (2017): 827.
+        </div>
+        
+        <div class="template-reference">
+          [PDG2024] Particle Data Group, Navas, S. et al. "Review of Particle Physics." 
+          Phys. Rev. D 110 (2024): 030001.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+  <script src="/assets/js/main.js"></script>
+  
+  <!-- Page-specific styles -->
+  <style>
+    /* Paper header */
+    .template-paper-header {
+      text-align: center;
+            margin-bottom: 2rem;
+    }
     
     <main class="content-page">
         <section class="mass-hero">
@@ -1027,283 +856,110 @@ if __name__ == "__main__":
         </section>
     </main>
     
-    <div id="footer-placeholder"></div>
+    .template-author-info {
+      margin-bottom: 1.5rem;
+    }
     
-    <script>
-        function showTab(tabName) {
-            // Hide all tabs
-            const tabs = document.querySelectorAll('.tab-content');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            
-            // Remove active class from all tab buttons
-            const buttons = document.querySelectorAll('.tab');
-            buttons.forEach(btn => btn.classList.remove('active'));
-            
-            // Show selected tab
-            document.getElementById(tabName).classList.add('active');
-            
-            // Add active class to clicked button
-            event.target.classList.add('active');
-        }
-        
-        // Particle data with detailed information
-        const particleData = {
-            electron: {
-                name: 'Electron',
-                symbol: 'e⁻',
-                mass: '0.511 MeV',
-                B: 1,
-                r: 0,
-                f: 0.0012,
-                delta: '<0.001%',
-                explanation: {
-                    B: 'Sector factor B=1 for the fundamental lepton family',
-                    r: 'Ground state at rung r=0, the reference point of the mass ladder',
-                    f: 'Small φ-sheet correction f≈0.0012 from ledger curvature',
-                    phi: 'Golden ratio φ=1.618... emerges from self-similarity requirement',
-                    Ecoh: 'Coherence quantum E_coh=φ^(-5)=0.090 eV from dimensional closure'
-                }
-            },
-            muon: {
-                name: 'Muon',
-                symbol: 'μ⁻',
-                mass: '105.66 MeV',
-                B: 1,
-                r: 11,
-                f: 0.0008,
-                delta: '<0.01%',
-                explanation: {
-                    B: 'Same sector B=1 as electron (lepton family)',
-                    r: 'Rung r=11 gives the precise μ/e mass ratio',
-                    f: 'φ-sheet correction f≈0.0008 slightly smaller than electron',
-                    phi: 'Scaling by φ^11 from the electron mass',
-                    Ecoh: 'Same coherence quantum as all particles'
-                }
-            },
-            tau: {
-                name: 'Tau',
-                symbol: 'τ⁻',
-                mass: '1776.86 MeV',
-                B: 1,
-                r: 17,
-                f: 0.0006,
-                delta: '<0.01%',
-                explanation: {
-                    B: 'Lepton sector B=1 maintained',
-                    r: 'Rung r=17, completing the charged lepton tower',
-                    f: 'Minimal φ-sheet correction f≈0.0006',
-                    phi: 'Mass scales as φ^17 relative to electron',
-                    Ecoh: 'Universal coherence quantum'
-                }
-            },
-            up: {
-                name: 'Up Quark',
-                symbol: 'u',
-                mass: '2.16 MeV',
-                B: 2,
-                r: 4,
-                f: 0.0015,
-                delta: '<0.1%',
-                explanation: {
-                    B: 'Sector B=2 for light quarks (fractional charge)',
-                    r: 'Rung r=4, lightest quark state',
-                    f: 'φ-sheet correction f≈0.0015 from color confinement',
-                    phi: 'Scales with φ^4 in the B=2 sector',
-                    Ecoh: 'Same E_coh, different sector gives different mass scale'
-                }
-            },
-            down: {
-                name: 'Down Quark',
-                symbol: 'd',
-                mass: '4.67 MeV',
-                B: 2,
-                r: 6,
-                f: 0.0018,
-                delta: '<0.1%',
-                explanation: {
-                    B: 'Light quark sector B=2',
-                    r: 'Rung r=6, two steps above up quark',
-                    f: 'Slightly larger correction f≈0.0018',
-                    phi: 'Mass ratio d/u ≈ φ^2 from rung difference',
-                    Ecoh: 'Universal coherence quantum'
-                }
-            }
-        };
-        
-        function selectParticle(particleName) {
-            // Remove selected class from all cards
-            const cards = document.querySelectorAll('.particle-card');
-            cards.forEach(card => card.classList.remove('selected'));
-            
-            // Add selected class to clicked card
-            event.currentTarget.classList.add('selected');
-            
-            const particle = particleData[particleName];
-            if (!particle) return;
-            
-            // Update calculation details section
-            const particleNameSpan = document.getElementById('calcParticleName');
-            const calcContent = document.getElementById('calcContent');
-            
-            particleNameSpan.textContent = particle.name;
-            
-            // Build detailed calculation HTML
-            calcContent.innerHTML = `
-                <div class="calc-step">
-                    <div class="calc-step-title">Step 1: Identify Quantum Numbers</div>
-                    <p>The ${particle.name} has the following ledger quantum numbers:</p>
-                    <ul style="margin: 1rem 0;">
-                        <li>Sector Factor: <span class="calc-value">B = ${particle.B}</span> - ${particle.explanation.B}</li>
-                        <li>Rung Number: <span class="calc-value">r = ${particle.r}</span> - ${particle.explanation.r}</li>
-                        <li>φ-Sheet Correction: <span class="calc-value">f ≈ ${particle.f}</span> - ${particle.explanation.f}</li>
-                    </ul>
-                </div>
-                
-                <div class="calc-step">
-                    <div class="calc-step-title">Step 2: Apply Universal Constants</div>
-                    <p>These constants emerge from the ledger's fundamental structure:</p>
-                    <ul style="margin: 1rem 0;">
-                        <li>Golden Ratio: <span class="calc-value">φ = 1.618034...</span> - ${particle.explanation.phi}</li>
-                        <li>Coherence Quantum: <span class="calc-value">E<sub>coh</sub> = 0.090169 eV</span> - ${particle.explanation.Ecoh}</li>
-                    </ul>
-                </div>
-                
-                <div class="calc-step">
-                    <div class="calc-step-title">Step 3: Calculate Mass</div>
-                    <div class="calc-formula">
-                        m = ${particle.B} × 0.090169 × 1.618034<sup>(${particle.r} + ${particle.f})</sup>
-                    </div>
-                    <p style="margin-top: 1rem;">Evaluating the expression:</p>
-                    <div class="calc-formula">
-                        m = ${particle.B} × 0.090169 × 1.618034<sup>${(particle.r + particle.f).toFixed(4)}</sup> = <strong>${particle.mass}</strong>
-                    </div>
-                </div>
-                
-                <div class="calc-step">
-                    <div class="calc-step-title">Step 4: Compare with Empirical Value</div>
-                    <p>The calculated mass matches the measured value with a delta of <span class="delta-badge delta-low">${particle.delta}</span></p>
-                    <p style="margin-top: 1rem; padding: 1rem; background: #f0fdf4; border-left: 4px solid #10b981; color: #065f46;">
-                        <strong>Key Point:</strong> This calculation uses zero free parameters. Every value is derived from 
-                        first principles or represents a counting number (like r). The remarkable agreement validates 
-                        that particle masses are ledger states, not arbitrary constants of nature.
-                    </p>
-                </div>
-            `;
-        }
-        
-        function runCalculation() {
-            const button = document.querySelector('.run-button');
-            const buttonText = document.getElementById('button-text');
-            const spinner = document.getElementById('spinner');
-            const output = document.getElementById('calculation-output');
-            const outputText = document.getElementById('output-text');
-            
-            // Show spinner
-            buttonText.textContent = 'Calculating...';
-            spinner.style.display = 'inline-block';
-            button.disabled = true;
-            
-            // Simulate calculation delay
-            setTimeout(() => {
-                // Show output
-                output.style.display = 'block';
-                outputText.textContent = `=== Full masses snapshot — v22c ===
-
--- Charged lepton ratios --
-μ/e=206.768283, τ/μ=16.817200, τ/e=3477.150956
-
--- Charged leptons (absolute, eV) --
-e=510998.9 eV, μ=105658374.1 eV, τ=1776860000.0 eV
-
--- Neutrinos (absolute, Dirac NO) --
-m1=8.655583e-03 eV, m2=1.205125e-02 eV, m3=5.030284e-02 eV, Σm=7.101967e-02 eV
-Δm21^2=7.422028e-05 eV^2, Δm31^2=2.455341e-03 eV^2, m_β=1.113508e-02 eV
-
--- Bosons (absolute from locked ratios; anchor M_W) --
-Z: pred=91.107774 GeV (exp 91.187600)
-H: pred=124.978879 GeV (exp 125.100000)
-
--- Quarks (φ-fixed ratios at μ⋆) --
-Down: s/d=20.1695669 (exp 20.1052632), b/s=43.7291176 (43.7644231), b/d=881.9961625 (879.8093108)
-Up  : c/u=586.7231268 (exp 587.9629630), t/c=135.8306806 (135.8267717), t/u=79695.5311281 (79858.8310185)
-
-[Calculation complete - all masses derived from m = B·E_coh·φ^(r+f) with zero free parameters]`;
-                
-                // Reset button
-                buttonText.textContent = 'Run Full Mass Calculation';
-                spinner.style.display = 'none';
-                button.disabled = false;
-                
-                // Smooth scroll to output
-                output.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }, 2000);
-        }
-        
-        function togglePythonCode() {
-            const codeDiv = document.getElementById('pythonCode');
-            const button = event.target;
-            if (codeDiv.style.display === 'none') {
-                codeDiv.style.display = 'block';
-                button.textContent = 'Hide Python Code';
-            } else {
-                codeDiv.style.display = 'none';
-                button.textContent = 'View Python Code';
-            }
-        }
-        
-        function copyPythonCode() {
-            const code = document.getElementById('pythonCodeContent').textContent;
-            const button = event.currentTarget || event.target;
-            const originalText = button.textContent;
-            
-            // Try to use the clipboard API
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(code).then(() => {
-                    button.textContent = 'Copied!';
-                    button.style.background = '#10b981';
-                    setTimeout(() => {
-                        button.textContent = originalText;
-                        button.style.background = '#4b5563';
-                    }, 2000);
-                }).catch(err => {
-                    console.error('Failed to copy:', err);
-                    // Fallback to select and copy
-                    fallbackCopy(code, button, originalText);
-                });
-            } else {
-                // Fallback for browsers without clipboard API
-                fallbackCopy(code, button, originalText);
-            }
-        }
-        
-        function fallbackCopy(text, button, originalText) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = "fixed";
-            textArea.style.left = "-999999px";
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            
-            try {
-                document.execCommand('copy');
-                button.textContent = 'Copied!';
-                button.style.background = '#10b981';
-                setTimeout(() => {
-                    button.textContent = originalText;
-                    button.style.background = '#4b5563';
-                }, 2000);
-            } catch (err) {
-                console.error('Failed to copy:', err);
-                button.textContent = 'Copy failed';
-                setTimeout(() => {
-                    button.textContent = originalText;
-                }, 2000);
-            }
-            
-            document.body.removeChild(textArea);
-        }
-    </script>
-    <script src="assets/js/main.js"></script>
+    .template-author-name {
+      font-weight: 600;
+      font-size: 1.125rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .template-author-affiliation {
+      color: var(--color-text-muted);
+      font-size: 0.95rem;
+    }
+    
+    .template-author-email {
+      color: var(--color-primary);
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+    }
+    
+    .template-paper-download {
+      margin-top: 1.5rem;
+    }
+    
+    /* Abstract */
+    .template-abstract {
+      margin-bottom: 2rem;
+    }
+    
+    .template-keywords {
+      margin-top: 1rem;
+      font-size: 0.875rem;
+      color: var(--color-text-muted);
+    }
+    
+    /* Equations */
+    .template-equation {
+      background: var(--color-bg-subtle);
+      padding: 1rem 1.5rem;
+      margin: 1rem 0;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      overflow-x: auto;
+      border-left: 3px solid var(--color-primary);
+    }
+    
+    /* Results boxes */
+    .template-results-box {
+      background: white;
+      border: 1px solid var(--color-border-light);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    
+    .template-results-box h4 {
+      color: var(--color-primary);
+      margin-bottom: 1rem;
+      font-size: 1.125rem;
+    }
+    
+    .template-values {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+    
+    .template-values div {
+      padding: 0.25rem 0;
+    }
+    
+    /* References */
+    .template-references {
+      font-size: 0.875rem;
+    }
+    
+    .template-reference {
+      margin-bottom: 1rem;
+      line-height: 1.6;
+      color: var(--color-text-muted);
+    }
+    
+    /* Sections */
+    h3 {
+      color: var(--color-primary);
+      font-size: 1.25rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    
+    /* Mobile optimization */
+    @media (max-width: 768px) {
+      .template-equation {
+        font-size: 0.875rem;
+        padding: 0.75rem 1rem;
+      }
+      
+      .template-values {
+        font-size: 0.875rem;
+      }
+    }
+  </style>
 </body>
 </html>

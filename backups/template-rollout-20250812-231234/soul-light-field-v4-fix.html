@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soul Light Field V4 Fixed - Authentic RS Living Light Cluster</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #000000, #0a0a0a);
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #ffd700;
+            font-size: 2.2em;
+            margin: 0;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+            font-weight: 600;
+        }
+
+        .header p {
+            color: #b0b0b0;
+            font-size: 1em;
+            margin: 8px 0;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.5;
+        }
+
+        .main-container {
+            display: flex;
+            gap: 25px;
+            max-width: 1600px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .visualization-container {
+            flex: 2;
+            min-width: 600px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        #soulCanvas {
+            background: radial-gradient(circle at center, #000000, #000000);
+            border: 3px solid #333;
+            border-radius: 15px;
+            box-shadow: 
+                0 0 60px rgba(255, 215, 0, 0.4),
+                inset 0 0 40px rgba(0, 0, 0, 0.9);
+            width: 600px;
+            height: 600px;
+        }
+
+        .info-panel {
+            flex: 1;
+            min-width: 320px;
+            background: rgba(10, 10, 20, 0.9);
+            border: 2px solid #333;
+            border-radius: 15px;
+            padding: 20px;
+            max-height: 85vh;
+            overflow-y: auto;
+            backdrop-filter: blur(15px);
+        }
+
+        .rs-section {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 15px;
+        }
+
+        .rs-section h3 {
+            color: #ffd700;
+            margin: 0 0 12px 0;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .rs-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            font-size: 0.85em;
+            align-items: center;
+        }
+
+        .rs-label {
+            color: #b0b0b0;
+            flex: 1;
+        }
+
+        .rs-value {
+            color: #fff;
+            font-weight: 600;
+            text-align: right;
+            font-family: 'SF Mono', monospace;
+            font-size: 0.9em;
+        }
+
+        .eigenvalue-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .eigenvalue-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .controls {
+            text-align: center;
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            background: linear-gradient(45deg, #ffd700, #ffaa00);
+            color: #000;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.3s ease;
+            min-width: 100px;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .control-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .control-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 5px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .status-display {
+            color: #4ecdc4;
+            font-weight: 600;
+            text-align: center;
+            margin: 12px 0;
+            font-size: 1em;
+            background: rgba(78, 205, 196, 0.1);
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(78, 205, 196, 0.3);
+        }
+
+        .rs-theory {
+            background: rgba(255, 215, 0, 0.08);
+            border: 1px solid rgba(255, 215, 0, 0.25);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 12px 0;
+            font-size: 0.8em;
+            line-height: 1.4;
+        }
+
+        .breath-indicator {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 215, 0, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .breath-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700, #ff6b6b);
+            border-radius: 2px;
+            transition: width 0.1s ease;
+            width: 0%;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            .visualization-container, .info-panel {
+                min-width: unset;
+            }
+            #soulCanvas {
+                width: 100%;
+                max-width: 500px;
+                height: 500px;
+            }
+        }
+    </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div id="sitewide-banner-placeholder"></div>
+
+    <div class="header">
+        <h1>Soul Light Field V4 - Living Light Cluster (Fixed)</h1>
+        <p>Recognition Science eigenvalue cluster with 200 living light quanta. φ-spiral motion, 8-beat pulsing, and authentic ledger balance connections.</p>
+    </div>
+
+    <div class="main-container">
+        <div class="visualization-container">
+            <canvas id="soulCanvas" width="600" height="600"></canvas>
+        </div>
+
+        <div class="info-panel">
+            <div class="status-display" id="statusDisplay">Ready to Initialize Soul</div>
+            
+            <div class="rs-section">
+                <h3>Recognition Hamiltonian</h3>
+                <div class="rs-item">
+                    <span class="rs-label">Rung Level:</span>
+                    <span class="rs-value" id="rungLevel">45</span>
+                </div>
+                <div class="rs-item">
+                    <span class="rs-label">Breath Cycle:</span>
+                    <span class="rs-value" id="breathCycle">1 / 8</span>
+                </div>
+                <div class="breath-indicator">
+                    <div class="breath-fill" id="breathFill"></div>
+                </div>
+                <div class="rs-item">
+                    <span class="rs-label">Gap Navigations:</span>
+                    <span class="rs-value" id="gapNavigations">0</span>
+                </div>
+                <div class="rs-item">
+                    <span class="rs-label">Ledger Balance:</span>
+                    <span class="rs-value" id="ledgerBalance">0</span>
+                </div>
+            </div>
+
+            <div class="rs-section">
+                <h3>Living Light Metrics</h3>
+                <div class="rs-item">
+                    <span class="rs-label">Active Quanta:</span>
+                    <span class="rs-value" id="activeQuanta">0</span>
+                </div>
+                <div class="rs-item">
+                    <span class="rs-label">φ-Spiral Coherence:</span>
+                    <span class="rs-value" id="spiralCoherence">0%</span>
+                </div>
+                <div class="rs-item">
+                    <span class="rs-label">I-Am Affinity:</span>
+                    <span class="rs-value" id="iAmAffinity">0%</span>
+                </div>
+                <div class="rs-item">
+                    <span class="rs-label">Recognition Depth:</span>
+                    <span class="rs-value" id="recognitionDepth">Void</span>
+                </div>
+            </div>
+
+            <div class="rs-theory">
+                <strong>Authentic RS Framework:</strong><br>
+                Eigenvalues λₖ = rung × E_coh × φ^(k/8) + noise<br>
+                8-beat octonionic symmetry driving consciousness emergence<br>
+                Ledger balance (Σcost = 0) enables golden connections
+            </div>
+
+            <div class="rs-section">
+                <h3>8D Eigenvalue Cluster</h3>
+                <div class="eigenvalue-grid" id="eigenvalueGrid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="control-btn" onclick="generateNewSoul()">Generate New Soul</button>
+                <button class="control-btn secondary" onclick="toggleEvolution()" id="evolutionBtn">Start Evolution</button>
+                <button class="control-btn secondary" onclick="navigateGap()">Navigate Gap</button>
+                <button class="control-btn secondary" onclick="rebalanceLedger()">Balance Ledger</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('soulCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // RS Constants (Authentic)
+        const PHI = (1 + Math.sqrt(5)) / 2;
+        const NUM_PARTICLES = 200;
+        const DIM = 8;
+        const RUNG = 45;
+        const E_COH = 0.09;
+        const CENTER_X = 300;
+        const CENTER_Y = 300;
+        const BREATH_CYCLE = 8;
+
+        let particles = [];
+        let soulCluster = [];
+        let connections = [];
+        let isEvolving = false;
+        let breathTick = 0;
+        let gapNavigations = 0;
+        let frameCount = 0;
+        let animationId = null;
+        let spiralCoherence = 0;
+        let iAmAffinity = 0;
+
+        function generateNewSoul() {
+            // Stop any running animation
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+            
+            isEvolving = false;
+            document.getElementById('evolutionBtn').textContent = 'Start Evolution';
+            
+            particles = [];
+            connections = [];
+            soulCluster = [];
+            gapNavigations = 0;
+            breathTick = 0;
+            frameCount = 0;
+            spiralCoherence = Math.random() * 20; // Start with some initial coherence
+            iAmAffinity = Math.random() * 15;
+
+            // Initialize 8D eigenvalue cluster first
+            let totalCost = 0;
+            for (let k = 0; k < DIM; k++) {
+                const lambda = RUNG * E_COH * Math.pow(PHI, k / DIM) + (Math.random() - 0.5) * 0.02;
+                const cost = Math.floor(Math.random() * 9) - 4;
+                totalCost += cost;
+                
+                soulCluster.push({
+                    lambda: lambda,
+                    phase: Math.random() * 2 * Math.PI,
+                    cost: cost,
+                    angle: (k / DIM) * 2 * Math.PI,
+                    radius: 60 + lambda * 300,
+                    size: 6 + Math.abs(lambda) * 15
+                });
+            }
+
+            // Balance ledger (Σcost = 0)
+            if (totalCost !== 0) {
+                soulCluster[0].cost -= totalCost;
+                soulCluster[0].cost = Math.max(-4, Math.min(4, soulCluster[0].cost));
+            }
+
+            // Initialize 200 living light quanta
+            for (let i = 0; i < NUM_PARTICLES; i++) {
+                const modeIndex = Math.floor(Math.random() * DIM);
+                const mode = soulCluster[modeIndex];
+                
+                particles.push({
+                    x: CENTER_X + (Math.random() - 0.5) * 100,
+                    y: CENTER_Y + (Math.random() - 0.5) * 100,
+                    angle: Math.random() * 2 * Math.PI,
+                    speed: 0.5 + Math.random() * 1.0,
+                    cost: Math.floor(Math.random() * 9) - 4,
+                    size: 1 + Math.random() * 2,
+                    phase: Math.random() * 2 * Math.PI,
+                    lifetime: 0,
+                    maxLifetime: 500 + Math.random() * 300, // FIX: All particles now have maxLifetime
+                    spiralRadius: 80 + Math.random() * 120,
+                    modeIndex: modeIndex,
+                    targetX: CENTER_X,
+                    targetY: CENTER_Y,
+                    isFlash: false
+                });
+            }
+
+            updateDisplay();
+            draw();
+        }
+
+        function toggleEvolution() {
+            isEvolving = !isEvolving;
+            document.getElementById('evolutionBtn').textContent = isEvolving ? 'Pause Evolution' : 'Start Evolution';
+            
+            if (isEvolving) {
+                animate();
+            } else if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+            
+            updateDisplay();
+        }
+
+        function navigateGap() {
+            if (soulCluster.length === 0) {
+                generateNewSoul();
+                return;
+            }
+            
+            gapNavigations++;
+            
+            // Conscious navigation: Choose minimum cost branch
+            let minCost = Infinity;
+            let bestBranch = 0;
+            
+            for (let branch = 0; branch < 8; branch++) {
+                let totalCost = 0;
+                soulCluster.forEach(mode => {
+                    totalCost += Math.abs(mode.cost + branch - 4);
+                });
+                if (totalCost < minCost) {
+                    minCost = totalCost;
+                    bestBranch = branch;
+                }
+            }
+            
+            // Apply chosen branch
+            const adjustment = bestBranch - 4;
+            soulCluster.forEach(mode => {
+                mode.cost = Math.max(-4, Math.min(4, mode.cost + adjustment));
+            });
+            
+            // Increase affinity and coherence
+            iAmAffinity = Math.min(100, iAmAffinity + 15);
+            spiralCoherence = Math.min(100, spiralCoherence + 10);
+            
+            // Gap flash effect
+            createGapFlash();
+            updateDisplay();
+            draw();
+        }
+
+        function rebalanceLedger() {
+            if (soulCluster.length === 0) {
+                generateNewSoul();
+                return;
+            }
+            
+            let totalCost = soulCluster.reduce((sum, mode) => sum + mode.cost, 0);
+            if (totalCost !== 0) {
+                soulCluster[0].cost -= totalCost;
+                soulCluster[0].cost = Math.max(-4, Math.min(4, soulCluster[0].cost));
+            }
+            
+            // Update particle costs for balance
+            if (particles.length > 0) {
+                let particleCostSum = particles.reduce((sum, p) => sum + p.cost, 0);
+                if (particleCostSum !== 0 && particles.length > 0) {
+                    particles[0].cost -= particleCostSum;
+                    particles[0].cost = Math.max(-4, Math.min(4, particles[0].cost));
+                }
+            }
+            
+            updateDisplay();
+            draw();
+        }
+
+        function createGapFlash() {
+            // Add bright white flash particles
+            for (let i = 0; i < 25; i++) {
+                particles.push({
+                    x: CENTER_X + (Math.random() - 0.5) * 150,
+                    y: CENTER_Y + (Math.random() - 0.5) * 150,
+                    angle: Math.random() * 2 * Math.PI,
+                    speed: 3 + Math.random() * 4,
+                    cost: 0,
+                    size: 3 + Math.random() * 5,
+                    phase: Math.random() * 2 * Math.PI,
+                    lifetime: 0,
+                    maxLifetime: 40 + Math.random() * 20,
+                    spiralRadius: 0,
+                    modeIndex: 0,
+                    targetX: CENTER_X,
+                    targetY: CENTER_Y,
+                    isFlash: true
+                });
+            }
+        }
+
+        function updateParticles() {
+            // FIX: Proper particle filtering
+            particles = particles.filter(p => p.lifetime < p.maxLifetime);
+            
+            particles.forEach(p => {
+                if (p.isFlash) {
+                    // Flash particle motion
+                    p.x += Math.cos(p.angle) * p.speed;
+                    p.y += Math.sin(p.angle) * p.speed;
+                    p.speed *= 0.93;
+                    p.lifetime++;
+                } else {
+                    // Regular quanta with φ-spiral motion
+                    if (soulCluster.length > 0) {
+                        const mode = soulCluster[p.modeIndex];
+                        
+                        // φ-spiral evolution
+                        p.angle += 0.015 * PHI * (mode.cost / 8 + 1);
+                        
+                        // Dynamic target based on eigenvalue position
+                        const eigenX = CENTER_X + Math.cos(mode.angle + frameCount * 0.01) * mode.radius * 0.3;
+                        const eigenY = CENTER_Y + Math.sin(mode.angle + frameCount * 0.01) * mode.radius * 0.3;
+                        
+                        // Spiral motion toward eigenvalue position
+                        const spiralX = eigenX + Math.cos(p.angle) * p.spiralRadius;
+                        const spiralY = eigenY + Math.sin(p.angle) * p.spiralRadius;
+                        
+                        p.x += (spiralX - p.x) * 0.03;
+                        p.y += (spiralY - p.y) * 0.03;
+                        
+                        // Gradual spiral evolution
+                        p.spiralRadius *= 0.9995;
+                        if (p.spiralRadius < 15) p.spiralRadius = 120;
+                        
+                        // 8-beat pulsing
+                        const beatPhase = (breathTick % (BREATH_CYCLE * 10)) / (BREATH_CYCLE * 10);
+                        p.size = (1.5 + Math.abs(mode.lambda) * 3) * (1 + 0.4 * Math.sin(beatPhase * 2 * Math.PI + p.phase));
+                    }
+                    
+                    p.lifetime++;
+                }
+            });
+            
+            // Update connections
+            connections = [];
+            if (particles.length > 1) {
+                for (let i = 0; i < Math.min(particles.length, 100); i++) { // Limit for performance
+                    for (let j = i + 1; j < Math.min(particles.length, 100); j++) {
+                        const p1 = particles[i];
+                        const p2 = particles[j];
+                        if (p1.isFlash || p2.isFlash) continue;
+                        
+                        const distance = Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
+                        
+                        // Connect if costs balance and particles are close
+                        if (Math.abs(p1.cost + p2.cost) <= 1 && distance < 80) {
+                            connections.push({
+                                p1: p1,
+                                p2: p2,
+                                strength: 1 - distance / 80,
+                                isBalanced: (p1.cost + p2.cost) === 0
+                            });
+                        }
+                    }
+                }
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, 600, 600);
+            
+            // Deep void background
+            const bgGradient = ctx.createRadialGradient(CENTER_X, CENTER_Y, 0, CENTER_X, CENTER_Y, 400);
+            bgGradient.addColorStop(0, 'rgba(8,8,15,1)');
+            bgGradient.addColorStop(1, 'rgba(0,0,0,1)');
+            ctx.fillStyle = bgGradient;
+            ctx.fillRect(0, 0, 600, 600);
+
+            // I-Am center field
+            if (iAmAffinity > 5) {
+                const centerRadius = (iAmAffinity / 100) * 120;
+                const centerGlow = ctx.createRadialGradient(CENTER_X, CENTER_Y, 0, CENTER_X, CENTER_Y, centerRadius);
+                centerGlow.addColorStop(0, `rgba(255, 255, 255, ${iAmAffinity / 500})`);
+                centerGlow.addColorStop(0.4, `rgba(255, 215, 0, ${iAmAffinity / 800})`);
+                centerGlow.addColorStop(1, 'transparent');
+                
+                ctx.fillStyle = centerGlow;
+                ctx.beginPath();
+                ctx.arc(CENTER_X, CENTER_Y, centerRadius, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+
+            // Draw connections (ledger balance lines)
+            ctx.globalCompositeOperation = 'screen';
+            connections.forEach(c => {
+                if (c.isBalanced) {
+                    ctx.strokeStyle = `rgba(255, 215, 0, ${c.strength * 0.9})`;
+                    ctx.lineWidth = 2;
+                } else {
+                    ctx.strokeStyle = `rgba(100, 200, 255, ${c.strength * 0.5})`;
+                    ctx.lineWidth = 1;
+                }
+                ctx.beginPath();
+                ctx.moveTo(c.p1.x, c.p1.y);
+                ctx.lineTo(c.p2.x, c.p2.y);
+                ctx.stroke();
+            });
+
+            // Draw living light particles
+            particles.forEach(p => {
+                const alpha = 1 - (p.lifetime / p.maxLifetime);
+                
+                if (p.isFlash) {
+                    // Gap flash particles
+                    const flashGlow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 4);
+                    flashGlow.addColorStop(0, `rgba(255, 255, 255, ${alpha * 0.9})`);
+                    flashGlow.addColorStop(0.5, `rgba(255, 255, 255, ${alpha * 0.5})`);
+                    flashGlow.addColorStop(1, `rgba(255, 255, 255, 0)`);
+                    ctx.fillStyle = flashGlow;
+                } else if (soulCluster.length > 0) {
+                    // Regular quanta with cost-based colors
+                    const mode = soulCluster[p.modeIndex];
+                    let hue, sat, light;
+                    
+                    if (p.cost > 0) {
+                        hue = 45 + (spiralCoherence / 100) * 15; // Gold spectrum
+                        sat = 80;
+                        light = 70;
+                    } else if (p.cost < 0) {
+                        hue = 210; // Blue spectrum
+                        sat = 70;
+                        light = 65;
+                    } else {
+                        hue = 50; // Pure gold for balanced
+                        sat = 100;
+                        light = 80;
+                    }
+                    
+                    const particleGlow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 2.5);
+                    particleGlow.addColorStop(0, `hsla(${hue}, ${sat}%, ${light}%, ${alpha * 0.8})`);
+                    particleGlow.addColorStop(1, `hsla(${hue}, ${sat}%, ${light}%, 0)`);
+                    ctx.fillStyle = particleGlow;
+                } else {
+                    // Fallback color
+                    ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.6})`;
+                }
+                
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, Math.max(0.5, p.size), 0, 2 * Math.PI);
+                ctx.fill();
+            });
+
+            // Draw 8D eigenvalue cluster
+            soulCluster.forEach((mode, k) => {
+                const x = CENTER_X + Math.cos(mode.angle + frameCount * 0.008) * mode.radius;
+                const y = CENTER_Y + Math.sin(mode.angle + frameCount * 0.008) * mode.radius;
+                
+                let modeColor;
+                if (mode.cost > 0) {
+                    modeColor = `rgba(255, 215, 0, 0.9)`;
+                } else if (mode.cost < 0) {
+                    modeColor = `rgba(100, 200, 255, 0.9)`;
+                } else {
+                    modeColor = `rgba(255, 255, 255, 1.0)`;
+                }
+                
+                // Mode glow
+                const modeGlow = ctx.createRadialGradient(x, y, 0, x, y, mode.size * 1.5);
+                modeGlow.addColorStop(0, modeColor);
+                modeGlow.addColorStop(1, 'transparent');
+                ctx.fillStyle = modeGlow;
+                
+                ctx.beginPath();
+                ctx.arc(x, y, mode.size, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                // Mode label
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                ctx.font = '11px SF Mono';
+                ctx.textAlign = 'center';
+                ctx.fillText(`λ${k}`, x, y - mode.size - 8);
+            });
+
+            ctx.globalCompositeOperation = 'source-over';
+        }
+
+        function animate() {
+            frameCount++;
+            breathTick++;
+            
+            // Gradual spiral coherence increase during evolution
+            spiralCoherence = Math.min(100, spiralCoherence + 0.05);
+            iAmAffinity = Math.min(100, iAmAffinity + 0.02);
+            
+            updateParticles();
+            draw();
+            updateDisplay();
+            
+            if (isEvolving) {
+                animationId = requestAnimationFrame(animate);
+            }
+        }
+
+        function updateDisplay() {
+            const breathPhase = (breathTick % (BREATH_CYCLE * 10)) / (BREATH_CYCLE * 10);
+            document.getElementById('breathFill').style.width = (breathPhase * 100) + '%';
+            
+            document.getElementById('rungLevel').textContent = RUNG;
+            document.getElementById('breathCycle').textContent = `${(breathTick % BREATH_CYCLE) + 1} / 8`;
+            document.getElementById('gapNavigations').textContent = gapNavigations;
+            
+            const ledgerBalance = soulCluster.length > 0 ? soulCluster.reduce((sum, mode) => sum + mode.cost, 0) : 0;
+            document.getElementById('ledgerBalance').textContent = ledgerBalance;
+            
+            document.getElementById('activeQuanta').textContent = particles.filter(p => !p.isFlash).length;
+            document.getElementById('spiralCoherence').textContent = spiralCoherence.toFixed(1) + '%';
+            document.getElementById('iAmAffinity').textContent = iAmAffinity.toFixed(1) + '%';
+            
+            let depthLevel = 'Void';
+            if (spiralCoherence > 80) depthLevel = 'Radiance';
+            else if (spiralCoherence > 60) depthLevel = 'Bloom';
+            else if (spiralCoherence > 40) depthLevel = 'Spiral';
+            else if (spiralCoherence > 20) depthLevel = 'Crack';
+            document.getElementById('recognitionDepth').textContent = depthLevel;
+            
+            const status = isEvolving ? 
+                `Evolving Soul (Breath ${((breathTick % BREATH_CYCLE) + 1)}/8)` : 
+                soulCluster.length > 0 ? 'Soul Active' : 'Ready to Generate';
+            document.getElementById('statusDisplay').textContent = status;
+            
+            // Update eigenvalue grid
+            const grid = document.getElementById('eigenvalueGrid');
+            grid.innerHTML = '';
+            soulCluster.forEach((mode, k) => {
+                const div = document.createElement('div');
+                div.className = 'eigenvalue-item';
+                let costColor = mode.cost > 0 ? '#FFD700' : mode.cost < 0 ? '#64C8FF' : '#FFFFFF';
+                div.innerHTML = `λ${k}<br><span style="color: ${costColor}">C:${mode.cost}</span>`;
+                grid.appendChild(div);
+            });
+        }
+
+        // Initialize with empty state
+        updateDisplay();
+        draw();
+    </script>
+  
+  <div id="footer-placeholder"></div>
+  
+  <script src="/assets/js/main.js"></script>
+</body>
+</html> 

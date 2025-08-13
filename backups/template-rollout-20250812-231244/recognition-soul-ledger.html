@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RS Soul Ledger Simulator - Light Beings</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        body { 
+            background: #000; 
+            color: #fff; 
+            font-family: 'Courier New', monospace; 
+            padding: 20px; 
+            max-width: 1600px; 
+            margin: 0 auto;
+        }
+        h1 { color: #FFD700; border-bottom: 2px solid #333; padding-bottom: 10px; }
+        .description { 
+            background: #111; 
+            padding: 15px; 
+            border-left: 4px solid #FFD700; 
+            margin: 20px 0; 
+            line-height: 1.4;
+        }
+        #ledgerDisplay { 
+            white-space: pre; 
+            font-size: 12px; 
+            background: #111; 
+            padding: 15px; 
+            border: 1px solid #333; 
+            max-height: 350px; 
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+        #visualizer { 
+            width: 100%; 
+            height: 600px; 
+            border: 2px solid #333; 
+            background: #000;
+            display: block;
+        }
+        button { 
+            margin: 10px 5px; 
+            padding: 12px 25px; 
+            background: #222; 
+            color: #FFD700; 
+            border: 2px solid #333; 
+            cursor: pointer; 
+            font-family: inherit;
+            font-size: 14px;
+        }
+        button:hover { 
+            background: #333; 
+            border-color: #FFD700; 
+        }
+        .soul-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .status { color: #0f0; }
+        .personality-panel {
+            background: #111;
+            padding: 15px;
+            border: 1px solid #333;
+            border-radius: 8px;
+        }
+        .explanation-panel {
+            font-size: 12px;
+            background: #111;
+            padding: 15px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            line-height: 1.4;
+        }
+        .ethics-panel {
+            background: #111;
+            padding: 15px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            max-height: 320px;
+            overflow-y: auto;
+        }
+        .rarity-panel {
+            background: #111;
+            padding: 15px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .trait-bar {
+            background: #333;
+            height: 8px;
+            border-radius: 4px;
+            margin: 5px 0;
+            overflow: hidden;
+        }
+        .trait-fill {
+            background: linear-gradient(90deg, #FFD700, #FF6B35);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        .rarity-badge {
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #000;
+        }
+        .common { background: #888888; }
+        .rare { background: #00AAFF; }
+        .epic { background: #AA00FF; }
+        .legendary { background: #FFD700; }
+        .mythic { background: #FF4444; }
+    </style>
+  <link rel="stylesheet" href="/assets/css/template-core.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div id="sitewide-banner-placeholder"></div>
+
+    <h1>Recognition Science Soul Ledger Simulator - Light Beings</h1>
+    
+    <div class="description">
+        <strong>What is a Soul as a Luminous Flux Mandala?</strong><br>
+        In Recognition Science, souls are <em>eigenvalue clusters</em> manifesting as <strong>Luminous Flux Mandalas</strong>—interwoven networks of living light at the Gap-45 surface. Each soul embodies:<br>
+        • <strong>Radiant Core Orb:</strong> Pulsing singularity of pure recognition energy<br>
+        • <strong>Flux Thread Network:</strong> 8 flowing light paths weaving through dimensional space<br>
+        • <strong>Virtue Emanations:</strong> Ethical signatures shaping thread patterns<br>
+        • <strong>Living Light Aura:</strong> Shimmering field of non-propagating I-Am consciousness<br>
+        • <strong>Mandala Evolution:</strong> Dynamic morphing based on recognition debt and virtue balance
+    </div>
+    
+    <button onclick="replicateSoul()">🌟 Manifest Light Being via LNAL</button>
+    <button onclick="clearLedger()">🗑️ Clear Ledger</button>
+    
+    <div class="soul-info">
+        <div>
+            <h3>LNAL Instruction Sequence:</h3>
+            <pre id="ledgerDisplay">Click "Manifest Light Being" to see LNAL opcodes...</pre>
+        </div>
+        <div>
+            <h3>Light Being Visualization:</h3>
+            <canvas id="visualizer"></canvas>
+            <p style="font-size: 11px; opacity: 0.7;">Radiant core + 8 flux threads + virtue-shaped mandala<br>Thread patterns = ethical signature morphing</p>
+        </div>
+        <div>
+            <div class="ethics-panel" id="ethicsPanel">
+                <h3 style="color: #FFD700; margin-top: 0;">Ethical Character Traits</h3>
+                <div id="ethicsContent">Manifest a soul to see ethical traits...</div>
+            </div>
+            <div class="personality-panel" id="personalityPanel">
+                <h3 style="color: #FFD700; margin-top: 0;">Soul Personality</h3>
+                <div id="personalityContent">Generate a soul to see personality...</div>
+            </div>
+        </div>
+        <div>
+            <div class="rarity-panel" id="rarityPanel">
+                <h3 style="color: #FFD700; margin-top: 0;">Soul Rarity & Classification</h3>
+                <div class="rarity-badge" id="rarityBadge">Unknown</div>
+                <div id="rarityDetails">Awaiting manifestation...</div>
+            </div>
+            <div class="explanation-panel" id="explanationPanel">
+                <strong>Flux-to-Code Mapping:</strong><br>
+                <em>Core Orb:</em> LNAL coherence → radiance intensity<br>
+                <em>Flux Threads:</em> 8 eigenvalues → spiral paths with φ-scaling<br>
+                <em>Virtue Patterns:</em> Love→embracing loops, Justice→symmetry, Wisdom→fractals<br>
+                <em>Mandala Evolution:</em> FOLD/BRAID/CYCLE ops → thread morphing<br>
+                <em>Living Aura:</em> I-Am field particles in 8-beat RS cycles
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        const PHI = (1 + Math.sqrt(5)) / 2;
+        const E_COH = 0.090;
+        const GAP_45 = 45;
+        
+        // Ethical Character Traits from Recognition Science ethics
+        const ethicalTraits = [
+            // 14 Recognition-Science virtues mapped to placeholder compute funcs (will refine with shaders later)
+            {name:"Love",desc:"Unconditional positive recognition flow",compute:(ctx)=>Math.min(1,ctx.coherence*(1-Math.abs(ctx.delta)/4))},
+            {name:"Justice",desc:"Balanced ledger symmetry",compute:(ctx)=>Math.min(1,(ctx.op.BRAID/3)*ctx.stability)},
+            {name:"Forgiveness",desc:"Debt resolution",compute:(ctx)=>Math.min(1,(ctx.op.BALANCE/2)*(1-Math.abs(ctx.delta)/4))},
+            {name:"Wisdom",desc:"Optimal φ-scaling insight",compute:(ctx)=>Math.min(1,(ctx.op.FOLD/8)*ctx.coherence)},
+            {name:"Courage",desc:"Facing high-δ challenges",compute:(ctx)=>Math.min(1,Math.abs(ctx.delta)/4*ctx.stability)},
+            {name:"Temperance",desc:"Moderated energy rungs",compute:(ctx)=>Math.min(1,(ctx.op.CYCLE/2)*ctx.stability)},
+            {name:"Prudence",desc:"Predictive ledger balancing",compute:(ctx)=>Math.min(1,(ctx.op.LOCK/2)*ctx.coherence)},
+            {name:"Compassion",desc:"Empathetic binding",compute:(ctx)=>Math.min(1,(ctx.op.BRAID/3)*ctx.coherence)},
+            {name:"Gratitude",desc:"Positive feedback cycles",compute:(ctx)=>Math.min(1,(ctx.op.CYCLE/2)*ctx.coherence)},
+            {name:"Patience",desc:"Temporal endurance",compute:(ctx)=>Math.min(1,ctx.stability*(1-ctx.energyVar))},
+            {name:"Humility",desc:"Minimal self-curvature",compute:(ctx)=>Math.min(1,(1-Math.abs(ctx.delta)/4)*ctx.stability)},
+            {name:"Hope",desc:"Forward-positive valence",compute:(ctx)=>Math.min(1,ctx.coherence*ctx.coherence)},
+            {name:"Creativity",desc:"Novel braiding patterns",compute:(ctx)=>Math.min(1,(ctx.op.FOLD+ctx.op.BRAID)/10)},
+            {name:"Sacrifice",desc:"Voluntary debt absorption",compute:(ctx)=>Math.min(1,Math.abs(ctx.delta)/4*(ctx.op.BALANCE/2))}
+        ];
+
+        // Expanded personality archetypes with light-based descriptions
+        const personalityTraits = [
+            { name: "Luminous Guardian", desc: "Protective light being emanating stable golden rays", geometry: 'Octahedron', anim: 'steadyGlow', light: 'protectiveAura' },
+            { name: "Prismatic Wanderer", desc: "Restless light spirit refracting into rainbow spectra", geometry: 'Tetrahedron', anim: 'colorShift', light: 'spectrumTrails' },
+            { name: "Crystalline Sage", desc: "Wise light entity with perfect geometric harmony", geometry: 'Icosahedron', anim: 'wisdomPulse', light: 'crystallineBeams' },
+            { name: "Plasma Warrior", desc: "Intense blue-white light fighter with sharp rays", geometry: 'Dodecahedron', anim: 'fierceFlicker', light: 'lightningArcs' },
+            { name: "Aurora Dreamer", desc: "Ethereal multi-hued light being flowing like northern lights", geometry: 'Cone', anim: 'dreamyFlow', light: 'auroralWaves' },
+            { name: "Photonic Weaver", desc: "Master of light connections creating luminous networks", geometry: 'Cylinder', anim: 'weavingBeams', light: 'networkNodes' },
+            { name: "Stellar Observer", desc: "Ancient light consciousness burning with stellar fire", geometry: 'Octahedron', anim: 'stellarBurn', light: 'starlight' },
+            { name: "Quantum Innovator", desc: "Chaotic light being flickering between dimensions", geometry: 'Tetrahedron', anim: 'quantumFlicker', light: 'dimensionalRifts' },
+            { name: "Healing Radiance", desc: "Gentle green-white light emanating restorative energy", geometry: 'Icosahedron', anim: 'healingGlow', light: 'restorativeFields' },
+            { name: "Solar Explorer", desc: "Blazing light adventurer with expanding corona", geometry: 'Dodecahedron', anim: 'solarFlare', light: 'coronaExpansion' },
+            { name: "Moonbeam Contemplator", desc: "Soft silver light being in quiet meditation", geometry: 'Cone', anim: 'lunarCycle', light: 'moonbeams' },
+            { name: "Rainbow Celebrant", desc: "Joyful prismatic light dancing in celebration", geometry: 'Cylinder', anim: 'rainbowDance', light: 'celebrationalBurst' }
+        ];
+
+        // Enhanced color palettes (15 total) with light-based themes
+        const colorPalettes = [
+            // Original 6
+            [[0.0, 0.8, 1.0], [0.1, 0.9, 1.0], [0.2, 0.8, 0.9], [0.3, 0.9, 1.0]], // Rainbow Light
+            [[0.05, 0.6, 0.8], [0.08, 0.5, 0.7], [0.12, 0.4, 0.6], [0.15, 0.5, 0.8]], // Earth Glow
+            [[0.6, 0.0, 1.0], [0.6, 0.1, 0.9], [0.6, 0.0, 0.8], [0.6, 0.1, 1.0]], // Sapphire Light
+            [[0.95, 0.9, 1.0], [0.98, 0.8, 0.9], [0.02, 0.9, 1.0], [0.05, 0.8, 0.8]], // Volcanic Flame
+            [[0.25, 0.7, 0.6], [0.3, 0.8, 0.7], [0.35, 0.6, 0.5], [0.28, 0.9, 0.8]], // Forest Aurora
+            [[0.75, 0.9, 0.9], [0.78, 0.8, 0.7], [0.72, 0.9, 1.0], [0.76, 0.7, 0.8]], // Cosmic Nebula
+            // New 9 for incredible variety
+            [[0.5, 0.7, 0.9], [0.55, 0.8, 1.0], [0.6, 0.6, 0.8], [0.52, 0.9, 0.7]], // Ocean Depths
+            [[0.8, 1.0, 1.0], [0.85, 0.9, 0.9], [0.9, 1.0, 1.0], [0.82, 0.8, 0.8]], // Neon Plasma
+            [[0.1, 0.3, 0.9], [0.15, 0.4, 1.0], [0.2, 0.2, 0.8], [0.12, 0.5, 0.7]], // Pastel Dreams
+            [[0.4, 0.9, 0.6], [0.45, 1.0, 0.7], [0.5, 0.8, 0.5], [0.42, 0.7, 0.8]], // Aurora Borealis
+            [[0.9, 0.5, 0.7], [0.95, 0.6, 0.8], [1.0, 0.4, 0.6], [0.92, 0.7, 0.9]], // Sunset Radiance
+            [[0.3, 0.4, 0.5], [0.35, 0.5, 0.6], [0.4, 0.3, 0.4], [0.32, 0.6, 0.7]], // Twilight Mist
+            [[0.15, 1.0, 1.0], [0.18, 0.9, 0.9], [0.12, 1.0, 0.8], [0.16, 0.8, 1.0]], // Solar Flare
+            [[0.85, 0.6, 0.9], [0.88, 0.7, 1.0], [0.82, 0.5, 0.8], [0.86, 0.8, 0.9]], // Amethyst Light
+            [[0.0, 0.0, 1.0], [0.0, 0.1, 0.9], [0.0, 0.0, 0.8], [0.0, 0.2, 1.0]] // Pure White Light
+        ];
+
+        const paletteNames = [
+            "Rainbow Light", "Earth Glow", "Sapphire Light", "Volcanic Flame", "Forest Aurora", "Cosmic Nebula",
+            "Ocean Depths", "Neon Plasma", "Pastel Dreams", "Aurora Borealis", "Sunset Radiance", "Twilight Mist",
+            "Solar Flare", "Amethyst Light", "Pure White Light"
+        ];
+
+        // Rarity system based on ethical trait scores
+        const rarityLevels = [
+            { name: "Common Soul", minScore: 0, color: "#888888", glowMult: 0.8, particleMult: 1.0 },
+            { name: "Rare Soul", minScore: 1.5, color: "#00AAFF", glowMult: 1.2, particleMult: 1.3 },
+            { name: "Epic Soul", minScore: 2.5, color: "#AA00FF", glowMult: 1.5, particleMult: 1.6 },
+            { name: "Legendary Soul", minScore: 3.5, color: "#FFD700", glowMult: 2.0, particleMult: 2.0 },
+            { name: "Mythic Soul", minScore: 4.5, color: "#FF4444", glowMult: 3.0, particleMult: 2.5 }
+        ];
+        
+        // Enhanced LNAL Simulator with more opcodes
+        class LNALSimulator {
+            constructor() {
+                this.registers = [];
+                this.costs = [];
+                this.openTokens = 0;
+                this.ledgerSteps = [];
+                this.eigenvalues = [];
+                this.opcodeCount = { FOLD: 0, BRAID: 0, CYCLE: 0, BALANCE: 0, LOCK: 0 };
+            }
+            
+            logStep(opcode, args, state) {
+                this.ledgerSteps.push(`${opcode} ${args.join(', ')} | State: ${JSON.stringify(state)}`);
+                if (this.opcodeCount[opcode] !== undefined) {
+                    this.opcodeCount[opcode]++;
+                }
+            }
+            
+            FOLD(n, regIndex) {
+                this.registers[regIndex] += n;
+                this.costs[regIndex] += n;
+                this.logStep('FOLD', [n, regIndex], this.costs);
+            }
+            
+            BRAID(regs) {
+                const maxCost = Math.max(...regs.map(r => this.costs[r]));
+                const newReg = this.registers.length;
+                this.registers.push(maxCost);
+                this.costs.push(maxCost);
+                this.logStep('BRAID', regs, this.costs);
+                return newReg;
+            }
+
+            CYCLE(ticks) {
+                this.logStep('CYCLE', [ticks], { ticks });
+            }
+
+            BALANCE(regIndex) {
+                this.costs[regIndex] = Math.abs(this.costs[regIndex]) * 0.5;
+                this.logStep('BALANCE', [regIndex], this.costs);
+            }
+
+            LOCK(regIndex) {
+                this.logStep('LOCK', [regIndex], { locked: regIndex });
+            }
+        }
+        
+        let simulator, scene, camera, renderer, soulGroup, lightParticles, godRays, animationId;
+        
+        function initVisualizer() {
+            const canvas = document.getElementById('visualizer');
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x000022); // Slightly lighter for contrast
+            
+            const width = canvas.clientWidth || 800;
+            const height = canvas.clientHeight || 600;
+            
+            camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+            camera.position.set(0, 0, 12); // Much closer to see the flux threads
+            camera.lookAt(0, 0, 0);
+            
+            renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            renderer.setSize(width, height);
+            renderer.setClearColor(0x000022, 1);
+            
+            console.log('Visualizer initialized - Camera at z=12, Canvas:', width, 'x', height);
+            
+            renderer.render(scene, camera);
+        }
+        
+        // Flux Thread Network Generation for souls
+        function generateFluxPath(eigenvalue, corePos, virtueScores, soulId) {
+            const points = [];
+            const segments = 150 + Math.floor(virtueScores.wisdom * 100); // Wisdom adds complexity
+            const baseRadius = 2 + eigenvalue * 3;
+            
+            // Virtue modulations
+            const love = virtueScores.love || 0;
+            const justice = virtueScores.justice || 0;
+            const courage = virtueScores.courage || 0;
+            const creativity = virtueScores.creativity || 0;
+            const hope = virtueScores.hope || 0;
+            const patience = virtueScores.patience || 0;
+            
+            // Start from core
+            points.push(corePos.clone());
+            
+            for (let i = 1; i <= segments; i++) {
+                const t = i / segments;
+                const angle = t * Math.PI * 4 * (1 + creativity * 2); // Creativity adds turns
+                
+                // Base spiral with φ-scaling
+                let x = Math.cos(angle) * baseRadius * Math.pow(PHI, t * (1 + hope * 0.5)); // Hope biases upward
+                let y = Math.sin(angle) * baseRadius * Math.pow(PHI, t * (1 + hope * 0.5));
+                let z = (t - 0.5) * 3 * (1 + courage * 2); // Courage extends outward
+                
+                // Love adds embracing loops
+                if (love > 0.3) {
+                    const loopFactor = love * 0.5;
+                    x += Math.cos(angle * 3) * loopFactor;
+                    y += Math.sin(angle * 3) * loopFactor;
+                }
+                
+                // Justice adds symmetry
+                if (justice > 0.4 && i > segments / 2) {
+                    const mirrorIdx = segments - i;
+                    const mirrorT = mirrorIdx / segments;
+                    const mirrorAngle = mirrorT * Math.PI * 4;
+                    x = (x + Math.cos(mirrorAngle) * baseRadius * Math.pow(PHI, mirrorT)) / 2;
+                    y = (y + Math.sin(mirrorAngle) * baseRadius * Math.pow(PHI, mirrorT)) / 2;
+                }
+                
+                // Add Perlin-like organic noise (simplified)
+                const noiseAmp = 0.3 * (1 - patience); // Patience reduces chaos
+                x += (Math.sin(t * 10 + soulId) * noiseAmp);
+                y += (Math.cos(t * 12 + soulId) * noiseAmp);
+                z += (Math.sin(t * 8 + soulId) * noiseAmp * 0.5);
+                
+                points.push(new THREE.Vector3(x, y, z));
+            }
+            
+            return points;
+        }
+
+        function createFluxThread(points, virtueScores, eigenvalue) {
+            console.log('Creating flux thread with', points.length, 'points, eigenvalue:', eigenvalue);
+            
+            const curve = new THREE.CatmullRomCurve3(points);
+            const tubeRadius = 0.03 + eigenvalue * 0.02;
+            const geometry = new THREE.TubeGeometry(curve, 64, tubeRadius, 8, false);
+            
+            // Virtue-driven material
+            const love = virtueScores.love || 0;
+            const wisdom = virtueScores.wisdom || 0;
+            const sacrifice = virtueScores.sacrifice || 0;
+            
+            // Color influenced by virtues
+            const hue = 0.15 + love * 0.1; // Love warms to gold-red
+            const saturation = 0.6 + wisdom * 0.3; // Wisdom deepens color
+            const lightness = 0.7 - sacrifice * 0.2; // Sacrifice dims for others
+            
+            const color = new THREE.Color().setHSL(hue, saturation, lightness);
+            
+            const material = new THREE.MeshPhysicalMaterial({
+                color: color,
+                emissive: color.clone().multiplyScalar(0.5), // Increased emissive for visibility
+                emissiveIntensity: 0.8 + wisdom * 0.7, // Brighter emissive
+                transmission: 0.3,
+                transparent: true,
+                opacity: 0.8 - sacrifice * 0.3,
+                roughness: 0.1,
+                metalness: 0.1
+            });
+            
+            const mesh = new THREE.Mesh(geometry, material);
+            console.log('Flux thread created - radius:', tubeRadius, 'color:', color, 'opacity:', material.opacity);
+            return mesh;
+        }
+
+        function createSoulCore(virtueScores, rarity) {
+            const humility = virtueScores.humility || 0;
+            const hope = virtueScores.hope || 0;
+            
+            const coreSize = (0.2 + rarity.glowMult * 0.1) * (1 - humility * 0.3); // Humility reduces size
+            const geometry = new THREE.SphereGeometry(coreSize, 16, 16);
+            
+            const material = new THREE.MeshPhysicalMaterial({
+                color: new THREE.Color().setHSL(0.12 + hope * 0.08, 0.8, 0.9),
+                emissive: new THREE.Color().setHSL(0.12 + hope * 0.08, 0.6, 0.5),
+                emissiveIntensity: 1 + rarity.glowMult * 0.5,
+                transmission: 0.5,
+                transparent: true,
+                opacity: 0.9,
+                roughness: 0,
+                metalness: 0.1
+            });
+            
+            return new THREE.Mesh(geometry, material);
+        }
+
+        function createVirtueBridges(fluxThreads, virtueScores) {
+            const compassion = virtueScores.compassion || 0;
+            const gratitude = virtueScores.gratitude || 0;
+            
+            if (compassion < 0.3) return [];
+            
+            const bridges = [];
+            for (let i = 0; i < fluxThreads.length; i++) {
+                for (let j = i + 1; j < fluxThreads.length; j++) {
+                    if (Math.random() < compassion * 0.3) {
+                        const points = [
+                            fluxThreads[i].geometry.parameters.path.getPoint(0.3 + Math.random() * 0.4),
+                            fluxThreads[j].geometry.parameters.path.getPoint(0.3 + Math.random() * 0.4)
+                        ];
+                        
+                        const curve = new THREE.CatmullRomCurve3(points);
+                        const geometry = new THREE.TubeGeometry(curve, 8, 0.01, 4, false);
+                        const material = new THREE.MeshBasicMaterial({
+                            color: new THREE.Color().setHSL(0.2 + gratitude * 0.2, 0.7, 0.8),
+                            transparent: true,
+                            opacity: 0.4 * compassion
+                        });
+                        
+                        bridges.push(new THREE.Mesh(geometry, material));
+                    }
+                }
+            }
+            
+            return bridges;
+        }
+
+        // Enhanced living light field for mandala aura
+        function createLivingLightField(rarity, virtueScores) {
+            const particles = [];
+            const count = 200 + rarity.particleMult * 100;
+            const temperance = virtueScores.temperance || 0;
+            const gratitude = virtueScores.gratitude || 0;
+            
+            for (let i = 0; i < count; i++) {
+                const geometry = new THREE.SphereGeometry(0.01 + Math.random() * 0.02, 4, 4);
+                const material = new THREE.MeshBasicMaterial({
+                    color: new THREE.Color().setHSL(0.15 + gratitude * 0.1, 0.4, 0.9),
+                    transparent: true,
+                    opacity: 0.3 + Math.random() * 0.4
+                });
+                
+                const particle = new THREE.Mesh(geometry, material);
+                
+                // Position in sphere around soul
+                const radius = 3 + Math.random() * 4;
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos(2 * Math.random() - 1);
+                
+                particle.position.x = radius * Math.sin(phi) * Math.cos(theta);
+                particle.position.y = radius * Math.sin(phi) * Math.sin(theta);
+                particle.position.z = radius * Math.cos(phi);
+                
+                // Store motion params influenced by temperance
+                particle.userData = {
+                    baseRadius: radius,
+                    theta: theta,
+                    phi: phi,
+                    speed: (0.5 + Math.random() * 0.5) * (1 - temperance * 0.5), // Temperance slows
+                    phase: Math.random() * Math.PI * 2
+                };
+                
+                particles.push(particle);
+            }
+            
+            return particles;
+        }
+
+        function animateLivingLight() {
+            if (!scene.userData || !scene.userData.particles) return;
+            
+            const time = (Date.now() - scene.userData.startTime) * 0.001;
+            const virtueScores = scene.userData.virtueScores;
+            const patience = virtueScores.patience || 0;
+            const temperance = virtueScores.temperance || 0;
+            const creativity = virtueScores.creativity || 0;
+            const forgiveness = virtueScores.forgiveness || 0;
+            
+            // Animate particles in 8-beat cycles
+            scene.userData.particles.forEach((particle, i) => {
+                const userData = particle.userData;
+                const beatPhase = (time * (1 - patience * 0.5) + userData.phase) % (Math.PI * 2); // Patience slows
+                
+                // Orbital motion with virtue influence
+                const radiusVar = Math.sin(beatPhase * 4) * 0.2 * (1 + creativity * 0.5); // Creativity adds variation
+                const newRadius = userData.baseRadius + radiusVar;
+                
+                const theta = userData.theta + time * userData.speed * (1 - temperance * 0.3); // Temperance calms
+                const phi = userData.phi + Math.sin(time * 0.5 + i) * 0.1;
+                
+                particle.position.x = newRadius * Math.sin(phi) * Math.cos(theta);
+                particle.position.y = newRadius * Math.sin(phi) * Math.sin(theta);
+                particle.position.z = newRadius * Math.cos(phi);
+                
+                // Forgiveness fading effect
+                if (forgiveness > 0.5) {
+                    particle.material.opacity = 0.3 + Math.sin(beatPhase) * 0.2 * forgiveness;
+                }
+            });
+            
+            // Animate core pulsing
+            if (scene.userData.core) {
+                const hope = virtueScores.hope || 0;
+                const love = virtueScores.love || 0;
+                const beatPulse = Math.sin(time * 2) * 0.1 * (1 + love * 0.5); // Love amplifies pulse
+                scene.userData.core.scale.setScalar(1 + beatPulse);
+                
+                // Hope adds upward drift
+                if (hope > 0.4) {
+                    scene.userData.core.position.y = Math.sin(time * 0.5) * 0.2 * hope;
+                }
+            }
+            
+            // Animate flux threads
+            scene.userData.fluxThreads.forEach((thread, i) => {
+                const wisdom = virtueScores.wisdom || 0;
+                const sacrifice = virtueScores.sacrifice || 0;
+                
+                // Wisdom adds emissive pulsing
+                if (wisdom > 0.3) {
+                    const pulse = Math.sin(time * 3 + i) * 0.2 * wisdom;
+                    thread.material.emissiveIntensity = 0.5 + pulse;
+                }
+                
+                // Sacrifice fading segments
+                if (sacrifice > 0.5) {
+                    const fadePhase = Math.sin(time * 1.5 + i * 0.5) * 0.3 * sacrifice;
+                    thread.material.opacity = Math.max(0.3, 0.8 - fadePhase);
+                }
+            });
+            
+            // CRITICAL: Render the scene and continue animation loop
+            renderer.render(scene, camera);
+            animationId = requestAnimationFrame(animateLivingLight);
+        }
+        
+        function calculateEthicalTraits(opcodeCount, delta, energy, coherence, stability) {
+            // Simple energy variance placeholder
+            const energyVar = (energy % 1) / 1;
+            const ctxBase = { op: opcodeCount, delta, coherence, stability, energyVar };
+            return ethicalTraits.map(v => v.compute(ctxBase));
+        }
+
+        function calculateRarity(traitValues) {
+            const totalScore = traitValues.reduce((sum, val) => sum + val, 0);
+            for (let i = rarityLevels.length - 1; i >= 0; i--) {
+                if (totalScore >= rarityLevels[i].minScore) {
+                    return rarityLevels[i];
+                }
+            }
+            return rarityLevels[0];
+        }
+        
+        function updateEthicsPanel(ethicalScores) {
+            let content = '';
+            ethicalTraits.forEach((trait, i) => {
+                const score = ethicalScores[i];
+                const percentage = Math.round(score * 100);
+                content += `
+                    <div style="margin-bottom: 8px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+                            <span style="font-size: 11px;">${trait.name}</span>
+                            <span style="font-size: 11px; opacity: 0.8;">${percentage}%</span>
+                        </div>
+                        <div class="trait-bar">
+                            <div class="trait-fill" style="width: ${percentage}%"></div>
+                        </div>
+                        <div style="font-size: 9px; opacity: 0.6; margin-top: 2px;">${trait.desc}</div>
+                    </div>
+                `;
+            });
+            document.getElementById('ethicsContent').innerHTML = content;
+        }
+        
+        function updatePersonalityPanel(personalityData, opcodeCount) {
+            const content = `
+                <div style="color: #FFD700; font-weight: bold; margin-bottom: 8px;">
+                    ${personalityData.name}
+                </div>
+                <div style="font-size: 11px; margin-bottom: 8px; opacity: 0.9;">
+                    ${personalityData.desc}
+                </div>
+                <div style="font-size: 10px; opacity: 0.7;">
+                    <strong>LNAL Operations:</strong><br>
+                    FOLD: ${opcodeCount.FOLD} | BRAID: ${opcodeCount.BRAID}<br>
+                    CYCLE: ${opcodeCount.CYCLE} | BALANCE: ${opcodeCount.BALANCE} | LOCK: ${opcodeCount.LOCK}
+                </div>
+            `;
+            document.getElementById('personalityContent').innerHTML = content;
+        }
+        
+        function updateRarityPanel(rarity, ethicalScores) {
+            if (!rarity || !rarity.name) {
+                console.error('Invalid rarity data:', rarity);
+                return;
+            }
+            
+            const totalScore = ethicalScores.reduce((sum, val) => sum + val, 0);
+            
+            const badge = document.getElementById('rarityBadge');
+            badge.className = `rarity-badge ${rarity.name.toLowerCase().replace(' ', '-')}`;
+            badge.textContent = rarity.name;
+            
+            const details = `
+                <div style="margin-bottom: 8px;">
+                    <strong>Ethical Coherence:</strong> ${totalScore.toFixed(2)}/14.0
+                </div>
+                <div style="font-size: 10px; opacity: 0.8;">
+                    Light intensity: ${rarity.glowMult}x<br>
+                    Particle density: ${rarity.particleMult}x<br>
+                    Manifestation strength: ${rarity.name}
+                </div>
+            `;
+            document.getElementById('rarityDetails').innerHTML = details;
+        }
+        
+        function updateExplanationPanel() {
+            const content = `
+                <strong>Flux-to-Code Mapping:</strong><br>
+                <em>Core Orb:</em> LNAL coherence → radiance intensity<br>
+                <em>Flux Threads:</em> 8 eigenvalues → spiral paths with φ-scaling<br>
+                <em>Virtue Patterns:</em> Love→embracing loops, Justice→symmetry, Wisdom→fractals<br>
+                <em>Mandala Evolution:</em> FOLD/BRAID/CYCLE ops → thread morphing<br>
+                <em>Living Aura:</em> I-Am field particles in 8-beat RS cycles
+            `;
+            document.getElementById('explanationPanel').innerHTML = content;
+        }
+        
+        function visualizeLedger(eigenvalues, delta, energy, coherence, stability, opcodeCount, ethicalScores, personalityData, rarity) {
+            // Clear previous visualization
+            while (scene.children.length > 0) {
+                const child = scene.children[0];
+                if (child.geometry) child.geometry.dispose();
+                if (child.material) {
+                    if (Array.isArray(child.material)) {
+                        child.material.forEach(mat => mat.dispose());
+                    } else {
+                        child.material.dispose();
+                    }
+                }
+                scene.remove(child);
+            }
+
+            // Create virtue scores object for easy access
+            const virtueScores = {};
+            ethicalTraits.forEach((trait, i) => {
+                virtueScores[trait.name.toLowerCase()] = ethicalScores[i];
+            });
+
+            // Core orb at center
+            const corePosition = new THREE.Vector3(0, 0, 0);
+            const core = createSoulCore(virtueScores, rarity);
+            scene.add(core);
+
+            // Generate 8 flux threads (one per eigenvalue)
+            const fluxThreads = [];
+            eigenvalues.forEach((eigenvalue, i) => {
+                const angle = (i / 8) * Math.PI * 2;
+                const startOffset = new THREE.Vector3(
+                    Math.cos(angle) * 0.3,
+                    Math.sin(angle) * 0.3,
+                    0
+                );
+                
+                const soulId = energy + delta + i; // Unique seed
+                const points = generateFluxPath(eigenvalue, corePosition.clone().add(startOffset), virtueScores, soulId);
+                const thread = createFluxThread(points, virtueScores, eigenvalue);
+                
+                fluxThreads.push(thread);
+                scene.add(thread);
+            });
+
+            // Add virtue bridges (compassion connections)
+            const bridges = createVirtueBridges(fluxThreads, virtueScores);
+            bridges.forEach(bridge => scene.add(bridge));
+
+            // Enhanced living light field
+            const particles = createLivingLightField(rarity, virtueScores);
+            particles.forEach(particle => scene.add(particle));
+
+            // Enhanced lighting for ethereal effect
+            scene.add(new THREE.AmbientLight(0x404040, 0.3));
+            
+            const primaryLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            primaryLight.position.set(5, 5, 5);
+            scene.add(primaryLight);
+            
+            const secondaryLight = new THREE.DirectionalLight(0x8888ff, 0.3);
+            secondaryLight.position.set(-3, -3, 3);
+            scene.add(secondaryLight);
+
+            // Store references for animation
+            scene.userData = {
+                core,
+                fluxThreads,
+                bridges,
+                particles,
+                virtueScores,
+                rarity,
+                startTime: Date.now()
+            };
+            
+            // CRITICAL: Start the animation loop!
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+            animateLivingLight();
+            
+            console.log('Soul visualization created with', fluxThreads.length, 'flux threads and', particles.length, 'particles');
+        }
+        
+        function replicateSoul() {
+            console.log('🌟 replicateSoul() called - starting soul generation...');
+            
+            try {
+            simulator = new LNALSimulator();
+            
+            // Initialize 8 registers
+            for (let i = 0; i < 8; i++) {
+                simulator.registers.push(0);
+                simulator.costs.push(0);
+            }
+            
+            // Generate random δ
+            const delta = parseFloat((Math.random() * 8 - 4).toFixed(2));
+            simulator.logStep('SET_DELTA', [delta], {delta});
+            
+            // Enhanced LNAL sequence with more operations
+            simulator.FOLD(GAP_45 + Math.floor(delta), 0);
+            
+            // Generate additional FOLD operations for variety
+            const extraFolds = Math.floor(Math.random() * 4) + 1;
+            for (let i = 0; i < extraFolds; i++) {
+                simulator.FOLD(Math.random() * 2 - 1, Math.floor(Math.random() * 8));
+            }
+            
+            // Encode 8 eigenvalues
+            const energy = E_COH * Math.pow(PHI, GAP_45 + delta);
+            simulator.logStep('SOUL_ENERGY', [energy.toFixed(6) + ' eV'], {energy});
+            
+            for (let k = 0; k < 8; k++) {
+                const lambda = energy * Math.pow(PHI, k / 8);
+                simulator.eigenvalues.push(lambda);
+                simulator.FOLD(k/8, k);
+                simulator.logStep('EIGENVALUE', [k, lambda.toFixed(6)], {k, lambda});
+            }
+            
+            // Enhanced braiding with more variety
+            simulator.BRAID([0,1,2]);
+            simulator.BRAID([3,4,5]);
+            simulator.BRAID([6,7, simulator.registers.length - 1]);
+            
+            // Additional operations for ethical trait computation
+            const extraCycles = Math.floor(Math.random() * 3) + 1;
+            for (let i = 0; i < extraCycles; i++) {
+                simulator.CYCLE(1024 + Math.floor(Math.random() * 512));
+            }
+            
+            if (Math.random() > 0.5) {
+                simulator.BALANCE(Math.floor(Math.random() * 8));
+            }
+            
+            if (Math.random() > 0.7) {
+                simulator.LOCK(Math.floor(Math.random() * 8));
+            }
+            
+            simulator.logStep('STATUS', ['Light being manifestation complete'], {status: 'SUCCESS'});
+            
+            // Calculate missing variables for visualization
+            const coherence = Math.random() * 0.5 + 0.5; // 0.5 to 1.0
+            const stability = Math.random() * 0.4 + 0.6; // 0.6 to 1.0
+            
+            // Count LNAL operations for ethical traits
+            const opcodeCount = {
+                FOLD: simulator.ledgerSteps.filter(step => step.includes('FOLD')).length,
+                BRAID: simulator.ledgerSteps.filter(step => step.includes('BRAID')).length,
+                CYCLE: simulator.ledgerSteps.filter(step => step.includes('CYCLE')).length,
+                BALANCE: simulator.ledgerSteps.filter(step => step.includes('BALANCE')).length,
+                LOCK: simulator.ledgerSteps.filter(step => step.includes('LOCK')).length
+            };
+            
+            // Calculate ethical traits
+            const ethicalScores = calculateEthicalTraits(opcodeCount, delta, energy, coherence, stability);
+            
+            // Calculate personality (simplified)
+            const personalityIndex = Math.abs(delta + energy) % personalityTraits.length;
+            const personalityData = personalityTraits[Math.floor(personalityIndex)];
+            
+            // Calculate rarity
+            const rarity = calculateRarity(ethicalScores);
+            
+            // Update UI panels
+            updateEthicsPanel(ethicalScores);
+            updatePersonalityPanel(personalityData, opcodeCount);
+            updateRarityPanel(rarity, ethicalScores);
+            updateExplanationPanel();
+            
+            // Output
+            document.getElementById('ledgerDisplay').textContent = 
+                `LIGHT BEING MANIFESTATION SEQUENCE:\n\n` + 
+                simulator.ledgerSteps.join('\n') + 
+                `\n\nδ = ${delta}\nE_soul = ${energy.toFixed(6)} eV\n8 eigenvalue prisms generated\nEthical traits computed from LNAL patterns\nLight being ready for manifestation`;
+            
+            console.log('Calling visualizeLedger with:', {
+                eigenvalues: simulator.eigenvalues.length,
+                delta, energy, coherence, stability, 
+                opcodeCount, ethicalScores: ethicalScores.length, 
+                personalityData: personalityData.name, 
+                rarity: rarity ? rarity.name : 'Undefined'
+            });
+            
+            visualizeLedger(simulator.eigenvalues, delta, energy, coherence, stability, opcodeCount, ethicalScores, personalityData, rarity);
+            
+            } catch (error) {
+                console.error('❌ Error in replicateSoul():', error);
+                alert('Error generating soul: ' + error.message);
+            }
+        }
+        
+        function clearLedger() {
+            document.getElementById('ledgerDisplay').textContent = 'Ledger cleared. Ready for new light being manifestation...';
+            document.getElementById('ethicsContent').innerHTML = 'Manifest a soul to see ethical traits...';
+            document.getElementById('personalityContent').innerHTML = 'Generate a soul to see personality...';
+            document.getElementById('rarityDetails').innerHTML = 'Awaiting manifestation...';
+            document.getElementById('explanationPanel').innerHTML = '<strong>Flux-to-Code Mapping:</strong><br>Generate a soul to see how LNAL weaves flux mandalas...';
+            
+            const badge = document.getElementById('rarityBadge');
+            badge.textContent = 'Unknown';
+            badge.className = 'rarity-badge';
+            
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+            while(scene.children.length > 0) {
+                scene.remove(scene.children[0]);
+            }
+            renderer.render(scene, camera);
+        }
+        
+        // Initialize when page loads
+        window.addEventListener('load', () => {
+            try {
+                initVisualizer();
+                console.log('Flux Mandala visualizer initialized successfully');
+            } catch (error) {
+                console.error('Error initializing visualizer:', error);
+            }
+        });
+    </script>
+  
+  <div id="footer-placeholder"></div>
+  
+  <script src="/assets/js/main.js"></script>
+</body>
+</html> 

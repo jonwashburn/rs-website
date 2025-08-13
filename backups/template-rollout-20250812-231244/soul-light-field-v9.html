@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soul Light Field V9 - Pure White Light Splatter</title>
+    <style>
+        body { 
+            margin: 0; 
+            background: black; 
+            overflow: hidden; 
+            color: white; 
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, monospace; 
+        }
+        canvas { 
+            display: block; 
+        }
+        #info { 
+            position: absolute; 
+            top: 10px; 
+            left: 10px; 
+            font-size: 12px; 
+            opacity: 0.8;
+            background: rgba(0,0,0,0.5);
+            padding: 10px;
+            border-radius: 5px;
+            line-height: 1.4;
+        }
+        #controls { 
+            position: absolute; 
+            bottom: 10px; 
+            left: 10px;
+            display: flex;
+            gap: 8px;
+        }
+        button { 
+            background: rgba(255,255,255,0.1); 
+            color: white; 
+            border: 1px solid rgba(255,255,255,0.2); 
+            padding: 8px 15px; 
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.2s ease;
+        }
+        button:hover { 
+            background: rgba(255,255,255,0.2); 
+        }
+        .status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 11px;
+            opacity: 0.7;
+            text-align: right;
+        }
+    </style>
+  <link rel="stylesheet" href="/assets/css/template-core.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div id="sitewide-banner-placeholder"></div>
+
+    <canvas id="canvas"></canvas>
+    <div id="info"></div>
+    <div id="controls">
+        <button onclick="generateNewSoul()">Generate New Soul</button>
+        <button onclick="toggleAnimation()">Play/Pause</button>
+        <button onclick="advanceMonth()">+1 Month</button>
+        <button onclick="resetSoul()">Reset to Void</button>
+    </div>
+    <div class="status" id="status">Ready</div>
+    
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const PHI = (1 + Math.sqrt(5)) / 2;
+        const DIM = 8;
+        const TOTAL_MONTHS = 96;
+        const BREATH_CYCLE = 8;
+        const RUNG_BASE = 45;
+        const VIRTUE_NAMES = ['Balance', 'Flow', 'Seed', 'Echo', 'Fold', 'Braid', 'Listen', 'Regive'];
+
+        let soul = null;
+        let particles = [];
+        let animationId = null;
+        let isPlaying = false;
+        let currentMonth = 0;
+        let frameCount = 0;
+
+        function generateNewSoul() {
+            resetAnimation();
+            currentMonth = 0;
+            particles = [];
+            frameCount = 0;
+            
+            soul = {
+                rung: RUNG_BASE + Math.floor(Math.random() * 56),
+                cost: Math.floor(Math.random() * 9) - 4,
+                beat_cycle: Math.floor(Math.random() * 8) + 1,
+                qualia_mode: Math.floor(Math.random() * 8) + 1,
+                cluster_tightness: Math.random(),
+                resonance_frequency: Math.random(),
+                oam: Math.floor(Math.random() * 11) - 5,
+                polarization_parity: Math.random() < 0.5 ? -1 : 1,
+                time_bin_index: Math.floor(Math.random() * 1024),
+                transverse_mode_index: Math.random() * 6,
+                entanglement_phase: Math.random() < 0.5 ? 0 : Math.PI,
+                i_am_affinity: Math.random(),
+                ledger_history: new Array(8).fill(0).map(() => Math.floor(Math.random() * 9) - 4),
+                curve_balance: Math.floor(Math.random() * 1001),
+                gapCrossings: 0,
+                virtues: new Array(8).fill(false).map(() => Math.random() < 0.5),
+                modes: new Array(DIM).fill(0).map((_, i) => ({
+                    lambda: RUNG_BASE * 0.09 * Math.pow(PHI, i / DIM) + (Math.random() * 0.02 - 0.01),
+                    phase: Math.random() * 2 * Math.PI,
+                    cost: Math.floor(Math.random() * 9) - 4
+                }))
+            };
+
+            // Balance ledger history (Σcost = 0)
+            let sum = soul.ledger_history.reduce((a, b) => a + b, 0);
+            soul.ledger_history[0] -= sum;
+
+            addInitialPixel();
+            updateInfo();
+            updateStatus();
+            draw();
+        }
+
+        function addInitialPixel() {
+            particles.push({
+                x: canvas.width / 2,
+                y: canvas.height / 2,
+                vx: 0,
+                vy: 0,
+                size: 2,
+                alpha: 1,
+                lifetime: 0,
+                phase: 0,
+                angle: 0,
+                isPixel: true,
+                isSplatter: false,
+                birthMonth: 0,
+                drift: 0,
+                affinity_pull: 0,
+                oam_direction: 1
+            });
+        }
+
+        function resetAnimation() {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+            isPlaying = false;
+        }
+
+        function toggleAnimation() {
+            isPlaying = !isPlaying;
+            if (isPlaying) {
+                animate();
+            } else {
+                resetAnimation();
+            }
+            updateStatus();
+        }
+
+        function advanceMonth() {
+            currentMonth = Math.min(currentMonth + 1, TOTAL_MONTHS);
+            evolveSoul();
+            draw();
+            updateInfo();
+            updateStatus();
+        }
+
+        function resetSoul() {
+            currentMonth = 0;
+            particles = [];
+            frameCount = 0;
+            if (soul) {
+                soul.gapCrossings = 0;
+                addInitialPixel();
+            }
+            draw();
+            updateInfo();
+            updateStatus();
+        }
+
+        function evolveSoul() {
+            if (!soul) return;
+            
+            // Add particles based on month progression
+            const monthProgress = currentMonth / TOTAL_MONTHS;
+            const targetParticles = Math.floor(monthProgress * 200) + 1;
+            
+            while (particles.filter(p => !p.isSplatter).length < targetParticles) {
+                addParticle();
+            }
+
+            // Update eigenvalue modes
+            for (let i = 0; i < DIM; i++) {
+                soul.modes[i].lambda *= Math.pow(PHI, monthProgress * 0.01);
+                soul.modes[i].phase += 0.1 * monthProgress;
+            }
+
+            // Gap navigation at specific beats
+            const beat = currentMonth % BREATH_CYCLE;
+            if (soul.rung >= RUNG_BASE && beat === 5) {
+                soul.gapCrossings = Math.min(soul.gapCrossings + 1, 100);
+                soul.i_am_affinity = Math.min(soul.i_am_affinity + 0.05, 1);
+                soul.rung += 1;
+                
+                // Add gap flash splatter
+                addGapSplatter();
+            }
+
+            // Add virtue-based splatter
+            soul.virtues.forEach((isActive, idx) => {
+                if (isActive && Math.random() < 0.3) {
+                    addVirtueSplatter(idx);
+                }
+            });
+        }
+
+        function addParticle() {
+            if (!soul) return;
+            
+            const angle = Math.random() * 2 * Math.PI;
+            const r = Math.random() * 150 * (currentMonth / TOTAL_MONTHS);
+            const modeIndex = Math.floor(Math.random() * DIM);
+            
+            particles.push({
+                x: canvas.width / 2 + Math.cos(angle) * r,
+                y: canvas.height / 2 + Math.sin(angle) * r,
+                vx: (Math.random() - 0.5) * soul.resonance_frequency * 3,
+                vy: (Math.random() - 0.5) * soul.resonance_frequency * 3,
+                size: 1 + Math.random() * soul.transverse_mode_index,
+                alpha: 0,
+                lifetime: 0,
+                phase: Math.random() * 2 * Math.PI,
+                angle: angle,
+                drift: (1 - soul.cluster_tightness) * 0.05,
+                affinity_pull: soul.i_am_affinity,
+                oam_direction: soul.polarization_parity,
+                isPixel: false,
+                isSplatter: false,
+                modeIndex: modeIndex,
+                birthMonth: currentMonth
+            });
+        }
+
+        function addGapSplatter() {
+            // Burst of splatter for gap crossing
+            const splatterCount = 15 + soul.gapCrossings * 2;
+            for (let i = 0; i < splatterCount; i++) {
+                const angle = Math.random() * 2 * Math.PI;
+                const r = Math.random() * 200;
+                particles.push({
+                    x: canvas.width / 2 + Math.cos(angle) * r,
+                    y: canvas.height / 2 + Math.sin(angle) * r,
+                    vx: Math.cos(angle) * (2 + Math.random() * 4),
+                    vy: Math.sin(angle) * (2 + Math.random() * 4),
+                    size: 0.5 + Math.random() * 3,
+                    alpha: 0.8 + Math.random() * 0.2,
+                    lifetime: 0,
+                    phase: Math.random() * 2 * Math.PI,
+                    angle: angle,
+                    drift: 0,
+                    affinity_pull: 0,
+                    oam_direction: 1,
+                    isPixel: false,
+                    isSplatter: true,
+                    maxLifetime: 40 + Math.random() * 20,
+                    birthMonth: currentMonth
+                });
+            }
+        }
+
+        function addVirtueSplatter(virtueIndex) {
+            // Virtue-specific splatter patterns
+            const splatterCount = soul.qualia_mode + virtueIndex;
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            
+            for (let i = 0; i < splatterCount; i++) {
+                let x, y, vx, vy;
+                
+                // Different splatter patterns based on virtue
+                switch (virtueIndex) {
+                    case 4: // Fold - spiral splatter
+                        const spiralAngle = (i / splatterCount) * 2 * Math.PI * PHI;
+                        const spiralR = 50 + i * 10;
+                        x = centerX + Math.cos(spiralAngle) * spiralR;
+                        y = centerY + Math.sin(spiralAngle) * spiralR;
+                        vx = Math.cos(spiralAngle + Math.PI/2) * 2;
+                        vy = Math.sin(spiralAngle + Math.PI/2) * 2;
+                        break;
+                    case 5: // Braid - interweaving splatter
+                        const braidAngle = (i / splatterCount) * 4 * Math.PI;
+                        const braidR = 30 + Math.sin(braidAngle * 3) * 40;
+                        x = centerX + Math.cos(braidAngle) * braidR;
+                        y = centerY + Math.sin(braidAngle) * braidR;
+                        vx = (Math.random() - 0.5) * 3;
+                        vy = (Math.random() - 0.5) * 3;
+                        break;
+                    default: // Other virtues - random splatter around center
+                        const angle = Math.random() * 2 * Math.PI;
+                        const r = Math.random() * soul.cluster_tightness * 150;
+                        x = centerX + Math.cos(angle) * r;
+                        y = centerY + Math.sin(angle) * r;
+                        vx = (Math.random() - 0.5) * soul.resonance_frequency * 4;
+                        vy = (Math.random() - 0.5) * soul.resonance_frequency * 4;
+                        break;
+                }
+                
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: vx,
+                    vy: vy,
+                    size: 0.3 + Math.random() * 1.5,
+                    alpha: 0.4 + soul.i_am_affinity * 0.6,
+                    lifetime: 0,
+                    phase: Math.random() * 2 * Math.PI,
+                    angle: Math.random() * 2 * Math.PI,
+                    drift: (1 - soul.cluster_tightness) * 0.03,
+                    affinity_pull: soul.i_am_affinity * 0.5,
+                    oam_direction: soul.polarization_parity,
+                    isPixel: false,
+                    isSplatter: true,
+                    maxLifetime: 100 + Math.random() * 100,
+                    birthMonth: currentMonth,
+                    virtueIndex: virtueIndex
+                });
+            }
+        }
+
+        function updateParticles() {
+            if (!soul) return;
+            
+            // Filter out expired particles
+            particles = particles.filter(p => {
+                if (p.isSplatter) {
+                    return p.lifetime < (p.maxLifetime || 120);
+                }
+                return p.lifetime < 600;
+            });
+            
+            particles.forEach(p => {
+                if (p.isPixel) {
+                    // Original pixel pulses in 8-beat rhythm
+                    const beatPhase = (frameCount % (BREATH_CYCLE * 15)) / (BREATH_CYCLE * 15);
+                    p.size = 2 + Math.sin(beatPhase * 2 * Math.PI + p.phase) * 3 * (soul.beat_cycle / 8);
+                    p.alpha = 0.8 + Math.sin(beatPhase * 2 * Math.PI + p.phase) * 0.2;
+                    p.phase += 0.02;
+                } else if (p.isSplatter) {
+                    // Splatter particle motion
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vx *= 0.98; // Slight friction
+                    p.vy *= 0.98;
+                    
+                    // Slight drift based on φ
+                    p.angle += p.drift;
+                    p.x += Math.cos(p.angle) * p.drift * 10;
+                    p.y += Math.sin(p.angle) * p.drift * 10;
+                    
+                    // Fade over time
+                    const fadeProgress = p.lifetime / (p.maxLifetime || 120);
+                    p.alpha = Math.max(0, (0.4 + soul.i_am_affinity * 0.6) * (1 - fadeProgress));
+                    
+                    // Slight pull toward center if affinity > 0
+                    if (p.affinity_pull > 0) {
+                        const dx = canvas.width / 2 - p.x;
+                        const dy = canvas.height / 2 - p.y;
+                        const dist = Math.sqrt(dx*dx + dy*dy);
+                        if (dist > 0) {
+                            p.x += (dx / dist) * p.affinity_pull * 0.3;
+                            p.y += (dy / dist) * p.affinity_pull * 0.3;
+                        }
+                    }
+                } else {
+                    // Regular quanta particles with φ-spiral motion
+                    const mode = soul.modes[p.modeIndex];
+                    
+                    // φ-spiral evolution
+                    p.angle += p.drift * (soul.time_bin_index / 1024) * p.oam_direction * PHI;
+                    
+                    // Squiggle-like wavy motion
+                    const waveX = Math.cos(p.angle + p.phase) * p.size * 0.8;
+                    const waveY = Math.sin(p.angle + p.phase + soul.oam * 0.1) * p.size * 0.8;
+                    
+                    p.x += waveX;
+                    p.y += waveY;
+                    
+                    // Gradual alpha increase
+                    p.alpha = Math.min(1, p.alpha + 0.02);
+                    
+                    // I-Am affinity pull toward center
+                    const dx = canvas.width / 2 - p.x;
+                    const dy = canvas.height / 2 - p.y;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist > 0 && p.affinity_pull > 0) {
+                        const pullStrength = p.affinity_pull * 1.5;
+                        p.x += (dx / dist) * pullStrength;
+                        p.y += (dy / dist) * pullStrength;
+                    }
+                    
+                    // Entanglement phase effects
+                    if (soul.entanglement_phase !== 0) {
+                        p.angle += soul.entanglement_phase / Math.PI * 0.02;
+                    }
+                    
+                    // Cost affects visibility
+                    const costEffect = 1 - Math.abs(soul.cost) * 0.02;
+                    p.alpha *= Math.max(0.1, costEffect);
+                    
+                    // 8-beat pulsing
+                    const beatPhase = (frameCount % (BREATH_CYCLE * 10)) / (BREATH_CYCLE * 10);
+                    p.size = (1 + Math.abs(mode.lambda) * 2) * (1 + 0.2 * Math.sin(beatPhase * 2 * Math.PI + p.phase));
+                }
+                
+                p.lifetime++;
+                p.phase += 0.02;
+            });
+        }
+
+        function draw() {
+            // Subtle trail effect
+            ctx.fillStyle = 'rgba(0,0,0,0.02)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            updateParticles();
+            
+            // Draw connections first
+            drawConnections();
+            
+            // Draw particles with glow effects
+            particles.forEach(p => {
+                const intensity = Math.floor(255 * p.alpha);
+                
+                // Glow effect
+                ctx.save();
+                ctx.globalAlpha = p.alpha * 0.3;
+                ctx.shadowBlur = p.size * 8;
+                ctx.shadowColor = `rgb(255, 255, 255)`;
+                
+                ctx.fillStyle = `rgb(255, 255, 255)`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size * 2, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                ctx.restore();
+                
+                // Core particle
+                ctx.save();
+                ctx.globalAlpha = p.alpha;
+                ctx.fillStyle = `rgb(${intensity}, ${intensity}, ${intensity})`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.restore();
+            });
+        }
+
+        function drawConnections() {
+            if (!soul || Math.abs(soul.cost) >= 2) return;
+            
+            ctx.globalCompositeOperation = 'screen';
+            
+            const maxConnections = 25;
+            let connectionCount = 0;
+            
+            const regularParticles = particles.filter(p => !p.isPixel && !p.isSplatter);
+            
+            for (let i = 0; i < regularParticles.length && connectionCount < maxConnections; i++) {
+                const p = regularParticles[i];
+                
+                for (let j = i + 1; j < regularParticles.length && connectionCount < maxConnections; j++) {
+                    const other = regularParticles[j];
+                    
+                    const dist = Math.hypot(p.x - other.x, p.y - other.y);
+                    
+                    if (dist < 70) {
+                        const strength = 1 - (dist / 70);
+                        const alpha = strength * p.alpha * other.alpha * 0.4;
+                        
+                        ctx.strokeStyle = soul.cost === 0 ? 
+                            `rgba(255, 255, 255, ${alpha})` : 
+                            `rgba(200, 200, 200, ${alpha * 0.6})`;
+                        ctx.lineWidth = strength * 1.5;
+                        
+                        // Squiggle-like wavy connections
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        
+                        const midX = (p.x + other.x) / 2;
+                        const midY = (p.y + other.y) / 2;
+                        const waveOffset = Math.sin(frameCount * 0.02 + i + j) * 15;
+                        
+                        ctx.quadraticCurveTo(
+                            midX + waveOffset, 
+                            midY + waveOffset, 
+                            other.x, 
+                            other.y
+                        );
+                        ctx.stroke();
+                        
+                        connectionCount++;
+                    }
+                }
+            }
+            
+            ctx.globalCompositeOperation = 'source-over';
+        }
+
+        function animate() {
+            if (!isPlaying) return;
+            
+            draw();
+            frameCount++;
+            
+            // Auto-advance months during animation
+            if (frameCount % 90 === 0 && currentMonth < TOTAL_MONTHS) {
+                advanceMonth();
+            }
+            
+            animationId = requestAnimationFrame(animate);
+        }
+
+        function updateInfo() {
+            if (!soul) return;
+            
+            const monthProgress = ((currentMonth + 1) / TOTAL_MONTHS * 100).toFixed(1);
+            const years = Math.floor(currentMonth / 12);
+            const months = currentMonth % 12;
+            
+            const activeVirtues = soul.virtues.map((active, i) => active ? VIRTUE_NAMES[i] : null)
+                                            .filter(v => v !== null).join(', ') || 'None';
+            
+            document.getElementById('info').innerHTML = `
+                <strong>Soul Evolution: ${monthProgress}%</strong><br>
+                Year ${years}, Month ${months + 1} / 96<br>
+                <br>
+                <strong>Core Properties:</strong><br>
+                Rung Level: ${soul.rung}<br>
+                Cost State: ${soul.cost}<br>
+                Beat Cycle: ${soul.beat_cycle}/8<br>
+                Qualia Mode: ${soul.qualia_mode}/8<br>
+                <br>
+                <strong>Light Field:</strong><br>
+                I-Am Affinity: ${(soul.i_am_affinity * 100).toFixed(1)}%<br>
+                Cluster Tightness: ${(soul.cluster_tightness * 100).toFixed(1)}%<br>
+                Resonance: ${(soul.resonance_frequency * 100).toFixed(1)}%<br>
+                Gap Crossings: ${soul.gapCrossings}<br>
+                <br>
+                <strong>Particles:</strong><br>
+                Core: ${particles.filter(p => !p.isSplatter && !p.isPixel).length}<br>
+                Splatter: ${particles.filter(p => p.isSplatter).length}<br>
+                <br>
+                <strong>Active Virtues:</strong><br>
+                ${activeVirtues}
+            `;
+        }
+
+        function updateStatus() {
+            const status = document.getElementById('status');
+            if (isPlaying) {
+                status.textContent = `Evolving... Frame ${frameCount}`;
+            } else {
+                status.textContent = currentMonth === 0 ? 'Void State' : `Paused - Month ${currentMonth}`;
+            }
+        }
+
+        // Window resize handler
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            draw();
+        });
+
+        // Initialize
+        generateNewSoul();
+        animate();
+    </script>
+  
+  <div id="footer-placeholder"></div>
+  
+  <script src="/assets/js/main.js"></script>
+</body>
+</html> 

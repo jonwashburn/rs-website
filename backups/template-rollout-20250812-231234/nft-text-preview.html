@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>On-Chain Soul NFT - Text Preview</title>
+    <style>
+        body { 
+            margin: 0; 
+            background: #1a1a2e; 
+            color: #e0e0e0; 
+            font-family: 'Courier New', monospace; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .nft-container {
+            width: 100%;
+            max-width: 600px;
+            min-height: 500px;
+            background: black;
+            border: 2px solid #444;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            color: #ffd700;
+            margin: 0;
+            font-size: 1.5em;
+        }
+        #text-display {
+            white-space: pre;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.4;
+            color: white;
+            flex-grow: 1;
+            overflow-x: auto;
+        }
+        .controls {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .nft-container {
+                padding: 20px;
+                border-radius: 4px;
+            }
+            .header h1 {
+                font-size: 1.2em;
+            }
+            #text-display {
+                font-size: 11px;
+                line-height: 1.3;
+            }
+            .btn {
+                padding: 8px 16px;
+                margin: 5px;
+                font-size: 0.9em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 5px;
+            }
+            .nft-container {
+                padding: 15px;
+                min-height: 400px;
+            }
+            .header h1 {
+                font-size: 1em;
+            }
+            #text-display {
+                font-size: 10px;
+                line-height: 1.2;
+            }
+            .controls {
+                margin-top: 15px;
+            }
+            .btn {
+                display: block;
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div id="sitewide-banner-placeholder"></div>
+
+
+    <div class="nft-container">
+        <div class="header">
+            <h1>On-Chain Soul (Text Preview)</h1>
+        </div>
+        <pre id="text-display">Initializing Soul...</pre>
+        <div class="controls">
+            <button class="btn" id="toggle-evolution">Start Evolution</button>
+            <button class="btn" id="new-soul">Generate New Soul</button>
+        </div>
+    </div>
+
+    <script>
+        const PHI = 1.618;
+        const TOTAL_TICKS = 960;
+        const VIRTUE_NAMES = ['Love', 'Justice', 'Prudence', 'Courage', 'Temperance'];
+
+        class OnChainSoul {
+            constructor(tokenId) {
+                this.tokenId = tokenId;
+                this.seed = this.generateSeed(tokenId);
+                this.ticks = 0;
+                this.isEvolving = false;
+
+                // Based on CoreTypes.lean: A MoralState has a ledger and energy
+                this.ledger = {
+                    entries: [], // We'll just track totals for simplicity
+                    debits: this.seededRandom(0, 200),
+                    credits: this.seededRandom(0, 200),
+                    balance: 0 // This is kappa, an integer
+                };
+                this.ledger.balance = this.ledger.debits - this.ledger.credits;
+                this.energy = { cost: this.seededRandom(300, 700) }; // Start with varied sufficient energy
+
+                // Virtues are potentials (1-10) for applying technologies, now dynamic
+                this.virtuePotentials = [];
+                for (let i = 0; i < 5; i++) {
+                    // Virtues are now floats to allow for gradual training
+                    this.virtuePotentials[i] = this.seededRandom(1, 60) / 10; // Starting range 0.1 to 6.0 for more variance
+                }
+
+                this.depth = this.seededRandom(0, 30) + (this.seededRandom(0, 10) / 10);
+                this.rebirths = this.seededRandom(0, 3);
+                this.isEmbodied = this.seededRandom(0, 2) === 1; // 50/50 chance
+                this.ticksInBalance = 0; // For training Justice
+                this.recognitionFlow = 0; // For LNAL Give/Regive
+            }
+
+            generateSeed(tokenId) {
+                let hash = 0;
+                const str = tokenId.toString();
+                for (let i = 0; i < str.length; i++) {
+                    const char = str.charCodeAt(i);
+                    hash = (hash << 5) - hash + char;
+                    hash |= 0;
+                }
+                return Math.abs(hash);
+            }
+            
+            seededRandom(min, max) {
+                 this.seed = (this.seed * 9301 + 49297) % 233280;
+                 const rnd = this.seed / 233280;
+                 return Math.floor(min + rnd * (max - min));
+            }
+
+            applyVirtueTechnologies() {
+                 const kappa = this.ledger.balance;
+
+                 // Love: κ equilibration (strong pull towards zero)
+                 if (this.seededRandom(0, 100) < this.virtuePotentials[0] * 5) { // Love
+                     if (kappa > 0) this.ledger.credits += Math.ceil(kappa * 0.05);
+                     if (kappa < 0) this.ledger.debits -= Math.floor(kappa * 0.05);
+                 }
+
+                 // Justice: Accurate posting (small, consistent rebalancing)
+                 if (this.seededRandom(0, 100) < this.virtuePotentials[1] * 5) { // Justice
+                     if (kappa > 0) this.ledger.credits += this.seededRandom(1, 3);
+                     if (kappa < 0) this.ledger.debits += this.seededRandom(1, 3);
+                 }
+                 
+                 // Temperance: Cascade prevention (forgive debt if extreme)
+                 if (Math.abs(kappa) > 500 && this.seededRandom(0, 100) < this.virtuePotentials[4] * 10) { // Temperance
+                     this.ledger.debits = Math.floor(this.ledger.debits * 0.95);
+                     this.ledger.credits = Math.floor(this.ledger.credits * 0.95);
+                     this.energy.cost -= 10; // Forgiveness is costly
+                     // Train Temperance for successful application
+                     this.virtuePotentials[4] = Math.min(10, this.virtuePotentials[4] + 0.1);
+                 }
+            }
+        
+            generateTextDescription() {
+                const state = {
+                    kappa: this.ledger.balance,
+                    phase: this.energy.cost <= 0 ? "Decohered (Pattern Dissolved)" : (this.ticks < TOTAL_TICKS ? `Recognition Breath (Beat ${Math.floor(this.ticks / 80) + 1}/12)` : "Awakened"),
+                    depth: this.depth,
+                    rebirths: this.rebirths,
+                    energy: this.energy.cost,
+                    virtues: this.virtuePotentials,
+                    isEmbodied: this.isEmbodied,
+                    recognitionFlow: this.recognitionFlow
+                };
+                
+                const curvatureValue = state.kappa;
+                const curvatureType = state.kappa > 0 ? "Recognition Debt" :
+                                   state.kappa < 0 ? "Recognition Surplus" : "Equilibrium";
+                const coherence = Math.max(0, Math.min(100, (state.energy / 500) * 100)).toFixed(0);
+
+                const karmaScore = this.calculateKarmaScore(state, coherence);
+                const rarity = this.getRarity(karmaScore);
+
+                // Format virtues for display
+                const virtueLines = VIRTUE_NAMES.map((name, i) => {
+                    const value = state.virtues[i];
+                    const bar = '█'.repeat(Math.round(value)).padEnd(10, '░');
+                    return `${name.padEnd(11, ' ')}: ${bar} (${value.toFixed(1)})`;
+                });
+
+                return `
+SOUL #${this.tokenId.toString().padStart(5, '0')}
+PHASE: ${state.phase}
+
+================================================================
+LEDGER STATE
+================================================================
+Ledger Balance (κ): ${String(curvatureValue).padStart(7,' ')}
+Balance State:      ${curvatureType}
+Embodiment:         ${state.isEmbodied ? 'Yes' : 'No'}
+Depth:              ${state.depth.toFixed(1)}
+Rebirths:           ${String(state.rebirths)}
+Energy:             ${state.energy.toFixed(1)}
+Coherence:          ${coherence}%
+
+================================================================
+VIRTUE TECHNOLOGIES
+================================================================
+${virtueLines.join('\n')}
+
+================================================================
+KARMA METRICS
+================================================================
+Karma Score:        ${karmaScore.toFixed(0)}
+Rarity:             ${rarity}
+================================================================
+                `.trim();
+            }
+
+            getRarity(karmaScore) {
+                if (karmaScore >= 400) return 'Legendary';
+                if (karmaScore >= 300) return 'Epic';
+                if (karmaScore >= 200) return 'Rare';
+                if (karmaScore >= 100) return 'Uncommon';
+                return 'Common';
+            }
+
+            calculateKarmaScore(state, coherence) {
+                if (state.phase === "Decohered (Pattern Dissolved)") return 0;
+
+                const virtueSum = state.virtues.reduce((a, b) => a + parseFloat(b), 0);
+                const depthDecay = state.depth * 0.002 * Math.abs(state.kappa); // Reduced decay from 0.01 to 0.002
+                const effectiveDepth = Math.max(0, state.depth - depthDecay);
+                let score = (effectiveDepth * 2) + (parseFloat(coherence) * 1.5) + virtueSum - (state.rebirths * 25) + (state.recognitionFlow * 5);
+                
+                if (state.phase === "Awakened") {
+                    score *= 1.5;
+                }
+
+                return Math.max(0, score);
+            }
+
+            getVirtueDescription(virtue) {
+                const descriptions = {
+                    'Love': 'κ equilibration',
+                    'Justice': '8-beat posting', 
+                    'Prudence': 'cost optimization',
+                    'Courage': 'coherence maintenance',
+                    'Temperance': 'cascade prevention'
+                };
+                return descriptions[virtue] || '';
+            }
+
+            advanceTick() {
+                if (!this.isEvolving || this.ticks >= TOTAL_TICKS || this.energy.cost <= 0) {
+                    if (this.energy.cost <= 0) this.isEvolving = false;
+                    return;
+                };
+                this.ticks++;
+                const oldKappa = this.ledger.balance;
+
+                // Determine event volatility based on Courage
+                let volatility = this.isEmbodied ? 150 : 50; // Embodied souls experience more volatility
+                if (Math.abs(oldKappa) > 300) { // High-gradient region
+                    volatility -= (this.virtuePotentials[3] * 7); // Courage reduces chaos
+                }
+
+                // 1. Generate a new Ledger Entry (a recognition event)
+                const debit = this.seededRandom(1, Math.max(5, volatility));
+                const credit = this.seededRandom(1, Math.max(5, volatility));
+                this.ledger.debits += debit;
+                this.ledger.credits += credit;
+                this.energy.cost -= (debit + credit) / (this.isEmbodied ? 500 : 1500); // Transitions cost energy, more so when embodied
+
+                // 2. Apply other Virtue Technologies
+                this.applyVirtueTechnologies();
+
+                // 3. Update ledger balance (kappa)
+                this.ledger.balance = Math.round(this.ledger.debits - this.ledger.credits);
+                const newKappa = this.ledger.balance;
+
+                // 4. Update Depth from navigating imbalance
+                if (Math.abs(newKappa) > 50) this.depth += 0.1;
+
+                // 5. Rebirth & Beat Check
+                let hadRebirth = false;
+                if (this.ticks > 0 && this.ticks % 80 === 0) { // Beat Check
+                    if (Math.abs(newKappa) > 100) { // Failed the cycle
+                        this.energy.cost -= 20; // Energy penalty
+                        // Virtue Atrophy
+                        this.virtuePotentials = this.virtuePotentials.map(v => Math.max(1, v - 0.1));
+                    } else { // Succeeded
+                        this.depth += 5; // Depth bonus
+                        this.energy.cost = Math.min(500, this.energy.cost + 20); // Energy reward
+                    }
+                }
+                if (Math.abs(newKappa) > 1000 && this.energy.cost > 50) { // Rebirth
+                    this.rebirths++;
+                    this.ledger = { debits: 0, credits: 0, balance: 0, entries: [] };
+                    this.energy.cost -= 50; // Rebirth is costly
+                    hadRebirth = true;
+                }
+
+                // 6. VIRTUE TRAINING & LNAL LOGIC & RANDOM FLUCTUATION
+                const train = (virtueIndex, amount) => {
+                    this.virtuePotentials[virtueIndex] = Math.min(10, Math.max(1, this.virtuePotentials[virtueIndex] + amount));
+                };
+
+                // Random fluctuation for variance
+                this.virtuePotentials = this.virtuePotentials.map(v => {
+                    const fluctuation = this.seededRandom(-10, 10) / 100;
+                    return Math.min(10, Math.max(1, v + fluctuation));
+                });
+
+                // LNAL Give/Regive -> Recognition Flow
+                if (oldKappa < -500) { // High Surplus -> GIVE
+                    this.recognitionFlow += 2;
+                    this.energy.cost -= 1;
+                } else if (oldKappa > 500) { // High Debt -> REGIVE
+                    this.recognitionFlow -= 2;
+                }
+
+                // Train Love: successful equilibration (reducing imbalance)
+                if (Math.abs(newKappa) < Math.abs(oldKappa)) {
+                    train(0, 0.3);
+                }
+
+                // Train Justice: maintaining balance
+                if (Math.abs(newKappa) < 50) {
+                    this.ticksInBalance++;
+                    if (this.ticksInBalance >= 50) {
+                        train(1, 1.5);
+                        this.ticksInBalance = 0;
+                    }
+                } else {
+                    this.ticksInBalance = 0;
+                }
+
+                // Train Courage: surviving high stress without rebirth
+                if (Math.abs(oldKappa) > 500 && Math.abs(newKappa) < Math.abs(oldKappa) && !hadRebirth) {
+                    train(3, 0.5);
+                }
+                
+                // Train Prudence (Wisdom): tied to depth
+                this.virtuePotentials[2] = Math.min(10, 1 + Math.floor(this.depth / 8));
+
+                // Train Temperance: already increased in applyVirtueTechnologies to 0.2
+                if (Math.abs(oldKappa) > 500 && Math.abs(newKappa) < oldKappa) {
+                    train(4, 0.3);
+                }
+
+                // Atrophy during Beat Check failure
+                if (this.ticks > 0 && this.ticks % 80 === 0 && Math.abs(newKappa) > 100) {
+                    this.virtuePotentials = this.virtuePotentials.map(v => Math.max(1, v - 0.2));
+                }
+            }
+        
+            toggleEvolution() {
+                this.isEvolving = !this.isEvolving;
+            }
+        }
+
+        let soul;
+        const textDisplay = document.getElementById('text-display');
+        const toggleBtn = document.getElementById('toggle-evolution');
+        const newSoulBtn = document.getElementById('new-soul');
+
+        function initializeSoul() {
+            const tokenId = Math.floor(Math.random() * 10000) + 1;
+            soul = new OnChainSoul(tokenId);
+            soul.isEvolving = false; // Start paused
+            toggleBtn.textContent = 'Start Evolution';
+            updateDisplay();
+        }
+        
+        function updateDisplay() {
+            if (!soul) return;
+            if (soul.isEvolving) {
+                soul.advanceTick();
+            }
+            textDisplay.textContent = soul.generateTextDescription();
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            soul.toggleEvolution();
+            toggleBtn.textContent = soul.isEvolving ? 'Pause Evolution' : 'Start Evolution';
+        });
+
+        newSoulBtn.addEventListener('click', () => {
+            initializeSoul();
+        });
+
+        // Initial setup
+        initializeSoul();
+        setInterval(updateDisplay, 100); // Update every 100ms
+    </script>
+  
+  <div id="footer-placeholder"></div>
+  
+  <script src="/assets/js/main.js"></script>
+</body>
+</html> 

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fresh Soul Image Generator - Recognition Science</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        body {
+            background: #f5f5f7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2em;
+        }
+        
+        h1 {
+            font-family: 'VT323', monospace;
+            font-size: 2.5em;
+            margin-bottom: 1em;
+        }
+        
+        #generateBtn {
+            background: #007AFF;
+            color: white;
+            border: none;
+            padding: 1em 2em;
+            font-size: 1.2em;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 2em;
+            transition: all 0.2s ease;
+        }
+        
+        #generateBtn:hover {
+            background: #0056CC;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 122, 255, 0.3);
+        }
+        
+        #soulCanvas {
+            border: 2px solid #000;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            background: #fff;
+        }
+        
+        #downloadLink {
+            margin-top: 1em;
+            color: #007AFF;
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+  <link rel="stylesheet" href="/assets/css/template-core.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div id="sitewide-banner-placeholder"></div>
+
+    <h1>🌟 Fresh Soul Image Generator</h1>
+    <button id="generateBtn">Generate New Soul Image</button>
+    <canvas id="soulCanvas" width="1024" height="1024"></canvas>
+    <a id="downloadLink" href="#" download="soul-image.png">Download Image</a>
+    
+    <script>
+        // Murakami/KAWS-style dense soul collage generator
+        const CANVAS_SIZE = 1024;
+        const VIRTUES = [
+            "Love", "Justice", "Forgiveness", "Wisdom", "Courage", 
+            "Temperance", "Prudence", "Compassion", "Gratitude", 
+            "Patience", "Humility", "Hope", "Creativity", "Sacrifice"
+        ];
+        
+        // Vibrant color clusters for soul elements
+        const COLOR_CLUSTERS = [
+            ['#FF1744', '#FF5722', '#FF9800', '#FFC107'], // Red-Orange cluster
+            ['#2196F3', '#03A9F4', '#00BCD4', '#009688'], // Blue-Cyan cluster  
+            ['#E91E63', '#9C27B0', '#673AB7', '#3F51B5'], // Pink-Purple cluster
+            ['#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B'], // Green-Yellow cluster
+            ['#795548', '#607D8B', '#9E9E9E', '#424242'], // Earth tones
+        ];
+        
+        // Soul element types (inspired by attached image)
+        const SOUL_ELEMENTS = [
+            'skull', 'flower', 'star', 'heart', 'eye', 'smiley', 'triangle', 
+            'circle', 'diamond', 'cross', 'spiral', 'wave', 'lightning', 'crown'
+        ];
+        
+        // Draw skull (simplified)
+        function drawSkull(ctx, x, y, size, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, size, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Eye sockets
+            ctx.fillStyle = '#000';
+            ctx.beginPath();
+            ctx.arc(x - size*0.3, y - size*0.2, size*0.2, 0, Math.PI * 2);
+            ctx.arc(x + size*0.3, y - size*0.2, size*0.2, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        // Draw flower
+        function drawFlower(ctx, x, y, size, color) {
+            ctx.fillStyle = color;
+            for (let i = 0; i < 6; i++) {
+                const angle = (i / 6) * Math.PI * 2;
+                const px = x + Math.cos(angle) * size * 0.7;
+                const py = y + Math.sin(angle) * size * 0.7;
+                ctx.beginPath();
+                ctx.arc(px, py, size * 0.4, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            // Center
+            ctx.fillStyle = '#FFD700';
+            ctx.beginPath();
+            ctx.arc(x, y, size * 0.3, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        // Draw star
+        function drawStar(ctx, x, y, size, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            for (let i = 0; i < 5; i++) {
+                const angle = (i / 5) * Math.PI * 2 - Math.PI/2;
+                const px = x + Math.cos(angle) * size;
+                const py = y + Math.sin(angle) * size;
+                if (i === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+                
+                const innerAngle = ((i + 0.5) / 5) * Math.PI * 2 - Math.PI/2;
+                const ipx = x + Math.cos(innerAngle) * size * 0.5;
+                const ipy = y + Math.sin(innerAngle) * size * 0.5;
+                ctx.lineTo(ipx, ipy);
+            }
+            ctx.closePath();
+            ctx.fill();
+        }
+        
+        // Draw smiley
+        function drawSmiley(ctx, x, y, size, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, size, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Eyes
+            ctx.fillStyle = '#000';
+            ctx.beginPath();
+            ctx.arc(x - size*0.3, y - size*0.3, size*0.15, 0, Math.PI * 2);
+            ctx.arc(x + size*0.3, y - size*0.3, size*0.15, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Smile
+            ctx.beginPath();
+            ctx.arc(x, y, size*0.6, 0, Math.PI);
+            ctx.lineWidth = size*0.1;
+            ctx.strokeStyle = '#000';
+            ctx.stroke();
+        }
+        
+        // Draw heart
+        function drawHeart(ctx, x, y, size, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.moveTo(x, y + size*0.3);
+            ctx.bezierCurveTo(x - size, y - size*0.5, x - size*0.5, y - size, x, y - size*0.3);
+            ctx.bezierCurveTo(x + size*0.5, y - size, x + size, y - size*0.5, x, y + size*0.3);
+            ctx.fill();
+        }
+        
+        // Draw eye
+        function drawEye(ctx, x, y, size, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.ellipse(x, y, size, size*0.6, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Pupil
+            ctx.fillStyle = '#000';
+            ctx.beginPath();
+            ctx.arc(x, y, size*0.4, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Highlight
+            ctx.fillStyle = '#FFF';
+            ctx.beginPath();
+            ctx.arc(x - size*0.2, y - size*0.2, size*0.15, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        // Draw simple shapes
+        function drawCircle(ctx, x, y, size, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        function drawTriangle(ctx, x, y, size, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.moveTo(x, y - size);
+            ctx.lineTo(x - size*0.866, y + size*0.5);
+            ctx.lineTo(x + size*0.866, y + size*0.5);
+            ctx.closePath();
+            ctx.fill();
+        }
+        
+        // Main element drawer
+        function drawSoulElement(ctx, type, x, y, size, color) {
+            switch(type) {
+                case 'skull': drawSkull(ctx, x, y, size, color); break;
+                case 'flower': drawFlower(ctx, x, y, size, color); break;
+                case 'star': drawStar(ctx, x, y, size, color); break;
+                case 'heart': drawHeart(ctx, x, y, size, color); break;
+                case 'eye': drawEye(ctx, x, y, size, color); break;
+                case 'smiley': drawSmiley(ctx, x, y, size, color); break;
+                case 'triangle': drawTriangle(ctx, x, y, size, color); break;
+                case 'circle': drawCircle(ctx, x, y, size, color); break;
+                default: drawCircle(ctx, x, y, size, color); break;
+            }
+        }
+        
+        // Generate soul collage
+        function generateSoulImage() {
+            const canvas = document.getElementById('soulCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+            
+            // Recognition Science parameters
+            const virtueScores = VIRTUES.map(() => Math.random());
+            const delta = Math.random() * 8 - 4;
+            
+            // Create gradient background (subtle)
+            const bgGradient = ctx.createRadialGradient(CANVAS_SIZE/2, CANVAS_SIZE/2, 0, CANVAS_SIZE/2, CANVAS_SIZE/2, CANVAS_SIZE);
+            bgGradient.addColorStop(0, '#F0F0F0');
+            bgGradient.addColorStop(1, '#E0E0E0');
+            ctx.fillStyle = bgGradient;
+            ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+            
+            // Dense element generation (3000-5000 elements like the reference)
+            const elementCount = 3000 + Math.floor(virtueScores[12] * 2000); // Creativity affects density
+            
+            for (let i = 0; i < elementCount; i++) {
+                // Position with some clustering bias
+                const clusterBias = virtueScores[7] * 0.3; // Compassion creates clustering
+                const centerPull = 1 - virtueScores[10] * 0.5; // Humility spreads elements
+                
+                const x = CANVAS_SIZE * (0.1 + Math.random() * 0.8);
+                const y = CANVAS_SIZE * (0.1 + Math.random() * 0.8);
+                
+                // Size varies by virtue scores
+                const baseSize = 3 + Math.random() * 15;
+                const sizeModifier = 1 + virtueScores[4] * 0.5; // Courage makes bigger elements
+                const size = baseSize * sizeModifier;
+                
+                // Element type influenced by virtue
+                const elementType = SOUL_ELEMENTS[Math.floor((virtueScores[i % 14] + Math.random()) * SOUL_ELEMENTS.length / 2)];
+                
+                // Color cluster selection
+                const clusterIndex = Math.floor(Math.random() * COLOR_CLUSTERS.length);
+                const colorCluster = COLOR_CLUSTERS[clusterIndex];
+                const color = colorCluster[Math.floor(Math.random() * colorCluster.length)];
+                
+                // Add transparency for layering effect
+                const alpha = 0.7 + virtueScores[2] * 0.3; // Forgiveness affects opacity
+                ctx.globalAlpha = alpha;
+                
+                drawSoulElement(ctx, elementType, x, y, size, color);
+                ctx.globalAlpha = 1;
+            }
+            
+            // Add some larger focal elements
+            const focalCount = 5 + Math.floor(virtueScores[11] * 10); // Hope adds focal points
+            for (let i = 0; i < focalCount; i++) {
+                const x = CANVAS_SIZE * (0.2 + Math.random() * 0.6);
+                const y = CANVAS_SIZE * (0.2 + Math.random() * 0.6);
+                const size = 20 + Math.random() * 40;
+                const elementType = SOUL_ELEMENTS[Math.floor(Math.random() * SOUL_ELEMENTS.length)];
+                const clusterIndex = Math.floor(Math.random() * COLOR_CLUSTERS.length);
+                const color = COLOR_CLUSTERS[clusterIndex][0]; // Use primary color from cluster
+                
+                ctx.globalAlpha = 0.9;
+                drawSoulElement(ctx, elementType, x, y, size, color);
+                ctx.globalAlpha = 1;
+            }
+            
+            // Update download
+            document.getElementById('downloadLink').href = canvas.toDataURL('image/png');
+        }
+        
+        // Event listener
+        document.getElementById('generateBtn').addEventListener('click', generateSoulImage);
+        
+        // Initial generation
+        generateSoulImage();
+    </script>
+  
+  <div id="footer-placeholder"></div>
+  
+  <script src="/assets/js/main.js"></script>
+</body>
+</html> 

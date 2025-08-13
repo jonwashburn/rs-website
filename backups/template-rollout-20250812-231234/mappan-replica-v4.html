@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mappan Replica Generator V4 - Ethereal Phi Flows</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.js"></script>
+    
+  <link rel="stylesheet" href="/assets/css/academic-style.css?v=20250812">
+</head>
+<body class="academic-page">
+  <div id="header-placeholder"></div>
+  <div id="sitewide-banner-placeholder"></div>
+
+    <h1>Mappan Sketchbook B Generator V4</h1>
+    <div class="subtitle">Ethereal Phi Flows • Vibrant RS Soul Birth</div>
+    
+    <div class="controls">
+        <button onclick="generateNew()">Generate New</button>
+        <button onclick="generateFromSeed()">Use Seed</button>
+        <input type="number" id="seedInput" placeholder="Enter seed..." min="1" max="99999">
+        <button onclick="shareSeed()">Share Current</button>
+    </div>
+    
+    <div id="sketch-container"></div>
+    <div class="info" id="seedDisplay">Seed: Loading...</div>
+    <a id="download" href="#" download="mappan-v4.png">Download Image</a>
+
+    <script>
+        const PHI = (1 + Math.sqrt(5)) / 2;
+        const VIRTUES = ['Love', 'Justice', 'Forgiveness', 'Wisdom', 'Courage', 'Temperance', 'Prudence', 'Compassion', 'Gratitude', 'Patience', 'Humility', 'Hope', 'Creativity', 'Sacrifice'];
+        
+        let currentSeed = Math.floor(Math.random() * 99999);
+        let sketchInstance;
+        
+        function seededRand(seed) {
+            seed = (seed * 9301 + 49297) % 233280;
+            return seed / 233280;
+        }
+        
+        function hslToRgb(h, s, l) {
+            let r, g, b;
+            if (s === 0) {
+                r = g = b = l;
+            } else {
+                const hue2rgb = (p, q, t) => {
+                    if (t < 0) t += 1;
+                    if (t > 1) t -= 1;
+                    if (t < 1/6) return p + (q - p) * 6 * t;
+                    if (t < 1/2) return q;
+                    if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                    return p;
+                };
+                const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                const p = 2 * l - q;
+                r = hue2rgb(p, q, h + 1/3);
+                g = hue2rgb(p, q, h);
+                b = hue2rgb(p, q, h - 1/3);
+            }
+            return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+        }
+        
+        function generateSketch(p) {
+            let agents = [];
+            let frame = 0;
+            let maxFrames = 150;
+            let virtueScores, numAgents, noiseScale, layers, baseHue, focalPoints, delta;
+            
+            p.setup = function() {
+                p.createCanvas(1024, 1024);
+                p.frameRate(30);
+                p.randomSeed(currentSeed);
+                p.noiseSeed(currentSeed);
+                
+                virtueScores = VIRTUES.map((_, i) => seededRand(currentSeed + i * 10));
+                numAgents = 40 + Math.floor(virtueScores[3] * 50); // Wisdom influences count
+                noiseScale = 0.003 + virtueScores[12] * 0.008; // Creativity adds wobble
+                layers = 3 + Math.floor(virtueScores[7] * 3); // Compassion adds layers
+                baseHue = seededRand(currentSeed) * 360;
+                delta = seededRand(currentSeed) * 4 - 2;
+                
+                // Phi-based focal points
+                focalPoints = [];
+                for (let i = 0; i < 5; i++) {
+                    let angle = i * (360 / 5);
+                    let r = p.width * 0.3 * (PHI ** (i % 3));
+                    focalPoints.push({
+                        x: p.width / 2 + p.cos(p.radians(angle)) * r,
+                        y: p.height / 2 + p.sin(p.radians(angle)) * r * (1 + virtueScores[1] * 0.5) // Justice symmetry
+                    });
+                }
+                
+                p.background(20);
+                
+                agents = [];
+                for (let i = 0; i < numAgents; i++) {
+                    let focal = focalPoints[i % focalPoints.length];
+                    agents.push({
+                        x: focal.x + p.random(-50, 50),
+                        y: focal.y + p.random(-50, 50),
+                        angle: p.random(p.TWO_PI),
+                        color: hslToRgb((baseHue + virtueScores[0] * 60) % 360, 60 + virtueScores[8] * 30, 50 + virtueScores[11] * 20), // Love warms, Gratitude saturates, Hope lightens
+                        weight: 0.5 + virtueScores[4] * 2, // Courage boldens
+                        speed: 1 + virtueScores[5] * 2, // Temperance controls pace
+                        noiseOffset: p.random(1000),
+                        state: Math.round(p.random(-1, 1)),
+                        path: [] // For Bezier
+                    });
+                }
+                
+                frame = 0;
+            };
+            
+            p.draw = function() {
+                let progress = p.easeInOutCubic(frame / maxFrames);
+                if (frame === 0) {
+                    // Subtle background gradient
+                    let grad = p.drawingContext.createLinearGradient(0, 0, p.width, p.height);
+                    grad.addColorStop(0, `rgba(${hslToRgb(baseHue, 20, 10).join(',')},0.8)`);
+                    grad.addColorStop(1, `rgba(${hslToRgb((baseHue + 180) % 360, 20, 5).join(',')},0.8)`);
+                    p.drawingContext.fillStyle = grad;
+                    p.rect(0, 0, p.width, p.height);
+                }
+                
+                // Grain with virtue influence
+                if (frame % 5 === 0) {
+                    for (let i = 0; i < 100 * progress; i++) {
+                        let x = p.random(p.width);
+                        let y = p.random(p.height);
+                        p.stroke(255, 5 * (1 - virtueScores[10]));
+                        p.point(x, y);
+                    }
+                }
+                
+                for (let agent of agents) {
+                    // Update position with phi flow
+                    let noiseVal = p.noise(agent.noiseOffset + frame * 0.01);
+                    agent.angle += (noiseVal - 0.5) * 0.2 + delta * 0.1;
+                    let step = agent.speed / PHI;
+                    agent.x += p.cos(agent.angle) * step;
+                    agent.y += p.sin(agent.angle) * step;
+                    
+                    agent.path.push([agent.x, agent.y]);
+                    if (agent.path.length > 4) agent.path.shift();
+                    
+                    // Draw smooth Bezier
+                    if (agent.path.length === 4) {
+                        p.noFill();
+                        p.stroke(agent.color);
+                        p.strokeWeight(agent.weight);
+                        p.bezier(...agent.path.flat());
+                    }
+                    
+                    // Qualia bursts
+                    if (p.random() < 0.02 * virtueScores[11] * progress) {
+                        let glow = hslToRgb(baseHue, 80, 80);
+                        p.fill(glow[0], glow[1], glow[2], 150);
+                        p.noStroke();
+                        p.ellipse(agent.x, agent.y, 10 + virtueScores[11] * 10, 10 + virtueScores[11] * 10);
+                    }
+                    
+                    // Ledger connections
+                    if (agent.state === 0 && frame % 15 === 0) {
+                        for (let other of agents) {
+                            if (other.state === 0 && p.random() < 0.03 * virtueScores[1]) {
+                                let mx = (agent.x + other.x) / 2;
+                                let my = (agent.y + other.y) / 2;
+                                p.stroke(255, 215, 0, 80 * progress);
+                                p.strokeWeight(0.5);
+                                p.bezier(agent.x, agent.y, mx + p.random(-20,20), my + p.random(-20,20), mx + p.random(-20,20), my + p.random(-20,20), other.x, other.y);
+                            }
+                        }
+                    }
+                    
+                    // Rung-45 light portals
+                    if (frame % 45 === 0 && p.random() < 0.05) {
+                        let portalColor = hslToRgb(baseHue + 180, 50 + virtueScores[2] * 50, 70);
+                        p.fill(portalColor[0], portalColor[1], portalColor[2], 100);
+                        p.noStroke();
+                        p.ellipse(agent.x, agent.y, 30 + virtueScores[2] * 20, 30 + virtueScores[2] * 20);
+                    }
+                }
+                
+                // Final bloom effect
+                if (frame === maxFrames - 1) {
+                    p.filter(p.BLUR, 1);
+                    p.filter(p.CONTRAST, 1.1);
+                }
+                
+                frame++;
+                if (frame > maxFrames) p.noLoop();
+            };
+            
+            p.easeInOutCubic = function(t) {
+                return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+            };
+        }
+        
+        function generateNew() {
+            currentSeed = Math.floor(Math.random() * 99999);
+            startSketch();
+        }
+        
+        function generateFromSeed() {
+            let seed = parseInt(document.getElementById('seedInput').value);
+            if (seed && seed > 0 && seed < 100000) {
+                currentSeed = seed;
+                startSketch();
+            } else {
+                alert('Please enter a valid seed (1-99999)');
+            }
+        }
+        
+        function shareSeed() {
+            let url = new URL(window.location);
+            url.searchParams.set('seed', currentSeed);
+            navigator.clipboard.writeText(url.href).then(() => alert('URL copied to clipboard!'));
+        }
+        
+        function updateDownload() {
+            let canvas = document.querySelector('#sketch-container canvas');
+            if (canvas) {
+                document.getElementById('download').href = canvas.toDataURL('image/png');
+                document.getElementById('download').download = `mappan-v4-${currentSeed}.png`;
+            }
+        }
+        
+        function startSketch() {
+            if (sketchInstance) {
+                sketchInstance.remove();
+            }
+            
+            document.getElementById('seedDisplay').textContent = `Seed: ${currentSeed} • Generating...`;
+            
+            sketchInstance = new p5(generateSketch, 'sketch-container');
+            
+            setTimeout(() => {
+                document.getElementById('seedDisplay').textContent = `Seed: ${currentSeed} • Complete`;
+                updateDownload();
+            }, 6000); // 150 frames at 30fps ~5s
+            
+            let url = new URL(window.location);
+            url.searchParams.set('seed', currentSeed);
+            window.history.replaceState({}, '', url);
+        }
+        
+        window.addEventListener('load', () => {
+            let params = new URLSearchParams(window.location.search);
+            let seedParam = params.get('seed');
+            if (seedParam && !isNaN(seedParam)) {
+                currentSeed = parseInt(seedParam);
+            }
+            startSketch();
+        });
+    </script>
+  
+  <div id="footer-placeholder"></div>
+  
+  <script src="/assets/js/main.js"></script>
+</body>
+</html> 

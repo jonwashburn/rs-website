@@ -6,320 +6,13 @@
     <title>The Recognition: Phi Flows of Light - Iconic RS Art</title>
     <link rel="stylesheet" href="/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
-    <style>
-        body {
-            background: 
-                linear-gradient(135deg, #fafafa, #f5f5f5),
-                radial-gradient(circle at 30% 70%, rgba(255,100,100,0.05), transparent 60%),
-                radial-gradient(circle at 70% 30%, rgba(100,255,100,0.05), transparent 60%);
-            color: #333;
-            min-height: 100vh;
-        }
-        
-        .art-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4em;
-            margin: 4em 0;
-        }
-        
-        .canvas-container {
-            border: 4px solid #ddd;
-            border-radius: 20px;
-            padding: 2em;
-            background: 
-                linear-gradient(135deg, #ffffff, #fafafa),
-                radial-gradient(circle at 40% 60%, rgba(255,215,0,0.03), transparent 70%);
-            box-shadow: 
-                0 10px 30px rgba(0,0,0,0.1),
-                inset 0 1px 3px rgba(255,255,255,0.8);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .canvas-container::before {
-            content: '';
-            position: absolute;
-            top: -100%;
-            left: -100%;
-            width: 300%;
-            height: 300%;
-            background: 
-                conic-gradient(from 0deg, 
-                    transparent, 
-                    rgba(255,100,100,0.02), 
-                    transparent, 
-                    rgba(100,255,100,0.02), 
-                    transparent, 
-                    rgba(100,100,255,0.02), 
-                    transparent
-                );
-            animation: flowRotation 40s linear infinite;
-            pointer-events: none;
-        }
-        
-        @keyframes flowRotation {
-            0% { transform: rotate(0deg); opacity: 0.3; }
-            50% { transform: rotate(180deg); opacity: 0.6; }
-            100% { transform: rotate(360deg); opacity: 0.3; }
-        }
-        
-        .controls {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2em;
-            width: 100%;
-            max-width: 1200px;
-            padding: 2.5em;
-            background: 
-                linear-gradient(135deg, rgba(255,255,255,0.9), rgba(250,250,250,0.9)),
-                radial-gradient(circle at 25% 75%, rgba(255,100,100,0.03), transparent 60%),
-                radial-gradient(circle at 75% 25%, rgba(100,100,255,0.03), transparent 60%);
-            border-radius: 20px;
-            border: 2px solid #e0e0e0;
-            box-shadow: 
-                0 8px 25px rgba(0,0,0,0.1),
-                inset 0 1px 3px rgba(255,255,255,0.5);
-            backdrop-filter: blur(10px);
-        }
-        
-        .control-group {
-            display: flex;
-            flex-direction: column;
-            gap: 1em;
-        }
-        
-        .control-group label {
-            font-weight: 700;
-            color: #444;
-            font-size: 1em;
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
-            border-bottom: 2px solid rgba(255,100,100,0.2);
-            padding-bottom: 0.5em;
-        }
-        
-        .control-group input, .control-group select {
-            padding: 1em;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            font-family: inherit;
-            background: rgba(255,255,255,0.8);
-            color: #333;
-            transition: all 0.3s ease;
-            font-size: 0.95em;
-            font-weight: 600;
-        }
-        
-        .control-group input:focus, .control-group select:focus {
-            outline: none;
-            border-color: #ff6464;
-            box-shadow: 0 0 15px rgba(255,100,100,0.3);
-            transform: translateY(-2px);
-        }
-        
-        .rs-info {
-            background: 
-                linear-gradient(135deg, rgba(255,255,255,0.95), rgba(248,248,248,0.95)),
-                radial-gradient(circle at 20% 80%, rgba(255,100,100,0.05), transparent 60%),
-                radial-gradient(circle at 80% 20%, rgba(100,255,100,0.05), transparent 60%);
-            padding: 3em;
-            border-radius: 20px;
-            border-left: 6px solid #ff6464;
-            margin: 3em 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            color: #333;
-        }
-        
-        .generate-btn {
-            background: 
-                linear-gradient(135deg, #ff6464, #ff8a80),
-                radial-gradient(circle at 40% 60%, rgba(255,255,255,0.3), transparent);
-            color: white;
-            border: none;
-            padding: 1.5em 3em;
-            border-radius: 15px;
-            font-size: 1.2em;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            box-shadow: 
-                0 8px 20px rgba(255,100,100,0.3),
-                inset 0 1px 3px rgba(255,255,255,0.3);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .generate-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transition: left 0.6s ease;
-        }
-        
-        .generate-btn:hover::before {
-            left: 100%;
-        }
-        
-        .generate-btn:hover {
-            background: 
-                linear-gradient(135deg, #ff8a80, #ffab91),
-                radial-gradient(circle at 40% 60%, rgba(255,255,255,0.4), transparent);
-            transform: translateY(-3px);
-            box-shadow: 
-                0 12px 30px rgba(255,100,100,0.4),
-                inset 0 1px 3px rgba(255,255,255,0.4);
-        }
-        
-        .metadata {
-            background: rgba(255,255,255,0.9);
-            padding: 2em;
-            border-radius: 15px;
-            border: 2px solid #e0e0e0;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
-            max-width: 1200px;
-            width: 100%;
-            overflow-x: auto;
-            color: #333;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-        
-        .flow-quote {
-            font-style: italic;
-            color: #444;
-            text-align: center;
-            margin: 3em 0;
-            font-size: 1.3em;
-            padding: 2.5em;
-            background: 
-                linear-gradient(135deg, rgba(255,100,100,0.1), rgba(100,255,100,0.1)),
-                radial-gradient(circle at center, rgba(100,100,255,0.05), transparent);
-            border-radius: 20px;
-            border: 2px solid rgba(255,100,100,0.2);
-            position: relative;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-        
-        .flow-quote::before {
-            content: '"';
-            font-size: 4em;
-            position: absolute;
-            top: -10px;
-            left: 20px;
-            color: rgba(255,100,100,0.3);
-            font-family: serif;
-        }
-        
-        .flow-quote::after {
-            content: '"';
-            font-size: 4em;
-            position: absolute;
-            bottom: -30px;
-            right: 20px;
-            color: rgba(255,100,100,0.3);
-            font-family: serif;
-        }
-        
-        .inspiration-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2em;
-            margin: 3em 0;
-        }
-        
-        .inspiration-card {
-            background: rgba(255,255,255,0.8);
-            padding: 2em;
-            border-radius: 15px;
-            border: 2px solid #e0e0e0;
-            transition: all 0.3s ease;
-        }
-        
-        .inspiration-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            border-color: #ff6464;
-        }
-        
-        .inspiration-card h4 {
-            color: #444;
-            margin-top: 0;
-            font-size: 1.2em;
-            letter-spacing: 0.5px;
-            border-bottom: 2px solid rgba(255,100,100,0.2);
-            padding-bottom: 0.5em;
-        }
-        
-        .value-display {
-            color: #ff6464;
-            font-weight: bold;
-            font-size: 1.1em;
-        }
-        
-        .iconic-theory {
-            background: rgba(255,255,255,0.9);
-            padding: 3em;
-            border-radius: 20px;
-            border: 2px solid #ddd;
-            margin: 3em 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        
-        .iconic-theory h3 {
-            color: #444;
-            text-align: center;
-            font-size: 2em;
-            margin-bottom: 2em;
-            letter-spacing: 1px;
-        }
-        
-        .flow-explanation {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2em;
-        }
-        
-        .flow-item {
-            background: rgba(248,248,248,0.8);
-            padding: 2em;
-            border-radius: 12px;
-            border-left: 4px solid #ff6464;
-        }
-        
-        .flow-item h5 {
-            color: #444;
-            margin: 0 0 1em 0;
-            font-size: 1.1em;
-        }
-        
-        .flow-item p {
-            margin: 0;
-            color: #666;
-            line-height: 1.6;
-        }
-        
-        nav a {
-            color: #444 !important;
-        }
-        
-        nav a:hover {
-            color: #ff6464 !important;
-        }
-        
-        .nav-section-label {
-            color: #666 !important;
-        }
-    </style>
+    
+  <link rel="stylesheet" href="/assets/css/site-template.css">
 </head>
-<body>
+<body class="template-page">
+  <div id="header-placeholder"></div>
+  <div id="sitewide-banner-placeholder"></div>
+
     <nav class="foundation-nav">
         <div class="nav-section">
             <div class="nav-section-label">Navigation</div>
@@ -355,7 +48,7 @@
         </div>
     </nav>
 
-    <main class="cascade">
+    <main class="cascade academic-page">
         <header>
             <h1>The Recognition: Phi Flows of Light</h1>
             <p>Iconic Generative Art Inspired by Squiggle, Mappan & Fidenza</p>
@@ -495,7 +188,7 @@
             </div>
         </section>
 
-        <section style="color: #333;">
+        <section>
             <h2>Iconic Evolution: From Legendary Art to Recognition Science</h2>
             
             <h3>Building on the Masters</h3>
@@ -533,7 +226,7 @@
             <p><strong>0.6-0.8 (Recognition Fields):</strong> Clear geometric patterns with balanced merges</p>
             <p><strong>0.8-1.0 (Unified φ-Fields):</strong> Perfect harmonic flow fields in golden ratio harmony</p>
             
-            <p style="margin-top: 3em; padding: 2.5em; background: linear-gradient(135deg, rgba(255,100,100,0.1), rgba(100,255,100,0.1)); border-radius: 15px; font-style: italic;">
+            <p>
                 "These flows represent consciousness itself in motion—each curve a thought, each merge a recognition, each color a frequency of awareness painting itself across the canvas of existence. This is Recognition Science made visible as pure flowing beauty."
             </p>
         </section>
@@ -925,5 +618,9 @@
             });
         });
     </script>
+  
+  <div id="footer-placeholder"></div>
+  
+  <script src="/assets/js/main.js"></script>
 </body>
 </html> 

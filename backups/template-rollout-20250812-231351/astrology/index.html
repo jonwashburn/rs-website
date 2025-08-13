@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astrology OS /// Recognition Science</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/academic-style.css?v=20250812">
+    
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="content-page academic-page">
+        <section class="intro-section">
+            <div class="container text-center">
+                <h1>The Astrology OS</h1>
+                <p class="lead">
+                    A scientifically rigorous framework for temporal navigation, derived from the first principles of Recognition Science.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <div class="text-block">
+                    <h2>From Mysticism to Mathematics</h2>
+                    <p>For millennia, humanity has looked to the stars for guidance, believing that the positions of celestial bodies hold sway over our lives. While traditional astrology has been dismissed by modern science, its persistence across cultures suggests a deeper, forgotten truth. Recognition Science reveals this truth not as a mystical influence, but as a precise, computational system of temporal navigation.</p>
+                    <p>The **Astrology OS** is not a tool for divination or personality assessment. It is a scientifically-derived operating system for interacting with the Universal Ledger—the computational substrate of reality. It allows us to measure the "cost" of a given moment in time, providing a quantitative metric for the harmony or disharmony of the planetary state vector.</p>
+
+                    <h2>The Science Behind the Score</h2>
+                    <p>The core of the Astrology OS is the **Window Score**, a value between 0 and 1 that represents the optimality of a given moment. A higher score indicates a period of lower cosmic "cost"—a time when actions are more likely to propagate through the Ledger with minimal resistance.</p>
+                    <p>This score is derived from the following principles:</p>
+                    <ul>
+                        <li><strong>The 24-Dimensional State Vector:</strong> At any moment, the positions (λ) and velocities (λ̇) of the ten primary celestial bodies (Sun through Pluto) form a 24-dimensional vector that describes the state of our solar system within the Universal Ledger.</li>
+                        <li><strong>The Zodiac as a Hashing Algorithm:</strong> The twelve zodiacal signs are not mystical archetypes, but a natural hashing scheme derived from the 8-beat cycle (2³), which divides the ecliptic plane into twelve 30-degree sectors.</li>
+                        <li><strong>The Global Cost Functional (J(x)):</strong> Recognition Science provides a precise formula for the "cost" or disharmony between any two points on the ecliptic: <code>J_ij = |sin(Δσ·π/12)|?</code>, where ? is the Golden Ratio. The global cost is the sum of these pairwise costs for all planets.</li>
+                        <li><strong>The Window Score:</strong> The final score is a simple inversion of the global cost: <code>Score = 1 / (1 + J)</code>. This yields a value close to 1.0 for moments of low cost (harmony) and close to 0.0 for moments of high cost (disharmony).</li>
+                    </ul>
+
+                    <div class="quote-box">
+                        <p>This is not an interpretation of the stars, but a measurement of the computational state of the Universal Ledger. The planets do not influence events; their configuration *is* a direct read-out of the Ledger's underlying harmony.</p>
+                    </div>
+                    
+                    <h2>What this is — and isn’t</h2>
+                    <div class="callout">
+                        <ul>
+                            <li>Not divination or personality typing.</li>
+                            <li>No planetary “influence.” It is a read‑out of system harmony (global cost J).</li>
+                            <li>A temporal navigation tool: choose lower‑cost windows for sensitive actions.</li>
+                        </ul>
+                    </div>
+
+                    <h2>Method (brief)</h2>
+                    <div class="callout">
+                        <ol>
+                            <li>Compute planetary state vector (positions/velocities).</li>
+                            <li>Map to a 12‑sector zodiac hash from the 2³ cycle geometry.</li>
+                            <li>Sum pairwise costs J<sub>ij</sub> = |sin(Δσ·π/12)|·φ across bodies.</li>
+                            <li>Window Score = 1/(1+J).</li>
+                        </ol>
+                    </div>
+
+                    <h2>Limits and falsifiability</h2>
+                    <div class="callout">
+                        <ul>
+                            <li>Correlates timing windows; doesn’t predict outcomes.</li>
+                            <li>Use exact UTC timestamps; birth time is a proxy—conception timing may be more causal for research.</li>
+                            <li>Research: high‑precision timing cohorts, twin‑discordance, ephemeris regressions.</li>
+                        </ul>
+                    </div>
+
+                    <h2>Why we care (even if “astrology is crazy”)</h2>
+                    <p>We don’t endorse traditional astrology. We study it here because many ancient wisdom traditions seem to encode fragments of the same truths Recognition Science makes explicit: a universal field of consciousness, cyclic structure, and ethical balance as physics. RS is the first framework we’ve found that can <em>deductively</em> reconcile those human intuitions with hard science.</p>
+                    <p>In that spirit, Astrology OS is a concrete, testable case study in “ancient pattern → RS translation.” It treats planetary configurations as a readable <em>state tag</em> of the Universal Ledger—not a causal force—and asks whether lower‑cost timing windows are measurably useful for temporal navigation.</p>
+                    <p class="small-note">See the broader context in <a href="/us.html">The Theory of Us</a>, which surveys how traditions like Buddhism, Hinduism, the Law of One/Ra, Walter Russell, and Christianity rhyme under RS without requiring belief.</p>
+                </div>
+
+                <div class="astrology-tool-section">
+                    <div>
+                        <span id="apiModeBadge" class="mode-badge" title="Computation mode">Mode: Auto</span>
+                    </div>
+                    <h2 class="text-center">Calculate a Window Score</h2>
+                    <div class="input-section">
+                        <label for="datetime">Select a Date and Time (UTC):</label>
+                        <input type="datetime-local" id="datetime" name="datetime">
+                        <button id="calculate" type="button">Calculate Score</button>
+                         <p class="helper-text">What this does: Computes a 0–1 Window Score for the selected moment. Higher = lower global cost J (more harmonious). If the backend API is offline, the page uses a simplified client‑side model so you still get an estimate.</p>
+                         <p class="helper-text">How to use: Choose a meaningful time (launch, meeting, decision) and compare options. Prefer higher‑scoring windows when possible.</p>
+                         <p class="small-note">Note: Uses UTC. For research, exact timestamps improve fidelity; birth time is a proxy for conception.</p>
+                    </div>
+                    <div id="results" class="results"></div>
+                
+                    <div class="heatmap-section">
+                        <h2>Generate Yearly Heatmap</h2>
+                        <label for="year">Enter a Year:</label>
+                        <input type="number" id="year" name="year" placeholder="e.g., 2025" min="1900" max="2100">
+                        <button id="generateHeatmap" type="button">Generate Heatmap</button>
+                     <p class="helper-text">What this shows: One square per day; greener = more optimal. The table lists the top 10 days by score. If the backend API is offline, a simplified client‑side model approximates daily scores.</p>
+                    </div>
+                    <div id="heatmap" class="heatmap-results"></div>
+                    <div id="heatmapLegend" class="legend"></div>
+                    <div id="topWindows" class="top-windows-results"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <div id="footer-placeholder"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const API_BASE_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+                ? 'http://localhost:5001'
+                : window.location.origin + '/api';
+
+            // Fetches and inserts header and footer
+            fetch('/_includes/header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-placeholder').innerHTML = data;
+                });
+            fetch('/_includes/footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('footer-placeholder').innerHTML = data;
+                });
+            
+            const calculateBtn = document.getElementById('calculate');
+            const datetimeInput = document.getElementById('datetime');
+            const resultsDiv = document.getElementById('results');
+
+            const generateBtn = document.getElementById('generateHeatmap');
+            const yearInput = document.getElementById('year');
+            const heatmapDiv = document.getElementById('heatmap');
+            const topWindowsDiv = document.getElementById('topWindows');
+            const heatmapLegend = document.getElementById('heatmapLegend');
+            const apiModeBadge = document.getElementById('apiModeBadge');
+
+            // Network helper with timeout
+            function fetchWithTimeout(url, options = {}, timeout = 5000) {
+                return Promise.race([
+                    fetch(url, options),
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), timeout))
+                ]);
+            }
+
+            function setMode(isApprox) {
+                if (!apiModeBadge) return;
+                if (isApprox === null || typeof isApprox === 'undefined') {
+                    apiModeBadge.textContent = 'Mode: Auto';
+                    apiModeBadge.style.background = '#f3f4f6';
+                    apiModeBadge.style.color = '#333';
+                    return;
+                }
+                if (isApprox) {
+                    apiModeBadge.textContent = 'Mode: Approximate (offline)';
+                    apiModeBadge.style.background = '#fff3cd';
+                    apiModeBadge.style.color = '#7a5b00';
+                } else {
+                    apiModeBadge.textContent = 'Mode: Live (API)';
+                    apiModeBadge.style.background = '#e7f5ff';
+                    apiModeBadge.style.color = '#0b5384';
+                }
+            }
+
+            // Client-side approximation fallbacks
+            const PHI = (1 + Math.sqrt(5)) / 2;
+            const zodiacNames = ['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
+            function degToSign(deg){
+                const d = ((deg % 360) + 360) % 360;
+                return zodiacNames[Math.floor(d / 30)];
+            }
+            function dayOfYear(date){
+                const start = new Date(Date.UTC(date.getUTCFullYear(),0,1));
+                return Math.floor((date - start) / 86400000) + 1;
+            }
+            function approxPlanetAngle(days, periodDays, phase){
+                return (360 * (days / periodDays) + phase) % 360;
+            }
+            function approximateWindowScore(dateObj){
+                const days = dayOfYear(dateObj) + (dateObj.getUTCHours()/24) + (dateObj.getUTCMinutes()/(24*60));
+                const periods = { Moon: 27.3, Mercury: 87.97, Venus: 224.70, Earth: 365.256, Mars: 686.98, Jupiter: 4332.59, Saturn: 10759.22, Uranus: 30685.4, Neptune: 60190, Pluto: 90560 };
+                const phases = { Moon: 0, Mercury: 10, Venus: 20, Earth: 30, Mars: 40, Jupiter: 50, Saturn: 60, Uranus: 70, Neptune: 80, Pluto: 90 };
+                const angles = {};
+                for (const name of Object.keys(periods)) {
+                    angles[name] = approxPlanetAngle(days, periods[name], phases[name]);
+                }
+                const signs = {};
+                for (const name of Object.keys(angles)) { signs[name] = degToSign(angles[name]); }
+                const signIndex = s => zodiacNames.indexOf(s);
+                const names = Object.keys(signs);
+                let Jsum = 0, pairs = 0;
+                for (let i=0;i<names.length;i++){
+                    for(let j=i+1;j<names.length;j++){
+                        const di = Math.abs(signIndex(signs[names[i]]) - signIndex(signs[names[j]]));
+                        const wrapped = Math.min(di, 12 - di);
+                        const cost = Math.abs(Math.sin((wrapped * Math.PI / 12))) * PHI;
+                        Jsum += cost; pairs++;
+                    }
+                }
+                const J = Jsum / Math.max(1,pairs);
+                const score = 1 / (1 + J);
+                return { timestamp: dateObj.toISOString(), window_score: score, global_cost: J, zodiac_hash: signs, _approximate: true };
+            }
+            async function getWindowScore(iso){
+                try {
+                    const resp = await fetchWithTimeout(`${API_BASE_URL}/window_score?timestamp=${encodeURIComponent(iso)}`);
+                    const data = await resp.json();
+                    data._approximate = false;
+                    return data;
+                } catch (e) {
+                    return approximateWindowScore(new Date(iso));
+                }
+            }
+            function approximateHeatmap(year){
+                const daily_scores = {};
+                const top = [];
+                for (let m=0;m<12;m++){
+                    for (let d=1; d<=31; d++){
+                        const date = new Date(Date.UTC(year, m, d));
+                        if (date.getUTCMonth() !== m) continue;
+                        const approx = approximateWindowScore(date);
+                        const key = date.toISOString().slice(0,10);
+                        daily_scores[key] = approx.window_score;
+                        top.push({ date: key, score: approx.window_score });
+                    }
+                }
+                top.sort((a,b)=>b.score-a.score);
+                const top_windows = top.slice(0,10);
+                return { daily_scores, top_windows, _approximate: true };
+            }
+
+            calculateBtn.addEventListener('click', () => {
+                if (!datetimeInput.value) {
+                    resultsDiv.innerHTML = '<p>Please select a date and time.</p>';
+                    resultsDiv.style.display = 'block';
+                    return;
+                }
+                const isoTimestamp = new Date(datetimeInput.value).toISOString();
+                resultsDiv.innerHTML = '<p>Calculating...</p>';
+                resultsDiv.style.display = 'block';
+
+                getWindowScore(isoTimestamp)
+                    .then(data => {
+                        try { setMode(data._approximate); } catch(_) {}
+                        if (data.error) {
+                            resultsDiv.innerHTML = `<p>Error: ${data.error}</p>`;
+                            return;
+                        }
+                        const approxNote = data._approximate ? '<div>Approximate client-side estimate (API unavailable)</div>' : '';
+                        resultsDiv.innerHTML = `
+                            <h3>Results for ${new Date(data.timestamp).toLocaleString()}</h3>
+                            <div class="result-item"><span>Window Score:</span> <span class="result-value">${Number(data.window_score).toFixed(6)}</span></div>
+                            <div class="result-item"><span>Global Cost (J):</span> <span class="result-value">${Number(data.global_cost).toFixed(4)}</span></div>
+                            <div class="result-item"><span>Zodiac Hash:</span> <span class="result-value">${JSON.stringify(data.zodiac_hash)}</span></div>
+                            ${approxNote}
+                        `;
+                    })
+                    .catch(error => {
+                        resultsDiv.innerHTML = `<p>Error computing score.</p>`;
+                        console.error('Error:', error);
+                    });
+            });
+
+            generateBtn.addEventListener('click', () => {
+                const year = yearInput.value;
+                if (!year) {
+                    heatmapDiv.innerHTML = '<p>Please enter a year.</p>';
+                    heatmapDiv.style.display = 'block';
+                    return;
+                }
+                heatmapDiv.innerHTML = '<p>Generating heatmap... This may take a moment.</p>';
+                heatmapDiv.style.display = 'block';
+                topWindowsDiv.style.display = 'none';
+
+                fetchWithTimeout(`${API_BASE_URL}/heatmap?year=${encodeURIComponent(year)}`)
+                    .then(resp => resp.json())
+                    .catch(() => approximateHeatmap(parseInt(year, 10)))
+                    .then(data => {
+                        try { setMode(data._approximate); } catch(_) {}
+                        if (data.error) {
+                            heatmapDiv.innerHTML = `<p>Error: ${data.error}</p>`;
+                            return;
+                        }
+                        const approxNote = data._approximate ? '<div>Approximate client-side estimate (API unavailable)</div>' : '';
+                        heatmapDiv.innerHTML = '<h3>Yearly Heatmap</h3><p>Darker green indicates higher (more optimal) window scores.</p>' + approxNote;
+                        const calendar = document.createElement('div');
+                        calendar.className = 'calendar-heatmap';
+                        heatmapDiv.appendChild(calendar);
+                        
+                        // Simple calendar heatmap rendering
+                        const entries = Object.entries(data.daily_scores).sort((a,b)=> a[0] < b[0] ? -1 : 1);
+                        for (const [date, score] of entries) {
+                            if (score === null || typeof score === 'undefined') continue;
+                            const day = document.createElement('div');
+                            day.className = 'heatmap-day';
+                            const alpha = Math.max(0.05, Math.min(1, Number(score)));
+                            day.style.backgroundColor = `rgba(0, 128, 0, ${alpha})`;
+                            day.title = `${date}: ${Number(score).toFixed(4)}`;
+                            calendar.appendChild(day);
+                        }
+                        if (heatmapLegend) {
+                            const alphas = [0.1, 0.3, 0.5, 0.7, 0.9];
+                            heatmapLegend.innerHTML = '';
+                            const low = document.createElement('span'); low.textContent = 'low';
+                            heatmapLegend.appendChild(low);
+                            alphas.forEach(a => {
+                                const sw = document.createElement('span');
+                                sw.className = 'swatch';
+                                sw.style.backgroundColor = `rgba(0, 128, 0, ${a})`;
+                                heatmapLegend.appendChild(sw);
+                            });
+                            const high = document.createElement('span'); high.textContent = 'high';
+                            heatmapLegend.appendChild(high);
+                            heatmapLegend.style.display = 'flex';
+                        }
+                        
+                        topWindowsDiv.innerHTML = '<h3>Top 10 Optimal Windows</h3>';
+                        const table = document.createElement('table');
+                        table.innerHTML = '<thead><tr><th>Date</th><th>Score</th></tr></thead>';
+                        const tbody = document.createElement('tbody');
+                        data.top_windows.forEach(item => {
+                            const row = tbody.insertRow();
+                            row.insertCell(0).textContent = item.date;
+                            row.insertCell(1).textContent = Number(item.score).toFixed(6);
+                        });
+                        table.appendChild(tbody);
+                        topWindowsDiv.appendChild(table);
+                        topWindowsDiv.style.display = 'block';
+
+                    })
+                    .catch(error => {
+                        heatmapDiv.innerHTML = `<p>Error generating heatmap.</p>`;
+                        console.error('Error:', error);
+                    });
+            });
+
+            // Initialize defaults to now and current year; auto-run initial calculation
+            setMode(null);
+            try {
+                const now = new Date();
+                const pad = n => String(n).padStart(2,'0');
+                const localISO = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+                datetimeInput.value = localISO;
+                yearInput.value = now.getFullYear();
+                // Trigger initial calculation for immediate feedback
+                calculateBtn.click();
+            } catch (e) {
+                console.warn('Initialization error:', e);
+            }
+        });
+    </script>
+    <script src="/assets/js/main.js"></script>
+</body>
+</html>

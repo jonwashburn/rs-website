@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mappan Replica Generator V3 - Sketchbook B with RS Phi Flows</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.js"></script>
+    
+  <link rel="stylesheet" href="/assets/css/template-core.css">
+</head>
+<body class="academic-page">
+  <div id="header-placeholder"></div>
+  <div id="sitewide-banner-placeholder"></div>
+
+    <h1>Mappan Sketchbook B Generator V3</h1>
+    <div class="subtitle">Phi Flows of Light • RS-Infused Organic Sketches</div>
+    
+    <div class="controls">
+        <button onclick="generateNew()">Generate New</button>
+        <button onclick="generateFromSeed()">Use Seed</button>
+        <input type="number" id="seedInput" placeholder="Enter seed..." min="1" max="99999">
+        <button onclick="shareSeed()">Share Current</button>
+    </div>
+    
+    <div id="sketch-container"></div>
+    <div class="info" id="seedDisplay">Seed: Loading...</div>
+    <a id="download" href="#" download="mappan-v3.png">Download Image</a>
+
+    <script>
+        const PHI = (1 + Math.sqrt(5)) / 2;
+        const VIRTUES = ['Love', 'Justice', 'Forgiveness', 'Wisdom', 'Courage', 'Temperance', 'Prudence', 'Compassion', 'Gratitude', 'Patience', 'Humility', 'Hope', 'Creativity', 'Sacrifice'];
+        
+        let currentSeed = Math.floor(Math.random() * 99999);
+        let sketchInstance;
+        
+        function seededRand(seed) {
+            seed = (seed * 9301 + 49297) % 233280;
+            return seed / 233280;
+        }
+        
+        function generateSketch(p) {
+            let agents = [];
+            let frame = 0;
+            let maxFrames = 100;
+            let virtueScores, numAgents, noiseScale, layers, palette, delta;
+            
+            p.setup = function() {
+                p.createCanvas(1024, 1024);
+                p.frameRate(30);
+                
+                // Set p5.js seeds for consistent randomness
+                p.randomSeed(currentSeed);
+                p.noiseSeed(currentSeed);
+                
+                // Calculate RS parameters
+                virtueScores = VIRTUES.map((_, i) => seededRand(currentSeed + i * 10));
+                numAgents = 30 + Math.floor(seededRand(currentSeed) * 40);
+                noiseScale = 0.005 + seededRand(currentSeed + 1) * 0.01;
+                layers = 2 + Math.floor(seededRand(currentSeed + 2) * 3);
+                palette = ['#e0ded8', '#d2cbc4', '#c4b9ac', '#b6a794', '#a8957c'];
+                delta = seededRand(currentSeed) * 8 - 4;
+                
+                // Reset background
+                p.background('#f0f0f0');
+                
+                // Initialize agents
+                agents = [];
+                for (let i = 0; i < numAgents; i++) {
+                    agents.push({
+                        x: seededRand(currentSeed + i * 100) * p.width,
+                        y: seededRand(currentSeed + i * 101) * p.height,
+                        angle: seededRand(currentSeed + i * 102) * p.TWO_PI,
+                        color: palette[Math.floor(seededRand(currentSeed + i * 103) * palette.length)],
+                        weight: 1 + seededRand(currentSeed + i * 104) * 4,
+                        length: 50 + seededRand(currentSeed + i * 105) * 150,
+                        noiseOffset: seededRand(currentSeed + i * 106) * 1000,
+                        state: Math.round(seededRand(currentSeed + i * 107) * 2 - 1)
+                    });
+                }
+                
+                frame = 0;
+            };
+            
+            p.draw = function() {
+                let progress = frame / maxFrames;
+                
+                // Add subtle grain texture
+                if (frame % 3 === 0) { // Only every few frames for performance
+                    let grainDensity = 50 * (1 - virtueScores[10]) * progress;
+                    for (let i = 0; i < grainDensity; i++) {
+                        let x = p.random(p.width);
+                        let y = p.random(p.height);
+                        p.stroke(0, 15);
+                        p.strokeWeight(1);
+                        p.point(x, y);
+                    }
+                }
+                
+                // Draw agents in layers
+                for (let layer = 0; layer < layers; layer++) {
+                    for (let agent of agents) {
+                        if (frame === 0) continue; // Skip first frame
+                        
+                        let oldX = agent.x;
+                        let oldY = agent.y;
+                        
+                        // Move agent with phi-scaled step and noise
+                        let noiseVal = p.noise(agent.noiseOffset + agent.x * noiseScale, agent.noiseOffset + agent.y * noiseScale);
+                        agent.angle += (noiseVal - 0.5) + virtueScores[12] * 0.1;
+                        
+                        let step = agent.length / (PHI ** (45 / 10 + delta));
+                        agent.x += p.cos(agent.angle) * step * 0.5; // Slower movement
+                        agent.y += p.sin(agent.angle) * step * 0.5;
+                        
+                        // Keep agents on canvas
+                        agent.x = p.constrain(agent.x, 50, p.width - 50);
+                        agent.y = p.constrain(agent.y, 50, p.height - 50);
+                        
+                        // Draw line with virtue-influenced style
+                        p.stroke(agent.color);
+                        p.strokeWeight(agent.weight * (0.5 + virtueScores[4] * 0.5));
+                        p.line(oldX, oldY, agent.x, agent.y);
+                        
+                        // Occasional erasures (rung-45 voids)
+                        if (frame % 45 === 0 && p.random() < 0.1) {
+                            p.fill('#f0f0f0', 80 + virtueScores[2] * 40);
+                            p.noStroke();
+                            let size = 20 + p.random(30);
+                            p.ellipse(agent.x, agent.y, size, size);
+                        }
+                        
+                        // Ledger connections (gold lines between balanced agents)
+                        if (agent.state === 0 && frame % 10 === 0) {
+                            for (let other of agents) {
+                                if (other.state === 0 && other !== agent) {
+                                    let d = p.dist(agent.x, agent.y, other.x, other.y);
+                                    if (d < PHI * 80 * virtueScores[1] && p.random() < 0.05) {
+                                        p.stroke(255, 215, 0, 100 * progress); // Gold with transparency
+                                        p.strokeWeight(1);
+                                        p.line(agent.x, agent.y, other.x, other.y);
+                                    }
+                                }
+                            }
+                        }
+                        
+                        // Qualia bursts (hope-influenced golden points)
+                        if (p.random() < 0.02 * virtueScores[11]) {
+                            p.fill(255, 215, 0, 200);
+                            p.noStroke();
+                            p.ellipse(agent.x, agent.y - 5 * virtueScores[11], 3, 3);
+                        }
+                    }
+                }
+                
+                frame++;
+                
+                // Stop animation when complete
+                if (frame >= maxFrames) {
+                    p.noLoop();
+                    setTimeout(() => {
+                        document.getElementById('seedDisplay').textContent = `Seed: ${currentSeed} • Complete`;
+                        updateDownload();
+                    }, 100);
+                }
+            };
+        }
+        
+        function generateNew() {
+            currentSeed = Math.floor(Math.random() * 99999);
+            startSketch();
+        }
+        
+        function generateFromSeed() {
+            let seed = parseInt(document.getElementById('seedInput').value);
+            if (seed && seed > 0 && seed < 100000) {
+                currentSeed = seed;
+                startSketch();
+            } else {
+                alert('Please enter a valid seed (1-99999)');
+            }
+        }
+        
+        function shareSeed() {
+            let url = new URL(window.location);
+            url.searchParams.set('seed', currentSeed);
+            navigator.clipboard.writeText(url.href).then(() => alert('URL copied to clipboard!'));
+        }
+        
+        function updateDownload() {
+            let canvas = document.querySelector('#sketch-container canvas');
+            if (canvas) {
+                document.getElementById('download').href = canvas.toDataURL('image/png');
+                document.getElementById('download').download = `mappan-v3-${currentSeed}.png`;
+            }
+        }
+        
+        function startSketch() {
+            if (sketchInstance) {
+                sketchInstance.remove();
+            }
+            
+            document.getElementById('seedDisplay').textContent = `Seed: ${currentSeed} • Generating...`;
+            
+            sketchInstance = new p5(generateSketch, 'sketch-container');
+            
+            // Update URL
+            let url = new URL(window.location);
+            url.searchParams.set('seed', currentSeed);
+            window.history.replaceState({}, '', url);
+        }
+        
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            let params = new URLSearchParams(window.location.search);
+            let seedParam = params.get('seed');
+            if (seedParam && !isNaN(seedParam)) {
+                currentSeed = parseInt(seedParam);
+            }
+            startSketch();
+        });
+    </script>
+  
+  <div id="footer-placeholder"></div>
+  
+  <script src="/assets/js/main.js"></script>
+</body>
+</html> 

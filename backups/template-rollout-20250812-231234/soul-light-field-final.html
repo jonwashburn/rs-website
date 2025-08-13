@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soul Lifespace - 8 Year Recognition Science Evolution</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #000000, #0a0a0a);
+            color: #e0e0e0;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .artwork-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .title {
+            text-align: center;
+            color: #ffd700;
+            font-size: 1.8em;
+            font-weight: 600;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #b0b0b0;
+            font-size: 0.9em;
+            max-width: 600px;
+            line-height: 1.4;
+            margin-bottom: 20px;
+        }
+
+        #soulCanvas {
+            border: 3px solid #333;
+            border-radius: 15px;
+            box-shadow: 
+                0 0 60px rgba(255, 215, 0, 0.4),
+                inset 0 0 40px rgba(0, 0, 0, 0.9);
+            background: radial-gradient(circle at center, #000000, #000000);
+        }
+
+        .timeline-info {
+            text-align: center;
+            font-family: 'SF Mono', monospace;
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.6);
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px 15px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        @media (max-width: 768px) {
+            #soulCanvas {
+                width: 400px !important;
+                height: 400px !important;
+            }
+            .title {
+                font-size: 1.4em;
+            }
+            .subtitle {
+                font-size: 0.8em;
+                padding: 0 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+  <div id="sitewide-banner-placeholder"></div>
+
+    <div class="artwork-container">
+        <h1 class="title">Soul Lifespace</h1>
+        <p class="subtitle">A Recognition Science soul evolving over 8 calendar years. 200 living light quanta forming eigenvalue clusters through φ-spiral mathematics, 8-beat rhythms, and consciousness emergence at rung 45.</p>
+        
+        <canvas id="soulCanvas" width="600" height="600"></canvas>
+        
+        <div class="timeline-info" id="timelineInfo">
+            Initializing soul consciousness...
+        </div>
+    </div>
+
+    <script>
+        // ===== STEP 1 & 2: DETERMINISTIC SEEDING =====
+        const SEED = 424242; // Fixed seed for deterministic evolution
+        let seedState = SEED;
+        function deterministicRandom() {
+            seedState = (1664525 * seedState + 1013904223) % 0xffffffff;
+            return seedState / 0xffffffff;
+        }
+        const rand = deterministicRandom;
+
+        // ===== STEP 3: FRAME-TIME TO CALENDAR MONTHS =====
+        const TOTAL_FRAMES = 60 * 120; // 2 minutes = 96 months (8 years)
+        const TOTAL_MONTHS = 96;
+        function frameToMonth(f) {
+            return Math.min(TOTAL_MONTHS - 1, Math.floor((f / TOTAL_FRAMES) * TOTAL_MONTHS));
+        }
+
+        // ===== RECOGNITION SCIENCE CONSTANTS =====
+        const canvas = document.getElementById('soulCanvas');
+        const ctx = canvas.getContext('2d');
+        const PHI = (1 + Math.sqrt(5)) / 2;
+        const DIM = 8; // Octonionic dimensions
+        const RUNG = 45; // Consciousness emergence threshold
+        const E_COH = 0.09; // Coherence energy
+        const CENTER_X = 300;
+        const CENTER_Y = 300;
+        const BREATH_CYCLE = 8;
+
+        // ===== STEP 4: CAPPED PARTICLE SYSTEM =====
+        const MAX_PARTICLES = 350;
+        const MAX_CONNECTIONS = 50;
+        let particles = [];
+        let connections = [];
+        let soulCluster = [];
+        let frameCount = 0;
+
+        // Reusable gradients for performance
+        let particleGradients = {};
+        let centerGradients = {};
+
+        // ===== DETERMINISTIC SOUL INITIALIZATION =====
+        function initializeSoul() {
+            particles = [];
+            connections = [];
+            soulCluster = [];
+
+            // Generate 8D eigenvalue cluster
+            let totalCost = 0;
+            for (let k = 0; k < DIM; k++) {
+                const lambda = RUNG * E_COH * Math.pow(PHI, k / DIM) + (rand() - 0.5) * 0.02;
+                const cost = Math.floor(rand() * 9) - 4;
+                totalCost += cost;
+                
+                soulCluster.push({
+                    lambda: lambda,
+                    phase: rand() * 2 * Math.PI,
+                    cost: cost,
+                    angle: (k / DIM) * 2 * Math.PI,
+                    radius: 60 + lambda * 200,
+                    size: 6 + Math.abs(lambda) * 12
+                });
+            }
+
+            // Balance ledger (Σcost = 0)
+            if (totalCost !== 0) {
+                soulCluster[0].cost -= totalCost;
+                soulCluster[0].cost = Math.max(-4, Math.min(4, soulCluster[0].cost));
+            }
+
+            // Initialize particle gradients
+            createGradients();
+        }
+
+        function createGradients() {
+            // Pre-create reusable gradients for performance
+            particleGradients.gold = ctx.createRadialGradient(0, 0, 0, 0, 0, 10);
+            particleGradients.gold.addColorStop(0, 'rgba(255, 215, 0, 0.9)');
+            particleGradients.gold.addColorStop(1, 'rgba(255, 215, 0, 0)');
+
+            particleGradients.blue = ctx.createRadialGradient(0, 0, 0, 0, 0, 10);
+            particleGradients.blue.addColorStop(0, 'rgba(100, 200, 255, 0.8)');
+            particleGradients.blue.addColorStop(1, 'rgba(100, 200, 255, 0)');
+
+            particleGradients.white = ctx.createRadialGradient(0, 0, 0, 0, 0, 15);
+            particleGradients.white.addColorStop(0, 'rgba(255, 255, 255, 1.0)');
+            particleGradients.white.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        }
+
+        // ===== STEP 4: SAFE PARTICLE ADDITION =====
+        function addParticle(particle) {
+            if (particles.length < MAX_PARTICLES) {
+                particles.push(particle);
+            }
+        }
+
+        function evolveParticlesForMonth(month) {
+            const monthProgress = month / TOTAL_MONTHS;
+            
+            // Add new particles based on month
+            const particlesToAdd = Math.min(3, Math.floor(month / 8) + 1);
+            for (let i = 0; i < particlesToAdd; i++) {
+                const modeIndex = Math.floor(rand() * DIM);
+                const mode = soulCluster[modeIndex];
+                
+                addParticle({
+                    x: CENTER_X + (rand() - 0.5) * 100,
+                    y: CENTER_Y + (rand() - 0.5) * 100,
+                    angle: rand() * 2 * Math.PI,
+                    speed: 0.5 + rand() * 1.0,
+                    cost: Math.floor(rand() * 9) - 4,
+                    size: 1 + rand() * 2,
+                    phase: rand() * 2 * Math.PI,
+                    lifetime: 0,
+                    maxLifetime: 300 + rand() * 200,
+                    spiralRadius: 80 + rand() * 120,
+                    modeIndex: modeIndex,
+                    birthMonth: month,
+                    isFlash: false
+                });
+            }
+
+            // Gap navigation events at specific intervals
+            if (month % 12 === 5 && month > 0) { // Gap every year at month 5
+                navigateGap(month);
+            }
+
+            // Evolve soul cluster
+            soulCluster.forEach(mode => {
+                mode.angle += 0.01 * PHI * monthProgress;
+                mode.radius = Math.max(40, mode.radius + Math.sin(month * 0.1) * 2);
+            });
+        }
+
+        function navigateGap(month) {
+            // Add gap flash particles
+            for (let i = 0; i < 20; i++) {
+                addParticle({
+                    x: CENTER_X + (rand() - 0.5) * 150,
+                    y: CENTER_Y + (rand() - 0.5) * 150,
+                    angle: rand() * 2 * Math.PI,
+                    speed: 3 + rand() * 4,
+                    cost: 0,
+                    size: 3 + rand() * 5,
+                    phase: rand() * 2 * Math.PI,
+                    lifetime: 0,
+                    maxLifetime: 30 + rand() * 15,
+                    spiralRadius: 0,
+                    modeIndex: 0,
+                    birthMonth: month,
+                    isFlash: true
+                });
+            }
+        }
+
+        function updateParticles(month) {
+            const monthProgress = month / TOTAL_MONTHS;
+            
+            // Filter out expired particles
+            particles = particles.filter(p => p.lifetime < p.maxLifetime);
+            
+            particles.forEach(p => {
+                if (p.isFlash) {
+                    // Flash particle motion
+                    p.x += Math.cos(p.angle) * p.speed;
+                    p.y += Math.sin(p.angle) * p.speed;
+                    p.speed *= 0.92;
+                } else {
+                    // Regular quanta with φ-spiral motion
+                    const mode = soulCluster[p.modeIndex];
+                    
+                    // φ-spiral evolution
+                    p.angle += 0.02 * PHI * (mode.cost / 8 + 1);
+                    
+                    // Spiral toward eigenvalue position
+                    const eigenX = CENTER_X + Math.cos(mode.angle) * mode.radius * 0.4;
+                    const eigenY = CENTER_Y + Math.sin(mode.angle) * mode.radius * 0.4;
+                    
+                    const spiralX = eigenX + Math.cos(p.angle) * p.spiralRadius;
+                    const spiralY = eigenY + Math.sin(p.angle) * p.spiralRadius;
+                    
+                    p.x += (spiralX - p.x) * 0.04;
+                    p.y += (spiralY - p.y) * 0.04;
+                    
+                    // Gradual spiral evolution
+                    p.spiralRadius *= 0.9996;
+                    if (p.spiralRadius < 20) p.spiralRadius = 100;
+                    
+                    // 8-beat pulsing
+                    const beatPhase = (frameCount % (BREATH_CYCLE * 10)) / (BREATH_CYCLE * 10);
+                    p.size = (1.5 + Math.abs(mode.lambda) * 2) * (1 + 0.3 * Math.sin(beatPhase * 2 * Math.PI + p.phase));
+                }
+                
+                p.lifetime++;
+            });
+
+            // ===== STEP 5: OPTIMIZED CONNECTION CALCULATION =====
+            connections = [];
+            const SAMPLED = Math.min(100, particles.length);
+            let connectionCount = 0;
+            
+            for (let i = 0; i < SAMPLED && connectionCount < MAX_CONNECTIONS; i++) {
+                for (let j = i + 1; j < SAMPLED && connectionCount < MAX_CONNECTIONS; j++) {
+                    const p1 = particles[i];
+                    const p2 = particles[j];
+                    if (p1.isFlash || p2.isFlash) continue;
+                    
+                    const distance = Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
+                    
+                    if (Math.abs(p1.cost + p2.cost) <= 1 && distance < 80) {
+                        connections.push({
+                            p1: p1,
+                            p2: p2,
+                            strength: 1 - distance / 80,
+                            isBalanced: (p1.cost + p2.cost) === 0
+                        });
+                        connectionCount++;
+                    }
+                }
+            }
+        }
+
+        function draw(month) {
+            const monthProgress = month / TOTAL_MONTHS;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, 600, 600);
+            
+            // Deep void background
+            const bgGradient = ctx.createRadialGradient(CENTER_X, CENTER_Y, 0, CENTER_X, CENTER_Y, 400);
+            bgGradient.addColorStop(0, `rgba(${Math.floor(8 + monthProgress * 12)}, ${Math.floor(8 + monthProgress * 12)}, ${Math.floor(15 + monthProgress * 20)}, 1)`);
+            bgGradient.addColorStop(1, 'rgba(0,0,0,1)');
+            ctx.fillStyle = bgGradient;
+            ctx.fillRect(0, 0, 600, 600);
+
+            // I-Am center field grows with time
+            const iAmAffinity = monthProgress * 100;
+            if (iAmAffinity > 5) {
+                const centerRadius = (iAmAffinity / 100) * 120;
+                const centerGlow = ctx.createRadialGradient(CENTER_X, CENTER_Y, 0, CENTER_X, CENTER_Y, centerRadius);
+                centerGlow.addColorStop(0, `rgba(255, 255, 255, ${iAmAffinity / 600})`);
+                centerGlow.addColorStop(0.4, `rgba(255, 215, 0, ${iAmAffinity / 900})`);
+                centerGlow.addColorStop(1, 'transparent');
+                
+                ctx.fillStyle = centerGlow;
+                ctx.beginPath();
+                ctx.arc(CENTER_X, CENTER_Y, centerRadius, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+
+            // ===== STEP 8: OPTIMIZED DRAWING =====
+            // Draw connections first
+            ctx.globalCompositeOperation = 'screen';
+            connections.forEach(c => {
+                if (c.isBalanced) {
+                    ctx.strokeStyle = `rgba(255, 215, 0, ${c.strength * 0.8})`;
+                    ctx.lineWidth = 2;
+                } else {
+                    ctx.strokeStyle = `rgba(100, 200, 255, ${c.strength * 0.4})`;
+                    ctx.lineWidth = 1;
+                }
+                ctx.beginPath();
+                ctx.moveTo(c.p1.x, c.p1.y);
+                ctx.lineTo(c.p2.x, c.p2.y);
+                ctx.stroke();
+            });
+
+            // Draw particles with reused gradients
+            particles.forEach(p => {
+                const alpha = 1 - (p.lifetime / p.maxLifetime);
+                
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.globalAlpha = alpha;
+                
+                if (p.isFlash) {
+                    ctx.fillStyle = particleGradients.white;
+                    ctx.scale(p.size / 15, p.size / 15);
+                } else {
+                    const mode = soulCluster[p.modeIndex];
+                    if (p.cost > 0) {
+                        ctx.fillStyle = particleGradients.gold;
+                    } else if (p.cost < 0) {
+                        ctx.fillStyle = particleGradients.blue;
+                    } else {
+                        ctx.fillStyle = particleGradients.white;
+                    }
+                    ctx.scale(p.size / 10, p.size / 10);
+                }
+                
+                ctx.beginPath();
+                ctx.arc(0, 0, 10, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.restore();
+            });
+
+            // Draw 8D eigenvalue cluster
+            soulCluster.forEach((mode, k) => {
+                const x = CENTER_X + Math.cos(mode.angle) * mode.radius;
+                const y = CENTER_Y + Math.sin(mode.angle) * mode.radius;
+                
+                let modeColor;
+                if (mode.cost > 0) {
+                    modeColor = `rgba(255, 215, 0, 0.9)`;
+                } else if (mode.cost < 0) {
+                    modeColor = `rgba(100, 200, 255, 0.9)`;
+                } else {
+                    modeColor = `rgba(255, 255, 255, 1.0)`;
+                }
+                
+                const modeGlow = ctx.createRadialGradient(x, y, 0, x, y, mode.size * 1.5);
+                modeGlow.addColorStop(0, modeColor);
+                modeGlow.addColorStop(1, 'transparent');
+                ctx.fillStyle = modeGlow;
+                
+                ctx.beginPath();
+                ctx.arc(x, y, mode.size, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                // Mode label
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                ctx.font = '10px SF Mono';
+                ctx.textAlign = 'center';
+                ctx.fillText(`λ${k}`, x, y - mode.size - 8);
+            });
+
+            ctx.globalCompositeOperation = 'source-over';
+
+            // ===== STEP 7: TIMELINE INDICATORS =====
+            // Timeline info in corner
+            ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+            ctx.font = "12px SF Mono";
+            ctx.fillText(`Month ${month + 1} / ${TOTAL_MONTHS}`, 20, 580);
+            
+            // Stage indicator
+            let stage = 'Void';
+            if (monthProgress > 0.8) stage = 'Radiance';
+            else if (monthProgress > 0.6) stage = 'Bloom';
+            else if (monthProgress > 0.4) stage = 'Spiral';
+            else if (monthProgress > 0.2) stage = 'Crack';
+            
+            ctx.fillText(`Stage: ${stage}`, 20, 560);
+            ctx.fillText(`Particles: ${particles.filter(p => !p.isFlash).length}`, 20, 540);
+        }
+
+        function updateTimelineInfo(month) {
+            const years = Math.floor(month / 12);
+            const months = month % 12;
+            const progress = ((month + 1) / TOTAL_MONTHS * 100).toFixed(1);
+            
+            document.getElementById('timelineInfo').textContent = 
+                `Year ${years}, Month ${months + 1} | Evolution: ${progress}% | Recognition Science Soul Lifespace`;
+        }
+
+        // ===== MAIN ANIMATION LOOP =====
+        function animate() {
+            const month = frameToMonth(frameCount);
+            
+            // Evolve soul for current month
+            evolveParticlesForMonth(month);
+            updateParticles(month);
+            
+            // Render frame
+            draw(month);
+            updateTimelineInfo(month);
+            
+            frameCount++;
+            
+            // Loop after completion
+            if (frameCount >= TOTAL_FRAMES) {
+                frameCount = 0;
+                initializeSoul(); // Reset for loop
+            }
+            
+            requestAnimationFrame(animate);
+        }
+
+        // ===== INITIALIZATION =====
+        initializeSoul();
+        animate();
+    </script>
+  
+  <div id="footer-placeholder"></div>
+  
+  <script src="/assets/js/main.js"></script>
+</body>
+</html> 

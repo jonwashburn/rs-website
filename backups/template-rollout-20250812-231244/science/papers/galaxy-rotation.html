@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galaxy Rotation Curves from a Finite–Bandwidth Gravitational Model - Recognition Science</title>
+  <link rel="stylesheet" href="/assets/css/template-core.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="content-page paper-page academic-page">
+        <div class="container">
+            <div class="framework-note">
+                <p><strong>A Note on This Paper:</strong> This work represents an early, phenomenological exploration of the ideas that matured into the full Recognition Science framework. The concept of "Information-Limited Gravity" (ILG) was a precursor to the rigorously derived theorem of Ledger Curvature (κ), which now explains these phenomena from first principles. While the data-fitting approach and some parameters in this paper have been superseded by the final, parameter-free theory, it remains a valuable demonstration of the core insight: that galactic dynamics can be explained by information processing constraints, not unseen matter.</p>
+            </div>
+
+            <article>
+                <header class="paper-header">
+                    <h1>Galaxy Rotation Curves from a Finite–Bandwidth Gravitational Model</h1>
+                    <p class="author">Jonathan Washburn</p>
+                    <p class="publication-date">July 26, 2025</p>
+                    <div class="paper-links">
+                        <a href="https://zenodo.org/records/16454433" target="_blank" class="button-link">View on Zenodo &rarr;</a>
+                        <a href="https://github.com/jonwashburn/darkmatter" target="_blank" class="button-link">View on GitHub &rarr;</a>
+                    </div>
+                </header>
+
+                <section class="paper-abstract">
+                    <h2>Abstract</h2>
+                    <p>We introduce an empirical, information-theoretic extension of Newtonian gravity in which the gravitational field is treated as a dynamical data stream updated through a channel of finite bandwidth. The resulting "refresh-lag" effect amplifies the effective gravitational acceleration in systems whose dynamical time is comparable to or longer than the global refresh interval, while leaving high-acceleration regimes unchanged. Without invoking non-baryonic matter or modifying inertia, the model reproduces the full set of 175 rotation curves in the SPARC catalogue with a median fit statistic of \( \chi^2/N = 0.48 \) using just five global parameters. For comparison, canonical NFW dark-halo fits achieve \( \chi^2/N \sim 2-3 \) with hundreds of free parameters, and Modified Newtonian Dynamics typically yields \( \chi^2/N \sim 4.5 \). The same parameter set simultaneously accounts for dwarfs (median \( \chi^2/N = 0.16 \)) and massive spirals (median \( \chi^2/N = 0.94 \)) and reproduces the observed mass-discrepancy-acceleration relation. We derive the characteristic acceleration scale \( a_0 \sim 1.2 \times 10^{-10} \) m/s\(^2\) as a natural consequence of limited information throughput and outline falsifiable predictions for ultra-diffuse galaxies, weak gravitational lensing, and precision timing in the outer Solar System.</p>
+                </section>
+
+                <section>
+                    <h2>1. Introduction</h2>
+                    <p>Galaxy rotation curves have posed a fundamental challenge to our understanding of gravity for over four decades. Observations consistently show that stars in galactic disks orbit faster than expected from their visible matter content, requiring either unseen "dark matter" or modifications to gravitational dynamics. The standard \( \Lambda \)CDM paradigm postulates cold dark matter halos with carefully tuned density profiles, but faces persistent issues. Modified Newtonian Dynamics (MOND) provides an alternative by introducing a characteristic acceleration scale \( a_0 \), but lacks a fundamental theoretical foundation.</p>
+                    <p>We propose a phenomenological model called <strong>Information-Limited Gravity (ILG)</strong> in which the effective gravitational acceleration is modified by finite rates of information exchange. In ILG, the effective acceleration is given by \( a_{\text{eff}}(r) = w(r) \times a_{\text{baryon}}(r) \), where \( w(r) \) is a dimensionless weight function encoding these information-processing effects. The key insight is that systems with longer dynamical timescales experience greater delays, leading to enhanced effective gravity. This naturally explains why dwarf galaxies exhibit stronger apparent dark matter effects.</p>
+                </section>
+
+                <section>
+                    <h2>2. Phenomenological Information-Limited Gravity (ILG)</h2>
+                    <h3>Bandwidth Optimization and Recognition Weight</h3>
+                    <p>The model follows from a generic efficiency argument: limited information-processing capacity must be allocated across many gravitational subsystems. This leads to an optimal refresh interval for each system, which in turn defines the recognition weight \( w(r) \) that modifies gravity. The full expression is:</p>
+                    <div class="math-box">
+                       \[ w(r) = \lambda \times \xi \times n(r) \times \left(\frac{T_{\text{dyn}}(r)}{\tau_0}\right)^\alpha \times \zeta(r) \]
+                    </div>
+                    <p>Each component has a physical interpretation: \( \lambda \) for global efficiency, \( \xi \) for system complexity (gas, morphology), \( n(r) \) for radial processing delays, the power law for scaling with local dynamical time \( T_{\text{dyn}} \), and \( \zeta(r) \) for geometric factors. Unlike \( \Lambda \)CDM, all parameters are fixed globally for the entire sample of galaxies.</p>
+                </section>
+
+                <section>
+                    <h2>3. Methods and Validation</h2>
+                    <p>We developed a 3D solver to compute rotation curves using the ILG framework. To validate the model, we used the SPARC dataset, which provides high-quality rotation curves for 175 disk galaxies.</p>
+                    <p>The solver operates in a 'pure' mode, using only parameters strictly derived from the underlying theory without empirical tuning. This ensures that the validation is a true test of the framework's predictive power. The implementation is fully reproducible and available on GitHub, including a Docker container to regenerate all figures and tables.</p>
+                </section>
+
+                <section>
+                    <h2>4. Results</h2>
+                    <p>The ILG model achieves excellent fits for the SPARC galaxy sample without any per-galaxy tuning of parameters.</p>
+                    <ul>
+                        <li>The global median reduced chi-squared is \( \chi^2/N = 0.48 \).</li>
+                        <li>The model performs exceptionally well for dwarf galaxies (median \( \chi^2/N = 0.16 \)), which are challenging for \( \Lambda \)CDM.</li>
+                        <li>It naturally reproduces the baryonic Tully-Fisher relation with the correct slope and scatter.</li>
+                    </ul>
+                    <p>These results demonstrate the model's robustness across five decades of galaxy mass, a significant improvement over standard models that require extensive tuning.</p>
+                </section>
+                
+                <section>
+                    <h2>5. Discussion and Implications</h2>
+                    <p>The success of the ILG model suggests that "dark matter" may be an informational artifact rather than a physical substance. The framework reinterprets gravitational anomalies as the result of a finite-bandwidth channel for gravitational updates, where communication lags in low-acceleration environments manifest as enhanced gravity.</p>
+                    <p>The model is highly falsifiable, making specific predictions for gravitational lensing, nanoscale gravity tests, and pulsar timing that can be tested with current and near-future experiments. This work presents a compelling case that information-theoretic principles offer a powerful new direction for resolving long-standing puzzles in cosmology.</p>
+                </section>
+
+            </article>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+    <script src="/../assets/js/main.js"></script>
+</body>
+</html>
