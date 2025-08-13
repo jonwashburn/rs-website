@@ -35,6 +35,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 // Remove any existing listeners to prevent duplicates
                 mobileMenuButton.removeEventListener('click', toggleMobileMenu);
                 mobileMenuButton.addEventListener('click', toggleMobileMenu);
+                // Expand clickable area to surrounding box as fallback
+                mobileMenuButton.addEventListener('touchstart', (e) => { e.stopPropagation(); }, { passive: true });
             }
 
             const dropdowns = document.querySelectorAll('.global-nav .dropdown');
@@ -45,11 +47,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (dropbtn) {
                     // Remove existing listeners to prevent duplicates
                     dropbtn.removeEventListener('click', handleDropdownClick);
-                    dropbtn.addEventListener('click', handleDropdownClick, { passive: false });
+                    dropbtn.addEventListener('click', handleDropdownClick, { passive: false, capture: true });
 
                     // Also allow tapping the caret/arrow region to open
                     dropbtn.removeEventListener('touchstart', handleDropdownClick);
-                    dropbtn.addEventListener('touchstart', handleDropdownClick, { passive: false });
+                    dropbtn.addEventListener('touchstart', handleDropdownClick, { passive: false, capture: true });
                 }
             });
         }, 100);
@@ -120,6 +122,12 @@ document.addEventListener("DOMContentLoaded", function() {
                     placeholder.innerHTML = data;
                     if (placeholderId === 'header-placeholder') {
                         setupHeaderEventListeners();
+                        // Inject sitewide banner only after header is present to avoid race conditions
+                        const base = getBasePath();
+                        const bannerTarget = document.getElementById('sitewide-banner-placeholder');
+                        if (bannerTarget) {
+                            fetchAndInject(base + '_includes/banner.html', 'sitewide-banner-placeholder');
+                        }
                     }
                 })
                 .catch(error => {
@@ -158,9 +166,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const basePath = getBasePath();
     fetchAndInject(basePath + '_includes/header.html', 'header-placeholder');
-    // After header loads, also inject the sitewide banner just beneath it
-    setTimeout(() => {
-        fetchAndInject(basePath + '_includes/banner.html', 'sitewide-banner-placeholder');
-    }, 150);
+    // Footer can be injected immediately
     fetchAndInject(basePath + '_includes/footer.html', 'footer-placeholder');
 });
