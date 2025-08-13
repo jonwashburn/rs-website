@@ -7,12 +7,37 @@
   <link rel="stylesheet" href="/assets/css/main.css">
   <link rel="stylesheet" href="/assets/css/site-template.css">
   <meta name="description" content="Translate hard math into constrained physics, force the solution by necessity, then translate it back to pure mathematics.">
+  <style>
+    /* Top-right badge linking to the RH proof */
+    .template-hero { position: relative; }
+    .proof-badge {
+      position: absolute; top: 14px; right: 14px; z-index: 5;
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      border: 2px solid var(--color-accent); color: var(--color-accent);
+      background: transparent; border-radius: 999px; padding: 0.35rem 0.6rem;
+      cursor: pointer; text-decoration: none; line-height: 1; font-size: 0.85rem;
+      transition: transform 0.15s ease;
+    }
+    .proof-badge:hover { transform: translateY(-1px); }
+    .proof-icon { width: 16px; height: 16px; display: inline-block; }
+    @media (max-width: 640px) { .proof-badge span { display: none; } .proof-badge { padding: 0.35rem; } }
+    /* Callout + grid helpers from manifesto */
+    .callout { background: var(--color-bg-warm); border-left: 3px solid var(--color-accent); padding: 1rem 1.25rem; border-radius: 0 8px 8px 0; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 1rem; }
+    .card { background: var(--color-bg-card); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 1rem 1.25rem; }
+  </style>
 </head>
 <body class="template-page">
   <div id="header-placeholder"></div>
 
   <!-- Hero -->
   <section class="template-hero template-hero-framed">
+    <a class="proof-badge" href="/riemann-hypothesis.html" aria-label="Read the Riemann Hypothesis proof">
+      <svg class="proof-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+      <span>Read our RH proof</span>
+    </a>
     <div class="template-hero-content">
       <p class="template-hero-badge">Revolutionary Method</p>
       <h1 class="template-hero-title">The Axiomatic Bridging Method</h1>
@@ -63,6 +88,20 @@
           <li><strong>Apply constraints</strong>: Demand what must be true for stability and consistency; eliminate the impossible.</li>
           <li><strong>Prove mathematically</strong>: Translate the forced structure back and complete a conventional proof.</li>
         </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- Closed Loop Thesis -->
+  <section class="template-section">
+    <div class="template-container">
+      <div class="template-accent-bar"></div>
+      <h2 class="template-section-title">The Closed Loop Thesis</h2>
+      <div class="template-reading">
+        <div class="callout">
+          <p><strong>Thesis:</strong> Math and physics form a closed logical loop. Physics is mathematics evaluated under the constraints of existence; mathematics is the language that proves those constraints. If the loop is closed, a disciplined <em>translate → constrain → resolve → translate back</em> pipeline is a <em>map</em> for difficult problems.</p>
+        </div>
+        <p style="margin-top:0.75rem;">In Recognition Science, the ledger, fairness cost <span class="template-accent-text">J(x)=½(x+1/x)−1</span>, and eight‑tick cadence are necessities of persistence. Bridging does not import empirical guesses; it leverages these necessities to force the structure a solution must have, then recasts that structure as a conventional proof.</p>
       </div>
     </div>
   </section>
@@ -127,6 +166,33 @@
     </div>
   </section>
 
+  <!-- Research Checklist -->
+  <section class="template-section">
+    <div class="template-container">
+      <h2 class="template-section-title">A Research Checklist for Bridging</h2>
+      <div class="grid">
+        <div class="card"><h3>Blocker</h3><p>State the minimal PSD/contractivity/convexity/compactness statement.</p></div>
+        <div class="card"><h3>Dictionary</h3><p>Translate each object to a ledger counterpart (posting, balance, port, unit, cadence).</p></div>
+        <div class="card"><h3>Necessities</h3><p>List what must hold by conservation/fairness/locality. Eliminate the impossible.</p></div>
+        <div class="card"><h3>Finite stage</h3><p>Engineer a finite passive model that is solvable and preserves analyticity.</p></div>
+        <div class="card"><h3>Limit</h3><p>Pass to the limit with uniform HS/compact control; use closure (Schur/PSD).</p></div>
+        <div class="card"><h3>Translate back</h3><p>Rewrite as theorems in the native math domain. No physics terms in the final statement.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Objections -->
+  <section class="template-section">
+    <div class="template-container">
+      <h2 class="template-section-title">Common Objections, Answered</h2>
+      <div class="grid">
+        <div class="card"><h3>“Smuggling physics into math?”</h3><p>No. We use logical necessities of existence (balance, passivity, finiteness) that any consistent world must satisfy.</p></div>
+        <div class="card"><h3>“Will it translate back?”</h3><p>Yes, by insisting on finite, analytic stages with explicit operators; each step is standard analysis/operator theory.</p></div>
+        <div class="card"><h3>“What if a mapping fails?”</h3><p>Then we refine the dictionary or the ontology. The loop is falsifiable, which is scientific strength.</p></div>
+      </div>
+    </div>
+  </section>
+
   <!-- Beyond RH -->
   <section class="template-section">
     <div class="template-container">
@@ -149,8 +215,9 @@
         <h2>Explore Next</h2>
         <p>Browse derivation‑backed answers or read the formal logic chain.</p>
         <p>
-          <a href="/questions/" class="template-btn">Explore Questions</a>
+          <a href="/riemann-hypothesis.html" class="template-btn">Read the RH Proof</a>
           <a href="/logical-foundations.html" class="template-btn template-btn-secondary">Learn the Framework</a>
+          <a href="/chain.html" class="template-btn template-btn-secondary">Inspect the Logic Chain</a>
         </p>
       </div>
     </div>
