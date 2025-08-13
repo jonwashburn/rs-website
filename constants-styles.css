@@ -101,7 +101,7 @@
 
 /* Content sections */
 .constants-section {
-  padding: 4rem 0;
+  padding: 2.5rem 0;
   position: relative;
 }
 
@@ -114,6 +114,9 @@
   padding: 0 2rem;
 }
 
+/* subtle dividers between sections */
+.constants-section + .constants-section { border-top: 1px solid #f0f2f4; }
+
 /* Elevate first paragraph as section intro */
 .constants-section .reading p:first-of-type {
   font-size: 1.1rem;
@@ -125,10 +128,10 @@
 }
 
 .section-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #1e293b;
-  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #000;
+  margin-bottom: 1rem;
   text-align: center;
   position: relative;
 }
@@ -139,9 +142,9 @@
   bottom: -0.5rem;
   left: 50%;
   transform: translateX(-50%);
-  width: 80px;
-  height: 3px;
-  background: linear-gradient(90deg, #8b5cf6, #ec4899);
+  width: 56px;
+  height: 2px;
+  background: #e5e7eb;
   border-radius: 2px;
 }
 
@@ -366,8 +369,19 @@
   justify-content: center;
   align-items: flex-end;
   gap: 0.75rem;
-  margin: 1.5rem 0;
-  height: 300px;
+  margin: 1.25rem 0;
+  height: 240px;
+  position: relative;
+}
+
+.phi-ladder::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: #e5e7eb;
 }
 
 .ladder-rung {
@@ -379,6 +393,14 @@
   transition: all 0.3s ease;
   cursor: pointer;
 }
+
+/* rung heights for better structure */
+.ladder-rung:nth-child(1) { height: 26%; }
+.ladder-rung:nth-child(2) { height: 38%; }
+.ladder-rung:nth-child(3) { height: 52%; }
+.ladder-rung:nth-child(4) { height: 68%; }
+.ladder-rung:nth-child(5) { height: 84%; }
+.ladder-rung:nth-child(6) { height: 100%; }
 
 .ladder-rung:hover { transform: translateY(-6px); }
 
