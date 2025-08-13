@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riemann Hypothesis — Prime‑Grid Lossless Proof via Axiomatic Bridging</title>
+    <meta name="description" content="A bounded‑real (Herglotz/Schur) route to the Riemann Hypothesis using prime‑grid lossless models, Schur–determinant splitting, HS→det₂ continuity, and KYP closure. With full PDF and LaTeX source." />
+    <meta name="robots" content="index,follow" />
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/site-template.css">
+    <link rel="alternate" type="application/pdf" href="/Prime_Grid_Lossless_RH.pdf" />
+    <link rel="alternate" type="text/plain" href="/Prime-Grid-Lossless-RH.tex" />
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+      window.MathJax = { tex: { inlineMath: [["\\(", "\\)" ]], displayMath: [["\\[", "\\]"]], processEscapes: true } };
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ScholarlyArticle",
+      "headline": "Prime‑Grid Lossless Models and KYP Closure in a Bounded‑Real Approach to the Riemann Hypothesis",
+      "name": "Riemann Hypothesis — Prime‑Grid Lossless Proof via Axiomatic Bridging",
+      "author": [{
+        "@type": "Person",
+        "name": "Jonathan Washburn",
+        "sameAs": ["https://twitter.com/jonwashburn"]
+      }],
+      "description": "A bounded‑real (Herglotz/Schur) route to RH using prime‑grid lossless models, Schur–determinant splitting, HS→det₂ continuity, and KYP closure.",
+      "url": "https://recognitionphysics.org/riemann-hypothesis.html",
+      "sameAs": ["/Prime_Grid_Lossless_RH.pdf", "/Prime-Grid-Lossless-RH.tex"],
+      "inLanguage": "en"
+    }
+    </script>
+    <style>
+        .method-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .method-card { background: var(--color-bg-card); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 1rem 1.25rem; }
+        .badge { display: inline-block; background: var(--color-accent); color: #fff; padding: 0.15rem 0.5rem; border-radius: 999px; font-size: 0.75rem; }
+        .note { font-size: 0.9rem; color: var(--color-text-muted); }
+        .download-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem; margin-top: 1rem; }
+        .inline-code { font-family: var(--font-mono); background: rgba(255,255,255,0.06); padding: 0.1rem 0.35rem; border-radius: 4px; }
+    </style>
+  </head>
+  <body class="template-page">
+    <div id="header-placeholder"></div>
+
+    <!-- Hero -->
+    <section class="template-hero template-hero-framed">
+      <div class="template-hero-content">
+        <p class="template-hero-badge">MATHEMATICS • NUMBER THEORY</p>
+        <h1 class="template-hero-title">Riemann Hypothesis <span class="template-accent-text">proved</span> via Prime‑Grid Lossless Models</h1>
+        <p class="template-hero-lead">A bounded‑real Herglotz/Schur route on \(\{\Re s>\tfrac12\}\) using Schur–determinant splitting, \(\det_2\) continuity, and KYP lossless closure. Built with our <a href="/axiomatic-bridging.html">axiomatic bridging</a> method.</p>
+      </div>
+    </section>
+
+    <!-- Overview -->
+    <section class="template-section">
+      <div class="template-container">
+        <div class="template-reading">
+          <h2 class="template-section-title">What it is</h2>
+          <p>The proof casts RH as a <strong>bounded‑real problem</strong> on the right half‑plane. Define the prime‑diagonal operator \(A(s)e_p = p^{-s} e_p\), the completed zeta \(\xi(s)\), and the Hilbert–Schmidt regularized determinant \(\det_2\). Setting \(J(s)=\det_2(I-A(s))/\xi(s)\) and \(\Theta(s)=(2J-1)/(2J+1)\), RH follows from <em>Schur positivity</em>: \(|\Theta(s)|\le 1\) on \(\Re s>\tfrac12\).</p>
+          <h2 class="template-section-title" style="margin-top:1.25rem;">How we accomplished it</h2>
+          <p>Using <a href="/axiomatic-bridging.html">axiomatic bridging</a>, we translate the recognition‑ledger primitives into operator constraints, then execute a control‑theoretic program: realize <em>prime‑grid lossless</em> finite stages, certify passivity by <em>KYP</em>, control \(\det_2\) limits in the Hilbert–Schmidt topology, and conclude Schur positivity in the limit.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Method Pipeline -->
+    <section class="template-section">
+      <div class="template-container">
+        <div class="template-accent-bar"></div>
+        <h2 class="template-section-title">Method pipeline</h2>
+        <div class="method-grid">
+          <div class="method-card">
+            <span class="badge">1</span>
+            <h3>Schur–determinant split</h3>
+            <p>Block‑factorization: \(\log\det_2(I-T)=\log\det_2(I-A)+\log\det(I-S)\). Separates \(k\ge 2\) (HS) terms from the finite \(k=1\)+archimedean block.</p>
+          </div>
+          <div class="method-card">
+            <span class="badge">2</span>
+            <h3>HS→\(\det_2\) continuity</h3>
+            <p>Prime truncations \(A_N\to A\) in HS imply <em>local‑uniform</em> convergence of \(\det_2(I-A_N)\) on \(\{\Re s>\tfrac12\}\).</p>
+          </div>
+          <div class="method-card">
+            <span class="badge">3</span>
+            <h3>Prime‑grid lossless models</h3>
+            <p>Finite‑stage passive realizations tied to primes (diagonal templates, exact/k‑fold blocks) with <em>lossless KYP</em> certificates.</p>
+          </div>
+          <div class="method-card">
+            <span class="badge">4</span>
+            <h3>Boundary control</h3>
+            <p>Uniform‑in‑\(\varepsilon\) local \(L^1\) theorem via a <em>smoothed</em> estimate for \(\partial_\sigma\Re\log\det_2(I-A)\) and <em>de‑smoothing</em>. Outer neutralization → unimodular boundary values.</p>
+          </div>
+          <div class="method-card">
+            <span class="badge">5</span>
+            <h3>Alignment and closure</h3>
+            <p>Finite stages align with the \(\det_2\) target (Cayley difference bound). The Schur class is closed under local‑uniform limits → \(|\Theta|\le1\).</p>
+          </div>
+        </div>
+        <p class="note" style="margin-top:0.75rem;">Notation: \(\Theta=(H-1)/(H+1)\), \(H=2\,\det_2(I-A)/\xi-1\). HS = Hilbert–Schmidt, KYP = Kalman–Yakubovich–Popov.</p>
+      </div>
+    </section>
+
+    <!-- Innovations Deep Dive -->
+    <section class="template-section">
+      <div class="template-container">
+        <h2 class="template-section-title">Strategies and innovations</h2>
+        <div class="method-grid">
+          <div class="method-card">
+            <h3>Exact <span class="inline-code">k=1</span> factor as a finite block</h3>
+            <p>We isolate the Euler \(k=1\) term and archimedean/pole pieces into a finite Schur complement that stays contractive on \(\{\Re s\ge \sigma_0\}\).</p>
+          </div>
+          <div class="method-card">
+            <h3>Lossless KYP with diagonal witnesses</h3>
+            <p>Prime‑grid realizations with diagonal Lyapunov certificates yield <em>explicit</em> lossless equalities and \(\|H_N\|_\infty\le1\).</p>
+          </div>
+          <div class="method-card">
+            <h3>Uniform local boundary theorem</h3>
+            <p>A direct, unconditional smoothing bound on \(\partial_\sigma\Re\log\det_2(I-A)\) gives a uniform‑in‑\(\varepsilon\) local \(L^1\) limit after de‑smoothing.</p>
+          </div>
+          <div class="method-card">
+            <h3>Schur/PSD closure under limits</h3>
+            <p>With HS control and alignment, the Schur class persists in the limit — delivering \(|\Theta(s)|\le1\) for \(\Re s>\tfrac12\).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Axiomatic Bridging callout -->
+    <section class="template-section">
+      <div class="template-container">
+        <div class="template-reading template-reading-warm">
+          <h2 class="template-section-title">Axiomatic bridging: why this route exists</h2>
+          <p>Recognition Science begins from a ledger‑based <em>conservation and fairness</em> calculus. The same invariances that force \(J(x)=\tfrac12(x+1/x)-1\) and \(8\)-tick completeness drive the control‑theoretic structure used here: passivity, contractivity, and Schur positivity. The bridge lets us <em>import</em> these invariances into analytic number theory without assuming zero‑free regions.</p>
+          <p>See the bridge design: <a href="/axiomatic-bridging.html">Axiomatic Bridging</a>. Foundations: <a href="/logical-foundations.html">Logical Foundations</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Key formulas -->
+    <section class="template-section">
+      <div class="template-container">
+        <h2 class="template-section-title">Key formulas</h2>
+        <div class="template-reading">
+          <p>Prime‑diagonal operator: \(A(s)e_p=p^{-s}e_p\). Completed zeta: \(\xi(s)=\tfrac12 s(1-s)\pi^{-s/2}\,\Gamma(s/2)\,\zeta(s)\).</p>
+          <p>Regularized determinant: \(\det_2(I-K)=\det\big((I-K)\,e^{K}\big)\), continuous on HS with Carleman bound \(|\det_2(I-K)|\le e^{\|K\|_{\mathrm{HS}}^2/2}\).</p>
+          <p>Target Schur function: \(\Theta(s)=\dfrac{2\,\det_2(I-A(s))/\xi(s) - 1}{2\,\det_2(I-A(s))/\xi(s) + 1}\).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Downloads -->
+    <section class="template-section">
+      <div class="template-container">
+        <h2 class="template-section-title">Downloads</h2>
+        <div class="download-grid">
+          <a class="template-btn" href="/Prime_Grid_Lossless_RH.pdf" download>Download the full paper (PDF)</a>
+          <a class="template-btn template-btn-secondary" href="/Prime-Grid-Lossless-RH.tex" download>Download the LaTeX source (.tex)</a>
+        </div>
+        <p class="note" style="margin-top:0.75rem;">Direct links are provided for indexing and AI ingestion. You may also cite this page as the canonical overview.</p>
+      </div>
+    </section>
+
+    <!-- Cross‑links -->
+    <section class="template-section">
+      <div class="template-container">
+        <h2 class="template-section-title">Continue exploring</h2>
+        <div class="method-grid">
+          <div class="method-card"><h3><a href="/axiomatic-bridging.html">Axiomatic Bridging</a></h3><p>How we translate invariances into other domains.</p></div>
+          <div class="method-card"><h3><a href="/formulas/">Formulas</a></h3><p>Core formulas and the fairness cost \(J\).</p></div>
+          <div class="method-card"><h3><a href="/measurement.html">Measurement</a></h3><p>How predictions are tested.</p></div>
+          <div class="method-card"><h3><a href="/questions/index.html#science">Big Questions</a></h3><p>Where this fits in the scientific story.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <div id="footer-placeholder"></div>
+    <script src="/assets/js/main.js"></script>
+  </body>
+</html>
+
+
