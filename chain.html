@@ -493,6 +493,23 @@
                 }
             });
 
+            // Heuristic hotspots for most code items
+            const defLike = /^(\s*)(def|theorem|lemma|structure|namespace)\s+([A-Za-z0-9_\.]+)/;
+            lines.forEach((raw, i) => {
+                const textLine = raw.trim();
+                if (!textLine || textLine.startsWith('--') || textLine.startsWith('/-')) return;
+                const m = textLine.match(defLike);
+                if (m) {
+                    const el = container.children[i];
+                    if (!el.classList.contains('hotspot')) {
+                        el.classList.add('hotspot');
+                        el.setAttribute('data-kind', m[2]);
+                        el.setAttribute('data-name', m[3]);
+                        el.title = `Explain ${m[2]} ${m[3]}`;
+                    }
+                }
+            });
+
             status.textContent = '';
         }
 
@@ -510,7 +527,9 @@
             const line = e.target.closest('.code-line');
             if (!line) return;
             const key = line.getAttribute('data-key');
-            if (!key) return; // not a hotspot
+            const kind = line.getAttribute('data-kind');
+            const name = line.getAttribute('data-name');
+            if (!key && !kind) return; // not a hotspot
 
             // Toggle expansion below this line
             const isActive = line.classList.contains('active');
@@ -523,7 +542,12 @@
 
             const exp = document.createElement('div');
             exp.className = 'expansion active';
-            exp.innerHTML = explain[key] || '<p>No notes yet.</p>';
+            if (key && explain[key]) {
+                exp.innerHTML = explain[key];
+            } else {
+                const textLine = line.querySelector('.code-text')?.textContent || '';
+                exp.innerHTML = genericExplain(kind || 'def', name || '', textLine);
+            }
             line.insertAdjacentElement('afterend', exp);
         });
 
@@ -539,6 +563,33 @@
                 target.click();
             }
         });
+
+        // Generic explanation generator for arbitrary code items
+        function genericExplain(kind, name, text) {
+            const safe = (s) => (s || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            const head = `<p><strong>${kind}</strong> <code>${safe(name)}</code></p>`;
+            let body = '';
+            switch (kind) {
+                case 'structure':
+                    body = `<p>Declares a typed record bundling fields and invariants. In Lean, <em>structures</em> model mathematical objects with named components.</p>`;
+                    break;
+                case 'def':
+                    body = `<p>Introduces a definition. In Lean, <em>def</em> binds a name to a term with a precise type, enabling reuse downstream.</p>`;
+                    break;
+                case 'theorem':
+                case 'lemma':
+                    body = `<p>States a proposition and provides a proof term that the typechecker validates. Machine‑checked = no gaps.</p>`;
+                    break;
+                case 'namespace':
+                    body = `<p>Opens a scope for related declarations, avoiding name collisions and clarifying provenance.</p>`;
+                    break;
+                default:
+                    body = `<p>Lean item. Parsed, typed, and checked by the kernel for full correctness.</p>`;
+            }
+            const linePreview = `<pre style="white-space:pre-wrap;">${safe(text)}</pre>`;
+            const links = `<p>See also: <a href="/glossary.html">Glossary</a>, <a href="/logical-foundations.html">Foundations</a>, <a href="/formulas/">Formulas</a></p>`;
+            return head + body + linePreview + links;
+        }
 
         // Load on page ready
         loadLean();
