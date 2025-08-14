@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Riemann Hypothesis — Prime‑Grid Lossless Models (Full HTML)</title>
-  <meta name="description" content="Full HTML rendering of 'Prime‑Grid Lossless Models and KYP Closure in a Bounded‑Real Approach to the Riemann Hypothesis' with MathJax and site styling." />
+  <title>Prime-Grid Lossless Models and KYP Closure in a Bounded-Real Approach to the Riemann Hypothesis</title>
+  <meta name="description" content="Full paper: Prime-Grid Lossless Models and KYP Closure in a Bounded-Real Approach to the Riemann Hypothesis by Jonathan Washburn" />
   <link rel="alternate" type="application/pdf" href="/Prime_Grid_Lossless_RH.pdf" />
   <link rel="stylesheet" href="/assets/css/main.css" />
   <link rel="stylesheet" href="/assets/css/site-template.css" />
@@ -20,9 +20,7 @@
           HS: '\\mathcal{S}_2',
           Half: '\\{\\,s\\in\\mathbb{C}:\\ \\Re s>\\tfrac12\\,\\}',
           Tr: '\\operatorname{Tr}',
-          dettwo: '\\operatorname{det_2}',
-          varphi: '\\varphi',
-          phi: '\\varphi'
+          dettwo: '\\operatorname{det_2}'
         }
       },
       svg: { fontCache: 'global' }
@@ -30,19 +28,138 @@
   </script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
   <style>
-    .paper-wrap { max-width: 920px; margin: 0 auto; padding: 2rem 1.25rem; background: #fff; }
-    .paper-meta { text-align: center; margin-bottom: 1rem; }
-    .paper-title { font-size: 2rem; font-weight: 800; margin: 0.25rem 0 0.35rem; color: var(--color-primary); }
-    .paper-author { color: var(--color-text-muted); }
-    .paper-toolbar { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin: 0.75rem 0 1.5rem; }
-    .paper-abstract { background: var(--color-bg-subtle); border-left: 4px solid var(--color-accent); padding: 1rem; margin: 1rem 0 1.25rem; }
-    .paper-body h2 { margin-top: 2rem; color: var(--color-primary); }
-    .paper-body h3 { margin-top: 1.25rem; color: var(--color-primary); }
-    .env { background: #f7f7f9; border: 1px solid var(--color-border-light); border-radius: 6px; padding: 0.75rem 1rem; margin: 1rem 0; }
-    .env-title { font-weight: 700; color: var(--color-primary); margin-bottom: 0.5rem; }
-    .eqn { background: #f7f7f9; padding: 0.75rem; border-radius: 6px; overflow-x: auto; }
-    .paper-body ul, .paper-body ol { margin: 0.75rem 0 1rem 1.25rem; }
-    .paper-body li { margin: 0.25rem 0; }
+    .paper-wrap { 
+      max-width: 920px; 
+      margin: 0 auto; 
+      padding: 2rem 1.25rem; 
+      background: #fff; 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+    }
+    .paper-meta { 
+      text-align: center; 
+      margin-bottom: 2rem; 
+      border-bottom: 1px solid var(--color-border-light);
+      padding-bottom: 1.5rem;
+    }
+    .paper-title { 
+      font-size: 2rem; 
+      font-weight: 800; 
+      margin: 0.25rem 0 0.5rem; 
+      color: var(--color-primary); 
+      line-height: 1.2;
+    }
+    .paper-author { 
+      color: var(--color-text-muted); 
+      font-size: 1.1rem;
+    }
+    .paper-toolbar { 
+      display: flex; 
+      gap: 0.5rem; 
+      justify-content: center; 
+      flex-wrap: wrap; 
+      margin: 1rem 0 0; 
+    }
+    .paper-abstract { 
+      background: var(--color-bg-subtle); 
+      border-left: 4px solid var(--color-accent); 
+      padding: 1.25rem; 
+      margin: 2rem 0; 
+      border-radius: 0 6px 6px 0;
+    }
+    .paper-abstract strong {
+      color: var(--color-accent);
+      font-weight: 700;
+      display: block;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.9rem;
+    }
+    .paper-body { 
+      color: var(--color-text);
+    }
+    .paper-body h2 { 
+      margin-top: 2.5rem; 
+      margin-bottom: 1rem;
+      color: var(--color-primary); 
+      font-size: 1.75rem;
+      font-weight: 700;
+      border-bottom: 2px solid var(--color-border-light);
+      padding-bottom: 0.5rem;
+    }
+    .paper-body h3 { 
+      margin-top: 2rem; 
+      margin-bottom: 0.75rem;
+      color: var(--color-primary); 
+      font-size: 1.35rem;
+      font-weight: 600;
+    }
+    .paper-body h4 { 
+      margin-top: 1.5rem; 
+      margin-bottom: 0.5rem;
+      color: var(--color-primary); 
+      font-size: 1.15rem;
+      font-weight: 600;
+    }
+    .paper-body p {
+      margin: 1rem 0;
+      text-align: justify;
+      hyphens: auto;
+    }
+    .env { 
+      background: #f7f7f9; 
+      border: 1px solid var(--color-border-light); 
+      border-radius: 6px; 
+      padding: 1rem 1.25rem; 
+      margin: 1.5rem 0; 
+    }
+    .env-title { 
+      font-weight: 700; 
+      color: var(--color-primary); 
+      margin-bottom: 0.5rem; 
+      font-size: 1.05rem;
+    }
+    .env-theorem { border-left: 3px solid var(--color-primary); }
+    .env-lemma { border-left: 3px solid #666; }
+    .env-proposition { border-left: 3px solid #888; }
+    .env-corollary { border-left: 3px solid #999; }
+    .env-remark { 
+      border-left: 3px solid var(--color-accent); 
+      background: rgba(255,0,110,0.03);
+    }
+    .paper-body ul, .paper-body ol { 
+      margin: 1rem 0 1rem 2rem; 
+    }
+    .paper-body li { 
+      margin: 0.5rem 0; 
+    }
+    .mjx-container {
+      overflow-x: auto;
+      overflow-y: hidden;
+      max-width: 100%;
+    }
+    .mjx-container[display="true"] {
+      margin: 1.5rem 0 !important;
+    }
+    .keywords {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--color-border-light);
+      font-size: 0.95rem;
+      color: var(--color-text-muted);
+    }
+    .keywords strong {
+      color: var(--color-text);
+    }
+    .paper-body em {
+      font-style: italic;
+      color: inherit;
+    }
+    .paper-body strong {
+      font-weight: 700;
+      color: inherit;
+    }
   </style>
   <link rel="canonical" href="/riemann-hypothesis-paper.html" />
 </head>
@@ -54,96 +171,40 @@
     <section class="template-section">
       <div class="paper-wrap">
         <div class="paper-meta">
-          <h1 class="paper-title">Prime‑Grid Lossless Models and KYP Closure in a Bounded‑Real Approach to the Riemann Hypothesis</h1>
-          <div class="paper-author">Jonathan Washburn • <a href="mailto:washburn.jonathan@gmail.com">washburn.jonathan@gmail.com</a></div>
+          <h1 class="paper-title">Prime-Grid Lossless Models and KYP Closure in a Bounded-Real Approach to the Riemann Hypothesis</h1>
+          <div class="paper-author">Jonathan Washburn • Independent Researcher • <a href="mailto:washburn.jonathan@gmail.com">washburn.jonathan@gmail.com</a></div>
           <div class="paper-toolbar">
             <a class="template-btn" href="/Prime_Grid_Lossless_RH.pdf" download>Download PDF</a>
           </div>
         </div>
 
-        <div id="paper-abstract" class="paper-abstract" style="display:none;"></div>
-        <div id="paper-body" class="paper-body"></div>
+        <div class="paper-abstract">
+          <strong>Abstract</strong>
+          We develop a bounded-real (Herglotz/Schur) formulation of the Riemann Hypothesis (RH) on the right half-plane \(\Omega:=\{\Re s>\tfrac12\}\). Let \(A(s):\ell^2(\mathcal{P})\to\ell^2(\mathcal{P})\) be the prime-diagonal operator \(A(s)e_p:=p^{-s}e_p\). With the Hilbert–Schmidt regularized determinant \(\operatorname{det_2}\) and the completed zeta \(\xi(s)\), set \(J(s):=\operatorname{det_2}(I-A(s))/\xi(s)\) and \(\Theta(s):=(2J(s)-1)/(2J(s)+1)\).
+          Our approach hinges on: (i) a Schur–determinant splitting that isolates \(k=1\) and archimedean terms into a finite block; (ii) Hilbert–Schmidt control of prime truncations implying local-uniform convergence of \(\operatorname{det_2}(I-A_N)\); and (iii) explicit finite-stage passive realizations certified by the Kalman–Yakubovich–Popov (KYP) lemma.
+          
+          <p>We establish the interior route on zero-free rectangles via passive \(H^\infty\) approximation and prove a uniform-in-\(\varepsilon\) local \(L^1\) boundary theorem by a smoothed estimate for \(\partial_\sigma\Re\log\operatorname{det_2}(I-A)\) and de-smoothing. Outer normalization produces an outer factor \(\mathcal O\) and a normalized ratio \(\mathcal J:=\operatorname{det_2}(I-A)/(\mathcal O\,\xi)\). Under the boundary positive-real condition</p>
+          
+          $$\textbf{(P+)}\qquad \Re\big(2\mathcal J(\tfrac12+it)\big)\ge 0\ \text{ for a.e. }t,$$
+          
+          <p>the Poisson integral yields that \(2\mathcal J\) is Herglotz on \(\Omega\); the Cayley transform then gives \(\Theta\) Schur and the Pick kernel PSD. The finite-stage KYP certificates supply interior passivity independently of any zero-free hypothesis.</p>
+          
+          <div class="keywords">
+            <strong>Keywords:</strong> Riemann zeta function; Schur functions; Herglotz functions; bounded-real lemma; KYP lemma; operator theory; Hilbert–Schmidt determinants; passive systems.<br>
+            <strong>MSC 2020:</strong> 11M06, 30D05, 47A12, 47B10, 93B36, 93C05.
+          </div>
+        </div>
+
+        <div class="paper-body">
+          <p><em>The full paper continues with 13 sections including Introduction, Preliminaries, Exact k=1 finite block, Notation and conventions, Schur–determinant splitting, Finite-stage KYP certificates, Schur/Herglotz/Pick equivalences, Alignment and closure, BRF and RH implications, Main theorem, Discussion and outlook, Limitations and scope, and Examples of small-N prime-grid models, followed by an extensive Appendix with technical lemmas and expanded proofs.</em></p>
+          
+          <p>For the complete mathematical development, proofs, and technical details, please <a href="/Prime_Grid_Lossless_RH.pdf">download the full PDF</a>.</p>
+        </div>
       </div>
     </section>
   </main>
 
   <div id="footer-placeholder"></div>
   <script src="/assets/js/main.js"></script>
-  <script>
-    (function(){
-      const texPath = '/Prime-Grid-Lossless-Riemann.tex';
-      const url = encodeURI(texPath);
-      const bodyEl = document.getElementById('paper-body');
-      const absEl = document.getElementById('paper-abstract');
-      if (!bodyEl) return;
-
-      function tx(s){
-        // inline formatting only; keep math as-is for MathJax
-        return s
-          .replace(/\\emph\{([^}]*)\}/g, '<em>$1</em>')
-          .replace(/\\textbf\{([^}]*)\}/g, '<strong>$1</strong>')
-          .replace(/\\paragraph\{([^}]*)\}/g, '<h4>$1</h4>');
-      }
-
-      function wrapEnv(src, env, label){
-        const re = new RegExp('\\\\begin\\{'+env+'\\}([\\s\\S]*?)\\\\end\\{'+env+'\\}', 'g');
-        return src.replace(re, (_m, g1) => {
-          return '<div class="env env-'+env+'">'+
-                   '<div class="env-title">'+label+'</div>'+
-                   '<div class="env-body">'+g1+'</div>'+
-                 '</div>';
-        });
-      }
-
-      function convert(tex){
-        // strip preamble and trailer
-        tex = tex.replace(/[\s\S]*?\\begin\{document\}/,'').replace(/\\end\{document\}[\s\S]*/,'');
-
-        // abstract
-        const am = tex.match(/\\begin\{abstract\}([\s\S]*?)\\end\{abstract\}/);
-        if (am){ absEl.style.display=''; absEl.innerHTML = '<strong>Abstract</strong><br>'+tx(am[1].trim()); tex = tex.replace(am[0],''); }
-
-        // theorem-like wrappers
-        tex = wrapEnv(tex, 'theorem', 'Theorem');
-        tex = wrapEnv(tex, 'lemma', 'Lemma');
-        tex = wrapEnv(tex, 'proposition', 'Proposition');
-        tex = wrapEnv(tex, 'corollary', 'Corollary');
-        tex = wrapEnv(tex, 'remark', 'Remark');
-        tex = wrapEnv(tex, 'conjecture', 'Conjecture');
-
-        // sections
-        tex = tex.replace(/\\section\*?\{([^}]*)\}/g, '<h2>$1</h2>');
-        tex = tex.replace(/\\subsection\*?\{([^}]*)\}/g, '<h3>$1</h3>');
-
-        // lists
-        tex = tex.replace(/\\begin\{itemize\}/g,'<ul>').replace(/\\end\{itemize\}/g,'</ul>')
-                 .replace(/\\begin\{enumerate\}/g,'<ol>').replace(/\\end\{enumerate\}/g,'</ol>')
-                 .replace(/\\item\s*/g,'<li>');
-
-        // equations env → $$ ... $$ to let MathJax render
-        tex = tex.replace(/\\begin\{equation\}/g,'$$').replace(/\\end\{equation\}/g,'$$');
-        tex = tex.replace(/\\\[/g,'$$').replace(/\\\]/g,'$$');
-
-        // small cleanups
-        tex = tex.replace(/\n\s*\n/g,'\n\n');
-
-        // paragraph split: keep $$ blocks and block tags as-is
-        const blocks = tex.split(/\n\n+/).map(b=>b.trim()).filter(Boolean);
-        const html = blocks.map(b => {
-          if (b.startsWith('<h2')||b.startsWith('<h3')||b.startsWith('<ul')||b.startsWith('<ol')||b.startsWith('<div class="env')||b.startsWith('$$')){
-            return b;
-          }
-          return '<p>'+tx(b)+'</p>';
-        }).join('\n');
-        return html;
-      }
-
-      fetch(url)
-        .then(r => r.ok ? r.text() : Promise.reject(new Error('Cannot load LaTeX')))
-        .then(tex => { bodyEl.innerHTML = convert(tex); if (window.MathJax) { MathJax.typesetPromise(); } })
-        .catch(() => { bodyEl.innerHTML = '<div class="template-reading">Full HTML rendering failed. Download the PDF <a href="/Prime_Grid_Lossless_RH.pdf">here</a>.</div>'; });
-    })();
-  </script>
 </body>
 </html>
-
