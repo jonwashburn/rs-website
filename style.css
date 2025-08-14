@@ -566,151 +566,192 @@ footer p {
 } 
 
 /* ==============================
-   Encyclopedia (Template v3.0)
-   Enhanced styling matching site design
+   Encyclopedia v4.0 - Authoritative Design
+   Physics textbook meets high-end journal
    ============================== */
+
+/* Base container */
 .template-section.encyclopedia-entry {
-  padding: 0.75rem 0;
-  background: var(--white);
+  padding: 0;
+  background: #ffffff;
+  position: relative;
+}
+
+.template-section.encyclopedia-entry::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(255, 0, 110, 0.01) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(0, 40, 85, 0.01) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .template-container {
   max-width: 900px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 3rem 2rem;
+  position: relative;
+  z-index: 1;
 }
 
 .template-reading {
   max-width: 100%;
 }
 
-/* Encyclopedia title */
+/* Title section - more dramatic */
+.encyclopedia-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 2rem;
+  margin-bottom: 3rem;
+}
+
 .template-reading h1 {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 2.25rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  margin: 1.5rem 0 1rem 0;
+  font-size: 3rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin: 1rem 0 1.5rem 0;
   color: #000;
+  position: relative;
 }
 
-/* Breadcrumb */
+/* Breadcrumb - minimal */
 .template-hero-badge {
-  font-size: 0.875rem;
-  color: #64748b;
+  font-size: 0.75rem;
+  color: #94a3b8;
   margin-bottom: 0.5rem;
-  font-weight: 500;
-  letter-spacing: 0.025em;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
-/* Meta badges - refined style */
+/* Meta badges - ultra minimal */
 .meta-badges {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 1rem 0 1.5rem 0;
+  gap: 1.5rem;
+  margin: 1.5rem 0 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .meta-badges span {
   display: inline-flex;
   align-items: center;
-  padding: 0.35rem 0.75rem;
-  border-radius: 999px;
   font-size: 0.8rem;
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-
-.category-badge {
-  background: linear-gradient(135deg, #002855 0%, #003d82 100%);
-  color: white;
-  border: 1px solid transparent;
-}
-
-.difficulty-badge {
-  background: #fff;
-  color: #ff006e;
-  border: 1px solid #ff006e;
-}
-
-.tags {
-  background: #fafbfc;
-  color: #475569;
-  border: 1px solid rgba(0,0,0,0.08);
-}
-
-/* Summary/Essence */
-.summary, .essence {
-  font-size: 1.125rem;
-  line-height: 1.7;
-  color: #475569;
-  margin-bottom: 1.5rem;
   font-weight: 400;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0;
+  background: none;
+  border: none;
 }
 
-/* Definition box - signature style */
+.meta-badges span::before {
+  content: attr(data-label) ": ";
+  color: #94a3b8;
+  font-weight: 300;
+}
+
+.category-badge::before { content: "Category: "; }
+.difficulty-badge::before { content: "Level: "; }
+.tags::before { content: "Topics: "; }
+
+.category-badge,
+.difficulty-badge,
+.tags {
+  background: none;
+  border: none;
+  color: #1e293b;
+  font-weight: 500;
+}
+
+/* Summary/Essence - lead paragraph style */
+.summary, .essence {
+  font-size: 1.25rem;
+  line-height: 1.65;
+  color: #334155;
+  margin: 2rem 0 3rem 0;
+  font-weight: 400;
+  position: relative;
+  padding-left: 3rem;
+}
+
+.summary::before, .essence::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.5rem;
+  width: 2rem;
+  height: 2px;
+  background: #ff006e;
+}
+
+/* Definition box - authoritative */
 .definition-box {
-  background: linear-gradient(135deg, #fffbf0 0%, #fff7e6 100%);
-  border: 1px solid rgba(255, 193, 7, 0.3);
-  border-left: 4px solid #ff006e;
-  padding: 1.5rem;
-  border-radius: 12px;
-  margin: 2rem 0 1.5rem 0;
+  background: #ffffff;
+  border: none;
+  border-left: 3px solid #ff006e;
+  padding: 2rem 0 2rem 2rem;
+  margin: 3rem 0;
   position: relative;
 }
 
 .definition-box h2 {
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin-bottom: 0.75rem;
-  color: #002855;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #ff006e;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 .definition-box p {
-  color: #1e293b;
-  line-height: 1.7;
-  margin-bottom: 0.5rem;
+  color: #0f172a;
+  line-height: 1.8;
+  margin-bottom: 0.75rem;
+  font-size: 1.05rem;
 }
 
 .definition-box p:last-child {
   margin-bottom: 0;
 }
 
-/* Math notes */
+/* Math notes - subtle */
 .math-note {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: #64748b;
-  margin-top: 0.5rem;
-  font-style: italic;
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: #f8fafc;
+  border-left: 2px solid #e2e8f0;
+  display: block;
 }
 
-/* Why it matters callout */
+/* Why it matters - clean emphasis */
 .why-matters-callout {
   background: #ffffff;
-  border: 2px solid #ff006e;
-  border-radius: 14px;
-  padding: 1.5rem;
-  margin: 2rem 0;
+  border: none;
+  padding: 0;
+  margin: 3rem 0;
   position: relative;
 }
 
-.why-matters-callout::before {
-  content: "💡";
-  position: absolute;
-  top: -12px;
-  left: 24px;
-  background: white;
-  padding: 0 8px;
-  font-size: 1.25rem;
-}
-
 .why-matters-callout h2 {
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  color: #002855;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #ff006e;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 .why-matters-callout ul {
@@ -720,167 +761,196 @@ footer p {
 
 .why-matters-callout li {
   position: relative;
-  padding-left: 1.5rem;
-  margin-bottom: 0.75rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #f1f5f9;
   color: #1e293b;
-  line-height: 1.6;
+  line-height: 1.7;
+  font-size: 0.95rem;
 }
 
-.why-matters-callout li::before {
-  content: "→";
-  position: absolute;
-  left: 0;
-  color: #ff006e;
-  font-weight: bold;
+.why-matters-callout li:last-child {
+  border-bottom: none;
 }
 
-/* Section headings */
+.why-matters-callout li strong {
+  color: #0f172a;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+/* Section headings - bold and clean */
 .encyclopedia-entry h2 {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin: 2.5rem 0 1rem 0;
-  color: #002855;
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 4rem 0 1.5rem 0;
+  color: #0f172a;
   position: relative;
-  padding-bottom: 0.5rem;
+  letter-spacing: -0.02em;
 }
 
-.encyclopedia-entry h2::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 40px;
-  height: 3px;
-  background: linear-gradient(90deg, #ff006e 0%, transparent 100%);
+.encyclopedia-entry h2:first-of-type {
+  margin-top: 3rem;
 }
 
 .encyclopedia-entry h3 {
   font-size: 1.125rem;
   font-weight: 600;
-  margin: 1.5rem 0 0.75rem 0;
-  color: #1e293b;
+  margin: 2rem 0 1rem 0;
+  color: #334155;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  font-size: 0.875rem;
 }
 
-/* Mechanism steps */
+/* Mechanism steps - clean list */
 .mechanism-steps {
-  margin: 1.5rem 0;
+  margin: 2rem 0;
+  counter-reset: step-counter;
 }
 
 .mechanism-steps .step {
-  background: #fafbfc;
-  border-left: 3px solid #002855;
-  padding: 1rem 1.25rem;
-  margin-bottom: 1rem;
-  border-radius: 0 8px 8px 0;
-  transition: all 0.2s ease;
+  background: transparent;
+  border: none;
+  padding: 1.5rem 0;
+  margin-bottom: 0;
+  border-bottom: 1px solid #f1f5f9;
+  position: relative;
+  padding-left: 3rem;
+  counter-increment: step-counter;
+  transition: none;
+}
+
+.mechanism-steps .step:last-child {
+  border-bottom: none;
+}
+
+.mechanism-steps .step::before {
+  content: counter(step-counter);
+  position: absolute;
+  left: 0;
+  top: 1.5rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #ff006e;
+  font-size: 1.25rem;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 .mechanism-steps .step:hover {
-  background: #f1f5f9;
-  border-left-color: #ff006e;
-  transform: translateX(4px);
-}
-
-.mechanism-steps .step + .step {
-  margin-top: 1rem;
+  background: transparent;
+  transform: none;
 }
 
 .mechanism-steps h3 {
-  margin-top: 0;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #0f172a;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
-/* Properties grid */
+/* Properties grid - minimal cards */
 .properties-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
-  margin: 1.5rem 0;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
 }
 
 .property-card {
-  background: #ffffff;
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 12px;
-  padding: 1.25rem;
-  transition: all 0.2s ease;
+  background: transparent;
+  border: none;
+  border-top: 2px solid #ff006e;
+  padding: 1.5rem 0 0 0;
+  transition: none;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .property-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #002855 0%, #ff006e 100%);
+  display: none;
 }
 
 .property-card:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  transform: translateY(-2px);
+  box-shadow: none;
+  transform: none;
 }
 
 .property-card h3 {
-  font-size: 1rem;
-  font-weight: 700;
-  color: #002855;
-  margin: 0 0 0.5rem 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #ff006e;
+  margin: 0 0 0.75rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .property-card p {
-  font-size: 0.9rem;
-  color: #475569;
-  line-height: 1.6;
+  font-size: 0.95rem;
+  color: #334155;
+  line-height: 1.7;
   margin: 0;
 }
 
-/* Math section - collapsible */
+/* Math section - minimal collapsible */
 details.math-section {
-  margin: 2rem 0;
-  border: 1px dashed rgba(0,40,85,0.2);
-  border-radius: 8px;
-  background: #fafbfc;
-  overflow: hidden;
+  margin: 3rem 0;
+  border: none;
+  background: transparent;
+  overflow: visible;
 }
 
 details.math-section summary {
-  padding: 1rem 1.25rem;
+  padding: 0;
   cursor: pointer;
   font-weight: 600;
-  color: #002855;
-  background: white;
-  border-bottom: 1px dashed rgba(0,40,85,0.2);
-  transition: background 0.2s ease;
+  color: #64748b;
+  background: transparent;
+  border: none;
+  transition: color 0.2s ease;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 details.math-section summary:hover {
-  background: #f8f9fa;
+  color: #ff006e;
+  background: transparent;
 }
 
 details.math-section[open] summary {
-  background: #002855;
-  color: white;
+  color: #ff006e;
+  background: transparent;
+  margin-bottom: 1rem;
 }
 
 .math-content {
-  padding: 1.25rem;
+  padding: 1.5rem 0 0 0;
+  border-top: 1px solid #f1f5f9;
 }
 
-/* Testable predictions box */
+/* Testable predictions - authoritative */
 .testable-box {
-  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-  border: 1px solid #3b82f6;
-  border-left: 4px solid #002855;
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin: 2rem 0;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 3rem 0;
 }
 
 .testable-box h2 {
-  color: #002855;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #ff006e;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 .testable-box ul {
@@ -889,216 +959,301 @@ details.math-section[open] summary {
 }
 
 .testable-box li {
-  padding: 0.5rem 0;
-  padding-left: 1.5rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #f1f5f9;
   position: relative;
-  color: #1e293b;
-  line-height: 1.6;
+  color: #334155;
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+.testable-box li:last-child {
+  border-bottom: none;
+}
+
+.testable-box li.prediction {
+  padding-left: 2rem;
 }
 
 .testable-box li.prediction::before {
-  content: "✓";
+  content: "→";
   position: absolute;
   left: 0;
-  color: #002855;
-  font-weight: bold;
+  color: #ff006e;
+  font-weight: 700;
 }
 
 .testable-box li.test-method {
   margin-top: 1rem;
-  font-style: italic;
-  color: #475569;
+  font-style: normal;
+  color: #64748b;
+  font-size: 0.875rem;
+  padding-left: 0;
 }
 
 .testable-box li.test-method::before {
-  content: "🔬";
-  position: absolute;
-  left: 0;
+  display: none;
 }
 
-/* Misconceptions */
+/* Misconceptions - clean contrast */
 .misconception {
-  background: white;
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 12px;
-  padding: 1.25rem;
-  margin: 1.5rem 0;
+  background: transparent;
+  border: none;
+  padding: 2rem 0;
+  margin: 3rem 0;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .misconception .wrong {
-  color: #dc2626;
-  margin-bottom: 0.75rem;
-  padding: 0.5rem;
-  background: #fef2f2;
-  border-radius: 6px;
+  color: #64748b;
+  margin-bottom: 1rem;
+  padding: 0;
+  background: transparent;
+  font-size: 0.95rem;
+  text-decoration: line-through;
+  opacity: 0.7;
 }
 
 .misconception .right {
-  color: #059669;
-  padding: 0.5rem;
-  background: #f0fdf4;
-  border-radius: 6px;
+  color: #0f172a;
+  padding: 0;
+  background: transparent;
+  font-weight: 500;
+  font-size: 0.95rem;
 }
 
-/* FAQ section */
+/* FAQ section - minimal */
+.faq-section {
+  margin: 3rem 0;
+}
+
 .faq-section details {
-  background: white;
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 8px;
-  margin-bottom: 0.75rem;
-  overflow: hidden;
-  transition: all 0.2s ease;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #f1f5f9;
+  margin-bottom: 0;
+  overflow: visible;
+  transition: none;
+  padding: 1.5rem 0;
+}
+
+.faq-section details:last-child {
+  border-bottom: none;
 }
 
 .faq-section details:hover {
-  border-color: #ff006e;
+  border-color: #f1f5f9;
 }
 
 .faq-section summary {
-  padding: 1rem 1.25rem;
+  padding: 0;
   cursor: pointer;
   font-weight: 600;
-  color: #002855;
-  transition: all 0.2s ease;
+  color: #0f172a;
+  transition: color 0.2s ease;
+  font-size: 1rem;
+}
+
+.faq-section summary:hover {
+  color: #ff006e;
 }
 
 .faq-section details[open] summary {
-  background: #fafbfc;
-  border-bottom: 1px solid rgba(0,0,0,0.08);
+  background: transparent;
+  border: none;
+  color: #ff006e;
+  margin-bottom: 1rem;
 }
 
 .faq-section details p {
-  padding: 1rem 1.25rem;
+  padding: 0;
   color: #475569;
-  line-height: 1.6;
+  line-height: 1.7;
   margin: 0;
+  font-size: 0.95rem;
 }
 
-/* Related topics grid */
+/* Related topics - text-based grid */
 .related-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1rem;
-  margin-top: 1.5rem;
+  margin: 3rem 0;
+  padding: 2rem 0;
+  border-top: 2px solid #f1f5f9;
+}
+
+.related-grid h2 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  color: #ff006e;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 .related-card {
-  display: block;
-  background: white;
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 10px;
-  padding: 1rem;
-  color: inherit;
+  display: inline-block;
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: #0f172a;
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: color 0.2s ease;
   position: relative;
+  margin-right: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+  font-size: 0.95rem;
 }
 
 .related-card:hover {
-  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-  transform: translateY(-2px);
-  border-color: #ff006e;
+  color: #ff006e;
+  box-shadow: none;
+  transform: none;
+  border: none;
 }
 
 .related-card h3 {
-  font-size: 1rem;
-  font-weight: 700;
-  color: #002855;
-  margin: 0 0 0.5rem 0;
+  display: inline;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  margin: 0;
 }
 
 .related-card p {
-  font-size: 0.85rem;
-  color: #64748b;
-  line-height: 1.5;
-  margin: 0 0 0.75rem 0;
+  display: none;
 }
 
 .relation-type {
-  display: inline-block;
-  padding: 0.2rem 0.5rem;
-  font-size: 0.7rem;
-  font-weight: 600;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #002855 0%, #003d82 100%);
-  color: white;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
+  display: inline;
+  padding: 0;
+  font-size: 0.75rem;
+  font-weight: 400;
+  background: none;
+  color: #64748b;
+  text-transform: lowercase;
+  letter-spacing: 0;
+  margin-left: 0.5rem;
 }
 
-/* Further reading */
+.relation-type::before {
+  content: "(";
+}
+
+.relation-type::after {
+  content: ")";
+}
+
+/* Further reading - minimal */
 details.further-reading {
-  margin: 2rem 0;
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 8px;
-  background: white;
-  overflow: hidden;
+  margin: 3rem 0;
+  border: none;
+  background: transparent;
+  overflow: visible;
 }
 
 details.further-reading summary {
-  padding: 1rem 1.25rem;
+  padding: 0;
   cursor: pointer;
   font-weight: 600;
-  color: #002855;
-  background: #fafbfc;
+  color: #64748b;
+  background: transparent;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: color 0.2s ease;
+}
+
+details.further-reading summary:hover {
+  color: #ff006e;
+}
+
+details.further-reading[open] summary {
+  color: #ff006e;
+  margin-bottom: 1rem;
 }
 
 details.further-reading ul {
-  padding: 1.25rem;
+  padding: 1rem 0 0 0;
   list-style: none;
+  border-top: 1px solid #f1f5f9;
 }
 
 details.further-reading li {
-  padding: 0.5rem 0;
-  border-bottom: 1px solid rgba(0,0,0,0.05);
-}
-
-details.further-reading li:last-child {
+  padding: 0.75rem 0;
   border-bottom: none;
 }
 
 details.further-reading a {
-  color: #002855;
-  font-weight: 500;
+  color: #334155;
+  font-weight: 400;
   text-decoration: none;
   transition: color 0.2s ease;
+  border-bottom: 1px solid transparent;
 }
 
 details.further-reading a:hover {
   color: #ff006e;
-  text-decoration: underline;
+  text-decoration: none;
+  border-bottom: 1px solid #ff006e;
 }
 
-/* Content paragraphs */
+/* Content paragraphs - clean typography */
 .encyclopedia-entry p {
-  font-size: 0.95rem;
-  line-height: 1.7;
-  color: #1e293b;
-  margin-bottom: 1rem;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: #334155;
+  margin-bottom: 1.25rem;
 }
 
 .encyclopedia-entry ul, .encyclopedia-entry ol {
-  margin: 1rem 0;
-  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+  padding-left: 0;
+  list-style: none;
 }
 
 .encyclopedia-entry li {
-  margin-bottom: 0.5rem;
-  line-height: 1.6;
-  color: #1e293b;
+  margin-bottom: 0.75rem;
+  line-height: 1.7;
+  color: #334155;
+  position: relative;
+  padding-left: 1.5rem;
 }
 
-/* Links within content */
-.encyclopedia-entry a {
+.encyclopedia-entry ul li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: #cbd5e1;
+}
+
+.encyclopedia-entry ol {
+  counter-reset: ol-counter;
+}
+
+.encyclopedia-entry ol li {
+  counter-increment: ol-counter;
+}
+
+.encyclopedia-entry ol li::before {
+  content: counter(ol-counter) ".";
+  position: absolute;
+  left: 0;
   color: #ff006e;
+  font-weight: 600;
+}
+
+/* Links within content - subtle */
+.encyclopedia-entry a {
+  color: #0f172a;
   text-decoration: none;
-  border-bottom: 1px dotted #ff006e;
+  border-bottom: 1px solid #cbd5e1;
   transition: all 0.2s ease;
 }
 
 .encyclopedia-entry a:hover {
-  color: #002855;
-  border-bottom-style: solid;
+  color: #ff006e;
+  border-bottom-color: #ff006e;
 }
 
 @media (max-width: 768px) {
