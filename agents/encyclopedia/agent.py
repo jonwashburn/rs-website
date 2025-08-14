@@ -3,6 +3,7 @@ import json
 import argparse
 import hashlib
 import yaml
+import re
 from pathlib import Path
 from typing import List, Dict, Any
 
@@ -97,12 +98,45 @@ Use only the following theory context and your prior RS style rules:
 {ctx}
 ---
 
-Output only valid HTML for the body section inside the `<section class=\"template-section encyclopedia-entry\">` container as per template.
+Output only the body content for the encyclopedia section, without markdown code fences.
 """.strip()
 	return [
 		{"role": "system", "content": system_prompt},
 		{"role": "user", "content": user},
 	]
+
+
+def sanitize_and_wrap(html_body: str, task: Dict[str, Any]) -> str:
+	# strip markdown code fences if present
+	body = re.sub(r"```[a-zA-Z]*", "", html_body)
+	body = body.replace("```", "")
+	body = body.strip()
+	# ensure container structure and meta badges
+	category = task.get("category", "Physics")
+	difficulty = task.get("difficulty", "Foundational")
+	tags = ", ".join(task.get("tags", []))
+	title = task.get("title", "")
+	# If body already contains our container, keep as-is
+	if "template-container" in body and "template-reading" in body:
+		return body
+	# Avoid duplicate H1 if already present
+	maybe_h1 = "" if "<h1" in body.lower() else f"<h1>{title}</h1>"
+	meta = (
+		f"<p class=\"template-hero-badge\">Encyclopedia / {category} / {title}</p>"
+		f"<div class=\"meta-badges\">"
+		f"<span class=\"category-badge\">{category}</span>"
+		f"<span class=\"difficulty-badge\">{difficulty}</span>"
+		+ (f"<span class=\"tags\">{tags}</span>" if tags else "")
+		+ "</div>"
+	)
+	wrapped = (
+		"<section class=\"template-section encyclopedia-entry\">"
+		"<div class=\"template-container\">"
+		"<div class=\"template-reading\">"
+		+ meta + maybe_h1 + body +
+		"</div></div></section>"
+	)
+	return wrapped
 
 
 def call_model(cfg: Dict[str, Any], messages: List[Dict[str, str]]) -> str:
@@ -123,6 +157,8 @@ def minimal_validate(html: str) -> List[str]:
 	for h in needed:
 		if h not in html:
 			errs.append(f"Missing section: {h}")
+	if "template-section" not in html:
+		errs.append("Missing template wrapper")
 	return errs
 
 
@@ -193,7 +229,8 @@ def main():
 		q = f"Recognition Physics Encyclopedia page: {task['title']} in category {task.get('category','Physics')}"
 		ctx = retrieve(cfg, q, cfg.get("retrieve_k", 8))
 		messages = build_prompt(sys_prompt, template_md, task, ctx)
-		html_body = call_model(cfg, messages)
+		raw = call_model(cfg, messages)
+		html_body = sanitize_and_wrap(raw, task)
 		errs = minimal_validate(html_body)
 		if errs:
 			print(f"Validation warnings for {slug}: {errs}")
