@@ -54,8 +54,9 @@
             font-size: 0.875rem; /* original code font on desktop */
             line-height: 1.6;
             color: #a8b9cc;
-            max-height: 600px;
-            overflow-y: auto;
+            /* remove internal scroll; let page scroll */
+            max-height: none;
+            overflow-y: visible;
             max-width: 100%;
         }
 
@@ -118,10 +119,11 @@
             background: white;
             border-radius: 8px;
             padding: 1.5rem;
-            position: sticky;
-            top: 2rem;
-            max-height: calc(100vh - 4rem);
-            overflow-y: auto;
+            /* remove sticky + internal scroll; let page scroll */
+            position: static;
+            top: auto;
+            max-height: none;
+            overflow: visible;
         }
 
         .quick-index h3 {
@@ -308,6 +310,8 @@
             .quick-index {
                 position: static;
                 margin-top: 2rem;
+                max-height: none;
+                overflow: visible;
             }
 
             .code-body {
