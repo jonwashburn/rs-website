@@ -119,11 +119,11 @@
             background: white;
             border-radius: 8px;
             padding: 1.5rem;
-            /* remove sticky + internal scroll; let page scroll */
-            position: static;
-            top: auto;
-            max-height: none;
-            overflow: visible;
+            position: sticky;
+            top: 2rem;
+            max-height: calc(100vh - 4rem);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .quick-index h3 {
@@ -1677,6 +1677,11 @@ end IndisputableMonolith
 
             status.textContent = '';
             console.log('Rendering complete, total lines rendered:', container.children.length);
+            console.log('Hotspots found:', container.querySelectorAll('.hotspot').length);
+            console.log('Markers applied:', markers.filter(m => lines.some(l => l.includes(m.pattern))).length);
+            
+            // Auto-scroll Quick Index based on viewport
+            setupQuickIndexAutoScroll();
 
             // Honor deep link anchors like #L123
             if (location.hash && /^#L\d+$/.test(location.hash)) {
@@ -2241,6 +2246,81 @@ end IndisputableMonolith
             };
             
             return prompts[key] || '';
+        }
+
+        // Quick Index auto-scroll functionality
+        function setupQuickIndexAutoScroll() {
+            const quickIndex = document.getElementById('quick-index');
+            const codeContainer = document.getElementById('code');
+            if (!quickIndex || !codeContainer) return;
+            
+            // Update Quick Index highlight based on current viewport
+            function updateQuickIndexHighlight() {
+                const hotspots = codeContainer.querySelectorAll('.hotspot[data-key], .hotspot[data-name]');
+                const viewportTop = window.scrollY;
+                const viewportBottom = viewportTop + window.innerHeight;
+                
+                let currentSection = null;
+                let minDistance = Infinity;
+                
+                hotspots.forEach(hotspot => {
+                    const rect = hotspot.getBoundingClientRect();
+                    const absoluteTop = rect.top + viewportTop;
+                    
+                    // Find closest hotspot to the center of viewport
+                    const center = viewportTop + window.innerHeight / 2;
+                    const distance = Math.abs(absoluteTop - center);
+                    
+                    if (distance < minDistance && absoluteTop <= viewportBottom) {
+                        minDistance = distance;
+                        currentSection = hotspot.getAttribute('data-key') || hotspot.getAttribute('data-name');
+                    }
+                });
+                
+                // Highlight current section in Quick Index
+                quickIndex.querySelectorAll('a').forEach(link => {
+                    const jumpTarget = link.getAttribute('data-jump');
+                    if (jumpTarget === currentSection) {
+                        link.style.background = 'rgba(255, 0, 110, 0.1)';
+                        link.style.color = 'var(--color-accent)';
+                        link.style.borderLeftColor = 'var(--color-accent)';
+                        
+                        // Auto-scroll Quick Index to show current item
+                        const linkRect = link.getBoundingClientRect();
+                        const containerRect = quickIndex.getBoundingClientRect();
+                        
+                        if (linkRect.top < containerRect.top || linkRect.bottom > containerRect.bottom) {
+                            link.scrollIntoView({ 
+                                behavior: 'smooth', 
+                                block: 'center',
+                                inline: 'nearest'
+                            });
+                        }
+                    } else {
+                        link.style.background = '';
+                        link.style.color = '';
+                        link.style.borderLeftColor = '';
+                    }
+                });
+            }
+            
+            // Throttled scroll handler
+            let ticking = false;
+            function handleScroll() {
+                if (!ticking) {
+                    requestAnimationFrame(() => {
+                        updateQuickIndexHighlight();
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            }
+            
+            // Set up scroll listener
+            window.addEventListener('scroll', handleScroll);
+            
+            // Initial highlight
+            setTimeout(updateQuickIndexHighlight, 100);
         }
 
         // Load on page ready
