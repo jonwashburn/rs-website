@@ -98,6 +98,16 @@
             overflow-wrap: break-word;
         }
 
+        /* Clickable symbol tokens inside code */
+        .code-text .sym {
+            color: var(--color-accent);
+            border-bottom: 1px dotted var(--color-accent);
+            cursor: pointer;
+        }
+        .code-text .sym:hover {
+            background: rgba(255, 0, 110, 0.08);
+        }
+
         /* Quick index sidebar */
         .quick-index {
             background: white;
@@ -463,6 +473,12 @@
             { key: 'gray_ham', pattern: 'theorem gray_ham' },
             { key: 'period_exactly_8', pattern: 'theorem period_exactly_8' },
             { key: 'Chain', pattern: 'theorem Chain' },
+            // Extra common patterns to maximize hotspots
+            { key: 'namespace', pattern: 'namespace ' },
+            { key: 'end_namespace', pattern: 'end ' },
+            { key: 'Nothing', pattern: 'inductive Nothing' },
+            { key: 'Recognition', pattern: 'structure Recognition ' },
+            { key: 'MetaProof', pattern: 'theorem meta_principle_holds' },
         ];
 
         // Scientist-facing explanations
@@ -552,7 +568,8 @@
                 
                 const code = document.createElement('div');
                 code.className = 'code-text';
-                code.textContent = t.replace(/\t/g, '  ');
+                // We'll set innerHTML later after token injection; for now, store raw
+                code.setAttribute('data-raw', t.replace(/\t/g, '  '));
                 
                 line.appendChild(ln);
                 line.appendChild(code);
@@ -570,8 +587,9 @@
                 }
             });
 
-            // Heuristic hotspots for most code items
+            // Heuristic hotspots for most code items + symbol table
             const defLike = /^(\s*)(def|theorem|lemma|structure|namespace)\s+([A-Za-z0-9_\.]+)/;
+            const symbolTable = [];
             lines.forEach((raw, i) => {
                 const textLine = raw.trim();
                 if (!textLine || textLine.startsWith('--') || textLine.startsWith('/-')) return;
@@ -584,8 +602,47 @@
                         el.setAttribute('data-name', m[3]);
                         el.title = `Explain ${m[2]} ${m[3]}`;
                     }
+                    // Record symbol definition for token linking and quick index
+                    symbolTable.push({ name: m[3], kind: m[2], line: i });
                 }
             });
+
+            // Inject clickable tokens for all known symbols
+            const escapeHtml = (s) => s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+            // Sort symbols by length to avoid partial matches overshadowing long names
+            const symbolsByLen = [...new Set(symbolTable.map(s => s.name))].sort((a,b)=>b.length-a.length);
+            const makeTokenReplacer = (text) => {
+                let html = escapeHtml(text);
+                symbolsByLen.forEach((name) => {
+                    const safe = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    const re = new RegExp(`(^|[^A-Za-z0-9_])(${safe})(?![A-Za-z0-9_])`, 'g');
+                    html = html.replace(re, (match, p1, p2) => `${p1}<span class="sym" data-name="${name}">${p2}</span>`);
+                });
+                return html;
+            };
+            container.querySelectorAll('.code-text').forEach((el) => {
+                const raw = el.getAttribute('data-raw') || '';
+                el.innerHTML = makeTokenReplacer(raw);
+            });
+
+            // Auto-extend the Quick Index with discovered symbols (first 50)
+            const qi = document.getElementById('quick-index');
+            if (qi) {
+                const existingKeys = new Set(Array.from(qi.querySelectorAll('a')).map(a => a.getAttribute('data-jump')));
+                let added = 0;
+                symbolTable.forEach(({name}) => {
+                    if (added >= 50) return;
+                    if (existingKeys.has(name)) return;
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.href = '#';
+                    a.setAttribute('data-jump', name);
+                    a.textContent = name;
+                    li.appendChild(a);
+                    qi.appendChild(li);
+                    added += 1;
+                });
+            }
 
             status.textContent = '';
         }
@@ -601,6 +658,30 @@
         }
 
         document.addEventListener('click', (e) => {
+            // Symbol token click: jump to definition or explain inline
+            const sym = e.target.closest('.sym');
+            if (sym) {
+                const name = sym.getAttribute('data-name');
+                const defLine = document.querySelector(`.code-line[data-name="${name}"]`);
+                if (defLine) {
+                    defLine.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    setTimeout(() => defLine.click(), 180);
+                } else {
+                    const hostLine = e.target.closest('.code-line');
+                    if (hostLine) {
+                        const isActive = hostLine.classList.contains('active');
+                        clearActives(isActive ? null : hostLine);
+                        if (!isActive) hostLine.classList.add('active');
+                        const exp = document.createElement('div');
+                        exp.className = 'expansion active';
+                        exp.innerHTML = decorate(genericExplain('symbol', name, sym.textContent || name), 'symbol');
+                        hostLine.insertAdjacentElement('afterend', exp);
+                    }
+                }
+                e.preventDefault();
+                e.stopPropagation();
+                return;
+            }
             const line = e.target.closest('.code-line');
             if (!line) return;
             const key = line.getAttribute('data-key');
@@ -634,7 +715,7 @@
             if (!a) return;
             e.preventDefault();
             const key = a.getAttribute('data-jump');
-            const target = document.querySelector(`.code-line[data-key="${key}"]`);
+            const target = document.querySelector(`.code-line[data-key="${key}"]`) || document.querySelector(`.code-line[data-name="${key}"]`);
             if (target) {
                 target.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 target.click();
