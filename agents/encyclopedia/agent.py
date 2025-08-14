@@ -171,10 +171,15 @@ def write_page(out_dir: Path, slug: str, html_body: str) -> None:
 	<meta charset=\"UTF-8\" />
 	<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />
 	<title>{slug}</title>
+	<link rel=\"stylesheet\" href=\"/assets/css/main.css\" />
+	<link rel=\"stylesheet\" href=\"/assets/css/site-template.css\" />
 	<link rel=\"stylesheet\" href=\"/style.css\" />
 </head>
-<body>
+<body class=\"template-page\">
+	<div id=\"header-placeholder\"></div>
 {html_body}
+	<div id=\"footer-placeholder\"></div>
+	<script src=\"/assets/js/main.js\"></script>
 </body>
 </html>
 """
