@@ -1059,6 +1059,13 @@ end IndisputableMonolith
         // Render Lean file with line numbers and hotspots
         async function loadLean() {
             const status = document.getElementById('status');
+            const container = document.getElementById('code');
+            
+            if (!status || !container) {
+                console.error('Missing required elements:', { status: !!status, container: !!container });
+                return;
+            }
+            
             status.textContent = 'Loading…';
 
             // Try multiple sources
@@ -1078,6 +1085,7 @@ end IndisputableMonolith
                     const res = await fetch(url, { cache: 'no-cache' });
                     if (res.ok) {
                         text = await res.text();
+                        console.log('Loaded from:', url);
                         break;
                     }
                 } catch (_) { /* continue */ }
@@ -1088,20 +1096,21 @@ end IndisputableMonolith
                 const embedded = document.getElementById('embedded-lean');
                 if (embedded && embedded.textContent) {
                     text = embedded.textContent;
+                    console.log('Using embedded source, length:', text.length);
                 }
             }
 
             if (!text || !text.trim()) {
-                status.textContent = 'Loaded embedded source';
-                const embedded = document.getElementById('embedded-lean');
-                text = embedded?.textContent || '-- fallback minimal stub';
-                if (!text || !text.trim()) {
-                    text = `/- Fallback minimal Lean source when remote fetch fails -/\ninductive Nothing : Type where\n-- no constructors\n\nstructure Recognition (A : Type) (B : Type) where\n  recognizer : A\n  recognized : B\n\n/-- Meta‑Principle: Nothing cannot recognize itself -/\ntheorem MetaPrinciple : ¬ ∃ (r : Recognition Nothing Nothing), True := by\n  intro h; cases h with\n  | intro r _ => cases r.recognizer\n`;
-                }
+                status.textContent = 'Using fallback';
+                text = `/- Fallback minimal Lean source when remote fetch fails -/\ninductive Nothing : Type where\n-- no constructors\n\nstructure Recognition (A : Type) (B : Type) where\n  recognizer : A\n  recognized : B\n\n/-- Meta‑Principle: Nothing cannot recognize itself -/\ntheorem MetaPrinciple : ¬ ∃ (r : Recognition Nothing Nothing), True := by\n  intro h; cases h with\n  | intro r _ => cases r.recognizer\n`;
+                console.log('Using hardcoded fallback');
             }
 
+            console.log('Text length:', text.length, 'First 100 chars:', text.substring(0, 100));
+
             const lines = text.split('\n');
-            const container = document.getElementById('code');
+            console.log('Number of lines:', lines.length);
+            
             container.innerHTML = '';
 
             // Build DOM lines
@@ -1194,6 +1203,7 @@ end IndisputableMonolith
             }
 
             status.textContent = '';
+            console.log('Rendering complete, total lines rendered:', container.children.length);
 
             // Honor deep link anchors like #L123
             if (location.hash && /^#L\d+$/.test(location.hash)) {
@@ -1759,7 +1769,12 @@ end IndisputableMonolith
         }
 
         // Load on page ready
-        loadLean();
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadLean);
+        } else {
+            // DOM is already loaded
+            loadLean();
+        }
     </script>
 </body>
 </html>
