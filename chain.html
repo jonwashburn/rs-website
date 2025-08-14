@@ -280,25 +280,7 @@
         }
 
         /* Mode switch in header */
-        .mode-switch {
-            display: inline-flex;
-            border: 1px solid #1f2937;
-            border-radius: 999px;
-            overflow: hidden;
-            background: #0b1220;
-        }
-        .mode-switch button {
-            color: #cbd5e1;
-            padding: 0.25rem 0.6rem;
-            font-size: 0.75rem;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-        }
-        .mode-switch button.active {
-            background: var(--color-accent);
-            color: white;
-        }
+        /* (mode-switch removed) */
 
         /* Mobile adjustments */
         @media (max-width: 768px) {
@@ -376,18 +358,7 @@
                     <div class="code-wrap" id="viewer">
                         <div class="code-header">
                             <div>Chain.lean — complete proof chain</div>
-                            <div style="display:flex; align-items:center; gap:0.5rem;">
-                                <div class="mode-switch" title="Training mode">
-                                    <button id="modeLine" class="active">Lines</button>
-                                    <button id="modeSection">Sections</button>
-                                </div>
-                                <input id="codeSearch" type="search" placeholder="Search… (/ to focus)" style="background:#111728; color:#e2e8f0; border:1px solid #1f2937; border-radius:6px; padding:0.25rem 0.5rem; width:14rem;" />
-                                <button id="searchPrev" class="template-btn template-btn-outline" style="padding:0.25rem 0.5rem; font-size:0.75rem;">Prev</button>
-                                <button id="searchNext" class="template-btn" style="padding:0.25rem 0.5rem; font-size:0.75rem;">Next</button>
-                                <button id="searchClear" class="template-btn template-btn-outline" style="padding:0.25rem 0.5rem; font-size:0.75rem;">Clear</button>
-                                <button id="copyLink" class="template-btn template-btn-outline" title="Copy link to active line" style="padding:0.25rem 0.5rem; font-size:0.75rem;">Copy link</button>
-                                <div id="status" aria-live="polite" style="margin-left:0.5rem;"></div>
-                            </div>
+                            <div id="status" aria-live="polite"></div>
                         </div>
                         <div class="code-body" id="code"></div>
                     </div>
@@ -697,12 +668,8 @@
                 }
             }
 
-            // Wire up search controls
-            initSearch(lines);
-            // Wire up keyboard navigation
-            initKeys();
-            // Wire up section grouping mode
-            initSections(lines);
+            // Controls removed; keep base functionality minimal
+            // Section grouping mode disabled (controls removed)
         }
 
         // Expansion handling
@@ -857,7 +824,7 @@
         }
 
         // Simple line search with next/prev navigation and copy link
-        function initSearch(lines) {
+        /* controls removed: initSearch omitted */
             const input = document.getElementById('codeSearch');
             const btnNext = document.getElementById('searchNext');
             const btnPrev = document.getElementById('searchPrev');
@@ -904,96 +871,10 @@
         }
 
         // Keyboard shortcuts: j/k arrows and / for search focus
-        function initKeys() {
-            document.addEventListener('keydown', (e) => {
-                if ((e.target instanceof HTMLInputElement) || (e.target instanceof HTMLTextAreaElement)) return;
-                if (e.key === '/') { e.preventDefault(); document.getElementById('codeSearch')?.focus(); return; }
-                if (e.key === 'j' || e.key === 'ArrowDown') {
-                    const cur = document.querySelector('.code-line.active');
-                    const lines = Array.from(document.querySelectorAll('.code-line'));
-                    const i = cur ? lines.indexOf(cur) : -1;
-                    const next = lines[i + 1] || lines[0];
-                    next?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    setTimeout(() => next?.click(), 80);
-                } else if (e.key === 'k' || e.key === 'ArrowUp') {
-                    const cur = document.querySelector('.code-line.active');
-                    const lines = Array.from(document.querySelectorAll('.code-line'));
-                    const i = cur ? lines.indexOf(cur) : lines.length;
-                    const prev = lines[i - 1] || lines[lines.length - 1];
-                    prev?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    setTimeout(() => prev?.click(), 80);
-                }
-            });
-        }
+        /* controls removed: initKeys omitted */
 
         // Section-mode grouping: provide higher-level training on whole blocks
-        function initSections(lines) {
-            const btnLine = document.getElementById('modeLine');
-            const btnSec = document.getElementById('modeSection');
-            const container = document.getElementById('code');
-            if (!btnLine || !btnSec || !container) return;
-
-            // Build simple sections from known anchors; fallback to heuristic by blank-line separations
-            const anchors = [
-                { key: 'MetaPrinciple', title: 'Meta‑Principle' },
-                { key: 'RecognitionStructure', title: 'Recognition structure' },
-                { key: 'Ledger', title: 'Ledger necessity' },
-                { key: 'J_def', title: 'Unique cost J' },
-                { key: 'φ_def', title: 'Golden ratio φ' },
-                { key: 'k_equals_one', title: 'k = 1 minimal' },
-                { key: 'period_exactly_8', title: '8‑tick period' },
-                { key: 'Chain', title: 'Final theorem' }
-            ];
-
-            // Map anchor to nearest tagged line element
-            const sections = anchors.map(a => {
-                const el = container.querySelector(`.code-line[data-key="${a.key}"]`) || container.querySelector(`.code-line[data-name="${a.key}"]`);
-                const lineIdx = el ? parseInt(el.dataset.idx, 10) - 1 : -1;
-                return { ...a, el, lineIdx };
-            }).filter(s => s.el && s.lineIdx >= 0).sort((x,y)=> x.lineIdx - y.lineIdx);
-
-            // Compute end indices by next start - 1
-            for (let i = 0; i < sections.length; i++) {
-                sections[i].end = (i+1 < sections.length) ? sections[i+1].lineIdx - 1 : (lines.length - 1);
-            }
-
-            let mode = 'line';
-            const setMode = (m) => {
-                mode = m;
-                btnLine.classList.toggle('active', mode === 'line');
-                btnSec.classList.toggle('active', mode === 'section');
-                // Clear any block highlights
-                container.querySelectorAll('.block-highlight').forEach(n => n.classList.remove('block-highlight'));
-                const s = document.getElementById('status');
-                if (s) s.textContent = (mode === 'section' ? 'Section mode: click any line to see the full block' : 'Line mode: click a line for that item');
-                setTimeout(() => { const s2 = document.getElementById('status'); if (s2) s2.textContent = ''; }, 1500);
-            };
-            btnLine.addEventListener('click', ()=> setMode('line'));
-            btnSec.addEventListener('click', ()=> setMode('section'));
-            setMode('line');
-
-            // Intercept clicks to expand entire section in section mode
-            document.addEventListener('click', (e) => {
-                if (mode !== 'section') return;
-                const line = e.target.closest('.code-line');
-                if (!line) return;
-                const idx = parseInt(line.dataset.idx, 10) - 1;
-                const sec = sections.find(s => idx >= s.lineIdx && idx <= s.end);
-                if (!sec) return;
-                // Highlight entire block and open a comprehensive explanation at the anchor
-                const block = [];
-                for (let i = sec.lineIdx; i <= sec.end; i++) {
-                    const el = container.children[i];
-                    block.push(el);
-                    el.classList.add('block-highlight');
-                }
-                // Scroll anchor line to center and click to open its curated explanation
-                sec.el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                setTimeout(() => sec.el.click(), 150);
-                // Auto-clear highlight after a short while (user can re-activate by clicking again)
-                setTimeout(() => block.forEach(el => el.classList.remove('block-highlight')), 2500);
-            }, true);
-        }
+        // (initSections removed)
 
         // Separate function for rich content to avoid huge inline strings
         function getRichContent(key) {
