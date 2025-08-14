@@ -21,9 +21,9 @@
     </script>
     <link rel="stylesheet" href="/assets/css/site-template.css">
     <style>
-        /* Podcast badge styles - matching particle-masses.html exactly */
+        /* Podcast badge styles - positioned below header with attention animation */
         .podcast-badge {
-            position: fixed; top: 20px; right: 20px; z-index: 1000;
+            position: fixed; top: 80px; right: 20px; z-index: 1000;
             display: inline-flex; align-items: center; gap: 0.5rem;
             border: 2px solid var(--color-accent); color: var(--color-accent);
             background: #ffffff; border-radius: 999px; 
@@ -31,6 +31,18 @@
             cursor: pointer; font: inherit; line-height: 1; 
             transition: all 0.15s ease;
             box-shadow: 0 2px 8px rgba(255, 0, 110, 0.2);
+            animation: subtlePulse 2s ease-in-out 3;
+        }
+        
+        @keyframes subtlePulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 2px 8px rgba(255, 0, 110, 0.2);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 4px 16px rgba(255, 0, 110, 0.4);
+            }
         }
         .podcast-badge:hover { 
             transform: translateY(-1px); 
@@ -43,7 +55,7 @@
         .podcast-label { font-size: 0.8rem; }
         @media (max-width: 640px) {
             .podcast-label { display: none; }
-            .podcast-badge { padding: 0.35rem; top: 10px; right: 10px; }
+            .podcast-badge { padding: 0.35rem; top: 70px; right: 10px; }
         }
         
         .free-will-hero {
@@ -729,7 +741,7 @@
       
       badge.addEventListener('click', function() {
         if (!audio) {
-          const audioPath = encodeURI('/Beyond Illusion_ Recognition Science Reveals Our Costly, Quantifiable Free Will.mp3');
+          const audioPath = encodeURI('/Beyond Determinism_ How _Operational Free Will_ Lets You Steer Reality.mp3');
           audio = new Audio(audioPath);
           
           audio.addEventListener('ended', function() {

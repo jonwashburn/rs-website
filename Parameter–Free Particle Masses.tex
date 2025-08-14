@@ -16,8 +16,10 @@
 \maketitle
 
 \begin{abstract}
-We present a parameter--free architecture that predicts Standard Model (SM) masses and mixings from a rung--indexed $\varphi$--ladder solved as a local fixed point. The method replaces an arbitrary probe scale with a \emph{$\varphi$--sheet} average tied to the same alternating gap coefficients that define the ledger. The only data inputs are physical constants and inclusive $e^+e^-\!\to{\rm hadrons}$ information used in a dispersion calculation of $\alpha_{\rm em}(\mu)$. Charged--lepton ratios agree with experiment at parts--per--million (ppm) after densifying the $\tau$--window in the hadronic vacuum--polarization integral; the underlying solver and invariants remain unchanged. A neutrino--anchored global scale gives absolute Dirac neutrino masses $\Sigma m_\nu\simeq 0.0605$\,eV, consistent with cosmology, and fixes $(e,\mu,\tau)$ in eV at ppm accuracy. The boson sector reproduces $Z/W$ and $H/Z$ at the $10^{-3}$ level, and quark mass ratios—evaluated ``$\varphi$--fixed'' at each species' self--consistent scale $\mu_\star$ to remove scheme bias—agree at the few$\times 10^{-3}$ level. CKM and PMNS follow from the same rung geometry without additional parameters. We provide a reproducible pipeline and a compact error budget that attribute the residuals to quadrature density in the $\tau$ window and fixed--point stability.
+We present a parameter--free architecture that predicts Standard Model (SM) masses and mixings from a rung--indexed $\varphi$--ladder solved as a local fixed point. The method replaces an arbitrary probe scale with a \emph{$\varphi$--sheet} average tied to the same alternating gap coefficients that define the ledger. The only data inputs are physical constants and inclusive $e^+e^-\!\to{\rm hadrons}$ information used in a dispersion calculation of $\alpha_{\rm em}(\mu)$. Charged--lepton ratios agree with experiment at parts--per--million (ppm) after densifying the $\tau$--window in the hadronic vacuum--polarization integral; the underlying solver and invariants remain unchanged. A neutrino--anchored global scale gives absolute Dirac neutrino masses $\Sigma m_\nu\simeq 0.0605$\,eV, consistent with cosmology, and fixes $(e,\mu,\tau)$ in eV at ppm accuracy. We also provide an \emph{internal} $Z/W$ consistency anchor that fixes the absolute unit without experimental masses or $\Delta m^2$ inputs. The boson sector reproduces $Z/W$ and $H/Z$ at the $10^{-3}$ level, and quark mass ratios—evaluated ``$\varphi$--fixed'' at each species' self--consistent scale $\mu_\star$ to remove scheme bias—agree at the few$\times 10^{-3}$ level. CKM and PMNS follow from the same rung geometry without additional parameters. We provide a reproducible pipeline and a compact error budget that attribute the residuals to quadrature density in the $\tau$ window and fixed--point stability.
 
+
+\end{abstract}
 
 \keyword{axiomatic physics; type theory; foundations of physics; logical necessity; tautology; dark matter; cosmology} 
 
@@ -25,6 +27,21 @@ We present a parameter--free architecture that predicts Standard Model (SM) mass
 % Main Document
 %=================================================================
 
+
+% Notation \& Definitions (quick reference)
+\begin{center}
+\fbox{\begin{minipage}{0.95\textwidth}\small
+\textbf{Notation \& Definitions}\par\medskip
+\begin{itemize}
+  \item $\displaystyle \varphi=\tfrac{1+\sqrt{5}}{2}$, \quad $E_{\rm coh}=\varphi^{-5}$.
+  \item $B_i$ (sector factor; e.g. charged leptons $B=1$, quarks $B=2$, weak bosons $B=4$).
+  \item $r_i\in\mathbb{Z}$ (rung index; e.g. $r_e=0$, $r_\mu=11$, $r_\tau=17$).
+  \item $f_i$ (fractional residue from the $\varphi$--sheet fixed point; no probe scale).
+  \item $g_m=\dfrac{(-1)^{m+1}}{m\,\varphi^{m}}$, \; sheet weights $w_k\propto g_{k+1}$ with $\ell^1$ normalizer $2\ln\varphi$.
+  \item Charged--lepton invariants: $I_1=Y_R^2+\Delta f_\chi(r)$ with $Y_R^2=4$, $\Delta f_\chi(r)=\dfrac{(r\bmod 8)-4}{8}$; $I_2=\dfrac{9}{76}$.
+\end{itemize}
+\end{minipage}}
+\end{center}
 
 \section{Introduction}
 The observed pattern of SM masses and mixings is usually accommodated by dozens of a priori free Yukawa parameters. In the absence of tuned textures or family symmetries, there is no accepted predictive mechanism for the numerical values themselves. This paper exhibits a minimal, measurement--anchored alternative: a parameter--free, fixed--point architecture in which integer rungs on a $\varphi$--ladder determine coarse mass separations, and a small \emph{fractional residue} $f_i$—computed from standard anomalous dimensions plus fixed ledger invariants—accounts for the remaining percent--to--ppm structure. The key difference from conventional treatments is procedural: we \emph{define} masses nonperturbatively as solutions of a local $\varphi$--cycle and then \emph{average} over a $\varphi$--sheet with signed weights tied to the same alternating gap series that encodes the ledger, thereby eliminating the arbitrary choice of probe scale and its scheme dependence. The resulting pipeline consumes only physical constants and inclusive $e^+e^-\!\to{\rm hadrons}$ information via a dispersion calculation of $\alpha_{\rm em}(\mu)$; it introduces no sector--specific knobs, priors, or fitted coefficients. The full solver and backend are implemented in a single, reproducible code path \cite{EidelmanJegerlehner1995,Jegerlehner2003,Keshavarzi2019,Davier2017,PDG2024}.
@@ -212,6 +229,25 @@ m_\tau=1.77686~\text{GeV},
 \]
 which inherit the ppm--level agreement established by the dispersion $\alpha_{\rm em}(\mu)$ backend and the two--loop SM running used inside the fixed--point integrals (no toggles or fits). The scale transfer introduces no new freedom: it is a single multiplicative factor fixed by $\Delta m^2_{\rm large}$ and used unchanged across sectors.
 
+\subsection{Internal absolute scale from a $Z/W$ identity (no experimental masses)}
+\label{subsec:ZW-anchor}
+The absolute unit $s$ (eV per ladder unit) can alternatively be \emph{derived internally} from a consistency identity using only (i) the \emph{dimensionless} ladder outputs for $W$ and $Z$, and (ii) a calculable $\cos\theta_W(\mu)$.
+Let $m_W^{(\varphi)}$ and $m_Z^{(\varphi)}$ denote the ladder outputs. Define
+\[
+  F(\mu) \,=\, \frac{m_Z^{(\varphi)}}{m_W^{(\varphi)}}\,\cos\theta_W(\mu)\; -\; 1,\qquad
+  s \,=\, \frac{\mu_\star}{m_W^{(\varphi)}}\quad(\mu_\star:\ F(\mu_\star)=0),
+\]
+with $\cos\theta_W(\mu)=g_2/\sqrt{g'^2+g_2^2}$ and $g'^2=\tfrac{3}{5}g_1^2$.
+In the main runs we now \emph{default} to a parameter--free RS force--ladder map for $\cos\theta_W(\mu)$ built solely from the ledger gap series $g_m$ and the recognition energy $E_{\rm rec}=\hbar c/\lambda_{\rm rec}$, with $\lambda_{\rm rec}=\sqrt{\hbar G/(\pi c^3)}$. Concretely, with $x\equiv \ln(\mu\,\mathrm{eV}/E_{\rm rec})/(2\ln\varphi)$,
+\[
+  a_Y(x)=\sum_{m\ge1} g_m\,\tanh\!\Bigl(\frac{x}{m}\Bigr),\qquad
+  a_2(x)=\sum_{m\ge1} g_m\,\tanh\!\Bigl(-\frac{x}{m}\Bigr),\qquad
+  \cos\theta_W^{\rm RS}(\mu)=\frac{\sqrt{e^{a_2(x)}}}{\sqrt{\tfrac{3}{5}e^{a_Y(x)}+e^{a_2(x)}}}\,.
+\]
+The SM two--loop tilt remains available as a cross--check; in either case, no experimental mass or $\Delta m^2$ enters.
+
+Numerically $\cos\theta_W(\mu)$ is monotone on tens–hundreds of GeV, so $F(\mu)$ has a unique zero found by safeguarded bisection/Newton in $\ln\mu$. Under this $Z/W$ anchor, neutrino absolute masses become \emph{predictions}; charged--lepton and boson absolutes move only at $\lesssim10^{-4}$ relative to the $\nu$--anchored snapshot.
+
 \subsection{Boson ratios and absolutes (anchored to $M_W$)}
 Locked ratios:
 \[
@@ -265,6 +301,15 @@ Both mixing matrices are determined by the integer rung map plus the closed--for
       \item Source SHA--256: \texttt{7b0b02449e5c054a40eff15af7a0c594977c-}\\\texttt{17179b5950601cf97db5e1934c2f}
       \item Compiled pyc SHA--256: \texttt{e868d7765a532b9f190b2ea1a6971b71d20628721c-}\\\texttt{fe6ceb29f4bd4a121691e2}
     \end{itemize}
+  \item How to reproduce the internal anchor run (CLI):
+  \begin{verbatim}
+  python examples/ledger_snapshot_v22c.py --anchor=ZW            # defaults to RS tilt (force-ladder)
+  # optional cross-checks:
+  python examples/ledger_snapshot_v22c.py --anchor=ZW --tilt=SM  # SM two-loop tilt
+  python examples/ledger_snapshot_v22c.py --anchor=GF
+  python examples/ledger_snapshot_v22c.py --anchor=MW
+  \end{verbatim}
+  Z/W derives the absolute unit internally (no masses, no $\Delta m^2$). Report $s/E_{\rm rec}$ for the RS bridge.
 \end{itemize}
 
 \section{Discussion and outlook}
