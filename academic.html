@@ -1049,6 +1049,103 @@
             'small correction f': 'Typically ~0.001-0.006, from gap (δ_gap) and curvature (κ) effects. Same corrections appear across all particles—universal, not fitted per particle.'
         };
 
+        // Short, first-layer definitions used to auto-link terms inline
+        const shortDefs = {
+            'Meta‑Principle': 'Logical tautology: absolute nothingness cannot exist—forces minimal recognition.',
+            'self‑recognizing ledger': 'Universal accounting substrate that records its own state changes, preventing contradictions.',
+            'dual‑balance': 'Inside/outside (or forward/backward) counts must have equal cost—enforces symmetry constraints.',
+            'golden‑ratio': 'φ = (1+√5)/2, unique fixed point of x = 1 + 1/x—sets the universe’s scaling ladder.',
+            '3+1 spacetime': 'Three spatial dimensions plus ordered ticks are the unique stable arena for recognition.',
+            '8‑beat recognition cycle': 'In 3D, complete updates require exactly 2³ = 8 ordered ticks—quantum heartbeat.',
+            'τ_rec': 'Recognition tick ≈ 7.33 fs—the minimal time for stable two‑way recognition exchange.',
+            'λ_rec': 'Recognition length ≈ 2.20 μm—the minimal separation for stable recognition.',
+            'E_coh': 'Coherence energy ħ/τ_rec ≈ 0.090 eV—the base energy scale for ledger coherence.',
+            'fine‑structure constant': 'α ≈ 1/137—derived from recognition geometry with gap and curvature corrections.',
+            'Ω_dm': 'Dark matter fraction ≈ 0.265—from 12‑channel interference at π/12 plus universal corrections.',
+            '45gap': 'Incomputability at 45° where forward and backward paths have equal weight (δ_gap ≈ 0.006115).',
+            'curvature functional': 'Information‑geometry curvature κ that regulates discrete→continuum transitions.',
+            'path‑exchange invariance': 'Swapping equivalent recognition paths preserves total cost—forces J(x) and φ.',
+            'φ‑scaled mass spectrum': 'All particle masses fall on a φ‑ladder with sector B and small deterministic f.',
+            'falsifiable': 'Makes precise, parameter‑free predictions; a clean mismatch falsifies the entire framework.',
+            'dimensionless': 'Ledger operates in pure counts and ratios; units appear only when mapped to measurement.',
+            'A_L': 'Ledger alphabet {1, φ, φ², …}: allowed self‑similar scaling factors—unique from dual‑balance.',
+            'δ_gap': 'Universal gap 1/(8 ln φ) scale and 45° incomputability producing tiny signed corrections.',
+            'H₀': 'Hubble constant as global update rate; differences explained by the 45‑Gap time lag.',
+            'MOND scale': 'a₀ = cH₀/2π—bandwidth saturation produces MOND‑like dynamics without dark matter.',
+            'recognition channels': 'Exactly 12 channels can meet in 3D (kissing number); their interference shapes physics.',
+            'voxel geometry': 'Discrete λ_rec³ voxels give small curvature corrections and set fundamental bandwidth.',
+            'universal computation': 'The universe computes its own next state—no external simulator needed.',
+            'computational substrate': 'The ledger is the fundamental layer; matter/energy are its excitation patterns.'
+        };
+
+        // Auto-link key terms across the article by wrapping them as clickable .term buttons
+        function autolinkTerms() {
+            const containers = document.querySelectorAll('.template-reading, .template-container p, .template-container li');
+            if (!containers.length) return;
+
+            // Build an ordered list of terms to avoid partial overshadowing
+            const terms = Object.keys(shortDefs).sort((a,b)=> b.length - a.length);
+
+            // Helper: should not process inside these elements
+            const BLOCK_TAGS = new Set(['A', 'BUTTON', 'CODE', 'PRE', 'H1', 'H2', 'H3', 'H4']);
+
+            containers.forEach(container => {
+                const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, {
+                    acceptNode(node) {
+                        if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+                        const p = node.parentElement;
+                        if (!p) return NodeFilter.FILTER_REJECT;
+                        if (p.closest('.term') || p.closest('.expansion') || p.closest('.need-more')) return NodeFilter.FILTER_REJECT;
+                        if (BLOCK_TAGS.has(p.tagName)) return NodeFilter.FILTER_REJECT;
+                        return NodeFilter.FILTER_ACCEPT;
+                    }
+                });
+
+                const nodes = [];
+                while (walker.nextNode()) nodes.push(walker.currentNode);
+
+                nodes.forEach(textNode => {
+                    let text = textNode.nodeValue;
+                    let parent = textNode.parentNode;
+                    let madeChange = false;
+
+                    // For each term, attempt to wrap occurrences
+                    for (const label of terms) {
+                        const def = shortDefs[label];
+                        const termLower = label.toLowerCase();
+                        let offset = 0;
+                        while (true) {
+                            const idx = text.toLowerCase().indexOf(termLower, offset);
+                            if (idx === -1) break;
+
+                            // Split into before / match / after
+                            const before = document.createTextNode(text.slice(0, idx));
+                            const matchText = text.slice(idx, idx + label.length);
+                            const afterText = text.slice(idx + label.length);
+
+                            // Create button.term
+                            const btn = document.createElement('button');
+                            btn.className = 'term';
+                            btn.setAttribute('data-def', def);
+                            btn.textContent = matchText;
+
+                            // Replace textNode with before + button + newTextNode(after)
+                            parent.insertBefore(before, textNode);
+                            parent.insertBefore(btn, textNode);
+                            textNode.nodeValue = afterText;
+                            text = afterText;
+                            offset = 0; // restart on the remainder
+                            madeChange = true;
+                        }
+                    }
+
+                    if (madeChange) {
+                        // Nothing else—subsequent nodes are already correct
+                    }
+                });
+            });
+        }
+
         // Handle term clicks with progressive disclosure
         document.addEventListener('click', function(e) {
             // Close expansions when clicking outside (but not on deeper toggle or expansion content)
@@ -1126,6 +1223,11 @@
                     }
                 }
             }
+        });
+
+        // Initialize autolinking once content and CSS are ready
+        window.addEventListener('load', function() {
+            try { autolinkTerms(); } catch (err) { console.warn('Autolink failed', err); }
         });
 
         // Lean theorem snippet - compact clickable version
