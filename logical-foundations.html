@@ -614,7 +614,8 @@
         }
         
         if (!featuredAudio) {
-          const audioPath = encodeURI('/From Nothingness to Reality_ Could the Universe\'s Laws Be Unavoidably Fixed_.mp3');
+          // Use a URL-safe filename to avoid quoting issues across servers
+          const audioPath = '/from-nothingness-to-reality.mp3';
           featuredAudio = new Audio(audioPath);
           
           featuredAudio.addEventListener('ended', function() {
