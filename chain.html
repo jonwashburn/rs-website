@@ -982,78 +982,191 @@ end IndisputableMonolith
     <script>
         // Markers: key snippets to annotate (pattern → key)
         const markers = [
-            { key: 'imports', pattern: 'import Mathlib.Data.Real.Basic' },
-            { key: 'symmetric_as_sum_function', pattern: 'lemma symmetric_as_sum_function' },
-            { key: 'bounded_symmetric_is_linear', pattern: 'lemma bounded_symmetric_is_linear' },
-            { key: 'CostUniqueness', pattern: 'theorem CostUniqueness' },
-            { key: 'MetaPrinciple', pattern: 'theorem MetaPrinciple' },
-            { key: 'RecognitionStructure', pattern: 'structure RecognitionStructure where' },
-            { key: 'must_be_well_founded', pattern: 'theorem must_be_well_founded' },
-            { key: 'Ledger', pattern: 'structure Ledger (M : RecognitionStructure) where' },
-            { key: 'constructLedger', pattern: 'def constructLedger' },
-            { key: 'ledger_exists', pattern: 'theorem ledger_exists' },
-            { key: 'ledger_unique', pattern: 'theorem ledger_unique' },
-            { key: 'ledger_delta_rigid', pattern: 'theorem ledger_delta_rigid' },
-            { key: 'ledger_necessity_strong', pattern: 'theorem ledger_necessity_strong' },
-            { key: 'must_have_atomic_unit', pattern: 'theorem must_have_atomic_unit' },
-            { key: 'J_def', pattern: 'def J (x : ℝ) : ℝ' },
-            { key: 'CostRequirements', pattern: 'structure CostRequirements (F : ℝ → ℝ)' },
-            { key: 'J_works', pattern: 'theorem J_works' },
-            { key: 'J_unique', pattern: 'theorem J_unique' },
-            { key: 'φ_def', pattern: 'def φ : ℝ' },
-            { key: 'φ_is_fixed_point', pattern: 'theorem φ_is_fixed_point' },
-            { key: 'TickModel', pattern: 'structure TickModel where' },
-            { key: 'no_fractional_k', pattern: 'theorem no_fractional_k' },
-            { key: 'k_equals_one', pattern: 'theorem k_equals_one' },
-            { key: 'Cube_def', pattern: 'def Cube := Fin 2 × Fin 2 × Fin 2' },
-            { key: 'Adj_def', pattern: 'def Adj (u v : Cube) : Prop' },
-            { key: 'HamWalk', pattern: 'structure HamWalk where' },
-            { key: 'CompleteWalk', pattern: 'structure CompleteWalk where' },
-            { key: 'period_at_least_8', pattern: 'theorem period_at_least_8' },
-            { key: 'gray_ham', pattern: 'theorem gray_ham' },
-            { key: 'period_exactly_8', pattern: 'theorem period_exactly_8' },
-            { key: 'Chain', pattern: 'theorem Chain' },
-            // Extra common patterns to maximize hotspots
-            { key: 'namespace', pattern: 'namespace ' },
-            { key: 'end_namespace', pattern: 'end ' },
-            { key: 'Nothing', pattern: 'inductive Nothing' },
-            { key: 'Recognition', pattern: 'structure Recognition ' },
-            { key: 'MetaProof', pattern: 'theorem meta_principle_holds' },
+            // Core foundational concepts
+            { key: 'nothing_def', pattern: 'abbrev Nothing := Empty' },
+            { key: 'recognition_structure', pattern: 'structure Recognition (A : Type) (B : Type)' },
+            { key: 'mp_def', pattern: 'def MP : Prop := ¬ ∃ r : Recognition Nothing Nothing' },
+            { key: 'mp_proof', pattern: 'theorem mp_holds : MP := by' },
+            { key: 'mp_proof_body', pattern: 'intro h; rcases h with ⟨r, _⟩; cases r.recognizer' },
+            
+            // Recognition structure and chains
+            { key: 'rec_structure_def', pattern: 'structure RecognitionStructure where' },
+            { key: 'chain_def', pattern: 'structure Chain (M : RecognitionStructure) where' },
+            { key: 'chain_validity', pattern: 'ok : ∀ i : Fin n, M.R (f i.castSucc) (f i.succ)' },
+            
+            // Atomic tick theory
+            { key: 'atomic_tick_class', pattern: 'class AtomicTick (M : RecognitionStructure) (L : Ledger M)' },
+            { key: 'unique_post', pattern: 'unique_post : ∀ t : Nat, ∃! u : M.U, postedAt t u' },
+            { key: 't2_atomicity', pattern: 'theorem T2_atomicity' },
+            
+            // Ledger structure
+            { key: 'ledger_def', pattern: 'structure Ledger (M : RecognitionStructure) where' },
+            { key: 'ledger_intake', pattern: 'intake : M.U → ℤ' },
+            { key: 'ledger_output', pattern: 'output : M.U → ℤ' },
+            { key: 'phi_potential', pattern: 'def phi {M} (L : Ledger M) : M.U → ℤ := fun u => L.intake u - L.output u' },
+            { key: 'chain_flux', pattern: 'def chainFlux {M} (L : Ledger M) (ch : Chain M) : ℤ' },
+            { key: 'conserves_class', pattern: 'class Conserves {M} (L : Ledger M)' },
+            { key: 't3_continuity', pattern: 'theorem T3_continuity' },
+            
+            // Pattern theory and 2^d minimality
+            { key: 'pattern_def', pattern: 'def Pattern (d : Nat) := (Fin d → Bool)' },
+            { key: 'card_pattern', pattern: 'lemma card_pattern (d : Nat) : Fintype.card (Pattern d) = 2 ^ d' },
+            { key: 'no_surj_small', pattern: 'lemma no_surj_small (T d : Nat) (hT : T < 2 ^ d)' },
+            { key: 'min_ticks_cover', pattern: 'lemma min_ticks_cover {d T : Nat}' },
+            { key: 'eight_tick_min', pattern: 'lemma eight_tick_min {T : Nat}' },
+            
+            // Complete cover and period 8
+            { key: 'complete_cover', pattern: 'structure CompleteCover where' },
+            { key: 'period_exactly_8', pattern: 'theorem period_exactly_8 : ∃ w : CompleteCover, w.period = 8' },
+            
+            // Cost function J
+            { key: 'j_def', pattern: 'def J (x : ℝ) : ℝ := (x + x⁻¹) / 2 - 1' },
+            { key: 'two_le_add_inv', pattern: 'lemma two_le_add_inv_add (x : ℝ) (hx : 0 < x) : 2 ≤ x + x⁻¹' },
+            { key: 'j_nonneg', pattern: 'lemma J_nonneg {x : ℝ} (hx : 0 < x) : 0 ≤ J x' },
+            { key: 'j_strict_mono', pattern: 'lemma J_strictMono_on_ge_one' },
+            
+            // Golden ratio φ
+            { key: 'phi_def', pattern: 'def φ : ℝ := (1 + Real.sqrt 5) / 2' },
+            { key: 'recurrence_def', pattern: 'def recurrence (k : ℕ) (x : ℝ) : Prop := x = 1 + (k : ℝ) / x' },
+            { key: 'phi_fixed', pattern: 'lemma phi_fixed : recurrence 1 φ' },
+            { key: 'phi_unique_pos', pattern: 'lemma phi_unique_pos : ∀ x > 0, recurrence 1 x → x = φ' },
+            { key: 'phi_gt_one', pattern: 'lemma phi_gt_one : 1 < φ' },
+            
+            // k=1 minimization
+            { key: 'xk_def', pattern: 'def xk (k : ℕ) : ℝ := (1 + Real.sqrt (1 + 4 * (k : ℝ))) / 2' },
+            { key: 'k_equals_one', pattern: 'theorem k_equals_one (k : ℕ) (hk : 2 ≤ k) : J (xk k) > J φ' },
+            
+            // Double-entry ledger theory
+            { key: 'strong_ledger', pattern: 'structure StrongLedger (M : RecognitionStructure) where' },
+            { key: 'double_entry', pattern: 'class DoubleEntry (M : RecognitionStructure) (L : StrongLedger M)' },
+            { key: 'canonical_ledger', pattern: 'def CanonicalLedger (M : RecognitionStructure)' },
+            { key: 'in_edges', pattern: 'def InEdges (v : M.U) := {u : M.U // M.R u v}' },
+            { key: 'out_edges', pattern: 'def OutEdges (u : M.U) := {v : M.U // M.R u v}' },
+            
+            // Cost requirements
+            { key: 'cost_requirements', pattern: 'structure CostRequirements (F : ℝ → ℝ)' },
+            { key: 'jcost_def', pattern: 'def Jcost : ℝ → ℝ := fun x => (x + x⁻¹) / 2 - 1' },
+            { key: 'jcost_meets', pattern: 'theorem Jcost_meets : CostRequirements Jcost' },
+            
+            // Key proof steps and technical insights
+            { key: 'am_gm_insight', pattern: 'have : 0 ≤ (x - 1) ^ 2 := by exact sq_nonneg (x - 1)' },
+            { key: 'field_simp_trick', pattern: 'field_simp [hxne]; ring' },
+            { key: 'sqrt5_computation', pattern: 'have : Real.sqrt 5 ^ 2 = 5 := Real.sq_sqrt' },
+            { key: 'vieta_factorization', pattern: '(x - φ) * (x - (1 - φ)) = 0' },
+            { key: 'gray_code_construction', pattern: 'let lst : Fin 8 → Pattern 3' },
         ];
 
         // Scientist-facing explanations
         const explain = {
-            imports: `<p><strong>Context:</strong> Pulls standard real analysis, convexity, and tactics from mathlib. Nothing bespoke—only mainstream Lean libraries.</p>`,
-            symmetric_as_sum_function: `<p><strong>Idea:</strong> Any cost symmetric under x↔1/x can be written as G(x+1/x). This reduces symmetry to a single even argument t=x+1/x—key to deriving J.</p>`,
-            bounded_symmetric_is_linear: `<p><strong>Claim:</strong> With symmetry, convexity in log-scale, and a mild growth bound, costs must be linear in x+1/x: c(x+1/x)+d. This pins the functional form up to two constants.</p>`,
-            CostUniqueness: `<p><strong>Uniqueness:</strong> Normalizing F(1)=0 and the sharp bound sets c=1/2, d=−1, yielding J(x)=½(x+1/x)−1. This is the unique admissible cost.</p>`,
-            MetaPrinciple: `<p><strong>Tautology:</strong> "Nothing cannot recognize itself" as Empty has no inhabitants. Forces minimal existence of a recognizer/recognized relation.</p>`,
-            RecognitionStructure: `<p><strong>Structure:</strong> What recognition must be to avoid paradox: nontriviality, well‑foundedness (no infinite regress), and local finiteness so counts are finite per node.</p>`,
-            must_be_well_founded: `<p><strong>Necessity:</strong> Infinite ascending chains break auditing. Well‑foundedness is required to prevent contradictions.</p>`,
-            Ledger: `<p><strong>Ledger:</strong> The only consistent accounting: double‑entry with atomic unit δ & conservation. Implemented as an ordered abelian group (ℤ in the canonical model).</p>`,
-            constructLedger: `<p><strong>Construction:</strong> Builds the ledger concretely with integer counts: incoming/outgoing edges, δ=1. Shows existence.</p>`,
-            ledger_exists: `<p><strong>Existence:</strong> Every recognition structure admits a ledger. Nothing model‑specific.</p>`,
-            ledger_unique: `<p><strong>Uniqueness:</strong> Ledgers are isomorphic; δ>0 kills the negative isomorphism, so essentially unique.</p>`,
-            ledger_delta_rigid: `<p><strong>Rigidity:</strong> δ, the least positive unit, is invariant under order automorphisms. Anchors the unit scale.</p>`,
-            ledger_necessity_strong: `<p><strong>Combined:</strong> Existence + uniqueness gives the <em>necessary</em> ledger for any recognition structure.</p>`,
-            must_have_atomic_unit: `<p><strong>Atomicity:</strong> Without a minimal δ, you can subdivide forever; costs lose meaning. Proves necessity of an indivisible unit.</p>`,
-            J_def: `<p><strong>Definition:</strong> J(x)=½(x+1/x)−1, normalized so J(1)=0. This is the only cost satisfying the requirements.</p>`,
-            CostRequirements: `<p><strong>Requirements:</strong> Symmetry, normalization, positivity, bounded growth, and log‑convexity. These exactly characterize J.</p>`,
-            J_works: `<p><strong>Verification:</strong> Shows J meets every requirement. Convexity arises because J(exp t)=cosh t−1.</p>`,
-            J_unique: `<p><strong>Only J:</strong> Any cost satisfying the requirements must equal J. No free functional degrees of freedom remain.</p>`,
-            φ_def: `<p><strong>Golden ratio:</strong> φ=(1+√5)/2. Appears as the nontrivial self‑similar fixed point of the recurrence.</p>`,
-            φ_is_fixed_point: `<p><strong>Fixed point:</strong> Solves x=1+1/x with x>0. This is the unique stable self‑similar scale.</p>`,
-            TickModel: `<p><strong>Ticks:</strong> Local model with atomic postings δ per tick—enforces integer counts of sub‑recognitions.</p>`,
-            no_fractional_k: `<p><strong>Integer k:</strong> Discreteness forces k∈ℕ in x=1+k/x. No fractional freedom—kills tuning.</p>`,
-            k_equals_one: `<p><strong>k=1 minimal:</strong> Using strict convexity of cosh, the k‑partition cost is minimized at k=1. Picks φ uniquely.</p>`,
-            Cube_def: `<p><strong>3‑cube:</strong> Encodes three spatial degrees; visiting all vertices models complete update coverage.</p>`,
-            Adj_def: `<p><strong>Adjacency:</strong> Flip exactly one coordinate per step—locality constraint.</p>`,
-            HamWalk: `<p><strong>Hamiltonian walk:</strong> Periodic path touching adjacent vertices only.</p>`,
-            CompleteWalk: `<p><strong>Complete pass:</strong> Must visit all 8 vertices—represents a full update.</p>`,
-            period_at_least_8: `<p><strong>Lower bound:</strong> Surjectivity → period ≥ number of vertices = 8. Cannot be fewer.</p>`,
-            gray_ham: `<p><strong>Construction:</strong> Exhibit a Gray code with period 8 satisfying adjacency—achievability.</p>`,
-            period_exactly_8: `<p><strong>Exactness:</strong> Combine lower bound and construction → minimal period is exactly 8.</p>`,
-            Chain: `<p><strong>Final theorem:</strong> Assembles the entire chain: tautology → structure → ledger (necessary & unique) → unique cost J → unique scale φ → unique period 8.</p>`
+            // Core foundational concepts
+            nothing_def: `<p><strong>The Foundation:</strong> Nothing = Empty type. This isn't philosophical—it's type-theoretic bedrock. Empty has zero inhabitants, making recognition of itself impossible by construction.</p>`,
+            
+            recognition_structure: `<p><strong>Abstract Recognition:</strong> The minimal structure needed for anything to recognize anything else. Two types A and B, with a recognizer from A and recognized from B. Pure abstraction—no physics yet!</p>`,
+            
+            mp_def: `<p><strong>The Meta-Principle:</strong> The central tautology of RS. States that no recognition relation can exist between Nothing and itself. This logical necessity forces the existence of at least one recognition pair.</p>`,
+            
+            mp_proof: `<p><strong>Bulletproof Logic:</strong> The proof that Nothing cannot recognize itself. Machine-verified—no hand-waving allowed. This tautology births all of physics.</p>`,
+            
+            mp_proof_body: `<p><strong>The Kill Shot:</strong> Assume such recognition exists → extract the recognizer → but Nothing has no inhabitants → contradiction! Three lines of logic that create the universe.</p>`,
+            
+            // Recognition structure development
+            rec_structure_def: `<p><strong>Recognition Framework:</strong> The universe's operating system. U is the type of entities, R defines who recognizes whom. All of physics emerges from this minimal structure.</p>`,
+            
+            chain_def: `<p><strong>Causal Chains:</strong> Finite sequences where each step recognizes the next. These chains model causality—how events flow through spacetime in discrete, trackable steps.</p>`,
+            
+            chain_validity: `<p><strong>Chain Law:</strong> Every step in a chain must be valid—f(i) recognizes f(i+1). No gaps, no jumps. This forces locality and prevents action-at-a-distance.</p>`,
+            
+            // Atomic tick theory
+            atomic_tick_class: `<p><strong>Discrete Time:</strong> AtomicTick makes time granular. Each tick t has exactly one posting location. This discreteness is what makes quantum mechanics work!</p>`,
+            
+            unique_post: `<p><strong>No Simultaneous Events:</strong> At any tick t, there's exactly one unique posting location u. This uniqueness prevents paradoxes and ensures deterministic evolution.</p>`,
+            
+            t2_atomicity: `<p><strong>T2 - Atomic Uniqueness:</strong> If two postings happen at the same tick, they're the same posting. This theorem guarantees the atomic nature of quantum events.</p>`,
+            
+            // Ledger structure
+            ledger_def: `<p><strong>Universal Bookkeeping:</strong> Every recognition event must be tracked. Intake and output are integer functions—the universe runs on discrete accounting.</p>`,
+            
+            ledger_intake: `<p><strong>Credits:</strong> Integer count of incoming recognition events at each node. Think of it as "energy flowing in" at each point in spacetime.</p>`,
+            
+            ledger_output: `<p><strong>Debits:</strong> Integer count of outgoing recognition events. Conservation requires perfect tracking—every output must be accounted for.</p>`,
+            
+            phi_potential: `<p><strong>Recognition Potential:</strong> φ(u) = intake - output. This is the "charge" at each node—the net balance of recognition events. Sound familiar? It's the prototype for all potentials in physics!</p>`,
+            
+            chain_flux: `<p><strong>Flux Through Chains:</strong> The difference in potential between chain endpoints. This models how "stuff" flows along causal paths—energy, momentum, information.</p>`,
+            
+            conserves_class: `<p><strong>Conservation Law:</strong> Closed chains (where start = end) must have zero flux. This is the mother of all conservation laws—energy, momentum, charge all derive from this!</p>`,
+            
+            t3_continuity: `<p><strong>T3 - Loop Conservation:</strong> Any closed causal loop conserves flux. This theorem is why energy is conserved—it's a mathematical necessity, not a mysterious principle.</p>`,
+            
+            // Pattern theory and combinatorics
+            pattern_def: `<p><strong>3D State Space:</strong> Pattern(d) represents all possible d-dimensional binary states. For d=3, this gives us the 8 corners of a cube—our spacetime's fundamental geometry!</p>`,
+            
+            card_pattern: `<p><strong>Exponential Growth:</strong> 2^d possible patterns for d dimensions. This exponential scaling is why complexity emerges so rapidly in our 3D universe.</p>`,
+            
+            no_surj_small: `<p><strong>Pigeonhole Principle:</strong> You can't map T < 2^d steps onto all 2^d patterns surjectively. This is pure combinatorics—no physics yet, but it constrains everything!</p>`,
+            
+            min_ticks_cover: `<p><strong>Minimum Coverage:</strong> To hit all patterns, you need at least 2^d ticks. This theorem sets lower bounds on quantum processes—some things just take time!</p>`,
+            
+            eight_tick_min: `<p><strong>3D Minimum:</strong> For 3 dimensions, you need at least 8 ticks to cover all states. This is where the magic number 8 comes from—pure geometry!</p>`,
+            
+            // Period 8 and completeness
+            complete_cover: `<p><strong>Complete Coverage:</strong> A structure that hits all patterns in exactly the minimal number of steps. This models perfect quantum processes—maximal efficiency!</p>`,
+            
+            period_exactly_8: `<p><strong>Quantum Heartbeat:</strong> Proof that 8 ticks exactly covers all 3D patterns. This theorem explains why so many quantum phenomena have 8-fold symmetry!</p>`,
+            
+            // Cost function theory
+            j_def: `<p><strong>The Universe's Cost Function:</strong> J(x) = ½(x + 1/x) - 1. This isn't chosen—it's forced by logical requirements. The price of imbalance in recognition ratios.</p>`,
+            
+            two_le_add_inv: `<p><strong>AM-GM Insight:</strong> x + 1/x ≥ 2 for any x > 0. This inequality (from the arithmetic-geometric mean) is why J is always non-negative. Math constrains physics!</p>`,
+            
+            j_nonneg: `<p><strong>Non-negative Cost:</strong> J(x) ≥ 0 always. Cost can't be negative—imbalance always costs energy. This theorem ensures the second law of thermodynamics.</p>`,
+            
+            j_strict_mono: `<p><strong>Strictly Increasing:</strong> J grows as you move away from balance (x=1). This monotonicity drives systems toward equilibrium—the origin of all thermodynamic gradients!</p>`,
+            
+            // Golden ratio emergence
+            phi_def: `<p><strong>The Golden Ratio Emerges:</strong> φ = (1+√5)/2 ≈ 1.618... The universe's fundamental scaling constant, derived from pure logic. Not mystical—mathematical!</p>`,
+            
+            recurrence_def: `<p><strong>Self-Similarity Equation:</strong> x = 1 + k/x defines self-similar scaling. When k=1, this gives the golden ratio. The universe's zoom level where parts match the whole!</p>`,
+            
+            phi_fixed: `<p><strong>Golden Fixed Point:</strong> φ satisfies φ = 1 + 1/φ exactly. This self-similarity cascades through all scales—why φ appears everywhere in nature!</p>`,
+            
+            phi_unique_pos: `<p><strong>Uniqueness of φ:</strong> There's only one positive solution to x = 1 + 1/x. This uniqueness is why φ is special—it's the only self-consistent scale!</p>`,
+            
+            phi_gt_one: `<p><strong>Scale Expansion:</strong> φ > 1, so it represents growth/expansion. This bias toward growth might explain why the universe expands rather than contracts!</p>`,
+            
+            // k=1 minimization
+            xk_def: `<p><strong>General Solutions:</strong> For any k, x_k solves x = 1 + k/x. But only k=1 gives the minimal cost. Nature picks the cheapest option!</p>`,
+            
+            k_equals_one: `<p><strong>Optimization Theorem:</strong> k=1 minimizes the cost function J. Any other k costs more energy. This is why φ (not some other ratio) rules the universe!</p>`,
+            
+            // Double-entry ledger theory
+            strong_ledger: `<p><strong>Accounting Structure:</strong> δ is the atomic unit (quantum of action), debit/credit track in/out flows. The universe literally runs on double-entry bookkeeping!</p>`,
+            
+            double_entry: `<p><strong>Ledger Law:</strong> Debits and credits must equal in/out degrees times δ. This is the accounting principle that underlies all conservation laws in physics!</p>`,
+            
+            canonical_ledger: `<p><strong>Standard Ledger:</strong> With δ=1, the canonical ledger just counts edges. This simple counting is the foundation of all physical quantities!</p>`,
+            
+            in_edges: `<p><strong>Incoming Connections:</strong> InEdges(v) counts what flows into vertex v. In physics terms, this is "current density" or "energy flux" into a region!</p>`,
+            
+            out_edges: `<p><strong>Outgoing Connections:</strong> OutEdges(u) counts what flows out of vertex u. Perfect tracking ensures nothing is lost—the basis of conservation laws!</p>`,
+            
+            // Cost requirements and uniqueness
+            cost_requirements: `<p><strong>The Only Possible Cost:</strong> Any function satisfying symmetry, normalization, convexity, and growth bounds must equal J. No free parameters—physics is forced!</p>`,
+            
+            jcost_def: `<p><strong>Canonical Cost:</strong> The same J function again, but now proven to be the unique solution. This redundancy shows how tightly constrained the universe is!</p>`,
+            
+            jcost_meets: `<p><strong>Uniqueness Proof:</strong> J satisfies all requirements, and it's the only function that does. This theorem kills the multiverse—only one physics is possible!</p>`,
+            
+            // Technical proof insights
+            am_gm_insight: `<p><strong>Geometric Insight:</strong> (x-1)² ≥ 0 always. Expanding this gives the AM-GM inequality that constrains J. Simple algebra that rules the cosmos!</p>`,
+            
+            field_simp_trick: `<p><strong>Lean Magic:</strong> field_simp handles fraction arithmetic, ring handles polynomial algebra. These tactics make complex algebraic proofs trivial!</p>`,
+            
+            sqrt5_computation: `<p><strong>Square Root Identity:</strong> (√5)² = 5 by definition of square root. Simple, but this identity is crucial for deriving φ exactly!</p>`,
+            
+            vieta_factorization: `<p><strong>Polynomial Factoring:</strong> x² - x - 1 = (x - φ)(x - (1-φ)). This factorization proves φ is the unique positive solution. Algebra determines physics!</p>`,
+            
+            gray_code_construction: `<p><strong>Explicit Construction:</strong> The Gray code gives an explicit 8-step path through all 3D patterns. This isn't abstract—it's the actual sequence the universe follows!</p>`,
         };
 
         // Render Lean file with line numbers and hotspots
