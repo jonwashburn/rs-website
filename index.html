@@ -31,6 +31,28 @@
     </div>
   </section>
 
+  <!-- Featured Audio -->
+  <section class="featured-audio-section">
+    <div class="template-container">
+      <div class="featured-audio-card">
+        <div class="audio-badge-large">
+          <span class="audio-label">NEW AUDIO</span>
+        </div>
+        <h2 class="featured-audio-title">Beyond Fine-Tuning: Is the Universe Written in Pure Logic?</h2>
+        <p class="featured-audio-description">
+          Discover why the universe's constants aren't arbitrary choices but mathematical necessities. This groundbreaking audio explores how Recognition Physics derives—not assumes—the fundamental numbers of reality.
+        </p>
+        <button class="featured-audio-btn" id="featuredAudioBtn" aria-pressed="false">
+          <svg class="audio-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon id="featuredPlay" points="8,5 19,12 8,19 8,5"></polygon>
+            <g id="featuredPause" style="display:none"><line x1="9" y1="5" x2="9" y2="19"></line><line x1="15" y1="5" x2="15" y2="19"></line></g>
+          </svg>
+          <span class="btn-text">Listen Now</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
   <!-- What It Is -->
   <section class="template-section">
     <div class="template-container">
@@ -225,6 +247,101 @@
       line-height: 1.7 !important;
       color: var(--color-text-body) !important;
       font-weight: 400;
+    }
+    
+    /* Featured Audio Section */
+    .featured-audio-section {
+      padding: 2rem 0;
+      background: linear-gradient(135deg, #fff5f7 0%, #fff0f4 100%);
+      border-top: 1px solid rgba(255, 0, 110, 0.1);
+      border-bottom: 1px solid rgba(255, 0, 110, 0.1);
+    }
+    
+    .featured-audio-card {
+      position: relative;
+      padding: 2rem;
+      background: white;
+      border-radius: 16px;
+      border: 2px solid rgba(255, 0, 110, 0.2);
+      box-shadow: 0 4px 20px rgba(255, 0, 110, 0.08);
+      text-align: center;
+    }
+    
+    .audio-badge-large {
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+    
+    .audio-label {
+      background: var(--color-accent);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    
+    .featured-audio-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin: 1rem 0;
+      line-height: 1.3;
+    }
+    
+    .featured-audio-description {
+      font-size: 1.05rem;
+      color: var(--color-text-body);
+      line-height: 1.6;
+      max-width: 700px;
+      margin: 0 auto 1.5rem;
+    }
+    
+    .featured-audio-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--color-accent);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      padding: 0.75rem 2rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 15px rgba(255, 0, 110, 0.3);
+    }
+    
+    .featured-audio-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 0, 110, 0.4);
+    }
+    
+    .featured-audio-btn[aria-pressed="true"] {
+      background: var(--color-primary);
+    }
+    
+    .featured-audio-btn .audio-icon {
+      width: 20px;
+      height: 20px;
+    }
+    
+    @media (max-width: 768px) {
+      .featured-audio-title {
+        font-size: 1.5rem;
+      }
+      
+      .featured-audio-description {
+        font-size: 0.95rem;
+      }
+      
+      .featured-audio-btn {
+        font-size: 0.95rem;
+        padding: 0.6rem 1.5rem;
+      }
     }
     
     /* Story Grid */
@@ -438,48 +555,105 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      // Original podcast badge
       const badge = document.getElementById('podcastBadge');
       const playIcon = document.getElementById('iconPlay');
       const pauseIcon = document.getElementById('iconPause');
       let audio = null;
       
-      if (!badge) return;
+      if (badge) {
+        badge.addEventListener('click', function() {
+          if (!audio) {
+            const audioPath = encodeURI('/Beyond Physics_ Deducing Reality from the Impossibility of Nothingness.mp3');
+            audio = new Audio(audioPath);
+            
+            audio.addEventListener('ended', function() {
+              badge.setAttribute('aria-pressed', 'false');
+              playIcon.style.display = 'block';
+              pauseIcon.style.display = 'none';
+            });
+            
+            audio.addEventListener('error', function(e) {
+              console.error('Audio load error:', e);
+              alert('Audio file not found. Please try again later.');
+              badge.setAttribute('aria-pressed', 'false');
+              playIcon.style.display = 'block';
+              pauseIcon.style.display = 'none';
+            });
+          }
+          
+          if (badge.getAttribute('aria-pressed') === 'false') {
+            audio.play().then(() => {
+              badge.setAttribute('aria-pressed', 'true');
+              playIcon.style.display = 'none';
+              pauseIcon.style.display = 'block';
+            }).catch(err => {
+              console.error('Play error:', err);
+            });
+          } else {
+            audio.pause();
+            badge.setAttribute('aria-pressed', 'false');
+            playIcon.style.display = 'block';
+            pauseIcon.style.display = 'none';
+          }
+        });
+      }
       
-      badge.addEventListener('click', function() {
-        if (!audio) {
-          const audioPath = encodeURI('/Beyond Physics_ Deducing Reality from the Impossibility of Nothingness.mp3');
-          audio = new Audio(audioPath);
-          
-          audio.addEventListener('ended', function() {
+      // Featured audio player
+      const featuredBtn = document.getElementById('featuredAudioBtn');
+      const featuredPlay = document.getElementById('featuredPlay');
+      const featuredPause = document.getElementById('featuredPause');
+      let featuredAudio = null;
+      
+      if (featuredBtn) {
+        featuredBtn.addEventListener('click', function() {
+          // Pause the other audio if playing
+          if (audio && badge && badge.getAttribute('aria-pressed') === 'true') {
+            audio.pause();
             badge.setAttribute('aria-pressed', 'false');
             playIcon.style.display = 'block';
             pauseIcon.style.display = 'none';
-          });
+          }
           
-          audio.addEventListener('error', function(e) {
-            console.error('Audio load error:', e);
-            alert('Audio file not found. Please try again later.');
-            badge.setAttribute('aria-pressed', 'false');
-            playIcon.style.display = 'block';
-            pauseIcon.style.display = 'none';
-          });
-        }
-        
-        if (badge.getAttribute('aria-pressed') === 'false') {
-          audio.play().then(() => {
-            badge.setAttribute('aria-pressed', 'true');
-            playIcon.style.display = 'none';
-            pauseIcon.style.display = 'block';
-          }).catch(err => {
-            console.error('Play error:', err);
-          });
-        } else {
-          audio.pause();
-          badge.setAttribute('aria-pressed', 'false');
-          playIcon.style.display = 'block';
-          pauseIcon.style.display = 'none';
-        }
-      });
+          if (!featuredAudio) {
+            const audioPath = encodeURI('/Beyond Fine-Tuning_ Is the Universe Written in Pure Logic_.mp3');
+            featuredAudio = new Audio(audioPath);
+            
+            featuredAudio.addEventListener('ended', function() {
+              featuredBtn.setAttribute('aria-pressed', 'false');
+              featuredPlay.style.display = 'block';
+              featuredPause.style.display = 'none';
+              featuredBtn.querySelector('.btn-text').textContent = 'Listen Now';
+            });
+            
+            featuredAudio.addEventListener('error', function(e) {
+              console.error('Featured audio load error:', e);
+              alert('Audio file not found. Please check the file path.');
+              featuredBtn.setAttribute('aria-pressed', 'false');
+              featuredPlay.style.display = 'block';
+              featuredPause.style.display = 'none';
+              featuredBtn.querySelector('.btn-text').textContent = 'Listen Now';
+            });
+          }
+          
+          if (featuredBtn.getAttribute('aria-pressed') === 'false') {
+            featuredAudio.play().then(() => {
+              featuredBtn.setAttribute('aria-pressed', 'true');
+              featuredPlay.style.display = 'none';
+              featuredPause.style.display = 'block';
+              featuredBtn.querySelector('.btn-text').textContent = 'Pause';
+            }).catch(err => {
+              console.error('Play error:', err);
+            });
+          } else {
+            featuredAudio.pause();
+            featuredBtn.setAttribute('aria-pressed', 'false');
+            featuredPlay.style.display = 'block';
+            featuredPause.style.display = 'none';
+            featuredBtn.querySelector('.btn-text').textContent = 'Listen Now';
+          }
+        });
+      }
     });
   </script>
 </body>
