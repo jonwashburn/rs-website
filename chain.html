@@ -1281,17 +1281,20 @@ end IndisputableMonolith
         });
 
         // Quick index jumps
-        document.getElementById('quick-index').addEventListener('click', (e) => {
-            const a = e.target.closest('a');
-            if (!a) return;
-            e.preventDefault();
-            const key = a.getAttribute('data-jump');
-            const target = document.querySelector(`.code-line[data-key="${key}"]`) || document.querySelector(`.code-line[data-name="${key}"]`);
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                target.click();
-            }
-        });
+        const quickIndex = document.getElementById('quick-index');
+        if (quickIndex) {
+            quickIndex.addEventListener('click', (e) => {
+                const a = e.target.closest('a');
+                if (!a) return;
+                e.preventDefault();
+                const key = a.getAttribute('data-jump');
+                const target = document.querySelector(`.code-line[data-key="${key}"]`) || document.querySelector(`.code-line[data-name="${key}"]`);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    target.click();
+                }
+            });
+        }
 
         // Generic explanation generator for arbitrary code items
         function genericExplain(kind, name, text) {
@@ -1414,7 +1417,6 @@ end IndisputableMonolith
                 const s = document.getElementById('status');
                 if (s) { s.textContent = 'Link copied'; setTimeout(()=> s.textContent = '', 1200); }
             });
-        }
 
         // Keyboard shortcuts: j/k arrows and / for search focus
         /* controls removed: initKeys omitted */
