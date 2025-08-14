@@ -111,30 +111,54 @@ def sanitize_and_wrap(html_body: str, task: Dict[str, Any]) -> str:
 	body = re.sub(r"```[a-zA-Z]*", "", html_body)
 	body = body.replace("```", "")
 	body = body.strip()
-	# ensure container structure and meta badges
+	
+	# Extract metadata
 	category = task.get("category", "Physics")
 	difficulty = task.get("difficulty", "Foundational")
 	tags = ", ".join(task.get("tags", []))
 	title = task.get("title", "")
+	summary = task.get("summary", "")
+	
 	# If body already contains our container, keep as-is
 	if "template-container" in body and "template-reading" in body:
 		return body
-	# Avoid duplicate H1 if already present
-	maybe_h1 = "" if "<h1" in body.lower() else f"<h1>{title}</h1>"
-	meta = (
-		f"<p class=\"template-hero-badge\">Encyclopedia / {category} / {title}</p>"
-		f"<div class=\"meta-badges\">"
-		f"<span class=\"category-badge\">{category}</span>"
-		f"<span class=\"difficulty-badge\">{difficulty}</span>"
-		+ (f"<span class=\"tags\">{tags}</span>" if tags else "")
-		+ "</div>"
+	
+	# Extract the h1 from body if it exists, otherwise create it
+	h1_match = re.search(r'<h1>(.*?)</h1>', body)
+	if h1_match:
+		h1_content = h1_match.group(1)
+		body = body.replace(h1_match.group(0), '')  # Remove h1 from body
+	else:
+		h1_content = title
+	
+	# Try to make last word pink if it's a compound title
+	words = h1_content.split()
+	if len(words) > 1:
+		h1_formatted = ' '.join(words[:-1]) + f' <span class="template-accent-text">{words[-1]}</span>'
+	else:
+		h1_formatted = h1_content
+	
+	# Build hero box with framed design (matching academic.html)
+	hero_box = (
+		f'<div class="encyclopedia-hero">'
+		f'<p class="template-hero-badge">ENCYCLOPEDIA ENTRY</p>'
+		f'<h1>{h1_formatted}</h1>'
+		+ (f'<p class="lead-text">{summary}</p>' if summary else '')
+		+ f'<div class="meta-badges">'
+		f'<span class="category-badge">{category}</span>'
+		f'<span class="difficulty-badge">{difficulty}</span>'
+		+ (f'<span class="tags">{tags}</span>' if tags else '')
+		+ '</div>'
+		f'</div>'
 	)
+	
 	wrapped = (
-		"<section class=\"template-section encyclopedia-entry\">"
-		"<div class=\"template-container\">"
-		"<div class=\"template-reading\">"
-		+ meta + maybe_h1 + body +
-		"</div></div></section>"
+		'<section class="template-section encyclopedia-entry">'
+		'<div class="template-container">'
+		+ hero_box +
+		'<div class="template-reading">'
+		+ body +
+		'</div></div></section>'
 	)
 	return wrapped
 
