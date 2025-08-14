@@ -1,405 +1,339 @@
-# Encyclopedia Template Guide v2.0
-## For Recognition Physics Encyclopedia Pages
+# Encyclopedia Template Guide v3.0
+## Recognition Physics Encyclopedia - Academic Style
 
 ---
 
 ## TEMPLATE STRUCTURE
 
-### 1. File Header (HTML)
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>[TITLE] - Recognition Physics Encyclopedia</title>
-    <meta name="description" content="[SUMMARY - 160 chars max]">
-    <link rel="stylesheet" href="/assets/css/main.css">
-</head>
-<body>
-```
-
-### 2. Metadata Block (Required)
-```yaml
----
-title: [Item Name]
-category: [Physics|Mathematics|Consciousness|Computation|Cosmology]
-difficulty: [Foundational|Intermediate|Advanced|Expert]
-readingTime: [X min]
-tags: [tag1, tag2, tag3, tag4]  # 3-6 tags
-relatedConcepts: [concept1, concept2, concept3]  # for auto-linking
-prerequisites: [prereq1, prereq2]  # optional
-lastUpdated: YYYY-MM-DD
----
-```
-
-### 3. Page Structure (Canonical Order)
+### Page HTML Structure (Generated Automatically)
+The agent will wrap your content in this structure:
 
 ```html
 <section class="template-section encyclopedia-entry">
     <div class="template-container">
-        <div class="template-reading">
-            <!-- Breadcrumb -->
-            <p class="template-hero-badge">Encyclopedia / [Category] / [Title]</p>
-            
-            <!-- Title -->
-            <h1>[Title]</h1>
-            
-            <!-- One-line essence -->
-            <p class="essence">[Single sentence capturing the core idea]</p>
-            
-            <!-- Metadata badges -->
+        <!-- Hero Box (auto-generated) -->
+        <div class="encyclopedia-hero">
+            <p class="template-hero-badge">ENCYCLOPEDIA ENTRY</p>
+            <h1>[Title with <span class="template-accent-text">accent</span>]</h1>
+            <p class="lead-text">[Summary from metadata]</p>
             <div class="meta-badges">
                 <span class="category-badge">[Category]</span>
-                <span class="difficulty-badge">[Difficulty]</span>
-                <span class="reading-time">[X] min read</span>
+                <span class="difficulty-badge">[Level]</span>
+                <span class="tags">[Tags]</span>
             </div>
-            
-            <!-- Visual anchor (if applicable) -->
-            <figure class="concept-visual">
-                <img src="/assets/images/encyclopedia/[slug].svg" alt="[Description]">
-                <figcaption>[Caption explaining the visual]</figcaption>
-            </figure>
-            
-            <!-- Core Definition -->
-            <div class="definition-box">
-                <h2>Definition</h2>
-                <p>[Technical definition in 1-2 sentences]</p>
-                <p class="math-note">(Expressed mathematically: [formula if applicable])</p>
-            </div>
-            
-            <!-- Plain English -->
-            <h2>In Plain English</h2>
-            <p>[Accessible explanation using analogy or everyday language]</p>
-            <p>[Continue with 2-3 paragraphs max]</p>
-            
-            <!-- Why It Matters -->
-            <div class="why-matters-callout">
-                <h2>Why It Matters</h2>
-                <ul>
-                    <li><strong>[Impact 1]:</strong> [Explanation]</li>
-                    <li><strong>[Impact 2]:</strong> [Explanation]</li>
-                    <li><strong>[Impact 3]:</strong> [Explanation]</li>
-                </ul>
-            </div>
-            
-            <!-- How It Works -->
-            <h2>How It Works</h2>
-            <div class="mechanism-steps">
-                <div class="step">
-                    <h3>1. [Step/Component Name]</h3>
-                    <p>[Description]</p>
-                </div>
-                <div class="step">
-                    <h3>2. [Step/Component Name]</h3>
-                    <p>[Description]</p>
-                </div>
-                <div class="step">
-                    <h3>3. [Step/Component Name]</h3>
-                    <p>[Description]</p>
-                </div>
-            </div>
-            
-            <!-- Key Properties -->
-            <h2>Key Properties</h2>
-            <div class="properties-grid">
-                <div class="property-card">
-                    <h3>[Property Name]</h3>
-                    <p>[Description]</p>
-                    <p class="math-note">(Value: [if applicable])</p>
-                </div>
-                <div class="property-card">
-                    <h3>[Property Name]</h3>
-                    <p>[Description]</p>
-                </div>
-                <div class="property-card">
-                    <h3>[Property Name]</h3>
-                    <p>[Description]</p>
-                </div>
-            </div>
-            
-            <!-- Mathematical Foundation (if applicable) -->
-            <details class="math-section">
-                <summary><h2>Mathematical Foundation</h2></summary>
-                <div class="math-content">
-                    <p>[Mathematical description]</p>
-                    <p class="math-note">[Key equations]</p>
-                    <p>[Derivation or relationships]</p>
-                </div>
-            </details>
-            
-            <!-- Connections -->
-            <h2>Connections & Interactions</h2>
-            <ul class="connections-list">
-                <li><strong>With [Concept]:</strong> [How they relate]</li>
-                <li><strong>Enables [Process]:</strong> [What it makes possible]</li>
-                <li><strong>Constrains [Phenomenon]:</strong> [Limitations it imposes]</li>
-            </ul>
-            
-            <!-- Predictions & Tests -->
-            <div class="testable-box">
-                <h2>Testable Predictions</h2>
-                <ul>
-                    <li class="prediction">[Specific, falsifiable prediction]</li>
-                    <li class="prediction">[Another prediction with measurable outcome]</li>
-                    <li class="test-method">Test via: [Experimental approach]</li>
-                </ul>
-            </div>
-            
-            <!-- Common Misconceptions -->
-            <h2>Common Misconceptions</h2>
-            <div class="misconception">
-                <p class="wrong">❌ <strong>Wrong:</strong> [Common misunderstanding]</p>
-                <p class="right">✓ <strong>Right:</strong> [Correct understanding]</p>
-            </div>
-            
-            <!-- FAQs -->
-            <h2>Frequently Asked Questions</h2>
-            <div class="faq-section">
-                <details class="faq-item">
-                    <summary>[Question 1]</summary>
-                    <p>[Answer]</p>
-                </details>
-                <details class="faq-item">
-                    <summary>[Question 2]</summary>
-                    <p>[Answer]</p>
-                </details>
-                <details class="faq-item">
-                    <summary>[Question 3]</summary>
-                    <p>[Answer]</p>
-                </details>
-            </div>
-            
-            <!-- Related Topics -->
-            <h2>Related Topics</h2>
-            <div class="related-grid">
-                <a href="/encyclopedia/[slug1]" class="related-card">
-                    <h3>[Topic Name]</h3>
-                    <p>[One-line description]</p>
-                    <span class="relation-type">Prerequisite</span>
-                </a>
-                <a href="/encyclopedia/[slug2]" class="related-card">
-                    <h3>[Topic Name]</h3>
-                    <p>[One-line description]</p>
-                    <span class="relation-type">Extension</span>
-                </a>
-                <a href="/encyclopedia/[slug3]" class="related-card">
-                    <h3>[Topic Name]</h3>
-                    <p>[One-line description]</p>
-                    <span class="relation-type">Application</span>
-                </a>
-            </div>
-            
-            <!-- Further Reading (optional) -->
-            <details class="further-reading">
-                <summary><h2>Further Reading</h2></summary>
-                <ul>
-                    <li><a href="[url]">[Internal page or section]</a> - [Description]</li>
-                    <li><a href="[url]">[Paper or proof]</a> - [What it covers]</li>
-                </ul>
-            </details>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="template-reading">
+            [Your content goes here]
         </div>
     </div>
 </section>
 ```
 
+### Content Structure (What You Write)
+
+#### 1. Introduction Section
+```html
+<!-- Lead paragraph introducing the concept -->
+<p class="lead-text">
+    [A compelling introduction that sets context. Can include <button class="term" data-def="Definition shown on hover">interactive terms</button> that reveal definitions on hover.]
+</p>
+
+<!-- Optional reading tip -->
+<div class="reading-tip">
+    <p><strong>Reading tip:</strong> [Guidance for how to approach this content]</p>
+</div>
+```
+
+#### 2. Core Definition
+```html
+<div class="definition-box">
+    <h2>Formal Definition</h2>
+    <p>[Technical definition with precision]</p>
+    <p class="math-note">Mathematical form: <code>[formula]</code></p>
+</div>
+```
+
+#### 3. Plain Language Explanation
+```html
+<div class="plain-language">
+    <p>
+        In plain terms, [accessible explanation using everyday language and analogies].
+    </p>
+    <p>
+        [Continue with additional context, making complex ideas approachable].
+    </p>
+</div>
+```
+
+#### 4. Key Properties/Constants (if applicable)
+```html
+<h2 class="template-section-title">Key Properties</h2>
+
+<div class="constants-list">
+    <div class="constant">
+        <div class="constant-header">
+            <span class="constant-name">Property Name</span>
+            <span class="constant-value">Value</span>
+        </div>
+        <p class="constant-desc">Brief description of what this means.</p>
+        <details>
+            <summary>Derivation & Details</summary>
+            <div class="details-content">
+                <p>Detailed explanation of how this is derived.</p>
+                <ul>
+                    <li>Point 1 about this property</li>
+                    <li>Point 2 about this property</li>
+                </ul>
+            </div>
+        </details>
+    </div>
+</div>
+```
+
+#### 5. How It Works (Mechanism)
+```html
+<h2 class="template-section-title">How It Works</h2>
+
+<div class="theorems-grid">
+    <details class="theorem-detail">
+        <summary>Step 1: [Process Name]</summary>
+        <div class="theorem-content">
+            <p><strong>What happens:</strong> [Description]</p>
+            <p><strong>Why it matters:</strong> [Significance]</p>
+            <p><strong>Mathematical form:</strong> <code>[formula if applicable]</code></p>
+        </div>
+    </details>
+    
+    <details class="theorem-detail">
+        <summary>Step 2: [Process Name]</summary>
+        <div class="theorem-content">
+            <p>[Content following same structure]</p>
+        </div>
+    </details>
+</div>
+```
+
+#### 6. Calculations/Predictions (if applicable)
+```html
+<h2 class="template-section-title">Testable Predictions</h2>
+
+<div class="calc-grid">
+    <div class="calc-card">
+        <h3>Prediction Name</h3>
+        <span class="calc-value">Predicted Value</span>
+        <span class="calc-formula">Formula used</span>
+        <p>Brief explanation of what this predicts.</p>
+        <a href="#" class="derivation-link">See derivation</a>
+    </div>
+    
+    <div class="calc-card">
+        <h3>Another Prediction</h3>
+        <span class="calc-value">Value</span>
+        <span class="calc-formula">Formula</span>
+        <p>Explanation.</p>
+    </div>
+</div>
+```
+
+#### 7. Mathematical Details (Collapsible)
+```html
+<details class="math-section">
+    <summary>Mathematical Framework</summary>
+    <div class="math-content">
+        <div class="formula-section">
+            <span class="formula">Main Formula Here</span>
+            <div class="description">
+                <p>Where:</p>
+                <ul>
+                    <li><code>x</code> = description of variable</li>
+                    <li><code>y</code> = description of variable</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</details>
+```
+
+#### 8. Common Misconceptions
+```html
+<h2 class="template-section-title">Common Misconceptions</h2>
+
+<div class="comparison-card">
+    <h3>Misconception vs. Reality</h3>
+    <div class="comparison-point">
+        <strong>Wrong:</strong> [Common misunderstanding]
+    </div>
+    <div class="comparison-point">
+        <strong>Right:</strong> [Correct understanding]
+    </div>
+</div>
+```
+
+#### 9. FAQ Section
+```html
+<h2 class="template-section-title">Frequently Asked Questions</h2>
+
+<div class="faq-section">
+    <details>
+        <summary>Question that readers often ask?</summary>
+        <p>Clear, concise answer that addresses the question directly.</p>
+    </details>
+    
+    <details>
+        <summary>Another common question?</summary>
+        <p>Helpful answer with context.</p>
+    </details>
+</div>
+```
+
+#### 10. Related Topics
+```html
+<h2 class="template-section-title">Related Topics</h2>
+
+<div class="related-grid">
+    <a href="/encyclopedia/[slug]" class="related-card">
+        <h3>Related Concept Name</h3>
+        <p>Brief description of how it relates.</p>
+        <span class="relation-type">FOUNDATIONAL</span>
+    </a>
+    
+    <a href="/encyclopedia/[slug]" class="related-card">
+        <h3>Another Related Concept</h3>
+        <p>Connection explanation.</p>
+        <span class="relation-type">EXTENDS</span>
+    </a>
+</div>
+```
+
+#### 11. Academic Context (Optional)
+```html
+<div class="academic-note">
+    <strong>Academic Note:</strong> [Connection to established physics/mathematics, 
+    comparisons with standard approaches, or notes for researchers.]
+</div>
+```
+
+#### 12. Further Reading (Collapsible)
+```html
+<details class="further-reading">
+    <summary>Further Reading</summary>
+    <ul>
+        <li><a href="/[page]">Internal Resource Title</a></li>
+        <li><a href="[external]">External Paper or Resource</a></li>
+    </ul>
+</details>
+```
+
 ---
 
-## CONTENT GUIDELINES
+## STYLE GUIDELINES
 
-### Voice & Tone
-- **Authoritative but accessible** - Write as if explaining to a smart colleague
-- **Present tense** for facts, past tense for discoveries
-- **Active voice** preferred
-- **No hedging** - State facts confidently (we've proven them)
-- **No hype** - Let the implications speak for themselves
+### Interactive Elements
+- Use `<button class="term" data-def="Definition here">term</button>` for hoverable definitions
+- These appear with subtle pink outline, reveal definitions on hover
+- Keep definitions concise (1-2 sentences max)
 
-### Plain English Rules
-1. **Lead with intuition**, follow with precision
-2. **One idea per paragraph**
-3. **Concrete analogies** over abstract descriptions
-4. **Short sentences** (aim for 15-20 words average)
-5. **Define jargon** on first use, then use freely
+### Visual Hierarchy
+- **Hero Box**: Framed with border, contains title and metadata
+- **Section Titles**: Use `<h2 class="template-section-title">` for major sections
+- **Accent Color**: Last word of titles gets `<span class="template-accent-text">` for pink accent
+- **Cards**: Use for calculations, properties, comparisons (hover effect included)
 
 ### Mathematical Content
-- **Never lead with math** - Always provide context first
-- **Math as evidence**, not explanation
-- Use the format: `(Expressed mathematically: [formula])`
-- Keep derivations in collapsible sections
-- Link to full proofs when available
+- Inline math: `<code>formula</code>`
+- Block formulas: Use `.formula-section` with `.formula` class
+- Always provide plain language explanation alongside math
 
-### Linking Strategy
-1. **First mention** of any RS concept gets linked
-2. **Prerequisites** listed explicitly in metadata
-3. **Related topics** show relationship type (prerequisite, extension, application)
-4. **No orphan pages** - Every page links to/from at least 3 others
-5. **Avoid circular prerequisites**
+### Progressive Disclosure
+- Use `<details>` elements for deep dives
+- Summary should be compelling question or clear section name
+- Expanded content should reward curiosity
 
-### Visual Guidelines
-- **One primary visual** per page (concept diagram preferred)
-- **SVG format** for diagrams
-- **Alt text** must fully describe the concept shown
-- **Captions** explain what to notice
-- **Consistent color scheme**: 
-  - Pink (#ff006e) for emphasis
-  - Blue (#0066cc) for primary concepts
-  - Gray (#64748b) for supporting elements
+### Relationship Types for Related Topics
+- **FOUNDATIONAL**: Required prerequisite understanding
+- **EXTENDS**: Builds upon this concept
+- **PARALLEL**: Similar concept in different domain
+- **APPLIES**: Practical application of this concept
+- **CONTRASTS**: Opposing or alternative view
+
+---
+
+## CONTENT PRINCIPLES
+
+### Clarity First
+- Lead with clearest explanation
+- Build complexity gradually
+- Always provide plain English alongside technical content
+
+### Academic Rigor
+- Precise definitions
+- Mathematical formulations where applicable
+- Clear derivations
+- Testable predictions
+
+### Accessibility
+- Multiple explanation levels
+- Visual aids where helpful
+- Interactive elements for engagement
+- Progressive disclosure for different audiences
+
+### Consistency
+- Follow the structural order
+- Use established CSS classes
+- Maintain tone: authoritative but approachable
+- Link related concepts generously
 
 ---
 
 ## QUALITY CHECKLIST
 
-### Required Elements
-- [ ] One-line essence at top
-- [ ] Definition in 1-2 sentences
-- [ ] Plain English explanation with analogy
-- [ ] 3+ key properties
-- [ ] 2+ testable predictions
-- [ ] 3-5 FAQs
-- [ ] 3+ related topics with relationship types
-- [ ] Mathematical note (if applicable)
+Before publishing, ensure:
 
-### Content Quality
-- [ ] No undefined jargon
-- [ ] No circular explanations
-- [ ] At least one concrete example
-- [ ] Clear causal mechanism ("how it works")
-- [ ] Falsifiable predictions marked explicitly
-- [ ] Common misconceptions addressed
-
-### Technical Accuracy
-- [ ] Consistent with RS framework
-- [ ] Parameter-free claims
-- [ ] Units specified where applicable
-- [ ] Links to supporting proofs/papers
-- [ ] No contradictions with other entries
-
-### Accessibility
-- [ ] Reading time accurate (150-200 words/min)
-- [ ] Difficulty level appropriate
-- [ ] Prerequisites listed
-- [ ] Progressive disclosure (details in collapsible sections)
-- [ ] Mobile-friendly layout
-
----
-
-## CATEGORIES & DIFFICULTY LEVELS
-
-### Categories
-- **Physics**: Fundamental physical concepts (light, mass, forces)
-- **Mathematics**: Mathematical structures and methods
-- **Consciousness**: Awareness, recognition, agency
-- **Computation**: Information processing, algorithms
-- **Cosmology**: Large-scale structure and evolution
-
-### Difficulty Levels
-- **Foundational**: Core concepts everyone needs (ledger, recognition)
-- **Intermediate**: Built on foundations (8-beat cycle, voxel grid)
-- **Advanced**: Requires multiple prerequisites (LNAL, ledger curvature)
-- **Expert**: Deep technical content (proof details, advanced predictions)
-
----
-
-## AUTOMATION NOTES FOR AGENTS
-
-### File Naming
-- Slug format: `lowercase-with-hyphens`
-- File path: `/encyclopedia/[slug].html`
-- Image path: `/assets/images/encyclopedia/[slug].svg`
-
-### Metadata Extraction
-```python
-# Extract from front matter
-title: str
-category: Literal["Physics", "Mathematics", "Consciousness", "Computation", "Cosmology"]
-difficulty: Literal["Foundational", "Intermediate", "Advanced", "Expert"]
-readingTime: int  # in minutes
-tags: List[str]  # 3-6 tags
-relatedConcepts: List[str]  # for auto-linking
-prerequisites: Optional[List[str]]
-```
-
-### Auto-generated Elements
-1. **Breadcrumb**: `Encyclopedia / {category} / {title}`
-2. **Meta description**: First 160 chars of essence + definition
-3. **Reading time**: Word count / 175
-4. **Relationship types**: Infer from prerequisite graph
-
-### Validation Rules
-1. All internal links must resolve
-2. No duplicate titles
-3. Prerequisites must be lower or equal difficulty
-4. At least 500 words, max 2500 words
-5. Math expressions must be valid LaTeX
-
-### Cross-referencing
-- Build bidirectional link graph
-- Auto-suggest related topics based on shared tags
-- Flag orphan pages
-- Detect circular prerequisites
-
----
-
-## EXAMPLE ENTRIES TO STUDY
-
-### Foundational
-- The Ledger
-- Recognition Events
-- Positive Cost
-
-### Intermediate  
-- Light (current version to improve)
-- 8-Beat Cycle
-- Voxel Grid
-
-### Advanced
-- LNAL Machine Code
-- Ledger Curvature
-- Golden Ratio Scaling
-
-### Expert
-- Prime Grid Lossless
-- Axiomatic Bridging
-- Parameter-Free Predictions
+- [ ] Hero box properly formatted with title, summary, and badges
+- [ ] Both technical definition and plain language explanation present
+- [ ] Interactive terms used where helpful
+- [ ] Mathematical content (if any) has plain language companion
+- [ ] Related topics identified with relationship types
+- [ ] Progressive disclosure used for detailed content
+- [ ] All sections follow academic page styling
+- [ ] Links to related encyclopedia entries included
+- [ ] Mobile responsive (cards stack, hero adjusts)
 
 ---
 
 ## CSS CLASSES REFERENCE
 
-```css
-.encyclopedia-entry { /* Main container */ }
-.essence { /* One-liner at top */ }
-.meta-badges { /* Category, difficulty, time */ }
-.definition-box { /* Highlighted definition */ }
-.math-note { /* Inline math expressions */ }
-.why-matters-callout { /* Impact section */ }
-.mechanism-steps { /* How it works */ }
-.properties-grid { /* Key properties cards */ }
-.testable-box { /* Predictions section */ }
-.misconception { /* Wrong vs right */ }
-.faq-section { /* Collapsible Q&As */ }
-.related-grid { /* Related topics cards */ }
-.relation-type { /* Badge on related cards */ }
-```
+### Structural
+- `.template-section.encyclopedia-entry` - Main wrapper
+- `.template-container` - Content container
+- `.encyclopedia-hero` - Framed hero box
+- `.template-reading` - Main content area
+
+### Typography
+- `.template-hero-badge` - Small caps label
+- `.template-accent-text` - Pink accent color
+- `.lead-text` - Larger intro paragraphs
+- `.template-section-title` - Section headings
+
+### Components
+- `.definition-box` - Formal definition container
+- `.plain-language` - Blue background explanation
+- `.reading-tip` - Pink-bordered tip box
+- `.academic-note` - Yellow gradient note
+- `.constant` - Property/constant card
+- `.calc-card` - Calculation/prediction card
+- `.theorem-detail` - Expandable detail section
+- `.comparison-card` - Comparison container
+- `.related-card` - Related topic link card
+
+### Interactive
+- `.term` - Hoverable term with definition
+- `.expansion` - Revealed definition box
+- `details` - Collapsible sections
+- `.derivation-link` - Link to detailed derivation
 
 ---
 
-## VERSION HISTORY
-- v2.0 (2024-12): Complete template with automation support
-- v1.0 (2024-11): Initial template based on Light page
-
----
-
-## NOTES FOR BACKGROUND AGENT
-
-When creating encyclopedia entries:
-
-1. **Start with prerequisites** - Build foundational concepts first
-2. **Maintain consistency** - Use established terminology exactly
-3. **Cross-link aggressively** - No isolated pages
-4. **Validate predictions** - Must be specific and testable
-5. **Progressive enhancement** - Can start simple, add sections later
-6. **Track coverage** - Maintain list of planned vs completed entries
-7. **Quality over quantity** - Better to have 50 excellent entries than 200 mediocre ones
-
-Key principle: Each entry should teach one concept thoroughly while connecting it to the larger framework.
+This template creates encyclopedia pages that match the sophisticated, academic style of the Recognition Physics technical overview page, with consistent design elements, interactive features, and clear information hierarchy.
