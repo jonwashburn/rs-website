@@ -42,7 +42,8 @@ def chunk_text(text: str, chunk_size: int, overlap: int) -> List[str]:
 
 def embed_texts(client: Any, model: str, texts: List[str]) -> List[List[float]]:
 	resp = client.embeddings.create(model=model, input=texts)
-	return [d["embedding"] for d in resp.data]
+	# openai>=1.0 returns objects with `.embedding` attribute
+	return [d.embedding for d in resp.data]
 
 
 def ensure_index(cfg: Dict[str, Any], force: bool = False) -> Dict[str, Any]:
