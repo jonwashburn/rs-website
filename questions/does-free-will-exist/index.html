@@ -120,122 +120,112 @@
             background: var(--color-bg-subtle);
         }
         
-        /* Veto Windows Section Styling */
+        /* Veto Windows Section Styling - Matching Site Design */
         .veto-windows-section {
-            background: linear-gradient(135deg, rgba(255,0,110,0.03), rgba(168,85,247,0.02));
-            border: 2px solid rgba(255,0,110,0.1);
-            border-radius: 12px;
-            padding: 2rem;
             margin: 3rem 0;
+            padding-top: 2rem;
+            border-top: 2px solid var(--color-border-light);
         }
         
         .veto-windows-section h2 {
-            color: var(--color-accent);
-            border-bottom: 2px solid var(--color-accent);
-            padding-bottom: 0.5rem;
+            color: var(--color-primary);
+            font-size: 2rem;
             margin-bottom: 1.5rem;
         }
         
+        .veto-windows-section h3 {
+            color: var(--color-primary);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        
         .key-insight {
-            background: rgba(255,0,110,0.05);
-            border-left: 4px solid var(--color-accent);
+            background: var(--color-bg-subtle);
+            border-left: 3px solid var(--color-accent);
             padding: 1.5rem;
-            margin: 1.5rem 0;
-            border-radius: 0 8px 8px 0;
-            font-size: 1.1em;
-        }
-        
-        .veto-math {
-            background: rgba(168,85,247,0.05);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            border: 1px solid rgba(168,85,247,0.2);
-        }
-        
-        .veto-math h3 {
-            color: #a855f7;
-        }
-        
-        .practical-detection {
-            background: rgba(34,197,94,0.05);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            border: 1px solid rgba(34,197,94,0.2);
-        }
-        
-        .practical-detection h3 {
-            color: #22c55e;
-        }
-        
-        .home-protocol {
-            background: rgba(59,130,246,0.05);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            border: 1px solid rgba(59,130,246,0.2);
-        }
-        
-        .home-protocol h3 {
-            color: #3b82f6;
-        }
-        
-        .home-protocol ol {
-            margin-left: 1rem;
-        }
-        
-        .home-protocol li {
-            margin: 0.75rem 0;
-            padding: 0.5rem;
-            background: rgba(59,130,246,0.03);
+            margin: 2rem 0;
             border-radius: 4px;
         }
         
-        .applied-playbook {
-            background: rgba(251,191,36,0.05);
-            border-radius: 8px;
+        .key-insight strong {
+            color: var(--color-accent);
+        }
+        
+        .veto-math {
+            background: var(--color-bg-subtle);
             padding: 1.5rem;
-            margin: 1.5rem 0;
-            border: 1px solid rgba(251,191,36,0.2);
-        }
-        
-        .applied-playbook h3 {
-            color: #fbbf24;
-        }
-        
-        .critical-applications {
-            background: rgba(239,68,68,0.05);
+            margin: 2rem 0;
             border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            border: 1px solid rgba(239,68,68,0.2);
+            border: 1px solid var(--color-border-light);
         }
         
-        .critical-applications h3 {
-            color: #ef4444;
-        }
-        
+        .practical-detection,
+        .home-protocol,
+        .applied-playbook,
+        .critical-applications,
         .testable-predictions {
-            background: rgba(16,185,129,0.05);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            border: 1px solid rgba(16,185,129,0.2);
+            margin: 2rem 0;
+            padding-left: 1rem;
         }
         
-        .testable-predictions h3 {
-            color: #10b981;
+        .home-protocol {
+            background: var(--color-bg-subtle);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+        
+        .home-protocol ol {
+            margin-left: 0;
+            counter-reset: protocol-counter;
+        }
+        
+        .home-protocol li {
+            margin: 1rem 0;
+            padding-left: 2rem;
+            position: relative;
+            counter-increment: protocol-counter;
+        }
+        
+        .home-protocol li::before {
+            content: counter(protocol-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1.5rem;
+            height: 1.5rem;
+            background: var(--color-accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
         }
         
         .bottom-line-veto {
-            background: linear-gradient(135deg, rgba(255,0,110,0.08), rgba(168,85,247,0.04));
-            border: 2px solid var(--color-accent);
-            border-radius: 8px;
+            background: var(--color-bg-subtle);
+            border-left: 3px solid var(--color-accent);
             padding: 1.5rem;
             margin: 2rem 0;
-            text-align: center;
+            border-radius: 4px;
             font-weight: 600;
+        }
+        
+        /* Pink accent touches */
+        .veto-windows-section h4 {
+            color: var(--color-accent);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .veto-windows-section strong {
+            font-weight: 600;
+        }
+        
+        .veto-windows-section ul li strong:first-child {
+            color: var(--color-primary);
         }
     </style>
 </head>
