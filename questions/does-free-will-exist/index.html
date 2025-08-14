@@ -227,6 +227,120 @@
         .veto-windows-section ul li strong:first-child {
             color: var(--color-primary);
         }
+        
+        /* Will Budget and Practical Sections */
+        .will-budget-section,
+        .practical-autonomy,
+        .what-wont-work {
+            margin: 3rem 0;
+            padding-top: 2rem;
+            border-top: 2px solid var(--color-border-light);
+        }
+        
+        .three-reservoirs,
+        .control-law,
+        .budget-dynamics,
+        .leverage-moves,
+        .autonomy-equation,
+        .daily-stack {
+            margin: 2rem 0;
+        }
+        
+        .three-reservoirs ol {
+            counter-reset: reservoir-counter;
+            margin-left: 0;
+        }
+        
+        .three-reservoirs li {
+            counter-increment: reservoir-counter;
+            position: relative;
+            padding-left: 2rem;
+            margin: 1rem 0;
+        }
+        
+        .three-reservoirs li::before {
+            content: counter(reservoir-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1.5rem;
+            height: 1.5rem;
+            background: var(--color-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .control-law,
+        .budget-dynamics {
+            background: var(--color-bg-subtle);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--color-border-light);
+        }
+        
+        .warning-note {
+            background: rgba(255,0,110,0.05);
+            border-left: 3px solid var(--color-accent);
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+        
+        .leverage-moves h3 {
+            color: var(--color-primary);
+            margin-top: 1.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .leverage-moves h3:first-child {
+            margin-top: 0;
+        }
+        
+        .autonomy-equation {
+            background: var(--color-bg-subtle);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+        
+        .daily-stack {
+            background: rgba(255,0,110,0.03);
+            border: 1px solid rgba(255,0,110,0.1);
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+        
+        .daily-stack h3 {
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+        }
+        
+        .what-wont-work ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .what-wont-work li {
+            position: relative;
+            padding-left: 2rem;
+            margin: 1rem 0;
+        }
+        
+        .what-wont-work li::before {
+            content: "×";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--color-accent);
+            font-size: 1.5rem;
+            font-weight: bold;
+            line-height: 1;
+        }
     </style>
 </head>
 <body class="template-page">
@@ -388,6 +502,119 @@
                     <div class="bottom-line-veto">
                         <p><strong>Bottom line:</strong> In RS, veto windows aren't a metaphor. They're a structural necessity of how posting works in a finite ledger. If you learn to spot them and budget $\Delta J$ for them, you can <strong>buy control</strong> exactly where it still exists.</p>
                     </div>
+                </section>
+
+                <section class="will-budget-section">
+                    <h2>The Currency of Choice: What You Actually Pay With</h2>
+                    
+                    <p>In Recognition Science, <strong>free will = the ability to pay positive ledger cost</strong> $\Delta J > 0$ to reweight which admissible future happens. The payment isn't magic; it's drawn from three concrete reservoirs:</p>
+                    
+                    <div class="three-reservoirs">
+                        <h3>Your Three Reservoirs</h3>
+                        <ol>
+                            <li><strong>Metabolic exergy (biophysics):</strong> ATP/O₂ supporting the neural reconfiguration that opposes the prepared act.</li>
+                            <li><strong>Time slack (geometry):</strong> Remaining ticks before the commit instant $t_c$. More slack = cheaper control.</li>
+                            <li><strong>Information precision (structure):</strong> Prior computation/planning that compresses uncertainty, so each unit of $\Delta J$ moves odds farther.</li>
+                        </ol>
+                        <p>These combine into your momentary <strong>will budget</strong> $B(t)$. If a veto/redirection needs at least $\Delta J_{\min}$ and $B(t) \geq \Delta J_{\min}$, you can do it. If not, you don't.</p>
+                    </div>
+
+                    <div class="control-law">
+                        <h3>The Control Law: What Your Payment Buys</h3>
+                        <p>When you pay $\Delta J$ at time $t$ (before commit), you change log-odds for your intended outcome by:</p>
+                        
+                        $$\Delta\Lambda(t) = \beta(t)\,\Delta J - \alpha\,(t_c-t)$$
+                        
+                        <ul>
+                            <li>$\beta(t)$ = <strong>efficiency</strong> (how much log-odds gain per unit cost)</li>
+                            <li>$\alpha > 0$ = <strong>closure pressure</strong> (how fast the window tightens as you approach $t_c$)</li>
+                        </ul>
+                        
+                        <p>You succeed if $\Delta\Lambda > 0$. Two levers: <strong>pay more</strong> ($\Delta J \uparrow$) or <strong>make payment more effective</strong> ($\beta \uparrow$).</p>
+                    </div>
+
+                    <div class="budget-dynamics">
+                        <h3>Where the Budget Comes From (and How It Drains)</h3>
+                        <p>Think of $B(t)$ as a small account that <strong>refills gradually</strong> and <strong>leaks constantly</strong>:</p>
+                        
+                        $$\dot B(t) = \underbrace{I_{\text{met}}(t)+I_{\text{info}}(t)}_{\text{refills}} - \underbrace{L_{\text{load}}(t)}_{\text{leak}} - \underbrace{\kappa B(t)}_{\text{baseline leak}}$$
+                        
+                        <h4>Refills:</h4>
+                        <ul>
+                            <li>$I_{\text{met}}$: sleep, stable glucose, oxygenation, mitochondrial capacity</li>
+                            <li>$I_{\text{info}}$: pre-commit rules, implementation intentions, practice—these raise $\beta$ and shrink $\Delta J_{\min}$</li>
+                        </ul>
+                        
+                        <h4>Leaks:</h4>
+                        <ul>
+                            <li>$L_{\text{load}}$: stress, multitasking, inflammation, sleep debt, alcohol—these reduce $\beta$ and bring $t$ closer to $t_c$</li>
+                            <li>$\kappa B$: natural drift—idling costs even when you do nothing</li>
+                        </ul>
+                        
+                        <p class="warning-note"><strong>Yes, you can run out.</strong> When $B \to 0$, you drop to <strong>autopilot</strong>: default (Born-rule) odds, minimal veto power. You can also <strong>borrow</strong> from the next macro-cycle; that shows up as next-day fatigue and a shorter veto window—you paid with interest.</p>
+                    </div>
+                </section>
+
+                <section class="practical-autonomy">
+                    <h2>How to Have More to Spend (and Spend It Better)</h2>
+                    
+                    <div class="leverage-moves">
+                        <h3>1. Time Slack (The Cheapest Currency)</h3>
+                        <ul>
+                            <li><strong>Pre-commit a veto rule:</strong> "If I feel the pre-act surge, I veto+redirect." Pre-compilation buys you time because the counter-act is already loaded.</li>
+                            <li><strong>Single-task during choke points:</strong> Multitasking burns slack; your $t$ lives near $t_c$ all day. Carve clean windows for emails, negotiations, cravings—one at a time.</li>
+                        </ul>
+
+                        <h3>2. Information Precision (Make β Bigger)</h3>
+                        <ul>
+                            <li><strong>Implementation intentions:</strong> "If X, then I do Y." This converts a vague goal into a compiled opcode, directly raising $\beta$.</li>
+                            <li><strong>Practice the veto in slow-motion:</strong> Metronome drill expands your veto S-curve leftward (longer window) and steepens it (higher $\beta$).</li>
+                        </ul>
+
+                        <h3>3. Metabolic Exergy (Raise B)</h3>
+                        <ul>
+                            <li><strong>Sleep to completion:</strong> Multiple 90-min cycles. This is the main refill of $I_{\text{met}}$.</li>
+                            <li><strong>Coherent nasal breathing:</strong> ≈6/min for 2–5 minutes before high-stakes acts. You'll feel the pre-act surge earlier (more slack) and your cancel costs drop.</li>
+                            <li><strong>Glycemic stability:</strong> Protein/fiber before simple carbs; don't make big decisions during a glucose trough.</li>
+                            <li><strong>Zone-2 training:</strong> Most days. Bigger mitochondrial base = larger daily $I_{\text{met}}$.</li>
+                        </ul>
+
+                        <h3>4. Environmental Arbitrage (Lower ΔJ_min Outright)</h3>
+                        <ul>
+                            <li><strong>Friction the wrong path:</strong> One extra step to open social apps; remove temptations from the house.</li>
+                            <li><strong>Grease the right path:</strong> Water bottle on desk, canned reply drafts.</li>
+                        </ul>
+                        <p>These literally <strong>lower the cost of doing the right thing</strong>, so you need less budget to flip odds.</p>
+                    </div>
+
+                    <div class="autonomy-equation">
+                        <h3>Autonomy = Budget × Efficiency, Allocated at the Right Time</h3>
+                        <p>Your <strong>daily autonomy</strong> isn't a vibe; it's the integral of effective control you exercised:</p>
+                        
+                        $$\text{Autonomy} \approx \int \beta(t)\,\underbrace{u(t)}_{\text{your paid cost}}\,dt \quad \text{s.t.}\quad 0 \leq \int u(t)\,dt \leq \int B(t)\,dt$$
+                        
+                        <p>Spend where $\beta/\alpha$ is largest (high leverage, before the window collapses). Don't waste budget when the window is already closed.</p>
+                    </div>
+
+                    <div class="daily-stack">
+                        <h3>Quick Practical Stack (Use Today)</h3>
+                        <ul>
+                            <li><strong>Morning:</strong> Light, water, protein → refill $I_{\text{met}}$. Write two "If X then Y" rules for known choke points → raise $\beta$.</li>
+                            <li><strong>Before a trigger:</strong> 60–120s coherent breathing → more slack; silently name the act ("about to…") to mark the window.</li>
+                            <li><strong>During the window:</strong> Trigger your pre-committed veto+redirect.</li>
+                            <li><strong>Evening:</strong> Protect sleep. If you borrowed (felt fried), don't schedule will-heavy tasks tomorrow morning—your window will be shorter.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="what-wont-work">
+                    <h2>What Won't Work (Don't Waste Cycles)</h2>
+                    
+                    <ul>
+                        <li><strong>After the post:</strong> If it's already out (send clicked, word spoken), there's no ledger path left to reweight. Work upstream next time.</li>
+                        <li><strong>Hand-waving:</strong> "Try harder" without reserving $\Delta J$ fails. Budget first, then act.</li>
+                        <li><strong>Fighting physics:</strong> You can't will impossible things. Some futures have infinite cost barriers.</li>
+                    </ul>
                 </section>
 
                 <section>
