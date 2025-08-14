@@ -1,12 +1,12 @@
-# Recognition Science Website
+# Recognition Physics Website
 
 **Live at: [recognitionphysics.com](https://recognitionphysics.com)**
 
-A comprehensive presentation of Recognition Science theory - the unified framework that derives all physics, mathematics, biology, and consciousness from a single meta-principle: "Nothing cannot recognize itself."
+A comprehensive presentation of Recognition Physics theory - the unified framework that derives all physics, mathematics, biology, and consciousness from a single meta-principle: "Nothing cannot recognize itself."
 
 ## Theory Overview
 
-Recognition Science achieves what physics has long sought: a complete, parameter-free derivation of reality from logical necessity. Starting from the impossibility of self-recognition by nothingness, the theory derives:
+Recognition Physics achieves what physics has long sought: a complete, parameter-free derivation of reality from logical necessity. Starting from the impossibility of self-recognition by nothingness, the theory derives:
 
 - **Eight Foundations**: Discrete time, dual balance, positive cost, unitary evolution, irreducible tick, spatial voxels, eight-beat closure, and the golden ratio
 - **Physical Constants**: All emerge mathematically (φ, E_coh = 0.090 eV, τ₀ = 7.33 fs)

@@ -26,7 +26,7 @@ def test_api_functions():
         "window_score": score,
         "zodiac_hash": zhash,
         "global_cost": cost,
-        "framework": "Recognition Science"
+        "framework": "Recognition Physics"
     }
     
     print("\n📡 API Response Format:")

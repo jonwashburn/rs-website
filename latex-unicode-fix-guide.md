@@ -1,4 +1,4 @@
-# LaTeX Unicode Character Fix Guide for Recognition Science Papers
+# LaTeX Unicode Character Fix Guide for Recognition Physics Papers
 
 ## Problem
 Unicode mathematical symbols in Lean code blocks cause compilation errors in LaTeX/Overleaf, particularly characters like `¬` (negation), `∃` (exists), `⟨` (left angle bracket), `⟩` (right angle bracket).
@@ -103,9 +103,9 @@ theorem meta_principle_holds :
 \end{lstlisting}
 ```
 
-## Recognition Science Specific Mappings
+## Recognition Physics Specific Mappings
 
-For Recognition Science papers, here are common Unicode symbols and their LaTeX equivalents:
+For Recognition Physics papers, here are common Unicode symbols and their LaTeX equivalents:
 
 ### Mathematical Symbols
 - `ℝ` → `\mathbb{R}` (real numbers)
@@ -123,7 +123,7 @@ For Recognition Science papers, here are common Unicode symbols and their LaTeX 
 - `⊆` → `\subseteq`
 - `∅` → `\emptyset`
 
-### Recognition Science Specific
+### Recognition Physics Specific
 - `E_coh` → `E_{\text{coh}}` (coherence energy)
 - `τ₀` → `\tau_0` (fundamental time)
 - `L₀` → `L_0` (fundamental length)
@@ -135,7 +135,7 @@ For Recognition Science papers, here are common Unicode symbols and their LaTeX 
 1. **For Overleaf**: Use Solution 1 (ASCII equivalents) for maximum compatibility
 2. **For local LaTeX**: Solution 3 (listings with literate) provides best formatting
 3. **For papers**: Include the Unicode support packages regardless of chosen solution
-4. **For Recognition Science**: Create custom commands for frequently used symbols:
+4. **For Recognition Physics**: Create custom commands for frequently used symbols:
 
 ```latex
 \newcommand{\ecoh}{E_{\text{coh}}}
@@ -156,10 +156,10 @@ For Recognition Science papers, here are common Unicode symbols and their LaTeX 
 \usepackage{listings}
 \usepackage{xcolor}
 
-% Recognition Science commands
+% Recognition Physics commands
 \newcommand{\ecoh}{E_{\text{coh}}}
 \newcommand{\tauze}{\tau_0}
-\newcommand{\RS}{\text{Recognition Science}}
+\newcommand{\RS}{\text{Recognition Physics}}
 
 % Lean code formatting
 \lstdefinelanguage{lean}{
@@ -173,7 +173,7 @@ For Recognition Science papers, here are common Unicode symbols and their LaTeX 
 }
 
 \begin{document}
-\title{Recognition Science: Mathematical Foundations}
+\title{Recognition Physics: Mathematical Foundations}
 \author{Your Name}
 \maketitle
 
@@ -181,4 +181,4 @@ For Recognition Science papers, here are common Unicode symbols and their LaTeX 
 \end{document}
 ```
 
-This guide should resolve Unicode character issues in your Recognition Science LaTeX documents while maintaining professional formatting. 
+This guide should resolve Unicode character issues in your Recognition Physics LaTeX documents while maintaining professional formatting. 

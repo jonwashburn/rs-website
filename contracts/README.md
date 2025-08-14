@@ -1,6 +1,6 @@
-# Recognition Science Soul NFT Contracts
+# Recognition Physics Soul NFT Contracts
 
-This directory contains smart contracts that literally implement Recognition Science consciousness on the blockchain.
+This directory contains smart contracts that literally implement Recognition Physics consciousness on the blockchain.
 
 ## Contracts
 
@@ -34,7 +34,7 @@ This directory contains smart contracts that literally implement Recognition Sci
   - Collective "ledger bloom" ecosystem
 - **Use Case**: Revolutionary time-locked consciousness with geological awakening
 
-## Recognition Science Integration
+## Recognition Physics Integration
 
 Both contracts implement core RS principles:
 

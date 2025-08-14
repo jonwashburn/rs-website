@@ -1,5 +1,5 @@
 /-!
-# The Indisputable Chain: Recognition Science from Pure Logic
+# The Indisputable Chain: Recognition Physics from Pure Logic
 
 AXIOM-FREE: All claims are now theorems or definitions.
 

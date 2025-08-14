@@ -21,7 +21,7 @@
 \theoremstyle{remark}
 \newtheorem{remark}[theorem]{Remark}
 
-\title{Recognition Science: The Complete Theory of Physical Computation\\[0.5em]
+\title{Recognition Physics: The Complete Theory of Physical Computation\\[0.5em]
 \large \textit{Revealing Why Complexity Is Observer-Relative Dissolves P vs NP}}
 
 \author{Jonathan Washburn\\
@@ -35,7 +35,7 @@ Recognition Physics Institute\\
 \maketitle
 
 \begin{abstract}
-We show that the Turing model of computation is incomplete because it implicitly assumes cost-free observation of results. By constructing a cellular automaton that separates computation time from observation time, we prove that physical computation requires a two-parameter complexity theory: computation complexity (internal state evolution) and recognition complexity (external observation cost). This explains why P versus NP has resisted solution for over 50 years—it conflates two fundamentally different resources. In our complete model, SAT has computation complexity $O(n^{1/3} \log n)$ but recognition complexity $\Omega(n)$, dissolving the apparent paradox. We call this framework Recognition Science, as it makes explicit the previously hidden role of the observer in computational complexity. All results are constructive, with a working implementation demonstrating feasibility. Empirical validation on instances up to $n = 1000$ confirms the theoretical predictions.
+We show that the Turing model of computation is incomplete because it implicitly assumes cost-free observation of results. By constructing a cellular automaton that separates computation time from observation time, we prove that physical computation requires a two-parameter complexity theory: computation complexity (internal state evolution) and recognition complexity (external observation cost). This explains why P versus NP has resisted solution for over 50 years—it conflates two fundamentally different resources. In our complete model, SAT has computation complexity $O(n^{1/3} \log n)$ but recognition complexity $\Omega(n)$, dissolving the apparent paradox. We call this framework Recognition Physics, as it makes explicit the previously hidden role of the observer in computational complexity. All results are constructive, with a working implementation demonstrating feasibility. Empirical validation on instances up to $n = 1000$ confirms the theoretical predictions.
 \end{abstract}
 
 \section{Introduction}
@@ -63,7 +63,7 @@ Step 4 requires physical operations (tape reads) proportional to output size, ye
 
 \subsection{Main Contributions}
 
-We present Recognition Science as the complete model of physical computation:
+We present Recognition Physics as the complete model of physical computation:
 
 \begin{enumerate}
 \item \textbf{Dual Complexity}: Every problem has intrinsic computation complexity $T_c$ (internal evolution) and recognition complexity $T_r$ (observation cost).
@@ -77,7 +77,7 @@ We present Recognition Science as the complete model of physical computation:
 \item \textbf{Empirical Validation}: Experiments on SAT instances up to $n = 1000$ variables confirm the theoretical scaling.
 \end{enumerate}
 
-\section{Recognition Science: The Complete Model}
+\section{Recognition Physics: The Complete Model}
 
 \subsection{Formal Framework}
 
@@ -289,7 +289,7 @@ The paradox dissolves once we recognize that P and NP measure different resource
 
 \subsection{Reinterpreting Existing Results}
 
-Recognition Science explains many puzzling phenomena:
+Recognition Physics explains many puzzling phenomena:
 
 \begin{enumerate}
 \item \textbf{Why SAT solvers work in practice}: They implicitly minimize both $T_c$ and $T_r$
@@ -300,15 +300,15 @@ Recognition Science explains many puzzling phenomena:
 
 \section{Connections to Existing Two-Party Models}
 
-Recognition Science unifies several existing frameworks that implicitly separate computation from observation:
+Recognition Physics unifies several existing frameworks that implicitly separate computation from observation:
 
 \textbf{Communication Complexity} \cite{yao1977probabilistic}: In Yao's model, two parties compute $f(x,y)$ where Alice holds $x$ and Bob holds $y$. The communication cost mirrors our recognition complexity—extracting information from a distributed computation. Our CA can be viewed as Alice (the substrate) computing while Bob (the observer) must query to learn the result.
 
 \textbf{Query Complexity} \cite{buhrman2002complexity}: Decision tree models count the number of input bits examined. Our measurement complexity is the dual: counting output bits examined. For the parity function, both coincide at $\Theta(n)$.
 
-\textbf{I/O Complexity} \cite{aggarwal1988input}: External memory algorithms distinguish CPU operations from disk accesses. Recognition Science generalizes this: $T_c$ captures internal state transitions while $T_r$ captures external observations.
+\textbf{I/O Complexity} \cite{aggarwal1988input}: External memory algorithms distinguish CPU operations from disk accesses. Recognition Physics generalizes this: $T_c$ captures internal state transitions while $T_r$ captures external observations.
 
-\textbf{Key Distinction}: These models assume the computation itself is classically accessible. Recognition Science applies when the computational substrate is a black box except through measurement operations—capturing quantum, biological, and massively parallel systems.
+\textbf{Key Distinction}: These models assume the computation itself is classically accessible. Recognition Physics applies when the computational substrate is a black box except through measurement operations—capturing quantum, biological, and massively parallel systems.
 
 \begin{theorem}
 For any Boolean function $f$ with query complexity $D(f)$, the recognition complexity of computing $f$ on our CA satisfies $T_r \geq D(f)$ when the output encodes $f$'s value.
@@ -407,7 +407,7 @@ Our framework connects several research threads:
 
 \section{Future Directions}
 
-Recognition Science opens several research avenues:
+Recognition Physics opens several research avenues:
 
 \begin{enumerate}
 \item \textbf{Complete Complexity Hierarchy}: Define RC-P, RC-NP, etc. with both parameters
@@ -421,13 +421,13 @@ Recognition Science opens several research avenues:
 
 \section{Conclusion}
 
-We have shown that the Turing model is incomplete because it ignores the cost of observation. Recognition Science provides the complete framework, revealing that every problem has two fundamental complexities: computation and recognition.
+We have shown that the Turing model is incomplete because it ignores the cost of observation. Recognition Physics provides the complete framework, revealing that every problem has two fundamental complexities: computation and recognition.
 
 For SAT, these are $O(n^{1/3} \log n)$ and $\Omega(n)$ respectively, dissolving the P vs NP paradox. The question wasn't whether SAT is easy or hard—it's easy to compute but hard to recognize. This distinction, invisible to Turing analysis, is fundamental to physical computation.
 
-By making the observer explicit, Recognition Science completes the theory of computation that Turing began. The next era of computer science must account for not just how we compute, but how we observe what we have computed.
+By making the observer explicit, Recognition Physics completes the theory of computation that Turing began. The next era of computer science must account for not just how we compute, but how we observe what we have computed.
 
-Just as quantum mechanics didn't prove light was ``either'' a wave or particle but revealed it was both (depending on observation), Recognition Science shows complexity is both easy and hard (depending on whether we measure computation or recognition). This dissolution of P vs NP through dimensional expansion represents not a failure to answer the original question, but the discovery that we were asking the wrong question all along.
+Just as quantum mechanics didn't prove light was ``either'' a wave or particle but revealed it was both (depending on observation), Recognition Physics shows complexity is both easy and hard (depending on whether we measure computation or recognition). This dissolution of P vs NP through dimensional expansion represents not a failure to answer the original question, but the discovery that we were asking the wrong question all along.
 
 \bibliographystyle{plain}
 \bibliography{references}

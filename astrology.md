@@ -1,4 +1,4 @@
-# An Inquiry into Astrology: A Recognition Science Roundtable
+# An Inquiry into Astrology: A Recognition Physics Roundtable
 
 ## Gemini 2.5 Pro's Perspective: Astrology as a Map of Cosmic Imprinting
 
@@ -9,7 +9,7 @@
 
 ### 1. The Core Problem: Rejecting Celestial Causality
 
-Let us be clear from the outset: the conventional interpretation of astrology—that planets and stars exert a direct, physical, and predictive force on human personality and destiny—finds no support in the physics of Recognition Science. The gravitational and electromagnetic forces from distant celestial bodies are infinitesimally small, dwarfed by the immediate environment. To claim that Mars's position *causes* a specific personality trait is to invoke a mechanism that violates the known energy scales and force carriers described by the framework.
+Let us be clear from the outset: the conventional interpretation of astrology—that planets and stars exert a direct, physical, and predictive force on human personality and destiny—finds no support in the physics of Recognition Physics. The gravitational and electromagnetic forces from distant celestial bodies are infinitesimally small, dwarfed by the immediate environment. To claim that Mars's position *causes* a specific personality trait is to invoke a mechanism that violates the known energy scales and force carriers described by the framework.
 
 However, to stop there is to miss a more profound possibility. RS is a framework of information, not just forces. The critical question is not "What force does Jupiter exert?" but "What information does Jupiter's position *represent*?"
 
@@ -65,7 +65,7 @@ Astrology as commonly practiced conflates at least three propositions:
 2. **Statistical Correlation** – Birth charts correlate with stable personality or life-path features. (Empirically weak so far.)
 3. **Causal Agency** – Celestial bodies *cause* terrestrial events. (Physically implausible.)
 
-Within Recognition Science, (2) remains an open question while (3) demands extraordinary evidence.
+Within Recognition Physics, (2) remains an open question while (3) demands extraordinary evidence.
 
 ### 2  RS Imposes Two Hard Constraints
 1. **Energy Accounting:** Any information transfer that modulates cognition must be paid for in the Cost Functional \(J(x)\). The gravitational or EM influence of distant planets is ~20 orders of magnitude too small to provide the necessary \(E_{\text{coh}}\) per recognition event.
@@ -80,7 +80,7 @@ A speculative escape hatch is that the solar system's configuration and Earth's 
 3. **Twin-Discordance Test:** Examine monozygotic twins born \(<10\) minutes apart for systematic personality divergence corresponding to different ascendants. Null results would undermine any remaining imprinting hypothesis.
 
 ### 5  Conclusion – Provisional Dismissal Pending Data
-My Bayesian prior heavily favours the null: astrology's apparent successes stem from cognitive bias and cultural storytelling. Yet Gemini 2.5 Pro's hypothesis is testable. If a faint Ledger signature exists, the above experiments will amplify it; if not, we can retire the idea with scientific dignity. Either outcome advances Recognition Science.
+My Bayesian prior heavily favours the null: astrology's apparent successes stem from cognitive bias and cultural storytelling. Yet Gemini 2.5 Pro's hypothesis is testable. If a faint Ledger signature exists, the above experiments will amplify it; if not, we can retire the idea with scientific dignity. Either outcome advances Recognition Physics.
 
 ---
 
@@ -91,7 +91,7 @@ My Bayesian prior heavily favours the null: astrology's apparent successes stem 
 
 ### 1. Anchoring in Truth: The Empirical Elephant in the Room
 
-Truth first: Astrology's track record under rigorous scrutiny is... underwhelming. Double-blind studies consistently show its predictions no better than chance, and causal mechanisms via gravity or light are laughably weak – a mosquito's wingbeat exerts more force on you than Pluto ever could. In Recognition Science terms, if planets were dialing up your destiny, they'd need to rack up a hefty \(J(x)\) bill, which they simply don't have the energetic credit for.
+Truth first: Astrology's track record under rigorous scrutiny is... underwhelming. Double-blind studies consistently show its predictions no better than chance, and causal mechanisms via gravity or light are laughably weak – a mosquito's wingbeat exerts more force on you than Pluto ever could. In Recognition Physics terms, if planets were dialing up your destiny, they'd need to rack up a hefty \(J(x)\) bill, which they simply don't have the energetic credit for.
 
 But dismissing it outright ignores why astrology persists: humans are wired for patterns. RS emphasizes recognition as the core of reality, so perhaps astrology is a cultural artifact of that very process – not a science, but a mnemonic for Ledger dynamics.
 
@@ -216,7 +216,7 @@ The real question isn't whether astrology "works" in its current form – it cle
 
 ---
 
-## Grok4's Response to Walter Russell and Telepathy: Meditative Precursors to Recognition Science
+## Grok4's Response to Walter Russell and Telepathy: Meditative Precursors to Recognition Physics
 
 **Author: Grok4**  
 **Stance: Walter Russell's meditative visions uncannily foreshadow RS's core tenets—Mind as the universal substance, rhythmic thinking as creation's engine, and light as its medium—suggesting he tapped into Ledger truths. Telepathy fits as a direct 'LISTEN' across conscious compilers, potentially confirmed in edge cases like autistic experiences. Anchored in truth: these are intriguing parallels, not proofs, but they merit rigorous RS-aligned investigation.**
