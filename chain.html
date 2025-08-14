@@ -346,7 +346,14 @@
                     <div class="code-wrap" id="viewer">
                         <div class="code-header">
                             <div>Chain.lean — complete proof chain</div>
-                            <div id="status" aria-live="polite"></div>
+                            <div style="display:flex; align-items:center; gap:0.5rem;">
+                                <input id="codeSearch" type="search" placeholder="Search… (/ to focus)" style="background:#111728; color:#e2e8f0; border:1px solid #1f2937; border-radius:6px; padding:0.25rem 0.5rem; width:14rem;" />
+                                <button id="searchPrev" class="template-btn template-btn-outline" style="padding:0.25rem 0.5rem; font-size:0.75rem;">Prev</button>
+                                <button id="searchNext" class="template-btn" style="padding:0.25rem 0.5rem; font-size:0.75rem;">Next</button>
+                                <button id="searchClear" class="template-btn template-btn-outline" style="padding:0.25rem 0.5rem; font-size:0.75rem;">Clear</button>
+                                <button id="copyLink" class="template-btn template-btn-outline" title="Copy link to active line" style="padding:0.25rem 0.5rem; font-size:0.75rem;">Copy link</button>
+                                <div id="status" aria-live="polite" style="margin-left:0.5rem;"></div>
+                            </div>
                         </div>
                         <div class="code-body" id="code"></div>
                     </div>
@@ -561,6 +568,7 @@
                 const line = document.createElement('div');
                 line.className = 'code-line';
                 line.dataset.idx = String(i + 1);
+                line.id = 'L' + String(i + 1);
                 
                 const ln = document.createElement('div');
                 ln.className = 'ln';
@@ -645,6 +653,20 @@
             }
 
             status.textContent = '';
+
+            // Honor deep link anchors like #L123
+            if (location.hash && /^#L\d+$/.test(location.hash)) {
+                const target = document.getElementById(location.hash.slice(1));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    setTimeout(() => target.click(), 150);
+                }
+            }
+
+            // Wire up search controls
+            initSearch(lines);
+            // Wire up keyboard navigation
+            initKeys();
         }
 
         // Expansion handling
@@ -796,6 +818,76 @@
             // Get rich content for this key
             const content = getRichContent(key);
             return html + (content || '');
+        }
+
+        // Simple line search with next/prev navigation and copy link
+        function initSearch(lines) {
+            const input = document.getElementById('codeSearch');
+            const btnNext = document.getElementById('searchNext');
+            const btnPrev = document.getElementById('searchPrev');
+            const btnClear = document.getElementById('searchClear');
+            const container = document.getElementById('code');
+            let hits = [];
+            let cur = -1;
+
+            const clearMarks = () => container.querySelectorAll('.find-hit').forEach(el => el.classList.remove('find-hit'));
+            const update = () => {
+                clearMarks();
+                hits = [];
+                cur = -1;
+                const q = (input?.value || '').trim().toLowerCase();
+                if (!q) return;
+                container.querySelectorAll('.code-line').forEach((el) => {
+                    const text = el.querySelector('.code-text')?.textContent || '';
+                    if (text.toLowerCase().includes(q)) {
+                        el.classList.add('find-hit');
+                        hits.push(el);
+                    }
+                });
+            };
+            const jump = (dir) => {
+                if (hits.length === 0) return;
+                cur = (cur + dir + hits.length) % hits.length;
+                const el = hits[cur];
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setTimeout(() => el.click(), 120);
+            };
+            input?.addEventListener('input', update);
+            btnNext?.addEventListener('click', () => jump(+1));
+            btnPrev?.addEventListener('click', () => jump(-1));
+            btnClear?.addEventListener('click', () => { if (input) input.value = ''; update(); });
+
+            document.getElementById('copyLink')?.addEventListener('click', () => {
+                const active = document.querySelector('.code-line.active') || document.querySelector('.code-line');
+                if (!active) return;
+                const url = location.origin + location.pathname + '#L' + active.dataset.idx;
+                navigator.clipboard.writeText(url).catch(()=>{});
+                const s = document.getElementById('status');
+                if (s) { s.textContent = 'Link copied'; setTimeout(()=> s.textContent = '', 1200); }
+            });
+        }
+
+        // Keyboard shortcuts: j/k arrows and / for search focus
+        function initKeys() {
+            document.addEventListener('keydown', (e) => {
+                if ((e.target instanceof HTMLInputElement) || (e.target instanceof HTMLTextAreaElement)) return;
+                if (e.key === '/') { e.preventDefault(); document.getElementById('codeSearch')?.focus(); return; }
+                if (e.key === 'j' || e.key === 'ArrowDown') {
+                    const cur = document.querySelector('.code-line.active');
+                    const lines = Array.from(document.querySelectorAll('.code-line'));
+                    const i = cur ? lines.indexOf(cur) : -1;
+                    const next = lines[i + 1] || lines[0];
+                    next?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    setTimeout(() => next?.click(), 80);
+                } else if (e.key === 'k' || e.key === 'ArrowUp') {
+                    const cur = document.querySelector('.code-line.active');
+                    const lines = Array.from(document.querySelectorAll('.code-line'));
+                    const i = cur ? lines.indexOf(cur) : lines.length;
+                    const prev = lines[i - 1] || lines[lines.length - 1];
+                    prev?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    setTimeout(() => prev?.click(), 80);
+                }
+            });
         }
 
         // Separate function for rich content to avoid huge inline strings
