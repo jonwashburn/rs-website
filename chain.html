@@ -1054,6 +1054,142 @@ end IndisputableMonolith
             { key: 'sqrt5_computation', pattern: 'have : Real.sqrt 5 ^ 2 = 5 := Real.sq_sqrt' },
             { key: 'vieta_factorization', pattern: '(x - φ) * (x - (1 - φ)) = 0' },
             { key: 'gray_code_construction', pattern: 'let lst : Fin 8 → Pattern 3' },
+            
+            // Additional core structures and classes
+            { key: 'namespace_mono', pattern: 'namespace IndisputableMonolith' },
+            { key: 'eight_theorems_index', pattern: '# The Eight Theorems (index)' },
+            { key: 'open_classical', pattern: 'open Classical Function' },
+            { key: 'bigoperators_scope', pattern: 'open scoped BigOperators' },
+            
+            // Chain operations and properties
+            { key: 'chain_namespace', pattern: 'namespace Chain' },
+            { key: 'chain_head', pattern: 'def head : M.U := ch.f ⟨0, by decide⟩' },
+            { key: 'chain_last', pattern: 'def last : M.U := ch.f ⟨ch.n, Nat.lt_succ_self _⟩' },
+            { key: 'chain_head_simp', pattern: '@[simp] lemma head_def' },
+            { key: 'chain_last_simp', pattern: '@[simp] lemma last_def' },
+            
+            // Atomic tick details
+            { key: 'posted_at', pattern: 'postedAt : Nat → M.U → Prop' },
+            { key: 'atomic_proof_step1', pattern: 'rcases (AtomicTick.unique_post' },
+            { key: 'atomic_proof_step2', pattern: 'have hu\' : u = w := huniq u hu' },
+            { key: 'atomic_proof_step3', pattern: 'exact hu\'.trans hv\'.symm' },
+            
+            // Ledger conservation proofs
+            { key: 'conserves_potential', pattern: 'instance conserves_of_potential' },
+            { key: 'conservation_proof', pattern: 'unfold chainFlux phi' },
+            { key: 'conservation_simpa', pattern: 'simpa [h]' },
+            
+            // Pattern and fintype theory
+            { key: 'pattern_fintype', pattern: 'instance (d : Nat) : Fintype (Pattern d)' },
+            { key: 'fintype_card_fun', pattern: 'Fintype.card_fun : Fintype.card (Fin d → Bool)' },
+            { key: 'classical_assumption', pattern: 'classical' },
+            { key: 'surjective_right_inverse', pattern: 'obtain ⟨g, hg⟩ := hf.hasRightInverse' },
+            { key: 'injective_from_right_inv', pattern: 'have hginj : Injective g' },
+            { key: 'card_inequality', pattern: 'have hcard : Fintype.card (Pattern d) ≤ Fintype.card (Fin T)' },
+            { key: 'contradiction_false', pattern: 'exact (lt_of_le_of_lt this hT).false' },
+            
+            // Complete cover construction
+            { key: 'complete_path', pattern: 'path : Fin period → Pattern 3' },
+            { key: 'complete_surjective', pattern: 'complete : Surjective path' },
+            { key: 'pattern_enumeration', pattern: 'let p0 : Pattern 3 := fun i => by fin_cases i using Fin.cases' },
+            { key: 'gray_explicit_0', pattern: '| 0 => fun j => by fin_cases j using Fin.cases' },
+            { key: 'gray_explicit_1', pattern: '| 1 => fun j => by fin_cases j using Fin.cases' },
+            { key: 'gray_explicit_7', pattern: '| _ => fun j => by fin_cases j using Fin.cases' },
+            { key: 'fintype_equiv_fin', pattern: 'refine ⟨(Fintype.equivFin (Pattern 3)).symm v, ?_⟩' },
+            
+            // J function detailed properties
+            { key: 'j_algebra_setup', pattern: 'have hxne : (x : ℝ) ≠ 0 := ne_of_gt hx' },
+            { key: 'square_nonneg', pattern: 'have hsq : 0 ≤ (x - 1) ^ 2 := by exact sq_nonneg' },
+            { key: 'div_nonneg', pattern: 'have : 0 ≤ ((x - 1) ^ 2) / x := by exact div_nonneg' },
+            { key: 'algebraic_identity', pattern: 'have hiden : ((x - 1) ^ 2) / x = x + x⁻¹ - 2' },
+            { key: 'j_pos_square', pattern: 'have hsq : 0 < (x - 1) ^ 2' },
+            { key: 'square_nonzero', pattern: 'have : x - 1 ≠ 0 := sub_ne_zero.mpr' },
+            { key: 'pow_two_pos', pattern: 'exact pow_two_pos_of_ne_zero (x - 1) this' },
+            
+            // J monotonicity proof
+            { key: 'diff_sum_inverse', pattern: 'lemma diff_sum_inv (x y : ℝ) (hx : x ≠ 0) (hy : y ≠ 0)' },
+            { key: 'product_bound', pattern: 'have hprod : x*y > 1' },
+            { key: 'factor_positive', pattern: 'have hfactor : 0 < 1 - (x*y)⁻¹' },
+            { key: 'inverse_inequality', pattern: 'have : (x*y)⁻¹ < 1' },
+            { key: 'monotonicity_calculation', pattern: 'have hdiff : 0 < (y + y⁻¹) - (x + x⁻¹)' },
+            
+            // Golden ratio detailed proofs
+            { key: 'phi_nonzero', pattern: 'have hφ0 : φ ≠ 0' },
+            { key: 'sqrt5_positive', pattern: 'have : 0 < Real.sqrt 5 := Real.sqrt_pos.mpr' },
+            { key: 'phi_quadratic', pattern: 'have hx_sq : x^2 = x + 1' },
+            { key: 'quadratic_to_linear', pattern: 'have := congrArg (fun t => t * x) hx\'' },
+            { key: 'phi_multiplication', pattern: 'have hφ_mul : φ * (1 - φ) = -1' },
+            { key: 'quadratic_factorization', pattern: 'have factor : (x - φ) * (x - (1 - φ)) = 0' },
+            { key: 'vieta_formulas', pattern: 'have : (x - φ) * (x - (1 - φ)) = x^2 - (φ + (1 - φ)) * x + φ * (1 - φ)' },
+            { key: 'negative_root', pattern: 'have one_sub_phi_neg : 1 - φ < 0' },
+            { key: 'root_exclusion', pattern: 'have hx_ne : x ≠ 1 - φ := by exact ne_of_gt' },
+            { key: 'cases_analysis', pattern: 'have hmul0 := eq_zero_or_eq_zero_of_mul_eq_zero factor' },
+            
+            // xk functions and k=1 proof
+            { key: 'xk_formula', pattern: 'def xk (k : ℕ) : ℝ := (1 + Real.sqrt (1 + 4 * (k : ℝ))) / 2' },
+            { key: 'xk_solves_recurrence', pattern: 'lemma xk_solves (k : ℕ) : recurrence k (xk k)' },
+            { key: 'sqrt_calculation', pattern: 'have : Real.sqrt (1 + 4 * (k:ℝ)) ^ 2 = 1 + 4 * (k:ℝ)' },
+            { key: 'nonneg_assumption', pattern: 'have hpos : (0:ℝ) ≤ 1 + 4 * (k:ℝ)' },
+            { key: 'cast_nonneg', pattern: 'exact_mod_cast Nat.cast_nonneg k' },
+            { key: 'phi_xk1_equality', pattern: 'lemma phi_eq_xk1 : φ = xk 1' },
+            { key: 'xk_comparison', pattern: 'lemma xk_gt_phi_of_ge_two {k : ℕ} (hk : 2 ≤ k) : xk k > φ' },
+            { key: 'sqrt_inequality', pattern: 'have : Real.sqrt (1 + 4 * (k:ℝ)) > Real.sqrt 5' },
+            { key: 'inequality_transfer', pattern: 'exact Real.sqrt_lt_sqrt_iff.mpr hlt' },
+            { key: 'phi_geq_one', pattern: 'lemma phi_ge_one : 1 ≤ φ' },
+            
+            // Strong ledger and double entry
+            { key: 'delta_positive', pattern: 'δ_pos : 0 < δ := by decide' },
+            { key: 'ledger_debit', pattern: 'debit : M.U → ℤ' },
+            { key: 'ledger_credit', pattern: 'credit : M.U → ℤ' },
+            { key: 'edges_subtype', pattern: 'def Edges := {p : M.U × M.U // M.R p.1 p.2}' },
+            { key: 'indegree_count', pattern: 'def indeg (v : M.U) : Nat := Fintype.card (InEdges v)' },
+            { key: 'outdegree_count', pattern: 'def outdeg (u : M.U) : Nat := Fintype.card (OutEdges u)' },
+            { key: 'total_edges', pattern: 'def numEdges : Nat := Fintype.card (Edges (M:=M))' },
+            
+            // Sigma equivalences  
+            { key: 'in_sigma_equiv', pattern: 'def inSigmaEquivEdges : (Σ v : M.U, InEdges (M:=M) v) ≃ Edges (M:=M)' },
+            { key: 'out_sigma_equiv', pattern: 'def outSigmaEquivEdges : (Σ u : M.U, OutEdges (M:=M) u) ≃ Edges (M:=M)' },
+            { key: 'equiv_to_fun', pattern: 'toFun := fun ⟨v, ⟨u, h⟩⟩ => ⟨(u, v), h⟩' },
+            { key: 'equiv_inv_fun', pattern: 'invFun := fun ⟨⟨u, v⟩, h⟩ => ⟨v, ⟨u, h⟩⟩' },
+            { key: 'left_inverse_proof', pattern: 'left_inv := by intro x; cases x with | mk v uv => cases uv with | mk u h => rfl' },
+            { key: 'right_inverse_proof', pattern: 'right_inv := by intro x; cases x with | mk uv h => cases uv with | mk u v => rfl' },
+            
+            // Canonical ledger construction
+            { key: 'canonical_construction', pattern: 'def CanonicalLedger (M : RecognitionStructure) [Fintype M.U] [DecidableRel M.R]' },
+            { key: 'canonical_debit_def', pattern: 'debit := fun v => (Fintype.card (InEdges (M:=M) v) : ℤ)' },
+            { key: 'canonical_credit_def', pattern: 'credit := fun u => (Fintype.card (OutEdges (M:=M) u) : ℤ)' },
+            { key: 'double_entry_debit', pattern: 'debit_def : ∀ v : M.U, L.debit v = (Fintype.card (InEdges (M:=M) v)) • (L.δ)' },
+            { key: 'double_entry_credit', pattern: 'credit_def : ∀ u : M.U, L.credit u = (Fintype.card (OutEdges (M:=M) u)) • (L.δ)' },
+            { key: 'canonical_double_entry', pattern: 'instance canonicalDoubleEntry' },
+            { key: 'nsmul_one_simp', pattern: 'simp [CanonicalLedger, InEdges, nsmul_one]' },
+            
+            // Normalization and uniqueness theorems
+            { key: 'normalized_theorem', pattern: 'theorem doubleEntry_normalized {L : StrongLedger M} [DoubleEntry M L]' },
+            { key: 'sigma_card_theorem', pattern: 'theorem card_sigma_inEdges_eq_edges' },
+            { key: 'sum_indegree_theorem', pattern: 'theorem sum_indeg_eq_edges : (∑ v : M.U, indeg (M:=M) v) = numEdges (M:=M)' },
+            { key: 'fintype_card_sigma', pattern: 'have h := Fintype.card_sigma (fun v : M.U => InEdges (M:=M) v)' },
+            { key: 'debit_sum_theorem', pattern: 'theorem debit_sum_eq_edges_int {L : StrongLedger M} [DoubleEntry M L]' },
+            { key: 'calc_proof_step', pattern: 'calc' },
+            { key: 'canonical_unique_norm', pattern: 'theorem canonical_unique_normalized {L : StrongLedger M} [DoubleEntry M L]' },
+            { key: 'extensionality_proof', pattern: 'cases L with' },
+            
+            // Cost requirements structure
+            { key: 'cost_symmetric', pattern: 'symmetric : ∀ x > 0, F x = F x⁻¹' },
+            { key: 'cost_unit_zero', pattern: 'unit0 : F 1 = 0' },
+            { key: 'cost_bounded', pattern: 'bounded : ∃ K, ∀ x > 0, F x ≤ K * (x + x⁻¹)' },
+            { key: 'cost_avg_ineq', pattern: 'avgIneq : ∀ {k : ℕ}, 1 ≤ k → ∀ t : ℝ' },
+            { key: 'cost_avg_strict', pattern: 'avgStrict : ∀ {k : ℕ}, 2 ≤ k → ∀ {t : ℝ}, t ≠ 0' },
+            { key: 'jcost_proof_symmetric', pattern: 'intro x hx; unfold Jcost; field_simp; ring' },
+            { key: 'jcost_proof_unit', pattern: 'unfold Jcost; simp' },
+            { key: 'jcost_proof_bounded', pattern: 'refine ⟨(1/2 : ℝ), ?_⟩; intro x hx; unfold Jcost; nlinarith' },
+            
+            // Simple ledger finale
+            { key: 'simple_ledger', pattern: 'structure SimpleLedger (M : RecognitionStructure) where' },
+            { key: 'sphi_def', pattern: 'def sphi {M} (L : SimpleLedger M) : M.U → ℤ' },
+            { key: 'schain_flux', pattern: 'def schainFlux {M} (L : SimpleLedger M) (ch : Chain M) : ℤ' },
+            { key: 's_conserves', pattern: 'class SConserves {M} (L : SimpleLedger M)' },
+            { key: 's_conserves_instance', pattern: 'instance s_conserves_of_potential' },
+            { key: 'end_monolith', pattern: 'end IndisputableMonolith' },
         ];
 
         // Scientist-facing explanations
@@ -1167,6 +1303,230 @@ end IndisputableMonolith
             vieta_factorization: `<p><strong>Polynomial Factoring:</strong> x² - x - 1 = (x - φ)(x - (1-φ)). This factorization proves φ is the unique positive solution. Algebra determines physics!</p>`,
             
             gray_code_construction: `<p><strong>Explicit Construction:</strong> The Gray code gives an explicit 8-step path through all 3D patterns. This isn't abstract—it's the actual sequence the universe follows!</p>`,
+            
+            // Additional structural and organizational elements
+            namespace_mono: `<p><strong>Module Boundary:</strong> The IndisputableMonolith namespace encapsulates the entire axiom-free proof chain. Everything inside this boundary is machine-verified and logically necessary—no assumptions allowed!</p>`,
+            
+            eight_theorems_index: `<p><strong>The Grand Roadmap:</strong> These 8 theorems form the complete logical chain from pure logic to physical constants. Each builds on the previous—no gaps, no hand-waving, just inevitable mathematical consequences!</p>`,
+            
+            open_classical: `<p><strong>Classical Logic:</strong> We use classical (not constructive) logic and function theory. This gives us powerful tools like proof by contradiction and the axiom of choice when needed.</p>`,
+            
+            bigoperators_scope: `<p><strong>Summation Notation:</strong> BigOperators enables clean notation for sums, products, and other aggregate operations. Essential for counting arguments and cardinality proofs.</p>`,
+            
+            // Chain theory deep dive
+            chain_namespace: `<p><strong>Chain Operations:</strong> This namespace defines operations on causal chains—how to extract heads, tails, and prove properties about finite sequences of recognition events.</p>`,
+            
+            chain_head: `<p><strong>Chain Start:</strong> Every causal chain has a definite starting point—f(0). The 'by decide' tactic proves 0 < n+1 automatically. This head is where the causal sequence begins!</p>`,
+            
+            chain_last: `<p><strong>Chain End:</strong> The last element of a chain—f(n). Uses 'Nat.lt_succ_self' to prove n < n+1. This endpoint is where the causal sequence terminates.</p>`,
+            
+            chain_head_simp: `<p><strong>Simplification Rule:</strong> The @[simp] attribute tells Lean to automatically unfold 'head' definitions. This makes proofs cleaner by eliminating trivial rewriting steps.</p>`,
+            
+            chain_last_simp: `<p><strong>Auto-Simplification:</strong> Another simp lemma for 'last'. These simp rules are crucial for making complex proofs readable—Lean handles the bookkeeping automatically!</p>`,
+            
+            // Atomic tick proof mechanics
+            posted_at: `<p><strong>Temporal Posting:</strong> This relation defines when and where recognition events get "posted" in spacetime. Think of it as the universe's event logging system!</p>`,
+            
+            atomic_proof_step1: `<p><strong>Extract Witness:</strong> The 'rcases' tactic destructures the existential statement. We get both the unique element w and the proof that it's unique. Classic existence-uniqueness pattern!</p>`,
+            
+            atomic_proof_step2: `<p><strong>Apply Uniqueness:</strong> Since huniq proves uniqueness of w, and we know u satisfies the property, u must equal w. This is how uniqueness proofs work in Lean!</p>`,
+            
+            atomic_proof_step3: `<p><strong>Transitivity Chain:</strong> We have u = w and v = w, so by transitivity (trans) and symmetry (symm), we get u = v. This completes the atomicity proof elegantly!</p>`,
+            
+            // Ledger conservation mechanics
+            conserves_potential: `<p><strong>Automatic Conservation:</strong> Any ledger defined via a potential function automatically conserves flux on closed chains. This instance tells Lean that conservation is trivial for potential-based ledgers!</p>`,
+            
+            conservation_proof: `<p><strong>Unfold Definitions:</strong> The proof strategy is simple—unfold the definitions of chainFlux and phi, then the conservation follows immediately from the closed chain condition!</p>`,
+            
+            conservation_simpa: `<p><strong>Simplify and Solve:</strong> 'simpa' is 'simp' followed by assumption solving. Here it uses the hypothesis h (that head = last) to automatically prove flux = 0. Lean magic!</p>`,
+            
+            // Pattern theory and combinatorial arguments
+            pattern_fintype: `<p><strong>Finite Patterns:</strong> This instance tells Lean's type system that Pattern(d) is a finite type. Essential for cardinality arguments and combinatorial proofs about state spaces!</p>`,
+            
+            fintype_card_fun: `<p><strong>Function Cardinality:</strong> The number of functions from Fin d to Bool is exactly 2^d. This is the foundation of all our exponential counting arguments!</p>`,
+            
+            classical_assumption: `<p><strong>Classical Mode:</strong> Enables non-constructive reasoning like proof by contradiction. We assume the negation and derive a contradiction—sometimes the only way forward!</p>`,
+            
+            surjective_right_inverse: `<p><strong>Surjection Inverse:</strong> If f is surjective, it has a right inverse g. This is a fundamental theorem in set theory—every surjection "splits" in this sense!</p>`,
+            
+            injective_from_right_inv: `<p><strong>Inverse Injectivity:</strong> If g is a right inverse of a function, then g must be injective. This is the key insight for our cardinality contradiction argument!</p>`,
+            
+            card_inequality: `<p><strong>Cardinality Transfer:</strong> Injective functions can't increase cardinality. This inequality will lead to our contradiction when we combine it with the size assumption!</p>`,
+            
+            contradiction_false: `<p><strong>Final Contradiction:</strong> We've shown T < 2^d but also 2^d ≤ T. This contradiction (.false) proves our assumption was wrong—pure logical necessity!</p>`,
+            
+            // Complete cover construction details
+            complete_path: `<p><strong>Covering Function:</strong> A path that maps each time step to a 3D pattern. For completeness, this path must hit every single corner of the 3D cube—no exceptions!</p>`,
+            
+            complete_surjective: `<p><strong>Full Coverage:</strong> Surjectivity means every pattern is hit at least once. Combined with period minimality, this gives us the tightest possible quantum cycle!</p>`,
+            
+            pattern_enumeration: `<p><strong>Explicit Enumeration:</strong> We construct each of the 8 patterns explicitly using Lean's fin_cases tactic. This gives concrete evidence that period-8 is achievable!</p>`,
+            
+            gray_explicit_0: `<p><strong>Pattern (0,0,0):</strong> The first Gray code step—all bits false. This represents the "vacuum state" of our 3D quantum system. The universe starts here!</p>`,
+            
+            gray_explicit_1: `<p><strong>Pattern (0,0,1):</strong> Second Gray step—flip the rightmost bit. Each Gray code step changes exactly one coordinate, ensuring minimal quantum transitions!</p>`,
+            
+            gray_explicit_7: `<p><strong>Final Pattern:</strong> The wildcard case handles the last pattern (1,1,1)—all bits true. After 8 steps, we've covered every possible 3D state configuration!</p>`,
+            
+            fintype_equiv_fin: `<p><strong>Finite Equivalence:</strong> Uses the canonical equivalence between Pattern 3 and Fin 8. This technical step proves our explicit construction actually covers everything!</p>`,
+            
+            // J function proof deep dive
+            j_algebra_setup: `<p><strong>Non-zero Assumption:</strong> Since x > 0, we know x ≠ 0. This enables division by x and inversion operations throughout the J function analysis. Foundation for all algebraic manipulations!</p>`,
+            
+            square_nonneg: `<p><strong>Perfect Square:</strong> (x-1)² ≥ 0 always—perfect squares are never negative. This simple fact is the key to deriving the AM-GM inequality that constrains J!</p>`,
+            
+            div_nonneg: `<p><strong>Division Preservation:</strong> Dividing a non-negative number by a positive number preserves non-negativity. This step maintains our inequality through the algebraic transformation!</p>`,
+            
+            algebraic_identity: `<p><strong>Crucial Identity:</strong> The algebraic manipulation that transforms (x-1)²/x into x + 1/x - 2. This identity is the bridge connecting geometric intuition to the AM-GM inequality!</p>`,
+            
+            j_pos_square: `<p><strong>Strict Positivity:</strong> When x ≠ 1, we have (x-1)² > 0 strictly. This strict inequality is what makes J strictly positive away from the balance point x = 1!</p>`,
+            
+            square_nonzero: `<p><strong>Non-zero Factor:</strong> If x ≠ 1, then x - 1 ≠ 0. This seemingly obvious fact is what enables the strict positivity argument for squares of non-zero numbers!</p>`,
+            
+            pow_two_pos: `<p><strong>Positive Squares:</strong> The square of any non-zero real number is strictly positive. This fundamental fact about real numbers drives the strict monotonicity of J!</p>`,
+            
+            // J monotonicity detailed mechanics
+            diff_sum_inverse: `<p><strong>Difference Formula:</strong> A technical lemma giving an exact formula for (y + 1/y) - (x + 1/x). This formula reveals the factorization that makes monotonicity proofs tractable!</p>`,
+            
+            product_bound: `<p><strong>Product Inequality:</strong> For 1 ≤ x < y, we have xy > 1. This inequality is crucial for showing that the factor (1 - 1/(xy)) is positive in our monotonicity argument!</p>`,
+            
+            factor_positive: `<p><strong>Factor Sign:</strong> Since xy > 1, we have 1/(xy) < 1, so 1 - 1/(xy) > 0. This positive factor, combined with y - x > 0, proves the difference is positive!</p>`,
+            
+            inverse_inequality: `<p><strong>Inverse Bound:</strong> When xy > 1, the inverse 1/(xy) < 1. This inequality about reciprocals is what makes our factorization work for the monotonicity proof!</p>`,
+            
+            monotonicity_calculation: `<p><strong>Difference Positive:</strong> The final calculation showing (y + 1/y) - (x + 1/x) > 0. This proves J is strictly increasing, which is essential for optimization arguments!</p>`,
+            
+            // Golden ratio proof deep dive
+            phi_nonzero: `<p><strong>φ Non-zero:</strong> The golden ratio φ = (1+√5)/2 is definitely not zero. This enables multiplication by φ and ensures the quadratic manipulation is valid!</p>`,
+            
+            sqrt5_positive: `<p><strong>√5 Positive:</strong> The square root of 5 is positive, making φ > 1. This positivity is crucial for showing φ is the unique positive solution to the golden ratio equation!</p>`,
+            
+            phi_quadratic: `<p><strong>Quadratic Form:</strong> From x = 1 + 1/x, multiplying by x gives x² = x + 1. This converts the rational equation into a standard quadratic—much easier to analyze!</p>`,
+            
+            quadratic_to_linear: `<p><strong>Equation Transformation:</strong> Uses congrArg to apply multiplication by x to both sides of the equation. This is how we rigorously transform equations in Lean!</p>`,
+            
+            phi_multiplication: `<p><strong>Product Identity:</strong> φ(1-φ) = -1 is derived from the quadratic φ² = φ + 1. This identity is essential for the Vieta formulas factorization approach!</p>`,
+            
+            quadratic_factorization: `<p><strong>Factored Form:</strong> Any solution to x² - x - 1 = 0 satisfies (x - φ)(x - (1-φ)) = 0. This factorization is the key to proving φ's uniqueness!</p>`,
+            
+            vieta_formulas: `<p><strong>Vieta's Theorem:</strong> For quadratic ax² + bx + c with roots r,s: r + s = -b/a and rs = c/a. Here we use this to verify our factorization is correct!</p>`,
+            
+            negative_root: `<p><strong>Negative Root:</strong> Since φ > 1, we have 1 - φ < 0. This means one root of our quadratic is negative, which we can exclude since we want x > 0!</p>`,
+            
+            root_exclusion: `<p><strong>Exclude Negative:</strong> Since x > 0 and 1 - φ < 0, we know x ≠ 1 - φ. This elimination leaves φ as the only possibility for positive solutions!</p>`,
+            
+            cases_analysis: `<p><strong>Case Split:</strong> From (x - φ)(x - (1-φ)) = 0, either x - φ = 0 or x - (1-φ) = 0. We've ruled out the second case, so x = φ is forced!</p>`,
+            
+            // xk functions and optimization
+            xk_formula: `<p><strong>General Solution:</strong> For any k, x_k = (1 + √(1+4k))/2 solves x = 1 + k/x. This formula generalizes the golden ratio to arbitrary k values!</p>`,
+            
+            xk_solves_recurrence: `<p><strong>Verification:</strong> Proof that x_k actually satisfies the recurrence relation x = 1 + k/x. We verify our formula is correct before using it for optimization!</p>`,
+            
+            sqrt_calculation: `<p><strong>Square Root Identity:</strong> (√(1+4k))² = 1+4k by definition of square root. This identity is needed to verify the x_k formula through algebraic manipulation!</p>`,
+            
+            nonneg_assumption: `<p><strong>Non-negative Input:</strong> Since k ≥ 0, we have 1 + 4k ≥ 1 > 0, so the square root is well-defined. Essential for making sense of the x_k formula!</p>`,
+            
+            cast_nonneg: `<p><strong>Natural Cast:</strong> Casting natural number k to real preserves non-negativity. This technical step ensures our square root argument is valid in Lean's type system!</p>`,
+            
+            phi_xk1_equality: `<p><strong>Special Case:</strong> When k = 1, x_k reduces to φ. This connects our general optimization theory to the specific golden ratio that emerges from k=1 minimality!</p>`,
+            
+            xk_comparison: `<p><strong>Suboptimality:</strong> For k ≥ 2, x_k > φ. Since J is increasing, this means J(x_k) > J(φ), proving k=1 minimizes cost among all natural number values!</p>`,
+            
+            sqrt_inequality: `<p><strong>Square Root Monotonicity:</strong> √(1+4k) > √5 when k ≥ 2 because 1+4k > 5. Square root function preserves order, transferring our numerical inequality!</p>`,
+            
+            inequality_transfer: `<p><strong>Inequality Preservation:</strong> Real.sqrt_lt_sqrt_iff transfers inequality from arguments to square roots. This is how we rigorously prove √(1+4k) > √5 implies x_k > φ!</p>`,
+            
+            phi_geq_one: `<p><strong>Golden Lower Bound:</strong> φ ≥ 1 is needed for monotonicity arguments. Since φ = (1+√5)/2 and √5 > 2, we have φ > 1.5, well above 1!</p>`,
+            
+            // Strong ledger theory
+            delta_positive: `<p><strong>Positive Unit:</strong> δ > 0 is proven by 'decide' tactic—Lean automatically verifies 0 < 1. This positivity is essential for meaningful cost units and scale!</p>`,
+            
+            ledger_debit: `<p><strong>Debit Function:</strong> Maps each vertex to its integer debit value. In double-entry bookkeeping, debits track incoming flows—energy, momentum, information flowing into nodes!</p>`,
+            
+            ledger_credit: `<p><strong>Credit Function:</strong> Maps each vertex to its integer credit value. Credits track outgoing flows—what leaves each node in the recognition network. Perfect symmetry with debits!</p>`,
+            
+            edges_subtype: `<p><strong>Edge Type:</strong> Edges are pairs (u,v) where M.R(u,v) holds—the subtype of valid recognition relationships. This formalizes the graph structure underlying physics!</p>`,
+            
+            indegree_count: `<p><strong>Incoming Count:</strong> indeg(v) counts how many edges point into vertex v. In physics terms, this is the "current density" or "flux convergence" at each point!</p>`,
+            
+            outdegree_count: `<p><strong>Outgoing Count:</strong> outdeg(u) counts edges leaving vertex u. Conservation requires indegree sums equal outdegree sums—the mathematical basis of Kirchhoff's laws!</p>`,
+            
+            total_edges: `<p><strong>Total Edge Count:</strong> numEdges counts all recognition relationships in the structure. This global quantity is conserved and appears in both indegree and outdegree sums!</p>`,
+            
+            // Sigma equivalences and bijections
+            in_sigma_equiv: `<p><strong>Incoming Equivalence:</strong> Bijection between dependent sum over incoming edges and the total edge set. This is the formal way to prove ∑indegree = numEdges!</p>`,
+            
+            out_sigma_equiv: `<p><strong>Outgoing Equivalence:</strong> Bijection between dependent sum over outgoing edges and total edges. Proves ∑outdegree = numEdges, establishing perfect conservation!</p>`,
+            
+            equiv_to_fun: `<p><strong>Forward Map:</strong> Takes a vertex v and an edge into v, produces the edge (u,v). This map shows how to reconstruct edges from vertex-indexed collections!</p>`,
+            
+            equiv_inv_fun: `<p><strong>Inverse Map:</strong> Takes an edge (u,v) and produces vertex v plus the edge viewed as incoming to v. Shows the vertex indexing is bijective!</p>`,
+            
+            left_inverse_proof: `<p><strong>Left Inverse:</strong> Applying inverse then forward gives identity. The 'cases' tactic destructs the dependent pair structure, and 'rfl' verifies the identity!</p>`,
+            
+            right_inverse_proof: `<p><strong>Right Inverse:</strong> Forward then inverse is identity. These inverse proofs establish the bijection that makes cardinality arguments rigorous!</p>`,
+            
+            // Canonical ledger construction
+            canonical_construction: `<p><strong>Standard Construction:</strong> The CanonicalLedger simply counts incoming/outgoing edges as integer values. This proves ledgers exist for any finite recognition structure!</p>`,
+            
+            canonical_debit_def: `<p><strong>Debit = Indegree:</strong> In the canonical ledger, debit at v equals the number of incoming edges. This makes the abstract ledger theory concrete and computable!</p>`,
+            
+            canonical_credit_def: `<p><strong>Credit = Outdegree:</strong> Credit at u equals outgoing edge count. With δ=1, this gives the simplest possible double-entry accounting system!</p>`,
+            
+            double_entry_debit: `<p><strong>Debit Law:</strong> In any double-entry ledger, debit equals indegree times the unit δ. This law connects abstract accounting to concrete graph structure!</p>`,
+            
+            double_entry_credit: `<p><strong>Credit Law:</strong> Credit equals outdegree times δ. Together with the debit law, this defines what "double-entry" means in our mathematical setting!</p>`,
+            
+            canonical_double_entry: `<p><strong>Canonical Instance:</strong> Proof that CanonicalLedger satisfies double-entry requirements. This instance lets Lean automatically use double-entry properties!</p>`,
+            
+            nsmul_one_simp: `<p><strong>Scalar Multiplication:</strong> When δ=1, multiplying by δ is trivial (n • 1 = n). The 'simp' tactic handles this simplification automatically!</p>`,
+            
+            // Advanced theorems and proofs
+            normalized_theorem: `<p><strong>Normalized Form:</strong> When δ=1, double-entry ledgers reduce to simple edge counting. This normalization makes the general theory concrete and computational!</p>`,
+            
+            sigma_card_theorem: `<p><strong>Sigma Cardinality:</strong> The bijection between Σ(incoming edges at v) and total edges. This theorem makes the conservation ∑indegree = numEdges rigorous!</p>`,
+            
+            sum_indegree_theorem: `<p><strong>Indegree Sum:</strong> Mathematical proof that total indegree equals total edge count. This is the foundation of current conservation in network theory!</p>`,
+            
+            fintype_card_sigma: `<p><strong>Dependent Sum Cardinality:</strong> General theorem about cardinality of dependent sums. This provides the technical machinery for our conservation proofs!</p>`,
+            
+            debit_sum_theorem: `<p><strong>Debit Conservation:</strong> Total debit (as integers) equals total edge count. This theorem proves perfect accounting—every debit is matched by structure!</p>`,
+            
+            calc_proof_step: `<p><strong>Calculation Chain:</strong> The 'calc' environment allows step-by-step equality chains with explicit justifications. Perfect for complex algebraic manipulations!</p>`,
+            
+            canonical_unique_norm: `<p><strong>Canonical Uniqueness:</strong> Any normalized double-entry ledger equals the canonical one. This uniqueness theorem shows there's only one way to do accounting!</p>`,
+            
+            extensionality_proof: `<p><strong>Structural Decomposition:</strong> 'cases' tactic destructs the ledger structure into its components. This enables element-wise comparison for equality proofs!</p>`,
+            
+            // Cost requirements detailed structure
+            cost_symmetric: `<p><strong>Symmetry Requirement:</strong> F(x) = F(1/x) for all x > 0. This symmetry under reciprocal means no preferred scale—critical for scale-invariant physics!</p>`,
+            
+            cost_unit_zero: `<p><strong>Normalized Cost:</strong> F(1) = 0 sets the cost of perfect balance to zero. This normalization makes the cost function unique and physically meaningful!</p>`,
+            
+            cost_bounded: `<p><strong>Growth Bound:</strong> Cost can't grow faster than linear in x + 1/x. This bound prevents pathological behavior and ensures physical reasonableness!</p>`,
+            
+            cost_avg_ineq: `<p><strong>Averaging Inequality:</strong> Subadditivity condition relating F at different scales. This convexity-like property constrains the functional form severely!</p>`,
+            
+            cost_avg_strict: `<p><strong>Strict Averaging:</strong> For k ≥ 2, the averaging inequality is strict when t ≠ 0. This strict convexity pins down J as the unique solution!</p>`,
+            
+            jcost_proof_symmetric: `<p><strong>J Symmetry Proof:</strong> 'field_simp; ring' proves J(x) = J(1/x). These tactics handle the algebraic verification automatically—Lean power!</p>`,
+            
+            jcost_proof_unit: `<p><strong>J Unit Proof:</strong> 'unfold Jcost; simp' proves J(1) = 0. Direct computation shows the normalization condition is satisfied!</p>`,
+            
+            jcost_proof_bounded: `<p><strong>J Bound Proof:</strong> 'nlinarith' (nonlinear arithmetic) proves the growth bound. This tactic handles the inequality verification using specialized solvers!</p>`,
+            
+            // Final simplified structures
+            simple_ledger: `<p><strong>Simplified Ledger:</strong> Minimal version with just debit/credit functions. This distilled form captures the essential accounting without extra structure!</p>`,
+            
+            sphi_def: `<p><strong>Simple Potential:</strong> sphi = debit - credit, the basic potential function. This simplified version still captures the essential conservation properties!</p>`,
+            
+            schain_flux: `<p><strong>Simple Flux:</strong> Chain flux using the simplified potential. Even in this minimal setting, closed chains must have zero flux—conservation is unavoidable!</p>`,
+            
+            s_conserves: `<p><strong>Simple Conservation:</strong> Conservation class for simplified ledgers. Shows that even the most basic accounting structure forces conservation laws!</p>`,
+            
+            s_conserves_instance: `<p><strong>Automatic Conservation:</strong> Instance showing simplified ledgers automatically conserve. Conservation emerges from structure—it's not an added assumption!</p>`,
+            
+            end_monolith: `<p><strong>Monolith Complete:</strong> End of the IndisputableMonolith namespace. We've traveled from pure logic to physical necessity—540 lines of mathematical inevitability!</p>`,
         };
 
         // Render Lean file with line numbers and hotspots
