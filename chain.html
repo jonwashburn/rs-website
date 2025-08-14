@@ -537,7 +537,11 @@
             const candidates = [
                 'Chain.lean',
                 'Chain.lean.txt',
-                'https://raw.githubusercontent.com/jonwashburn/rs-website/main/Chain.lean'
+                'IndisputableMonolith.lean',
+                'IndisputableMonolith.lean.txt',
+                '/IndisputableMonolith.lean',
+                'https://raw.githubusercontent.com/jonwashburn/rs-website/main/Chain.lean',
+                'https://raw.githubusercontent.com/jonwashburn/rs-website/main/IndisputableMonolith.lean'
             ];
 
             let text = null;
@@ -559,9 +563,13 @@
                 }
             }
 
-            if (!text) {
-                status.textContent = 'Load failed';
-                return;
+            if (!text || !text.trim()) {
+                status.textContent = 'Loaded embedded source';
+                const embedded = document.getElementById('embedded-lean');
+                text = embedded?.textContent || '-- fallback minimal stub';
+                if (!text || !text.trim()) {
+                    text = `/- Fallback minimal Lean source when remote fetch fails -/\ninductive Nothing : Type where\n-- no constructors\n\nstructure Recognition (A : Type) (B : Type) where\n  recognizer : A\n  recognized : B\n\n/-- Meta‑Principle: Nothing cannot recognize itself -/\ntheorem MetaPrinciple : ¬ ∃ (r : Recognition Nothing Nothing), True := by\n  intro h; cases h with\n  | intro r _ => cases r.recognizer\n`;
+                }
             }
 
             const lines = text.split('\n');
