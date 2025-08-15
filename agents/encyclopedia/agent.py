@@ -197,6 +197,7 @@ def write_page(out_dir: Path, slug: str, html_body: str) -> None:
 	<title>{slug}</title>
 	<link rel=\"stylesheet\" href=\"/assets/css/main.css\" />
 	<link rel=\"stylesheet\" href=\"/assets/css/site-template.css\" />
+	<link rel=\"stylesheet\" href=\"/assets/css/encyclopedia.css\" />
 	<link rel=\"stylesheet\" href=\"/style.css\" />
 </head>
 <body class=\"template-page\">
