@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://polyfill.io; style-src 'self' 'unsafe-inline';">
+	<title>recognition-entropy</title>
+	<link rel="stylesheet" href="/assets/css/main.css" />
+	<link rel="stylesheet" href="/assets/css/site-template.css" />
+	<link rel="stylesheet" href="/assets/css/encyclopedia.css" />
+	<link rel="stylesheet" href="/style.css" />
+	
+	<!-- MathJax Configuration -->
+	<script>
+	window.MathJax = {
+		tex: {
+			inlineMath: [['\\(', '\\)']],
+			displayMath: [['\\[', '\\]']],
+			processEscapes: true
+		},
+		options: {
+			skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+		}
+	};
+	</script>
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+	<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+	<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		// Process math-note elements before MathJax runs
+		document.querySelectorAll('math-note').forEach(function(note) {
+			const content = note.textContent.trim();
+			if (!content.startsWith('\\(') && !content.startsWith('\\[')) {
+				note.innerHTML = '\\(' + content + '\\)';
+			}
+		});
+		// Trigger MathJax after wrapping
+		if (window.MathJax && window.MathJax.typesetPromise) {
+			window.MathJax.typesetPromise();
+		}
+	});
+	</script>
+</head>
+<body class="template-page">
+	<div id="header-placeholder"></div>
+<section class="template-section encyclopedia-entry"><div class="template-container"><nav class="enc-breadcrumbs"><a href="/index.html">Home</a><span class="sep">/</span><a href="/encyclopedia/index.html">Encyclopedia</a><span class="sep">/</span><a href="/encyclopedia/index.html#cat-fundamentals">Recognition Physics Fundamentals</a></nav><div class="encyclopedia-hero"><p class="template-hero-badge">ENCYCLOPEDIA ENTRY</p><h1>Recognition <span class="template-accent-text">Entropy</span></h1><p class="lead-text">Information-theoretic measure of recognition state uncertainty.</p><div class="meta-badges"><span class="category-badge">Recognition Physics Fundamentals</span><span class="difficulty-badge">Advanced</span><span class="tags">entropy, information, disorder</span></div></div><figure class="concept-visual"><img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/Lorenz_attractor_trajectory.png" alt="Recognition Entropy conceptual visualization" loading="lazy" decoding="async" /><figcaption>Complex patterns emerge from simple recognition rules • <span class="figure-credit">Wikimedia Commons</span> • <span class="figure-license">Public Domain</span></figcaption></figure><div class="template-reading"><section>
+    
+    <p><strong>Category:</strong> Recognition Physics Fundamentals</p>
+    <p><strong>Difficulty:</strong> Advanced</p>
+    <p><strong>Tags:</strong> entropy, information, disorder</p>
+    <p><strong>Summary:</strong> Information-theoretic measure of recognition state uncertainty.</p>
+
+    <h2>Essence</h2>
+    <p>Recognition entropy quantifies the uncertainty associated with the recognition states within a system. It serves as a measure of disorder, reflecting how much information is needed to describe the state of a recognition structure.</p>
+
+    <h2>Definition</h2>
+    <math-note>H = -\sum p_i \log p_i</math-note>
+    <p>In this context, \(H\) represents the recognition entropy, and \(p_i\) denotes the probability of each recognition state. The entropy increases with the number of possible states and their probabilities becoming more uniform.</p>
+
+    <h2>In Plain English</h2>
+    <p>Imagine a box filled with different colored balls. If all the balls are red, you have low uncertainty about the color you will pick. But if the box contains an equal mix of red, blue, and green balls, your uncertainty increases. Recognition entropy works similarly; it measures how uncertain we are about the state of a system based on the variety and distribution of its recognition states.</p>
+
+    <h2>Why It Matters</h2>
+    <p>Understanding recognition entropy is crucial in Recognition Science because it helps us quantify the complexity of systems. Higher entropy indicates a more complex system, where more information is required to describe it accurately. This has implications for everything from information theory to cosmology, where the distribution of matter and energy can be analyzed through the lens of entropy.</p>
+
+    <h2>How It Works</h2><figure class="concept-visual"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Feynman_Diagram_Gluon_Radiation.svg" alt="Feynman diagram showing particle interactions" loading="lazy" decoding="async" /><figcaption>Recognition events create observable particle interactions • <span class="figure-credit">JabberWok</span> • <span class="figure-license">CC BY-SA 3.0</span></figcaption></figure>
+    <p>Recognition entropy is derived from the probabilities of different recognition states. As the number of states increases or as the distribution of probabilities becomes more uniform, the entropy rises. This relationship indicates that systems with more possible configurations or states are inherently more complex and uncertain.</p>
+
+    <h2>Key Properties</h2>
+    <ul>
+        <li><strong>Non-negativity:</strong> Entropy is always zero or positive; it is zero only when there is complete certainty (one state).</li>
+        <li><strong>Extensivity:</strong> The total entropy of a system composed of independent subsystems is the sum of their entropies.</li>
+        <li><strong>Maximal Disorder:</strong> Entropy reaches its maximum when all states are equally probable.</li>
+    </ul>
+
+    <h2>Mathematical Foundation</h2>
+    <div class="math-note">
+        <p>H = -\sum p_i \log p_i</p>
+        <p>Where \(p_i\) is the probability of state \(i\).</p>
+    </div>
+
+    <h2>Connections</h2>
+    <p>Recognition entropy is closely related to concepts in <a href="/encyclopedia/information-theory.html">information theory</a>, particularly in how it quantifies uncertainty and information content. It also connects to the <a href="/encyclopedia/dual-balance.html">dual-balance</a> principle, as the balance of recognition states influences the overall entropy of a system.</p>
+
+    <h2>Testable Predictions</h2>
+    <p>One can predict that systems with higher recognition entropy will exhibit greater complexity in their behavior and interactions. For instance, in a cosmological context, regions of space with higher entropy may correlate with more dynamic structures, such as galaxies or clusters of galaxies.</p>
+
+    <h2>Common Misconceptions</h2>
+    <p>A common misconception is that entropy is merely a measure of disorder. While it does reflect disorder, it is more accurately a measure of uncertainty regarding the state of a system. Additionally, higher entropy does not imply chaos; rather, it indicates a greater number of possible configurations.</p>
+
+    <h2>FAQs</h2>
+    <h3>What is the significance of recognition entropy in practical applications?</h3>
+    <p>Recognition entropy can be applied in various fields, including data compression, cryptography, and understanding complex systems in physics and biology.</p>
+
+    <h3>How does recognition entropy relate to thermodynamic entropy?</h3>
+    <p>While both concepts deal with uncertainty and disorder, recognition entropy focuses on the probabilities of recognition states in a system, whereas thermodynamic entropy relates to the microscopic configurations of particles in a thermodynamic system.</p>
+
+    <h2>Related Topics</h2>
+    <ul>
+        <li><a href="/encyclopedia/information-theory.html">Information Theory</a></li>
+        <li><a href="/encyclopedia/dual-balance.html">Dual-Balance</a></li>
+        <li><a href="/encyclopedia/voxel-grid.html">Voxel Grid</a></li>
+    </ul>
+
+    <h2>Further Reading</h2>
+    <p>For a deeper understanding of recognition entropy and its implications, consider exploring the following resources:</p>
+    <ul>
+        <li>Shannon, C. E. (1948). "A Mathematical Theory of Communication."</li>
+        <li>Cover, T. M., & Thomas, J. A. (2006). "Elements of Information Theory."</li>
+    </ul>
+</section></div></div></section>
+	<div id="footer-placeholder"></div>
+	<script src="/assets/js/main.js"></script>
+</body>
+</html>
