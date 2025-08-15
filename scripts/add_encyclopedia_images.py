@@ -4,9 +4,24 @@ import sys
 from pathlib import Path
 
 
+def build_img_tag(src: str, alt: str, fallback1: str = "", fallback2: str = "") -> str:
+    onerror = ""
+    if fallback1 or fallback2:
+        if fallback1 and fallback2:
+            onerror = (
+                "this.onerror=function(){this.onerror=null;this.src='" + fallback2 + "';};"
+                "this.src='" + fallback1 + "';"
+            )
+        elif fallback1:
+            onerror = "this.onerror=null;this.src='" + fallback1 + "';"
+    onerr_attr = (" onerror=\"" + onerror + "\"") if onerror else ""
+    return (
+        '<img src="' + src + '" alt="' + alt + '" loading="lazy" decoding="async"' + onerr_attr + ' />'
+    )
+
 FIGURE_TEMPLATE = (
     '<figure class="concept-visual">'
-    '<img src="{src}" alt="{alt}" loading="lazy" decoding="async" />'
+    '{img_tag}'
     '{cap_html}'
     '</figure>'
 )
@@ -82,7 +97,10 @@ def main():
                 credit = imeta.get("credit", "")
                 license_str = imeta.get("license", "")
                 cap_html = build_caption(caption, credit, license_str)
-                figure_html = FIGURE_TEMPLATE.format(src=src, alt=alt, cap_html=cap_html)
+                fallback1 = imeta.get("fallback_src", "")
+                fallback2 = imeta.get("fallback2_src", "")
+                img_tag = build_img_tag(src, alt, fallback1, fallback2)
+                figure_html = FIGURE_TEMPLATE.format(img_tag=img_tag, cap_html=cap_html)
                 placement = (imeta.get("placement") or "after_heading").lower()
                 if placement == "hero":
                     new_html = insert_hero_figure(html, figure_html)
