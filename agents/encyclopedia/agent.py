@@ -28,6 +28,23 @@ def read_text(path: str) -> str:
 		return f.read()
 
 
+def strip_latex(src: str) -> str:
+	"""Minimal LaTeX→text cleaning to improve retrieval while keeping content."""
+	import re
+	s = src
+	# remove comments
+	s = re.sub(r"%.*", "", s)
+	# drop \begin{...}/\end{...} markers
+	s = re.sub(r"\\begin\{.*?\}|\\end\{.*?\}", " ", s)
+	# remove common preamble commands
+	s = re.sub(r"\\(documentclass|usepackage|title|author|date|maketitle)[^\n]*", " ", s)
+	# braces
+	s = re.sub(r"[{}]", "", s)
+	# collapse whitespace
+	s = re.sub(r"\s+", " ", s)
+	return s.strip()
+
+
 def chunk_text(text: str, chunk_size: int, overlap: int) -> List[str]:
 	words = text.split()
 	chunks = []
@@ -57,7 +74,17 @@ def ensure_index(cfg: Dict[str, Any], force: bool = False) -> Dict[str, Any]:
 
 	assert OpenAI is not None, "openai library not available"
 	client = OpenAI()
-	text = read_text(cfg["theory_path"])
+	# Load one or multiple theory paths
+	paths = cfg.get("theory_paths") or [cfg.get("theory_path")]
+	texts: List[str] = []
+	for p in paths:
+		if not p:
+			continue
+		raw = read_text(p)
+		if p.lower().endswith((".tex", ".ltx")):
+			raw = strip_latex(raw)
+		texts.append(raw)
+	text = "\n\n".join(texts)
 	chunks = chunk_text(text, cfg.get("chunk_size", 1400), cfg.get("chunk_overlap", 200))
 	embs = embed_texts(client, cfg["embedding_model"], chunks)
 	index = {"model": cfg["embedding_model"], "chunks": chunks, "embeddings": embs}
