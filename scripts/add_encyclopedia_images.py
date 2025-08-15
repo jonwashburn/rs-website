@@ -12,15 +12,13 @@ FIGURE_TEMPLATE = (
 )
 
 
-def build_caption(caption: str, credit: str) -> str:
-    if not caption and not credit:
+def build_caption(caption: str, credit: str, license_str: str) -> str:
+    if not caption and not credit and not license_str:
         return ""
     credit_html = f'<span class="figure-credit">{credit}</span>' if credit else ""
-    if caption:
-        if credit_html:
-            return f"<figcaption>{caption} • {credit_html}</figcaption>"
-        return f"<figcaption>{caption}</figcaption>"
-    return f"<figcaption>{credit_html}</figcaption>"
+    license_html = f'<span class="figure-license">{license_str}</span>' if license_str else ""
+    parts = [part for part in [caption, credit_html, license_html] if part]
+    return f"<figcaption>{' • '.join(parts)}</figcaption>"
 
 
 def insert_hero_figure(html: str, figure_html: str) -> str:
@@ -32,6 +30,17 @@ def insert_hero_figure(html: str, figure_html: str) -> str:
     if idx == -1:
         return html  # unexpected shape; don't modify
     return html[:idx] + figure_html + html[idx:]
+
+
+def insert_after_heading(html: str, heading_text: str, figure_html: str) -> str:
+    import re
+    # Insert figure immediately after the first matching <h2>Heading</h2>
+    pattern = re.compile(rf"(<h2[^>]*>\s*{re.escape(heading_text)}\s*</h2>)", re.IGNORECASE)
+    m = pattern.search(html)
+    if not m:
+        return html
+    insert_at = m.end()
+    return html[:insert_at] + figure_html + html[insert_at:]
 
 
 def main():
@@ -56,21 +65,43 @@ def main():
             print(f"Skip missing page: {slug}")
             continue
         try:
-            src = meta.get("src") or f"/assets/images/encyclopedia/{slug}.svg"
-            alt = meta.get("alt") or slug.replace("-", " ").title()
-            caption = meta.get("caption", "")
-            credit = meta.get("credit", "")
-            cap_html = build_caption(caption, credit)
-            figure_html = FIGURE_TEMPLATE.format(src=src, alt=alt, cap_html=cap_html)
-
             html = page_path.read_text(encoding="utf-8")
-            new_html = insert_hero_figure(html, figure_html)
-            if new_html != html:
-                page_path.write_text(new_html, encoding="utf-8")
+
+            # Support two formats: single image object, or {"images": [...]}
+            images = []
+            if isinstance(meta, dict) and "images" in meta and isinstance(meta["images"], list):
+                images = meta["images"]
+            else:
+                images = [meta]
+
+            changed = False
+            for imeta in images:
+                src = imeta.get("src") or f"/assets/images/encyclopedia/{slug}.svg"
+                alt = imeta.get("alt") or slug.replace("-", " ").title()
+                caption = imeta.get("caption", "")
+                credit = imeta.get("credit", "")
+                license_str = imeta.get("license", "")
+                cap_html = build_caption(caption, credit, license_str)
+                figure_html = FIGURE_TEMPLATE.format(src=src, alt=alt, cap_html=cap_html)
+                placement = (imeta.get("placement") or "after_heading").lower()
+                if placement == "hero":
+                    new_html = insert_hero_figure(html, figure_html)
+                elif placement == "after_heading":
+                    heading = imeta.get("heading") or "How It Works"
+                    new_html = insert_after_heading(html, heading, figure_html)
+                else:
+                    # default to after_heading How It Works
+                    new_html = insert_after_heading(html, "How It Works", figure_html)
+                if new_html != html:
+                    html = new_html
+                    changed = True
+
+            if changed:
+                page_path.write_text(html, encoding="utf-8")
                 updated += 1
                 print(f"Updated: {slug}")
             else:
-                print(f"No change (already has figure): {slug}")
+                print(f"No changes for: {slug}")
         except Exception as e:
             print(f"Error updating {slug}: {e}")
 
