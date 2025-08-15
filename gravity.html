@@ -506,37 +506,46 @@
       const featuredAudio = document.getElementById('featuredAudio');
       const featuredPlay = document.getElementById('featuredPlay');
       const featuredPause = document.getElementById('featuredPause');
-      const featuredBtnText = featuredAudioBtn.querySelector('.btn-text');
-
+      
       let isFeaturedPlaying = false;
 
-      if (featuredAudioBtn) {
+      if (featuredAudioBtn && featuredAudio) {
+        const featuredBtnText = featuredAudioBtn.querySelector('.btn-text');
+        
         featuredAudioBtn.addEventListener('click', function() {
           if (isFeaturedPlaying) {
             featuredAudio.pause();
-            featuredPlay.style.display = 'block';
-            featuredPause.style.display = 'none';
+            if (featuredPlay) featuredPlay.style.display = 'block';
+            if (featuredPause) featuredPause.style.display = 'none';
             featuredAudioBtn.setAttribute('aria-pressed', 'false');
-            featuredBtnText.textContent = 'Listen Now';
+            if (featuredBtnText) featuredBtnText.textContent = 'Listen Now';
+            isFeaturedPlaying = false;
           } else {
             featuredAudio.play().then(() => {
-              featuredPlay.style.display = 'none';
-              featuredPause.style.display = 'block';
+              if (featuredPlay) featuredPlay.style.display = 'none';
+              if (featuredPause) featuredPause.style.display = 'block';
               featuredAudioBtn.setAttribute('aria-pressed', 'true');
-              featuredBtnText.textContent = 'Pause';
+              if (featuredBtnText) featuredBtnText.textContent = 'Pause';
+              isFeaturedPlaying = true;
             }).catch(err => {
               console.error('Audio playback failed:', err);
+              alert('Unable to play audio. The file may be missing or your browser may be blocking autoplay.');
+              isFeaturedPlaying = false;
             });
           }
-          isFeaturedPlaying = !isFeaturedPlaying;
         });
 
         featuredAudio.addEventListener('ended', function() {
-          featuredPlay.style.display = 'block';
-          featuredPause.style.display = 'none';
+          if (featuredPlay) featuredPlay.style.display = 'block';
+          if (featuredPause) featuredPause.style.display = 'none';
           featuredAudioBtn.setAttribute('aria-pressed', 'false');
-          featuredBtnText.textContent = 'Listen Now';
+          if (featuredBtnText) featuredBtnText.textContent = 'Listen Now';
           isFeaturedPlaying = false;
+        });
+      } else {
+        console.error('Audio elements not found:', {
+          btn: !!featuredAudioBtn,
+          audio: !!featuredAudio
         });
       }
     });
