@@ -83,8 +83,36 @@ def slugify(title: str) -> str:
 	return title.lower().replace(" ", "-").replace("/", "-")
 
 
+# Stable anchors for encyclopedia categories (used by breadcrumbs)
+CATEGORY_ANCHORS: Dict[str, str] = {
+	"Recognition Physics Fundamentals": "fundamentals",
+	"Fundamental Constants": "constants",
+	"Quantum & Particle Physics": "quantum",
+	"Spacetime & Gravity": "spacetime-gravity",
+	"Thermodynamics & Statistical": "thermo-stat",
+	"Cosmology & Astrophysics": "cosmology",
+	"Chemistry & Materials": "chemistry-materials",
+	"Biology & Consciousness": "biology-consciousness",
+	"Mathematics & Computation": "math-computation",
+	"Advanced Physics & Technology": "advanced-tech",
+}
+
+
+def load_crosslinks() -> Dict[str, Any]:
+	"""Load cross-link map with aliases if available."""
+	try:
+		p = Path(__file__).parent / "crosslinks.json"
+		if p.exists():
+			with open(p, "r", encoding="utf-8") as f:
+				return json.load(f)
+	except Exception:
+		pass
+	return {}
+
+
 def build_prompt(system_prompt: str, template_md: str, task: Dict[str, Any], contexts: List[Dict[str, Any]]) -> List[Dict[str, str]]:
 	ctx = "\n\n".join([c["text"] for c in contexts])
+	xlinks = load_crosslinks()
 	user = f"""
 Generate a complete encyclopedia HTML page following the house classes and section order.
 Title: {task.get('title')}
@@ -97,6 +125,14 @@ Use only the following theory context and your prior RS style rules:
 ---
 {ctx}
 ---
+
+Cross-linking rules (strict):
+- Use the cross-link map below. On first natural mention of any key or alias, wrap that phrase in an <a> to the mapped URL. Do not over-link; one link per concept per section is enough.
+- If a concept is not in the map, link to /encyclopedia/{{slugified-title}} when it obviously corresponds to an existing page.
+- Maintain clean HTML; no markdown. Example: <a href="/encyclopedia/the-ledger.html">the ledger</a>.
+
+Cross-link map (aliases allowed):
+{json.dumps(xlinks)[:4000]}
 
 Output only the body content for the encyclopedia section, without markdown code fences.
 """.strip()
@@ -138,6 +174,18 @@ def sanitize_and_wrap(html_body: str, task: Dict[str, Any]) -> str:
 	else:
 		h1_formatted = h1_content
 	
+	# Build breadcrumbs (Home / Encyclopedia / Category)
+	cat = task.get("category", "")
+	cat_anchor = CATEGORY_ANCHORS.get(cat, cat.lower().replace(" ", "-").replace("/", "-"))
+	breadcrumbs = (
+		'<nav class="enc-breadcrumbs">'
+		'<a href="/index.html">Home</a>'
+		'<span class="sep">/</span>'
+		'<a href="/encyclopedia/index.html">Encyclopedia</a>'
+		+ (f'<span class="sep">/</span><a href="/encyclopedia/index.html#cat-{cat_anchor}">{cat}</a>' if cat else '')
+		+ '</nav>'
+	)
+
 	# Build hero box with framed design (matching academic.html)
 	hero_box = (
 		f'<div class="encyclopedia-hero">'
@@ -155,7 +203,7 @@ def sanitize_and_wrap(html_body: str, task: Dict[str, Any]) -> str:
 	wrapped = (
 		'<section class="template-section encyclopedia-entry">'
 		'<div class="template-container">'
-		+ hero_box +
+		+ breadcrumbs + hero_box +
 		'<div class="template-reading">'
 		+ body +
 		'</div></div></section>'
