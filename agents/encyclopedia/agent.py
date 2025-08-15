@@ -110,9 +110,34 @@ def load_crosslinks() -> Dict[str, Any]:
 	return {}
 
 
+def load_rs_facts() -> Dict[str, Any]:
+	try:
+		p = Path(__file__).parent / "rs_facts.json"
+		if p.exists():
+			with open(p, "r", encoding="utf-8") as f:
+				return json.load(f)
+	except Exception:
+		pass
+	return {}
+
+
+def load_policy_for(category: str) -> Dict[str, Any]:
+	try:
+		p = Path(__file__).parent / "policies" / "cosmology.json"
+		if category.startswith("Cosmology") and p.exists():
+			with open(p, "r", encoding="utf-8") as f:
+				return json.load(f)
+	except Exception:
+		pass
+	return {}
+
+
+
 def build_prompt(system_prompt: str, template_md: str, task: Dict[str, Any], contexts: List[Dict[str, Any]]) -> List[Dict[str, str]]:
 	ctx = "\n\n".join([c["text"] for c in contexts])
 	xlinks = load_crosslinks()
+	rsfacts = load_rs_facts()
+	policy = load_policy_for(task.get("category", ""))
 	user = f"""
 Generate a complete encyclopedia HTML page following the house classes and section order.
 Title: {task.get('title')}
@@ -133,6 +158,12 @@ Cross-linking rules (strict):
 
 Cross-link map (aliases allowed):
 {json.dumps(xlinks)[:4000]}
+
+Canonical RS facts (cite precisely where relevant):
+{json.dumps(rsfacts)[:2000]}
+
+Category policy (must satisfy):
+{json.dumps(policy)[:2000]}
 
 Output only the body content for the encyclopedia section, without markdown code fences.
 """.strip()
