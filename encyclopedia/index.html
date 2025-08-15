@@ -1,502 +1,491 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Encyclopedia - Recognition Physics</title>
-    <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="stylesheet" href="/assets/css/site-template.css">
-    <meta name="description" content="Core concepts, constants, and theorems of Recognition Physics explained with clarity and precision.">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://polyfill.io; style-src 'self' 'unsafe-inline';">
+    <title>Recognition Science Encyclopedia</title>
+    <link rel="stylesheet" href="/assets/css/main.css" />
+    <link rel="stylesheet" href="/assets/css/site-template.css" />
+    <link rel="stylesheet" href="/assets/css/encyclopedia.css" />
     <style>
-        /* Encyclopedia-specific styles */
-        .enc-categories {
+        .encyclopedia-index {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .search-container {
+            position: relative;
+            max-width: 600px;
+            margin: 2rem auto 3rem;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            border: 2px solid var(--primary-gold);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--secondary-gold);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        }
+        
+        .autocomplete-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            max-height: 400px;
+            overflow-y: auto;
+            background: rgba(10, 10, 30, 0.98);
+            border: 1px solid var(--primary-gold);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            display: none;
+            z-index: 1000;
+        }
+        
+        .autocomplete-item {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+        }
+        
+        .autocomplete-item:hover,
+        .autocomplete-item.selected {
+            background: rgba(255, 215, 0, 0.1);
+        }
+        
+        .autocomplete-item .title {
+            font-weight: 600;
+            color: var(--primary-gold);
+            margin-bottom: 0.2rem;
+        }
+        
+        .autocomplete-item .category {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .category-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
+            gap: 2rem;
+            margin-top: 3rem;
         }
-
-        .enc-category {
-            background: white;
-            border: 1px solid var(--color-border-light);
-            border-radius: 8px;
+        
+        .category-section {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 12px;
             padding: 1.5rem;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
         }
-
-        .enc-category:hover {
-            border-color: var(--color-accent);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        
+        .category-section:hover {
+            border-color: var(--primary-gold);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
         }
-
-        .enc-category h3 {
-            color: var(--color-primary);
-            margin-bottom: 0.75rem;
-            font-size: 1.25rem;
-        }
-
-        .enc-category p {
-            color: var(--color-text-muted);
+        
+        .category-header {
+            font-size: 1.4rem;
+            color: var(--primary-gold);
             margin-bottom: 1rem;
-            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
-
-        .enc-category ul {
+        
+        .category-count {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: normal;
+        }
+        
+        .page-list {
             list-style: none;
             padding: 0;
             margin: 0;
         }
-
-        .enc-category li {
+        
+        .page-item {
             margin: 0.5rem 0;
         }
-
-        .enc-category a {
-            color: var(--color-text-body);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            transition: color 0.15s ease;
-        }
-
-        .enc-category a:hover {
-            color: var(--color-accent);
-        }
-
-        .enc-category a::before {
-            content: "→";
-            color: var(--color-accent);
-            margin-right: 0.5rem;
-            opacity: 0;
-            transition: all 0.15s ease;
-        }
-
-        .enc-category a:hover::before {
-            opacity: 1;
-            transform: translateX(2px);
-        }
-
-        /* Featured articles section */
-        .featured-articles {
-            margin: 3rem 0;
-        }
-
-        .featured-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .featured-card {
-            background: var(--color-bg-card);
-            border-radius: 8px;
-            padding: 1.5rem;
-            border-left: 3px solid var(--color-accent);
-            transition: all 0.2s ease;
-        }
-
-        .featured-card:hover {
-            transform: translateX(4px);
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        .featured-card h3 {
-            margin-bottom: 0.5rem;
-        }
-
-        .featured-card h3 a {
-            color: var(--color-primary);
+        
+        .page-link {
+            color: var(--text-primary);
             text-decoration: none;
             display: flex;
             align-items: baseline;
+            gap: 0.5rem;
+            transition: color 0.2s ease;
         }
-
-        .featured-card h3 a:hover {
-            color: var(--color-accent);
+        
+        .page-link:hover {
+            color: var(--secondary-gold);
         }
-
-        .featured-badge {
-            background: var(--color-accent);
-            color: white;
-            font-size: 0.625rem;
-            padding: 0.125rem 0.5rem;
-            border-radius: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-left: 0.75rem;
-            font-weight: 600;
-        }
-
-        .featured-card p {
-            color: var(--color-text-muted);
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        /* Search placeholder */
-        .search-box {
-            background: var(--color-bg-subtle);
-            border-radius: 8px;
-            padding: 1.5rem;
-            text-align: center;
-            margin: 2rem 0;
-        }
-
-        .search-box p {
-            color: var(--color-text-muted);
-            font-size: 0.875rem;
-        }
-
-        /* Quick reference */
-        .quick-ref {
-            background: white;
-            border: 1px solid var(--color-border-light);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 2rem 0;
-        }
-
-        .quick-ref h3 {
-            color: var(--color-primary);
-            margin-bottom: 1rem;
-            font-size: 1.125rem;
-        }
-
-        .quick-ref-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 0.75rem;
-        }
-
-        .quick-ref-item {
-            display: flex;
-            align-items: center;
-        }
-
-        .quick-ref-item code {
-            background: var(--color-bg-subtle);
-            padding: 0.25rem 0.5rem;
+        
+        .difficulty-badge {
+            font-size: 0.75rem;
+            padding: 0.1rem 0.4rem;
             border-radius: 4px;
-            font-family: var(--font-mono);
-            font-size: 0.875rem;
-            margin-right: 0.5rem;
-            min-width: 60px;
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--primary-gold);
+        }
+        
+        .difficulty-expert {
+            background: rgba(255, 0, 0, 0.1);
+            color: #ff6b6b;
+        }
+        
+        .difficulty-advanced {
+            background: rgba(255, 165, 0, 0.1);
+            color: #ffa500;
+        }
+        
+        .difficulty-intermediate {
+            background: rgba(0, 255, 0, 0.1);
+            color: #4ecdc4;
+        }
+        
+        .difficulty-foundational {
+            background: rgba(0, 150, 255, 0.1);
+            color: #45b7d1;
+        }
+        
+        .index-hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .index-hero h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, var(--primary-gold), var(--secondary-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+        
+        .index-stats {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .stat-item {
             text-align: center;
         }
-
-        .quick-ref-item a {
-            color: var(--color-text-body);
-            text-decoration: none;
-            font-size: 0.875rem;
+        
+        .stat-value {
+            font-size: 2rem;
+            color: var(--primary-gold);
+            font-weight: bold;
         }
-
-        .quick-ref-item a:hover {
-            color: var(--color-accent);
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body class="template-page">
     <div id="header-placeholder"></div>
-
-    <!-- Hero -->
-    <section class="template-hero template-hero-framed">
-        <div class="template-hero-content">
-            <p class="template-hero-badge">KNOWLEDGE BASE</p>
-            <h1 class="template-hero-title">Recognition Physics <span class="template-accent-text">Encyclopedia</span></h1>
-            <p class="template-hero-lead">
-                Core concepts, constants, and theorems explained with clarity and precision
-            </p>
-        </div>
-    </section>
-
-    <!-- Search Placeholder -->
-    <section class="template-section">
-        <div class="template-container">
-            <div class="search-box">
-                <p>🔍 Search functionality coming soon. Browse by category below.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Categories -->
-    <section class="template-section">
-        <div class="template-container">
-            <h2 class="template-section-title">Browse by Category</h2>
+    
+    <div class="encyclopedia-index">
+        <div class="index-hero">
+            <h1>Recognition Science Encyclopedia</h1>
+            <p class="lead">Explore the complete framework of reality through Recognition Science</p>
             
-            <div class="enc-categories">
-                <div class="enc-category" id="cat-fundamentals">
-                    <h3>Recognition Physics Fundamentals</h3>
-                    <p>Core principles and foundational concepts</p>
-                    <ul>
-                        <li><a href="/encyclopedia/meta-principle.html">Meta-Principle</a></li>
-                        <li><a href="/encyclopedia/recognition-events.html">Recognition Events</a></li>
-                        <li><a href="/encyclopedia/the-ledger.html">The Ledger</a></li>
-                        <li><a href="/encyclopedia/dual-balance.html">Dual-Balance</a></li>
-                        <li><a href="/encyclopedia/8-beat-cycle.html">8-Beat Cycle</a></li>
-                        <li><a href="/encyclopedia/voxel-grid.html">Voxel Grid</a></li>
-                        <li><a href="/encyclopedia/45-degree-gap.html">45-Degree Gap</a></li>
-                    </ul>
+            <div class="index-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="total-pages">0</div>
+                    <div class="stat-label">Total Pages</div>
                 </div>
-
-                <div class="enc-category" id="cat-constants">
-                    <h3>Fundamental Constants</h3>
-                    <p>Parameter-free values that define reality</p>
-                    <ul>
-                        <li><a href="/encyclopedia/coherence-energy.html">Coherence Energy (0.090 eV)</a></li>
-                        <li><a href="/encyclopedia/recognition-time.html">Recognition Time (7.33 fs)</a></li>
-                        <li><a href="/encyclopedia/recognition-length.html">Recognition Length (2.20 μm)</a></li>
-                        <li><a href="/encyclopedia/φ-scaling.html">φ-Scaling</a></li>
-                        <li><a href="/encyclopedia/sector-factors.html">Sector Factors</a></li>
-                        <li><a href="/encyclopedia/ledger-curvature.html">Ledger Curvature</a></li>
-                    </ul>
+                <div class="stat-item">
+                    <div class="stat-value" id="total-categories">0</div>
+                    <div class="stat-label">Categories</div>
                 </div>
-
-                <div class="enc-category" id="cat-quantum">
-                    <h3>Quantum & Particle Physics</h3>
-                    <p>Particles and quantum phenomena from recognition</p>
-                    <ul>
-                        <li><a href="/encyclopedia/electron.html">Electron</a></li>
-                        <li><a href="/encyclopedia/proton.html">Proton</a></li>
-                        <li><a href="/encyclopedia/photon.html">Photon</a></li>
-                        <li><a href="/encyclopedia/quantum-entanglement.html">Quantum Entanglement</a></li>
-                        <li><a href="/encyclopedia/wave-function.html">Wave Function</a></li>
-                        <li><a href="/encyclopedia/uncertainty-principle.html">Uncertainty Principle</a></li>
-                    </ul>
-                </div>
-
-                <div class="enc-category" id="cat-spacetime-gravity">
-                    <h3>Spacetime & Gravity</h3>
-                    <p>The arena and curvature of recognition</p>
-                    <ul>
-                        <li><a href="/encyclopedia/spacetime.html">Spacetime</a></li>
-                        <li><a href="/encyclopedia/gravity.html">Gravity</a></li>
-                        <li><a href="/encyclopedia/speed-of-light.html">Speed of Light</a></li>
-                        <li><a href="/encyclopedia/electromagnetic-field.html">Electromagnetic Field</a></li>
-                        <li><a href="/encyclopedia/energy.html">Energy</a></li>
-                        <li><a href="/encyclopedia/mass.html">Mass</a></li>
-                    </ul>
-                </div>
-
-                <div class="enc-category" id="cat-thermo-stat">
-                    <h3>Thermodynamics & Statistical</h3>
-                    <p>Recognition disorder and collective behavior</p>
-                    <ul>
-                        <li><a href="/encyclopedia/entropy.html">Entropy</a></li>
-                        <li><a href="/encyclopedia/temperature.html">Temperature</a></li>
-                        <li><a href="/encyclopedia/conservation-laws.html">Conservation Laws</a></li>
-                        <li><a href="/encyclopedia/phase-transitions.html">Phase Transitions</a></li>
-                    </ul>
-                </div>
-
-                <div class="enc-category" id="cat-cosmology">
-                    <h3>Cosmology & Astrophysics</h3>
-                    <p>Large-scale structure and cosmic phenomena</p>
-                    <ul>
-                        <li><a href="/encyclopedia/big-bang.html">Big Bang</a></li>
-                        <li><a href="/encyclopedia/dark-matter.html">Dark Matter</a></li>
-                        <li><a href="/encyclopedia/hubble-constant.html">Hubble Constant</a></li>
-                        <li><a href="/encyclopedia/black-holes.html">Black Holes</a></li>
-                        <li><a href="/encyclopedia/galaxies.html">Galaxies</a></li>
-                    </ul>
-                </div>
-
-                <div class="enc-category" id="cat-chemistry-materials">
-                    <h3>Chemistry & Materials</h3>
-                    <p>Recognition patterns in molecular systems</p>
-                    <ul>
-                        <li><a href="/encyclopedia/atoms.html">Atoms</a></li>
-                        <li><a href="/encyclopedia/molecules.html">Molecules</a></li>
-                        <li><a href="/encyclopedia/periodic-table.html">Periodic Table</a></li>
-                        <li><a href="/encyclopedia/chemical-bonds.html">Chemical Bonds</a></li>
-                        <li><a href="/encyclopedia/crystallography.html">Crystallography</a></li>
-                        <li><a href="/encyclopedia/catalysis.html">Catalysis</a></li>
-                        <li><a href="/encyclopedia/superconductivity.html">Superconductivity</a></li>
-                    </ul>
-                </div>
-
-                <div class="enc-category" id="cat-biology-consciousness">
-                    <h3>Biology & Consciousness</h3>
-                    <p>Life and awareness as recognition processes</p>
-                    <ul>
-                        <li><a href="/encyclopedia/dna.html">DNA</a></li>
-                        <li><a href="/encyclopedia/consciousness.html">Consciousness</a></li>
-                        <li><a href="/encyclopedia/evolution.html">Evolution</a></li>
-                        <li><a href="/encyclopedia/cells.html">Cells</a></li>
-                        <li><a href="/encyclopedia/neural-networks.html">Neural Networks</a></li>
-                    </ul>
-                </div>
-
-                <div class="enc-category" id="cat-math-computation">
-                    <h3>Mathematics & Computation</h3>
-                    <p>Mathematical structures and information theory</p>
-                    <ul>
-                        <li><a href="/encyclopedia/lnal-machine-code.html">LNAL Machine Code</a></li>
-                        <li><a href="/encyclopedia/information-theory.html">Information Theory</a></li>
-                        <li><a href="/encyclopedia/quantum-computing.html">Quantum Computing</a></li>
-                    </ul>
-                </div>
-
-                <div class="enc-category" id="cat-advanced-tech">
-                    <h3>Advanced Physics & Technology</h3>
-                    <p>Cutting-edge applications and phenomena</p>
-                    <ul>
-                        <li><a href="/encyclopedia/laser-physics.html">Laser Physics</a></li>
-                        <li><a href="/encyclopedia/fine-structure-constant.html">Fine Structure Constant</a></li>
-                    </ul>
+                <div class="stat-item">
+                    <div class="stat-value" id="completion-percent">0%</div>
+                    <div class="stat-label">Complete</div>
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- Featured Articles -->
-    <section class="template-section">
-        <div class="template-container">
-            <div class="template-accent-bar"></div>
-            <h2 class="template-section-title">Featured Articles</h2>
-            
-            <div class="featured-grid">
-                <div class="featured-card">
-                    <h3>
-                        <a href="/encyclopedia/recognition-events.html">
-                            Recognition Events
-                            <span class="featured-badge">Essential</span>
-                        </a>
-                    </h3>
-                    <p>The fundamental discrete units of reality—individual recognition acts that build up all physical phenomena from spacetime to consciousness.</p>
-                </div>
-
-                <div class="featured-card">
-                    <h3>
-                        <a href="/encyclopedia/the-ledger.html">
-                            The Ledger
-                            <span class="featured-badge">Core</span>
-                        </a>
-                    </h3>
-                    <p>The universal accounting system that tracks all recognition events with dual forward/backward representations, ensuring reality remains consistent.</p>
-                </div>
-
-                <div class="featured-card">
-                    <h3>
-                        <a href="/encyclopedia/consciousness.html">
-                            Consciousness
-                            <span class="featured-badge">Advanced</span>
-                        </a>
-                    </h3>
-                    <p>The ledger's self-recognition—awareness emerging from recursive recognition of recognition events, bridging physics and subjective experience.</p>
-                </div>
-
-                <div class="featured-card">
-                    <h3>
-                        <a href="/encyclopedia/fine-structure-constant.html">
-                            Fine Structure Constant
-                            <span class="featured-badge">Derivation</span>
-                        </a>
-                    </h3>
-                    <p>α⁻¹ = 137.035999084 derived from (4π × 11) − ln(φ) + δκ with no free parameters—one of nature's most precise constants explained.</p>
-                </div>
-
-                <div class="featured-card">
-                    <h3>
-                        <a href="/encyclopedia/φ-scaling.html">
-                            φ-Scaling
-                            <span class="featured-badge">Mathematical</span>
-                        </a>
-                    </h3>
-                    <p>Mass scaling by powers of the golden ratio φ = 1.618..., the unique self-similar solution to dual-balance that determines particle masses.</p>
-                </div>
-
-                <div class="featured-card">
-                    <h3>
-                        <a href="/encyclopedia/quantum-entanglement.html">
-                            Quantum Entanglement
-                            <span class="featured-badge">Phenomenon</span>
-                        </a>
-                    </h3>
-                    <p>Correlated recognition events maintained by ledger accounting across arbitrary spatial separations—quantum "spookiness" made concrete.</p>
-                </div>
-            </div>
+        
+        <div class="search-container">
+            <input 
+                type="text" 
+                class="search-input" 
+                id="encyclopedia-search"
+                placeholder="Search encyclopedia... (start typing to see suggestions)"
+                autocomplete="off"
+            />
+            <div class="autocomplete-dropdown" id="autocomplete-dropdown"></div>
         </div>
-    </section>
-
-    <!-- Quick Reference -->
-    <section class="template-section">
-        <div class="template-container">
-            <div class="quick-ref">
-                <h3>Quick Reference</h3>
-                <div class="quick-ref-grid">
-                    <div class="quick-ref-item">
-                        <code>c</code>
-                        <a href="/encyclopedia/speed-of-light.html">Speed of light</a>
-                    </div>
-                    <div class="quick-ref-item">
-                        <code>φ</code>
-                        <a href="/encyclopedia/φ-scaling.html">Golden ratio</a>
-                    </div>
-                    <div class="quick-ref-item">
-                        <code>E_coh</code>
-                        <a href="/encyclopedia/coherence-energy.html">Coherence energy</a>
-                    </div>
-                    <div class="quick-ref-item">
-                        <code>λ_rec</code>
-                        <a href="/encyclopedia/recognition-length.html">Recognition length</a>
-                    </div>
-                    <div class="quick-ref-item">
-                        <code>τ_rec</code>
-                        <a href="/encyclopedia/recognition-time.html">Recognition time</a>
-                    </div>
-                    <div class="quick-ref-item">
-                        <code>α</code>
-                        <a href="/encyclopedia/fine-structure-constant.html">Fine structure</a>
-                    </div>
-                    <div class="quick-ref-item">
-                        <code>Ω_dm</code>
-                        <a href="/encyclopedia/dark-matter.html">Dark matter</a>
-                    </div>
-                    <div class="quick-ref-item">
-                        <code>H₀</code>
-                        <a href="/encyclopedia/hubble-constant.html">Hubble constant</a>
-                    </div>
-                    <div class="quick-ref-item">
-                        <code>m_e</code>
-                        <a href="/encyclopedia/electron.html">Electron mass</a>
-                    </div>
-                    <div class="quick-ref-item">
-                        <code>m_p</code>
-                        <a href="/encyclopedia/proton.html">Proton mass</a>
-                    </div>
-                    <div class="quick-ref-item">
-                        <code>κ</code>
-                        <a href="/encyclopedia/ledger-curvature.html">Ledger curvature</a>
-                    </div>
-                    <div class="quick-ref-item">
-                        <code>δ_gap</code>
-                        <a href="/encyclopedia/45-degree-gap.html">45-degree gap</a>
-                    </div>
-                </div>
-            </div>
+        
+        <div class="category-grid" id="category-grid">
+            <!-- Categories will be populated by JavaScript -->
         </div>
-    </section>
-
-    <!-- Call to Action -->
-    <section class="template-section">
-        <div class="template-container">
-            <div class="template-reading template-reading-warm">
-                <h3 style="margin-bottom: 1rem;">Start Your Journey</h3>
-                <p>
-                    New to Recognition Physics? Begin with <a href="/encyclopedia/meta-principle.html">Meta-Principle</a> 
-                    for the logical foundation, then explore <a href="/encyclopedia/recognition-events.html">Recognition Events</a> and 
-                    <a href="/encyclopedia/the-ledger.html">The Ledger</a> to understand the core mechanics. See how traditional physics emerges through 
-                    <a href="/encyclopedia/spacetime.html">Spacetime</a>, <a href="/encyclopedia/quantum-entanglement.html">Quantum Entanglement</a>, and 
-                    <a href="/encyclopedia/consciousness.html">Consciousness</a>. For the mathematically inclined, dive into 
-                    <a href="/chain.html">formal proofs</a> or explore our <a href="/predictions.html">validated predictions</a>.
-                </p>
-            </div>
-        </div>
-    </section>
-
+    </div>
+    
     <div id="footer-placeholder"></div>
+    
     <script src="/assets/js/main.js"></script>
+    <script>
+        // Encyclopedia data structure
+        let encyclopediaData = [];
+        let categories = {};
+        
+        // Initialize the index
+        async function initializeIndex() {
+            // Load the task data
+            try {
+                const response = await fetch('/agents/encyclopedia/tasks.complete-2000.json');
+                const allTasks = await response.json();
+                
+                // Get list of existing pages
+                const existingPages = await getExistingPages();
+                
+                // Process tasks and organize by category
+                allTasks.forEach(task => {
+                    const slug = task.title.toLowerCase()
+                        .replace(/[^a-z0-9]+/g, '-')
+                        .replace(/^-+|-+$/g, '');
+                    
+                    const exists = existingPages.includes(slug);
+                    
+                    const entry = {
+                        title: task.title,
+                        slug: slug,
+                        category: task.category,
+                        difficulty: task.difficulty,
+                        tags: task.tags,
+                        summary: task.summary,
+                        exists: exists
+                    };
+                    
+                    encyclopediaData.push(entry);
+                    
+                    if (!categories[task.category]) {
+                        categories[task.category] = [];
+                    }
+                    categories[task.category].push(entry);
+                });
+                
+                // Update stats
+                updateStats();
+                
+                // Render categories
+                renderCategories();
+                
+                // Setup search
+                setupSearch();
+                
+            } catch (error) {
+                console.error('Error loading encyclopedia data:', error);
+            }
+        }
+        
+        // Get list of existing pages from generated JSON
+        async function getExistingPages() {
+            try {
+                const response = await fetch('/assets/data/existing-pages.json');
+                const pages = await response.json();
+                return pages;
+            } catch (error) {
+                console.error('Error loading existing pages:', error);
+                // Fallback to empty array
+                return [];
+            }
+        }
+        
+        function updateStats() {
+            const totalPages = encyclopediaData.length;
+            const existingPages = encyclopediaData.filter(page => page.exists).length;
+            const totalCategories = Object.keys(categories).length;
+            const completionPercent = Math.round((existingPages / totalPages) * 100);
+            
+            document.getElementById('total-pages').textContent = existingPages;
+            document.getElementById('total-categories').textContent = totalCategories;
+            document.getElementById('completion-percent').textContent = completionPercent + '%';
+        }
+        
+        function renderCategories() {
+            const grid = document.getElementById('category-grid');
+            grid.innerHTML = '';
+            
+            // Sort categories by number of existing pages
+            const sortedCategories = Object.entries(categories)
+                .sort((a, b) => {
+                    const aExists = a[1].filter(p => p.exists).length;
+                    const bExists = b[1].filter(p => p.exists).length;
+                    return bExists - aExists;
+                });
+            
+            sortedCategories.forEach(([categoryName, pages]) => {
+                const existingPages = pages.filter(p => p.exists);
+                if (existingPages.length === 0) return; // Skip empty categories
+                
+                const section = document.createElement('div');
+                section.className = 'category-section';
+                
+                const header = document.createElement('h2');
+                header.className = 'category-header';
+                header.innerHTML = `
+                    ${categoryName}
+                    <span class="category-count">(${existingPages.length}/${pages.length})</span>
+                `;
+                section.appendChild(header);
+                
+                const list = document.createElement('ul');
+                list.className = 'page-list';
+                
+                // Show only existing pages
+                existingPages.slice(0, 10).forEach(page => {
+                    const item = document.createElement('li');
+                    item.className = 'page-item';
+                    
+                    const link = document.createElement('a');
+                    link.href = `/encyclopedia/${page.slug}.html`;
+                    link.className = 'page-link';
+                    link.innerHTML = `
+                        <span>${page.title}</span>
+                        <span class="difficulty-badge difficulty-${page.difficulty.toLowerCase()}">${page.difficulty}</span>
+                    `;
+                    
+                    item.appendChild(link);
+                    list.appendChild(item);
+                });
+                
+                if (existingPages.length > 10) {
+                    const more = document.createElement('li');
+                    more.className = 'page-item';
+                    more.innerHTML = `<span style="color: var(--text-secondary)">...and ${existingPages.length - 10} more</span>`;
+                    list.appendChild(more);
+                }
+                
+                section.appendChild(list);
+                grid.appendChild(section);
+            });
+        }
+        
+        function setupSearch() {
+            const searchInput = document.getElementById('encyclopedia-search');
+            const dropdown = document.getElementById('autocomplete-dropdown');
+            let selectedIndex = -1;
+            
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                
+                if (query.length < 2) {
+                    dropdown.style.display = 'none';
+                    return;
+                }
+                
+                // Filter and sort results
+                const results = encyclopediaData
+                    .filter(page => 
+                        page.title.toLowerCase().includes(query) ||
+                        page.tags.some(tag => tag.toLowerCase().includes(query)) ||
+                        page.summary.toLowerCase().includes(query)
+                    )
+                    .sort((a, b) => {
+                        // Prioritize existing pages
+                        if (a.exists && !b.exists) return -1;
+                        if (!a.exists && b.exists) return 1;
+                        
+                        // Then by title match
+                        const aStartsWith = a.title.toLowerCase().startsWith(query);
+                        const bStartsWith = b.title.toLowerCase().startsWith(query);
+                        if (aStartsWith && !bStartsWith) return -1;
+                        if (!aStartsWith && bStartsWith) return 1;
+                        
+                        return a.title.localeCompare(b.title);
+                    })
+                    .slice(0, 10);
+                
+                if (results.length === 0) {
+                    dropdown.style.display = 'none';
+                    return;
+                }
+                
+                // Render results
+                dropdown.innerHTML = '';
+                results.forEach((page, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'autocomplete-item';
+                    if (index === selectedIndex) item.classList.add('selected');
+                    
+                    item.innerHTML = `
+                        <div class="title">${page.title}</div>
+                        <div class="category">${page.category} • ${page.difficulty}${!page.exists ? ' • Coming Soon' : ''}</div>
+                    `;
+                    
+                    item.addEventListener('click', () => {
+                        if (page.exists) {
+                            window.location.href = `/encyclopedia/${page.slug}.html`;
+                        }
+                    });
+                    
+                    dropdown.appendChild(item);
+                });
+                
+                dropdown.style.display = 'block';
+                selectedIndex = -1;
+            });
+            
+            // Keyboard navigation
+            searchInput.addEventListener('keydown', (e) => {
+                const items = dropdown.querySelectorAll('.autocomplete-item');
+                
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+                    updateSelection(items);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    selectedIndex = Math.max(selectedIndex - 1, -1);
+                    updateSelection(items);
+                } else if (e.key === 'Enter' && selectedIndex >= 0) {
+                    e.preventDefault();
+                    items[selectedIndex].click();
+                } else if (e.key === 'Escape') {
+                    dropdown.style.display = 'none';
+                    selectedIndex = -1;
+                }
+            });
+            
+            function updateSelection(items) {
+                items.forEach((item, index) => {
+                    if (index === selectedIndex) {
+                        item.classList.add('selected');
+                    } else {
+                        item.classList.remove('selected');
+                    }
+                });
+            }
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!searchInput.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.style.display = 'none';
+                    selectedIndex = -1;
+                }
+            });
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', initializeIndex);
+    </script>
 </body>
 </html>
