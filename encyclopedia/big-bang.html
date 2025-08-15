@@ -20,25 +20,26 @@
 		},
 		options: {
 			skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
-		},
-		startup: {
-			ready: () => {
-				MathJax.startup.defaultReady();
-				// Process math-note elements after MathJax is ready
-				document.querySelectorAll('math-note').forEach(function(note) {
-					const content = note.textContent.trim();
-					if (!content.startsWith('\\(') && !content.startsWith('\\[')) {
-						note.innerHTML = '\\(' + content + '\\)';
-					}
-				});
-				// Re-typeset the page
-				MathJax.typesetPromise();
-			}
 		}
 	};
 	</script>
 	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 	<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+	<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		// Process math-note elements before MathJax runs
+		document.querySelectorAll('math-note').forEach(function(note) {
+			const content = note.textContent.trim();
+			if (!content.startsWith('\\(') && !content.startsWith('\\[')) {
+				note.innerHTML = '\\(' + content + '\\)';
+			}
+		});
+		// Trigger MathJax after wrapping
+		if (window.MathJax && window.MathJax.typesetPromise) {
+			window.MathJax.typesetPromise();
+		}
+	});
+	</script>
 </head>
 <body class="template-page">
 	<div id="header-placeholder"></div>
@@ -110,7 +111,7 @@
   </section>
 
   <section class="section how-it-works">
-    <h2>How It Works</h2><figure class="concept-visual"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Observable_Universe_with_Measurements_01.png/800px-Observable_Universe_with_Measurements_01.png" alt="Timeline of the universe from Big Bang to present" loading="lazy" decoding="async" /><figcaption>Observable universe timeline showing expansion from Big Bang to present (13.77 billion years). • <span class="figure-credit">Pablo Carlos Budassi</span> • <span class="figure-license">CC BY-SA 4.0</span></figcaption></figure>
+    <h2>How It Works</h2><figure class="concept-visual"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/HubbleUltraDeepFieldwithScaleComparison.jpg/800px-HubbleUltraDeepFieldwithScaleComparison.jpg" alt="Observable universe showing expansion from Big Bang to present" loading="lazy" decoding="async" /><figcaption>The observable universe: from quantum to cosmic scales, showing expansion since the Big Bang. • <span class="figure-credit">NASA, ESA, and S. Beckwith (STScI) and the HUDF Team</span> • <span class="figure-license">Public Domain</span></figcaption></figure>
     <ol>
       <li>
         Logical necessity to dynamics. The <a href="/encyclopedia/meta-principle.html">Meta‑Principle</a> (nothing cannot recognize itself) forces a non‑trivial system that tracks change. The minimal non‑trivial tracker is <a href="/encyclopedia/the-ledger.html">the ledger</a>.
