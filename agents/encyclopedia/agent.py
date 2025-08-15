@@ -398,6 +398,21 @@ def write_page(out_dir: Path, slug: str, html_body: str) -> None:
 	</script>
 	<script src=\"https://polyfill.io/v3/polyfill.min.js?features=es6\"></script>
 	<script src=\"https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js\"></script>
+	<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		// Process math-note elements before MathJax runs
+		document.querySelectorAll('math-note').forEach(function(note) {
+			const content = note.textContent.trim();
+			if (!content.startsWith('\\\\(') && !content.startsWith('\\\\[')) {
+				note.innerHTML = '\\\\(' + content + '\\\\)';
+			}
+		});
+		// Trigger MathJax after wrapping
+		if (window.MathJax && window.MathJax.typesetPromise) {
+			window.MathJax.typesetPromise();
+		}
+	});
+	</script>
 </head>
 <body class=\"template-page\">
 	<div id=\"header-placeholder\"></div>
