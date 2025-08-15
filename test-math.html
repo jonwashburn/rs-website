@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Math Test</title>
+    <script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['\\(', '\\)']],
+            displayMath: [['\\[', '\\]']],
+            processEscapes: true
+        },
+        startup: {
+            pageReady: () => {
+                console.log('MathJax pageReady');
+                return MathJax.startup.defaultPageReady();
+            }
+        }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOMContentLoaded fired');
+        // Process math-note elements
+        document.querySelectorAll('math-note').forEach(function(note, i) {
+            const content = note.textContent.trim();
+            console.log('Processing math-note', i, 'content:', content);
+            console.log('Starts with \\(?', content.startsWith('\\('));
+            if (!content.startsWith('\\(') && !content.startsWith('\\[')) {
+                note.innerHTML = '\\(' + content + '\\)';
+                console.log('Wrapped to:', note.innerHTML);
+            }
+        });
+        // Trigger MathJax
+        if (window.MathJax && window.MathJax.typesetPromise) {
+            console.log('Calling MathJax.typesetPromise');
+            window.MathJax.typesetPromise().then(() => {
+                console.log('MathJax typeset complete');
+            });
+        } else {
+            console.log('MathJax not ready yet');
+        }
+    });
+    </script>
+</head>
+<body>
+    <h1>Math Rendering Test</h1>
+    
+    <p>Inline math with delimiters: \(E = mc^2\)</p>
+    
+    <p>Math-note element: <math-note>E = mc^2</math-note></p>
+    
+    <p>Complex math-note: <math-note>J(x) = \tfrac{1}{2}\,\bigl(x + 1/x\bigr)</math-note></p>
+    
+    <p>Check console for debug output.</p>
+</body>
+</html>

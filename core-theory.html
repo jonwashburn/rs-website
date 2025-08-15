@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Core Theory - Recognition Physics</title>
+    
+    <!-- CSS files -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/site-template.css">
+    <link rel="stylesheet" href="/style.css">
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        /* Academic page specific styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #374151;
+            background: white;
+        }
+        
+        .academic-hero {
+            background: white;
+            padding: 4rem 0 3rem;
+            text-align: center;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .academic-hero h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: -0.025em;
+            margin-bottom: 1rem;
+            color: #111827;
+        }
+        
+        .academic-subtitle {
+            font-size: 1.125rem;
+            color: #6b7280;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+        
+        .academic-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .academic-section {
+            padding: 3rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .academic-section:last-child {
+            border-bottom: none;
+        }
+        
+        .academic-section h2 {
+            font-size: 1.875rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #111827;
+        }
+        
+        .academic-section h3 {
+            font-size: 1.375rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem;
+            color: #111827;
+        }
+        
+        .academic-reading {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: #374151;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Cascade diagram styles */
+        .cascade-diagram {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        .cascade-level {
+            margin: 1rem 0;
+            padding: 0.75rem;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+            position: relative;
+        }
+        
+        .cascade-level::after {
+            content: '↓';
+            position: absolute;
+            bottom: -1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.25rem;
+            color: #9ca3af;
+        }
+        
+        .cascade-level:last-child::after {
+            display: none;
+        }
+        
+        /* Correspondence grid */
+        .correspondence-grid {
+            display: grid;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .correspondence-card {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .correspondence-card h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #111827;
+        }
+        
+        .correspondence-item {
+            margin: 0.75rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .correspondence-item::before {
+            content: '•';
+            position: absolute;
+            left: 0.5rem;
+            color: #ff006e;
+        }
+        
+        .correspondence-label {
+            font-weight: 600;
+            color: #111827;
+            margin-right: 0.5rem;
+        }
+        
+        /* Test grid */
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .test-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: border-color 0.2s;
+        }
+        
+        .test-card:hover {
+            border-color: #ff006e;
+        }
+        
+        .test-card h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #111827;
+        }
+        
+        .test-card p {
+            font-size: 0.9375rem;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+        
+        /* Accent text */
+        .accent-text {
+            color: #ff006e;
+            font-weight: 600;
+        }
+        
+        /* Code/formula blocks */
+        .formula-block {
+            background: #f3f4f6;
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 0.9375rem;
+            overflow-x: auto;
+        }
+        
+        /* Lean reference */
+        .lean-ref {
+            background: #fef3c7;
+            border: 1px solid #fbbf24;
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+            color: #92400e;
+        }
+        
+        /* Hover tooltip styles */
+        .term {
+            border-bottom: 1px dotted #9ca3af;
+            cursor: help;
+            position: relative;
+            transition: border-color 0.2s;
+        }
+        
+        .term:hover {
+            border-color: #ff006e;
+        }
+        
+        /* Reading tip box */
+        .reading-tip {
+            background: #fef3c7;
+            border: 1px solid #fbbf24;
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin: 2rem 0;
+            font-size: 0.9375rem;
+            color: #92400e;
+        }
+        
+        .reading-tip strong {
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="template-page">
+    <div id="header-placeholder"></div>
+    
+    <!-- Hero Section -->
+    <section class="academic-hero">
+        <div class="academic-container">
+            <h1>Core Theory</h1>
+            <p class="academic-subtitle">
+                A bottom‑up, parameter‑free core that derives physics as the unique fixed point of recognition with dual balance.<br>
+                <strong>Classical formulas describe; RS theorems explain why they must be.</strong>
+            </p>
+        </div>
+    </section>
+
+    <!-- The Cascade Section -->
+    <section class="academic-section">
+        <div class="academic-container">
+            <h2>The Cascade: Logic → Laws → Numbers</h2>
+            
+            <p class="academic-reading">
+                Physics emerges from a single logical necessity through a precise cascade of constraints. 
+                Each level uniquely determines the next, with no freedom to adjust parameters. The entire 
+                structure is <span class="accent-text">parameter-free</span>—change any piece and the 
+                whole framework collapses.
+            </p>
+            
+            <div class="cascade-diagram">
+                <div class="cascade-level">
+                    <strong>Meta-Principle</strong><br>
+                    Nothing cannot recognize itself (proven tautology)
+                </div>
+                <div class="cascade-level">
+                    <strong>Universal Ledger</strong><br>
+                    Double-entry counting (T1/T3/T4)
+                </div>
+                <div class="cascade-level">
+                    <strong>Eight-Tick Cycle</strong><br>
+                    2³ = 8 minimal update period (T6)
+                </div>
+                <div class="cascade-level">
+                    <strong>Cost Function</strong><br>
+                    J(x) = ½(x + 1/x) − 1 unique solution (T5)
+                </div>
+                <div class="cascade-level">
+                    <strong>Golden Ratio</strong><br>
+                    φ fixed point of scale recursion
+                </div>
+                <div class="cascade-level">
+                    <strong>Speed of Light</strong><br>
+                    c = ℓ₀/τ₀ from causality bound
+                </div>
+                <div class="cascade-level">
+                    <strong>Mass Spectrum</strong><br>
+                    m = B·E_coh·φ^(r+f) quantized ladder
+                </div>
+                <div class="cascade-level">
+                    <strong>All Constants</strong><br>
+                    α, G, H₀... dimensionless invariants
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Classical Correspondences Section -->
+    <section class="academic-section">
+        <div class="academic-container">
+            <h2>Classical Correspondences</h2>
+            
+            <p class="academic-reading">
+                Recognition Physics derives the same mathematical structures as classical physics, but from 
+                first principles rather than empirical postulates. Each classical formula has a precise RS 
+                counterpart that explains <em>why</em> that formula must take its observed form.
+            </p>
+            
+            <div class="correspondence-grid">
+                
+                <!-- Cost Functional -->
+                <div class="correspondence-card">
+                    <h4>Cost Functional</h4>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">RS:</span>
+                        Unique J(x) = ½(x + 1/x) − 1 from symmetry + unit + averaging
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Classical:</span>
+                        Stationary action / least dissipation; Dirichlet/Thomson principles
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Bridge:</span>
+                        Identical Euler-Lagrange form where defined; RS removes the family, leaves one functional
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Lean:</span>
+                        <span class="lean-ref">T5 block (AveragingBounds → Jcost uniqueness)</span>
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Test:</span>
+                        Any lab cost reconstructing a different convex even functional contradicts T5
+                    </div>
+                </div>
+                
+                <!-- Dual Cost -->
+                <div class="correspondence-card">
+                    <h4>Dual Cost</h4>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">RS:</span>
+                        Legendre/Fenchel dual of ledger cost; co-state pops out of dual balance
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Classical:</span>
+                        Hamiltonian/co-state; Pontryagin/KKT conditions
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Bridge:</span>
+                        Same primal-dual stationarity, but δ/dual-entry pins units and forbids hidden multipliers
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Lean:</span>
+                        <span class="lean-ref">edge-difference invariance + uniqueness on reach sets (T4)</span>
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Test:</span>
+                        Control-style experiments should recover the same dual kernel as RS's J*
+                    </div>
+                </div>
+                
+                <!-- Double-Entry / Dual-Balance -->
+                <div class="correspondence-card">
+                    <h4>Double-Entry / Dual-Balance</h4>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">RS:</span>
+                        Conservation is the algebra of a two-column ledger; closed-loop flux = 0
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Classical:</span>
+                        Continuity equations, KCL/KVL, Noether currents
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Bridge:</span>
+                        Same continuity equation; RS derives it from recognition necessity
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Lean:</span>
+                        <span class="lean-ref">T3_continuity + LedgerUniqueness</span>
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Test:</span>
+                        Zero-curl constraints in discrete circuits/data cubes must match T3 patterns
+                    </div>
+                </div>
+                
+                <!-- Golden-Ratio Fixed Point -->
+                <div class="correspondence-card">
+                    <h4>Golden-Ratio Fixed Point</h4>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">RS:</span>
+                        φ is the unique self-similar fixed point of the scale recursion under J
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Classical:</span>
+                        RG-style fixed points / self-similar scaling
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Bridge:</span>
+                        φ-quantized exponents reappear in spectra/ratios
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Lean:</span>
+                        <span class="lean-ref">φ arises from recursion (constants layer; formal note to add)</span>
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Test:</span>
+                        Rung spacings follow φ-ladder without tunables
+                    </div>
+                </div>
+                
+                <!-- Eight-Tick Cycle -->
+                <div class="correspondence-card">
+                    <h4>Eight-Tick Cycle</h4>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">RS:</span>
+                        Minimal complete update in 3D is 2³ = 8
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Classical:</span>
+                        Minimal closed traversal on a 3D cell complex; discrete flux quantization
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Bridge:</span>
+                        Discrete interference periodicities; pulsar tick prediction
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Lean:</span>
+                        <span class="lean-ref">eight_tick_min, T6_exist_8</span>
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Test:</span>
+                        ~10 ns tick signature in MSP residuals; eight-fold combinatorics
+                    </div>
+                </div>
+                
+                <!-- Finite Signal Bound -->
+                <div class="correspondence-card">
+                    <h4>Finite Signal Bound</h4>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">RS:</span>
+                        Causal speed from voxel length / tick time: c = ℓ₀/τ₀
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Classical:</span>
+                        Light cone / domain of dependence of wave equations
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Bridge:</span>
+                        Same cone structure; RS fixes the micro-units
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Lean:</span>
+                        <span class="lean-ref">causality scaffolding + bound (extend with "cone" lemma)</span>
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Test:</span>
+                        No super-cone transport in engineered lattices with RS ticks
+                    </div>
+                </div>
+                
+                <!-- Mass Law -->
+                <div class="correspondence-card">
+                    <h4>Mass Law</h4>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">RS:</span>
+                        m = B·E_coh·φ^(r+f) with rung r, sector B, residue f from RG-like dressing
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Classical:</span>
+                        Ladder spectra; dimensional reduction with fixed quantum
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Bridge:</span>
+                        Matches PDG without per-species fits; same integer+residue pattern
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Lean:</span>
+                        <span class="lean-ref">path-length/ledger-rung uniqueness (already scaffolded)</span>
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Test:</span>
+                        Cross-family residue relations; no freedom to retune
+                    </div>
+                </div>
+                
+                <!-- Gauge-Rigidity -->
+                <div class="correspondence-card">
+                    <h4>Gauge-Rigidity</h4>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">RS:</span>
+                        Unit-free ledger → only dimensionless predictions matter; Π-invariants forced
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Classical:</span>
+                        Buckingham-Π theorem
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Bridge:</span>
+                        Same invariants, but RS derives their specific numerical values
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Lean:</span>
+                        <span class="lean-ref">"units quotient" formalization (todo)</span>
+                    </div>
+                    <div class="correspondence-item">
+                        <span class="correspondence-label">Test:</span>
+                        All dimensionless ratios match without adjustment
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- What Changes Section -->
+    <section class="academic-section">
+        <div class="academic-container">
+            <h2>What Changes: RS vs Empirical-Only Physics</h2>
+            
+            <p class="academic-reading">
+                The fundamental shift is from <em>describing</em> patterns to <em>deriving</em> why those 
+                patterns must exist. Classical physics postulates conservation laws; RS proves them from 
+                ledger algebra. The Standard Model fits parameters to data; RS has no parameters to fit.
+            </p>
+            
+            <h3>Key Differences</h3>
+            
+            <div class="academic-reading">
+                <p><strong>No Adjustable Parameters:</strong> Every constant emerges from the logical structure. 
+                The fine-structure constant isn't measured then used—it's computed from first principles as 
+                α⁻¹ = (4π × 11) − ln(φ) + δκ.</p>
+                
+                <p><strong>Over-Constrained System:</strong> Classical theories have degrees of freedom. RS is 
+                maximally constrained—every piece interlocks with no wiggle room. This is why it makes such 
+                precise, falsifiable predictions.</p>
+                
+                <p><strong>Cross-Domain Constants:</strong> The same φ, E_coh, and eight-tick cycle appear in 
+                particle masses, cosmology, and quantum corrections. One structure explains all scales.</p>
+                
+                <p><strong>From Principles to Functionals:</strong> Where classical physics postulates stationary 
+                action, RS derives the unique action functional. Where QFT assumes gauge symmetry, RS derives 
+                why gauge structure must exist.</p>
+            </div>
+            
+            <div class="formula-block">
+                Classical: "Action is stationary" (postulate)
+                RS: "Action = ∫J[path] because J is the unique dual-balance cost" (theorem)
+            </div>
+        </div>
+    </section>
+
+    <!-- Near-Term Tests Section -->
+    <section class="academic-section">
+        <div class="academic-container">
+            <h2>Near-Term Experimental Tests</h2>
+            
+            <p class="academic-reading">
+                Unlike theories with adjustable parameters, RS makes sharp, parameter-free predictions that 
+                can be tested with current or near-future technology. A single confirmed deviation falsifies 
+                the entire framework.
+            </p>
+            
+            <div class="test-grid">
+                <div class="test-card">
+                    <h4>Galaxy Rotation</h4>
+                    <p>Information-limited gravity predicts rotation curves with χ²/N ≈ 2.75, 
+                    competitive with MOND but from first principles. Specific lensing signatures 
+                    distinguish from dark matter.</p>
+                </div>
+                
+                <div class="test-card">
+                    <h4>Nanoscale Gravity</h4>
+                    <p>Gravity should be 32× stronger at 20 nm due to ledger discreteness. 
+                    Achievable with current torsion pendulum technology. Binary result: 
+                    enhanced or not.</p>
+                </div>
+                
+                <div class="test-card">
+                    <h4>Pulsar Timing</h4>
+                    <p>Millisecond pulsars should show ~10 ns timing discreteness from the 
+                    eight-tick cycle. Statistical analysis of residuals provides clear 
+                    yes/no answer.</p>
+                </div>
+                
+                <div class="test-card">
+                    <h4>Particle Masses</h4>
+                    <p>Next discovered particle must fit m = B·E_coh·φ^(r+f) with integer 
+                    r and small f. No freedom to adjust—either matches or falsifies.</p>
+                </div>
+            </div>
+            
+            <div class="reading-tip">
+                <strong>For experimentalists:</strong> Each prediction includes specific measurement 
+                protocols and statistical tests. See our <a href="/predictions.html">predictions page</a> 
+                for detailed experimental designs.
+            </div>
+        </div>
+    </section>
+
+    <!-- Mathematical Details Section -->
+    <section class="academic-section">
+        <div class="academic-container">
+            <h2>Core Mathematical Results</h2>
+            
+            <p class="academic-reading">
+                The framework's mathematical backbone consists of eight theorems, each formally proven in 
+                Lean 4. These aren't axioms or postulates—they're logical consequences of the Meta-Principle.
+            </p>
+            
+            <h3>Cost Function Uniqueness</h3>
+            <p class="academic-reading">
+                Among all even, unit-normalized functions on ℝ₊, only one satisfies dual-balance averaging:
+            </p>
+            <div class="formula-block">
+                J(x) = ½(x + 1/x) − 1
+            </div>
+            <p class="academic-reading">
+                The proof uses Jensen's inequality on the log-axis with the constraint that 
+                F(e^t) = F(e^(-t)) and F(1) = 0. See <span class="lean-ref">IndisputableMonolith.lean:473-713</span> 
+                for the complete formal derivation.
+            </p>
+            
+            <h3>Eight-Tick Minimality</h3>
+            <p class="academic-reading">
+                For complete parity coverage in D dimensions, the minimal period is 2^D ticks:
+            </p>
+            <div class="formula-block">
+                ∀ T < 2^D, ∄ surjective map from T ticks to D-bit patterns
+            </div>
+            <p class="academic-reading">
+                In 3D, this gives exactly 8 ticks. The proof is constructive: 
+                <span class="lean-ref">eight_tick_min</span> and <span class="lean-ref">T6_exist_8</span>.
+            </p>
+            
+            <h3>Ledger Uniqueness</h3>
+            <p class="academic-reading">
+                Two ledgers with the same edge increment δ that agree at any point must agree everywhere 
+                on that connected component (up to global offset):
+            </p>
+            <div class="formula-block">
+                φ(L₁, x₀) = φ(L₂, x₀) ⟹ ∀y ∈ Reach(x₀): φ(L₁, y) = φ(L₂, y)
+            </div>
+            <p class="academic-reading">
+                This eliminates gauge freedom and ensures predictions are coordinate-independent. 
+                See <span class="lean-ref">T4_unique_on_component</span>.
+            </p>
+            
+            <div class="reading-tip">
+                <strong>For mathematicians:</strong> The complete Lean 4 formalization is available at 
+                <a href="https://github.com/recognition-physics/IndisputableMonolith">our repository</a>. 
+                All proofs are constructive and axiom-free beyond standard Lean foundations.
+            </div>
+        </div>
+    </section>
+
+    <!-- Links Section -->
+    <section class="academic-section">
+        <div class="academic-container">
+            <h2>Further Reading</h2>
+            
+            <p class="academic-reading">
+                This core theory page provides the conceptual bridge between our logical foundations and 
+                empirical predictions. For different perspectives:
+            </p>
+            
+            <ul style="line-height: 2;">
+                <li><a href="/academic.html">Technical Overview</a> - Complete mathematical framework</li>
+                <li><a href="/gravity.html">Gravity Derived</a> - How gravity emerges from information constraints</li>
+                <li><a href="/galaxy-rotation-discovery.html">Dark Matter Explained</a> - Galaxy rotation without dark matter</li>
+                <li><a href="/constants.html">Fundamental Constants</a> - All derived values</li>
+                <li><a href="/encyclopedia/">Encyclopedia</a> - Concept-by-concept exploration</li>
+            </ul>
+        </div>
+    </section>
+
+    <div id="footer-placeholder"></div>
+    
+    <script src="/assets/js/main.js"></script>
+</body>
+</html>
