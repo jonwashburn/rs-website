@@ -247,6 +247,7 @@ def call_model(cfg: Dict[str, Any], messages: List[Dict[str, str]]) -> str:
 	client = OpenAI()
 	primary = cfg.get("model", "gpt-4o-mini")
 	fallback = cfg.get("fallback_model", "gpt-4o-mini")
+	allow_fallback = cfg.get("allow_fallback", True)
 	# Prefer Responses API for GPT-5 with reasoning/verbosity if available
 	use_responses = primary.startswith("gpt-5")
 	try:
@@ -268,17 +269,16 @@ def call_model(cfg: Dict[str, Any], messages: List[Dict[str, str]]) -> str:
 			content = resp.choices[0].message.content or ""
 		reason = None
 	except Exception as e:
-		# Fallback on model-not-found or any transport error
-		try:
-			resp = client.chat.completions.create(
-				model=fallback,
-				messages=messages,
-				max_tokens=cfg.get("max_tokens", 3000),
-				temperature=0.3,
-			)
-			reason = f"fallback_used:{type(e).__name__}"
-		except Exception as e2:
-			raise e2
+		if not allow_fallback:
+			raise e
+		# Fallback on model-not-found or any transport error (if allowed)
+		resp = client.chat.completions.create(
+			model=fallback,
+			messages=messages,
+			max_tokens=cfg.get("max_tokens", 3000),
+			temperature=0.3,
+		)
+		reason = f"fallback_used:{type(e).__name__}"
 	# Attach a small tag in the content if fallback was used (non-rendering HTML comment)
 	if content and 'reason' in locals() and reason:
 		content = f"<!-- {reason} -->\n" + content
