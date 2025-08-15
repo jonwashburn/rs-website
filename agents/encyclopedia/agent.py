@@ -194,12 +194,28 @@ def write_page(out_dir: Path, slug: str, html_body: str) -> None:
 <head>
 	<meta charset=\"UTF-8\" />
 	<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />
-	<meta http-equiv=\"Content-Security-Policy\" content=\"script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline';\">
+	<meta http-equiv=\"Content-Security-Policy\" content=\"script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://polyfill.io; style-src 'self' 'unsafe-inline';\">
 	<title>{slug}</title>
 	<link rel=\"stylesheet\" href=\"/assets/css/main.css\" />
 	<link rel=\"stylesheet\" href=\"/assets/css/site-template.css\" />
 	<link rel=\"stylesheet\" href=\"/assets/css/encyclopedia.css\" />
 	<link rel=\"stylesheet\" href=\"/style.css\" />
+	
+	<!-- MathJax Configuration -->
+	<script>
+	window.MathJax = {{
+		tex: {{
+			inlineMath: [['\\\\(', '\\\\)']],
+			displayMath: [['\\\\[', '\\\\]']],
+			processEscapes: true
+		}},
+		options: {{
+			skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+		}}
+	}};
+	</script>
+	<script src=\"https://polyfill.io/v3/polyfill.min.js?features=es6\"></script>
+	<script src=\"https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js\"></script>
 </head>
 <body class=\"template-page\">
 	<div id=\"header-placeholder\"></div>

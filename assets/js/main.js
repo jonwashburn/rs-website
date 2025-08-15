@@ -197,34 +197,28 @@ document.addEventListener("DOMContentLoaded", function() {
     // Footer can be injected immediately
     fetchAndInject(basePath + '_includes/footer.html', 'footer-placeholder');
     
-    // Load MathJax for rendering mathematical formulas site-wide
-    if (!window.MathJax) {
-        // Configure MathJax with CSP-friendly settings
-        window.MathJax = {
-            tex: {
-                inlineMath: [['\\(', '\\)']],
-                displayMath: [['\\[', '\\]']],
-                processEscapes: true,
-                processEnvironments: true,
-                packages: {'[+]': ['html']}
-            },
-            loader: {
-                load: ['[tex]/html']
-            },
-            startup: {
-                ready() {
-                    MathJax.startup.defaultReady();
-                    // Process any existing math after initial load
-                    MathJax.typesetPromise();
-                }
-            }
-        };
-        
-        // Load MathJax script
-        const script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';
-        script.async = true;
-        script.id = 'MathJax-script';
+    // Simple MathJax configuration that works with GitHub Pages
+    window.MathJax = {
+        tex: {
+            inlineMath: [['\\(', '\\)']],
+            displayMath: [['\\[', '\\]']],
+            processEscapes: true
+        },
+        options: {
+            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        }
+    };
+    
+    // Load MathJax script directly
+    (function () {
+        var script = document.createElement('script');
+        script.src = 'https://polyfill.io/v3/polyfill.min.js?features=es6';
         document.head.appendChild(script);
-    }
+        script.onload = function() {
+            var mathjax = document.createElement('script');
+            mathjax.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+            mathjax.async = true;
+            document.head.appendChild(mathjax);
+        };
+    })();
 });
