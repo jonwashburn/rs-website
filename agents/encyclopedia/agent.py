@@ -372,16 +372,16 @@ def write_page(out_dir: Path, slug: str, html_body: str) -> None:
 	out_dir.mkdir(parents=True, exist_ok=True)
 	path = out_dir / f"{slug}.html"
 	page = f"""<!DOCTYPE html>
-<html lang=\"en\">
+<html lang="en">
 <head>
-	<meta charset=\"UTF-8\" />
-	<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />
-	<meta http-equiv=\"Content-Security-Policy\" content=\"script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://polyfill.io; style-src 'self' 'unsafe-inline';\">
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://polyfill.io; style-src 'self' 'unsafe-inline';">
 	<title>{slug}</title>
-	<link rel=\"stylesheet\" href=\"/assets/css/main.css\" />
-	<link rel=\"stylesheet\" href=\"/assets/css/site-template.css\" />
-	<link rel=\"stylesheet\" href=\"/assets/css/encyclopedia.css\" />
-	<link rel=\"stylesheet\" href=\"/style.css\" />
+	<link rel="stylesheet" href="/assets/css/main.css" />
+	<link rel="stylesheet" href="/assets/css/site-template.css" />
+	<link rel="stylesheet" href="/assets/css/encyclopedia.css" />
+	<link rel="stylesheet" href="/style.css" />
 	
 	<!-- MathJax Configuration -->
 	<script>
@@ -396,29 +396,29 @@ def write_page(out_dir: Path, slug: str, html_body: str) -> None:
 		}}
 	}};
 	</script>
-	<script src=\"https://polyfill.io/v3/polyfill.min.js?features=es6\"></script>
-	<script src=\"https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js\"></script>
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+	<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 	<script>
-	document.addEventListener('DOMContentLoaded', function() {
+	document.addEventListener('DOMContentLoaded', function() {{
 		// Process math-note elements before MathJax runs
-		document.querySelectorAll('math-note').forEach(function(note) {
+		document.querySelectorAll('math-note').forEach(function(note) {{
 			const content = note.textContent.trim();
-			if (!content.startsWith('\\\\(') && !content.startsWith('\\\\[')) {
+			if (!content.startsWith('\\\\(') && !content.startsWith('\\\\[')) {{
 				note.innerHTML = '\\\\(' + content + '\\\\)';
-			}
-		});
+			}}
+		}});
 		// Trigger MathJax after wrapping
-		if (window.MathJax && window.MathJax.typesetPromise) {
+		if (window.MathJax && window.MathJax.typesetPromise) {{
 			window.MathJax.typesetPromise();
-		}
-	});
+		}}
+	}});
 	</script>
 </head>
-<body class=\"template-page\">
-	<div id=\"header-placeholder\"></div>
+<body class="template-page">
+	<div id="header-placeholder"></div>
 {html_body}
-	<div id=\"footer-placeholder\"></div>
-	<script src=\"/assets/js/main.js\"></script>
+	<div id="footer-placeholder"></div>
+	<script src="/assets/js/main.js"></script>
 </body>
 </html>
 """
