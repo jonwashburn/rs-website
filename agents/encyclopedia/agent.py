@@ -245,13 +245,33 @@ def sanitize_and_wrap(html_body: str, task: Dict[str, Any]) -> str:
 def call_model(cfg: Dict[str, Any], messages: List[Dict[str, str]]) -> str:
 	assert OpenAI is not None, "openai library not available"
 	client = OpenAI()
-	resp = client.chat.completions.create(
-		model=cfg.get("model", "gpt-4o-mini"),
-		messages=messages,
-		max_tokens=cfg.get("max_tokens", 3000),
-		temperature=0.3,
-	)
-	return resp.choices[0].message.content or ""
+	primary = cfg.get("model", "gpt-4o-mini")
+	fallback = cfg.get("fallback_model", "gpt-4o-mini")
+	try:
+		resp = client.chat.completions.create(
+			model=primary,
+			messages=messages,
+			max_tokens=cfg.get("max_tokens", 3000),
+			temperature=0.3,
+		)
+		reason = None
+	except Exception as e:
+		# Fallback on model-not-found or any transport error
+		try:
+			resp = client.chat.completions.create(
+				model=fallback,
+				messages=messages,
+				max_tokens=cfg.get("max_tokens", 3000),
+				temperature=0.3,
+			)
+			reason = f"fallback_used:{type(e).__name__}"
+		except Exception as e2:
+			raise e2
+	# Attach a small tag in the content if fallback was used (non-rendering HTML comment)
+	content = resp.choices[0].message.content or ""
+	if content and 'reason' in locals() and reason:
+		content = f"<!-- {reason} -->\n" + content
+	return content
 
 
 def minimal_validate(html: str) -> List[str]:
