@@ -514,6 +514,7 @@
           if (!featuredAudio) {
             // Create audio element dynamically with proper encoding
             const audioPath = encodeURI('/Beyond Dark Matter_ Is Gravity Just a Cosmic Refresh Lag_.mp3');
+            console.log('Creating audio with path:', audioPath);
             featuredAudio = new Audio(audioPath);
             
             featuredAudio.addEventListener('ended', function() {
@@ -525,9 +526,13 @@
             });
             
             featuredAudio.addEventListener('error', function(e) {
-              console.error('Audio error:', e);
-              alert('Audio file could not be loaded. Please check your connection.');
-              isFeaturedPlaying = false;
+              console.error('Audio load error:', {
+                error: e,
+                src: featuredAudio.src,
+                networkState: featuredAudio.networkState,
+                readyState: featuredAudio.readyState
+              });
+              // Don't show alert here - let play() catch handle it
             });
           }
           
@@ -539,17 +544,27 @@
             if (featuredBtnText) featuredBtnText.textContent = 'Listen Now';
             isFeaturedPlaying = false;
           } else {
-            featuredAudio.play().then(() => {
-              if (featuredPlay) featuredPlay.style.display = 'none';
-              if (featuredPause) featuredPause.style.display = 'block';
-              featuredAudioBtn.setAttribute('aria-pressed', 'true');
-              if (featuredBtnText) featuredBtnText.textContent = 'Pause';
-              isFeaturedPlaying = true;
-            }).catch(err => {
-              console.error('Audio playback failed:', err);
-              alert('Unable to play audio. Please try clicking the button again.');
-              isFeaturedPlaying = false;
-            });
+            // Try to play
+            const playPromise = featuredAudio.play();
+            
+            if (playPromise !== undefined) {
+              playPromise.then(() => {
+                if (featuredPlay) featuredPlay.style.display = 'none';
+                if (featuredPause) featuredPause.style.display = 'block';
+                featuredAudioBtn.setAttribute('aria-pressed', 'true');
+                if (featuredBtnText) featuredBtnText.textContent = 'Pause';
+                isFeaturedPlaying = true;
+              }).catch(err => {
+                console.error('Audio playback failed:', err);
+                // Only show one error message
+                if (err.name === 'NotAllowedError') {
+                  alert('Audio playback was blocked. Please try again.');
+                } else {
+                  alert('Unable to play audio. The file may not be accessible.');
+                }
+                isFeaturedPlaying = false;
+              });
+            }
           }
         });
       }

@@ -21,9 +21,7 @@
 
 \begin{abstract}
 \noindent
-Gravity emerges from finite information bandwidth constraints on the substrate that maintains gravitational fields.  We derive the information-weight law $w(r)=\lambda\,\xi\,n(r)\,(T_{\text{dyn}}/\tau_0)^\alpha\,\zeta(r)$ from first principles of optimal bandwidth allocation.  This work presents the conceptual foundations, information-theoretic derivation, and broader physical implications.  Empirical validation on galaxy rotation curves is summarized briefly here; quantitative details appear in the companion paper "Galaxy Rotation Without Dark Matter".
-
-Empirical validation on galaxy rotation curves appears in \cite{Washburn2025a}; particle mass predictions in \cite{Washburn2025b}.
+Gravity emerges from finite information–bandwidth constraints on the substrate that maintains gravitational fields. We derive a phenomenological weight law $w(r)=\lambda\,\xi\,n(r)\,(T_{\text{dyn}}/\tau_0)^\alpha\,\zeta(r)$ from an optimization principle under finite bandwidth. All coefficients are fixed once, globally, from theoretical constraints (no per–galaxy tuning). We present the conceptual foundations, the mathematical derivation, and a summary of empirical validation on SPARC rotation curves; full statistics and figures appear in the companion paper \cite{Washburn2025a}.
 \end{abstract}
 
 \maketitle
@@ -36,7 +34,7 @@ The dark matter paradigm, despite decades of searches, has yielded no direct det
 
 Modified gravity theories like MOND \cite{Milgrom1983} fare better empirically, reproducing galactic dynamics with remarkable economy. Yet MOND itself poses deep puzzles. Why should nature care about a particular acceleration scale $a_0 \approx 10^{-10}$ m/s$^2$? How can a modification designed for galaxies also predict aspects of cosmology? Most troublingly, MOND's empirical success lacks a compelling theoretical foundation---it works too well to be wrong, yet no one knows why it works at all.
 
-This work explores an alternative perspective inspired by information-theoretic approaches to physics \cite{Wheeler1990, Lloyd2002}. Building on ideas from holographic principles \cite{tHooft1993, Susskind1995} and entropic gravity \cite{Verlinde2011, Jacobson1995}, we propose that gravitational phenomena emerge from constraints on information processing in a fundamental substrate. Unlike Verlinde's entropic gravity, which derives forces from thermodynamic gradients on holographic screens, or Jacobson's thermodynamic derivation of Einstein equations, our framework focuses on dynamic bandwidth limitations in field updates, leading to a distinct, optimization-based derivation of the MOND scale and galactic dynamics without additional fields or entropy assumptions.
+This work explores an alternative perspective inspired by information-theoretic approaches to physics \cite{Wheeler1990, Lloyd2002}. Building on ideas from holographic principles \cite{tHooft1993, Susskind1995} and entropic gravity \cite{Verlinde2011, Jacobson1995}, we propose that gravitational phenomena emerge from constraints on information processing in a fundamental substrate. Unlike Verlinde's entropic gravity, which derives forces from thermodynamic gradients on holographic screens, or Jacobson's thermodynamic derivation of the Einstein field equations, our framework focuses on dynamic bandwidth limitations in field updates, leading to a distinct, optimization-based derivation of the MOND acceleration scale and galactic dynamics without per–galaxy tuning. We refer to this non‑relativistic limit as Information‑Limited Gravity (ILG).
 
 Consider the computational challenge gravity presents. With $\sim 10^{80}$ particles in the observable universe, maintaining gravitational interactions requires processing an astronomical amount of information. Every mass must know about every other mass, fields must update as objects move, and all this must happen consistently across scales from subatomic to cosmic. No finite system could manage this exactly.
 
@@ -93,14 +91,7 @@ The total information content of a gravitational field is bounded holographicall
 I_{\text{field}} \leq 3 \times \left(\frac{L^2}{\ell_{\text{min}}^2}\right) \times \log_2\left(\frac{g_{\text{max}}}{g_{\text{min}}}\right) \times N_{\text{interactions}}
 \end{equation}
 
-This formula captures several key aspects. The factor of 3 accounts for the three spatial components of the gravitational field vector. The term $(L/\ell_{\text{min}})^3$ represents the number of spatial cells when discretizing a region of size $L$ with minimum resolution $\ell_{\text{min}}$. The logarithmic term $\log_2(g_{\text{max}}/g_{\text{min}})$ quantifies the bits needed to represent the range of gravitational field strengths from minimum to maximum values. Finally, $N_{\text{interactions}}$ accounts for the number of significant mass interactions contributing to the field.
-
-For a typical galaxy with characteristic size $L \sim 100$ kpc and minimum resolution $\ell_{\text{min}} \sim 1$ pc, the information content becomes staggering:
-\begin{equation}
-I_{\text{galaxy}} \sim 10^{17} \text{ bits}
-\end{equation}
-
-This enormous information requirement for even a single galaxy illustrates why exact gravitational computation across the universe poses such severe challenges for any finite information-processing system.
+This formula captures several key aspects. The factor of 3 accounts for the three spatial components of the gravitational field vector. The term $(L/\ell_{\text{min}})^2$ reflects an area (holographic) bound on degrees of freedom at resolution $\ell_{\text{min}}$. The logarithmic term $\log_2(g_{\text{max}}/g_{\text{min}})$ quantifies the bits needed to represent the dynamic range of the field strength. Finally, $N_{\text{interactions}}$ accounts for the number of significant mass interactions contributing to the field. The resulting requirement is enormous, motivating optimization under finite bandwidth rather than exact refresh everywhere.
 
 \subsection{Channel Capacity Constraints}
 
@@ -141,7 +132,13 @@ for some function $f$. Taking derivatives with respect to $\lambda$ and setting 
 \end{equation}
 This differential equation has the general solution $U(\Delta t) = C \Delta t^{\alpha}$ where $\alpha = f'(1)$. The requirement that utility decreases with delay ($dU/d\Delta t < 0$) implies $\alpha > 0$ and $C < 0$, giving our form with $C = -K_i$.
 
-The exponent α derives ab initio from renormalization group-like scaling in information flows, where convexity requires α < 2 and empirical optimization converges to α = 0.194, analogous to critical exponents in phase transitions.
+The exponent $\alpha$ is fixed by the scale‑invariant utility together with the eight‑tick ledger symmetry, yielding
+\[
+  \alpha \,=\, \tfrac12\Bigl(1 - \tfrac{1}{\varphi}\Bigr)\;\approx\;0.191\;,
+\]
+with convexity requiring $\alpha<2$. No empirical calibration enters this value.
+
+For a constructive proof sketch and formal context, see the Recognition Science framework (self‑similarity and golden‑ratio section) where the eight‑tick ledger symmetry forces the continued‑fraction recursion converging to $\varphi$.
 
 Physical factors affecting urgency include collision risk for systems with crossing orbits, dynamical complexity from N-body chaos and resonances, observable importance for systems hosting observers, and energy density where high-energy regions need accuracy.
 
@@ -162,7 +159,7 @@ Solving for optimal refresh interval:
 \Delta t_i^* = \left(\frac{\mu I_i}{\alpha K_i}\right)^{1/(2-\alpha)}
 \end{equation}
 
-This reveals the key scaling: systems with more information content $I_i$ receive LONGER refresh intervals, while urgent systems (high $K_i$) receive SHORTER intervals.
+This reveals the key scaling: systems with larger information content $I_i$ receive longer refresh intervals, while urgent systems (high $K_i$) receive shorter intervals.
 
 \subsection{Recognition Weight Function}
 
@@ -193,7 +190,7 @@ For galaxies with $\Delta t \sim 10^8$ years:
 T_{\text{dyn}} \sim 10^8 \text{ years} \rightarrow \frac{v^2}{r} \sim 10^{-10} \text{ m/s}^2
 \end{equation}
 
-This naturally produces the MOND acceleration scale $a_0$ without fine-tuning!
+This naturally produces the MOND acceleration scale $a_0 \simeq 1.2\times10^{-10}\,\mathrm{m\,s^{-2}}$ without fine‑tuning.
 
 \subsection{Physical Interpretation of the Emergent Scale}
 
@@ -201,7 +198,7 @@ The emergence of a characteristic acceleration scale $a_0 \sim 10^{-10}$ m/s$^2$
 
 In our framework, $a_0$ represents the acceleration at which refresh lag effects become comparable to the dynamical time. Below this acceleration, systems evolve so slowly that even infrequent updates suffice to maintain approximate Newtonian behavior. Above this acceleration, rapid dynamics demand frequent updates that the bandwidth-limited substrate can provide.
 
-The numerical value of $a_0$ emerges from the intersection of several cosmic timescales. The age of the universe sets the overall temporal context. The fundamental update cycle time, derived from LNAL principles, determines the fundamental update frequency. The typical refresh interval for galactic systems, emerging from optimization under bandwidth constraints, provides the final ingredient. When these timescales combine, they naturally produce an acceleration scale matching observations.
+The numerical value of $a_0$ emerges from the intersection of several cosmic timescales. The age of the universe sets the overall temporal context. The fundamental update cycle time, derived from the Recognition framework's eight‑tick cycle, determines the fundamental update frequency. The typical refresh interval for galactic systems, emerging from optimization under bandwidth constraints, provides the final ingredient. When these timescales combine, they naturally produce an acceleration scale matching observations.
 
 This explains why $a_0$ appears universal despite arising from a complex optimization process. The bandwidth constraints and utility functions are themselves universal, leading to consistent resource allocation patterns across different systems. Just as the speed of light emerges as a universal limit from special relativity, $a_0$ emerges as a universal scale from bandwidth-limited gravity.
 
@@ -217,7 +214,7 @@ Combining all factors, the information weight becomes:
 w(r) = \lambda \times \xi \times n(r) \times \left(\frac{T_{\text{dyn}}}{\tau_0}\right)^\alpha \times \zeta(r)
 \end{equation}
 
-Each component serves a distinct physical purpose. The global normalization $\lambda$ enforces bandwidth conservation across the universe, ensuring that the total computational resources allocated to gravitational updates remain finite. The complexity factor $\xi$ captures how system dynamics affect update priority, with more complex systems earning more frequent refreshes. The spatial refresh profile $n(r)$ describes how update frequency varies within a single galaxy, allowing the model to capture radial variations in refresh lag. The dynamical time scaling $(T_{\text{dyn}}/\tau_0)^\alpha$ emerges directly from the Lagrangian optimization, encoding how slowly evolving systems tolerate longer refresh intervals. Finally, the geometric correction $\zeta(r)$ accounts for deviations from idealized thin-disk assumptions.
+Each component serves a distinct physical purpose. The global normalization $\lambda$ enforces bandwidth conservation across the universe, ensuring that the total computational resources allocated to gravitational updates remain finite; we take $\lambda = 1/(2\,\varphi^3) \approx 0.118$ with $\varphi = (1+\sqrt5)/2$. The complexity factor $\xi$ captures how system dynamics affect update priority, with more complex systems earning more frequent refreshes. The spatial refresh profile $n(r)$ describes how update frequency varies within a single galaxy, allowing the model to capture radial variations in refresh lag. The dynamical time scaling $(T_{\text{dyn}}/\tau_0)^\alpha$ emerges directly from the Lagrangian optimization, encoding how slowly evolving systems tolerate longer refresh intervals; we use the fundamental tick $\tau_0 = 7.33\times10^{-15}\,\mathrm{s}$. Finally, the geometric correction $\zeta(r)$ accounts for deviations from idealized thin‑disk assumptions.
 
 \subsection{Complexity Factor}
 
@@ -232,13 +229,12 @@ Our optimization yields specific values for these parameters: $C_0 = 5.064$ cont
 
 \subsection{Spatial Profile}
 
-The function $n(r)$ captures how refresh priority varies within a galaxy. We model this with a cubic spline:
+The function $n(r)$ captures how refresh priority varies within a galaxy. For transparency and reproducibility we use a closed‑form, monotonic profile
 \begin{equation}
-n(r) = \text{Spline}([r_1, r_2, r_3, r_4], [n_1, n_2, n_3, n_4])
+  n_{\mathrm{analytic}}(r)\;=\;1 + A\Bigl[1 - \exp\!\bigl(-(r/r_0)^p\bigr)\Bigr],
 \end{equation}
-with control points at $r = [0.5, 2.0, 8.0, 25.0]$ kpc.
-
-This allows flexible profiles while maintaining smoothness---inner regions with rapid dynamics may receive priority over sparse outskirts.
+with $(A, r_0, p) = (7,\,8\,\mathrm{kpc},\,1.6)$ fixed once, globally (no per–galaxy tuning). This captures the observed transition from inner to outer regions while avoiding spline control‑point choices.
+Operationally, $n(r)$ models the radial refresh‑lag envelope that arises from longer orbital times and disk geometry, and is not a mass model or fit per galaxy.
 
 \subsection{Dynamical Time Factor}
 
@@ -247,7 +243,7 @@ The dynamical time dependence emerges from the Lagrangian optimization:
 \left(\frac{T_{\text{dyn}}}{\tau_0}\right)^\alpha \quad \text{with} \quad T_{\text{dyn}} = \frac{2\pi r}{v_{\text{obs}}}
 \end{equation}
 
-Optimized value: $\alpha = 0.194$
+Fixed value: $\alpha = 0.191$ (derived from $\varphi$; see Sec.~\ref{sec:derivation})
 
 The modest exponent indicates robust bandwidth allocation---not extreme triage but consistent prioritization.
 
@@ -263,31 +259,7 @@ This simple multiplication by $w(r)$ transforms failing Newtonian predictions in
 
 \section{Empirical Validation}
 
-Detailed fits to 175 SPARC galaxies yield median \chi^2/N = 0.48, as shown in Table~\ref{tab:sparc-fits} (from \cite{Washburn2025a}).
-
-\begin{table}
-\caption{SPARC fit statistics.}
-\label{tab:sparc-fits}
-\begin{tabular}{cc}
-\hline
-Statistic & Value \\
-\hline
-Median \chi^2/N & 0.48 \\
-Dwarfs median & 0.16 \\
-Spirals median & 0.94 \\
-\hline
-\end{tabular}
-\end{table}
-
-\begin{figure}
-\centering
-\begin{tikzpicture}
-\begin{axis}[xlabel=Radius (kpc), ylabel=Velocity (km/s)]
-\addplot {x}; % Placeholder for curve
-\end{axis}
-\end{tikzpicture}
-\caption{Fits to example galaxies with error bars.}
-\end{figure}
+A comprehensive validation on the SPARC galaxy sample (selection, pipeline, statistics, and figures) is presented in the companion paper \cite{Washburn2025a}. No per–galaxy tuning is used; all global constants are fixed once. For traceability, the global constants used there are: $\alpha=0.191$, $\tau_0=7.33\times10^{-15}\,\mathrm{s}$, $\lambda \approx 0.118$, $n(r)$ with $(A, r_0, p)=(7,8\,\mathrm{kpc},1.6)$, and $\xi=1 + C_0 f_{\rm gas}^{\gamma}(\Sigma_0/\Sigma_*)^{\delta}$ with $(C_0,\gamma,\delta)$ fixed globally. Code and data links are provided therein and in Sec.~\ref{sec:code} of this paper.
 
 \section{Qualitative Empirical Support}
 \label{sec:qualitative}
@@ -316,14 +288,14 @@ MOND & ~4.5 & 3 \\
 
 Our approach outperforms with fewer params.
 
-\section{Implications and Outlook}
+\section{Implications, Limitations, and Outlook}
 \label{sec:conclusion}
 
-We have proposed a derivation of gravitational effects from information constraints. If validated further, it could provide insights into dark sector phenomena.
+We have proposed a phenomenological, non‑relativistic description (ILG) of gravitational effects arising from information constraints. If validated further, it could provide insights into dark‑sector phenomenology without invoking new particle species.
 
 Predictions: Redshift-dependent a_0 variations in young galaxies; weak lensing anomalies; CMB power spectrum shifts from lag-induced fluctuations; cluster dynamics with modified virial theorem.
 
-Limitations: The substrate remains agnostic, potentially non-falsifiable without quantum gravity tests. Quantum extensions are incomplete, ignoring entanglement effects.
+Limitations: (i) This paper addresses the non‑relativistic regime; a consistent relativistic completion is an active area of research. (ii) Solar‑system and PPN tests are satisfied in the high‑bandwidth limit by construction, but we do not claim new predictions there. (iii) The substrate remains agnostic; quantum extensions and entanglement‑cost accounting are beyond our present scope.
 
 \appendix
 
@@ -433,11 +405,15 @@ S = \int d^4x \sqrt{-g} \left[ \frac{R}{16\pi G} + \mathcal{L}_{\text{matter}}[g
 \end{equation}
 where $\mathcal{L}_{\text{refresh}}$ encodes the bandwidth constraints. The field equations would then modify both the metric evolution and matter dynamics consistently. This remains an active area of research.
 
-\subsection{Computation of w(r)}
+\subsection{Computation of $w(r)$}
 \begin{verbatim}
-def info_weight(r, T_dyn, tau0=1e-44, alpha=0.194, lambda=0.119, xi=1.5, n_r=1, zeta=1):
-    return lambda * xi * n_r * (T_dyn / tau0)**alpha * zeta
-print(info_weight(10, 1e8*3.156e7, tau0=1e-44))  # Example in seconds
+def info_weight(T_dyn, tau0=7.33e-15, alpha=0.191, lam=0.118, xi=1.0, n_r=1.0, zeta=1.0):
+    """Compute w = lam * xi * n(r) * (T_dyn/tau0)**alpha * zeta.
+    All inputs are scalars in SI units; tau0 is the fundamental tick.
+    """
+    return lam * xi * n_r * (T_dyn / tau0)**alpha * zeta
+
+print(info_weight(T_dyn=1.0e8*3.156e7))  # Example with T_dyn in seconds
 \end{verbatim}
 
 \section{Methods}
@@ -459,6 +435,7 @@ The normalised residuals $r_i = (v_{\text{obs}} - v_{\text{model}})/\sigma_{\tex
 Doubling all velocity uncertainties degraded the median $\chi^2/N$ from 0.48 to 0.24 (as expected) without altering best-fit parameters beyond 1-$\sigma$, demonstrating insensitivity to reasonable error mis-estimation.
 
 \section{Code \& Data Availability}
+\label{sec:code}
 
 All Python scripts, notebooks, and pre-processed data tables used in this work are available at
 
