@@ -249,15 +249,33 @@ document.addEventListener("DOMContentLoaded", function() {
         })();
     }
 
+    // Ensure <math-note> and .math-note content has TeX delimiters if missing
+    function wrapMathNotesWithDelimiters() {
+        try {
+            const nodes = document.querySelectorAll('math-note, .math-note');
+            nodes.forEach(node => {
+                // Skip if already contains any TeX delimiters
+                const html = node.innerHTML.trim();
+                const hasDelims = /\\\(|\\\)|\$|\\\[|\\\]/.test(html);
+                if (!hasDelims && html.length > 0) {
+                    // Wrap entire content as inline TeX
+                    node.innerHTML = `\\(${html}\\)`;
+                }
+            });
+        } catch(_) {}
+    }
+
     // Robust typeset trigger akin to RH page
     function typesetWhenReady(){
         try {
+            wrapMathNotesWithDelimiters();
             if (window.MathJax && typeof MathJax.typesetPromise === 'function') { MathJax.typesetPromise(); return; }
             if (window.MathJax && typeof MathJax.typeset === 'function') { MathJax.typeset(); return; }
             const mj = document.getElementById('MathJax-script');
             if (mj && !mj.dataset.bound) {
                 mj.dataset.bound = '1';
                 mj.addEventListener('load', function(){
+                    wrapMathNotesWithDelimiters();
                     if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
                 });
                 return;
