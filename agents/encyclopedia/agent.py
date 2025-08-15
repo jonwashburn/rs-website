@@ -194,6 +194,7 @@ def write_page(out_dir: Path, slug: str, html_body: str) -> None:
 <head>
 	<meta charset=\"UTF-8\" />
 	<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />
+	<meta http-equiv=\"Content-Security-Policy\" content=\"script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline';\">
 	<title>{slug}</title>
 	<link rel=\"stylesheet\" href=\"/assets/css/main.css\" />
 	<link rel=\"stylesheet\" href=\"/assets/css/site-template.css\" />
