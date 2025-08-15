@@ -222,28 +222,48 @@ document.addEventListener("DOMContentLoaded", function() {
     // Footer can be injected immediately
     fetchAndInject(basePath + '_includes/footer.html', 'footer-placeholder');
     
-    // Simple MathJax configuration that works with GitHub Pages
-    window.MathJax = {
-        tex: {
-            inlineMath: [['\\(', '\\)']],
-            displayMath: [['\\[', '\\]']],
-            processEscapes: true
-        },
-        options: {
-            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
-        }
-    };
-    
-    // Load MathJax script directly
-    (function () {
-        var script = document.createElement('script');
-        script.src = 'https://polyfill.io/v3/polyfill.min.js?features=es6';
-        document.head.appendChild(script);
-        script.onload = function() {
-            var mathjax = document.createElement('script');
-            mathjax.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
-            mathjax.async = true;
-            document.head.appendChild(mathjax);
+    // MathJax loader (guarded). Use both $...$ and \(...\) like RH paper; include $$ and \[\] for display.
+    if (!document.getElementById('MathJax-script')) {
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
         };
-    })();
+        // Load MathJax (SVG renderer for fidelity)
+        (function () {
+            var pf = document.createElement('script');
+            pf.src = 'https://polyfill.io/v3/polyfill.min.js?features=es6';
+            document.head.appendChild(pf);
+            pf.onload = function() {
+                var mj = document.createElement('script');
+                mj.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';
+                mj.async = true;
+                mj.id = 'MathJax-script';
+                document.head.appendChild(mj);
+            };
+        })();
+    }
+
+    // Robust typeset trigger akin to RH page
+    function typesetWhenReady(){
+        try {
+            if (window.MathJax && typeof MathJax.typesetPromise === 'function') { MathJax.typesetPromise(); return; }
+            if (window.MathJax && typeof MathJax.typeset === 'function') { MathJax.typeset(); return; }
+            const mj = document.getElementById('MathJax-script');
+            if (mj && !mj.dataset.bound) {
+                mj.dataset.bound = '1';
+                mj.addEventListener('load', function(){
+                    if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+                });
+                return;
+            }
+            setTimeout(typesetWhenReady, 250);
+        } catch(_) {}
+    }
+    typesetWhenReady();
 });
