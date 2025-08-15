@@ -225,7 +225,17 @@ def call_model(cfg: Dict[str, Any], messages: List[Dict[str, str]]) -> str:
 
 def minimal_validate(html: str) -> List[str]:
 	errs = []
-	needed = ["Definition", "In Plain English", "Why It Matters", "How It Works", "Key Properties", "Related Topics"]
+	needed = [
+		"Essence",
+		"Definition",
+		"In Plain English",
+		"Why It Matters",
+		"How It Works",
+		"Key Properties",
+		"Connections",
+		"Testable Predictions",
+		"Related Topics",
+	]
 	for h in needed:
 		if h not in html:
 			errs.append(f"Missing section: {h}")
