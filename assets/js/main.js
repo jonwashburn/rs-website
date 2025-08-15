@@ -134,6 +134,29 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+    function executeScripts(container) {
+        try {
+            const scripts = container.querySelectorAll('script');
+            scripts.forEach((oldScript) => {
+                const newScript = document.createElement('script');
+                // Copy attributes
+                for (let i = 0; i < oldScript.attributes.length; i += 1) {
+                    const attr = oldScript.attributes[i];
+                    newScript.setAttribute(attr.name, attr.value);
+                }
+                if (oldScript.src) {
+                    newScript.src = oldScript.src;
+                } else {
+                    newScript.textContent = oldScript.textContent;
+                }
+                // Replace to trigger execution
+                oldScript.parentNode.replaceChild(newScript, oldScript);
+            });
+        } catch (e) {
+            // Silently ignore script execution errors in includes
+        }
+    }
+
     function fetchAndInject(url, placeholderId) {
         const placeholder = document.getElementById(placeholderId);
         if (placeholder) {
@@ -148,6 +171,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 })
                 .then(data => {
                     placeholder.innerHTML = data;
+                    // Ensure any scripts inside the included HTML execute
+                    executeScripts(placeholder);
                     if (placeholderId === 'header-placeholder') {
                         setupHeaderEventListeners();
                         // Inject sitewide banner only after header is present to avoid race conditions
