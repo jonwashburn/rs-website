@@ -215,8 +215,7 @@
 
   <div id="footer-placeholder"></div>
 
-  <!-- Audio element -->
-  <audio id="featuredAudio" src="/Beyond%20Dark%20Matter_%20Is%20Gravity%20Just%20a%20Cosmic%20Refresh%20Lag_.mp3" preload="none"></audio>
+  <!-- Audio element will be created dynamically in JavaScript -->
 
   <script src="/assets/js/main.js"></script>
   
@@ -500,19 +499,38 @@
     }
   </style>
   <script>
-    // Featured audio functionality
+    // Featured audio functionality - matching home page pattern
     document.addEventListener('DOMContentLoaded', function() {
       const featuredAudioBtn = document.getElementById('featuredAudioBtn');
-      const featuredAudio = document.getElementById('featuredAudio');
       const featuredPlay = document.getElementById('featuredPlay');
       const featuredPause = document.getElementById('featuredPause');
-      
+      let featuredAudio = null;
       let isFeaturedPlaying = false;
 
-      if (featuredAudioBtn && featuredAudio) {
+      if (featuredAudioBtn) {
         const featuredBtnText = featuredAudioBtn.querySelector('.btn-text');
         
         featuredAudioBtn.addEventListener('click', function() {
+          if (!featuredAudio) {
+            // Create audio element dynamically with proper encoding
+            const audioPath = encodeURI('/Beyond Dark Matter_ Is Gravity Just a Cosmic Refresh Lag_.mp3');
+            featuredAudio = new Audio(audioPath);
+            
+            featuredAudio.addEventListener('ended', function() {
+              if (featuredPlay) featuredPlay.style.display = 'block';
+              if (featuredPause) featuredPause.style.display = 'none';
+              featuredAudioBtn.setAttribute('aria-pressed', 'false');
+              if (featuredBtnText) featuredBtnText.textContent = 'Listen Now';
+              isFeaturedPlaying = false;
+            });
+            
+            featuredAudio.addEventListener('error', function(e) {
+              console.error('Audio error:', e);
+              alert('Audio file could not be loaded. Please check your connection.');
+              isFeaturedPlaying = false;
+            });
+          }
+          
           if (isFeaturedPlaying) {
             featuredAudio.pause();
             if (featuredPlay) featuredPlay.style.display = 'block';
@@ -529,23 +547,10 @@
               isFeaturedPlaying = true;
             }).catch(err => {
               console.error('Audio playback failed:', err);
-              alert('Unable to play audio. The file may be missing or your browser may be blocking autoplay.');
+              alert('Unable to play audio. Please try clicking the button again.');
               isFeaturedPlaying = false;
             });
           }
-        });
-
-        featuredAudio.addEventListener('ended', function() {
-          if (featuredPlay) featuredPlay.style.display = 'block';
-          if (featuredPause) featuredPause.style.display = 'none';
-          featuredAudioBtn.setAttribute('aria-pressed', 'false');
-          if (featuredBtnText) featuredBtnText.textContent = 'Listen Now';
-          isFeaturedPlaying = false;
-        });
-      } else {
-        console.error('Audio elements not found:', {
-          btn: !!featuredAudioBtn,
-          audio: !!featuredAudio
         });
       }
     });
