@@ -257,11 +257,46 @@ def sanitize_and_wrap(html_body: str, task: Dict[str, Any]) -> str:
 		+ '</div>'
 		f'</div>'
 	)
+
+	# Optional hero image/figure support via task metadata
+	# Supported fields:
+	# - task["hero_image"]: {src, alt, caption, credit}
+	# - task["images"]: [ {src, alt, caption, credit, placement: "hero"|"inline"} ]
+	hero_fig_html = ""
+	try:
+		images = task.get("images", []) or []
+		# Prefer explicit hero_image, otherwise first with placement hero/banner
+		hero_image = task.get("hero_image") or next(
+			(img for img in images if str(img.get("placement", "")).lower() in ("hero", "banner")),
+			None,
+		)
+		if hero_image is not None:
+			# Default src falls back to slug.svg under assets
+			default_src = f"/assets/images/encyclopedia/{slugify(title)}.svg"
+			src = hero_image.get("src") or default_src
+			alt = hero_image.get("alt") or title
+			caption = hero_image.get("caption", "")
+			credit = hero_image.get("credit", "")
+			credit_html = f'<span class="figure-credit">{credit}</span>' if credit else ""
+			cap_html = (
+				f"<figcaption>{caption}{(' • ' + credit_html) if caption and credit_html else credit_html}</figcaption>"
+				if (caption or credit)
+				else ""
+			)
+			hero_fig_html = (
+				'<figure class="concept-visual">'
+				f'<img src="{src}" alt="{alt}" loading="lazy" decoding="async" />'
+				f"{cap_html}"
+				"</figure>"
+			)
+	except Exception:
+		# Do not fail page generation if image metadata is malformed
+		hero_fig_html = ""
 	
 	wrapped = (
 		'<section class="template-section encyclopedia-entry">'
 		'<div class="template-container">'
-		+ breadcrumbs + hero_box +
+		+ breadcrumbs + hero_box + hero_fig_html +
 		'<div class="template-reading">'
 		+ body +
 		'</div></div></section>'
