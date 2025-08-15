@@ -43,33 +43,6 @@
             font-weight: 400;
         }
         
-        /* Stats */
-        .enc-stats {
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            margin-top: 2rem;
-        }
-        
-        .stat-item {
-            text-align: center;
-        }
-        
-        .stat-value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #1a1a1a;
-            line-height: 1;
-        }
-        
-        .stat-label {
-            font-size: 0.875rem;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-top: 0.5rem;
-        }
-        
         /* Search */
         .search-section {
             max-width: 600px;
@@ -370,21 +343,6 @@
         <div class="enc-hero">
             <h1>Recognition Science Encyclopedia</h1>
             <p class="subtitle">Explore the complete framework of reality through Recognition Science</p>
-            
-            <div class="enc-stats">
-                <div class="stat-item">
-                    <div class="stat-value" id="total-pages">0</div>
-                    <div class="stat-label">Total Pages</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="total-categories">0</div>
-                    <div class="stat-label">Categories</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="completion-percent">0%</div>
-                    <div class="stat-label">Complete</div>
-                </div>
-            </div>
         </div>
         
         <div class="search-section">
@@ -472,9 +430,6 @@
                     categories[task.category].push(entry);
                 });
                 
-                // Update stats
-                updateStats();
-                
                 // Render categories
                 renderCategories();
                 
@@ -498,17 +453,6 @@
                 console.error('Error loading existing pages:', error);
                 return [];
             }
-        }
-        
-        function updateStats() {
-            const totalPages = encyclopediaData.length;
-            const existingPages = encyclopediaData.filter(page => page.exists).length;
-            const totalCategories = Object.keys(categories).length;
-            const completionPercent = Math.round((existingPages / totalPages) * 100);
-            
-            document.getElementById('total-pages').textContent = existingPages;
-            document.getElementById('total-categories').textContent = totalCategories;
-            document.getElementById('completion-percent').textContent = completionPercent + '%';
         }
         
         function renderCategories() {
