@@ -4,111 +4,248 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://polyfill.io; style-src 'self' 'unsafe-inline';">
-    <title>Recognition Science Encyclopedia</title>
+    <title>Encyclopedia | Recognition Science</title>
     <link rel="stylesheet" href="/assets/css/main.css" />
     <link rel="stylesheet" href="/assets/css/site-template.css" />
-    <link rel="stylesheet" href="/assets/css/encyclopedia.css" />
     <style>
-        .encyclopedia-index {
-            max-width: 1200px;
+        /* Clean, modern design matching logical-foundations.html */
+        body {
+            background: #fafafa;
+            color: #1a1a1a;
+        }
+        
+        .encyclopedia-container {
+            max-width: 1100px;
             margin: 0 auto;
             padding: 2rem;
         }
         
-        .search-container {
-            position: relative;
+        /* Hero section */
+        .enc-hero {
+            text-align: center;
+            padding: 4rem 0 3rem;
+            border-bottom: 1px solid #e5e5e5;
+            margin-bottom: 3rem;
+        }
+        
+        .enc-hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 0 0 1rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .enc-hero .subtitle {
+            font-size: 1.25rem;
+            color: #666;
+            margin: 0 0 2rem;
+            font-weight: 400;
+        }
+        
+        /* Stats */
+        .enc-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            line-height: 1;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 0.5rem;
+        }
+        
+        /* Search */
+        .search-section {
             max-width: 600px;
-            margin: 2rem auto 3rem;
+            margin: 0 auto 4rem;
+            position: relative;
         }
         
         .search-input {
             width: 100%;
             padding: 1rem 1.5rem;
-            font-size: 1.1rem;
-            border: 2px solid var(--primary-gold);
+            font-size: 1.125rem;
+            border: 2px solid #e5e5e5;
             border-radius: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-primary);
-            transition: all 0.3s ease;
+            background: white;
+            transition: all 0.2s ease;
+            font-family: inherit;
         }
         
         .search-input:focus {
             outline: none;
-            border-color: var(--secondary-gold);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+            border-color: #1a1a1a;
+            box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.1);
         }
         
+        .search-input::placeholder {
+            color: #999;
+        }
+        
+        /* Autocomplete dropdown */
         .autocomplete-dropdown {
             position: absolute;
-            top: 100%;
+            top: calc(100% + 4px);
             left: 0;
             right: 0;
             max-height: 400px;
             overflow-y: auto;
-            background: rgba(10, 10, 30, 0.98);
-            border: 1px solid var(--primary-gold);
-            border-top: none;
-            border-radius: 0 0 8px 8px;
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             display: none;
             z-index: 1000;
         }
         
         .autocomplete-item {
-            padding: 0.8rem 1.5rem;
+            padding: 1rem 1.5rem;
             cursor: pointer;
-            transition: background 0.2s ease;
-            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+            border-bottom: 1px solid #f5f5f5;
+            transition: background 0.15s ease;
+        }
+        
+        .autocomplete-item:last-child {
+            border-bottom: none;
         }
         
         .autocomplete-item:hover,
         .autocomplete-item.selected {
-            background: rgba(255, 215, 0, 0.1);
+            background: #f8f8f8;
         }
         
         .autocomplete-item .title {
             font-weight: 600;
-            color: var(--primary-gold);
-            margin-bottom: 0.2rem;
+            color: #1a1a1a;
+            margin-bottom: 0.25rem;
         }
         
-        .autocomplete-item .category {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-        
-        .category-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-        
-        .category-section {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            border-radius: 12px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-        }
-        
-        .category-section:hover {
-            border-color: var(--primary-gold);
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
-        }
-        
-        .category-header {
-            font-size: 1.4rem;
-            color: var(--primary-gold);
-            margin-bottom: 1rem;
+        .autocomplete-item .meta {
+            font-size: 0.875rem;
+            color: #666;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
         
+        .autocomplete-item .category {
+            color: #666;
+        }
+        
+        .autocomplete-item .difficulty {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .difficulty-foundational {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+        
+        .difficulty-intermediate {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .difficulty-advanced {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+        
+        .difficulty-expert {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+        
+        .autocomplete-item .coming-soon {
+            font-style: italic;
+            color: #999;
+        }
+        
+        /* Categories */
+        .categories-section {
+            margin-top: 4rem;
+        }
+        
+        .categories-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .categories-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 0 0 0.5rem;
+        }
+        
+        .categories-header p {
+            color: #666;
+            margin: 0;
+        }
+        
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .category-card {
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .category-card:hover {
+            border-color: #1a1a1a;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+        
+        .category-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin: 0 0 0.5rem;
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+        }
+        
         .category-count {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            font-weight: normal;
+            font-size: 0.875rem;
+            font-weight: 400;
+            color: #666;
+        }
+        
+        .category-description {
+            color: #666;
+            font-size: 0.875rem;
+            margin: 0.5rem 0 1rem;
+            line-height: 1.5;
         }
         
         .page-list {
@@ -122,91 +259,119 @@
         }
         
         .page-link {
-            color: var(--text-primary);
+            color: #1a1a1a;
             text-decoration: none;
             display: flex;
-            align-items: baseline;
+            align-items: center;
             gap: 0.5rem;
-            transition: color 0.2s ease;
+            font-size: 0.9375rem;
+            transition: color 0.15s ease;
         }
         
         .page-link:hover {
-            color: var(--secondary-gold);
+            color: #0066cc;
         }
         
-        .difficulty-badge {
-            font-size: 0.75rem;
-            padding: 0.1rem 0.4rem;
-            border-radius: 4px;
-            background: rgba(255, 215, 0, 0.1);
-            color: var(--primary-gold);
+        .page-link .difficulty {
+            font-size: 0.6875rem;
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            flex-shrink: 0;
         }
         
-        .difficulty-expert {
-            background: rgba(255, 0, 0, 0.1);
-            color: #ff6b6b;
+        .more-pages {
+            color: #666;
+            font-style: italic;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
         }
         
-        .difficulty-advanced {
-            background: rgba(255, 165, 0, 0.1);
-            color: #ffa500;
+        /* Breadcrumb */
+        .breadcrumb {
+            margin-bottom: 2rem;
+            font-size: 0.875rem;
+            color: #666;
         }
         
-        .difficulty-intermediate {
-            background: rgba(0, 255, 0, 0.1);
-            color: #4ecdc4;
+        .breadcrumb a {
+            color: #666;
+            text-decoration: none;
         }
         
-        .difficulty-foundational {
-            background: rgba(0, 150, 255, 0.1);
-            color: #45b7d1;
+        .breadcrumb a:hover {
+            color: #1a1a1a;
         }
         
-        .index-hero {
+        .breadcrumb .sep {
+            margin: 0 0.5rem;
+            opacity: 0.5;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .encyclopedia-container {
+                padding: 1rem;
+            }
+            
+            .enc-hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .enc-stats {
+                gap: 2rem;
+            }
+            
+            .stat-value {
+                font-size: 2rem;
+            }
+            
+            .category-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Loading state */
+        .loading {
             text-align: center;
-            margin-bottom: 3rem;
+            padding: 4rem;
+            color: #666;
         }
         
-        .index-hero h1 {
-            font-size: 3rem;
-            background: linear-gradient(135deg, var(--primary-gold), var(--secondary-gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 1rem;
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-left: 10px;
+            border: 2px solid #e5e5e5;
+            border-top-color: #1a1a1a;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
         }
         
-        .index-stats {
-            display: flex;
-            gap: 2rem;
-            justify-content: center;
-            margin-top: 2rem;
-        }
-        
-        .stat-item {
-            text-align: center;
-        }
-        
-        .stat-value {
-            font-size: 2rem;
-            color: var(--primary-gold);
-            font-weight: bold;
-        }
-        
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body class="template-page">
     <div id="header-placeholder"></div>
     
-    <div class="encyclopedia-index">
-        <div class="index-hero">
+    <div class="encyclopedia-container">
+        <div class="breadcrumb">
+            <a href="/">Home</a>
+            <span class="sep">›</span>
+            <span>Encyclopedia</span>
+        </div>
+        
+        <div class="enc-hero">
             <h1>Recognition Science Encyclopedia</h1>
-            <p class="lead">Explore the complete framework of reality through Recognition Science</p>
+            <p class="subtitle">Explore the complete framework of reality through Recognition Science</p>
             
-            <div class="index-stats">
+            <div class="enc-stats">
                 <div class="stat-item">
                     <div class="stat-value" id="total-pages">0</div>
                     <div class="stat-label">Total Pages</div>
@@ -222,19 +387,26 @@
             </div>
         </div>
         
-        <div class="search-container">
+        <div class="search-section">
             <input 
                 type="text" 
                 class="search-input" 
                 id="encyclopedia-search"
-                placeholder="Search encyclopedia... (start typing to see suggestions)"
+                placeholder="Search encyclopedia..."
                 autocomplete="off"
             />
             <div class="autocomplete-dropdown" id="autocomplete-dropdown"></div>
         </div>
         
-        <div class="category-grid" id="category-grid">
-            <!-- Categories will be populated by JavaScript -->
+        <div class="categories-section">
+            <div class="categories-header">
+                <h2>Browse by Category</h2>
+                <p>Click any category to explore its articles</p>
+            </div>
+            
+            <div class="category-grid" id="category-grid">
+                <div class="loading">Loading encyclopedia data</div>
+            </div>
         </div>
     </div>
     
@@ -246,10 +418,28 @@
         let encyclopediaData = [];
         let categories = {};
         
+        // Category descriptions
+        const categoryDescriptions = {
+            "Recognition Physics Fundamentals": "Core concepts and principles of Recognition Science",
+            "Fundamental Constants": "Physical constants derived from first principles",
+            "Quantum & Particle Physics": "Quantum mechanics and particle physics through Recognition lens",
+            "Spacetime & Gravity": "Spacetime structure and gravitational phenomena",
+            "Cosmology & Astrophysics": "Large-scale structure and evolution of the universe",
+            "Thermodynamics & Statistical": "Statistical mechanics and thermodynamic principles",
+            "Chemistry & Materials": "Chemical bonds and material properties",
+            "Biology & Consciousness": "Life, consciousness, and recognition in biological systems",
+            "Mathematics & Computation": "Mathematical foundations and computational aspects",
+            "Advanced Physics & Technology": "Cutting-edge physics and technological applications",
+            "Experimental Methods": "Experimental techniques and verification methods",
+            "Historical Figures": "Key contributors to physics and Recognition Science",
+            "Philosophical Concepts": "Philosophical implications and interpretations",
+            "Applications & Technology": "Practical applications and future technologies"
+        };
+        
         // Initialize the index
         async function initializeIndex() {
-            // Load the task data
             try {
+                // Load the task data
                 const response = await fetch('/agents/encyclopedia/tasks.complete-2000.json');
                 const allTasks = await response.json();
                 
@@ -293,6 +483,8 @@
                 
             } catch (error) {
                 console.error('Error loading encyclopedia data:', error);
+                document.getElementById('category-grid').innerHTML = 
+                    '<div class="error">Error loading encyclopedia data. Please try again later.</div>';
             }
         }
         
@@ -304,7 +496,6 @@
                 return pages;
             } catch (error) {
                 console.error('Error loading existing pages:', error);
-                // Fallback to empty array
                 return [];
             }
         }
@@ -336,22 +527,29 @@
                 const existingPages = pages.filter(p => p.exists);
                 if (existingPages.length === 0) return; // Skip empty categories
                 
-                const section = document.createElement('div');
-                section.className = 'category-section';
+                const card = document.createElement('div');
+                card.className = 'category-card';
                 
-                const header = document.createElement('h2');
-                header.className = 'category-header';
+                const header = document.createElement('h3');
                 header.innerHTML = `
                     ${categoryName}
-                    <span class="category-count">(${existingPages.length}/${pages.length})</span>
+                    <span class="category-count">${existingPages.length}/${pages.length}</span>
                 `;
-                section.appendChild(header);
+                card.appendChild(header);
+                
+                // Add description if available
+                if (categoryDescriptions[categoryName]) {
+                    const desc = document.createElement('p');
+                    desc.className = 'category-description';
+                    desc.textContent = categoryDescriptions[categoryName];
+                    card.appendChild(desc);
+                }
                 
                 const list = document.createElement('ul');
                 list.className = 'page-list';
                 
-                // Show only existing pages
-                existingPages.slice(0, 10).forEach(page => {
+                // Show first 5 existing pages
+                existingPages.slice(0, 5).forEach(page => {
                     const item = document.createElement('li');
                     item.className = 'page-item';
                     
@@ -360,22 +558,22 @@
                     link.className = 'page-link';
                     link.innerHTML = `
                         <span>${page.title}</span>
-                        <span class="difficulty-badge difficulty-${page.difficulty.toLowerCase()}">${page.difficulty}</span>
+                        <span class="difficulty difficulty-${page.difficulty.toLowerCase()}">${page.difficulty}</span>
                     `;
                     
                     item.appendChild(link);
                     list.appendChild(item);
                 });
                 
-                if (existingPages.length > 10) {
+                if (existingPages.length > 5) {
                     const more = document.createElement('li');
-                    more.className = 'page-item';
-                    more.innerHTML = `<span style="color: var(--text-secondary)">...and ${existingPages.length - 10} more</span>`;
+                    more.className = 'more-pages';
+                    more.textContent = `...and ${existingPages.length - 5} more`;
                     list.appendChild(more);
                 }
                 
-                section.appendChild(list);
-                grid.appendChild(section);
+                card.appendChild(list);
+                grid.appendChild(card);
             });
         }
         
@@ -428,7 +626,11 @@
                     
                     item.innerHTML = `
                         <div class="title">${page.title}</div>
-                        <div class="category">${page.category} • ${page.difficulty}${!page.exists ? ' • Coming Soon' : ''}</div>
+                        <div class="meta">
+                            <span class="category">${page.category}</span>
+                            <span class="difficulty difficulty-${page.difficulty.toLowerCase()}">${page.difficulty}</span>
+                            ${!page.exists ? '<span class="coming-soon">Coming Soon</span>' : ''}
+                        </div>
                     `;
                     
                     item.addEventListener('click', () => {
