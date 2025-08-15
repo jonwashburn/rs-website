@@ -3,223 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gravity Explained: From Newton to Information Bandwidth | Recognition Physics</title>
-    <meta name="description" content="Gravity emerges from finite information bandwidth constraints. Learn how Recognition Physics derives Newton's law, explains dark matter without particles, and unifies gravitational phenomena.">
-    
+    <title>Gravity Explained - Recognition Physics</title>
     <link rel="stylesheet" href="/assets/css/main.css">
     <link rel="stylesheet" href="/assets/css/site-template.css">
-    <link rel="stylesheet" href="/style.css">
-    
+    <meta name="description" content="Gravity emerges from finite information bandwidth constraints on the universal ledger. Recognition Physics derives Newton's law and explains dark matter without particles.">
     <style>
-        /* Academic-style page specific styles */
-        body {
-            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #fafafa;
+        /* Interactive term styles - matching academic.html exactly */
+        .term {
+            border: none;
+            cursor: pointer;
+            position: relative;
+            background: none;
+            padding: 0 2px;
+            margin: 0 -2px;
+            font: inherit;
+            color: inherit;
+            border-radius: 2px;
+            box-shadow: inset 0 0 0 1px rgba(255, 0, 110, 0.10);
+            transition: all 0.15s ease;
+        }
+
+        .term:hover {
+            background: rgba(255, 0, 110, 0.08);
+            color: var(--color-accent);
+            box-shadow: inset 0 0 0 1px rgba(255, 0, 110, 0.25);
         }
         
-        .academic-hero {
-            background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 3rem;
-            margin: 2rem auto;
-            max-width: 900px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        .term.active {
+            background: rgba(255, 0, 110, 0.12);
+            color: var(--color-accent);
+            box-shadow: inset 0 0 0 1px var(--color-accent);
+            font-weight: 500;
         }
-        
-        .academic-hero h1 {
-            color: #002855;
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-        
-        .academic-hero .subtitle {
-            color: #666;
-            font-size: 1.2rem;
+
+        /* Inline expansions */
+        .expansion {
+            display: none;
+            background: var(--color-bg-subtle);
+            border-left: 3px solid var(--color-accent);
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            font-size: 0.95rem;
             line-height: 1.6;
+            border-radius: 0 8px 8px 0;
         }
-        
+
+        .expansion.active {
+            display: block;
+        }
+
+        /* Audio player */
         .audio-player {
-            margin: 2rem 0;
-            padding: 1.5rem;
-            background: #f5f5f5;
-            border-radius: 8px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, var(--color-primary) 0%, #001a3d 100%);
+            color: white;
+            padding: 0.75rem 0;
+            z-index: 1000;
+            display: none;
+        }
+
+        .audio-player.active {
+            display: block;
+        }
+
+        .audio-player-content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1rem;
             display: flex;
             align-items: center;
             gap: 1rem;
         }
-        
-        .audio-player button {
-            background: #ff006e;
-            color: white;
-            border: none;
-            padding: 0.5rem 1.5rem;
-            border-radius: 24px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.2s;
-        }
-        
-        .audio-player button:hover {
-            background: #e00060;
-        }
-        
-        .term {
-            color: #002855;
-            text-decoration: underline;
-            text-decoration-style: dotted;
-            cursor: help;
-            position: relative;
-            font-weight: 500;
-        }
-        
-        .expansion {
-            display: none;
-            background: #f8f9fa;
-            border-left: 3px solid #ff006e;
+
+        /* Reading tip */
+        .reading-tip {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
             padding: 1rem;
-            margin: 1rem 0;
-            font-size: 0.95rem;
-            line-height: 1.6;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
         }
-        
-        .expansion.show {
-            display: block;
+
+        .reading-tip p {
+            margin: 0;
+            color: #1b5e20;
         }
-        
-        .theorem-box {
-            background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 2rem;
-            margin: 2rem 0;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .theorem-box::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(180deg, #ff006e, #002855);
-        }
-        
-        .theorem-box h3 {
-            color: #002855;
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
-        }
-        
-        .calculation-card {
-            background: #f8f9fa;
-            border: 1px solid #e0e0e0;
+
+        /* Plain language boxes */
+        .plain-language {
+            background: #f3f4f6;
+            border: 1px solid var(--color-border-light);
             border-radius: 8px;
             padding: 1.5rem;
-            margin: 1rem 0;
-            font-family: 'JetBrains Mono', monospace;
-        }
-        
-        .calculation-card .result {
-            font-size: 1.2rem;
-            color: #ff006e;
-            font-weight: 600;
-            margin-top: 0.5rem;
-        }
-        
-        .comparison-card {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
             margin: 2rem 0;
         }
-        
-        .comparison-card > div {
-            background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 1.5rem;
+
+        /* Key result boxes */
+        .key-result {
+            background: var(--color-bg-subtle);
+            border-left: 4px solid var(--color-accent);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
         }
-        
-        .comparison-card h4 {
-            color: #002855;
-            margin-bottom: 1rem;
-        }
-        
+
+        /* Academic note */
         .academic-note {
             background: #fff8e1;
             border-left: 4px solid #ffc107;
             padding: 1rem;
             margin: 1.5rem 0;
             font-style: italic;
+            border-radius: 0 8px 8px 0;
         }
-        
-        .key-test {
-            background: #e8f5e9;
-            border-left: 4px solid #4caf50;
-            padding: 1rem;
-            margin: 1rem 0;
-        }
-        
-        .reading-tip {
-            background: #e3f2fd;
-            border-left: 4px solid #2196f3;
-            padding: 1rem;
-            margin: 1.5rem 0;
-        }
-        
-        .formula-box {
-            background: #002855;
+
+        /* Formula display */
+        .formula-display {
+            background: var(--color-primary);
             color: white;
             padding: 2rem;
             border-radius: 8px;
             margin: 2rem 0;
             text-align: center;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 1.2rem;
         }
-        
-        .paper-links {
-            display: flex;
-            gap: 1rem;
+
+        /* Comparison grid */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
             margin: 2rem 0;
-            flex-wrap: wrap;
         }
-        
-        .paper-links a {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
+
+        .comparison-card {
             background: white;
-            border: 2px solid #002855;
+            border: 1px solid var(--color-border-light);
             border-radius: 8px;
-            color: #002855;
-            text-decoration: none;
+            padding: 1.5rem;
+        }
+
+        .comparison-card h4 {
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Theorem-style boxes for predictions */
+        .prediction-box {
+            background: white;
+            border: 1px solid var(--color-border-light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .prediction-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--color-accent), var(--color-primary));
+        }
+
+        /* Result card */
+        .result-card {
+            background: #f8f9fa;
+            border: 1px solid var(--color-border-light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            font-family: var(--font-mono);
+        }
+
+        .result-card .value {
+            font-size: 1.2rem;
+            color: var(--color-accent);
             font-weight: 600;
-            transition: all 0.2s;
+            margin-top: 0.5rem;
         }
-        
-        .paper-links a:hover {
-            background: #002855;
-            color: white;
-        }
-        
-        .section-divider {
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #ff006e, transparent);
-            margin: 3rem 0;
-        }
-        
+
         @media (max-width: 768px) {
-            .academic-hero {
-                padding: 2rem 1.5rem;
-            }
-            
-            .comparison-card {
+            .comparison-grid {
                 grid-template-columns: 1fr;
                 gap: 1rem;
             }
@@ -228,235 +200,251 @@
 </head>
 <body class="template-page">
     <div id="header-placeholder"></div>
-    
-    <main class="template-content">
+
+    <!-- Audio Player (hidden by default) -->
+    <div class="audio-player" id="audio-player">
+        <div class="audio-player-content">
+            <button class="template-btn-small" onclick="toggleAudio()">
+                <span id="audio-btn-text">Pause</span>
+            </button>
+            <span>Listen • 8 min</span>
+            <audio id="gravity-audio" src="/Beyond%20Dark%20Matter_%20Is%20Gravity%20Just%20a%20Cosmic%20Refresh%20Lag_.mp3"></audio>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="template-hero">
         <div class="template-container">
-            <div class="academic-hero">
-                <h1>Gravity: From Force to Information</h1>
-                <p class="subtitle">
-                    <span class="term" data-expansion="gravity-intro">Gravity</span> emerges from finite 
-                    <span class="term" data-expansion="bandwidth">information bandwidth</span> constraints 
-                    on the universal ledger. What Newton described and Einstein geometrized, 
-                    Recognition Physics derives from first principles.
+            <span class="template-hero-badge">GRAVITY EXPLAINED</span>
+            <h1 class="template-hero-title">Gravity: From Force to Information</h1>
+            <p class="template-hero-subtitle">
+                <button class="term" data-def="In Recognition Physics, gravity isn't a fundamental force or spacetime curvature—it's the emergent effect of finite information processing maintaining consistent relationships between masses">Gravity</button> emerges from finite 
+                <button class="term" data-def="The universal ledger has limited bandwidth for updating gravitational fields, like a computer with finite processing power. This constraint shapes the laws of physics themselves">information bandwidth</button> constraints 
+                on the universal ledger. What Newton described and Einstein geometrized, 
+                Recognition Physics derives from first principles.
+            </p>
+            <div class="template-hero-actions">
+                <button class="template-btn template-btn-primary" onclick="startAudio()">
+                    Listen • 8 min
+                </button>
+                <a href="/gravity-derived-paper.html" class="template-btn template-btn-outline">
+                    Read Full Paper
+                </a>
+                <a href="/gravity.pdf" class="template-btn template-btn-outline">
+                    Download PDF
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Insight -->
+    <section class="template-section">
+        <div class="template-container">
+            <h2 class="template-section-title">The Core Insight</h2>
+            
+            <div class="template-reading">
+                <p>
+                    The universe faces a computational challenge: maintaining gravitational interactions 
+                    between ~10<sup>80</sup> particles with finite bandwidth. The solution? 
+                    <button class="term" data-def="Like an emergency room prioritizing critical patients, the ledger allocates its limited update capacity to systems that need it most">Triage</button>.
                 </p>
-                
-                <div class="audio-player">
-                    <button onclick="toggleAudio()">
-                        <span id="audio-btn-text">Listen</span> • 8 min
-                    </button>
-                    <audio id="gravity-audio" src="/Beyond%20Dark%20Matter_%20Is%20Gravity%20Just%20a%20Cosmic%20Refresh%20Lag_.mp3"></audio>
-                    <span style="color: #666; font-size: 0.9rem;">Audio overview of gravity as bandwidth limitation</span>
-                </div>
-                
-                <div class="paper-links">
-                    <a href="/gravity-derived-paper.html">
-                        📄 Read Full Theory Paper
-                    </a>
-                    <a href="/gravity.pdf">
-                        📊 Download Analysis PDF
-                    </a>
-                </div>
             </div>
-            
-            <div id="gravity-intro" class="expansion">
-                <strong>What is gravity really?</strong> In Recognition Physics, gravity isn't a fundamental force 
-                or spacetime curvature—it's the emergent effect of how a finite information system maintains 
-                consistent relationships between all masses. When the universal ledger can't update every 
-                gravitational field instantly, slow-moving systems experience "refresh lag" that manifests 
-                as the phenomena we observe.
+
+            <div class="prediction-box">
+                <h3>Gravity = Optimized Information Processing</h3>
+                <ul>
+                    <li><strong>High priority:</strong> Fast dynamics (solar systems) → Newtonian gravity preserved</li>
+                    <li><strong>Medium priority:</strong> Slow dynamics (galaxies) → Refresh lag → "Dark matter" effects</li>
+                    <li><strong>Low priority:</strong> Cosmic expansion → Minimal updates → "Dark energy" behavior</li>
+                </ul>
             </div>
-            
-            <div id="bandwidth" class="expansion">
-                <strong>Information bandwidth in physics:</strong> Just as a computer has finite processing power, 
-                the substrate maintaining reality has finite bandwidth for updating fields. This isn't a limitation 
-                of our models—it's a fundamental constraint that shapes the laws of physics themselves. Systems 
-                requiring frequent updates (like solar systems) get priority; slowly evolving systems (like galaxies) 
-                experience delays.
-            </div>
-            
-            <section class="template-section">
-                <h2>The Core Insight</h2>
-                
-                <div class="theorem-box">
-                    <h3>Gravity = Optimized Information Processing</h3>
-                    <p>
-                        The universe faces a computational challenge: maintaining gravitational interactions 
-                        between ~10<sup>80</sup> particles with finite bandwidth. The solution? Triage.
-                    </p>
-                    <ul>
-                        <li><strong>High priority:</strong> Fast dynamics (solar systems) → Newtonian gravity preserved</li>
-                        <li><strong>Medium priority:</strong> Slow dynamics (galaxies) → Refresh lag → "Dark matter" effects</li>
-                        <li><strong>Low priority:</strong> Cosmic expansion → Minimal updates → "Dark energy" behavior</li>
-                    </ul>
-                </div>
-                
-                <div class="reading-tip">
+
+            <div class="reading-tip">
+                <p>
                     <strong>For physicists:</strong> Think of this as a resource allocation problem under Shannon's 
                     channel capacity theorem. The substrate must optimize 
-                    <span class="term" data-expansion="utility">utility</span> subject to bandwidth constraints, 
-                    leading to a Lagrangian formulation that yields MOND-like behavior without fine-tuning.
-                </div>
-                
-                <div id="utility" class="expansion">
-                    <strong>Utility function:</strong> U(Δt) = -K·Δt<sup>α</sup> where K represents system urgency 
-                    (collision risk, complexity) and α = 0.191 emerges from the ledger's eight-tick cycle and 
-                    golden ratio scaling. This form ensures scale invariance and diminishing returns—exactly 
-                    what an optimal scheduler needs.
-                </div>
-            </section>
+                    <button class="term" data-def="Utility function: U(Δt) = -K·Δt^α where K represents system urgency and α = 0.191 emerges from the ledger's structure">utility</button> 
+                    subject to bandwidth constraints, leading to a Lagrangian formulation that yields MOND-like behavior without fine-tuning.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- From Bandwidth to Dark Matter -->
+    <section class="template-section">
+        <div class="template-container">
+            <div class="template-accent-bar"></div>
+            <h2 class="template-section-title">From Bandwidth to Dark Matter</h2>
             
-            <div class="section-divider"></div>
-            
-            <section class="template-section">
-                <h2>From Bandwidth to Dark Matter</h2>
-                
+            <div class="template-reading">
                 <p>
                     The most striking prediction: <strong>dark matter doesn't exist as particles</strong>. 
-                    Instead, it's the observable effect of refresh lag in slowly rotating galaxies.
+                    Instead, it's the observable effect of 
+                    <button class="term" data-def="When field updates lag behind object motion, the mismatch creates apparent extra gravity—like a video game where physics calculations can't keep up with player movement">refresh lag</button> 
+                    in slowly rotating galaxies.
                 </p>
-                
-                <div class="calculation-card">
-                    <div style="color: #666; margin-bottom: 0.5rem;">Key derivation:</div>
-                    <div>w(r) = λ × ξ × n(r) × (T<sub>dyn</sub>/τ<sub>0</sub>)<sup>α</sup> × ζ(r)</div>
-                    <div class="result">→ Explains galaxy rotation without dark matter</div>
-                </div>
-                
-                <p>Where:</p>
+            </div>
+
+            <div class="formula-display">
+                w(r) = λ × ξ × n(r) × (T<sub>dyn</sub>/τ<sub>0</sub>)<sup>α</sup> × ζ(r)
+            </div>
+
+            <div class="key-result">
+                <p><strong>Key derivation:</strong> This information weight w(r) multiplies Newtonian predictions to explain galaxy rotation without dark matter.</p>
                 <ul>
                     <li><strong>w(r)</strong> = information weight (effective gravity boost)</li>
-                    <li><strong>T<sub>dyn</sub></strong> = dynamical time (how long orbits take)</li>
+                    <li><strong>T<sub>dyn</sub></strong> = dynamical time (orbital period)</li>
                     <li><strong>τ<sub>0</sub></strong> = fundamental tick (7.33 × 10<sup>-15</sup> s)</li>
                     <li><strong>α</strong> = 0.191 (from ledger structure, not fitted)</li>
                 </ul>
-                
-                <div class="academic-note">
+            </div>
+
+            <div class="academic-note">
+                <p>
                     <strong>Key result:</strong> When T<sub>dyn</sub> ≈ 10<sup>8</sup> years (typical for galaxies), 
                     the refresh lag creates acceleration a<sub>0</sub> ≈ 10<sup>-10</sup> m/s<sup>2</sup>—exactly 
                     the MOND scale, but derived rather than postulated.
-                </div>
-            </section>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Historical Context -->
+    <section class="template-section">
+        <div class="template-container">
+            <h2 class="template-section-title">Historical Context: Why This Matters</h2>
             
-            <div class="section-divider"></div>
-            
-            <section class="template-section">
-                <h2>Historical Context: Why This Matters</h2>
-                
+            <div class="comparison-grid">
                 <div class="comparison-card">
-                    <div>
-                        <h4>Traditional View</h4>
-                        <ul>
-                            <li><strong>Newton:</strong> Instantaneous force</li>
-                            <li><strong>Einstein:</strong> Spacetime curvature</li>
-                            <li><strong>Dark matter:</strong> Add invisible mass</li>
-                            <li><strong>MOND:</strong> Modify the law empirically</li>
-                        </ul>
-                        <p style="color: #666; margin-top: 1rem;">
-                            Each step adds complexity without explaining <em>why</em> gravity exists.
-                        </p>
-                    </div>
-                    <div>
-                        <h4>Recognition Physics</h4>
-                        <ul>
-                            <li><strong>Foundation:</strong> Information processing</li>
-                            <li><strong>Constraint:</strong> Finite bandwidth</li>
-                            <li><strong>Result:</strong> Gravity emerges necessarily</li>
-                            <li><strong>Bonus:</strong> Dark phenomena explained</li>
-                        </ul>
-                        <p style="color: #666; margin-top: 1rem;">
-                            One principle explains all gravitational phenomena.
-                        </p>
-                    </div>
+                    <h4>Traditional View</h4>
+                    <ul>
+                        <li><strong>Newton:</strong> Instantaneous force</li>
+                        <li><strong>Einstein:</strong> Spacetime curvature</li>
+                        <li><strong>Dark matter:</strong> Add invisible mass</li>
+                        <li><strong>MOND:</strong> Modify the law empirically</li>
+                    </ul>
+                    <p style="color: var(--color-text-muted); margin-top: 1rem;">
+                        Each step adds complexity without explaining <em>why</em> gravity exists.
+                    </p>
                 </div>
-                
-                <div class="key-test">
+                <div class="comparison-card">
+                    <h4>Recognition Physics</h4>
+                    <ul>
+                        <li><strong>Foundation:</strong> Information processing</li>
+                        <li><strong>Constraint:</strong> Finite bandwidth</li>
+                        <li><strong>Result:</strong> Gravity emerges necessarily</li>
+                        <li><strong>Bonus:</strong> Dark phenomena explained</li>
+                    </ul>
+                    <p style="color: var(--color-text-muted); margin-top: 1rem;">
+                        One principle explains all gravitational phenomena.
+                    </p>
+                </div>
+            </div>
+
+            <div class="key-result">
+                <p>
                     <strong>Historical vindication:</strong> Vera Rubin's "too fast" galaxies and Fritz Zwicky's 
                     missing mass both find natural explanation in bandwidth-limited field updates. The universe 
                     isn't missing 95% of its matter—we've been using incomplete equations.
-                </div>
-            </section>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testable Predictions -->
+    <section class="template-section">
+        <div class="template-container">
+            <h2 class="template-section-title">Testable Predictions</h2>
             
-            <div class="section-divider"></div>
-            
-            <section class="template-section">
-                <h2>Testable Predictions</h2>
-                
+            <div class="template-reading">
                 <p>
                     Unlike dark matter (undetected after 40+ years), information-limited gravity makes 
                     specific, falsifiable predictions:
                 </p>
-                
-                <div class="theorem-box">
-                    <h3>Near-Term Tests</h3>
-                    <ol>
-                        <li>
-                            <strong>Laboratory:</strong> Gravity should be ~32× stronger at 20 nanometers 
-                            (testable with molecular interferometry)
-                        </li>
-                        <li>
-                            <strong>Pulsars:</strong> Timing should reveal discrete "ticks" at 10-nanosecond 
-                            precision (bandwidth quantization)
-                        </li>
-                        <li>
-                            <strong>Galaxies:</strong> Young galaxies at high redshift should show different 
-                            a<sub>0</sub> values (bandwidth evolution)
-                        </li>
-                        <li>
-                            <strong>Lensing:</strong> Specific enhancement patterns tied to dynamical time, 
-                            not halo profiles
-                        </li>
-                    </ol>
-                </div>
-                
-                <div class="calculation-card">
-                    <div style="color: #666;">Example: Galaxy rotation curves</div>
-                    <div style="font-size: 0.9rem;">126 galaxies tested, 0 free parameters per galaxy</div>
-                    <div class="result">Median χ²/N = 2.75 (competitive with MOND)</div>
-                </div>
-            </section>
+            </div>
+
+            <div class="prediction-box">
+                <h3>Near-Term Tests</h3>
+                <ol>
+                    <li>
+                        <strong>Laboratory:</strong> Gravity should be ~32× stronger at 20 nanometers 
+                        (testable with molecular interferometry)
+                    </li>
+                    <li>
+                        <strong>Pulsars:</strong> Timing should reveal discrete "ticks" at 10-nanosecond 
+                        precision (bandwidth quantization)
+                    </li>
+                    <li>
+                        <strong>Galaxies:</strong> Young galaxies at high redshift should show different 
+                        a<sub>0</sub> values (bandwidth evolution)
+                    </li>
+                    <li>
+                        <strong>Lensing:</strong> Specific enhancement patterns tied to dynamical time, 
+                        not halo profiles
+                    </li>
+                </ol>
+            </div>
+
+            <div class="result-card">
+                <div style="color: var(--color-text-muted);">Example: Galaxy rotation curves</div>
+                <div style="font-size: 0.9rem;">126 galaxies tested, 0 free parameters per galaxy</div>
+                <div class="value">Median χ²/N = 2.75 (competitive with MOND)</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gravity's Role in Consciousness -->
+    <section class="template-section">
+        <div class="template-container">
+            <div class="template-accent-bar"></div>
+            <h2 class="template-section-title">Gravity's Role in Consciousness</h2>
             
-            <div class="section-divider"></div>
-            
-            <section class="template-section">
-                <h2>Gravity's Role in Consciousness</h2>
-                
+            <div class="template-reading">
                 <p>
                     A deeper question: if reality is information processing, what's gravity's role in consciousness?
                 </p>
-                
-                <div class="theorem-box">
-                    <h3>Shared Substrate, Different Scales</h3>
-                    <p>
-                        Both gravity and consciousness emerge from the same recognition ledger:
-                    </p>
-                    <ul>
-                        <li><strong>Gravity:</strong> Large-scale bandwidth allocation maintaining cosmic coherence</li>
-                        <li><strong>Consciousness:</strong> Deep, localized recognition patterns in complex systems</li>
-                        <li><strong>Connection:</strong> Gravity sets the stage (spacetime arena) where conscious patterns can emerge and persist</li>
-                    </ul>
-                </div>
-                
-                <div class="academic-note">
+            </div>
+
+            <div class="prediction-box">
+                <h3>Shared Substrate, Different Scales</h3>
+                <p>
+                    Both gravity and consciousness emerge from the same recognition ledger:
+                </p>
+                <ul>
+                    <li><strong>Gravity:</strong> Large-scale bandwidth allocation maintaining cosmic coherence</li>
+                    <li><strong>Consciousness:</strong> Deep, localized recognition patterns in complex systems</li>
+                    <li><strong>Connection:</strong> Gravity sets the stage (spacetime arena) where conscious patterns can emerge and persist</li>
+                </ul>
+            </div>
+
+            <div class="academic-note">
+                <p>
                     <strong>Not mysticism, just constraints:</strong> Gravity doesn't "cause" consciousness—it 
                     provides the stable, predictable arena where complex information patterns (like brains) 
                     can maintain coherence. The same bandwidth limits that create dark matter also ensure 
                     local regions can develop rich internal structure.
-                </div>
-            </section>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Bigger Picture -->
+    <section class="template-section">
+        <div class="template-container">
+            <h2 class="template-section-title">The Bigger Picture</h2>
             
-            <div class="section-divider"></div>
-            
-            <section class="template-section">
-                <h2>The Bigger Picture</h2>
-                
+            <div class="template-reading">
                 <p>
                     Gravity exemplifies Recognition Physics' core principle: <strong>physical laws aren't 
                     fundamental—they emerge from information-theoretic necessities</strong>.
                 </p>
-                
-                <div class="formula-box">
-                    <div>Meta-Principle → Ledger → Bandwidth Limits → Gravity → Dark Phenomena</div>
-                </div>
-                
+            </div>
+
+            <div class="formula-display">
+                Meta-Principle → Ledger → Bandwidth Limits → Gravity → Dark Phenomena
+            </div>
+
+            <div class="plain-language">
                 <p>This single chain explains:</p>
                 <ul>
                     <li>Why gravity exists (not just how it works)</li>
@@ -465,51 +453,80 @@
                     <li>Why dark energy relates to cosmic bandwidth</li>
                     <li>Why quantum gravity has proven so difficult (it's not fundamental)</li>
                 </ul>
-                
-                <div class="reading-tip">
+            </div>
+
+            <div class="reading-tip">
+                <p>
                     <strong>For students:</strong> This inverts the usual approach. Instead of starting with 
                     gravity and adding patches (dark matter, dark energy), we start with information constraints 
                     and derive everything. Change any assumption and the whole structure fails—that's how we 
                     know it's right.
-                </div>
-            </section>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Resources -->
+    <section class="template-section">
+        <div class="template-container">
+            <h2 class="template-section-title">Technical Resources</h2>
             
-            <div class="section-divider"></div>
-            
-            <section class="template-section">
-                <h2>Technical Resources</h2>
-                
-                <div class="paper-links">
-                    <a href="/gravity-derived-paper.html">
-                        📜 Full Theoretical Derivation
+            <div class="template-cta-box">
+                <h3>Explore Further</h3>
+                <div class="template-hero-actions">
+                    <a href="/gravity-derived-paper.html" class="template-btn template-btn-primary">
+                        Full Theoretical Derivation
                     </a>
-                    <a href="/gravity.pdf">
-                        📈 Empirical Analysis & Data
+                    <a href="/gravity.pdf" class="template-btn template-btn-outline">
+                        Empirical Analysis & Data
                     </a>
-                    <a href="https://github.com/jonwashburn/gravity" target="_blank">
-                        💻 Code & Calculations
+                    <a href="https://github.com/jonwashburn/gravity" class="template-btn template-btn-outline" target="_blank">
+                        Code & Calculations
                     </a>
-                    <a href="/academic.html">
-                        🔬 Complete Framework
+                    <a href="/academic.html" class="template-btn template-btn-outline">
+                        Complete Framework
                     </a>
                 </div>
-                
-                <div class="key-test">
+            </div>
+
+            <div class="key-result">
+                <p>
                     <strong>For researchers:</strong> All code, data, and detailed calculations are publicly 
                     available. The model uses only global constants fixed by theory—no per-galaxy tuning. 
                     Either it works or it doesn't. So far, it works.
-                </div>
-            </section>
+                </p>
+            </div>
         </div>
-    </main>
-    
+    </section>
+
     <div id="footer-placeholder"></div>
-    
+
     <script src="/assets/js/main.js"></script>
     <script>
         // Audio player functionality
         let audio = null;
         let isPlaying = false;
+
+        function startAudio() {
+            const player = document.getElementById('audio-player');
+            player.classList.add('active');
+            // Add padding to body to account for fixed audio player
+            document.body.style.paddingTop = '60px';
+            
+            if (!audio) {
+                audio = document.getElementById('gravity-audio');
+            }
+            
+            audio.play().then(() => {
+                isPlaying = true;
+                document.getElementById('audio-btn-text').textContent = 'Pause';
+            }).catch(err => {
+                console.error('Audio playback failed:', err);
+                alert('Unable to play audio. Please check your browser settings.');
+                player.classList.remove('active');
+                document.body.style.paddingTop = '0';
+            });
+        }
         
         function toggleAudio() {
             if (!audio) {
@@ -520,42 +537,89 @@
             
             if (isPlaying) {
                 audio.pause();
-                btnText.textContent = 'Listen';
+                btnText.textContent = 'Resume';
                 isPlaying = false;
             } else {
                 audio.play().then(() => {
                     btnText.textContent = 'Pause';
                     isPlaying = true;
-                }).catch(err => {
-                    console.error('Audio playback failed:', err);
-                    alert('Unable to play audio. Please check your browser settings.');
-                    isPlaying = false;
                 });
             }
         }
-        
-        // Term expansion functionality
+
+        // Term expansion functionality - matching academic.html
         document.addEventListener('DOMContentLoaded', function() {
+            // Create tooltip element
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tooltip';
+            tooltip.style.cssText = `
+                position: absolute;
+                background: var(--color-primary);
+                color: white;
+                padding: 0.5rem 0.75rem;
+                border-radius: 4px;
+                font-size: 0.875rem;
+                max-width: 300px;
+                z-index: 1000;
+                display: none;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            `;
+            document.body.appendChild(tooltip);
+
+            // Handle term interactions
             const terms = document.querySelectorAll('.term');
             
             terms.forEach(term => {
-                term.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const expansionId = this.getAttribute('data-expansion');
-                    const expansion = document.getElementById(expansionId);
-                    
-                    if (expansion) {
-                        expansion.classList.toggle('show');
+                // Show tooltip on hover
+                term.addEventListener('mouseenter', function(e) {
+                    const def = this.getAttribute('data-def');
+                    if (def) {
+                        tooltip.textContent = def;
+                        tooltip.style.display = 'block';
+                        
+                        const rect = this.getBoundingClientRect();
+                        const tooltipRect = tooltip.getBoundingClientRect();
+                        
+                        // Position above the term
+                        let top = rect.top - tooltipRect.height - 8;
+                        let left = rect.left + (rect.width - tooltipRect.width) / 2;
+                        
+                        // Adjust if tooltip goes off screen
+                        if (top < 0) {
+                            top = rect.bottom + 8;
+                        }
+                        if (left < 0) {
+                            left = 8;
+                        }
+                        if (left + tooltipRect.width > window.innerWidth) {
+                            left = window.innerWidth - tooltipRect.width - 8;
+                        }
+                        
+                        tooltip.style.top = top + window.scrollY + 'px';
+                        tooltip.style.left = left + 'px';
                     }
                 });
+                
+                term.addEventListener('mouseleave', function() {
+                    tooltip.style.display = 'none';
+                });
+                
+                // Toggle active state on click
+                term.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    this.classList.toggle('active');
+                });
             });
-            
+
             // Update audio button if audio ends
             const audioElement = document.getElementById('gravity-audio');
             if (audioElement) {
                 audioElement.addEventListener('ended', function() {
                     document.getElementById('audio-btn-text').textContent = 'Listen';
                     isPlaying = false;
+                    // Hide audio player
+                    document.getElementById('audio-player').classList.remove('active');
+                    document.body.style.paddingTop = '0';
                 });
             }
         });
