@@ -23,6 +23,13 @@
 
   <!-- Hero Section -->
   <section class="template-hero">
+    <button class="podcast-badge" id="podcastBadge" aria-pressed="false" aria-label="Play measurement audio">
+      <svg class="podcast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon id="iconPlay" points="8,5 19,12 8,19 8,5"></polygon>
+        <g id="iconPause" style="display:none"><line x1="9" y1="5" x2="9" y2="19"></line><line x1="15" y1="5" x2="15" y2="19"></line></g>
+      </svg>
+      <span class="podcast-label">Listen</span>
+    </button>
     <div class="template-container">
       <div class="template-hero-badge">Zero Free Parameters</div>
       <h1 class="template-hero-title">Revolutionary Metrology</h1>
@@ -51,28 +58,6 @@
     </div>
   </section>
 
-  <!-- Featured Audio: Why Measurement -->
-  <section class="featured-audio-section">
-    <div class="template-container">
-      <div class="featured-audio-card">
-        <div class="audio-badge-large">
-          <span class="audio-label">NEW AUDIO</span>
-        </div>
-        <h2 class="featured-audio-title">Why Measurement</h2>
-        <p class="featured-audio-description">
-          A concise introduction to why Recognition Physics treats constants as direct readings of reality's own instruments,
-          and how the Reality Bridge Axiom turns deduction into metrology.
-        </p>
-        <button class="featured-audio-btn" id="measurementAudioBtn" aria-pressed="false">
-          <svg class="audio-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon id="measurementPlay" points="8,5 19,12 8,19 8,5"></polygon>
-            <g id="measurementPause" style="display:none"><line x1="9" y1="5" x2="9" y2="19"></line><line x1="15" y1="5" x2="15" y2="19"></line></g>
-          </svg>
-          <span class="btn-text">Listen</span>
-        </button>
-      </div>
-    </div>
-  </section>
 
   <!-- Reality Bridge Axiom Feature -->
   <section class="template-section">
@@ -602,51 +587,75 @@
 
   <div id="footer-placeholder"></div>
   <script src="/assets/js/main.js"></script>
+  <!-- Floating badge audio (match particle-masses) -->
+  <audio id="podcastAudio" preload="metadata"></audio>
   <script>
-    // Measurement page audio
-    const mBtn = document.getElementById('measurementAudioBtn');
-    const mPlay = document.getElementById('measurementPlay');
-    const mPause = document.getElementById('measurementPause');
-    let mAudio = null;
-    if (mBtn) {
-      mBtn.addEventListener('click', function() {
-        if (!mAudio) {
-          const audioPath = encodeURI('/measurement-why-nature.mp3');
-          mAudio = new Audio(audioPath);
-          mAudio.addEventListener('ended', function() {
-            mBtn.setAttribute('aria-pressed', 'false');
-            mPlay.style.display = 'block';
-            mPause.style.display = 'none';
-            mBtn.querySelector('.btn-text').textContent = 'Listen';
-          });
-          mAudio.addEventListener('error', function(e) {
-            console.error('Measurement audio error:', e);
-            alert('Unable to play audio. The file may be missing or blocked.');
-            mBtn.setAttribute('aria-pressed', 'false');
-            mPlay.style.display = 'block';
-            mPause.style.display = 'none';
-            mBtn.querySelector('.btn-text').textContent = 'Listen';
-          });
-        }
-        if (mBtn.getAttribute('aria-pressed') === 'false') {
-          mAudio.play().then(() => {
-            mBtn.setAttribute('aria-pressed', 'true');
-            mPlay.style.display = 'none';
-            mPause.style.display = 'block';
-            mBtn.querySelector('.btn-text').textContent = 'Pause';
-          }).catch(err => {
-            console.error('Play error:', err);
-          });
+    (function(){
+      const btn = document.getElementById('podcastBadge');
+      const audio = document.getElementById('podcastAudio');
+      const playIcon = document.getElementById('iconPlay');
+      const pauseIcon = document.getElementById('iconPause');
+      const label = btn ? btn.querySelector('.podcast-label') : null;
+      if (!btn || !audio) return;
+
+      const audioPath = '/measurement-why-nature.mp3';
+      audio.src = encodeURI(audioPath);
+
+      function setVisual(isPlaying){
+        if (isPlaying) {
+          if (playIcon) playIcon.style.display = 'none';
+          if (pauseIcon) pauseIcon.style.display = 'inline';
+          btn.setAttribute('aria-pressed','true');
+          if (label) label.textContent = 'Pause';
         } else {
-          mAudio.pause();
-          mBtn.setAttribute('aria-pressed', 'false');
-          mPlay.style.display = 'block';
-          mPause.style.display = 'none';
-          mBtn.querySelector('.btn-text').textContent = 'Listen';
+          if (playIcon) playIcon.style.display = 'inline';
+          if (pauseIcon) pauseIcon.style.display = 'none';
+          btn.setAttribute('aria-pressed','false');
+          if (label) label.textContent = 'Listen';
+        }
+      }
+      setVisual(false);
+
+      btn.addEventListener('click', () => {
+        if (audio.readyState < 2) { try { audio.load(); } catch (_) {} }
+        if (audio.paused) {
+          audio.play().then(()=> setVisual(true)).catch(()=>{ if (label) label.textContent = 'Enable audio'; });
+        } else {
+          audio.pause();
+          setVisual(false);
         }
       });
-    }
+
+      audio.addEventListener('ended', () => setVisual(false));
+      audio.addEventListener('error', () => { if (label) label.textContent = 'Audio not found'; });
+    })();
   </script>
+
+  <style>
+    .podcast-badge {
+      position: fixed; top: 20px; right: 20px; z-index: 1000;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      border: 2px solid var(--color-accent); color: var(--color-accent);
+      background: #ffffff; border-radius: 999px; 
+      padding: 0.35rem 0.6rem;
+      cursor: pointer; font: inherit; line-height: 1; 
+      transition: all 0.15s ease;
+      box-shadow: 0 2px 8px rgba(255, 0, 110, 0.2);
+    }
+    .podcast-badge:hover { 
+      transform: translateY(-1px); 
+      background: var(--color-accent);
+      color: white;
+      box-shadow: 0 4px 12px rgba(255, 0, 110, 0.4);
+    }
+    .podcast-badge:hover svg { stroke: white; }
+    .podcast-icon { width: 16px; height: 16px; display: inline-block; }
+    .podcast-label { font-size: 0.8rem; }
+    @media (max-width: 640px) {
+      .podcast-label { display: none; }
+      .podcast-badge { padding: 0.35rem; top: 10px; right: 10px; }
+    }
+  </style>
   
   <!-- Page-specific styles -->
   <style>

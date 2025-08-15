@@ -13,6 +13,13 @@
 
   <!-- Hero Section -->
   <section class="template-hero">
+    <button class="podcast-badge" id="podcastBadge" aria-pressed="false" aria-label="Play formulas audio">
+      <svg class="podcast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon id="iconPlay" points="8,5 19,12 8,19 8,5"></polygon>
+        <g id="iconPause" style="display:none"><line x1="9" y1="5" x2="9" y2="19"></line><line x1="15" y1="5" x2="15" y2="19"></line></g>
+      </svg>
+      <span class="podcast-label">Listen</span>
+    </button>
     <div class="template-container">
       <h1 class="template-hero-title">Formulas</h1>
       <p class="template-hero-lead">
@@ -37,28 +44,7 @@
     </div>
   </section>
 
-  <!-- Featured Audio: Five Logic-Driven Formulas -->
-  <section class="featured-audio-section">
-    <div class="template-container">
-      <div class="featured-audio-card">
-        <div class="audio-badge-large">
-          <span class="audio-label">NEW AUDIO</span>
-        </div>
-        <h2 class="featured-audio-title">Five Logic‑Driven Formulas</h2>
-        <p class="featured-audio-description">
-          A short overview of why five formulas—cost, mass law, curvature, eight‑tick, and finite signal—are the
-          actual operating instructions, not fitted models.
-        </p>
-        <button class="featured-audio-btn" id="formulasAudioBtn" aria-pressed="false">
-          <svg class="audio-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon id="formulasPlay" points="8,5 19,12 8,19 8,5"></polygon>
-            <g id="formulasPause" style="display:none"><line x1="9" y1="5" x2="9" y2="19"></line><line x1="15" y1="5" x2="15" y2="19"></line></g>
-          </svg>
-          <span class="btn-text">Listen</span>
-        </button>
-      </div>
-    </div>
-  </section>
+  
 
   <!-- Introduction Section -->
   <section class="template-section">
@@ -542,51 +528,75 @@
 
   <div id="footer-placeholder"></div>
   <script src="/assets/js/main.js"></script>
+  <!-- Floating badge audio (match particle-masses) -->
+  <audio id="podcastAudio" preload="metadata"></audio>
   <script>
-    // Formulas page audio
-    const fBtn = document.getElementById('formulasAudioBtn');
-    const fPlay = document.getElementById('formulasPlay');
-    const fPause = document.getElementById('formulasPause');
-    let fAudio = null;
-    if (fBtn) {
-      fBtn.addEventListener('click', function() {
-        if (!fAudio) {
-          const audioPath = encodeURI('/Recognition Physics_ Is Reality Just 5 Logic-Driven Formulas_.mp3');
-          fAudio = new Audio(audioPath);
-          fAudio.addEventListener('ended', function() {
-            fBtn.setAttribute('aria-pressed', 'false');
-            fPlay.style.display = 'block';
-            fPause.style.display = 'none';
-            fBtn.querySelector('.btn-text').textContent = 'Listen';
-          });
-          fAudio.addEventListener('error', function(e) {
-            console.error('Formulas audio error:', e);
-            alert('Unable to play audio. The file may be missing or blocked.');
-            fBtn.setAttribute('aria-pressed', 'false');
-            fPlay.style.display = 'block';
-            fPause.style.display = 'none';
-            fBtn.querySelector('.btn-text').textContent = 'Listen';
-          });
-        }
-        if (fBtn.getAttribute('aria-pressed') === 'false') {
-          fAudio.play().then(() => {
-            fBtn.setAttribute('aria-pressed', 'true');
-            fPlay.style.display = 'none';
-            fPause.style.display = 'block';
-            fBtn.querySelector('.btn-text').textContent = 'Pause';
-          }).catch(err => {
-            console.error('Play error:', err);
-          });
+    (function(){
+      const btn = document.getElementById('podcastBadge');
+      const audio = document.getElementById('podcastAudio');
+      const playIcon = document.getElementById('iconPlay');
+      const pauseIcon = document.getElementById('iconPause');
+      const label = btn ? btn.querySelector('.podcast-label') : null;
+      if (!btn || !audio) return;
+
+      const audioPath = "/Recognition Physics_ Is Reality Just 5 Logic-Driven Formulas_.mp3";
+      audio.src = encodeURI(audioPath);
+
+      function setVisual(isPlaying){
+        if (isPlaying) {
+          if (playIcon) playIcon.style.display = 'none';
+          if (pauseIcon) pauseIcon.style.display = 'inline';
+          btn.setAttribute('aria-pressed','true');
+          if (label) label.textContent = 'Pause';
         } else {
-          fAudio.pause();
-          fBtn.setAttribute('aria-pressed', 'false');
-          fPlay.style.display = 'block';
-          fPause.style.display = 'none';
-          fBtn.querySelector('.btn-text').textContent = 'Listen';
+          if (playIcon) playIcon.style.display = 'inline';
+          if (pauseIcon) pauseIcon.style.display = 'none';
+          btn.setAttribute('aria-pressed','false');
+          if (label) label.textContent = 'Listen';
+        }
+      }
+      setVisual(false);
+
+      btn.addEventListener('click', () => {
+        if (audio.readyState < 2) { try { audio.load(); } catch (_) {} }
+        if (audio.paused) {
+          audio.play().then(()=> setVisual(true)).catch(()=>{ if (label) label.textContent = 'Enable audio'; });
+        } else {
+          audio.pause();
+          setVisual(false);
         }
       });
-    }
+
+      audio.addEventListener('ended', () => setVisual(false));
+      audio.addEventListener('error', () => { if (label) label.textContent = 'Audio not found'; });
+    })();
   </script>
+
+  <style>
+    .podcast-badge {
+      position: fixed; top: 20px; right: 20px; z-index: 1000;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      border: 2px solid var(--color-accent); color: var(--color-accent);
+      background: #ffffff; border-radius: 999px; 
+      padding: 0.35rem 0.6rem;
+      cursor: pointer; font: inherit; line-height: 1; 
+      transition: all 0.15s ease;
+      box-shadow: 0 2px 8px rgba(255, 0, 110, 0.2);
+    }
+    .podcast-badge:hover { 
+      transform: translateY(-1px); 
+      background: var(--color-accent);
+      color: white;
+      box-shadow: 0 4px 12px rgba(255, 0, 110, 0.4);
+    }
+    .podcast-badge:hover svg { stroke: white; }
+    .podcast-icon { width: 16px; height: 16px; display: inline-block; }
+    .podcast-label { font-size: 0.8rem; }
+    @media (max-width: 640px) {
+      .podcast-label { display: none; }
+      .podcast-badge { padding: 0.35rem; top: 10px; right: 10px; }
+    }
+  </style>
   
   <!-- Page-specific styles -->
   <style>
