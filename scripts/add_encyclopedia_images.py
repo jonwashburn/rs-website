@@ -55,6 +55,10 @@ def insert_after_heading(html: str, heading_text: str, figure_html: str) -> str:
     if not m:
         return html
     insert_at = m.end()
+    # Check if there's already a figure immediately after this heading
+    check_portion = html[insert_at:insert_at + 100]
+    if '<figure class="concept-visual"' in check_portion:
+        return html  # Skip, already has a figure
     return html[:insert_at] + figure_html + html[insert_at:]
 
 
