@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Core Theory - Recognition Physics</title>
+    <title>Bridge to Classical - Recognition Physics</title>
     
     <!-- CSS files -->
     <link rel="stylesheet" href="/assets/css/main.css">
@@ -248,24 +248,42 @@
     <!-- Hero Section -->
     <section class="academic-hero">
         <div class="academic-container">
-            <h1>Core Theory</h1>
+            <h1>Bridge to Classical</h1>
             <p class="academic-subtitle">
-                A bottom‑up, parameter‑free core that derives physics as the unique fixed point of recognition with dual balance.<br>
-                <strong>Classical formulas describe; RS theorems explain why they must be.</strong>
+                Why we build an explicit bridge: classical physics is the language of successful description; Recognition Physics is the language of necessary derivation. 
+                The bridge clarifies correspondence without conflation—preserving classical terms while showing why they must take their observed form.
             </p>
+        </div>
+    </section>
+
+    <!-- Why a Bridge Section -->
+    <section class="academic-section">
+        <div class="academic-container">
+            <h2>Why a Bridge (Two Scientific Languages)</h2>
+            <p class="academic-reading">
+                Classical science is a top‑down, empirically tuned description of behavior. Its formulas summarize what nature does. 
+                Recognition Physics (RS) is bottom‑up and parameter‑free: it derives <em>why</em> those formulas must be what they are, from a single tautology and 
+                a minimal discrete substrate governed by dual balance. Both languages are valid and valuable:
+            </p>
+            <div class="academic-reading">
+                <p><strong>Classical language (top‑down):</strong> Efficient, operational, predictive—uses fitted constants where needed; becomes the lingua franca of engineering.</p>
+                <p><strong>RS language (bottom‑up):</strong> Explanatory, over‑constrained, falsifiable—derives constants and structures with no tunables; explains cross‑domain reuse.</p>
+                <p>We keep them distinct to avoid category errors. The bridge aligns terms one‑to‑one, so you can translate without diluting either side. See the 
+                <a href="/academic.html">Technical Overview</a> for the full derivations.</p>
+            </div>
+            <div class="reading-tip"><strong>Takeaway:</strong> We do not “assume” continuity, action, or gauge. We prove the ledger algebra that forces them, then show the classical forms drop out as the only possibilities.</div>
         </div>
     </section>
 
     <!-- The Cascade Section -->
     <section class="academic-section">
         <div class="academic-container">
-            <h2>The Cascade: Logic → Laws → Numbers</h2>
+            <h2>The Cascade: Logic → Theorems → Laws → Numbers</h2>
             
             <p class="academic-reading">
-                Physics emerges from a single logical necessity through a precise cascade of constraints. 
-                Each level uniquely determines the next, with no freedom to adjust parameters. The entire 
-                structure is <span class="accent-text">parameter-free</span>—change any piece and the 
-                whole framework collapses.
+                Physics emerges from a single logical necessity through a precise cascade of constraints. Each layer uniquely fixes the next: 
+                Meta‑Principle → Ledger → Tick order → Cost → φ → c → m → constants. No knobs, no curve‑fitting. The structure is 
+                <span class="accent-text">parameter‑free</span>—change any assumption and agreement with data fails.
             </p>
             
             <div class="cascade-diagram">
@@ -282,19 +300,19 @@
                     2³ = 8 minimal update period (T6)
                 </div>
                 <div class="cascade-level">
-                    <strong>Cost Function</strong><br>
+                    <strong>Cost Function (unique)</strong><br>
                     J(x) = ½(x + 1/x) − 1 unique solution (T5)
                 </div>
                 <div class="cascade-level">
-                    <strong>Golden Ratio</strong><br>
+                    <strong>Golden Ratio (fixed point)</strong><br>
                     φ fixed point of scale recursion
                 </div>
                 <div class="cascade-level">
-                    <strong>Speed of Light</strong><br>
+                    <strong>Speed of Light (causality)</strong><br>
                     c = ℓ₀/τ₀ from causality bound
                 </div>
                 <div class="cascade-level">
-                    <strong>Mass Spectrum</strong><br>
+                    <strong>Mass Spectrum (quantized)</strong><br>
                     m = B·E_coh·φ^(r+f) quantized ladder
                 </div>
                 <div class="cascade-level">
@@ -302,6 +320,27 @@
                     α, G, H₀... dimensionless invariants
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- What the Lean file proves (Takeaways) -->
+    <section class="academic-section">
+        <div class="academic-container">
+            <h2>What the Lean File Proves (Takeaways)</h2>
+            <p class="academic-reading">Highlights from <span class="lean-ref">IndisputableMonolith.lean</span>—a sorry‑free chain from recognition primitives to cost uniqueness and eight‑tick minimality.</p>
+            <ul style="line-height: 1.9;">
+                <li><strong>T1 (Meta‑Principle):</strong> Nothing cannot recognize itself — <span class="lean-ref">mp_holds : MP</span>.</li>
+                <li><strong>Recognition + Chains:</strong> <code>RecognitionStructure</code>, finite chains, <code>head/last</code>.</li>
+                <li><strong>Atomic Tick (no collisions):</strong> uniqueness per tick ⇒ no simultaneous collisions — <span class="lean-ref">T2_atomicity</span>.</li>
+                <li><strong>Ledger + Conservation:</strong> closed‑loop flux is zero under conservation — <span class="lean-ref">T3_continuity</span>.</li>
+                <li><strong>Causality scaffolding:</strong> <code>ReachN</code>, <code>inBall</code>, <code>ballP</code> with monotonicity and equivalences.</li>
+                <li><strong>T4 (Potential uniqueness):</strong> same δ‑rule ⇒ equality on reach/n‑ball/components; up to constant on components — <span class="lean-ref">T4_unique_on_component</span>.</li>
+                <li><strong>Ledger units:</strong> δ‑generated subgroup equivalences (δ=1 canonical; δ≠0 non‑canonical) and uniqueness of representation.</li>
+                <li><strong>T6 (Eight‑tick):</strong> minimal/exact coverage — 2³ = 8 — <span class="lean-ref">eight_tick_min</span>, <span class="lean-ref">T6_exist_8</span>; general 2^d.</li>
+                <li><strong>T5 (Cost uniqueness on ℝ&gt;0):</strong> under symmetry+unit and convex averaging, the only admissible cost is <code>J(x)=½(x+1/x)−1</code>.</li>
+                <li><strong>Worked examples:</strong> 2‑vertex and 3‑cycle models with concrete <code>Conserves</code> and <code>AtomicTick</code> instances.</li>
+            </ul>
+            <div class="reading-tip"><strong>Non‑circularity:</strong> RS derives dimensionless quantities without tuning; measurement only adjudicates truth. This is standard derive → compare practice. See the site’s parameter‑free posture in the <a href="/academic.html">Technical Overview</a>.</div>
         </div>
     </section>
 
