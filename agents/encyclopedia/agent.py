@@ -247,13 +247,25 @@ def call_model(cfg: Dict[str, Any], messages: List[Dict[str, str]]) -> str:
 	client = OpenAI()
 	primary = cfg.get("model", "gpt-4o-mini")
 	fallback = cfg.get("fallback_model", "gpt-4o-mini")
+	# Prefer Responses API for GPT-5 with reasoning/verbosity if available
+	use_responses = primary.startswith("gpt-5")
 	try:
-		resp = client.chat.completions.create(
-			model=primary,
-			messages=messages,
-			max_tokens=cfg.get("max_tokens", 3000),
-			temperature=0.3,
-		)
+		if use_responses and hasattr(client, "responses"):
+			resp = client.responses.create(
+				model=primary,
+				input=[{"role":"system","content":messages[0]["content"]},{"role":"user","content":messages[1]["content"]}],
+				reasoning={"effort": cfg.get("reasoning_effort", "medium")},
+				text={"verbosity": cfg.get("verbosity", "medium")}
+			)
+			content = getattr(resp, "output_text", None) or (resp.output[0].content[0].text if getattr(resp, "output", None) else "")
+		else:
+			resp = client.chat.completions.create(
+				model=primary,
+				messages=messages,
+				max_tokens=cfg.get("max_tokens", 3000),
+				temperature=0.3,
+			)
+			content = resp.choices[0].message.content or ""
 		reason = None
 	except Exception as e:
 		# Fallback on model-not-found or any transport error
@@ -268,7 +280,6 @@ def call_model(cfg: Dict[str, Any], messages: List[Dict[str, str]]) -> str:
 		except Exception as e2:
 			raise e2
 	# Attach a small tag in the content if fallback was used (non-rendering HTML comment)
-	content = resp.choices[0].message.content or ""
 	if content and 'reason' in locals() and reason:
 		content = f"<!-- {reason} -->\n" + content
 	return content
