@@ -30,6 +30,13 @@
     .env { background: #f7f7f9; border: 1px solid var(--color-border-light); border-radius: 6px; padding: 0.75rem 1rem; margin: 1rem 0; }
     .env-title { font-weight: 700; color: var(--color-primary); margin-bottom: 0.5rem; }
     .mjx-container { overflow-x: auto; max-width: 100%; }
+    .references { padding-left: 2rem; }
+    .references li { margin-bottom: 0.5rem; }
+    pre code { display: block; background: #f5f5f5; padding: 1rem; border-radius: 4px; overflow-x: auto; }
+    .table-wrapper { overflow-x: auto; margin: 1rem 0; }
+    table { border-collapse: collapse; width: 100%; }
+    table caption { font-weight: bold; margin-bottom: 0.5rem; }
+    table td { padding: 0.5rem; border: 1px solid #ddd; }
   </style>
 </head>
 <body class="template-page">
@@ -329,16 +336,18 @@ Empirical validation on galaxy rotation curves appears in \cite{Washburn2025a}; 
 
 \section{Comparison to Alternatives}
 
+Table~\ref{tab:comparison} shows quantitative fits vs. MOND and ΛCDM.
+
 \begin{table}
 \caption{Model comparisons on SPARC data.}
 \label{tab:comparison}
 \begin{tabular}{ccc}
 \hline
-Model & Median $\chi^2/N$ & Free Params \\
+Model & Median χ²/N & Free Params \\
 \hline
 This work & 0.48 & 5 global \\
 MOND & ~4.5 & 3 \\
-$\Lambda$CDM (NFW) & ~2-3 & ~350 (2/galaxy) \\
+ΛCDM (NFW) & ~2-3 & ~350 (2/galaxy) \\
 \hline
 \end{tabular}
 \end{table}
@@ -350,7 +359,7 @@ Our approach outperforms with fewer params.
 
 We have proposed a phenomenological, non‑relativistic description (ILG) of gravitational effects arising from information constraints. If validated further, it could provide insights into dark‑sector phenomenology without invoking new particle species.
 
-Predictions: Redshift-dependent $a_0$ variations in young galaxies; weak lensing anomalies; CMB power spectrum shifts from lag-induced fluctuations; cluster dynamics with modified virial theorem.
+Predictions: Redshift-dependent a_0 variations in young galaxies; weak lensing anomalies; CMB power spectrum shifts from lag-induced fluctuations; cluster dynamics with modified virial theorem.
 
 Limitations: (i) This paper addresses the non‑relativistic regime; a consistent relativistic completion is an active area of research. (ii) Solar‑system and PPN tests are satisfied in the high‑bandwidth limit by construction, but we do not claim new predictions there. (iii) The substrate remains agnostic; quantum extensions and entanglement‑cost accounting are beyond our present scope.
 
@@ -380,7 +389,7 @@ The substrate must decide how often to update each system's gravitational field.
 
 Total bandwidth constraint:
 \begin{equation}
-\sum_i B_i = \sum i \frac{I_i}{\Delta t_i} \leq B_{\text{total}}
+\sum_i B_i = \sum_i \frac{I_i}{\Delta t_i} \leq B_{\text{total}}
 \end{equation}
 
 The optimization problem becomes:
@@ -444,7 +453,7 @@ For small lag ($\Delta t \ll T_{\text{dyn}}$) the leading correction to the Newt
 \Phi_{\text{eff}} = \Phi_N + \frac{\Delta t}{T_{\text{dyn}}} \Phi_N + \mathcal{O}\left(\left(\frac{\Delta t}{T_{\text{dyn}}}\right)^2\right)
 \end{equation}
 
-so that the square-velocity relation becomes $v^2 = R \, \partial\Phi_{\text{eff}}/\partial R = w \, v_N^2$ with $w = 1 + \Delta t/T_{\text{dyn}}$.
+so that the square-velocity relation becomes $v^2 = R \partial\Phi_{\text{eff}}/\partial R = w v_N^2$ with $w = 1 + \Delta t/T_{\text{dyn}}$.
 
 \subsection{Recovering General Relativity in the High-Bandwidth Limit}
 
@@ -526,6 +535,7 @@ All Python scripts, notebooks, and pre-processed data tables used in this work a
 
 \bibitem{Washburn2025a} J. Washburn (2025). "Galaxy Rotation Curves from a Finite-Bandwidth Gravitational Model." Zenodo. \url{https://doi.org/10.5281/zenodo.16014943}.
 \bibitem{Washburn2025b} J. Washburn and E. Allahyarov (2025). "Particle Masses Spectrum from Harmonic Cascade Principles." arXiv:2506.12859 [hep-ph]. \url{https://doi.org/10.48550/arXiv.2506.12859}.
+\end{thebibliography}
 
 \end{document}
   </script>
@@ -554,12 +564,46 @@ All Python scripts, notebooks, and pre-processed data tables used in this work a
       function convert(tex){
         // strip preamble and end
         tex = tex.replace(/[\s\S]*?\\begin\{document\}/,'').replace(/\\end\{document\}[\s\S]*/,'');
-        // title/author (best effort)
-        const tm = tex.match(/\\title\{([^}]*)\}/); if (tm) document.getElementById('paper-title').innerHTML = tm[1];
-        const au = tex.match(/\\author\{([\s\S]*?)\}/); if (au) document.getElementById('paper-author').innerHTML = au[1];
-        // abstract
+        
+        // Extract and set title/author
+        const tm = tex.match(/\\title\{([^}]*)\}/); 
+        if (tm) {
+          document.getElementById('paper-title').innerHTML = tm[1];
+          tex = tex.replace(tm[0], ''); // Remove from main text
+        }
+        
+        const au = tex.match(/\\author\{([^}]*)\}/); 
+        if (au) {
+          document.getElementById('paper-author').innerHTML = au[1];
+          tex = tex.replace(au[0], ''); // Remove from main text
+        }
+        
+        // Remove other metadata commands
+        tex = tex.replace(/\\affiliation\{[^}]*\}/g, '');
+        tex = tex.replace(/\\date\{[^}]*\}/g, '');
+        tex = tex.replace(/\\maketitle/g, '');
+        tex = tex.replace(/\\noindent/g, '');
+        
+        // Extract abstract
         const am = tex.match(/\\begin\{abstract\}([\s\S]*?)\\end\{abstract\}/);
-        if (am){ absEl.style.display=''; absEl.innerHTML = '<strong>Abstract</strong><br>'+tx(am[1].trim()); tex = tex.replace(am[0],''); }
+        if (am){ 
+          absEl.style.display=''; 
+          absEl.innerHTML = '<strong>Abstract</strong><br>'+tx(am[1].trim()); 
+          tex = tex.replace(am[0],''); 
+        }
+        
+        // Handle bibliography
+        tex = tex.replace(/\\begin\{thebibliography\}\{[^}]*\}/g, '<h2>References</h2><ol class="references">');
+        tex = tex.replace(/\\end\{thebibliography\}/g, '</ol>');
+        tex = tex.replace(/\\bibitem\{([^}]*)\}/g, '<li id="ref-$1">');
+        tex = tex.replace(/\\cite\{([^}]*)\}/g, '<sup><a href="#ref-$1">[$1]</a></sup>');
+        
+        // Handle align environments
+        tex = tex.replace(/\\begin\{align\}/g,'$$\\begin{align}').replace(/\\end\{align\}/g,'\\end{align}$$');
+        
+        // Handle verbatim
+        tex = tex.replace(/\\begin\{verbatim\}([\s\S]*?)\\end\{verbatim\}/g, '<pre><code>$1</code></pre>');
+        
         // theorem-like wrappers
         tex = wrapEnv(tex, 'theorem', 'Theorem');
         tex = wrapEnv(tex, 'lemma', 'Lemma');
@@ -567,20 +611,47 @@ All Python scripts, notebooks, and pre-processed data tables used in this work a
         tex = wrapEnv(tex, 'corollary', 'Corollary');
         tex = wrapEnv(tex, 'remark', 'Remark');
         tex = wrapEnv(tex, 'conjecture', 'Conjecture');
+        
         // sections
-        tex = tex.replace(/\\section\*?\{([^}]*)\}/g, '<h2>$1<\/h2>');
-        tex = tex.replace(/\\subsection\*?\{([^}]*)\}/g, '<h3>$1<\/h3>');
+        tex = tex.replace(/\\section\*?\{([^}]*)\}/g, '<h2>$1</h2>');
+        tex = tex.replace(/\\subsection\*?\{([^}]*)\}/g, '<h3>$1</h3>');
+        tex = tex.replace(/\\subsubsection\*?\{([^}]*)\}/g, '<h4>$1</h4>');
+        tex = tex.replace(/\\label\{[^}]*\}/g, ''); // Remove labels
+        
         // lists
-        tex = tex.replace(/\\begin\{itemize\}/g,'<ul>').replace(/\\end\{itemize\}/g,'<\/ul>')
-                 .replace(/\\begin\{enumerate\}/g,'<ol>').replace(/\\end\{enumerate\}/g,'<\/ol>')
+        tex = tex.replace(/\\begin\{itemize\}/g,'<ul>').replace(/\\end\{itemize\}/g,'</ul>')
+                 .replace(/\\begin\{enumerate\}/g,'<ol>').replace(/\\end\{enumerate\}/g,'</ol>')
                  .replace(/\\item\s*/g,'<li>');
+        
         // equations to $$ $$
         tex = tex.replace(/\\begin\{equation\}/g,'$$').replace(/\\end\{equation\}/g,'$$');
         tex = tex.replace(/\\\[/g,'$$').replace(/\\\]/g,'$$');
+        
+        // Handle appendix
+        tex = tex.replace(/\\appendix/g, '<h2>Appendix</h2>');
+        
+        // Handle table environments (basic)
+        tex = tex.replace(/\\begin\{table\}[\s\S]*?\\caption\{([^}]*)\}[\s\S]*?\\begin\{tabular\}\{[^}]*\}([\s\S]*?)\\end\{tabular\}[\s\S]*?\\end\{table\}/g, 
+          (match, caption, content) => {
+            return '<div class="table-wrapper"><table><caption>' + caption + '</caption><tbody>' + 
+              content.replace(/\\\\/g, '</tr><tr>').replace(/&/g, '</td><td>').replace(/\\hline/g, '') + 
+              '</tbody></table></div>';
+          });
+        
+        // Clean up extra commands
+        tex = tex.replace(/\\textit\{([^}]*)\}/g, '<em>$1</em>');
+        tex = tex.replace(/\\url\{([^}]*)\}/g, '<a href="$1">$1</a>');
+        tex = tex.replace(/\\href\{([^}]*)\}\{([^}]*)\}/g, '<a href="$1">$2</a>');
+        tex = tex.replace(/\$\\sim\s*/g, '~');
+        tex = tex.replace(/---/g, '—');
+        tex = tex.replace(/--/g, '–');
+        tex = tex.replace(/``/g, '"');
+        tex = tex.replace(/''/g, '"');
+        
         // split paragraphs
         const blocks = tex.split(/\n\n+/).map(b=>b.trim()).filter(Boolean);
         const html = blocks.map(b => {
-          if (b.startsWith('<h2')||b.startsWith('<h3')||b.startsWith('<ul')||b.startsWith('<ol')||b.startsWith('<div class="env')||b.startsWith('$$')){
+          if (b.startsWith('<h2')||b.startsWith('<h3')||b.startsWith('<h4')||b.startsWith('<ul')||b.startsWith('<ol')||b.startsWith('<div class="env')||b.startsWith('$$')||b.startsWith('<pre>')||b.startsWith('<div class="table')){
             return b;
           }
           return '<p>'+tx(b)+'</p>';
