@@ -86,3 +86,19 @@ Checks for:
 - The index lives under `rs-website/agents/encyclopedia/.index/` (ignored by git)
 - Existing files are skipped unless `overwrite: true`
 - Adjust style via `system_prompt.md` and `ENCYCLOPEDIA-TEMPLATE.md`
+
+## Image Guidelines
+To avoid broken images in generated pages:
+1. **Always verify image URLs exist** before adding to manifest:
+   ```bash
+   python rs-website/scripts/verify_images.py
+   ```
+2. **Prefer stable sources**:
+   - NASA/ESA official sites (usually public domain)
+   - Wikimedia Commons (check the actual filename exists)
+   - Local files in `/assets/images/encyclopedia/`
+3. **Test with curl** before adding:
+   ```bash
+   curl -I "https://example.com/image.jpg"  # Should return 200 OK
+   ```
+4. **Use the manifest** (`assets/data/encyclopedia-images.json`) for post-processing images rather than embedding in agent tasks
