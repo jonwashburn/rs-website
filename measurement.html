@@ -51,6 +51,29 @@
     </div>
   </section>
 
+  <!-- Featured Audio: Why Measurement -->
+  <section class="featured-audio-section">
+    <div class="template-container">
+      <div class="featured-audio-card">
+        <div class="audio-badge-large">
+          <span class="audio-label">NEW AUDIO</span>
+        </div>
+        <h2 class="featured-audio-title">Why Measurement</h2>
+        <p class="featured-audio-description">
+          A concise introduction to why Recognition Physics treats constants as direct readings of reality's own instruments,
+          and how the Reality Bridge Axiom turns deduction into metrology.
+        </p>
+        <button class="featured-audio-btn" id="measurementAudioBtn" aria-pressed="false">
+          <svg class="audio-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon id="measurementPlay" points="8,5 19,12 8,19 8,5"></polygon>
+            <g id="measurementPause" style="display:none"><line x1="9" y1="5" x2="9" y2="19"></line><line x1="15" y1="5" x2="15" y2="19"></line></g>
+          </svg>
+          <span class="btn-text">Listen</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
   <!-- Reality Bridge Axiom Feature -->
   <section class="template-section">
     <div class="template-container">
@@ -579,6 +602,51 @@
 
   <div id="footer-placeholder"></div>
   <script src="/assets/js/main.js"></script>
+  <script>
+    // Measurement page audio
+    const mBtn = document.getElementById('measurementAudioBtn');
+    const mPlay = document.getElementById('measurementPlay');
+    const mPause = document.getElementById('measurementPause');
+    let mAudio = null;
+    if (mBtn) {
+      mBtn.addEventListener('click', function() {
+        if (!mAudio) {
+          const audioPath = encodeURI('/measurement-why-nature.mp3');
+          mAudio = new Audio(audioPath);
+          mAudio.addEventListener('ended', function() {
+            mBtn.setAttribute('aria-pressed', 'false');
+            mPlay.style.display = 'block';
+            mPause.style.display = 'none';
+            mBtn.querySelector('.btn-text').textContent = 'Listen';
+          });
+          mAudio.addEventListener('error', function(e) {
+            console.error('Measurement audio error:', e);
+            alert('Unable to play audio. The file may be missing or blocked.');
+            mBtn.setAttribute('aria-pressed', 'false');
+            mPlay.style.display = 'block';
+            mPause.style.display = 'none';
+            mBtn.querySelector('.btn-text').textContent = 'Listen';
+          });
+        }
+        if (mBtn.getAttribute('aria-pressed') === 'false') {
+          mAudio.play().then(() => {
+            mBtn.setAttribute('aria-pressed', 'true');
+            mPlay.style.display = 'none';
+            mPause.style.display = 'block';
+            mBtn.querySelector('.btn-text').textContent = 'Pause';
+          }).catch(err => {
+            console.error('Play error:', err);
+          });
+        } else {
+          mAudio.pause();
+          mBtn.setAttribute('aria-pressed', 'false');
+          mPlay.style.display = 'block';
+          mPause.style.display = 'none';
+          mBtn.querySelector('.btn-text').textContent = 'Listen';
+        }
+      });
+    }
+  </script>
   
   <!-- Page-specific styles -->
   <style>
