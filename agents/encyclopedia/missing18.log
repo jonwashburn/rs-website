@@ -1,0 +1,70 @@
+Wrote: ../../encyclopedia/dna.html
+Wrote: ../../encyclopedia/consciousness.html
+Wrote: ../../encyclopedia/evolution.html
+Wrote: ../../encyclopedia/cells.html
+Wrote: ../../encyclopedia/atoms.html
+Wrote: ../../encyclopedia/molecules.html
+Wrote: ../../encyclopedia/periodic-table.html
+Wrote: ../../encyclopedia/crystallography.html
+Traceback (most recent call last):
+  File "/Users/jonathanwashburn/Library/Python/3.9/lib/python/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "/Users/jonathanwashburn/Library/Python/3.9/lib/python/site-packages/httpx/_transports/default.py", line 250, in handle_request
+    resp = self._pool.handle_request(req)
+  File "/Users/jonathanwashburn/Library/Python/3.9/lib/python/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
+    raise exc from None
+  File "/Users/jonathanwashburn/Library/Python/3.9/lib/python/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
+    response = connection.handle_request(
+  File "/Users/jonathanwashburn/Library/Python/3.9/lib/python/site-packages/httpcore/_sync/connection.py", line 101, in handle_request
+    raise exc
+  File "/Users/jonathanwashburn/Library/Python/3.9/lib/python/site-packages/httpcore/_sync/connection.py", line 78, in handle_request
+    stream = self._connect(request)
+  File "/Users/jonathanwashburn/Library/Python/3.9/lib/python/site-packages/httpcore/_sync/connection.py", line 124, in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+  File "/Users/jonathanwashburn/Library/Python/3.9/lib/python/site-packages/httpcore/_backends/sync.py", line 215, in connect_tcp
+    sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/contextlib.py", line 135, in __exit__
+    self.gen.throw(type, value, traceback)
+  File "/Users/jonathanwashburn/Library/Python/3.9/lib/python/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectError: [Errno 8] nodename nor servname provided, or not known
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/jonathanwashburn/Library/Python/3.9/lib/python/site-packages/openai/_base_client.py", line 969, in request
+    response = self._client.send(
+  File "/Users/jonathanwashburn/Library/Python/3.9/lib/python/site-packages/httpx/_client.py", line 914, in send
+    response = self._send_handling_auth(
+  File "/Users/jonathanwashburn/Library/Python/3.9/lib/python/site-packages/httpx/_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+  File "/Users/jonathanwashburn/Library/Python/3.9/lib/python/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+  File "/Users/jonathanwashburn/Library/Python/3.9/lib/python/site-packages/httpx/_client.py", line 1014, in _send_single_request
+    response = transport.handle_request(request)
+  File "/Users/jonathanwashburn/Library/Python/3.9/lib/python/site-packages/httpx/_transports/default.py", line 250, in handle_request
+    resp = self._pool.handle_request(req)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/contextlib.py", line 135, in __exit__
+    self.gen.throw(type, value, traceback)
+  File "/Users/jonathanwashburn/Library/Python/3.9/lib/python/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectError: [Errno 8] nodename nor servname provided, or not known
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Volumes/T9/Cursor-Active/encyclopedia/rs-website/agents/encyclopedia/agent.py", line 274, in <module>
+    main()
+  File "/Volumes/T9/Cursor-Active/encyclopedia/rs-website/agents/encyclopedia/agent.py", line 259, in main
+    ctx = retrieve(cfg, q, cfg.get("retrieve_k", 8))
+  File "/Volumes/T9/Cursor-Active/encyclopedia/rs-website/agents/encyclopedia/agent.py", line 75, in retrieve
+    q_emb = embed_texts(client, index["model"], [query])[0]
+  File "/Volumes/T9/Cursor-Active/encyclopedia/rs-website/agents/encyclopedia/agent.py", line 45, in embed_texts
+    resp = client.embeddings.create(model=model, input=texts)
+  File "/Users/jonathanwashburn/Library/Python/3.9/lib/python/site-packages/openai/resources/embeddings.py", line 129, in create
+    return self._post(
+  File "/Users/jonathanwashburn/Library/Python/3.9/lib/python/site-packages/openai/_base_client.py", line 1239, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+  File "/Users/jonathanwashburn/Library/Python/3.9/lib/python/site-packages/openai/_base_client.py", line 1001, in request
+    raise APIConnectionError(request=request) from err
+openai.APIConnectionError: Connection error.
