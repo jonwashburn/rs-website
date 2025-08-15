@@ -1575,13 +1575,36 @@ If $\xi$ had a zero in $\Omega$, then $\mathcal J$ (and hence $\Theta$) would ha
         }).join('\n');
         return html;
       }
+      // Convert and inject HTML first
       try {
         const html = convert(src);
         bodyEl.innerHTML = html;
-        if (window.MathJax) MathJax.typesetPromise();
       } catch(e){
-        bodyEl.innerHTML = '<div class="template-reading">Rendering error. Please use the PDF version.</div>';
+        bodyEl.innerHTML = '<div class="template-reading">Rendering error in conversion. Please use the PDF version.</div>';
       }
+
+      // Safely typeset with MathJax when ready (avoid first-load race)
+      function typesetWhenReady(){
+        try {
+          if (window.MathJax && typeof MathJax.typesetPromise === 'function') {
+            MathJax.typesetPromise();
+            return;
+          }
+          if (window.MathJax && typeof MathJax.typeset === 'function') {
+            MathJax.typeset();
+            return;
+          }
+          const mj = document.getElementById('MathJax-script');
+          if (mj && !mj.dataset.bound) {
+            mj.dataset.bound = '1';
+            mj.addEventListener('load', typesetWhenReady, { once: true });
+            return;
+          }
+          // Retry shortly until MathJax attaches its API
+          setTimeout(typesetWhenReady, 250);
+        } catch(_) {}
+      }
+      typesetWhenReady();
     })();
   </script>
   <script src="/assets/js/main.js"></script>
