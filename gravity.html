@@ -244,7 +244,7 @@
                     <button onclick="toggleAudio()">
                         <span id="audio-btn-text">Listen</span> • 8 min
                     </button>
-                    <audio id="gravity-audio" src="/Beyond Dark Matter_ Is Gravity Just a Cosmic Refresh Lag_.mp3"></audio>
+                    <audio id="gravity-audio" src="/Beyond%20Dark%20Matter_%20Is%20Gravity%20Just%20a%20Cosmic%20Refresh%20Lag_.mp3"></audio>
                     <span style="color: #666; font-size: 0.9rem;">Audio overview of gravity as bandwidth limitation</span>
                 </div>
                 
@@ -521,12 +521,17 @@
             if (isPlaying) {
                 audio.pause();
                 btnText.textContent = 'Listen';
+                isPlaying = false;
             } else {
-                audio.play();
-                btnText.textContent = 'Pause';
+                audio.play().then(() => {
+                    btnText.textContent = 'Pause';
+                    isPlaying = true;
+                }).catch(err => {
+                    console.error('Audio playback failed:', err);
+                    alert('Unable to play audio. Please check your browser settings.');
+                    isPlaying = false;
+                });
             }
-            
-            isPlaying = !isPlaying;
         }
         
         // Term expansion functionality
