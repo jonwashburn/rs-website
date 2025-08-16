@@ -2527,6 +2527,11 @@ Hence the hypothesis of Theorem~\ref{thm:certificate} holds (in fact with a marg
         // title/author (best effort)
         const tm = tex.match(/\\title\{([^}]*)\}/); if (tm) document.getElementById('paper-title').innerHTML = tm[1];
         const au = tex.match(/\\author\{([\s\S]*?)\}/); if (au) document.getElementById('paper-author').innerHTML = au[1];
+        // remove metadata commands from main flow
+        tex = tex.replace(/\\affiliation\{[^}]*\}/g, '');
+        tex = tex.replace(/\\date\{[^}]*\}/g, '');
+        tex = tex.replace(/\\maketitle/g, '');
+        tex = tex.replace(/\\noindent/g, '');
         // abstract
         const am = tex.match(/\\begin\{abstract\}([\s\S]*?)\\end\{abstract\}/);
         if (am){ absEl.style.display=''; absEl.innerHTML = '<strong>Abstract</strong><br>'+tx(am[1].trim()); tex = tex.replace(am[0],''); }
