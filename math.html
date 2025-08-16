@@ -557,17 +557,8 @@
     <div id="footer-placeholder"></div>
     
     <!-- Scripts -->
-    <script src="/assets/js/jquery-3.6.0.min.js"></script>
+    <script src="/assets/js/main.js"></script>
     <script>
-        $(function() {
-            $('#header-placeholder').load('/_includes/header.html', function() {
-                // Update active nav
-                $('.nav-link').removeClass('active');
-                $('.nav-link[href="/math.html"]').addClass('active');
-            });
-            $('#footer-placeholder').load('/_includes/footer.html');
-        });
-        
         // Podcast player
         let audio = null;
         const podcastBadge = document.getElementById('podcastBadge');
@@ -575,29 +566,31 @@
         const iconPause = document.getElementById('iconPause');
         const audioPath = '/assets/audio/math-overview.mp3';
         
-        podcastBadge.addEventListener('click', function() {
-            if (!audio) {
-                audio = new Audio(encodeURI(audioPath));
-                audio.addEventListener('ended', () => {
-                    iconPlay.style.display = 'block';
-                    iconPause.style.display = 'none';
-                });
-            }
-            
-            if (audio.paused) {
-                audio.play().then(() => {
-                    iconPlay.style.display = 'none';
-                    iconPause.style.display = 'block';
-                }).catch(err => {
-                    console.error('Audio playback failed:', err);
-                    alert('Unable to play audio. The file may be missing or your browser may be blocking autoplay.');
-                });
-            } else {
-                audio.pause();
-                iconPlay.style.display = 'block';
-                iconPause.style.display = 'none';
-            }
-        });
+        if (podcastBadge) {
+            podcastBadge.addEventListener('click', function() {
+                if (!audio) {
+                    audio = new Audio(encodeURI(audioPath));
+                    audio.addEventListener('ended', () => {
+                        iconPlay && (iconPlay.style.display = 'block');
+                        iconPause && (iconPause.style.display = 'none');
+                    });
+                }
+                
+                if (audio.paused) {
+                    audio.play().then(() => {
+                        iconPlay && (iconPlay.style.display = 'none');
+                        iconPause && (iconPause.style.display = 'block');
+                    }).catch(err => {
+                        console.error('Audio playback failed:', err);
+                        alert('Unable to play audio. The file may be missing or your browser may be blocking autoplay.');
+                    });
+                } else {
+                    audio.pause();
+                    iconPlay && (iconPlay.style.display = 'block');
+                    iconPause && (iconPause.style.display = 'none');
+                }
+            });
+        }
     </script>
 </body>
 </html>
