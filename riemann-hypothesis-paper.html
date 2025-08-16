@@ -2537,6 +2537,8 @@ Hence the hypothesis of Theorem~\ref{thm:certificate} holds (in fact with a marg
         tex = wrapEnv(tex, 'corollary', 'Corollary');
         tex = wrapEnv(tex, 'remark', 'Remark');
         tex = wrapEnv(tex, 'conjecture', 'Conjecture');
+        // proofs (avoid MathJax unknown environment)
+        tex = wrapEnv(tex, 'proof', 'Proof');
         // sections
         tex = tex.replace(/\\section\*?\{([^}]*)\}/g, '<h2>$1</h2>');
         tex = tex.replace(/\\subsection\*?\{([^}]*)\}/g, '<h3>$1</h3>');
@@ -2547,6 +2549,8 @@ Hence the hypothesis of Theorem~\ref{thm:certificate} holds (in fact with a marg
         // equations to $$ $$
         tex = tex.replace(/\\begin\{equation\}/g,'$$').replace(/\\end\{equation\}/g,'$$');
         tex = tex.replace(/\\\[/g,'$$').replace(/\\\]/g,'$$');
+        // common amsthm commands without package
+        tex = tex.replace(/\\qedhere/g,'$\\square$');
         // paragraphs
         const blocks = tex.split(/\n\n+/).map(b=>b.trim()).filter(Boolean);
         const html = blocks.map(b => {
