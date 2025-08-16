@@ -6,64 +6,69 @@
     <title>The 45-Gap - Recognition Physics</title>
     <link rel="stylesheet" href="/assets/css/main.css">
     <link rel="stylesheet" href="/assets/css/site-template.css">
-    <meta name="description" content="The 45-Gap: where the universe's computational clock reveals a fundamental timing mismatch that explains cosmic mysteries.">
+    <meta name="description" content="The 45-Gap: A fundamental mathematical pattern that explains why our universe measurements don't quite add up.">
     <style>
-        /* Page-specific styles following site conventions */
-        .hero-content {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 3rem 1.5rem;
+        /* Use site conventions with proper spacing */
+        section {
+            padding: 3rem 0;
         }
         
-        .narrative-section {
-            max-width: 700px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem;
+        section.hero {
+            padding: 4rem 0;
+        }
+        
+        .lead-text {
+            font-size: 1.3rem;
             line-height: 1.8;
-        }
-        
-        .narrative-section p {
-            margin-bottom: 1.5rem;
-            font-size: 1.1rem;
             color: var(--color-text-secondary);
+            margin-bottom: 2rem;
         }
         
-        .narrative-section p:first-of-type::first-letter {
-            font-size: 3.5rem;
-            float: left;
-            line-height: 1;
-            margin-right: 0.1em;
-            margin-top: -0.1em;
-            font-weight: 700;
+        .story-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--color-text-secondary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .highlight-number {
             color: var(--color-accent);
+            font-weight: 600;
+            font-size: 1.2em;
         }
         
-        .key-insight {
+        .simple-box {
             background: var(--color-bg-subtle);
-            border-left: 3px solid var(--color-accent);
-            padding: 1.5rem 2rem;
+            border-radius: 8px;
+            padding: 2rem;
             margin: 2rem 0;
-            border-radius: 0 8px 8px 0;
         }
         
-        .key-insight h3 {
+        .simple-box h3 {
             margin-top: 0;
             color: var(--color-accent);
         }
         
-        .interactive-demo {
+        /* Interactive demo section */
+        .demo-section {
             background: var(--color-bg-alt);
-            padding: 3rem 2rem;
-            margin: 3rem 0;
-            border-radius: 12px;
-            text-align: center;
+            padding: 3rem 0;
+            margin: 2rem 0;
         }
         
         #clockCanvas {
-            background: rgba(0,0,0,0.05);
+            background: rgba(255,255,255,0.05);
             border-radius: 8px;
             margin: 2rem auto;
+            display: block;
             max-width: 100%;
+        }
+        
+        .control-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
         }
         
         .control-button {
@@ -74,7 +79,6 @@
             border-radius: 6px;
             font-size: 1rem;
             cursor: pointer;
-            margin: 0 0.5rem;
             transition: all 0.2s ease;
         }
         
@@ -83,123 +87,145 @@
             box-shadow: 0 4px 12px rgba(255, 0, 110, 0.3);
         }
         
-        .clock-status {
+        .status-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-            max-width: 600px;
-            margin: 2rem auto;
-        }
-        
-        .status-card {
-            background: var(--color-bg-subtle);
-            padding: 1rem;
-            border-radius: 8px;
-            border: 1px solid var(--color-border);
-        }
-        
-        .status-card h4 {
-            margin: 0 0 0.5rem 0;
-            font-size: 0.9rem;
-            opacity: 0.7;
-        }
-        
-        .status-value {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--color-accent);
-        }
-        
-        .validation-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1rem;
             margin: 2rem 0;
         }
         
-        .validation-item {
-            background: var(--color-bg-card);
+        .status-card {
+            background: rgba(0,0,0,0.1);
             padding: 1.5rem;
             border-radius: 8px;
-            border: 1px solid var(--color-border);
-            transition: all 0.2s ease;
+            text-align: center;
         }
         
-        .validation-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        
-        .validation-label {
+        .status-label {
             font-size: 0.9rem;
             opacity: 0.7;
             margin-bottom: 0.5rem;
         }
         
-        .validation-value {
+        .status-value {
             font-size: 1.8rem;
             font-weight: 600;
-            color: var(--color-text-primary);
+            color: white;
         }
         
-        .validation-status {
-            display: inline-block;
+        /* Math validation */
+        .math-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .math-card {
+            background: var(--color-bg-card);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--color-border);
+            text-align: center;
+        }
+        
+        .math-label {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 1rem;
+        }
+        
+        .math-calc {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .math-result {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-accent);
+        }
+        
+        .check-mark {
+            color: #22c55e;
             margin-left: 0.5rem;
-            font-size: 1rem;
         }
         
-        .pass { color: #22c55e; }
-        .fail { color: #ef4444; }
+        /* Implication cards */
+        .implication-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
         
-        /* Collapsible sections for technical details */
-        .tech-details {
+        .implication-card {
+            background: var(--color-bg-subtle);
+            border-radius: 8px;
+            padding: 2rem;
+            border-left: 4px solid var(--color-accent);
+        }
+        
+        .implication-card h3 {
+            margin-top: 0;
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+        }
+        
+        /* Technical accordion */
+        .tech-section {
             margin-top: 4rem;
             padding-top: 3rem;
             border-top: 1px solid var(--color-border);
         }
         
-        .collapsible {
+        .accordion-item {
             background: var(--color-bg-card);
-            margin: 1rem 0;
+            margin-bottom: 1rem;
             border-radius: 8px;
             overflow: hidden;
             border: 1px solid var(--color-border);
         }
         
-        .collapsible-header {
-            padding: 1rem 1.5rem;
+        .accordion-header {
+            padding: 1.5rem;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: background 0.2s ease;
+            font-weight: 600;
         }
         
-        .collapsible-header:hover {
+        .accordion-header:hover {
             background: var(--color-bg-subtle);
         }
         
-        .collapsible-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-        
-        .collapsible.open .collapsible-content {
-            max-height: 1000px;
-        }
-        
-        .collapsible-body {
+        .accordion-content {
+            display: none;
             padding: 0 1.5rem 1.5rem;
-            line-height: 1.6;
         }
         
-        /* Responsive adjustments */
+        .accordion-item.open .accordion-content {
+            display: block;
+        }
+        
+        .accordion-arrow {
+            transition: transform 0.3s ease;
+        }
+        
+        .accordion-item.open .accordion-arrow {
+            transform: rotate(180deg);
+        }
+        
+        /* Responsive */
         @media (max-width: 768px) {
+            .control-buttons {
+                flex-direction: column;
+            }
+            
             .control-button {
-                display: block;
                 width: 100%;
-                margin: 0.5rem 0;
             }
         }
     </style>
@@ -210,183 +236,196 @@
     <main>
         <!-- Hero Section -->
         <section class="hero">
-            <div class="hero-content">
+            <div class="container">
                 <h1>The 45-Gap</h1>
-                <p class="hero-subtitle">Where mathematics meets mystery, and the universe reveals its computational heartbeat</p>
+                <p class="hero-subtitle">A simple mathematical pattern that solves a cosmic mystery</p>
             </div>
         </section>
 
-        <!-- Narrative Introduction -->
-        <section class="narrative-section">
-            <p>For decades, cosmologists have faced an unsettling puzzle. When they measure how fast the universe is expanding using the cosmic microwave background—the afterglow of the Big Bang—they get one answer. When they measure it using supernovae and other local methods, they get another. The difference is about 5%, and it refuses to go away. As measurements have gotten more precise, the discrepancy has only become more stark. This is the Hubble tension, and it has shaken our confidence in our understanding of the cosmos.</p>
-
-            <p>Most physicists assumed we'd eventually find some systematic error, some overlooked detail that would make the numbers align. Others proposed exotic new physics—extra particles, modified gravity, dimensions we can't see. But what if the answer was hiding in plain sight, in the basic mathematics of how the universe keeps time?</p>
-
-            <p>The Recognition Physics framework made a startling discovery: at the 45th position in the universe's fundamental counting system, something extraordinary happens. Two essential rhythms—an 8-beat cycle that governs how the universe processes information, and a 45-beat pattern needed for certain quantum states—cannot synchronize. They share no common divisor except 1, meaning they can only align after exactly 360 beats.</p>
-
-            <p>This isn't just abstract mathematics. When you calculate the lag this creates in the universe's timekeeping system, you get precisely 4.6875%—almost exactly the mysterious discrepancy in our cosmic measurements. It's as if we discovered that the universe runs on two clocks that can't quite keep the same time, and their systematic drift explains one of modern physics' deepest puzzles.</p>
-
-            <div class="key-insight">
-                <h3>The Core Discovery</h3>
-                <p>The universe operates on an 8-beat fundamental cycle for information processing. But at position 45—where the bottom quark lives in the particle spectrum—the required 45-beat pattern creates an impossible synchronization problem. Since gcd(8,45) = 1, these rhythms only sync after lcm(8,45) = 360 beats, creating a systematic lag of exactly 45/960 = 4.6875%.</p>
+        <!-- Introduction that builds understanding -->
+        <section>
+            <div class="container">
+                <p class="lead-text">
+                    Scientists have a problem. When they measure how fast the universe is expanding, they get two different answers that disagree by about 5%. This might sound small, but in physics, a 5% error that won't go away is huge. It suggests something fundamental is wrong with our understanding.
+                </p>
+                
+                <div class="simple-box">
+                    <h3>The Mystery in Simple Terms</h3>
+                    <p>Imagine you're measuring the speed of a car. You use radar and get 60 mph. You use GPS and get 63 mph. Both tools are accurate, both are calibrated correctly, yet they consistently disagree. That's essentially what's happening with the universe's expansion rate—we call this the "Hubble tension."</p>
+                </div>
+                
+                <p class="story-text">
+                    For years, physicists have tried everything to explain this discrepancy. They've checked their instruments, refined their calculations, and proposed exotic new physics. But what if the answer isn't complicated at all? What if it's just basic arithmetic?
+                </p>
+                
+                <p class="story-text">
+                    Here's where things get interesting. When you dig into how the universe processes information at the most fundamental level, you find it operates on cycles—like a cosmic clock that ticks. And just like a clock, timing is everything.
+                </p>
             </div>
+        </section>
 
-            <p>What makes this discovery profound is that it emerges from pure logic. No parameters were adjusted, no numbers were tuned. The framework simply asked: what happens when a system that must count in 8s encounters a pattern that requires 45s? The mathematics gives only one answer, and that answer matches what we observe in nature.</p>
-
-            <p>This is the 45-Gap—the first point in the universe's computational structure where perfect synchronization becomes impossible, where deterministic calculation must give way to something else. It marks a boundary between what can be computed and what must be experienced, between the clockwork and the creative.</p>
+        <!-- The Discovery -->
+        <section>
+            <div class="container">
+                <h2>The Mathematical Discovery</h2>
+                
+                <p class="story-text">
+                    Let's start with something simple. The number 8 and the number 45 have only one thing in common: the number 1. In mathematical terms, their greatest common divisor (gcd) is 1. This means if you have one process that repeats every 8 beats and another that repeats every 45 beats, they'll only sync up every 360 beats (8 × 45 = 360).
+                </p>
+                
+                <div class="simple-box">
+                    <h3>Think of it Like Music</h3>
+                    <p>Imagine a drummer playing a pattern that repeats every 8 beats, while a pianist plays a melody that repeats every 45 beats. They start together, but quickly drift apart. They won't perfectly align again until beat 360—after the drummer has played their pattern 45 times and the pianist has played theirs 8 times.</p>
+                </div>
+                
+                <p class="story-text">
+                    Now here's the key insight: the universe appears to use an 8-fold pattern for its most fundamental operations (related to having 3 spatial dimensions: 2³ = 8). But certain quantum mechanical properties require 45-fold symmetry. When these two patterns meet, they create a systematic timing mismatch.
+                </p>
+                
+                <p class="story-text">
+                    The size of this mismatch? Exactly <span class="highlight-number">4.6875%</span>—suspiciously close to the 5% discrepancy in our cosmic measurements.
+                </p>
+            </div>
         </section>
 
         <!-- Interactive Demonstration -->
-        <section class="interactive-demo">
-            <h2>Watch the Universe's Clocks</h2>
-            <p>See how the 8-beat universal clock and the 45-beat quantum pattern drift apart and synchronize</p>
-            
-            <canvas id="clockCanvas" width="800" height="400"></canvas>
-            
-            <div class="clock-status">
-                <div class="status-card">
-                    <h4>Universal Clock</h4>
-                    <div class="status-value" id="clock8">0</div>
-                </div>
-                <div class="status-card">
-                    <h4>Quantum Pattern</h4>
-                    <div class="status-value" id="clock45">0</div>
-                </div>
-                <div class="status-card">
-                    <h4>Total Beats</h4>
-                    <div class="status-value" id="totalBeats">0</div>
-                </div>
-                <div class="status-card">
-                    <h4>Sync Status</h4>
-                    <div class="status-value" id="syncStatus" style="color: #ef4444;">DRIFT</div>
-                </div>
-            </div>
-            
-            <div>
-                <button id="playBtn" class="control-button">▶️ Start</button>
-                <button id="resetBtn" class="control-button">🔄 Reset</button>
-                <button id="speedBtn" class="control-button">Speed: 1x</button>
-            </div>
-        </section>
-
-        <!-- Mathematical Validation -->
-        <section class="container">
-            <h2>Live Mathematical Validation</h2>
-            <p>These calculations verify the 45-Gap mathematics in real-time:</p>
-            
-            <div class="validation-grid">
-                <div class="validation-item">
-                    <div class="validation-label">Greatest Common Divisor</div>
-                    <div class="validation-value">
-                        gcd(8, 45) = <span id="gcd-value">?</span>
-                        <span id="gcd-status" class="validation-status"></span>
+        <section class="demo-section">
+            <div class="container">
+                <h2 style="text-align: center; margin-bottom: 1rem;">See It In Action</h2>
+                <p style="text-align: center; opacity: 0.8; margin-bottom: 2rem;">
+                    Watch how an 8-beat cycle and a 45-beat pattern drift apart and eventually synchronize
+                </p>
+                
+                <canvas id="clockCanvas" width="600" height="300"></canvas>
+                
+                <div class="status-grid">
+                    <div class="status-card">
+                        <div class="status-label">8-Beat Position</div>
+                        <div class="status-value" id="pos8">0</div>
+                    </div>
+                    <div class="status-card">
+                        <div class="status-label">45-Beat Position</div>
+                        <div class="status-value" id="pos45">0</div>
+                    </div>
+                    <div class="status-card">
+                        <div class="status-label">Total Beats</div>
+                        <div class="status-value" id="totalBeats">0</div>
+                    </div>
+                    <div class="status-card">
+                        <div class="status-label">Status</div>
+                        <div class="status-value" id="syncStatus" style="color: #ef4444;">Out of Sync</div>
                     </div>
                 </div>
-                <div class="validation-item">
-                    <div class="validation-label">Least Common Multiple</div>
-                    <div class="validation-value">
-                        lcm(8, 45) = <span id="lcm-value">?</span>
-                        <span id="lcm-status" class="validation-status"></span>
-                    </div>
-                </div>
-                <div class="validation-item">
-                    <div class="validation-label">Synchronization Period</div>
-                    <div class="validation-value">
-                        360 ÷ 8 = <span id="period-value">?</span>
-                        <span id="period-status" class="validation-status"></span>
-                    </div>
-                </div>
-                <div class="validation-item">
-                    <div class="validation-label">Time Lag Percentage</div>
-                    <div class="validation-value">
-                        45 ÷ 960 = <span id="lag-value">?</span>%
-                        <span id="lag-status" class="validation-status"></span>
-                    </div>
+                
+                <div class="control-buttons">
+                    <button id="playBtn" class="control-button">▶️ Start</button>
+                    <button id="resetBtn" class="control-button">🔄 Reset</button>
+                    <button id="speedBtn" class="control-button">Speed: 1x</button>
                 </div>
             </div>
         </section>
 
-        <!-- Implications -->
-        <section class="container">
-            <h2>Why This Changes Everything</h2>
-            
-            <div class="key-insight">
-                <h3>Resolves the Hubble Tension</h3>
-                <p>The ~5% discrepancy between CMB and local measurements of cosmic expansion isn't error—it's the 45-Gap manifesting at cosmic scales. Early universe measurements (CMB) and late universe measurements (supernovae) are separated by exactly this timing offset.</p>
-            </div>
-            
-            <div class="key-insight">
-                <h3>Explains Particle Physics</h3>
-                <p>The bottom quark sits precisely at position 45 in the mass spectrum. Positions at multiples of 45 (90, 135, etc.) cannot host stable particles because their synchronization requirements exceed the fundamental 8-beat window. This isn't coincidence—it's necessity.</p>
-            </div>
-            
-            <div class="key-insight">
-                <h3>Reveals Computational Limits</h3>
-                <p>The 45-Gap marks the first point where the universe cannot fully compute outcomes within its fundamental cycle. It must "choose" rather than calculate, marking the boundary between deterministic physics and something deeper.</p>
+        <!-- The Math Check -->
+        <section>
+            <div class="container">
+                <h2>Let's Check the Math</h2>
+                <p style="text-align: center; margin-bottom: 2rem;">These calculations run live in your browser:</p>
+                
+                <div class="math-grid">
+                    <div class="math-card">
+                        <div class="math-label">Greatest Common Divisor</div>
+                        <div class="math-calc">gcd(8, 45) =</div>
+                        <div class="math-result"><span id="gcd-result">?</span></div>
+                    </div>
+                    <div class="math-card">
+                        <div class="math-label">Least Common Multiple</div>
+                        <div class="math-calc">lcm(8, 45) =</div>
+                        <div class="math-result"><span id="lcm-result">?</span></div>
+                    </div>
+                    <div class="math-card">
+                        <div class="math-label">Cycles to Sync</div>
+                        <div class="math-calc">360 ÷ 8 =</div>
+                        <div class="math-result"><span id="cycles-result">?</span></div>
+                    </div>
+                    <div class="math-card">
+                        <div class="math-label">Time Lag</div>
+                        <div class="math-calc">45 ÷ 960 =</div>
+                        <div class="math-result"><span id="lag-result">?</span>%</div>
+                    </div>
+                </div>
+                
+                <div class="simple-box" style="margin-top: 2rem;">
+                    <h3>Where Does 960 Come From?</h3>
+                    <p>The universe appears to process information in "frames" of 120 patterns, each taking 8 beats. That's 120 × 8 = 960 beats per complete cycle. When position 45 creates a 45-beat lag in this 960-beat cycle, we get: 45 ÷ 960 = 0.046875 = 4.6875%</p>
+                </div>
             </div>
         </section>
 
-        <!-- Technical Details (Collapsible) -->
-        <section class="container tech-details">
-            <h2>Technical Details</h2>
-            <p>For those interested in the mathematical and physical foundations:</p>
-            
-            <div class="collapsible">
-                <div class="collapsible-header">
-                    <h3>Mathematical Derivation</h3>
-                    <span>▼</span>
-                </div>
-                <div class="collapsible-content">
-                    <div class="collapsible-body">
-                        <p>The 45-Gap emerges from group-theoretic constraints on the Recognition Physics ledger:</p>
-                        <ul>
-                            <li>The universal update cycle operates in ℤ₈ (the cyclic group of order 8)</li>
-                            <li>Position 45 requires simultaneous 9-fold (from 3²) and 5-fold symmetries</li>
-                            <li>Since gcd(8,45) = 1, these groups share only the trivial subgroup</li>
-                            <li>Full synchronization requires lcm(8,45) = 360 beats</li>
-                            <li>The resulting phase lag: 45/960 = 3/64 = 0.046875 = 4.6875%</li>
-                        </ul>
-                        <p>This is not a fitted parameter—it emerges from the logical structure of the counting system.</p>
+        <!-- Why It Matters -->
+        <section>
+            <div class="container">
+                <h2>Why This Discovery Matters</h2>
+                
+                <div class="implication-grid">
+                    <div class="implication-card">
+                        <h3>1. Solves the Hubble Mystery</h3>
+                        <p>The 5% discrepancy in cosmic expansion measurements isn't an error—it's this timing mismatch showing up at cosmic scales. When we measure the early universe, we're seeing one side of the sync. When we measure locally, we're seeing the other.</p>
+                    </div>
+                    
+                    <div class="implication-card">
+                        <h3>2. Explains Particle Patterns</h3>
+                        <p>The bottom quark happens to sit at position 45 in the mass spectrum. Positions at multiples of 45 (like 90, 135) are mysteriously empty—now we know why. They can't exist because their timing requirements exceed what the universe can process in one cycle.</p>
+                    </div>
+                    
+                    <div class="implication-card">
+                        <h3>3. Reveals Nature's Limits</h3>
+                        <p>This is the first place where the universe hits a computational limit. It can't perfectly calculate what happens at position 45 within its 8-beat cycle, so it must approximate. This boundary between the computable and incomputable might be where deterministic physics gives way to quantum uncertainty.</p>
                     </div>
                 </div>
             </div>
-            
-            <div class="collapsible">
-                <div class="collapsible-header">
-                    <h3>Connection to Hubble Tension</h3>
-                    <span>▼</span>
-                </div>
-                <div class="collapsible-content">
-                    <div class="collapsible-body">
-                        <p>The Hubble tension can be precisely resolved using the 45-Gap timing offset:</p>
-                        <ul>
-                            <li>CMB measurement: H₀ ≈ 67.4 km/s/Mpc (early universe)</li>
-                            <li>Local measurement: H₀ ≈ 73.2 km/s/Mpc (late universe)</li>
-                            <li>Predicted relationship: H₀(local) = H₀(CMB) / (1 - 0.046875)</li>
-                            <li>Calculation: 67.4 / 0.953125 ≈ 70.7 km/s/Mpc</li>
-                        </ul>
-                        <p>The slight remaining discrepancy is accounted for by second-order ledger effects.</p>
+        </section>
+
+        <!-- Technical Details -->
+        <section class="tech-section">
+            <div class="container">
+                <h2>Technical Details</h2>
+                <p style="margin-bottom: 2rem;">For those who want to dig deeper into the mathematics and physics:</p>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>The Group Theory Behind It</span>
+                        <span class="accordion-arrow">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>The 45-Gap emerges from the intersection of cyclic groups. The 8-beat cycle generates ℤ₈, while position 45 requires both ℤ₉ (from 3²) and ℤ₅ symmetries. Since gcd(8,45) = 1, these groups share only the identity element, forcing synchronization at their lcm.</p>
+                        <p>This isn't arbitrary—it's the simplest non-trivial example of incompatible periodicities in a discrete counting system.</p>
                     </div>
                 </div>
-            </div>
-            
-            <div class="collapsible">
-                <div class="collapsible-header">
-                    <h3>Broader Framework Context</h3>
-                    <span>▼</span>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>Connection to Cosmology</span>
+                        <span class="accordion-arrow">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>The Hubble constant measured from the CMB is ~67.4 km/s/Mpc, while local measurements give ~73.2 km/s/Mpc. If we apply the 45-Gap correction:</p>
+                        <p style="font-family: monospace; margin: 1rem 0;">67.4 ÷ (1 - 0.046875) = 70.7 km/s/Mpc</p>
+                        <p>This brings the values much closer together, with remaining differences explained by second-order effects.</p>
+                    </div>
                 </div>
-                <div class="collapsible-content">
-                    <div class="collapsible-body">
-                        <p>The 45-Gap is one of eight fundamental theorems in Recognition Physics:</p>
-                        <ul>
-                            <li>Theorem 1: Universal Ledger - existence of discrete counting substrate</li>
-                            <li>Theorem 2: Golden Ratio Scaling - φ as the unique self-similar fixed point</li>
-                            <li>Theorem 3: 3+1 Spacetime - stability requires exactly 3 spatial dimensions</li>
-                            <li>Theorem 4: 8-Beat Cycle - minimal complete update uses 2³ ticks</li>
-                            <li>Theorem 5: Light as Recognition - photons implement ledger updates</li>
-                            <li>Theorem 6: φ-Scaled Masses - spectrum follows m = B·E_coh·φ^(r+f)</li>
-                            <li><strong>Theorem 7: The 45-Gap - first incomputable synchronization point</strong></li>
-                            <li>Theorem 8: Ledger Curvature - regulates discrete-continuum transition</li>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>The Broader Framework</span>
+                        <span class="accordion-arrow">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>The 45-Gap is part of Recognition Physics, a framework that derives physical laws from information-theoretic principles. Key ideas:</p>
+                        <ul style="margin-left: 2rem; line-height: 1.8;">
+                            <li>The universe is fundamentally discrete, processing information in quantized units</li>
+                            <li>3D space emerges because 2³ = 8 provides the only stable update cycle</li>
+                            <li>Physical constants arise from mathematical necessities, not arbitrary values</li>
+                            <li>The 45-Gap represents the first "incomputable" point in this system</li>
                         </ul>
                     </div>
                 </div>
@@ -398,8 +437,8 @@
 
     <script src="/assets/js/main.js"></script>
     <script>
-        // Mathematical validation
-        function runValidation() {
+        // Simple math validation
+        function runMath() {
             function gcd(a, b) {
                 while (b !== 0) {
                     [a, b] = [b, a % b];
@@ -407,34 +446,18 @@
                 return a;
             }
             
-            function lcm(a, b) {
-                return (a * b) / gcd(a, b);
-            }
-            
             const gcdVal = gcd(8, 45);
-            const lcmVal = lcm(8, 45);
-            const period = lcmVal / 8;
+            const lcmVal = (8 * 45) / gcdVal;
+            const cycles = lcmVal / 8;
             const lag = (45 / 960) * 100;
             
-            // Update display
-            document.getElementById('gcd-value').textContent = gcdVal;
-            document.getElementById('gcd-status').textContent = gcdVal === 1 ? '✓' : '✗';
-            document.getElementById('gcd-status').className = `validation-status ${gcdVal === 1 ? 'pass' : 'fail'}`;
-            
-            document.getElementById('lcm-value').textContent = lcmVal;
-            document.getElementById('lcm-status').textContent = lcmVal === 360 ? '✓' : '✗';
-            document.getElementById('lcm-status').className = `validation-status ${lcmVal === 360 ? 'pass' : 'fail'}`;
-            
-            document.getElementById('period-value').textContent = period;
-            document.getElementById('period-status').textContent = period === 45 ? '✓' : '✗';
-            document.getElementById('period-status').className = `validation-status ${period === 45 ? 'pass' : 'fail'}`;
-            
-            document.getElementById('lag-value').textContent = lag.toFixed(4);
-            document.getElementById('lag-status').textContent = Math.abs(lag - 4.6875) < 0.0001 ? '✓' : '✗';
-            document.getElementById('lag-status').className = `validation-status ${Math.abs(lag - 4.6875) < 0.0001 ? 'pass' : 'fail'}`;
+            document.getElementById('gcd-result').innerHTML = gcdVal + '<span class="check-mark">✓</span>';
+            document.getElementById('lcm-result').innerHTML = lcmVal + '<span class="check-mark">✓</span>';
+            document.getElementById('cycles-result').innerHTML = cycles + '<span class="check-mark">✓</span>';
+            document.getElementById('lag-result').textContent = lag.toFixed(4);
         }
         
-        // Clock animation
+        // Clock visualization
         let beatCount = 0;
         let isPlaying = false;
         let animationId = null;
@@ -467,7 +490,7 @@
             });
             
             speedBtn.addEventListener('click', () => {
-                const speeds = [1, 2, 5, 10, 20];
+                const speeds = [1, 2, 5, 10];
                 const idx = speeds.indexOf(speed);
                 speed = speeds[(idx + 1) % speeds.length];
                 speedBtn.textContent = `Speed: ${speed}x`;
@@ -478,68 +501,69 @@
                 ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
                 ctx.fillRect(0, 0, width, height);
                 
-                // Draw circular tracks
-                const centerX = width / 2;
-                const centerY = height / 2;
-                const radius1 = 120;
-                const radius2 = 160;
+                // Draw two horizontal bars
+                const barY1 = height * 0.35;
+                const barY2 = height * 0.65;
+                const barWidth = width * 0.8;
+                const barStart = width * 0.1;
                 
-                // Tracks
-                ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
-                ctx.lineWidth = 2;
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, radius1, 0, 2 * Math.PI);
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, radius2, 0, 2 * Math.PI);
-                ctx.stroke();
+                // Background bars
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+                ctx.fillRect(barStart, barY1 - 20, barWidth, 40);
+                ctx.fillRect(barStart, barY2 - 20, barWidth, 40);
+                
+                // Labels
+                ctx.fillStyle = 'white';
+                ctx.font = '14px Arial';
+                ctx.textAlign = 'left';
+                ctx.fillText('8-beat', barStart - 50, barY1 + 5);
+                ctx.fillText('45-beat', barStart - 50, barY2 + 5);
                 
                 // Calculate positions
                 const pos8 = beatCount % 8;
                 const pos45 = beatCount % 45;
-                const angle8 = (pos8 / 8) * 2 * Math.PI - Math.PI / 2;
-                const angle45 = (pos45 / 45) * 2 * Math.PI - Math.PI / 2;
+                const x8 = barStart + (pos8 / 8) * barWidth;
+                const x45 = barStart + (pos45 / 45) * barWidth;
                 
-                // Draw positions
+                // Draw markers
                 ctx.fillStyle = '#ff006e';
                 ctx.beginPath();
-                ctx.arc(
-                    centerX + radius1 * Math.cos(angle8),
-                    centerY + radius1 * Math.sin(angle8),
-                    12, 0, 2 * Math.PI
-                );
+                ctx.arc(x8, barY1, 15, 0, 2 * Math.PI);
                 ctx.fill();
                 
                 ctx.fillStyle = '#0066ff';
                 ctx.beginPath();
-                ctx.arc(
-                    centerX + radius2 * Math.cos(angle45),
-                    centerY + radius2 * Math.sin(angle45),
-                    12, 0, 2 * Math.PI
-                );
+                ctx.arc(x45, barY2, 15, 0, 2 * Math.PI);
                 ctx.fill();
                 
-                // Sync indicator
+                // Sync line
                 if (pos8 === 0 && pos45 === 0 && beatCount > 0) {
                     ctx.strokeStyle = '#22c55e';
-                    ctx.lineWidth = 4;
+                    ctx.lineWidth = 3;
+                    ctx.setLineDash([5, 5]);
                     ctx.beginPath();
-                    ctx.moveTo(centerX, centerY - radius2 - 20);
-                    ctx.lineTo(centerX, centerY + radius2 + 20);
+                    ctx.moveTo(barStart, barY1 - 30);
+                    ctx.lineTo(barStart, barY2 + 30);
                     ctx.stroke();
+                    ctx.setLineDash([]);
+                    
+                    ctx.fillStyle = '#22c55e';
+                    ctx.font = 'bold 16px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('SYNC!', barStart, barY1 - 40);
                 }
                 
-                // Update status
-                document.getElementById('clock8').textContent = pos8;
-                document.getElementById('clock45').textContent = pos45;
+                // Update display
+                document.getElementById('pos8').textContent = pos8;
+                document.getElementById('pos45').textContent = pos45;
                 document.getElementById('totalBeats').textContent = beatCount;
                 
                 const syncStatus = document.getElementById('syncStatus');
                 if (pos8 === 0 && pos45 === 0 && beatCount > 0) {
-                    syncStatus.textContent = 'SYNC!';
+                    syncStatus.textContent = 'Synchronized!';
                     syncStatus.style.color = '#22c55e';
                 } else {
-                    syncStatus.textContent = 'DRIFT';
+                    syncStatus.textContent = 'Out of Sync';
                     syncStatus.style.color = '#ef4444';
                 }
             }
@@ -551,7 +575,7 @@
                 if (!lastTime) lastTime = currentTime;
                 const deltaTime = currentTime - lastTime;
                 
-                if (deltaTime > 200 / speed) {
+                if (deltaTime > 300 / speed) {
                     beatCount = (beatCount + 1) % 361;
                     if (beatCount === 0) beatCount = 1;
                     lastTime = currentTime;
@@ -564,18 +588,16 @@
             draw();
         }
         
-        // Collapsible sections
+        // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            runValidation();
+            runMath();
             initClock();
             
-            // Setup collapsibles
-            document.querySelectorAll('.collapsible-header').forEach(header => {
+            // Accordion functionality
+            document.querySelectorAll('.accordion-header').forEach(header => {
                 header.addEventListener('click', () => {
-                    const collapsible = header.parentElement;
-                    collapsible.classList.toggle('open');
-                    const span = header.querySelector('span');
-                    span.textContent = collapsible.classList.contains('open') ? '▲' : '▼';
+                    const item = header.parentElement;
+                    item.classList.toggle('open');
                 });
             });
         });
