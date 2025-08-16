@@ -106,15 +106,10 @@
         </div>
         <div class="theory-expansion" aria-hidden="true">
           <div class="expansion-body">
-            <p>Select any constant above to see its definition, role, and deeper notes.</p>
-            <p class="tight"><a href="/constants/">All constants</a> • <a href="/math.html">Mathematics Hub</a></p>
-            <div class="need-more">
-              <span>Need more clarity?</span>
-              <a href="#" class="deeper-toggle">See deeper explanation →</a>
-              <div class="deeper-content">
-                <p><strong>Derivation sketch.</strong> The constants arise from: (i) countability and dual balance (alphabet, sectors), (ii) bandwidth limits (τ_rec, λ_rec), (iii) scaling by φ (E_coh = φ^{-5}), and (iv) an analytic gap series that sums to ln φ (δ_gap). None are fitted; each is forced by the ledger calculus.</p>
-              </div>
+            <div class="constants-detail-area">
+              <p style="color: var(--color-text-muted); font-style: italic;">Click any constant above to see its value and role.</p>
             </div>
+            <p class="tight" style="margin-top: 1rem;"><a href="/constants/">All constants</a> • <a href="/math.html">Mathematics Hub</a></p>
           </div>
         </div>
       </div>
@@ -466,12 +461,44 @@
           One wrong prediction kills the entire framework.`,
         
         // Constants
-        'E_coh': '<strong>E_coh (coherence energy).</strong> Minimal energy per recognition; sets the universal energy scale for masses and spectra.',
-        'tau_rec': '<strong>τ_rec (recognition time).</strong> Tick duration for one atomic recognition; anchors temporal scaling.',
-        'lambda_rec': '<strong>λ_rec (recognition length).</strong> Minimal stable separation; anchors spatial bandwidth and curvature corrections.',
-        'alphabet': '<strong>A_L (ledger alphabet).</strong> The nine-state dual-balanced symbol set {+4..0..-4}; fixes allowed local costs.',
-        'sectors': '<strong>B_i (sector factors).</strong> Discrete multiplicities from path topology; linearly scale composite masses.',
-        'delta_gap': '<strong>δ_gap (ledger gap).</strong> Quantized incomputability; produces tiny, signed corrections from a closed series.',
+        'E_coh': `<strong>E_coh = 0.090 eV</strong><br>
+          <em>Coherence Energy</em><br><br>
+          The minimal energy quantum for any recognition update. Derived from:<br>
+          E_coh = ħc/λ_rec = (ħc)/(2.20 μm) = 0.090 eV<br><br>
+          <strong>Role:</strong> Base energy scale in the mass formula m = B·E_coh·φ^(r+f)<br>
+          <strong>Origin:</strong> Set by recognition bandwidth limits`,
+          
+        'tau_rec': `<strong>τ_rec = 7.33 fs</strong><br>
+          <em>Recognition Time</em><br><br>
+          The tick duration for one atomic recognition update.<br>
+          τ_rec = λ_rec/c = 2.20 μm / c = 7.33 femtoseconds<br><br>
+          <strong>Role:</strong> Sets the universal clock rate<br>
+          <strong>Origin:</strong> Minimal two-way light exchange time`,
+          
+        'lambda_rec': `<strong>λ_rec = 2.20 μm</strong><br>
+          <em>Recognition Length</em><br><br>
+          The minimal stable separation for recognition exchange.<br><br>
+          <strong>Role:</strong> Sets spatial bandwidth of the ledger<br>
+          <strong>Origin:</strong> Fixed by dual-balance stability constraints`,
+          
+        'alphabet': `<strong>A_L = {1, φ, φ², ...}</strong><br>
+          <em>Ledger Alphabet</em><br><br>
+          The permitted scaling values in recognition operations.<br>
+          Primary element: φ (golden ratio) from self-similarity<br><br>
+          <strong>Role:</strong> Controls all scaling exponents<br>
+          <strong>Origin:</strong> Unique fixed point of dual-balance`,
+          
+        'sectors': `<strong>B_i = {1, 2, 3, 4, 6, 8, 9, 12}</strong><br>
+          <em>Sector Factors</em><br><br>
+          Discrete multiplicity factors from path topology.<br><br>
+          <strong>Role:</strong> Linear prefactors in mass formula<br>
+          <strong>Origin:</strong> Recognition path combinatorics`,
+          
+        'delta_gap': `<strong>δ_gap = 0.006115</strong><br>
+          <em>Ledger Gap (45-Gap)</em><br><br>
+          Quantized incomputability correction from the 45° phase boundary.<br><br>
+          <strong>Role:</strong> Produces tiny corrections (f terms) in masses<br>
+          <strong>Origin:</strong> Fundamental limit in forward computability`,
         // Theorems
         'T1': '<strong>Theorem 1 — Universal Ledger.</strong> A globally conserved count exists; continuity and conservation laws follow.',
         'T2': '<strong>Theorem 2 — Golden‑Ratio Scaling.</strong> φ is the unique non-trivial self‑similar fixed point under dual balance.',
@@ -554,6 +581,33 @@
           if (section) {
             const expansion = section.querySelector('.theory-expansion');
             if (!expansion) return;
+            
+            // Special handling for constants section
+            const constantsHeader = section.querySelector('.theory-header.constants');
+            if (constantsHeader) {
+              const detailArea = expansion.querySelector('.constants-detail-area');
+              if (!detailArea) return;
+              
+              // Toggle term state
+              if (term.classList.contains('active')) {
+                term.classList.remove('active');
+                detailArea.innerHTML = '<p style="color: var(--color-text-muted); font-style: italic;">Click any constant above to see its value and role.</p>';
+              } else {
+                // Remove active from other terms
+                section.querySelectorAll('.term.active').forEach(t => t.classList.remove('active'));
+                term.classList.add('active');
+                detailArea.innerHTML = `<div class="constant-detail">${def}</div>`;
+                
+                // Ensure the section is open
+                const btn = section.querySelector('.theory-expand-btn');
+                if (btn && expansion.getAttribute('aria-hidden') !== 'false') {
+                  btn.click();
+                }
+              }
+              return;
+            }
+            
+            // For other theory sections (theorems, formulas)
             const body = expansion.querySelector('.expansion-body');
             if (!body) return;
 
@@ -686,6 +740,25 @@
     
     .expansion div[style*="font-family"] {
       margin: 0.5rem 0 !important;
+    }
+    
+    .constant-detail {
+      background: white;
+      border: 1px solid var(--color-border-light);
+      border-radius: 6px;
+      padding: 1rem;
+      margin-top: 0.5rem;
+    }
+    
+    .constant-detail strong {
+      font-size: 1.1rem;
+      color: var(--color-text-primary);
+    }
+    
+    .constant-detail em {
+      display: block;
+      color: var(--color-text-muted);
+      margin-bottom: 0.75rem;
     }
     
     .expansion-close {
