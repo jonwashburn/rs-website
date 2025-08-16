@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics - Recognition Physics</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/site-template.css">
+    <meta name="description" content="Core mathematical programs of Recognition Physics: axiomatic bridging to classical mathematics, RDM formalism, unconditional Riemann Hypothesis proof, and recognition-based P vs NP approach.">
+    
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+      window.MathJax = { tex: { inlineMath: [["\\(", "\\)" ]], displayMath: [["\\[", "\\]"]], processEscapes: true } };
+    </script>
+    
+    <style>
+        /* Clean, readable design inspired by academic.html */
+        body {
+            font-family: var(--font-body);
+            color: var(--color-text-body);
+            line-height: 1.6;
+        }
+        
+        /* Hero section */
+        .hero-clean {
+            background: #ffffff;
+            padding: 3rem 0 2rem;
+            border-bottom: 1px solid var(--color-border-light);
+        }
+        
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 0, 110, 0.1);
+            color: var(--color-accent);
+            padding: 0.35rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+        
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            margin: 0 0 1rem 0;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+        
+        .hero-lead {
+            font-size: 1.25rem;
+            color: var(--color-text-muted);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        /* Main content area */
+        .content-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+        
+        /* Program sections */
+        .program-section {
+            margin-bottom: 4rem;
+            padding-bottom: 3rem;
+            border-bottom: 1px solid var(--color-border-light);
+        }
+        
+        .program-section:last-child {
+            border-bottom: none;
+            margin-bottom: 2rem;
+        }
+        
+        .program-header {
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .program-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin: 0;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            background: #10b981;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.675rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .program-lead {
+            font-size: 1.125rem;
+            color: var(--color-text-body);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+        
+        /* Highlight boxes */
+        .highlight-box {
+            background: var(--color-bg-subtle);
+            border-left: 4px solid var(--color-accent);
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .highlight-box strong {
+            color: var(--color-primary);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .highlight-box p {
+            margin: 0;
+            color: var(--color-text-body);
+        }
+        
+        .highlight-box code {
+            background: rgba(0, 0, 0, 0.05);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.9em;
+        }
+        
+        /* Lists with better spacing */
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 1.5rem 0;
+        }
+        
+        .feature-list li {
+            position: relative;
+            padding-left: 1.75rem;
+            margin-bottom: 0.75rem;
+            color: var(--color-text-body);
+        }
+        
+        .feature-list li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--color-accent);
+            font-weight: bold;
+        }
+        
+        /* Links section */
+        .program-links {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--color-border-light);
+        }
+        
+        .program-links-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+        }
+        
+        .link-grid {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .link-item {
+            color: var(--color-accent);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 0.35rem 0;
+            border-bottom: 2px solid transparent;
+            transition: all 0.15s ease;
+        }
+        
+        .link-item:hover {
+            border-bottom-color: var(--color-accent);
+        }
+        
+        /* Navigation section */
+        .nav-section {
+            background: linear-gradient(135deg, #fffbf0 0%, #fff7e6 100%);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .nav-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.15s ease;
+        }
+        
+        .nav-item:hover {
+            color: var(--color-accent);
+            transform: translateX(4px);
+        }
+        
+        /* Podcast badge */
+        .podcast-badge {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #ffffff;
+            border: 2px solid var(--color-accent);
+            color: var(--color-accent);
+            padding: 0.5rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            box-shadow: 0 2px 8px rgba(255, 0, 110, 0.15);
+        }
+        
+        .podcast-badge:hover {
+            background: var(--color-accent);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 0, 110, 0.3);
+        }
+        
+        .podcast-icon {
+            width: 18px;
+            height: 18px;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .hero-lead {
+                font-size: 1.125rem;
+            }
+            
+            .program-title {
+                font-size: 1.5rem;
+            }
+            
+            .nav-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .podcast-badge {
+                top: 10px;
+                right: 10px;
+                padding: 0.35rem;
+            }
+            
+            .podcast-badge span {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+    
+    <!-- Clean hero section -->
+    <section class="hero-clean">
+        <button class="podcast-badge" id="podcastBadge" aria-label="Play mathematics overview">
+            <svg class="podcast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon id="iconPlay" points="8,5 19,12 8,19 8,5"></polygon>
+                <g id="iconPause" style="display:none"><line x1="10" y1="5" x2="10" y2="19"></line><line x1="14" y1="5" x2="14" y2="19"></line></g>
+            </svg>
+            <span>Listen • 8 min</span>
+        </button>
+        
+        <div class="hero-content">
+            <div class="hero-badge">Mathematical Foundations</div>
+            <h1 class="hero-title">Mathematics</h1>
+            <p class="hero-lead">
+                Core mathematical programs of Recognition Physics: the axiomatic bridge to classical math, 
+                the RDM formalism, our unconditional route to the Riemann Hypothesis, and a theory-led angle on P vs NP.
+            </p>
+        </div>
+    </section>
+    
+    <!-- Main content -->
+    <main class="content-wrapper">
+        
+        <!-- Axiomatic Bridging -->
+        <section class="program-section">
+            <div class="program-header">
+                <h2 class="program-title">Axiomatic Bridging</h2>
+            </div>
+            
+            <p class="program-lead">
+                Our method for carrying invariants from the Recognition ledger (balance, symmetry, fairness) 
+                into classical mathematics. It is the "translator" that turns ledger constraints into theorems 
+                usable in analysis, optimization, and dynamics.
+            </p>
+            
+            <div class="highlight-box">
+                <strong>What it is:</strong>
+                <p>A tautology-to-theorem pipeline. Ledger constraints (double-entry, unitless ratios, cost symmetry) 
+                become mathematical laws (conservation, dimensionless invariants, unique even convex cost).</p>
+            </div>
+            
+            <p><strong>Why it matters:</strong> It explains why classical structures (least action, Laplacians, 
+            Herglotz/Schur positivity, Jensen convexity) are not empirical accidents, but the only options 
+            compatible with recognition's balance rules.</p>
+            
+            <p><strong>Core outcomes:</strong></p>
+            <ul class="feature-list">
+                <li>Cost uniqueness on ℝ>0: <code>J(x) = ½(x + 1/x) − 1</code> as the unique symmetric, unit-normalized benchmark</li>
+                <li>Golden-ratio fixed point via self-similar scaling and ledger recursion</li>
+                <li>Eight-tick minimal traversal on a 3D parity complex (discrete flux quantization)</li>
+                <li>Gauge-rigidity: laws depend only on dimensionless ratios (quotient by units)</li>
+            </ul>
+            
+            <div class="program-links">
+                <div class="program-links-title">Read more</div>
+                <div class="link-grid">
+                    <a href="/axiomatic-bridging.html" class="link-item">Axiomatic Bridging →</a>
+                    <a href="/logical-foundations.html" class="link-item">Logical Foundations →</a>
+                    <a href="/formulas/" class="link-item">Core Formulas →</a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- RDM -->
+        <section class="program-section">
+            <div class="program-header">
+                <h2 class="program-title">RDM (Recognition Dynamics & Measurement)</h2>
+            </div>
+            
+            <p class="program-lead">
+                The mathematical skeleton of how recognition "moves" (dynamics) and how it "counts" (measurement). 
+                It encodes updates on pattern spaces under ledger constraints and makes the cost J and scaling laws concrete.
+            </p>
+            
+            <div class="highlight-box">
+                <strong>What it is:</strong>
+                <p>A dynamics-and-measure framework on pattern spaces with: ledger balance (double-entry) → conservation, 
+                symmetric cost (J) → uniqueness and convexity on the log-axis, and self-similarity → golden-ratio scaling.</p>
+            </div>
+            
+            <p><strong>Why it matters:</strong> It justifies the exact functional forms used across our physics 
+            (e.g., J on ℝ>0 and its log-cosh model), ties discrete ticks to continuous limits, and explains 
+            why "unit-free" statements are the stable ones.</p>
+            
+            <p><strong>Key results:</strong></p>
+            <ul class="feature-list">
+                <li>J-agreement on the exp-axis via Jensen/convexity → J is the unique benchmark</li>
+                <li>Even/strict-convex log models become cost functionals compatible with symmetry and balance</li>
+                <li>From parity coverage to eight-tick minimality → discrete traversal lower bounds</li>
+            </ul>
+            
+            <div class="program-links">
+                <div class="program-links-title">Read more</div>
+                <div class="link-grid">
+                    <a href="/rdm-formalism.html" class="link-item">RDM Formalism →</a>
+                    <a href="/formulas/" class="link-item">Core Formulas →</a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Riemann -->
+        <section class="program-section">
+            <div class="program-header">
+                <h2 class="program-title">Riemann (Unconditional Route)</h2>
+                <span class="status-badge">Complete</span>
+            </div>
+            
+            <p class="program-lead">
+                We develop a bounded-real (Herglotz/Schur) route to RH on the half-plane Ω = {Re s > 1/2}. 
+                The core object is Θ(s), a Cayley transform of a det₂/ξ ratio built from the prime-diagonal 
+                operator A(s). Proving |Θ| ≤ 1 (Schur) on Ω is our target.
+            </p>
+            
+            <div class="highlight-box">
+                <strong>What it is:</strong>
+                <p>A stability/contractivity translation of RH:<br>
+                • <code>det₂(I − A)/ξ → J(s), Θ(s) = (2J − 1)/(2J + 1)</code><br>
+                • Contractivity (|Θ| ≤ 1) ⇔ Pick kernel PSD ⇔ Herglotz real part ≥ 0</p>
+            </div>
+            
+            <p><strong>Why it matters:</strong> It replaces "count the zeros" with "certify stability," 
+            enabling modular, auditable proofs via positivity and passivity.</p>
+            
+            <p><strong>The bridge:</strong></p>
+            <ul class="feature-list">
+                <li>Head–tail split: finite k=1 + archimedean block (exact) vs HS prime tail (continuous)</li>
+                <li>Prime-grid lossless realizations with explicit KYP certificates (passivity with diagonal witnesses)</li>
+                <li>Alignment + Cayley bounds → finite-to-infinite limit control</li>
+            </ul>
+            
+            <p><strong>Unconditional boundary route:</strong></p>
+            <ul class="feature-list">
+                <li>Smoothed estimates + de-smoothing for ∂σ Re log det₂(I − A) and ξ</li>
+                <li>Poisson–Carleson (P+) certificate with explicit constants → interior Herglotz → Schur/PSD</li>
+            </ul>
+            
+            <div class="program-links">
+                <div class="program-links-title">Read more</div>
+                <div class="link-grid">
+                    <a href="/riemann-hypothesis-paper.html" class="link-item">Full HTML Paper →</a>
+                    <a href="/riemann-hypothesis.html" class="link-item">Overview & Deep Dive →</a>
+                    <a href="/Prime_Grid_Lossless_RH.pdf" class="link-item">Download PDF →</a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- P vs NP -->
+        <section class="program-section">
+            <div class="program-header">
+                <h2 class="program-title">P vs NP (Recognition Perspective)</h2>
+            </div>
+            
+            <p class="program-lead">
+                We approach P vs NP via the Recognition lens: certificates are "recognized structure," 
+                and recognition costs follow the unique J-based calculus and ledger constraints. 
+                The aim is to turn "search vs proof" into "enumeration vs recognition with conserved cost."
+            </p>
+            
+            <div class="highlight-box">
+                <strong>What it is:</strong>
+                <p>A program to frame NP certificates as recognition artifacts with bounded recognition cost, 
+                and to ask when recognition can be made algorithmic at P-cost.</p>
+            </div>
+            
+            <p><strong>Why it matters:</strong> It reframes NP's asymmetry not as a quirk of Turing models, 
+            but as a deep asymmetry between constructing structure and recognizing balanced structure 
+            under ledger constraints.</p>
+            
+            <p><strong>Working hypotheses:</strong></p>
+            <ul class="feature-list">
+                <li>Proof-as-compression: short certificates reflect intrinsic redundancy; recognition cost is controlled by J and log-convexity</li>
+                <li>Ledger-bounded circuits: dimensionless invariants and fairness bounds yield forbidden "free gains," obstructing certain collapses</li>
+                <li>Recognition vs enumeration gap: translate into convex/positivity obstructions for uniform families</li>
+            </ul>
+            
+            <p><strong>Near-term steps:</strong></p>
+            <ul class="feature-list">
+                <li>Formalize recognition cost bounds for canonical NP languages with J-compatible encodings</li>
+                <li>Prove no-go inequalities for "free-gain" transformations under gauge-rigidity</li>
+                <li>Prototype "certificate-carrying evaluation" where verification is a ledger-preserving contraction</li>
+            </ul>
+            
+            <div class="program-links">
+                <div class="program-links-title">Read more</div>
+                <div class="link-grid">
+                    <a href="/p-vs-np.html" class="link-item">Initial Notes →</a>
+                    <a href="/axiomatic-bridging.html" class="link-item">Axiomatic Bridging →</a>
+                    <a href="/rdm-formalism.html" class="link-item">RDM Formalism →</a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Navigation section -->
+        <section class="nav-section">
+            <h3 class="nav-title">Where to go next</h3>
+            <div class="nav-grid">
+                <a href="/axiomatic-bridging.html" class="nav-item">
+                    <span>→</span> Explore the bridge
+                </a>
+                <a href="/rdm-formalism.html" class="nav-item">
+                    <span>→</span> Read the RDM core
+                </a>
+                <a href="/riemann-hypothesis-paper.html" class="nav-item">
+                    <span>→</span> See the full RH paper
+                </a>
+                <a href="/p-vs-np.html" class="nav-item">
+                    <span>→</span> Track the P vs NP program
+                </a>
+            </div>
+        </section>
+        
+    </main>
+    
+    <div id="footer-placeholder"></div>
+    
+    <!-- Scripts -->
+    <script src="/assets/js/jquery-3.6.0.min.js"></script>
+    <script>
+        $(function() {
+            $('#header-placeholder').load('/_includes/header.html', function() {
+                // Update active nav
+                $('.nav-link').removeClass('active');
+                $('.nav-link[href="/math.html"]').addClass('active');
+            });
+            $('#footer-placeholder').load('/_includes/footer.html');
+        });
+        
+        // Podcast player
+        let audio = null;
+        const podcastBadge = document.getElementById('podcastBadge');
+        const iconPlay = document.getElementById('iconPlay');
+        const iconPause = document.getElementById('iconPause');
+        const audioPath = '/assets/audio/math-overview.mp3';
+        
+        podcastBadge.addEventListener('click', function() {
+            if (!audio) {
+                audio = new Audio(encodeURI(audioPath));
+                audio.addEventListener('ended', () => {
+                    iconPlay.style.display = 'block';
+                    iconPause.style.display = 'none';
+                });
+            }
+            
+            if (audio.paused) {
+                audio.play().then(() => {
+                    iconPlay.style.display = 'none';
+                    iconPause.style.display = 'block';
+                }).catch(err => {
+                    console.error('Audio playback failed:', err);
+                    alert('Unable to play audio. The file may be missing or your browser may be blocking autoplay.');
+                });
+            } else {
+                audio.pause();
+                iconPlay.style.display = 'block';
+                iconPause.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
