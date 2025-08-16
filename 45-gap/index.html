@@ -288,6 +288,41 @@
                     <h3>🎵 Think of it Like Music</h3>
                     <p>If you've ever tried to clap along to two different songs playing at once, you know they rarely sync up perfectly. The 45-Gap is like discovering that the universe has two fundamental rhythms that can't play together - an 8-beat and a 45-beat - and they only sync up every 360 beats!</p>
                 </div>
+
+                <!-- Interactive Clock Visualization -->
+                <div class="chart-container" style="background: #1a1a2e; color: white;">
+                    <h3 style="color: white;">🕐 Interactive Universe Clock</h3>
+                    <p style="text-align: center; margin-bottom: 20px;">Watch how the 8-beat universal clock tries to sync with the 45-beat pattern</p>
+                    
+                    <div style="position: relative; margin: 20px auto; width: 600px; height: 600px;">
+                        <canvas id="clockCanvas" width="600" height="600"></canvas>
+                        
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                            <div id="beatCounter" style="font-size: 48px; font-weight: bold; color: #ffd700;">0</div>
+                            <div style="font-size: 16px; margin-top: 10px;">Total Beats</div>
+                            <div id="syncStatus" style="margin-top: 20px; padding: 10px; border-radius: 5px; background: rgba(255,255,255,0.1);">
+                                <div>8-beat position: <span id="pos8" style="color: #3498db;">0</span></div>
+                                <div>45-beat position: <span id="pos45" style="color: #e74c3c;">0</span></div>
+                                <div style="margin-top: 10px; font-size: 18px;">
+                                    <span id="syncIndicator" style="color: #e74c3c;">NOT SYNCED</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button id="playBtn" style="padding: 10px 30px; font-size: 18px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; margin: 0 10px;">▶️ Play</button>
+                        <button id="resetBtn" style="padding: 10px 30px; font-size: 18px; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer; margin: 0 10px;">🔄 Reset</button>
+                        <button id="speedBtn" style="padding: 10px 30px; font-size: 18px; background: #27ae60; color: white; border: none; border-radius: 5px; cursor: pointer; margin: 0 10px;">⚡ Speed: 1x</button>
+                    </div>
+                    
+                    <div style="margin-top: 20px; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                        <p style="margin: 5px 0;"><span style="color: #3498db;">●</span> Blue circle: 8-beat universal clock (completes cycle every 8 beats)</p>
+                        <p style="margin: 5px 0;"><span style="color: #e74c3c;">●</span> Red circle: 45-beat pattern (completes cycle every 45 beats)</p>
+                        <p style="margin: 5px 0;"><span style="color: #ffd700;">●</span> Gold flash: Synchronization moment (happens at beat 0 and 360)</p>
+                        <p style="margin-top: 15px; font-size: 18px; text-align: center;">They only sync after <strong style="color: #ffd700;">360 beats</strong> = <strong style="color: #3498db;">45</strong> complete 8-cycles = <strong style="color: #e74c3c;">8</strong> complete 45-cycles!</p>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -667,6 +702,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             runValidation();
             drawCharts();
+            initializeClockAnimation();
         });
 
         function drawCharts() {
@@ -908,6 +944,201 @@
                     }
                 });
             }
+        }
+
+        // Interactive Clock Animation
+        function initializeClockAnimation() {
+            const canvas = document.getElementById('clockCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = 250;
+            
+            let beatCount = 0;
+            let isPlaying = false;
+            let animationId = null;
+            let lastTimestamp = 0;
+            let speed = 1;
+            const beatDuration = 500; // milliseconds per beat at 1x speed
+            
+            // Button handlers
+            const playBtn = document.getElementById('playBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const speedBtn = document.getElementById('speedBtn');
+            
+            playBtn.addEventListener('click', () => {
+                isPlaying = !isPlaying;
+                playBtn.innerHTML = isPlaying ? '⏸️ Pause' : '▶️ Play';
+                if (isPlaying) {
+                    lastTimestamp = performance.now();
+                    animate();
+                } else {
+                    cancelAnimationFrame(animationId);
+                }
+            });
+            
+            resetBtn.addEventListener('click', () => {
+                beatCount = 0;
+                isPlaying = false;
+                playBtn.innerHTML = '▶️ Play';
+                cancelAnimationFrame(animationId);
+                drawClock();
+            });
+            
+            speedBtn.addEventListener('click', () => {
+                const speeds = [1, 2, 5, 10];
+                const currentIndex = speeds.indexOf(speed);
+                speed = speeds[(currentIndex + 1) % speeds.length];
+                speedBtn.innerHTML = `⚡ Speed: ${speed}x`;
+            });
+            
+            function drawClock() {
+                // Clear canvas
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw outer circle
+                ctx.strokeStyle = '#444';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+                ctx.stroke();
+                
+                // Draw tick marks
+                for (let i = 0; i < 360; i += 10) {
+                    const angle = (i - 90) * Math.PI / 180;
+                    const innerRadius = i % 45 === 0 ? radius - 20 : radius - 10;
+                    const x1 = centerX + innerRadius * Math.cos(angle);
+                    const y1 = centerY + innerRadius * Math.sin(angle);
+                    const x2 = centerX + radius * Math.cos(angle);
+                    const y2 = centerY + radius * Math.sin(angle);
+                    
+                    ctx.strokeStyle = i % 45 === 0 ? '#666' : '#333';
+                    ctx.lineWidth = i % 45 === 0 ? 2 : 1;
+                    ctx.beginPath();
+                    ctx.moveTo(x1, y1);
+                    ctx.lineTo(x2, y2);
+                    ctx.stroke();
+                }
+                
+                // Calculate positions
+                const pos8 = beatCount % 8;
+                const pos45 = beatCount % 45;
+                const angle8 = (pos8 / 8 * 360 - 90) * Math.PI / 180;
+                const angle45 = (pos45 / 45 * 360 - 90) * Math.PI / 180;
+                
+                // Check if synced
+                const isSynced = pos8 === 0 && pos45 === 0;
+                
+                // Draw sync flash
+                if (isSynced && beatCount > 0) {
+                    const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius);
+                    gradient.addColorStop(0, 'rgba(255, 215, 0, 0.3)');
+                    gradient.addColorStop(1, 'rgba(255, 215, 0, 0)');
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+                    ctx.fill();
+                }
+                
+                // Draw 8-beat indicator (inner circle)
+                const innerCircleRadius = radius * 0.6;
+                ctx.strokeStyle = '#3498db';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, innerCircleRadius, 0, 2 * Math.PI);
+                ctx.stroke();
+                
+                // Draw 8-beat position
+                const x8 = centerX + innerCircleRadius * Math.cos(angle8);
+                const y8 = centerY + innerCircleRadius * Math.sin(angle8);
+                ctx.fillStyle = '#3498db';
+                ctx.beginPath();
+                ctx.arc(x8, y8, 15, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                // Draw 8 segments
+                for (let i = 0; i < 8; i++) {
+                    const segmentAngle = (i / 8 * 360 - 90) * Math.PI / 180;
+                    const sx = centerX + innerCircleRadius * Math.cos(segmentAngle);
+                    const sy = centerY + innerCircleRadius * Math.sin(segmentAngle);
+                    ctx.fillStyle = i === pos8 ? '#3498db' : '#1a5490';
+                    ctx.beginPath();
+                    ctx.arc(sx, sy, 5, 0, 2 * Math.PI);
+                    ctx.fill();
+                }
+                
+                // Draw 45-beat indicator (outer circle)
+                const outerCircleRadius = radius * 0.85;
+                ctx.strokeStyle = '#e74c3c';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, outerCircleRadius, 0, 2 * Math.PI);
+                ctx.stroke();
+                
+                // Draw 45-beat position
+                const x45 = centerX + outerCircleRadius * Math.cos(angle45);
+                const y45 = centerY + outerCircleRadius * Math.sin(angle45);
+                ctx.fillStyle = '#e74c3c';
+                ctx.beginPath();
+                ctx.arc(x45, y45, 15, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                // Update display
+                document.getElementById('beatCounter').textContent = beatCount;
+                document.getElementById('pos8').textContent = pos8;
+                document.getElementById('pos45').textContent = pos45;
+                
+                const syncIndicator = document.getElementById('syncIndicator');
+                if (isSynced) {
+                    syncIndicator.textContent = '✨ SYNCED! ✨';
+                    syncIndicator.style.color = '#ffd700';
+                } else {
+                    syncIndicator.textContent = 'NOT SYNCED';
+                    syncIndicator.style.color = '#e74c3c';
+                }
+                
+                // Draw labels
+                ctx.fillStyle = '#3498db';
+                ctx.font = 'bold 16px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('8-BEAT', centerX, centerY - innerCircleRadius - 25);
+                
+                ctx.fillStyle = '#e74c3c';
+                ctx.fillText('45-BEAT', centerX, centerY - outerCircleRadius - 25);
+                
+                // Draw progress to next sync
+                if (beatCount < 360 && beatCount > 0) {
+                    const progress = beatCount / 360;
+                    ctx.strokeStyle = '#ffd700';
+                    ctx.lineWidth = 4;
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY, radius + 20, -Math.PI/2, -Math.PI/2 + progress * 2 * Math.PI);
+                    ctx.stroke();
+                    
+                    ctx.fillStyle = '#ffd700';
+                    ctx.font = '14px Arial';
+                    ctx.fillText(`${Math.round(progress * 100)}% to sync`, centerX, centerY + radius + 40);
+                }
+            }
+            
+            function animate(timestamp) {
+                if (!isPlaying) return;
+                
+                const deltaTime = timestamp - lastTimestamp;
+                if (deltaTime >= beatDuration / speed) {
+                    beatCount++;
+                    if (beatCount > 360) beatCount = 1; // Loop after full cycle
+                    lastTimestamp = timestamp;
+                    drawClock();
+                }
+                
+                animationId = requestAnimationFrame(animate);
+            }
+            
+            // Initial draw
+            drawClock();
         }
     </script>
 </body>
