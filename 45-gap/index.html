@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The 45-Gap | Recognition Science</title>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/site-template.css">
+  <style>
+    /* Page-specific styles for 45-Gap */
+    .hero-gap {
+      background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+      color: white;
+      padding: 6rem 0 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-gap::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        radial-gradient(circle at 20% 50%, rgba(255, 0, 110, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(0, 110, 255, 0.1) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255, 0, 110, 0.2);
+      color: #ff006e;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(255, 0, 110, 0.3);
+    }
+    
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, #fff 0%, #ff006e 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero-lead {
+      font-size: 1.25rem;
+      line-height: 1.6;
+      max-width: 800px;
+      opacity: 0.9;
+    }
+    
+    .validation-panel {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-top: 3rem;
+    }
+    
+    .validation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    
+    .validation-item {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    
+    .validation-item.pass {
+      border-color: #10b981;
+      background: rgba(16, 185, 129, 0.1);
+    }
+    
+    .validation-item.fail {
+      border-color: #ef4444;
+      background: rgba(239, 68, 68, 0.1);
+    }
+    
+    .validation-label {
+      font-size: 0.875rem;
+      opacity: 0.8;
+      margin-bottom: 0.5rem;
+    }
+    
+    .validation-value {
+      font-family: var(--font-mono);
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .validation-status {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    
+    .validation-status.pass { color: #10b981; }
+    .validation-status.fail { color: #ef4444; }
+    
+    .content-section {
+      padding: 4rem 0;
+    }
+    
+    .section-badge {
+      display: inline-block;
+      background: var(--color-bg-subtle);
+      color: var(--color-accent);
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    
+    .math-block {
+      background: var(--color-bg-subtle);
+      border-left: 4px solid var(--color-accent);
+      padding: 1.5rem;
+      margin: 2rem 0;
+      font-family: var(--font-mono);
+      overflow-x: auto;
+    }
+    
+    .consequence-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    
+    .consequence-card {
+      background: white;
+      border: 2px solid var(--color-border-light);
+      border-radius: 12px;
+      padding: 2rem;
+      transition: all 0.3s;
+    }
+    
+    .consequence-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      border-color: var(--color-accent);
+    }
+    
+    .consequence-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #ff006e 0%, #ff4081 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      color: white;
+    }
+    
+    .consequence-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--color-primary);
+    }
+    
+    .derivation-box {
+      background: white;
+      border: 1px solid var(--color-border-light);
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 2rem 0;
+    }
+    
+    .derivation-step {
+      display: flex;
+      align-items: center;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: var(--color-bg-subtle);
+      border-radius: 8px;
+    }
+    
+    .step-arrow {
+      margin: 0 1rem;
+      color: var(--color-accent);
+      font-size: 1.5rem;
+    }
+    
+    .faq-grid {
+      display: grid;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    
+    .faq-item {
+      background: white;
+      border: 1px solid var(--color-border-light);
+      border-radius: 8px;
+      padding: 1.5rem;
+    }
+    
+    .faq-question {
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .faq-icon {
+      color: var(--color-accent);
+    }
+    
+    .cta-section {
+      background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
+      padding: 4rem 0;
+      text-align: center;
+    }
+    
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+    
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: var(--color-accent);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 0, 110, 0.3);
+    }
+    
+    .cta-button.secondary {
+      background: white;
+      color: var(--color-primary);
+      border: 2px solid var(--color-border-light);
+    }
+    
+    .cta-button.secondary:hover {
+      border-color: var(--color-accent);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-title { font-size: 2.5rem; }
+      .validation-grid { grid-template-columns: 1fr; }
+      .consequence-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="template-page">
+  <div id="header-placeholder"></div>
+
+  <!-- Hero Section -->
+  <section class="hero-gap">
+    <div class="template-container">
+      <div class="hero-content">
+        <div class="hero-badge">STRUCTURAL OBSTRUCTION</div>
+        <h1 class="hero-title">The 45-Gap</h1>
+        <p class="hero-lead">
+          A precise structural obstruction in the Recognition Science ledger where rung 45 of the φ-ladder 
+          cannot synchronize inside the universal 8-beat cycle. It is the first point where concurrent 9-fold 
+          and 5-fold symmetries must be realized within an 8-tick recognition window, and they provably cannot 
+          be made commensurate.
+        </p>
+        
+        <!-- Live Validation Panel -->
+        <div class="validation-panel">
+          <h3 style="margin-bottom: 1rem;">Live Validation</h3>
+          <div class="validation-grid" id="validation-grid">
+            <div class="validation-item" id="gcd-check">
+              <div class="validation-label">gcd(8,45)</div>
+              <div class="validation-value">—</div>
+              <div class="validation-status">CHECKING</div>
+            </div>
+            <div class="validation-item" id="lcm-check">
+              <div class="validation-label">lcm(8,45)</div>
+              <div class="validation-value">—</div>
+              <div class="validation-status">CHECKING</div>
+            </div>
+            <div class="validation-item" id="cycles-check">
+              <div class="validation-label">8-cycles needed</div>
+              <div class="validation-value">—</div>
+              <div class="validation-status">CHECKING</div>
+            </div>
+            <div class="validation-item" id="lag-check">
+              <div class="validation-label">Time lag</div>
+              <div class="validation-value">—</div>
+              <div class="validation-status">CHECKING</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Executive Summary -->
+  <section class="content-section">
+    <div class="template-container">
+      <div class="section-badge">EXECUTIVE SUMMARY</div>
+      <h2>What It Is</h2>
+      
+      <div class="template-reading">
+        <ul>
+          <li><strong>Core fact:</strong> 45 = 3²·5; the 8-beat cycle is generated by ℤ₈. Since gcd(8,45) = 1, 
+              the only shared subgroup is trivial; synchronization requires lcm(8,45) = 360 beats.</li>
+          <li><strong>Consequence:</strong> This incompatibility yields a global accounting lag of 45 beats per 
+              960 baseline beats, i.e. 45/960 = 3/64 = 0.046875 = 4.6875%.</li>
+          <li><strong>Interpretation:</strong> The first, necessary "recognition gap" where deterministic 
+              computation yields to experiential navigation; it marks the onset of uncomputability in the ledger.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mathematical Core -->
+  <section class="content-section" style="background: var(--color-bg-subtle);">
+    <div class="template-container">
+      <div class="section-badge">MATHEMATICAL CORE</div>
+      <h2>Why It Happens</h2>
+      
+      <div class="template-grid">
+        <div class="template-card">
+          <h3>Eight-beat clock</h3>
+          <p>Recognition completes in an 8-tick cycle (ℤ₈).</p>
+        </div>
+        <div class="template-card">
+          <h3>Rung-45 symmetries</h3>
+          <p>To realize 45-coherence, the system must sustain 9-fold (from 3²) and 5-fold symmetries simultaneously.</p>
+        </div>
+        <div class="template-card">
+          <h3>Incompatibility</h3>
+          <p>ℤ₈ ∩ ℤ₄₅ ≅ ℤ<sub>gcd(8,45)</sub> = ℤ₁ → synchronization only at lcm(8,45) = 360 beats, 
+             far beyond a single 8-beat window.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Consequences -->
+  <section class="content-section">
+    <div class="template-container">
+      <div class="section-badge">IMMEDIATE CONSEQUENCES</div>
+      <h2>What Follows</h2>
+      
+      <div class="consequence-grid">
+        <div class="consequence-card">
+          <div class="consequence-icon">⏰</div>
+          <h3 class="consequence-title">Time Lag (Cosmic Clock)</h3>
+          <p>A systematic lag of 4.6875% (45/960) in the global ledger timing; used to reconcile the H₀ 
+             tension by mapping early-universe CMB inferences to local measurements.</p>
+        </div>
+        
+        <div class="consequence-card">
+          <div class="consequence-icon">🚫</div>
+          <h3 class="consequence-title">Spectrum Constraint at 45n</h3>
+          <p>The bottom quark at rung 45 is a singleton; rungs 90, 135, … do not host stable particles 
+             (coherence would require >1 fundamental window).</p>
+        </div>
+        
+        <div class="consequence-card">
+          <div class="consequence-icon">🧩</div>
+          <h3 class="consequence-title">Uncomputability Node</h3>
+          <p>The first ledger point where the universe must "choose" rather than fully compute—origin 
+             of experiential navigation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Derivation -->
+  <section class="content-section" style="background: var(--color-bg-subtle);">
+    <div class="template-container">
+      <div class="section-badge">DERIVATION</div>
+      <h2>The Calculation</h2>
+      
+      <div class="derivation-box">
+        <h3>Group-theoretic facts:</h3>
+        <div class="derivation-step">
+          <code>gcd(8,45) = 1</code>
+          <span class="step-arrow">→</span>
+          <span>no nontrivial shared periodicity</span>
+        </div>
+        <div class="derivation-step">
+          <code>lcm(8,45) = (8·45)/1 = 360</code>
+          <span class="step-arrow">→</span>
+          <span>full synchronization horizon</span>
+        </div>
+        
+        <h3 style="margin-top: 2rem;">Lag fraction:</h3>
+        <div class="math-block">
+          Baseline beats: 120 patterns × 8 beats = 960<br>
+          Unresolved beats due to 45: 45<br>
+          Lag: 45/960 = 3/64 = 0.046875 = 4.6875%
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Falsifiable Claims -->
+  <section class="content-section">
+    <div class="template-container">
+      <div class="section-badge">FALSIFIABLE TOUCHPOINTS</div>
+      <h2>Auditable Claims</h2>
+      
+      <div class="template-reading">
+        <ul>
+          <li><strong>H₀ reconciliation:</strong> Applying 4.6875% ledger lag maps CMB-inferred H₀ 
+              to the local value.</li>
+          <li><strong>Rung-90 null:</strong> Absence of resonances at rung 90 (and higher multiples 
+              of 45) in high-energy spectra.</li>
+          <li><strong>No per-galaxy tuning:</strong> The gap appears as a global structural constraint; 
+              no local parameter freedom can erase it.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="content-section" style="background: var(--color-bg-subtle);">
+    <div class="template-container">
+      <div class="section-badge">FREQUENTLY ASKED</div>
+      <h2>Questions</h2>
+      
+      <div class="faq-grid">
+        <div class="faq-item">
+          <div class="faq-question">
+            <span class="faq-icon">❓</span>
+            Why 45 and not earlier?
+          </div>
+          <p>Because 45 is the first rung requiring simultaneous 9-fold and 5-fold periodicities; 
+             with gcd(8,45)=1, those cannot fit inside one 8-tick window.</p>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">
+            <span class="faq-icon">🎯</span>
+            Is the 4.6875% number tuned?
+          </div>
+          <p>No. It is a pure combinatorial ratio (45/960) derived from first principles.</p>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">
+            <span class="faq-icon">🧮</span>
+            How does this relate to uncomputability?
+          </div>
+          <p>When full synchronization demands exceed the fundamental window, deterministic computation 
+             cannot complete; the ledger must resolve by experiential (non-computational) selection.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="template-container">
+      <h2>Explore Further</h2>
+      <p class="template-lead">
+        Dive deeper into the mathematical foundations and physical implications of the 45-Gap.
+      </p>
+      
+      <div class="cta-buttons">
+        <a href="/assets/data/45-Gap.pdf" class="cta-button">
+          <span>📄</span>
+          Full Mathematical Proof
+        </a>
+        <a href="/assets/data/Empirical-Measurement-of-Reality.pdf" class="cta-button secondary">
+          <span>📖</span>
+          Framework Overview
+        </a>
+        <a href="/audit" class="cta-button secondary">
+          <span>✓</span>
+          Audit Dashboard
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+  <script src="/assets/js/main.js"></script>
+  
+  <script>
+    // Live validation
+    function validate45Gap() {
+      // Helper functions
+      const gcd = (a, b) => { while (b) { const t = a % b; a = b; b = t; } return a; };
+      
+      // Calculations
+      const g = gcd(8, 45);
+      const l = (8 * 45) / g;
+      const cycles = l / 8;
+      const lagFraction = 45 / 960;
+      const lagPercent = lagFraction * 100;
+      
+      // Update GCD check
+      const gcdEl = document.getElementById('gcd-check');
+      gcdEl.querySelector('.validation-value').textContent = g;
+      gcdEl.querySelector('.validation-status').textContent = g === 1 ? 'PASS' : 'FAIL';
+      gcdEl.classList.add(g === 1 ? 'pass' : 'fail');
+      
+      // Update LCM check
+      const lcmEl = document.getElementById('lcm-check');
+      lcmEl.querySelector('.validation-value').textContent = l;
+      lcmEl.querySelector('.validation-status').textContent = l === 360 ? 'PASS' : 'FAIL';
+      lcmEl.classList.add(l === 360 ? 'pass' : 'fail');
+      
+      // Update cycles check
+      const cyclesEl = document.getElementById('cycles-check');
+      cyclesEl.querySelector('.validation-value').textContent = cycles;
+      cyclesEl.querySelector('.validation-status').textContent = cycles === 45 ? 'PASS' : 'FAIL';
+      cyclesEl.classList.add(cycles === 45 ? 'pass' : 'fail');
+      
+      // Update lag check
+      const lagEl = document.getElementById('lag-check');
+      lagEl.querySelector('.validation-value').textContent = `${lagPercent.toFixed(4)}%`;
+      lagEl.querySelector('.validation-status').textContent = 
+        Math.abs(lagPercent - 4.6875) < 1e-6 ? 'PASS' : 'FAIL';
+      lagEl.classList.add(Math.abs(lagPercent - 4.6875) < 1e-6 ? 'pass' : 'fail');
+    }
+    
+    // Run validation on load
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(validate45Gap, 500); // Small delay for visual effect
+    });
+  </script>
+</body>
+</html>
