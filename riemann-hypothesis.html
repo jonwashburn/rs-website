@@ -92,6 +92,13 @@
           .podcast-label { display: none; }
           .podcast-badge { padding: 0.35rem; top: 10px; right: 10px; }
         }
+        /* Figure/diagram styling */
+        .figure { background: var(--color-bg-subtle); border: 1px solid var(--color-border-light); border-radius: 10px; padding: 0.75rem; margin: 1rem 0; }
+        .figure svg { width: 100%; height: auto; display: block; }
+        .figure-caption { text-align: center; color: var(--color-text-muted); font-size: 0.9rem; margin-top: 0.5rem; }
+        .diagram-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.75rem; }
+        .callout { background: #fff; border-left: 4px solid var(--color-accent); padding: 0.75rem 1rem; border-radius: 6px; margin: 0.75rem 0; }
+        .callout strong { color: var(--color-primary); }
     </style>
   </head>
   <body class="template-page">
@@ -205,6 +212,34 @@
             positivity kernels, interpolation, and closure properties.</p>
           <p><strong>Proof‑of‑concept (sketch):</strong> If a dial never exceeds 1 in magnitude on a connected 
             region, no explosive singularities (zeros where they shouldn’t be) can lurk there.</p>
+          <figure class="figure">
+            <svg viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cayley dial diagram">
+              <defs>
+                <linearGradient id="g" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0%" stop-color="#f7f7fb"/>
+                  <stop offset="100%" stop-color="#eef2ff"/>
+                </linearGradient>
+              </defs>
+              <rect x="0" y="0" width="600" height="260" fill="url(#g)" rx="8"/>
+              <circle cx="130" cy="130" r="85" fill="#ffffff" stroke="#d1d5db" stroke-width="2"/>
+              <circle cx="130" cy="130" r="85" fill="none" stroke="#ff006e" stroke-width="3" stroke-dasharray="4 6"/>
+              <line x1="130" y1="130" x2="195" y2="95" stroke="#111827" stroke-width="3"/>
+              <text x="130" y="28" text-anchor="middle" font-size="14" fill="#111827">Unit circle: |Θ(s)| = 1</text>
+              <text x="130" y="150" text-anchor="middle" font-size="13" fill="#6b7280">Cayley dial for Θ</text>
+              <rect x="300" y="40" width="270" height="180" fill="#fff" stroke="#d1d5db" rx="8"/>
+              <text x="435" y="70" text-anchor="middle" font-size="14" fill="#111827">Cayley transform</text>
+              <text x="312" y="100" font-size="12" fill="#374151">J(s) = det₂(I−A)/ξ</text>
+              <text x="312" y="120" font-size="12" fill="#374151">Θ = (2J−1)/(2J+1)</text>
+              <text x="312" y="160" font-size="12" fill="#374151">Goal: |Θ| ≤ 1 on Re s &gt; 1/2</text>
+              <path d="M260,130 h25" stroke="#9ca3af" stroke-width="2" marker-end="url(#arrow)"/>
+              <defs>
+                <marker id="arrow" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto">
+                  <path d="M0,0 L8,4 L0,8 z" fill="#9ca3af"/>
+                </marker>
+              </defs>
+            </svg>
+            <figcaption class="figure-caption">Cayley maps the problem into a “dial” where contractivity (|Θ| ≤ 1) is the target.</figcaption>
+          </figure>
 
           <h3 id="deep-split">6) Schur–determinant splitting</h3>
           <p>Think of the full system as a head and a tail. The head is finite—archimedean, poles, 
@@ -214,6 +249,19 @@
             infinite tails are where continuity and positivity carry the day.</p>
           <p><strong>Proof‑of‑concept (sketch):</strong> Demonstrate that modeling the head separately does not 
             change the tail’s certificate; the algebra records this in an exact identity.</p>
+          <figure class="figure">
+            <svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Head–tail split diagram">
+              <rect x="15" y="20" width="570" height="180" fill="#fff" stroke="#d1d5db" rx="10"/>
+              <rect x="30" y="50" width="200" height="120" fill="#e5e7eb" stroke="#cbd5e1" rx="8"/>
+              <text x="130" y="95" text-anchor="middle" font-size="13" fill="#111827">Finite head</text>
+              <text x="130" y="115" text-anchor="middle" font-size="12" fill="#374151">(k=1, archimedean)</text>
+              <rect x="250" y="50" width="320" height="120" fill="#eef2ff" stroke="#c7d2fe" rx="8"/>
+              <text x="410" y="95" text-anchor="middle" font-size="13" fill="#111827">Infinite tail</text>
+              <text x="410" y="115" text-anchor="middle" font-size="12" fill="#374151">(k≥2, HS prime engine)</text>
+              <text x="300" y="40" font-size="12" fill="#6b7280">log det₂(I−T) = log det₂(I−A) + log det(I−S)</text>
+            </svg>
+            <figcaption class="figure-caption">Exact algebraic decoupling: finite “head” and HS “tail” are controlled separately.</figcaption>
+          </figure>
 
           <h3 id="deep-hscont">7) HS continuity and prime truncations</h3>
           <p>Any real proof must survive approximation: you can’t compute with infinitely many primes. 
@@ -222,6 +270,7 @@
           <p>This is the reason the finite certificates we construct actually matter for the infinite target.</p>
           <p><strong>Proof‑of‑concept (sketch):</strong> Show a monotone stabilization: once the dial is 
             inside the rails for large truncations, the limit stays inside.</p>
+          <div class="callout"><strong>Note.</strong> This principle also underlies our reproducibility story: finite computations approximate a certified limit without changing the qualitative certificate.</div>
 
           <h3 id="deep-kyp">8) Prime‑grid lossless models and KYP closure</h3>
           <p>Lossless/passive systems are the control‑theory embodiment of conservation and fairness: 
@@ -232,6 +281,25 @@
             structured matrix inequality we can factor and check.</p>
           <p><strong>Proof‑of‑concept (sketch):</strong> Exhibit a diagonal Lyapunov matrix that makes the 
             KYP inequality exact at the lossless points; conclude \(\|H_N\|_\infty\le1\).</p>
+          <figure class="figure">
+            <svg viewBox="0 0 600 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="KYP/passive block diagram">
+              <rect x="20" y="30" width="560" height="180" fill="#fff" stroke="#d1d5db" rx="10"/>
+              <rect x="220" y="80" width="160" height="80" fill="#ecfeff" stroke="#06b6d4" rx="8"/>
+              <text x="300" y="115" text-anchor="middle" font-size="13" fill="#0e7490">H_N (lossless)</text>
+              <line x1="80" y1="120" x2="220" y2="120" stroke="#9ca3af" stroke-width="2" marker-end="url(#arr)"/>
+              <line x1="380" y1="120" x2="520" y2="120" stroke="#9ca3af" stroke-width="2" marker-end="url(#arr)"/>
+              <text x="80" y="110" font-size="12" fill="#374151">u</text>
+              <text x="520" y="110" font-size="12" fill="#374151">y</text>
+              <rect x="410" y="50" width="150" height="40" fill="#fff7ed" stroke="#fdba74" rx="6"/>
+              <text x="485" y="75" text-anchor="middle" font-size="12" fill="#c2410c">Lyapunov (diag) P</text>
+              <defs>
+                <marker id="arr" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto">
+                  <path d="M0,0 L8,4 L0,8 z" fill="#9ca3af"/>
+                </marker>
+              </defs>
+            </svg>
+            <figcaption class="figure-caption">Each finite truncation is realized as a passive (lossless) system with a diagonal Lyapunov witness.</figcaption>
+          </figure>
 
           <h3 id="deep-logkernel">9) Additive/log kernel positivity</h3>
           <p>The log of a determinant is an integral of increments. Backward differences are the 
@@ -241,6 +309,21 @@
             positivity is natural, not mysterious.</p>
           <p><strong>Proof‑of‑concept (sketch):</strong> Write the boundary integral as an average of squares; 
             squares are nonnegative → kernel is PSD.</p>
+          <figure class="figure">
+            <svg viewBox="0 0 600 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Log-kernel Gram positivity">
+              <rect x="15" y="20" width="570" height="200" fill="#fff" stroke="#d1d5db" rx="10"/>
+              <circle cx="130" cy="120" r="32" fill="#eef2ff" stroke="#c7d2fe"/>
+              <circle cx="220" cy="90" r="28" fill="#eef2ff" stroke="#c7d2fe"/>
+              <circle cx="220" cy="150" r="28" fill="#eef2ff" stroke="#c7d2fe"/>
+              <line x1="162" y1="120" x2="192" y2="90" stroke="#9ca3af"/>
+              <line x1="162" y1="120" x2="192" y2="150" stroke="#9ca3af"/>
+              <text x="130" y="125" text-anchor="middle" font-size="12" fill="#374151">φ(s)</text>
+              <text x="220" y="95" text-anchor="middle" font-size="12" fill="#374151">φ(t₁)</text>
+              <text x="220" y="155" text-anchor="middle" font-size="12" fill="#374151">φ(t₂)</text>
+              <text x="420" y="120" text-anchor="middle" font-size="13" fill="#111827">Gram ⟹ PSD</text>
+            </svg>
+            <figcaption class="figure-caption">Backward differences assemble into a Gram matrix—positivity by design.</figcaption>
+          </figure>
 
           <h3 id="deep-fock">10) Symmetric‑Fock exponential lift aligned with Szegő</h3>
           <p>Exponential lifts are how you package cumulative correlation into a single, well‑behaved 
@@ -258,6 +341,22 @@
           <p>Do this not once but across a ladder of rectangles, and you propagate safety across the whole half‑plane.</p>
           <p><strong>Proof‑of‑concept (sketch):</strong> Combine boundary PSD with the maximum principle to 
             deduce \(\Re J\ge0\) interior; apply Cayley to bound \(|\Theta|\).</p>
+          <figure class="figure">
+            <svg viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Boundary to interior diagram">
+              <rect x="15" y="20" width="570" height="220" fill="#fff" stroke="#d1d5db" rx="10"/>
+              <rect x="120" y="50" width="360" height="160" fill="#f8fafc" stroke="#e5e7eb"/>
+              <text x="300" y="45" text-anchor="middle" font-size="12" fill="#6b7280">Rectangle R ⊂ {Re s &gt; 1/2}</text>
+              <path d="M120,50 L480,50 L480,210 L120,210 Z" fill="none" stroke="#ff006e" stroke-width="3" stroke-dasharray="6 6"/>
+              <text x="300" y="235" text-anchor="middle" font-size="12" fill="#374151">Boundary positivity ⇒ interior control</text>
+              <path d="M300,215 C300,230 300,230 300,240" stroke="#9ca3af" stroke-width="2" marker-end="url(#barr)"/>
+              <defs>
+                <marker id="barr" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto">
+                  <path d="M0,0 L8,4 L0,8 z" fill="#9ca3af"/>
+                </marker>
+              </defs>
+            </svg>
+            <figcaption class="figure-caption">Certify the boundary, inherit the interior by maximum principles.</figcaption>
+          </figure>
 
           <h3 id="deep-blaschke">12) Punctured boundaries and Blaschke compensation</h3>
           <p>Division by \(\xi\) is meaningful only where \(\xi\) doesn’t vanish. When a boundary passes 
@@ -267,6 +366,16 @@
             accounting so the positivity statements aren’t polluted by removable singularities.</p>
           <p><strong>Proof‑of‑concept (sketch):</strong> Multiply by a local Blaschke factor that has exactly 
             the inverse zero; verify PSD is preserved under pointwise (Schur) products.</p>
+          <figure class="figure">
+            <svg viewBox="0 0 600 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Blaschke compensation">
+              <rect x="15" y="20" width="570" height="200" fill="#fff" stroke="#d1d5db" rx="10"/>
+              <circle cx="300" cy="120" r="70" fill="#f8fafc" stroke="#e5e7eb"/>
+              <circle cx="300" cy="120" r="7" fill="#ff006e"/>
+              <text x="318" y="124" font-size="12" fill="#6b7280">ξ zero</text>
+              <text x="300" y="40" text-anchor="middle" font-size="12" fill="#374151">Puncture at zero; multiply by Blaschke</text>
+            </svg>
+            <figcaption class="figure-caption">A local Blaschke factor cancels boundary zeros so positivity statements remain clean.</figcaption>
+          </figure>
 
           <h3 id="deep-poisson">13) Quantitative Poisson–Carleson certificate (P+)</h3>
           <p>This is the “numbers on the table” step. A Poisson–Carleson certificate says: with the right 
@@ -276,6 +385,22 @@
             size interact. That’s what makes the program reproducible and extensible.</p>
           <p><strong>Proof‑of‑concept (sketch):</strong> Produce a Poisson average of smoothed boundary data 
             and record a lower bound in terms of window norms.</p>
+          <figure class="figure">
+            <svg viewBox="0 0 600 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Poisson-Carleson averaging">
+              <rect x="15" y="20" width="570" height="200" fill="#fff" stroke="#d1d5db" rx="10"/>
+              <rect x="120" y="50" width="360" height="120" fill="#f8fafc" stroke="#e5e7eb"/>
+              <text x="300" y="45" text-anchor="middle" font-size="12" fill="#6b7280">Boundary data (smoothed)</text>
+              <circle cx="300" cy="190" r="6" fill="#06b6d4"/>
+              <text x="318" y="194" font-size="12" fill="#0e7490">Interior point</text>
+              <path d="M300,170 L300,185" stroke="#9ca3af" stroke-width="2" marker-end="url(#parr)"/>
+              <defs>
+                <marker id="parr" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto">
+                  <path d="M0,0 L8,4 L0,8 z" fill="#9ca3af"/>
+                </marker>
+              </defs>
+            </svg>
+            <figcaption class="figure-caption">A Poisson‑type average pulls certified boundary data into the interior.</figcaption>
+          </figure>
 
           <h3 id="deep-windows">14) Windowing, Whitney scales, and bandlimits</h3>
           <p>Windows are how we “look” at a range of frequencies and times without introducing ringing 
@@ -285,6 +410,18 @@
             prime effects where they live, and the cross‑talk is kept minimal and measurable.</p>
           <p><strong>Proof‑of‑concept (sketch):</strong> Specify a compactly supported smooth window and show 
             how its \(L^1\)/BV norms control every term it touches.</p>
+          <figure class="figure">
+            <svg viewBox="0 0 600 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Windowing and bandlimits">
+              <rect x="15" y="20" width="570" height="200" fill="#fff" stroke="#d1d5db" rx="10"/>
+              <path d="M60,150 C120,60 220,60 300,150 C380,240 480,240 540,150" stroke="#ff006e" stroke-width="2" fill="none"/>
+              <text x="300" y="40" text-anchor="middle" font-size="12" fill="#374151">Smooth window (time)</text>
+              <rect x="100" y="70" width="120" height="18" fill="#eef2ff" stroke="#c7d2fe"/>
+              <rect x="380" y="70" width="120" height="18" fill="#eef2ff" stroke="#c7d2fe"/>
+              <text x="160" y="84" text-anchor="middle" font-size="11" fill="#6b7280">Band A</text>
+              <text x="440" y="84" text-anchor="middle" font-size="11" fill="#6b7280">Band B</text>
+            </svg>
+            <figcaption class="figure-caption">Windows localize; bandlimits constrain. Together they tame both time and frequency sides.</figcaption>
+          </figure>
 
           <h3 id="deep-arch">15) Explicit archimedean bounds</h3>
           <p>The gamma function and its derivatives are the analytic “gravity” of the complex plane—they 
@@ -319,6 +456,17 @@
           <p>This is the convergence‑and‑patching phase that turns many local pictures into a global mural.</p>
           <p><strong>Proof‑of‑concept (sketch):</strong> Demonstrate local uniform bounds on a nested family of rectangles; 
             extract a convergent subsequence and extend across isolated points.</p>
+          <figure class="figure">
+            <svg viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Exhaustion of the half-plane">
+              <rect x="15" y="20" width="570" height="220" fill="#fff" stroke="#d1d5db" rx="10"/>
+              <rect x="80" y="50" width="440" height="160" fill="#f8fafc" stroke="#e5e7eb"/>
+              <rect x="120" y="70" width="360" height="120" fill="none" stroke="#a5b4fc"/>
+              <rect x="160" y="90" width="280" height="80" fill="none" stroke="#818cf8"/>
+              <rect x="200" y="110" width="200" height="40" fill="none" stroke="#6366f1"/>
+              <text x="300" y="45" text-anchor="middle" font-size="12" fill="#6b7280">Nested rectangles ⟹ uniform control</text>
+            </svg>
+            <figcaption class="figure-caption">Prove things on larger and larger rectangles, pass to a limit, fill removable holes.</figcaption>
+          </figure>
 
           <h3 id="deep-equivalence">19) Equivalence back to RH</h3>
           <p>Once the dial is bounded everywhere in the half‑plane, there’s no “spare amplitude” for 
@@ -327,6 +475,25 @@
             projections of the same solid.</p>
           <p><strong>Proof‑of‑concept (sketch):</strong> Argue by contradiction: a zero would force the dial out 
             of bounds in a neighborhood, contradicting contractivity.</p>
+          <figure class="figure">
+            <svg viewBox="0 0 600 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Equivalence flow">
+              <rect x="15" y="20" width="570" height="200" fill="#fff" stroke="#d1d5db" rx="10"/>
+              <rect x="40" y="60" width="140" height="60" fill="#ecfeff" stroke="#06b6d4" rx="6"/>
+              <text x="110" y="95" text-anchor="middle" font-size="12" fill="#0e7490">|Θ| ≤ 1</text>
+              <path d="M180,90 L230,90" stroke="#9ca3af" stroke-width="2" marker-end="url(#earr)"/>
+              <rect x="230" y="60" width="140" height="60" fill="#eef2ff" stroke="#6366f1" rx="6"/>
+              <text x="300" y="95" text-anchor="middle" font-size="12" fill="#3730a3">Re J ≥ 0</text>
+              <path d="M370,90 L420,90" stroke="#9ca3af" stroke-width="2" marker-end="url(#earr)"/>
+              <rect x="420" y="60" width="140" height="60" fill="#fff7ed" stroke="#c2410c" rx="6"/>
+              <text x="490" y="95" text-anchor="middle" font-size="12" fill="#9a3412">No zeros (RH)</text>
+              <defs>
+                <marker id="earr" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto">
+                  <path d="M0,0 L8,4 L0,8 z" fill="#9ca3af"/>
+                </marker>
+              </defs>
+            </svg>
+            <figcaption class="figure-caption">Contractivity ⇒ nonnegative real part ⇒ no zeros on the half‑plane.</figcaption>
+          </figure>
 
           <h3 id="deep-bridge">20) Axiomatic Bridging perspective</h3>
           <p>Our meta‑principle says: nothing can recognize itself from nothing; consistency is built 
