@@ -350,6 +350,19 @@
               <code>Same parameters</code>
             </div>
           </div>
+
+          <div class="verification-card">
+            <h3>45-Gap</h3>
+            <div class="verification-status" id="gap45-status">
+              <div class="status-indicator loading"></div>
+              <span>Checking...</span>
+            </div>
+            <div class="verification-details" id="gap45-details">
+              <code>gcd(8,45) = ?</code>
+              <code>lcm(8,45) = ?</code>
+              <code>lag = ?</code>
+            </div>
+          </div>
         </div>
         
         <div class="verification-commands">
@@ -1462,7 +1475,42 @@ CONSEQUENCE: Universe.exe initialized.
     window.addEventListener('DOMContentLoaded', () => {
       mermaid.run({ nodes: document.querySelectorAll('.mermaid') });
       loadAuditData();
+      validate45Gap();
     });
+
+    // 45-Gap validation (group facts and lag fraction)
+    function validate45Gap() {
+      const statusEl = document.getElementById('gap45-status');
+      const detailsEl = document.getElementById('gap45-details');
+      if (!statusEl || !detailsEl) return;
+
+      const gcd = (a,b) => { while (b) { const t = a % b; a = b; b = t; } return a; };
+      const g = gcd(8, 45);
+      const l = (8 * 45) / g;
+      const cycles8 = l / 8; // 45
+      const beatsTotal = 120 * 8; // per manuscript
+      const lagBeats = 45; // per manuscript
+      const frac = lagBeats / beatsTotal; // 45/960
+      const percent = (frac * 100);
+
+      // Update details
+      detailsEl.innerHTML = '';
+      const mk = (t) => { const c = document.createElement('code'); c.textContent = t; return c; };
+      detailsEl.appendChild(mk(`gcd(8,45) = ${g}`));
+      detailsEl.appendChild(mk(`lcm(8,45) = ${l}`));
+      detailsEl.appendChild(mk(`8-cycles needed = ${cycles8}`));
+      detailsEl.appendChild(mk(`lag = 45/960 = ${frac.toFixed(6)} (${percent.toFixed(4)}%)`));
+
+      // PASS criteria: gcd == 1, lcm == 360, percent == 4.6875%
+      const ok = (g === 1) && (l === 360) && (Math.abs(percent - 4.6875) < 1e-6);
+      const dot = statusEl.querySelector('.status-indicator');
+      const label = statusEl.querySelector('span');
+      if (dot) {
+        dot.classList.remove('loading');
+        dot.classList.add(ok ? 'pass' : 'fail');
+      }
+      if (label) label.textContent = ok ? 'PASSED' : 'FAILED';
+    }
   </script>
 </body>
 </html>
