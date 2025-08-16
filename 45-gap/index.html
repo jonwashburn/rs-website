@@ -163,6 +163,104 @@
         .timeline-item:last-child:after {
             display: none;
         }
+        
+        /* Chart and graphic styles */
+        .chart-container {
+            margin: 30px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .sync-visualization {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .beat-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 2px;
+            transition: all 0.3s ease;
+        }
+        .beat-8 {
+            background: #3498db;
+            color: white;
+        }
+        .beat-45 {
+            background: #e74c3c;
+            color: white;
+        }
+        .beat-sync {
+            background: #27ae60;
+            color: white;
+            transform: scale(1.2);
+        }
+        .canvas-wrapper {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .phase-diagram {
+            max-width: 100%;
+            height: auto;
+            margin: 20px auto;
+            display: block;
+        }
+        .animated-gear {
+            animation: rotate 8s linear infinite;
+        }
+        .animated-gear-slow {
+            animation: rotate 45s linear infinite;
+        }
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #f0f0f0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+            position: relative;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db 0%, #e74c3c 100%);
+            width: 4.6875%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        .cc-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .split-visual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            align-items: center;
+            margin: 30px 0;
+        }
+        @media (max-width: 768px) {
+            .split-visual {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -219,16 +317,69 @@
                 
                 <div class="visual-example">
                     <h3>The 8-Beat Universal Clock</h3>
-                    <p style="font-size: 3em; letter-spacing: 0.5em;">⏰ ⏰ ⏰ ⏰ ⏰ ⏰ ⏰ ⏰</p>
+                    <div class="sync-visualization">
+                        <div class="beat-circle beat-8">1</div>
+                        <div class="beat-circle beat-8">2</div>
+                        <div class="beat-circle beat-8">3</div>
+                        <div class="beat-circle beat-8">4</div>
+                        <div class="beat-circle beat-8">5</div>
+                        <div class="beat-circle beat-8">6</div>
+                        <div class="beat-circle beat-8">7</div>
+                        <div class="beat-circle beat-8">8</div>
+                    </div>
                     <p>One complete cycle = 8 ticks</p>
                 </div>
 
+                <div class="chart-container">
+                    <h3>Interactive Beat Synchronization</h3>
+                    <canvas id="syncChart" width="800" height="400"></canvas>
+                    <p style="text-align: center; margin-top: 10px; color: #666;">
+                        <span style="color: #3498db;">● 8-beat cycle</span> | 
+                        <span style="color: #e74c3c;">● 45-beat cycle</span> | 
+                        <span style="color: #27ae60;">● Synchronization points</span>
+                    </p>
+                </div>
+
+                <div class="split-visual">
+                    <div>
+                        <h3>Gear Analogy</h3>
+                        <svg width="200" height="200" viewBox="0 0 200 200">
+                            <g class="animated-gear">
+                                <circle cx="100" cy="100" r="80" fill="#3498db" opacity="0.8"/>
+                                <text x="100" y="100" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="20" font-weight="bold">8 teeth</text>
+                                <!-- Gear teeth -->
+                                <path d="M100,20 L110,30 L90,30 Z" fill="#2980b9"/>
+                                <path d="M180,100 L170,110 L170,90 Z" fill="#2980b9"/>
+                                <path d="M100,180 L90,170 L110,170 Z" fill="#2980b9"/>
+                                <path d="M20,100 L30,90 L30,110 Z" fill="#2980b9"/>
+                            </g>
+                        </svg>
+                    </div>
+                    <div>
+                        <svg width="200" height="200" viewBox="0 0 200 200">
+                            <g class="animated-gear-slow">
+                                <circle cx="100" cy="100" r="80" fill="#e74c3c" opacity="0.8"/>
+                                <text x="100" y="100" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="20" font-weight="bold">45 teeth</text>
+                                <!-- More gear teeth for 45 -->
+                                <path d="M100,20 L105,25 L95,25 Z" fill="#c0392b"/>
+                                <path d="M140,30 L143,37 L135,33 Z" fill="#c0392b"/>
+                                <path d="M170,60 L170,67 L163,63 Z" fill="#c0392b"/>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+
                 <div class="visual-example">
-                    <h3>The 45-Pattern Trying to Fit</h3>
-                    <p>45 = 9 × 5 (needs both a 9-fold and 5-fold pattern)</p>
-                    <p style="font-size: 1.5em; margin: 20px 0;">But 8 and 45 share no common rhythm!</p>
-                    <p><strong>They only sync at:</strong> <span class="number-highlight">360</span> beats</p>
-                    <p>That's 45 complete 8-beat cycles!</p>
+                    <h3>The 45-Pattern Breakdown</h3>
+                    <canvas id="factorChart" width="600" height="300"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Cosmic Time Lag Visualization</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill">4.69%</div>
+                    </div>
+                    <p style="text-align: center;">The universe's built-in time lag: exactly 4.6875%</p>
                 </div>
 
                 <div class="key-point">
@@ -293,19 +444,74 @@
                 
                 <p style="font-size: 1.2em; line-height: 1.8; margin-bottom: 30px;">The 45-Gap isn't just a mathematical curiosity - it's a window into how reality itself works. Here's what it tells us:</p>
 
+                <div class="chart-container">
+                    <h3>The Hubble Tension Explained</h3>
+                    <canvas id="hubbleChart" width="800" height="400"></canvas>
+                    <p style="text-align: center; margin-top: 10px; color: #666;">
+                        The 4.6875% gap explains why cosmic measurements differ
+                    </p>
+                </div>
+
                 <div class="impact-box">
                     <h3>1. The Universe Has Built-in Incompleteness</h3>
-                    <p>Just like Gödel showed that mathematics has statements that can't be proven, the 45-Gap shows the universe has patterns that can't be perfectly synchronized. This isn't a flaw - it's a feature that enables choice and experience.</p>
+                    <div class="split-visual">
+                        <div>
+                            <p>Just like Gödel showed that mathematics has statements that can't be proven, the 45-Gap shows the universe has patterns that can't be perfectly synchronized. This isn't a flaw - it's a feature that enables choice and experience.</p>
+                        </div>
+                        <div>
+                            <svg width="200" height="200" viewBox="0 0 200 200">
+                                <circle cx="100" cy="100" r="90" fill="none" stroke="#3498db" stroke-width="3"/>
+                                <path d="M50,100 Q100,50 150,100 T250,100" fill="none" stroke="#e74c3c" stroke-width="3"/>
+                                <text x="100" y="180" text-anchor="middle" font-size="14" fill="#666">Incompatible Patterns</text>
+                            </svg>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="impact-box">
                     <h3>2. Time Isn't What We Think</h3>
+                    <canvas id="timeFlowChart" width="600" height="300"></canvas>
                     <p>We discovered that cosmic time has a built-in lag of exactly 4.6875%. This explains why different ways of measuring the universe's age give slightly different results - they're both right, just measuring different aspects of time!</p>
                 </div>
 
                 <div class="impact-box">
                     <h3>3. Patterns Have Power</h3>
+                    <div class="chart-container">
+                        <canvas id="particleChart" width="700" height="350"></canvas>
+                    </div>
                     <p>The fact that this specific mathematical relationship (8 vs 45) creates measurable effects in particle physics and cosmology shows that abstract patterns directly shape physical reality.</p>
+                </div>
+
+                <div class="visual-example">
+                    <h3>The Universal Ledger System</h3>
+                    <svg width="100%" height="200" viewBox="0 0 800 200">
+                        <!-- Ledger rungs -->
+                        <line x1="50" y1="100" x2="750" y2="100" stroke="#333" stroke-width="2"/>
+                        <!-- Rungs -->
+                        <g id="rungs">
+                            <line x1="100" y1="80" x2="100" y2="120" stroke="#3498db" stroke-width="2"/>
+                            <text x="100" y="140" text-anchor="middle" font-size="12">8</text>
+                            
+                            <line x1="200" y1="80" x2="200" y2="120" stroke="#3498db" stroke-width="2"/>
+                            <text x="200" y="140" text-anchor="middle" font-size="12">16</text>
+                            
+                            <line x1="300" y1="80" x2="300" y2="120" stroke="#3498db" stroke-width="2"/>
+                            <text x="300" y="140" text-anchor="middle" font-size="12">24</text>
+                            
+                            <line x1="400" y1="80" x2="400" y2="120" stroke="#3498db" stroke-width="2"/>
+                            <text x="400" y="140" text-anchor="middle" font-size="12">32</text>
+                            
+                            <line x1="500" y1="80" x2="500" y2="120" stroke="#3498db" stroke-width="2"/>
+                            <text x="500" y="140" text-anchor="middle" font-size="12">40</text>
+                            
+                            <line x1="562.5" y1="60" x2="562.5" y2="120" stroke="#e74c3c" stroke-width="4"/>
+                            <text x="562.5" y="140" text-anchor="middle" font-size="14" font-weight="bold" fill="#e74c3c">45</text>
+                            <text x="562.5" y="50" text-anchor="middle" font-size="12" fill="#e74c3c">GAP!</text>
+                            
+                            <line x1="600" y1="80" x2="600" y2="120" stroke="#3498db" stroke-width="2"/>
+                            <text x="600" y="140" text-anchor="middle" font-size="12">48</text>
+                        </g>
+                    </svg>
                 </div>
 
                 <div class="key-point" style="background: #d4edda; border-color: #c3e6cb;">
@@ -458,7 +664,251 @@
         }
 
         // Run validation on page load
-        document.addEventListener('DOMContentLoaded', runValidation);
+        document.addEventListener('DOMContentLoaded', function() {
+            runValidation();
+            drawCharts();
+        });
+
+        function drawCharts() {
+            // Synchronization Chart
+            const syncCanvas = document.getElementById('syncChart');
+            if (syncCanvas) {
+                const ctx = syncCanvas.getContext('2d');
+                const width = syncCanvas.width;
+                const height = syncCanvas.height;
+                
+                // Clear canvas
+                ctx.clearRect(0, 0, width, height);
+                
+                // Draw grid
+                ctx.strokeStyle = '#eee';
+                ctx.lineWidth = 1;
+                for (let i = 0; i <= 360; i += 40) {
+                    const x = (i / 360) * width;
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, height);
+                    ctx.stroke();
+                }
+                
+                // Draw 8-beat cycle
+                ctx.strokeStyle = '#3498db';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                for (let i = 0; i <= 360; i++) {
+                    const x = (i / 360) * width;
+                    const y = height/2 - 100 * Math.sin(i * Math.PI / 4);
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+                
+                // Draw 45-beat cycle
+                ctx.strokeStyle = '#e74c3c';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                for (let i = 0; i <= 360; i++) {
+                    const x = (i / 360) * width;
+                    const y = height/2 - 100 * Math.sin(i * Math.PI / 22.5);
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+                
+                // Mark sync points
+                ctx.fillStyle = '#27ae60';
+                for (let i = 0; i <= 360; i += 360) {
+                    const x = (i / 360) * width;
+                    ctx.beginPath();
+                    ctx.arc(x, height/2, 8, 0, 2 * Math.PI);
+                    ctx.fill();
+                }
+                
+                // Labels
+                ctx.fillStyle = '#333';
+                ctx.font = '14px Arial';
+                ctx.fillText('0', 10, height - 10);
+                ctx.fillText('360 beats', width - 70, height - 10);
+                ctx.fillText('Full Synchronization', width/2 - 60, 30);
+            }
+            
+            // Factor Chart
+            const factorCanvas = document.getElementById('factorChart');
+            if (factorCanvas) {
+                const ctx = factorCanvas.getContext('2d');
+                const width = factorCanvas.width;
+                const height = factorCanvas.height;
+                
+                ctx.clearRect(0, 0, width, height);
+                
+                // Draw 45 = 9 × 5 visualization
+                const centerX = width / 2;
+                const centerY = height / 2;
+                
+                // Draw main number
+                ctx.fillStyle = '#333';
+                ctx.font = 'bold 48px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('45', centerX, centerY);
+                
+                // Draw factors
+                ctx.font = 'bold 36px Arial';
+                ctx.fillStyle = '#3498db';
+                ctx.fillText('9', centerX - 100, centerY);
+                
+                ctx.fillStyle = '#e74c3c';
+                ctx.fillText('5', centerX + 100, centerY);
+                
+                // Draw multiplication
+                ctx.fillStyle = '#666';
+                ctx.font = '24px Arial';
+                ctx.fillText('×', centerX, centerY);
+                
+                // Draw breakdown
+                ctx.font = '16px Arial';
+                ctx.fillStyle = '#666';
+                ctx.fillText('= 3² × 5', centerX, centerY + 60);
+                ctx.fillText('(9-fold and 5-fold symmetries)', centerX, centerY + 85);
+            }
+            
+            // Hubble Chart
+            const hubbleCanvas = document.getElementById('hubbleChart');
+            if (hubbleCanvas) {
+                const ctx = hubbleCanvas.getContext('2d');
+                const width = hubbleCanvas.width;
+                const height = hubbleCanvas.height;
+                
+                ctx.clearRect(0, 0, width, height);
+                
+                // Draw bars
+                const barWidth = 150;
+                const barHeight = 200;
+                const gap = 100;
+                
+                // CMB measurement
+                ctx.fillStyle = '#3498db';
+                ctx.fillRect(width/2 - barWidth - gap/2, height - barHeight, barWidth, barHeight);
+                
+                // Local measurement
+                ctx.fillStyle = '#e74c3c';
+                ctx.fillRect(width/2 + gap/2, height - barHeight * 1.046875, barWidth, barHeight * 1.046875);
+                
+                // Labels
+                ctx.fillStyle = '#333';
+                ctx.font = '16px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('CMB Measurement', width/2 - barWidth/2 - gap/2, height - barHeight - 20);
+                ctx.fillText('67.4 km/s/Mpc', width/2 - barWidth/2 - gap/2, height - barHeight - 5);
+                
+                ctx.fillText('Local Measurement', width/2 + barWidth/2 + gap/2, height - barHeight * 1.046875 - 20);
+                ctx.fillText('73.2 km/s/Mpc', width/2 + barWidth/2 + gap/2, height - barHeight * 1.046875 - 5);
+                
+                // Draw gap indicator
+                ctx.strokeStyle = '#27ae60';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 5]);
+                ctx.beginPath();
+                ctx.moveTo(width/2 - barWidth/2 - gap/2, height - barHeight);
+                ctx.lineTo(width/2 + barWidth/2 + gap/2, height - barHeight);
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(width/2 - barWidth/2 - gap/2, height - barHeight * 1.046875);
+                ctx.lineTo(width/2 + barWidth/2 + gap/2, height - barHeight * 1.046875);
+                ctx.stroke();
+                
+                // Gap label
+                ctx.setLineDash([]);
+                ctx.fillStyle = '#27ae60';
+                ctx.font = 'bold 20px Arial';
+                ctx.fillText('4.69% Gap', width/2, height/2);
+            }
+            
+            // Time Flow Chart
+            const timeCanvas = document.getElementById('timeFlowChart');
+            if (timeCanvas) {
+                const ctx = timeCanvas.getContext('2d');
+                const width = timeCanvas.width;
+                const height = timeCanvas.height;
+                
+                ctx.clearRect(0, 0, width, height);
+                
+                // Draw time arrow
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(50, height/2);
+                ctx.lineTo(width - 50, height/2);
+                ctx.stroke();
+                
+                // Arrow head
+                ctx.beginPath();
+                ctx.moveTo(width - 50, height/2);
+                ctx.lineTo(width - 60, height/2 - 10);
+                ctx.lineTo(width - 60, height/2 + 10);
+                ctx.closePath();
+                ctx.fill();
+                
+                // Draw lag visualization
+                ctx.strokeStyle = '#e74c3c';
+                ctx.lineWidth = 3;
+                ctx.setLineDash([10, 5]);
+                ctx.beginPath();
+                ctx.moveTo(50, height/2 + 40);
+                ctx.lineTo(width - 100, height/2 + 40);
+                ctx.stroke();
+                
+                // Labels
+                ctx.setLineDash([]);
+                ctx.fillStyle = '#333';
+                ctx.font = '16px Arial';
+                ctx.textAlign = 'left';
+                ctx.fillText('Universal Time', 50, height/2 - 20);
+                ctx.fillText('Ledger Time (4.69% lag)', 50, height/2 + 60);
+            }
+            
+            // Particle Chart
+            const particleCanvas = document.getElementById('particleChart');
+            if (particleCanvas) {
+                const ctx = particleCanvas.getContext('2d');
+                const width = particleCanvas.width;
+                const height = particleCanvas.height;
+                
+                ctx.clearRect(0, 0, width, height);
+                
+                // Draw spectrum
+                const particles = [
+                    { rung: 15, name: 'Electron', exists: true },
+                    { rung: 30, name: 'Muon', exists: true },
+                    { rung: 45, name: 'Bottom quark', exists: true },
+                    { rung: 90, name: '(No particle)', exists: false },
+                    { rung: 135, name: '(No particle)', exists: false }
+                ];
+                
+                const barWidth = width / (particles.length + 1);
+                
+                particles.forEach((particle, i) => {
+                    const x = (i + 1) * barWidth;
+                    const barHeight = particle.exists ? 150 : 30;
+                    
+                    ctx.fillStyle = particle.exists ? '#3498db' : '#ccc';
+                    ctx.fillRect(x - 30, height - barHeight - 50, 60, barHeight);
+                    
+                    // Labels
+                    ctx.fillStyle = '#333';
+                    ctx.font = '14px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(`Rung ${particle.rung}`, x, height - 30);
+                    ctx.fillText(particle.name, x, height - 10);
+                    
+                    if (particle.rung === 45) {
+                        ctx.fillStyle = '#e74c3c';
+                        ctx.font = 'bold 14px Arial';
+                        ctx.fillText('45-Gap starts here!', x, height - barHeight - 70);
+                    }
+                });
+            }
+        }
     </script>
 </body>
 </html>
