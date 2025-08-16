@@ -2532,6 +2532,11 @@ Hence the hypothesis of Theorem~\ref{thm:certificate} holds (in fact with a marg
         tex = tex.replace(/\\date\{[^}]*\}/g, '');
         tex = tex.replace(/\\maketitle/g, '');
         tex = tex.replace(/\\noindent/g, '');
+        // strip LaTeX comments (outside of verbatim)
+        // remove full-line comments
+        tex = tex.replace(/^[\t ]*%.*$/gm, '');
+        // remove trailing comments while preserving escaped percent \%
+        tex = tex.replace(/(^|[^\\])%[^\n\r]*/g, '$1');
         // abstract
         const am = tex.match(/\\begin\{abstract\}([\s\S]*?)\\end\{abstract\}/);
         if (am){ absEl.style.display=''; absEl.innerHTML = '<strong>Abstract</strong><br>'+tx(am[1].trim()); tex = tex.replace(am[0],''); }
