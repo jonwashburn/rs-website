@@ -149,94 +149,194 @@
           </ul>
 
           <h3 id="deep-context">1) Context and claim</h3>
-          <p>We recast RH as a bounded‑real problem on the half‑plane: construct 
-            \(J(s)=\det_2(I-A(s))/\xi(s)\) and its Cayley transform \(\Theta=(2J-1)/(2J+1)\). 
-            Proving \(|\Theta(s)|\le1\) on \(\{\Re s>\tfrac12\}\) yields RH. This reframes 
-            the classical zero‑free region program in a control‑theoretic, positivity‑first language.</p>
+          <p>At heart, the Riemann Hypothesis is a stability statement about how prime structure 
+            organizes analytic behavior. Our route reframes this as a <em>bounded‑real</em> or 
+            <em>contractivity</em> question: build one canonical object from primes and the 
+            completed zeta, then show it never exceeds unit magnitude in the right half‑plane. 
+            That’s a stability certificate rather than a direct zero count.</p>
+          <p>Why does this matter? Stability and contractivity are robust notions. They admit 
+            modular designs (you can swap a block, re‑check a certificate) and quantitative 
+            margins (how far from the boundary you are). This is deeply aligned with our broader 
+            Recognition Physics ethos: conserve information, keep ledgers balanced, and certify 
+            behavior by positivity rather than brittle cancellations.</p>
+          <p><strong>Proof‑of‑concept (sketch):</strong> Define a canonical transform \(\Theta\) of our 
+            prime‑built object. If \(|\Theta|\le1\) for \(\Re s>1/2\), maximum‑principle arguments 
+            force the classical non‑vanishing on that region. Contractivity implies no room for 
+            a destabilizing zero.</p>
 
           <h3 id="deep-halfplane">2) The half‑plane program</h3>
-          <p>The right half‑plane \(\Omega=\{\Re s>\tfrac12\}\) is equipped with the Szegő kernel 
-            \(B(s,\overline t)=(s+\overline t-1)^{-1}\). Schur/Herglotz classes and Pick kernels are 
-            naturally formulated here. This geometry is the stage on which boundary positivity implies 
-            interior control via maximum‑principle arguments.</p>
+          <p>Many classical expositions prefer the critical strip; we choose the cleaner geometry 
+            of the half‑plane \(\Re s>1/2\). Here, harmonic measure, Poisson kernels, and Szegő 
+            kernels supply a <em>precision toolkit</em> for turning boundary statements into interior 
+            truths. Intuitively: if the system behaves on the boundary, analytic continuation and 
+            extremal principles ensure it behaves inside.</p>
+          <p>Working on rectangles inside the half‑plane lets us localize questions, prove things 
+            in manageable regions, and then “tile” our way to a global result. This also plays well 
+            with truncations and approximations—finite things on finite windows.</p>
+          <p><strong>Proof‑of‑concept (sketch):</strong> Control an object on the edges of a rectangle; 
+            analytic maximum principles bound it throughout the interior. Repeat across an exhaustion 
+            of the half‑plane.</p>
 
           <h3 id="deep-primeop">3) Prime‑diagonal operator and HS control</h3>
-          <p>Define the prime‑diagonal operator \(A(s)e_p=p^{-s}e_p\). For \(\sigma=\Re s>1/2\), one has 
-            \(\|A(s)\|_{\mathrm{HS}}^2=\sum_{p}p^{-2\sigma}<\infty\) and \(\|A(s)\|<1\). 
-            This pins the infinite‑prime contribution inside the Hilbert–Schmidt world where \(\det_2\) is continuous.</p>
+          <p>We encode primes as a simple diagonal action: each prime contributes a damped “note” 
+            \(p^{-s}\). The aggregate is an instrument whose volume is controlled as soon as you 
+            step into the right half‑plane. That control is not cosmetic—it guarantees the instrument 
+            is tame enough for our continuity theorems to apply.</p>
+          <p>Diagonal design is intentional: it keeps the “prime geometry” explicit and separable. 
+            Nothing is hidden in a black box; every contribution is auditable in ledger style.</p>
+          <p><strong>Proof‑of‑concept (sketch):</strong> Show the prime‑sum of squared magnitudes converges 
+            for \(\Re s>1/2\). This is the numerical expression of “the orchestra stays within volume limits.”</p>
 
           <h3 id="deep-detxi">4) Regularized determinants and the ξ ratio</h3>
-          <p>We work with \(\det_2\) to factor out linear terms and keep HS control. The ratio 
-            \(J(s)=\det_2(I-A(s))/\xi(s)\) normalizes archimedean and pole data into a finite block, 
-            isolating the genuinely infinite "prime tail" in a stable way.</p>
+          <p>Raw determinants of infinite objects are misleading—they swallow trivial infinities. 
+            The regularized determinant is like declaring “we count true surprise, not bookkeeping 
+            zeros.” Pairing this with the completed zeta \(\xi\) removes known archimedean and pole 
+            structure into a finite, controllable header.</p>
+          <p>The result is a clean separation: a finite front‑matter and an infinite prime tail, each 
+            certified by the right kind of estimate.</p>
+          <p><strong>Proof‑of‑concept (sketch):</strong> Exhibit how regularization nulls a trivial drift, 
+            so changes reflect genuine structure rather than artifacts of infinity.</p>
 
           <h3 id="deep-cayley">5) Cayley transform to Schur</h3>
-          <p>The bounded‑real lens is \(\Theta=(2J-1)/(2J+1)\). Establishing \(|\Theta|\le1\) is 
-            equivalent to \(J\) being Herglotz and to positivity of the associated Pick kernel. 
-            This bridges analytic number theory to contractive systems.</p>
+          <p>We turn a complicated quantity into a “dial” that must remain within the unit circle. 
+            The Cayley transform is precisely that engineering trick: map the problem into a space 
+            where the good behavior is literally “staying inside the guardrails.”</p>
+          <p>This move lets us use a century of contractive‑system and function‑theory machinery: 
+            positivity kernels, interpolation, and closure properties.</p>
+          <p><strong>Proof‑of‑concept (sketch):</strong> If a dial never exceeds 1 in magnitude on a connected 
+            region, no explosive singularities (zeros where they shouldn’t be) can lurk there.</p>
 
           <h3 id="deep-split">6) Schur–determinant splitting</h3>
-          <p>For a block operator \(T=\begin{bmatrix}A&B\\ C&D\end{bmatrix}\), the identity 
-            \(\log\det_2(I-T)=\log\det_2(I-A)+\log\det(I-S)\) with \(S=D-C(I-A)^{-1}B\) 
-            separates HS \((k\ge2)\) from finite \((k=1)\) contributions. This is the algebraic backbone of the approach.</p>
+          <p>Think of the full system as a head and a tail. The head is finite—archimedean, poles, 
+            low‑order effects—while the tail is the true infinite prime engine. The splitting formula 
+            is the wrench that decouples them cleanly, so each can be controlled in its native habitat.</p>
+          <p>This is crucial architecturally: finite blocks are where we prove exact lossless properties; 
+            infinite tails are where continuity and positivity carry the day.</p>
+          <p><strong>Proof‑of‑concept (sketch):</strong> Demonstrate that modeling the head separately does not 
+            change the tail’s certificate; the algebra records this in an exact identity.</p>
 
           <h3 id="deep-hscont">7) HS continuity and prime truncations</h3>
-          <p>Prime truncations \(A_N\to A\) in HS on compacta imply \(\det_2(I-A_N)\to\det_2(I-A)\) locally uniformly. 
-            This makes the approximation pipeline compatible with analytic limits in \(\Omega\).</p>
+          <p>Any real proof must survive approximation: you can’t compute with infinitely many primes. 
+            HS continuity promises that if you keep adding primes, what you’ve already certified doesn’t 
+            evaporate. The limiting object inherits the good behavior.</p>
+          <p>This is the reason the finite certificates we construct actually matter for the infinite target.</p>
+          <p><strong>Proof‑of‑concept (sketch):</strong> Show a monotone stabilization: once the dial is 
+            inside the rails for large truncations, the limit stays inside.</p>
 
           <h3 id="deep-kyp">8) Prime‑grid lossless models and KYP closure</h3>
-          <p>Finite‑stage systems tied to primes admit <em>lossless</em> (passive) realizations. 
-            Diagonal Lyapunov witnesses factor the KYP matrix, certifying \(\|H_N\|_\infty\le1\). 
-            These certificates are the finite anchors for the limiting Schur claim.</p>
+          <p>Lossless/passive systems are the control‑theory embodiment of conservation and fairness: 
+            no hidden energy leaks, no free gain. We realize each finite prime truncation as a small 
+            passive network with a <em>diagonal Lyapunov witness</em>—a clean, auditable certificate.</p>
+          <p>KYP (Kalman–Yakubovich–Popov) is the classical bridge between frequency‑domain bounds and 
+            time‑domain energy inequalities. Here, it turns a conceptual “never exceed 1” into a 
+            structured matrix inequality we can factor and check.</p>
+          <p><strong>Proof‑of‑concept (sketch):</strong> Exhibit a diagonal Lyapunov matrix that makes the 
+            KYP inequality exact at the lossless points; conclude \(\|H_N\|_\infty\le1\).</p>
 
           <h3 id="deep-logkernel">9) Additive/log kernel positivity</h3>
-          <p>Using a backward‑difference identity, the logarithmic kernel underlying \(\log\det_2^N\) 
-            is shown PSD on boundaries of zero‑free rectangles. This is the analytic engine that drives boundary positivity.</p>
+          <p>The log of a determinant is an integral of increments. Backward differences are the 
+            finite‑differences counterpart of derivatives, and in this construction they assemble into 
+            a <em>positive Gram structure</em>: an inner‑product disguised as an integral.</p>
+          <p>That inner‑product viewpoint is the key. Once you see the kernel as “energy of a feature map,” 
+            positivity is natural, not mysterious.</p>
+          <p><strong>Proof‑of‑concept (sketch):</strong> Write the boundary integral as an average of squares; 
+            squares are nonnegative → kernel is PSD.</p>
 
           <h3 id="deep-fock">10) Symmetric‑Fock exponential lift aligned with Szegő</h3>
-          <p>We construct a Fock‑type exponential kernel \(E_N\) lower‑bounded by Szegő in finite matrices. 
-            This alignment lets positivity of the logarithmic Gram lift to the kernel geometry of \(\Omega\).</p>
+          <p>Exponential lifts are how you package cumulative correlation into a single, well‑behaved 
+            object. Our lift is chosen to <em>align</em> with the half‑plane’s natural kernel, so lower 
+            bounds transfer without friction.</p>
+          <p>Conceptually, it’s like comparing two acoustically tuned rooms: put the same sound in, you get 
+            comparable resonance. That makes inequalities transparent.</p>
+          <p><strong>Proof‑of‑concept (sketch):</strong> Show a finite‑matrix inequality where the lifted 
+            kernel dominates (or is dominated by) the Szegő kernel; inherit positivity.</p>
 
           <h3 id="deep-boundary">11) Boundary positivity ⇒ interior Schur</h3>
-          <p>From PSD on \(\partial R\), a maximum‑principle step gives \(\Re J\ge0\) inside \(R\). 
-            Cayley then yields \(|\Theta|\le1\) on \(R\). Exhausting \(\Omega\) by rectangles and passing to limits delivers the global claim.</p>
+          <p>Engineers say “if your margins hold at the worst places, the interior is safe.” In complex 
+            analysis those worst places are boundaries. With positivity on the boundary, standard extremal 
+            principles force nonnegativity of the real part inside, hence contractivity after Cayley.</p>
+          <p>Do this not once but across a ladder of rectangles, and you propagate safety across the whole half‑plane.</p>
+          <p><strong>Proof‑of‑concept (sketch):</strong> Combine boundary PSD with the maximum principle to 
+            deduce \(\Re J\ge0\) interior; apply Cayley to bound \(|\Theta|\).</p>
 
           <h3 id="deep-blaschke">12) Punctured boundaries and Blaschke compensation</h3>
-          <p>Zeros of \(\xi\) on \(\partial R\) are neutralized by a half‑plane Blaschke factor; we work on punctured boundaries, 
-            preserve PSD under Schur products, and remove the compensation at the end.</p>
+          <p>Division by \(\xi\) is meaningful only where \(\xi\) doesn’t vanish. When a boundary passes 
+            near a zero, we <em>compensate</em> with a half‑plane Blaschke factor that cancels that 
+            vanishing locally. Then the algebra lives on a punctured boundary where everything is honest.</p>
+          <p>At the end we undo the compensation. Nothing essential changes—this is just careful 
+            accounting so the positivity statements aren’t polluted by removable singularities.</p>
+          <p><strong>Proof‑of‑concept (sketch):</strong> Multiply by a local Blaschke factor that has exactly 
+            the inverse zero; verify PSD is preserved under pointwise (Schur) products.</p>
 
           <h3 id="deep-poisson">13) Quantitative Poisson–Carleson certificate (P+)</h3>
-          <p>A constructive boundary positive‑real certificate (with explicit window‑dependent constants) 
-            closes the boundary route. This is where quantitative harmonic analysis enters.</p>
+          <p>This is the “numbers on the table” step. A Poisson–Carleson certificate says: with the right 
+            smoothing and windowing, your boundary data averages to a positive‑real quantity with explicit 
+            constants. No hand‑waving—just inequalities that can be audited.</p>
+          <p>Because the constants are explicit, we know exactly how the window choice and the rectangle 
+            size interact. That’s what makes the program reproducible and extensible.</p>
+          <p><strong>Proof‑of‑concept (sketch):</strong> Produce a Poisson average of smoothed boundary data 
+            and record a lower bound in terms of window norms.</p>
 
           <h3 id="deep-windows">14) Windowing, Whitney scales, and bandlimits</h3>
-          <p>Smooth windows control localization; Whitney scales and bandlimits tame prime sums and transforms. 
-            These design choices keep every contribution uniformly bounded where needed.</p>
+          <p>Windows are how we “look” at a range of frequencies and times without introducing ringing 
+            or aliasing that would swamp small effects. Whitney scaling chooses window sizes that match 
+            the geometry of the region; bandlimits ensure we never ask the data to carry more detail than it has.</p>
+          <p>The result is a clean separation of concerns: archimedean effects are handled where they live, 
+            prime effects where they live, and the cross‑talk is kept minimal and measurable.</p>
+          <p><strong>Proof‑of‑concept (sketch):</strong> Specify a compactly supported smooth window and show 
+            how its \(L^1\)/BV norms control every term it touches.</p>
 
           <h3 id="deep-arch">15) Explicit archimedean bounds</h3>
-          <p>We give clean bounds for the archimedean part (Γ/digamma) on lines \(\Re s=1/2+\varepsilon\), 
-            uniform in \(\varepsilon\), keeping the boundary analysis quantitative.</p>
+          <p>The gamma function and its derivatives are the analytic “gravity” of the complex plane—they 
+            tug on everything. We corral their influence with robust, book‑checked inequalities, uniform 
+            in how close you stand to the critical line.</p>
+          <p>This is the part that turns a conceptual framework into a working machine: every term 
+            controlled with dependence laid out.</p>
+          <p><strong>Proof‑of‑concept (sketch):</strong> Present a uniform digamma bound along a vertical line 
+            and show how it plugs into the local boundary estimate.</p>
 
           <h3 id="deep-primeshort">16) Prime‑side short‑sum control</h3>
-          <p>A precise inequality for the prime contribution is obtained via band‑limited test functions, 
-            Plancherel, and PNT‑weak estimates. This secures the prime‑side of the boundary balance.</p>
+          <p>On the prime side, we don’t need the sharpest theorems—just reliable upper bounds. 
+            Band‑limited test functions restrict how much each prime can “wiggle” the integral; 
+            Plancherel turns that into energy control; a weak prime number theorem handles counting.</p>
+          <p>Put together, the prime chorus never overwhelms the mix.</p>
+          <p><strong>Proof‑of‑concept (sketch):</strong> Bound a smoothed prime sum by a constant depending on 
+            the window and an adjustable bandlimit parameter.</p>
 
           <h3 id="deep-hilbert">17) Hilbert transform pairing and BV windows</h3>
-          <p>With bounded‑variation windows, the Hilbert transform obeys explicit \(L^\infty\) bounds. 
-            This underwrites the key pairing estimates that appear in the local boundary theorem.</p>
+          <p>The Hilbert transform is the harmonic partner of smoothing—it rotates information without 
+            changing its size too much. With BV (bounded‑variation) windows, we can quantify exactly how 
+            much the rotation costs.</p>
+          <p>These bounds appear as neat constants in the final inequalities. Nothing mysterious, just 
+            careful use of classical harmonic analysis.</p>
+          <p><strong>Proof‑of‑concept (sketch):</strong> State the \(L^\infty\) bound for the transform of a BV window 
+            and show how it multiplies a variation bound elsewhere.</p>
 
           <h3 id="deep-exhaust">18) Exhaustion and removable singularities</h3>
-          <p>We extract diagonal subsequences on an exhaustion of \(\Omega\setminus Z(\xi)\), 
-            obtain local‑uniform convergence in the Schur class, and cross zero sets by removable singularity arguments.</p>
+          <p>We cover the half‑plane by a ladder of rectangles, prove what we need on each rung, then 
+            pass to a limit. Where \(\xi\) vanishes, we work around the point, prove things in the donut, 
+            then fill the hole by standard removable‑singularity logic.</p>
+          <p>This is the convergence‑and‑patching phase that turns many local pictures into a global mural.</p>
+          <p><strong>Proof‑of‑concept (sketch):</strong> Demonstrate local uniform bounds on a nested family of rectangles; 
+            extract a convergent subsequence and extend across isolated points.</p>
 
           <h3 id="deep-equivalence">19) Equivalence back to RH</h3>
-          <p>Global Schur/PSD of \(\Theta\) forbids zeros of \(\xi\) with \(\Re s>1/2\) by a maximum‑modulus pinch. 
-            This closes the circle from bounded‑real control to the classical statement of RH.</p>
+          <p>Once the dial is bounded everywhere in the half‑plane, there’s no “spare amplitude” for 
+            \(\xi\) to vanish there. The standard pinching argument—comparing values and using analyticity— 
+            rules out stray zeros. The contractive picture and the classical picture fit like two 
+            projections of the same solid.</p>
+          <p><strong>Proof‑of‑concept (sketch):</strong> Argue by contradiction: a zero would force the dial out 
+            of bounds in a neighborhood, contradicting contractivity.</p>
 
           <h3 id="deep-bridge">20) Axiomatic Bridging perspective</h3>
-          <p>The Recognition Physics ledger enforces symmetry, conservation, and fairness — principles mirrored as 
-            passivity, contractivity, and positivity in this analytic setting. The <a href="/axiomatic-bridging.html">axiomatic bridging</a> method 
-            explains not just the steps we take, but why this route exists and coheres.</p>
+          <p>Our meta‑principle says: nothing can recognize itself from nothing; consistency is built 
+            by balanced recognition events. In practice, that becomes conservation laws, fairness costs, 
+            and unit‑free invariants. Here it appears as losslessness, passivity, and positivity.</p>
+          <p>So this proof is not a collection of tricks; it’s a manifestation of a deeper logic about how 
+            information must flow in a sane universe. The bridging architecture explains the <em>why</em>, 
+            not just the <em>how</em>.</p>
+          <p><strong>Proof‑of‑concept (sketch):</strong> Map ledger fairness → lossless certificates; balance → 
+            KYP energy equalities; unit‑free invariants → dimensionless contractivity statements.</p>
         </div>
       </div>
     </section>
