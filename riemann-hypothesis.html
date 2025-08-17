@@ -147,14 +147,14 @@ graph TD
 
   %% Interior / KYP alignment route
   subgraph I[Interior / KYP-alignment]
-    KYP[Lossless prime-grid H_N (KYP)]:::route --> ALN[Alignment on compacts (NP + H-infinity)]:::route
+    KYP[Lossless prime-grid H_N - KYP]:::route --> ALN[Alignment on compacts - NP + H-infinity]:::route
     ALN --> CLS[Schur closure under local-uniform limits]:::route
   end
 
   %% Boundary / (P+) route
-  subgraph B[Boundary / (P+)]
-    SMO[Smoothed d_sigma Re log det2 and de-smoothing]:::route --> PSC[Poisson-Carleson inequality (PSC)]:::route
-    PSC --> PCERT[(P+) certificate]:::route
+  subgraph B[Boundary / P+]
+    SMO[Smoothed d_sigma Re log det2 and de-smoothing]:::route --> PSC[Poisson-Carleson inequality - PSC]:::route
+    PSC --> PCERT[P+ certificate]:::route
     PCERT --> HERG[2J is Herglotz on Omega]:::route
   end
 
@@ -185,17 +185,17 @@ graph TD
         <div class="figure">
           <div class="mermaid">
 graph TD
-  A[Schur-determinant split] --> B[HS continuity (A_N -> A)]
-  B --> C[Prime-grid lossless (KYP)]
+  A[Schur-determinant split] --> B[HS continuity - A_N to A]
+  B --> C[Prime-grid lossless - KYP]
   C --> D[Alignment and Cayley bound]
   D --> E[Boundary on rectangles]
-  E --> E2[Blaschke compensation (dR minus Sigma)]
+  E --> E2[Blaschke compensation - dR minus Sigma]
   E2 --> F[Smoothed estimates and de-smoothing]
-  F --> G[Poisson-Carleson (P+)]
+  F --> G[Poisson-Carleson - P+]
   G --> H[2J is Herglotz]
-  H --> I[Theta is Schur (|Theta| <= 1)]
+  H --> I[Theta is Schur - |Theta| <= 1]
   I --> J[Pick kernel PSD]
-  J --> K[No zeros on Re s > 1/2 (RH)]
+  J --> K[No zeros on Re s > 1/2 - RH]
   I -.-> L[Exhaustion and removable singularities]
   L --> K
           </div>
