@@ -688,43 +688,25 @@
 
       // Handle term clicks with inline expansions
       document.addEventListener('click', function(e) {
-        // Close expansions when clicking outside
-        if (!e.target.closest('.term') && !e.target.closest('.expansion')) {
-          document.querySelectorAll('.expansion.active').forEach(exp => {
-            exp.classList.remove('active');
-            exp.innerHTML = '';
-          });
-          document.querySelectorAll('.term.active').forEach(term => {
-            term.classList.remove('active');
-          });
-        }
-        
         if (e.target.classList.contains('term')) {
+          e.preventDefault();
+          e.stopPropagation();
           const term = e.target;
           const key = term.getAttribute('data-key');
           const def = term.getAttribute('data-def') || (key ? termDetail[key] : '');
           
-          console.log('Term clicked:', key, 'Definition found:', !!def);
-          
-          if (!def) {
-            console.warn('No definition found for term:', key);
-            return;
-          }
+          if (!def) return;
           
           // For critical claim terms
           const criticalClaim = term.closest('.critical-claim');
           if (criticalClaim) {
-            console.log('Critical claim term clicked');
             let expansion = criticalClaim.querySelector('.expansion');
-            console.log('Expansion element found:', !!expansion);
             if (expansion) {
               if (expansion.classList.contains('active') && expansion.innerHTML.includes(def)) {
-                console.log('Closing expansion');
                 expansion.classList.remove('active');
                 expansion.innerHTML = '';
                 term.classList.remove('active');
               } else {
-                console.log('Opening expansion');
                 // Remove active from other terms
                 document.querySelectorAll('.term.active').forEach(t => t.classList.remove('active'));
                 document.querySelectorAll('.expansion.active').forEach(e => {
@@ -734,7 +716,6 @@
                 term.classList.add('active');
                 expansion.innerHTML = `<span class="expansion-close">×</span><div>${def}</div>`;
                 expansion.classList.add('active');
-                console.log('Expansion should be visible now');
               }
               return;
             }
@@ -853,6 +834,19 @@
         const showing = deeper.style.display === 'block';
         deeper.style.display = showing ? 'none' : 'block';
         toggle.textContent = showing ? 'See deeper explanation →' : 'Hide deeper explanation ↑';
+      });
+      
+      // Handle closing expansions when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.term') && !e.target.closest('.expansion')) {
+          document.querySelectorAll('.expansion.active').forEach(exp => {
+            exp.classList.remove('active');
+            exp.innerHTML = '';
+          });
+          document.querySelectorAll('.term.active').forEach(term => {
+            term.classList.remove('active');
+          });
+        }
       });
     });
   </script>
