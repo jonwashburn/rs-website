@@ -141,24 +141,24 @@
         <div class="figure">
           <div class="mermaid">
 graph TD
-  classDef goal fill:#ecfeff,stroke:#06b6d4,color:#0e7490,stroke-width:1px,rx:6,ry:6;
-  classDef step fill:#fff7ed,stroke:#fdba74,color:#9a3412,rx:6,ry:6;
-  classDef route fill:#f1f5f9,stroke:#cbd5e1,color:#334155,rx:6,ry:6;
+  classDef goal fill:#ecfeff,stroke:#06b6d4,color:#0e7490,stroke-width:1px,rx:6,ry:6
+  classDef step fill:#fff7ed,stroke:#fdba74,color:#9a3412,rx:6,ry:6
+  classDef route fill:#f1f5f9,stroke:#cbd5e1,color:#334155,rx:6,ry:6
 
   %% Interior / KYP alignment route
-  subgraph I[Interior / KYP–alignment]
-    KYP[Lossless prime‑grid H_N (KYP)]:::route --> ALN[Alignment on compacts (NP + H^∞)]:::route
-    ALN --> CLS[Schur closure under local‑uniform limits]:::route
+  subgraph I[Interior / KYP-alignment]
+    KYP[Lossless prime-grid H_N (KYP)]:::route --> ALN[Alignment on compacts (NP + H-infinity)]:::route
+    ALN --> CLS[Schur closure under local-uniform limits]:::route
   end
 
   %% Boundary / (P+) route
   subgraph B[Boundary / (P+)]
-    SMO[Smoothed ∂_σ Re log det₂ & de‑smoothing]:::route --> PSC[Poisson–Carleson inequality (PSC)]:::route
+    SMO[Smoothed d_sigma Re log det2 and de-smoothing]:::route --> PSC[Poisson-Carleson inequality (PSC)]:::route
     PSC --> PCERT[(P+) certificate]:::route
-    PCERT --> HERG[2J is Herglotz on Ω]:::route
+    PCERT --> HERG[2J is Herglotz on Omega]:::route
   end
 
-  CLS --> BRF[BRF: Θ Schur on Ω]:::goal
+  CLS --> BRF[BRF: Theta Schur on Omega]:::goal
   HERG --> BRF
   BRF --> RH[No zeros on Re s > 1/2 (RH)]:::step
 
@@ -167,11 +167,11 @@ graph TD
   click ALN "/riemann-hypothesis.html#method-pipeline" "Alignment on compacts" _self
   click CLS "/riemann-hypothesis.html#method-pipeline" "Schur closure under limits" _self
   click SMO "/riemann-hypothesis.html#deep-poisson" "Smoothed boundary control" _self
-  click PSC "/riemann-hypothesis.html#deep-poisson" "Poisson–Carleson inequality" _self
+  click PSC "/riemann-hypothesis.html#deep-poisson" "Poisson-Carleson inequality" _self
   click PCERT "/riemann-hypothesis.html#deep-poisson" "(P+) certificate" _self
-  click HERG "/riemann-hypothesis.html#deep-boundary" "Boundary ⇒ interior (Herglotz)" _self
-  click BRF "/riemann-hypothesis.html#deep-equivalence" "BRF ⇒ RH equivalence" _self
-  click RH "/riemann-hypothesis.html#deep-equivalence" "No zeros on the half‑plane" _self
+  click HERG "/riemann-hypothesis.html#deep-boundary" "Boundary => interior (Herglotz)" _self
+  click BRF "/riemann-hypothesis.html#deep-equivalence" "BRF => RH equivalence" _self
+  click RH "/riemann-hypothesis.html#deep-equivalence" "No zeros on the half-plane" _self
           </div>
           <div class="figure-caption">Two closure paths: interior alignment of lossless models, or boundary positivity (P+) with explicit constants.</div>
         </div>
@@ -187,16 +187,16 @@ graph TD
 graph TD
   A[Schur-determinant split] --> B[HS continuity (A_N -> A)]
   B --> C[Prime-grid lossless (KYP)]
-  C --> D[Alignment & Cayley bound]
+  C --> D[Alignment and Cayley bound]
   D --> E[Boundary on rectangles]
-  E --> E2[Blaschke compensation (dR \\ Sigma)]
-  E2 --> F[Smoothed estimates + de-smoothing]
+  E --> E2[Blaschke compensation (dR minus Sigma)]
+  E2 --> F[Smoothed estimates and de-smoothing]
   F --> G[Poisson-Carleson (P+)]
   G --> H[2J is Herglotz]
   H --> I[Theta is Schur (|Theta| <= 1)]
   I --> J[Pick kernel PSD]
   J --> K[No zeros on Re s > 1/2 (RH)]
-  I -.-> L[Exhaustion + removable singularities]
+  I -.-> L[Exhaustion and removable singularities]
   L --> K
           </div>
           <div class="figure-caption">High‑level architecture: construction → boundary control → contractivity → RH.</div>
