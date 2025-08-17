@@ -350,6 +350,70 @@
         </div>
     </section>
 
+    <!-- Eight Theorems (inserted) -->
+    <section class="theorem-section">
+        <div class="template-container">
+            <h2 class="template-section-title">The Eight Foundational Theorems</h2>
+            <p class="lead-text">From MP + Composability + Finiteness, these eight results form the spine of the framework.</p>
+            <article class="theorem-card">
+                <div class="theorem-number">Theorem 1</div>
+                <h3><a href="/theorems/T1-ledger-necessity.html">Ledger Necessity & Uniqueness</a></h3>
+                <div class="theorem-content">
+                    <p><strong>Statement:</strong> Any recognition structure satisfying MP + Composability + Finiteness admits a unique (up to order‑isomorphism) positive, double‑entry ledger with an immutable generator.</p>
+                </div>
+            </article>
+            <article class="theorem-card">
+                <div class="theorem-number">Theorem 2</div>
+                <h3><a href="/theorems/T2-atomicity.html">Atomicity & Countability</a></h3>
+                <div class="theorem-content">
+                    <p><strong>Statement:</strong> Each tick posts exactly one elementary ledger entry of size δ; concurrent postings at one tick are impossible.</p>
+                </div>
+            </article>
+            <article class="theorem-card">
+                <div class="theorem-number">Theorem 3</div>
+                <h3><a href="/theorems/T3-conservation.html">Dual‑Balance ⇒ Local Conservation</a></h3>
+                <div class="theorem-content">
+                    <p><strong>Statement:</strong> Additivity and dual‑balance imply a discrete continuity equation; in the coarse‑grained limit, ∂tρ + ∇·J = 0.</p>
+                </div>
+            </article>
+            <article class="theorem-card">
+                <div class="theorem-number">Theorem 4</div>
+                <h3><a href="/theorems/T4-unique-cost.html">Uniqueness of the Cost Functional</a></h3>
+                <div class="theorem-content">
+                    <p><strong>Statement:</strong> The only analytic, dual‑balanced, ledger‑finite cost is J(x) = ½(x + 1/x).</p>
+                </div>
+            </article>
+            <article class="theorem-card">
+                <div class="theorem-number">Theorem 5</div>
+                <h3><a href="/theorems/T5-k-equals-1-phi.html">Self‑Similarity selects k = 1 and φ</a></h3>
+                <div class="theorem-content">
+                    <p><strong>Statement:</strong> In x_{n+1} = 1 + k/x_n, countability and cost minimization force k = 1; fixed point φ.</p>
+                </div>
+            </article>
+            <article class="theorem-card">
+                <div class="theorem-number">Theorem 6</div>
+                <h3><a href="/theorems/T6-d-equals-3.html">Minimal Stable Spatial Dimension is d = 3</a></h3>
+                <div class="theorem-content">
+                    <p><strong>Statement:</strong> Stable non‑trivial linking requires exactly three spatial dimensions.</p>
+                </div>
+            </article>
+            <article class="theorem-card">
+                <div class="theorem-number">Theorem 7</div>
+                <h3><a href="/theorems/T7-T-equals-8.html">Minimal Recognition Period: T = 2³ = 8</a></h3>
+                <div class="theorem-content">
+                    <p><strong>Statement:</strong> On Q₃, any ledger‑compatible recognition has minimal period 8; in general T = 2^D.</p>
+                </div>
+            </article>
+            <article class="theorem-card">
+                <div class="theorem-number">Theorem 8</div>
+                <h3><a href="/theorems/T8-causal-speed.html">Causal Structure and a Universal Speed c</a></h3>
+                <div class="theorem-content">
+                    <p><strong>Statement:</strong> Atomic ticks on a nearest‑neighbor lattice define causal cones and a maximal speed c = L_min/τ₀.</p>
+                </div>
+            </article>
+        </div>
+    </section>
+
     <!-- Code Viewer -->
     <section class="code-viewer-section">
         <div class="template-container" style="max-width: 1100px;">
@@ -978,9 +1042,9 @@ instance s_conserves_of_potential {M} (L : SimpleLedger M) : SConserves L where
   conserve ch h := by unfold schainFlux sphi; simpa [h]
 
 /-!
-In this distilled monolith, “necessity” is captured by the fact that any
+In this distilled monolith, "necessity" is captured by the fact that any
 ledger defined via a potential has zero flux on closed chains, which is the
-substance used downstream. A more detailed uniqueness‑up‑to‑units statement
+substance used downstream. A more detailed uniqueness-up-to-units statement
 (tying debit/credit to in/out degrees) can be added with heavier finiteness
 infrastructure if desired.
 -/
@@ -1771,16 +1835,16 @@ end IndisputableMonolith
         const quickIndex = document.getElementById('quick-index');
         if (quickIndex) {
             quickIndex.addEventListener('click', (e) => {
-                const a = e.target.closest('a');
-                if (!a) return;
-                e.preventDefault();
-                const key = a.getAttribute('data-jump');
+            const a = e.target.closest('a');
+            if (!a) return;
+            e.preventDefault();
+            const key = a.getAttribute('data-jump');
                 const target = document.querySelector(`.code-line[data-key="${key}"]`) || document.querySelector(`.code-line[data-name="${key}"]`);
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    target.click();
-                }
-            });
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                target.click();
+            }
+        });
         }
 
         // Generic explanation generator for arbitrary code items
@@ -2337,7 +2401,7 @@ end IndisputableMonolith
             document.addEventListener('DOMContentLoaded', loadLean);
         } else {
             // DOM is already loaded
-            loadLean();
+        loadLean();
         }
     </script>
 </body>
