@@ -133,6 +133,50 @@
         </div>
       </div>
     </section>
+    
+    <!-- Executive Map (two routes to RH) -->
+    <section class="template-section">
+      <div class="template-container">
+        <h2 class="template-section-title">Executive map (two routes to RH)</h2>
+        <div class="figure">
+          <div class="mermaid">
+graph TD
+  classDef goal fill:#ecfeff,stroke:#06b6d4,color:#0e7490,stroke-width:1px,rx:6,ry:6;
+  classDef step fill:#fff7ed,stroke:#fdba74,color:#9a3412,rx:6,ry:6;
+  classDef route fill:#f1f5f9,stroke:#cbd5e1,color:#334155,rx:6,ry:6;
+
+  %% Interior / KYP alignment route
+  subgraph I[Interior / KYP–alignment]
+    KYP[Lossless prime‑grid H_N (KYP)]:::route --> ALN[Alignment on compacts (NP + H^\u221e)]:::route
+    ALN --> CLS[Schur closure under local‑uniform limits]:::route
+  end
+
+  %% Boundary / (P+) route
+  subgraph B[Boundary / (P+)]
+    SMO[Smoothed \u2202_\u03c3 Re log det\u2082 & de‑smoothing]:::route --> PSC[Poisson–Carleson inequality (PSC)]:::route
+    PSC --> PCERT[(P+) certificate]:::route
+    PCERT --> HERG[2J is Herglotz on \u03a9]:::route
+  end
+
+  CLS --> BRF[BRF: \u0398 Schur on \u03a9]:::goal
+  HERG --> BRF
+  BRF --> RH[No zeros on Re s > 1/2 (RH)]:::step
+
+  %% Clickable anchors
+  click KYP href "/riemann-hypothesis.html#deep-kyp" "Lossless KYP closure" _self
+  click ALN href "/riemann-hypothesis.html#method-pipeline" "Alignment on compacts" _self
+  click CLS href "/riemann-hypothesis.html#method-pipeline" "Schur closure under limits" _self
+  click SMO href "/riemann-hypothesis.html#deep-poisson" "Smoothed boundary control" _self
+  click PSC href "/riemann-hypothesis.html#deep-poisson" "Poisson–Carleson inequality" _self
+  click PCERT href "/riemann-hypothesis.html#deep-poisson" "(P+) certificate" _self
+  click HERG href "/riemann-hypothesis.html#deep-boundary" "Boundary ⇒ interior (Herglotz)" _self
+  click BRF href "/riemann-hypothesis.html#deep-equivalence" "BRF ⇒ RH equivalence" _self
+  click RH href "/riemann-hypothesis.html#deep-equivalence" "No zeros on the half‑plane" _self
+          </div>
+          <div class="figure-caption">Two closure paths: interior alignment of lossless models, or boundary positivity (P+) with explicit constants.</div>
+        </div>
+      </div>
+    </section>
 
     <!-- High-level Proof Track (Mermaid) -->
     <section class="template-section">
@@ -705,7 +749,7 @@ graph TD
     <section class="template-section">
       <div class="template-container">
         <div class="template-accent-bar"></div>
-        <h2 class="template-section-title">Method pipeline</h2>
+        <h2 id="method-pipeline" class="template-section-title">Method pipeline</h2>
         <div class="method-grid">
           <div class="method-card">
             <span class="badge">1</span>
