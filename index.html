@@ -37,7 +37,7 @@
       <h2 class="template-section-title">The Full Theory in 30 Seconds</h2>
       <div class="critical-claim">
         <p><strong>The Claim:</strong> We have a <span class="term" data-key="logically_derived">straightforward, logically derived</span> framework that predicts <span class="term" data-key="all_reality">all of reality</span>—every <span class="term" data-key="mass_derivation">particle mass</span>, every <span class="term" data-key="force_overview">force</span>, every <span class="term" data-key="constants_overview">constant</span>. <strong><span class="term" data-key="parameter_free">Zero adjustable parameters.</span></strong> <strong><span class="term" data-key="zero_fitting">Zero fitting to data.</span></strong> <span class="term" data-key="math_complete">The mathematics is complete</span> and the framework is <strong><span class="term" data-key="zero_parameter_framework">zero‑parameter</span></strong> (no tunable numbers—<span class="term" data-key="lambda_rec">λ_rec</span> maps the dimensionless to the dimensional). This is <span class="term" data-key="not_another_theory">not another foundational model</span>; it <span class="term" data-key="resolves_anomalies">resolves known anomalies</span> and matches observation with <strong><span class="term" data-key="perfect_agreement">100% agreement</span></strong>. If even <span class="term" data-key="predictions">one prediction</span> fails, the <span class="term" data-key="framework_dies">entire framework is falsified</span>. It is not a model—it's a <span class="term" data-key="measurement_inline">direct measurement</span> of what reality must be.</p>
-        <div class="expansion" style="display: block !important; background: yellow !important; padding: 1rem !important;">TEST: This should be visible if the expansion div exists</div>
+        <div class="expansion"></div>
       </div>
 
       <!-- Featured Audio (moved up under Claim) -->
@@ -705,6 +705,7 @@
               if (expansion.classList.contains('active') && expansion.innerHTML.includes(def)) {
                 expansion.classList.remove('active');
                 expansion.innerHTML = '';
+                expansion.style.display = 'none';
                 term.classList.remove('active');
               } else {
                 // Remove active from other terms
@@ -712,10 +713,12 @@
                 document.querySelectorAll('.expansion.active').forEach(e => {
                   e.classList.remove('active');
                   e.innerHTML = '';
+                  e.style.display = 'none';
                 });
                 term.classList.add('active');
                 expansion.innerHTML = `<span class="expansion-close">×</span><div>${def}</div>`;
                 expansion.classList.add('active');
+                expansion.style.display = 'block';
               }
               return;
             }
@@ -1024,7 +1027,7 @@
       background: #fff;
       border: 1px solid #f59e0b;
       margin-top: 1rem;
-      display: none;
+      display: none !important;
     }
     
     .critical-claim .expansion.active {
