@@ -705,6 +705,26 @@
           const def = term.getAttribute('data-def') || (key ? termDetail[key] : '');
           if (!def) return;
           
+          // For critical claim terms
+          const criticalClaim = term.closest('.critical-claim');
+          if (criticalClaim) {
+            let expansion = criticalClaim.querySelector('.expansion');
+            if (expansion) {
+              if (expansion.classList.contains('active') && expansion.innerHTML.includes(def)) {
+                expansion.classList.remove('active');
+                expansion.innerHTML = '';
+                term.classList.remove('active');
+              } else {
+                // Remove active from other terms
+                document.querySelectorAll('.term.active').forEach(t => t.classList.remove('active'));
+                term.classList.add('active');
+                expansion.innerHTML = `<span class="expansion-close">×</span><div>${def}</div>`;
+                expansion.classList.add('active');
+              }
+              return;
+            }
+          }
+          
           // For intro paragraph terms
           const reading = term.closest('.template-reading');
           if (reading) {
