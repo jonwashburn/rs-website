@@ -495,44 +495,60 @@
           The framework predicts the observed fraction by ledger curvature + gap corrections. See <a href="/predictions.html#dark-energy">derivation</a>.`,
         
         // Constants
-        'E_coh': `<strong>E_coh = 0.090 eV</strong><br>
-          <em>Coherence Energy</em><br><br>
-          The minimal energy quantum for any recognition update. Derived from:<br>
-          E_coh = ħc/λ_rec = (ħc)/(2.20 μm) = 0.090 eV<br><br>
-          <strong>Role:</strong> Base energy scale in the mass formula m = B·E_coh·φ^(r+f)<br>
-          <strong>Origin:</strong> Set by recognition bandwidth limits`,
+        'E_coh': `<div class="constant-detail">
+          <strong>E_coh = 0.090\,\text{eV}</strong>
+          <em>Coherence Energy</em>
+          <p>E_coh is the minimal energy required to post one recognition to the ledger. It links the spatial and temporal bandwidths of recognition.</p>
+          <p>Derived from the recognition length \(\lambda_{\mathrm{rec}}\):</p>
+          <p>\[ E_{\mathrm{coh}} = \frac{\hbar c}{\lambda_{\mathrm{rec}}} \quad\Rightarrow\quad E_{\mathrm{coh}} = \frac{\hbar c}{2.20\,\mu\mathrm{m}} \approx 0.090\,\mathrm{eV}. \]</p>
+          <p><strong>Role.</strong> Sets the base scale in the universal mass ladder</p>
+          <p>\[ m = B\,E_{\mathrm{coh}}\,\varphi^{\,r+f}. \]</p>
+          <p><strong>Origin.</strong> Bandwidth limits of recognition exchange fix \(\lambda_{\mathrm{rec}}\) and thus \(E_{\mathrm{coh}}\).</p>
+        </div>`,
           
-        'tau_rec': `<strong>τ_rec = 7.33 fs</strong><br>
-          <em>Recognition Time</em><br><br>
-          The tick duration for one atomic recognition update.<br>
-          τ_rec = λ_rec/c = 2.20 μm / c = 7.33 femtoseconds<br><br>
-          <strong>Role:</strong> Sets the universal clock rate<br>
-          <strong>Origin:</strong> Minimal two-way light exchange time`,
+        'tau_rec': `<div class="constant-detail">
+          <strong>\tau_{\mathrm{rec}} = 7.33\,\text{fs}</strong>
+          <em>Recognition Time</em>
+          <p>The atomic tick of the ledger: the minimal time to hand a distinction from one voxel to the next.</p>
+          <p>\[ \tau_{\mathrm{rec}} = \frac{\lambda_{\mathrm{rec}}}{c} = \frac{2.20\,\mu\mathrm{m}}{c} \approx 7.33\,\mathrm{fs}. \]</p>
+          <p><strong>Role.</strong> Defines the universal clock; complete 3D recognition requires \(N_{\text{ticks}}=2^3=8\) ticks.</p>
+          <p><strong>Origin.</strong> Bandwidth-limited null exchange across \(\lambda_{\mathrm{rec}}\).</p>
+        </div>`,
           
-        'lambda_rec': `<strong>λ_rec = 2.20 μm</strong><br>
-          <em>Recognition Length</em><br><br>
-          The minimal stable separation for recognition exchange.<br><br>
-          <strong>Role:</strong> Sets spatial bandwidth of the ledger<br>
-          <strong>Origin:</strong> Fixed by dual-balance stability constraints`,
+        'lambda_rec': `<div class="constant-detail">
+          <strong>\lambda_{\mathrm{rec}} = 2.20\,\mu\text{m}</strong>
+          <em>Recognition Length</em>
+          <p>The minimal stable separation for a recognition hop. Below this, dual-balance stability is lost.</p>
+          <p><strong>Role.</strong> Sets the spatial bandwidth and, with \(\tau_{\mathrm{rec}}\), fixes \(c\).</p>
+          <p><strong>Origin.</strong> Stability of the eight‑beat traversal in 3D (voxel geometry).</p>
+        </div>`,
           
-        'alphabet': `<strong>A_L = {1, φ, φ², ...}</strong><br>
-          <em>Ledger Alphabet</em><br><br>
-          The permitted scaling values in recognition operations.<br>
-          Primary element: φ (golden ratio) from self-similarity<br><br>
-          <strong>Role:</strong> Controls all scaling exponents<br>
-          <strong>Origin:</strong> Unique fixed point of dual-balance`,
+        'alphabet': `<div class="constant-detail">
+          <strong>A_{\!L} = \{1,\,\varphi,\,\varphi^{2},\,\dots\}</strong>
+          <em>Ledger Alphabet</em>
+          <p>Permitted self-similar scaling digits for recognition operations. The generator is the golden ratio \(\varphi\).</p>
+          <p>\[ x = 1 + \frac{1}{x} \;\Longrightarrow\; x = \varphi = \frac{1+\sqrt{5}}{2}. \]</p>
+          <p>Dual-balance invariance of \(J(x)=\tfrac12(x+1/x)\) forces \(\varphi\) as the unique non‑trivial fixed point.</p>
+          <p><strong>Role.</strong> Controls all scaling exponents across the framework.</p>
+        </div>`,
           
-        'sectors': `<strong>B_i = {1, 2, 3, 4, 6, 8, 9, 12}</strong><br>
-          <em>Sector Factors</em><br><br>
-          Discrete multiplicity factors from path topology.<br><br>
-          <strong>Role:</strong> Linear prefactors in mass formula<br>
-          <strong>Origin:</strong> Recognition path combinatorics`,
+        'sectors': `<div class="constant-detail">
+          <strong>B_i \in \{1,2,3,4,6,8,9,12\}</strong>
+          <em>Sector Factors</em>
+          <p>Discrete multiplicity from recognition‑path topology and representation. Appears linearly in the mass ladder:</p>
+          <p>\[ m = B\,E_{\mathrm{coh}}\,\varphi^{\,r+f}. \]</p>
+          <p><strong>Origin.</strong> Counting independent channels in the recognition register; fixed combinatorially.</p>
+        </div>`,
           
-        'delta_gap': `<strong>δ_gap = 0.006115</strong><br>
-          <em>Ledger Gap (45-Gap)</em><br><br>
-          Quantized incomputability correction from the 45° phase boundary.<br><br>
-          <strong>Role:</strong> Produces tiny corrections (f terms) in masses<br>
-          <strong>Origin:</strong> Fundamental limit in forward computability`,
+        'delta_gap': `<div class="constant-detail">
+          <strong>\delta_{\text{gap}} \approx 0.006115</strong>
+          <em>Ledger Gap (45‑Gap)</em>
+          <p>A universal, quantized incomputability that yields tiny, signed corrections.</p>
+          <p>Gap series:</p>
+          <p>\[ \mathcal F(z) = \sum_{m\ge1} \frac{(-1)^{m+1}}{m\,\varphi^{m}}\,z^{m} = \ln\!\bigl(1+\tfrac{z}{\varphi}\bigr). \]</p>
+          <p>At \(z=1\): \(\mathcal F(1)=\ln\varphi\). A useful small constant is \(\delta\approx\tfrac{1}{8\ln\varphi}=0.006115\).</p>
+          <p><strong>Role.</strong> Supplies the fractional residues \(f\) and tiny curvature/gap corrections used across domains.</p>
+        </div>`,
         // Theorems
         'T1': '<strong>Theorem 1 — Universal Ledger.</strong> A globally conserved count exists; continuity and conservation laws follow.',
         'T2': '<strong>Theorem 2 — Golden‑Ratio Scaling.</strong> φ is the unique non-trivial self‑similar fixed point under dual balance.',
