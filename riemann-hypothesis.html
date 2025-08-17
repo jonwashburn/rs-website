@@ -97,6 +97,9 @@
         .figure svg { width: 100%; height: auto; display: block; margin: 0 auto; }
         .figure .mermaid { text-align: center; margin: 0 auto; }
         .figure-caption { text-align: center; color: var(--color-text-muted); font-size: 0.9rem; margin-top: 0.5rem; }
+        /* Fix Mermaid node height */
+        .mermaid .node rect { height: auto !important; min-height: 40px !important; }
+        .mermaid .node text { dominant-baseline: middle; }
         .diagram-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.75rem; }
         .callout { background: #fff; border-left: 4px solid var(--color-accent); padding: 0.75rem 1rem; border-radius: 6px; margin: 0.75rem 0; }
         .callout strong { color: var(--color-primary); }
@@ -135,61 +138,6 @@
       </div>
     </section>
     
-    <!-- Executive Map (two routes to RH) -->
-    <section class="template-section">
-      <div class="template-container">
-        <h2 class="template-section-title">Executive map (two routes to RH)</h2>
-        <div class="figure">
-          <div class="mermaid">
-graph TD
-    subgraph I["Interior / KYP-alignment"]
-        KYP["Lossless prime-grid H_N with KYP"] --> ALN["Alignment on compacts"]
-        ALN --> CLS["Schur closure under limits"]
-    end
-
-    subgraph B["Boundary / P+"]
-        SMO["Smoothed boundary estimates"] --> PSC["Poisson-Carleson inequality"]
-        PSC --> PCERT["P+ certificate"]
-        PCERT --> HERG["2J is Herglotz on Omega"]
-    end
-
-    CLS --> BRF["BRF: Theta Schur on Omega"]
-    HERG --> BRF
-    BRF --> RH["No zeros on critical line"]
-
-    style BRF fill:#ecfeff,color:#0e7490
-    style RH fill:#fff7ed,color:#9a3412
-          </div>
-          <div class="figure-caption">Two closure paths: interior alignment of lossless models, or boundary positivity (P+) with explicit constants.</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- High-level Proof Track (Mermaid) -->
-    <section class="template-section">
-      <div class="template-container">
-        <h2 class="template-section-title">Proof track (high‑level)</h2>
-        <div class="figure">
-          <div class="mermaid">
-graph TD
-    A["Schur-determinant split"] --> B["HS continuity"]
-    B --> C["Prime-grid lossless KYP"]
-    C --> D["Alignment and Cayley bound"]
-    D --> E["Boundary on rectangles"]
-    E --> E2["Blaschke compensation"]
-    E2 --> F["Smoothed estimates"]
-    F --> G["Poisson-Carleson P+"]
-    G --> H["2J is Herglotz"]
-    H --> I["Theta is Schur"]
-    I --> J["Pick kernel PSD"]
-    J --> K["No zeros on critical line"]
-    I -.-> L["Exhaustion and removable singularities"]
-    L --> K
-          </div>
-          <div class="figure-caption">High‑level architecture: construction → boundary control → contractivity → RH.</div>
-        </div>
-      </div>
-    </section>
     <!-- Proof Deep Dive -->
     <section class="template-section">
       <div class="template-container">
@@ -765,6 +713,62 @@ graph TD
           </div>
         </div>
         <p class="note" style="margin-top:0.75rem;">Notation: \(\Theta=(H-1)/(H+1)\), \(H=2\,\det_2(I-A)/\xi-1\). HS = Hilbert–Schmidt, KYP = Kalman–Yakubovich–Popov.</p>
+      </div>
+    </section>
+
+    <!-- Executive Map (two routes to RH) -->
+    <section class="template-section">
+      <div class="template-container">
+        <h2 class="template-section-title">Executive map (two routes to RH)</h2>
+        <div class="figure">
+          <div class="mermaid">
+graph TD
+    subgraph I["Interior / KYP-alignment"]
+        KYP["Lossless prime-grid H_N with KYP"] --> ALN["Alignment on compacts"]
+        ALN --> CLS["Schur closure under limits"]
+    end
+
+    subgraph B["Boundary / P+"]
+        SMO["Smoothed boundary estimates"] --> PSC["Poisson-Carleson inequality"]
+        PSC --> PCERT["P+ certificate"]
+        PCERT --> HERG["2J is Herglotz on Omega"]
+    end
+
+    CLS --> BRF["BRF: Theta Schur on Omega"]
+    HERG --> BRF
+    BRF --> RH["No zeros on critical line"]
+
+    style BRF fill:#ecfeff,color:#0e7490
+    style RH fill:#fff7ed,color:#9a3412
+          </div>
+          <div class="figure-caption">Two closure paths: interior alignment of lossless models, or boundary positivity (P+) with explicit constants.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- High-level Proof Track (Mermaid) -->
+    <section class="template-section">
+      <div class="template-container">
+        <h2 class="template-section-title">Proof track (high‑level)</h2>
+        <div class="figure">
+          <div class="mermaid">
+graph TD
+    A["Schur-determinant split"] --> B["HS continuity"]
+    B --> C["Prime-grid lossless KYP"]
+    C --> D["Alignment and Cayley bound"]
+    D --> E["Boundary on rectangles"]
+    E --> E2["Blaschke compensation"]
+    E2 --> F["Smoothed estimates"]
+    F --> G["Poisson-Carleson P+"]
+    G --> H["2J is Herglotz"]
+    H --> I["Theta is Schur"]
+    I --> J["Pick kernel PSD"]
+    J --> K["No zeros on critical line"]
+    I -.-> L["Exhaustion and removable singularities"]
+    L --> K
+          </div>
+          <div class="figure-caption">High‑level architecture: construction → boundary control → contractivity → RH.</div>
+        </div>
       </div>
     </section>
 
