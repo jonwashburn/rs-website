@@ -141,24 +141,23 @@
         <div class="figure">
           <div class="mermaid">
 graph TD
-  classDef goal fill:#ecfeff,stroke:#06b6d4,color:#0e7490,stroke-width:1px
-  classDef step fill:#fff7ed,stroke:#fdba74,color:#9a3412
-  classDef route fill:#f1f5f9,stroke:#cbd5e1,color:#334155
+    subgraph I["Interior / KYP-alignment"]
+        KYP["Lossless prime-grid H_N with KYP"] --> ALN["Alignment on compacts"]
+        ALN --> CLS["Schur closure under limits"]
+    end
 
-  subgraph I[Interior / KYP-alignment]
-    KYP[Lossless prime-grid H_N with KYP]:::route --> ALN[Alignment on compacts]:::route
-    ALN --> CLS[Schur closure under limits]:::route
-  end
+    subgraph B["Boundary / P+"]
+        SMO["Smoothed boundary estimates"] --> PSC["Poisson-Carleson inequality"]
+        PSC --> PCERT["P+ certificate"]
+        PCERT --> HERG["2J is Herglotz on Omega"]
+    end
 
-  subgraph B[Boundary / P+]
-    SMO[Smoothed boundary estimates]:::route --> PSC[Poisson-Carleson inequality]:::route
-    PSC --> PCERT[P+ certificate]:::route
-    PCERT --> HERG[2J is Herglotz on Omega]:::route
-  end
+    CLS --> BRF["BRF: Theta Schur on Omega"]
+    HERG --> BRF
+    BRF --> RH["No zeros on critical line"]
 
-  CLS --> BRF[BRF: Theta Schur on Omega]:::goal
-  HERG --> BRF
-  BRF --> RH[No zeros on critical line]:::step
+    style BRF fill:#ecfeff,color:#0e7490
+    style RH fill:#fff7ed,color:#9a3412
           </div>
           <div class="figure-caption">Two closure paths: interior alignment of lossless models, or boundary positivity (P+) with explicit constants.</div>
         </div>
@@ -172,19 +171,19 @@ graph TD
         <div class="figure">
           <div class="mermaid">
 graph TD
-  A[Schur-determinant split] --> B[HS continuity]
-  B --> C[Prime-grid lossless KYP]
-  C --> D[Alignment and Cayley bound]
-  D --> E[Boundary on rectangles]
-  E --> E2[Blaschke compensation]
-  E2 --> F[Smoothed estimates]
-  F --> G[Poisson-Carleson P+]
-  G --> H[2J is Herglotz]
-  H --> I[Theta is Schur]
-  I --> J[Pick kernel PSD]
-  J --> K[No zeros on critical line]
-  I -.-> L[Exhaustion and removable singularities]
-  L --> K
+    A["Schur-determinant split"] --> B["HS continuity"]
+    B --> C["Prime-grid lossless KYP"]
+    C --> D["Alignment and Cayley bound"]
+    D --> E["Boundary on rectangles"]
+    E --> E2["Blaschke compensation"]
+    E2 --> F["Smoothed estimates"]
+    F --> G["Poisson-Carleson P+"]
+    G --> H["2J is Herglotz"]
+    H --> I["Theta is Schur"]
+    I --> J["Pick kernel PSD"]
+    J --> K["No zeros on critical line"]
+    I -.-> L["Exhaustion and removable singularities"]
+    L --> K
           </div>
           <div class="figure-caption">High‑level architecture: construction → boundary control → contractivity → RH.</div>
         </div>
@@ -845,13 +844,12 @@ graph TD
     <div id="footer-placeholder"></div>
     <script src="/assets/js/main.js"></script>
     <!-- Mermaid for the high‑level proof track -->
-    <script type="module">
-      try {
-        const m = await import('https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs');
-        m.default.initialize({ startOnLoad: true, theme: 'base' });
-      } catch (e) {
-        console.warn('Mermaid failed to load', e);
-      }
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+      mermaid.initialize({ startOnLoad: false, theme: 'default' });
+      window.addEventListener('DOMContentLoaded', () => {
+        mermaid.run({ nodes: document.querySelectorAll('.mermaid') });
+      });
     </script>
     <!-- Lightweight audio player -->
     <audio id="podcastAudio" preload="metadata"></audio>
