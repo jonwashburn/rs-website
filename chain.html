@@ -315,30 +315,6 @@
                 overflow-wrap: anywhere;
             }
         }
-
-        /* Compact theorems block (scoped) */
-        .theorem-compact .template-section-title { font-size: 1.05rem; margin-bottom: 0.75rem; }
-        .theorem-compact .theorem-compact-list {
-          list-style: none; margin: 0; padding: 0;
-          display: grid; gap: 10px;
-          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        }
-        .theorem-compact .theorem-compact-list li {
-          display: grid; grid-template-columns: auto 1fr; gap: 8px;
-          align-items: start; padding: 8px 10px;
-          background: var(--color-bg-subtle);
-          border: 1px solid var(--color-border-light); border-radius: 6px;
-        }
-        .theorem-compact .th-num {
-          font-weight: 700; font-size: 0.8rem;
-          background: #fff; border: 1px solid var(--color-border-light);
-          border-radius: 4px; padding: 2px 6px; color: var(--color-text-muted);
-        }
-        .theorem-compact .th-body { font-size: 0.92rem; }
-        .theorem-compact .th-title { font-weight: 600; line-height: 1.2; }
-        .theorem-compact .th-title a { text-decoration: none; color: var(--color-text-primary); }
-        .theorem-compact .th-title a:hover { text-decoration: underline; }
-        .theorem-compact .th-classical { color: var(--color-text-muted); font-size: 0.85rem; margin-top: 2px; }
     </style>
 </head>
 <body class="template-page">
@@ -375,67 +351,66 @@
     </section>
 
     <!-- Eight Theorems (inserted) -->
-    <section class="theorem-section theorem-compact">
+    <section class="theorem-section">
         <div class="template-container">
-            <h2 class="template-section-title">Eight Theorems (with classical correspondences)</h2>
-            <ul class="theorem-compact-list">
-                <li>
-                    <span class="th-num">T1</span>
-                    <div class="th-body">
-                        <div class="th-title"><a href="/theorems/T1-ledger-necessity.html">Ledger necessity & uniqueness</a></div>
-                        <div class="th-classical">Classical: state accounting framework; basis for conserved quantities</div>
-                    </div>
-                </li>
-                <li>
-                    <span class="th-num">T2</span>
-                    <div class="th-body">
-                        <div class="th-title"><a href="/theorems/T2-atomicity.html">Atomicity & countability</a></div>
-                        <div class="th-classical">Classical: quantization (discrete quanta, minimal tick/action)</div>
-                    </div>
-                </li>
-                <li>
-                    <span class="th-num">T3</span>
-                    <div class="th-body">
-                        <div class="th-title"><a href="/theorems/T3-conservation.html">Dual‑balance ⇒ local conservation</a></div>
-                        <div class="th-classical">Classical: continuity equations (∂tρ + ∇·J = 0)</div>
-                    </div>
-                </li>
-                <li>
-                    <span class="th-num">T4</span>
-                    <div class="th-body">
-                        <div class="th-title"><a href="/theorems/T4-unique-cost.html">Uniqueness of the cost functional</a></div>
-                        <div class="th-classical">Classical: least‑action style extremals; AM–GM bound</div>
-                    </div>
-                </li>
-                <li>
-                    <span class="th-num">T5</span>
-                    <div class="th-body">
-                        <div class="th-title"><a href="/theorems/T5-k-equals-1-phi.html">Self‑similarity selects k = 1 and φ</a></div>
-                        <div class="th-classical">Classical: scaling laws & RG fixed points</div>
-                    </div>
-                </li>
-                <li>
-                    <span class="th-num">T6</span>
-                    <div class="th-body">
-                        <div class="th-title"><a href="/theorems/T6-d-equals-3.html">Minimal stable spatial dimension d = 3</a></div>
-                        <div class="th-classical">Classical: 3D Newtonian space; knot/topology constraints</div>
-                    </div>
-                </li>
-                <li>
-                    <span class="th-num">T7</span>
-                    <div class="th-body">
-                        <div class="th-title"><a href="/theorems/T7-T-equals-8.html">Minimal recognition period T = 2^D (8 in 3D)</a></div>
-                        <div class="th-classical">Classical: Hamiltonian/Gray cycles; minimal complete traversal</div>
-                    </div>
-                </li>
-                <li>
-                    <span class="th-num">T8</span>
-                    <div class="th-body">
-                        <div class="th-title"><a href="/theorems/T8-causal-speed.html">Causal structure and a universal speed c</a></div>
-                        <div class="th-classical">Classical: light‑cones; relativistic causality</div>
-                    </div>
-                </li>
-            </ul>
+            <h2 class="template-section-title">The Eight Foundational Theorems</h2>
+            <p class="lead-text">From MP + Composability + Finiteness, these eight results form the spine of the framework.</p>
+            <article class="theorem-card">
+                <div class="theorem-number">Theorem 1</div>
+                <h3><a href="/theorems/T1-ledger-necessity.html">Ledger Necessity & Uniqueness</a></h3>
+                <div class="theorem-content">
+                    <p><strong>Statement:</strong> Any recognition structure satisfying MP + Composability + Finiteness admits a unique (up to order‑isomorphism) positive, double‑entry ledger with an immutable generator.</p>
+                </div>
+            </article>
+            <article class="theorem-card">
+                <div class="theorem-number">Theorem 2</div>
+                <h3><a href="/theorems/T2-atomicity.html">Atomicity & Countability</a></h3>
+                <div class="theorem-content">
+                    <p><strong>Statement:</strong> Each tick posts exactly one elementary ledger entry of size δ; concurrent postings at one tick are impossible.</p>
+                </div>
+            </article>
+            <article class="theorem-card">
+                <div class="theorem-number">Theorem 3</div>
+                <h3><a href="/theorems/T3-conservation.html">Dual‑Balance ⇒ Local Conservation</a></h3>
+                <div class="theorem-content">
+                    <p><strong>Statement:</strong> Additivity and dual‑balance imply a discrete continuity equation; in the coarse‑grained limit, ∂tρ + ∇·J = 0.</p>
+                </div>
+            </article>
+            <article class="theorem-card">
+                <div class="theorem-number">Theorem 4</div>
+                <h3><a href="/theorems/T4-unique-cost.html">Uniqueness of the Cost Functional</a></h3>
+                <div class="theorem-content">
+                    <p><strong>Statement:</strong> The only analytic, dual‑balanced, ledger‑finite cost is J(x) = ½(x + 1/x).</p>
+                </div>
+            </article>
+            <article class="theorem-card">
+                <div class="theorem-number">Theorem 5</div>
+                <h3><a href="/theorems/T5-k-equals-1-phi.html">Self‑Similarity selects k = 1 and φ</a></h3>
+                <div class="theorem-content">
+                    <p><strong>Statement:</strong> In x_{n+1} = 1 + k/x_n, countability and cost minimization force k = 1; fixed point φ.</p>
+                </div>
+            </article>
+            <article class="theorem-card">
+                <div class="theorem-number">Theorem 6</div>
+                <h3><a href="/theorems/T6-d-equals-3.html">Minimal Stable Spatial Dimension is d = 3</a></h3>
+                <div class="theorem-content">
+                    <p><strong>Statement:</strong> Stable non‑trivial linking requires exactly three spatial dimensions.</p>
+                </div>
+            </article>
+            <article class="theorem-card">
+                <div class="theorem-number">Theorem 7</div>
+                <h3><a href="/theorems/T7-T-equals-8.html">Minimal Recognition Period: T = 2³ = 8</a></h3>
+                <div class="theorem-content">
+                    <p><strong>Statement:</strong> On Q₃, any ledger‑compatible recognition has minimal period 8; in general T = 2^D.</p>
+                </div>
+            </article>
+            <article class="theorem-card">
+                <div class="theorem-number">Theorem 8</div>
+                <h3><a href="/theorems/T8-causal-speed.html">Causal Structure and a Universal Speed c</a></h3>
+                <div class="theorem-content">
+                    <p><strong>Statement:</strong> Atomic ticks on a nearest‑neighbor lattice define causal cones and a maximal speed c = L_min/τ₀.</p>
+                </div>
+            </article>
         </div>
     </section>
 
