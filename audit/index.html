@@ -1609,6 +1609,19 @@ CONSEQUENCE: Universe.exe initialized.
         p.push(`  mu/e = ${m.leptons_ratios.mu_over_e}`);
         p.push(`  tau/mu = ${m.leptons_ratios.tau_over_mu}`);
         p.push(`  tau/e = ${m.leptons_ratios.tau_over_e}`);
+        if (m.pdg) {
+          const e = m.pdg.electron_mass_MeV;
+          const mu = m.pdg.muon_mass_MeV;
+          const tau = m.pdg.tau_mass_MeV;
+          const mu_e = mu/e;
+          const tau_mu = tau/mu;
+          const tau_e = tau/e;
+          const pct = (x,y)=>(((x-y)/y)*100).toFixed(4)+'%';
+          p.push('Residuals vs PDG ratios:');
+          p.push(`  mu/e: ${pct(m.leptons_ratios.mu_over_e, mu_e)}`);
+          p.push(`  tau/mu: ${pct(m.leptons_ratios.tau_over_mu, tau_mu)}`);
+          p.push(`  tau/e: ${pct(m.leptons_ratios.tau_over_e, tau_e)}`);
+        }
         p.push('\nBoson ratios (W anchor):');
         p.push(`  Z/W = ${m.boson_ratios.Z_over_W}`);
         p.push(`  H/Z = ${m.boson_ratios.H_over_Z}`);
