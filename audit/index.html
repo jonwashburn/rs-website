@@ -1528,7 +1528,9 @@ CONSEQUENCE: Universe.exe initialized.
       try {
         const response = await fetch('https://raw.githubusercontent.com/jonwashburn/audit/main/docs/status.json');
         const data = await response.json();
-        const ciResponse = await fetch('https://raw.githubusercontent.com/jonwashburn/audit/main/docs/ci_status.json').then(r=>r.ok?r.json():{}).catch(()=>({}));
+        const ciRemote = await fetch('https://raw.githubusercontent.com/jonwashburn/audit/main/docs/ci_status.json').then(r=>r.ok?r.json():{}).catch(()=>({}));
+        const ciLocal  = await fetch('/docs/ci_status.json').then(r=>r.ok?r.json():{}).catch(()=>({}));
+        const ciResponse = Object.keys(ciRemote).length ? ciRemote : ciLocal;
         const canonRemote = await fetch('https://raw.githubusercontent.com/jonwashburn/audit/main/docs/canon.json').then(r=>r.ok?r.json():{}).catch(()=>({}));
         const canonLocal  = await fetch('/docs/canon.json').then(r=>r.ok?r.json():{}).catch(()=>({}));
         const canon = Object.keys(canonRemote).length ? canonRemote : canonLocal;
@@ -1559,7 +1561,7 @@ CONSEQUENCE: Universe.exe initialized.
             sEl.textContent = ciResponse.gates.stdout.split('\n').find(l=>l.includes('S')).replace('S   (brute)   = ','S = ');
           }
           if (bEl && ciResponse.gates.stdout) {
-            const m = ciResponse.gates.stdout.match(r"\|B\| \(brute\)\s*=\s*(\d+)");
+            const m = ciResponse.gates.stdout.match(/\|B\| \(brute\)\s*=\s*(\d+)/);
             if (m) bEl.textContent = `|B| = ${m[1]}`;
           }
         }
