@@ -367,6 +367,8 @@ cd audit
 python3 scripts/ci_status.py
 python3 scripts/ilg_gates_check.py</code></pre>
           <p>All verification scripts are parameter-free and deterministic.</p>
+          <h3>Mass Ladder Snapshot</h3>
+          <pre id="masses-snapshot">Loading mass snapshot...</pre>
         </div>
       </div>
     </section>
@@ -1570,6 +1572,23 @@ CONSEQUENCE: Universe.exe initialized.
     window.addEventListener('DOMContentLoaded', () => {
       mermaid.run({ nodes: document.querySelectorAll('.mermaid') });
       loadAuditData();
+      // Load masses snapshot
+      fetch('/docs/masses.json').then(r=>r.json()).then(m=>{
+        const p = [];
+        p.push('Lepton ratios:');
+        p.push(`  mu/e = ${m.leptons_ratios.mu_over_e}`);
+        p.push(`  tau/mu = ${m.leptons_ratios.tau_over_mu}`);
+        p.push(`  tau/e = ${m.leptons_ratios.tau_over_e}`);
+        p.push('\nBoson ratios (W anchor):');
+        p.push(`  Z/W = ${m.boson_ratios.Z_over_W}`);
+        p.push(`  H/Z = ${m.boson_ratios.H_over_Z}`);
+        p.push(`  W = ${m.anchored_absolutes.W_GeV} GeV`);
+        p.push(`  Z = ${m.anchored_absolutes.Z_GeV} GeV`);
+        p.push(`  H = ${m.anchored_absolutes.H_GeV} GeV`);
+        p.push('\nQuark ratios (phi-fixed):');
+        Object.entries(m.quark_phi_fixed_ratios).forEach(([k,v])=>p.push(`  ${k.replaceAll('_','/')} = ${v}`));
+        document.getElementById('masses-snapshot').textContent = p.join('\n');
+      }).catch(()=>{});
       
       // Add click handler for REAL GENIUS text
       const geniusLabel = document.getElementById('genius-label');
