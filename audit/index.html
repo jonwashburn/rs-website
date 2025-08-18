@@ -159,17 +159,17 @@
             <div class="constant-list">
               <div class="constant-item">
                 <span class="constant-name">E_coh</span>
-                <span class="constant-value">0.090 eV</span>
+                <span class="constant-value" id="canon-ecoheV">0.090 eV</span>
                 <span class="constant-derivation">From 8-beat energy scale</span>
               </div>
               <div class="constant-item">
                 <span class="constant-name">τ_rec</span>
-                <span class="constant-value">7.33 fs</span>
+                <span class="constant-value" id="canon-tau0">7.33 fs</span>
                 <span class="constant-derivation">From recognition tick rate</span>
               </div>
               <div class="constant-item">
                 <span class="constant-name">λ_rec</span>
-                <span class="constant-value">1.616×10^-35 m</span>
+                <span class="constant-value" id="canon-lambda-rec">1.616×10^-35 m</span>
                 <span class="constant-derivation">Planck length √(ħG/c^3)</span>
               </div>
               <div class="constant-item">
@@ -192,27 +192,27 @@
           <div class="parameter-card">
             <h3>Fine-Structure Constant</h3>
             <div class="formula-display">
-              α⁻¹ = (4π × 11) - f_gap + δκ
+              α⁻¹ = (4π × 11) - f_gap - δκ
             </div>
             <div class="parameter-breakdown">
               <div class="param-item">
                 <span>4π × 11</span>
-                <span>= 138.230076758</span>
+                <span id="alpha-seed">= 138.230076758</span>
                 <span class="source">Geometric (no parameters)</span>
               </div>
               <div class="param-item">
                 <span>f_gap</span>
-                <span>= 1.19737744</span>
+                <span id="alpha-fgap">= 1.19737744</span>
                 <span class="source">Ledger-gap series (parameter-free)</span>
               </div>
               <div class="param-item">
                 <span>δκ</span>
-                <span>= -0.003299762049</span>
+                <span id="alpha-dkappa">= -0.003299762049</span>
                 <span class="source">Curvature closure −103/(102·π^5)</span>
               </div>
               <div class="param-result">
                 <span>Result:</span>
-                <span class="template-accent-text">137.03599908</span>
+                <span class="template-accent-text" id="alpha-result">137.03599908</span>
                 <span>Free parameters: 0</span>
               </div>
             </div>
@@ -1521,6 +1521,7 @@ CONSEQUENCE: Universe.exe initialized.
       try {
         const response = await fetch('https://raw.githubusercontent.com/jonwashburn/audit/main/docs/status.json');
         const data = await response.json();
+        const canon = await (await fetch('https://raw.githubusercontent.com/jonwashburn/audit/main/docs/canon.json')).json().catch(()=>({}));
         
         // Update status
         document.getElementById('audit-status').textContent = data.verdict?.level || 'OPERATIONAL';
@@ -1539,6 +1540,20 @@ CONSEQUENCE: Universe.exe initialized.
           });
         }, 2000);
         
+        // Populate canonical constants if available
+        if (canon && canon.constants) {
+          const { E_coh_eV, tau0_fs, lambda_rec_m, alpha } = canon.constants;
+          if (E_coh_eV) document.getElementById('canon-ecoheV').textContent = `${E_coh_eV} eV`;
+          if (tau0_fs) document.getElementById('canon-tau0').textContent = `${tau0_fs} fs`;
+          if (lambda_rec_m) document.getElementById('canon-lambda-rec').textContent = `${lambda_rec_m} m`;
+          if (alpha) {
+            if (alpha.seed) document.getElementById('alpha-seed').textContent = `= ${alpha.seed}`;
+            if (alpha.f_gap) document.getElementById('alpha-fgap').textContent = `= ${alpha.f_gap}`;
+            if (alpha.delta_kappa) document.getElementById('alpha-dkappa').textContent = `= ${alpha.delta_kappa}`;
+            if (alpha.inverse) document.getElementById('alpha-result').textContent = `${alpha.inverse}`;
+          }
+        }
+
         // Load study guide
         const guideResponse = await fetch('https://raw.githubusercontent.com/jonwashburn/audit/main/docs/Recognition-Science-Study-Guide.md');
         const guideText = await guideResponse.text();
