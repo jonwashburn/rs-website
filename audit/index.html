@@ -173,6 +173,11 @@
                 <span class="constant-derivation">Planck length √(ħG/c^3)</span>
               </div>
               <div class="constant-item">
+                <span class="constant-name">λ_IR</span>
+                <span class="constant-value" id="canon-lambda-ir">—</span>
+                <span class="constant-derivation">Coherence wavelength ħc/E_coh</span>
+              </div>
+              <div class="constant-item">
                 <span class="constant-name">δ_gap</span>
                 <span class="constant-value">0.006115</span>
                 <span class="constant-derivation">From 45-gap incomputability</span>
@@ -314,9 +319,9 @@
               <span>Checking...</span>
             </div>
             <div class="verification-details">
-              <code>S = 489/512</code>
-              <code>β = 18.782</code>
-              <code>a₀ = 1.2×10⁻¹⁰ m/s²</code>
+              <code id="ilg-S">S = 489/512</code>
+              <code id="ilg-B">|B| = 46</code>
+              <code id="ilg-note">nine-gate schedule</code>
             </div>
           </div>
           
@@ -1523,6 +1528,7 @@ CONSEQUENCE: Universe.exe initialized.
       try {
         const response = await fetch('https://raw.githubusercontent.com/jonwashburn/audit/main/docs/status.json');
         const data = await response.json();
+        const ciResponse = await fetch('https://raw.githubusercontent.com/jonwashburn/audit/main/docs/ci_status.json').then(r=>r.ok?r.json():{}).catch(()=>({}));
         const canonRemote = await fetch('https://raw.githubusercontent.com/jonwashburn/audit/main/docs/canon.json').then(r=>r.ok?r.json():{}).catch(()=>({}));
         const canonLocal  = await fetch('/docs/canon.json').then(r=>r.ok?r.json():{}).catch(()=>({}));
         const canon = Object.keys(canonRemote).length ? canonRemote : canonLocal;
@@ -1531,25 +1537,47 @@ CONSEQUENCE: Universe.exe initialized.
         document.getElementById('audit-status').textContent = data.verdict?.level || 'OPERATIONAL';
         document.getElementById('last-update').textContent = data.last_updated || new Date().toISOString().split('T')[0];
         
-        // Update verification statuses
-        setTimeout(() => {
-          document.querySelectorAll('.status-indicator').forEach(indicator => {
-            indicator.classList.remove('loading');
-            indicator.classList.add('pass');
-          });
-          document.querySelectorAll('.verification-status span').forEach(span => {
-            if (span.textContent === 'Checking...') {
-              span.textContent = 'PASSED';
-            }
-          });
-        }, 2000);
+        // Update verification statuses from ci_status when available
+        function setStatus(elId, passed) {
+          const el = document.getElementById(elId);
+          if (!el) return;
+          const dot = el.querySelector('.status-indicator');
+          const txt = el.querySelector('span');
+          if (dot) {
+            dot.classList.remove('loading');
+            dot.classList.add(passed ? 'pass' : 'fail');
+          }
+          if (txt) txt.textContent = passed ? 'PASSED' : 'FAILED';
+        }
+
+        if (ciResponse && ciResponse.gates) {
+          setStatus('ilg-status', !!ciResponse.gates.passed);
+          // Fill ILG details
+          const sEl = document.getElementById('ilg-S');
+          const bEl = document.getElementById('ilg-B');
+          if (sEl && ciResponse.gates.stdout) {
+            sEl.textContent = ciResponse.gates.stdout.split('\n').find(l=>l.includes('S')).replace('S   (brute)   = ','S = ');
+          }
+          if (bEl && ciResponse.gates.stdout) {
+            const m = ciResponse.gates.stdout.match(r"\|B\| \(brute\)\s*=\s*(\d+)");
+            if (m) bEl.textContent = `|B| = ${m[1]}`;
+          }
+        }
+
+        if (ciResponse && ciResponse.masses_json) setStatus('mass-status', !!ciResponse.masses_json.passed);
+        if (ciResponse && ciResponse.cons_3d) setStatus('conservation-status', !!ciResponse.cons_3d.passed);
+        if (ciResponse && ciResponse.growth_json && ciResponse.lensing_json) {
+          const passed = !!(ciResponse.growth_json.passed && ciResponse.lensing_json.passed);
+          setStatus('cosmology-status', passed);
+        }
         
         // Populate canonical constants if available
         if (canon && canon.constants) {
-          const { E_coh_eV, tau0_fs, lambda_rec_m, alpha } = canon.constants;
+          const { E_coh_eV, tau0_fs, lambda_rec_m, lambda_IR_um, alpha } = canon.constants;
           if (E_coh_eV) document.getElementById('canon-ecoheV').textContent = `${E_coh_eV} eV`;
           if (tau0_fs) document.getElementById('canon-tau0').textContent = `${tau0_fs} fs`;
           if (lambda_rec_m) document.getElementById('canon-lambda-rec').textContent = `${lambda_rec_m} m`;
+          if (lambda_IR_um) document.getElementById('canon-lambda-ir').textContent = `${lambda_IR_um} µm`;
           if (alpha) {
             if (alpha.seed) document.getElementById('alpha-seed').textContent = `= ${alpha.seed}`;
             if (alpha.f_gap) document.getElementById('alpha-fgap').textContent = `= ${alpha.f_gap}`;
