@@ -136,8 +136,8 @@
               </div>
               <div class="derivation-node theorem">
                 <h4>T6: Light = Recognition</h4>
-                <p>c = λ_rec / τ_rec</p>
-                <code>From: Information flow</code>
+                <p>c = λ_IR / τ_rec</p>
+                <code>From: Information flow (coherence wavelength)</code>
               </div>
               <div class="derivation-node theorem">
                 <h4>T7: Mass Formula</h4>
@@ -1521,7 +1521,9 @@ CONSEQUENCE: Universe.exe initialized.
       try {
         const response = await fetch('https://raw.githubusercontent.com/jonwashburn/audit/main/docs/status.json');
         const data = await response.json();
-        const canon = await (await fetch('https://raw.githubusercontent.com/jonwashburn/audit/main/docs/canon.json')).json().catch(()=>({}));
+        const canonRemote = await fetch('https://raw.githubusercontent.com/jonwashburn/audit/main/docs/canon.json').then(r=>r.ok?r.json():{}).catch(()=>({}));
+        const canonLocal  = await fetch('/docs/canon.json').then(r=>r.ok?r.json():{}).catch(()=>({}));
+        const canon = Object.keys(canonRemote).length ? canonRemote : canonLocal;
         
         // Update status
         document.getElementById('audit-status').textContent = data.verdict?.level || 'OPERATIONAL';
