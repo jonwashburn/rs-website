@@ -303,7 +303,7 @@ end IndisputableMonolith`;
             .code-line {
                 display: flex;
                 align-items: baseline;
-                font-family: 'SF Mono', Monaco, monospace;
+                font-family: 'SF Mono', Monaco, 'Courier New', monospace;
                 font-size: 0.875rem;
                 line-height: 1.5;
             }
@@ -322,6 +322,7 @@ end IndisputableMonolith`;
                 flex: 1;
                 white-space: pre;
                 overflow-x: auto;
+                font-family: inherit;
             }
             .hotspot {
                 cursor: pointer;
@@ -335,21 +336,35 @@ end IndisputableMonolith`;
             }
             .tooltip {
                 position: absolute;
-                background: var(--color-primary);
+                background: #1e293b;
                 color: white;
-                padding: 0.75rem 1rem;
-                border-radius: 6px;
+                padding: 1rem 1.25rem;
+                border-radius: 8px;
                 font-size: 0.875rem;
-                line-height: 1.5;
-                max-width: 400px;
+                line-height: 1.6;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                font-weight: normal;
+                max-width: 500px;
                 z-index: 1000;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
                 opacity: 0;
                 pointer-events: none;
                 transition: opacity 0.15s ease;
             }
             .tooltip.active {
                 opacity: 1;
+            }
+            .tooltip p {
+                margin: 0 0 0.5rem 0;
+                font-size: 0.875rem;
+                line-height: 1.6;
+            }
+            .tooltip p:last-child {
+                margin-bottom: 0;
+            }
+            .tooltip strong {
+                font-weight: 600;
+                color: #f8fafc;
             }
             .tooltip::after {
                 content: '';
@@ -358,7 +373,7 @@ end IndisputableMonolith`;
                 left: 20px;
                 width: 10px;
                 height: 10px;
-                background: var(--color-primary);
+                background: #1e293b;
                 transform: rotate(45deg);
             }
         `;
