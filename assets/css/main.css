@@ -1451,7 +1451,8 @@ a:hover {
 }
 
 /* Tiny verified badge with controlled sizing */
-.verified-badge {
+.verified-badge,
+a.verified-badge {
   display: inline-block !important;
   padding: 2px 6px !important;
   background: #10b981 !important;
@@ -1470,20 +1471,48 @@ a:hover {
   vertical-align: baseline !important;
   height: auto !important;
   box-sizing: border-box !important;
+  position: relative !important;
+  z-index: 1 !important;
 }
 
 .verified-badge:hover,
-.verified-badge:focus {
+a.verified-badge:hover,
+.verified-badge:focus,
+a.verified-badge:focus {
   background: #059669 !important;
   color: white !important;
   text-decoration: none !important;
   transform: none !important;
   outline: none !important;
+  cursor: pointer !important;
 }
 
 /* Prevent badge from affecting header height */
 .header-container {
   align-items: center;
+}
+
+/* Override any inherited cursor styles */
+.logo * {
+  cursor: default;
+}
+
+.logo a,
+.logo a.verified-badge {
+  cursor: pointer !important;
+}
+
+/* Prevent header expansion on interaction */
+.site-header,
+.header-container,
+.logo {
+  overflow: hidden;
+  max-height: none;
+}
+
+/* Ensure badge doesn't trigger layout shifts */
+.verified-badge {
+  flex-shrink: 0;
 }
 
 /* Mobile responsiveness for verified badge */
