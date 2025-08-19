@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lean Training: IndisputableMonolith.lean | Recognition Physics</title>
+    <meta name="description" content="AI training guide for the formal Lean proofs of Recognition Science theorems.">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/site-template.css">
+</head>
+
+<body class="template-page">
+    <div id="header-placeholder"></div>
+
+    <div class="template-container">
+        <h1>LEAN TRAINING: IndisputableMonolith.lean</h1>
+        
+        <p><a href="/downloads/IndisputableMonolith_Training.txt" download="IndisputableMonolith_Training.txt">DOWNLOAD LEAN TRAINING TEXT FILE</a></p>
+
+<pre>
+LEAN TRAINING GUIDE: IndisputableMonolith.lean
+==============================================
+
+PURPOSE: AI training for formal verification of Recognition Science theorems.
+FILE: IndisputableMonolith.lean (1490 lines, sorry-free)
+STATUS: All eight theorems T1-T8 formally proved in Lean 4 + Mathlib
+
+PROOF STRUCTURE OVERVIEW
+========================
+- T1 (MP): mp_holds — Nothing cannot recognize itself
+- T2 (Atomicity): T2_atomicity — unique posting per tick
+- T3 (Continuity): T3_continuity — flux vanishes on closed chains  
+- T4 (Potential): T4_unique_on_component — uniqueness up to constant
+- T5 (Cost): T5_cost_uniqueness_on_pos — J(x) unique on ℝ₊
+- T6 (Eight-tick): eight_tick_min + T6_exist_8 — period = 2^D
+- T7 (Nyquist): T7_nyquist_obstruction — coverage lower bound
+- T8 (Units): LedgerUnits.equiv_delta — δ-subgroup ≃ ℤ
+
+CORE DEFINITIONS
+===============
+Nothing := Empty
+Recognition (A B : Type) := {recognizer : A, recognized : B}
+MP : Prop := ¬ ∃ _ : Recognition Nothing Nothing, True
+
+RecognitionStructure := {U : Type, R : U → U → Prop}
+Chain (M : RecognitionStructure) := {n : Nat, f : Fin (n+1) → M.U, ok : ∀ i, M.R (f i.castSucc) (f i.succ)}
+Ledger (M : RecognitionStructure) := {debit : M.U → ℤ, credit : M.U → ℤ}
+phi (L : Ledger M) : M.U → ℤ := fun u => L.debit u - L.credit u
+chainFlux (L : Ledger M) (ch : Chain M) : ℤ := phi L (Chain.last ch) - phi L (Chain.head ch)
+
+THEOREM PROOFS (LEAN FUNCTIONS)
+===============================
+
+T1: mp_holds : MP
+- Proof: intro ⟨⟨r, _⟩, _⟩; cases r
+- Logic: Empty type has no constructors
+
+T2: T2_atomicity {M} [AtomicTick M] : ∀ t u v, postedAt t u → postedAt t v → u = v
+- Uses: unique_post from AtomicTick class
+- Logic: existential uniqueness implies equality
+
+T3: T3_continuity {M} (L : Ledger M) [Conserves L] : ∀ ch, ch.head = ch.last → chainFlux L ch = 0
+- Direct: Conserves.conserve (interface axiom)
+- Bridge: discrete continuity equation
+
+T4: T4_unique_on_component {δ} {p q : Pot M} (hp : DE δ p) (hq : DE δ q) {x0 y} (hbase : p x0 = q x0) (hreach : Reaches x0 y) : p y = q y
+- Uses: diff_const_on_ReachN via edge_diff_invariant
+- Logic: constant difference propagates along paths
+
+T5: T5_cost_uniqueness_on_pos {F : ℝ → ℝ} [JensenSketch F] : ∀ {x}, 0 < x → F x = Jcost x
+- Uses: AveragingDerivation interface + exp-axis agreement
+- Logic: symmetry + unit + averaging → unique cost
+
+T6: eight_tick_min {T} (pass : Fin T → Pattern 3) (covers : Surjective pass) : 8 ≤ T
+- Uses: no_surj_small via cardinality argument
+- Logic: cannot cover 2^3 patterns with < 8 elements
+
+T7: T7_nyquist_obstruction {T D} (hT : T < 2^D) : ¬ ∃ f : Fin T → Pattern D, Surjective f
+- Alias: no_surj_small
+- Logic: cardinality obstruction
+
+T8: LedgerUnits.equiv_delta (δ ≠ 0) : DeltaSub δ ≃ ℤ
+- Maps: n·δ ↦ n (non-canonical for δ ≠ 0)
+- Logic: subgroup isomorphism via Classical.choose
+
+KEY LEAN TECHNIQUES USED
+========================
+1. Inductive types: ReachN, Chain construction
+2. Classical logic: Classical.choose for existence
+3. Typeclass system: AtomicTick, Conserves, SymmUnit
+4. Cardinality arguments: Fintype.card bounds
+5. Field arithmetic: field_simp for algebraic manipulation
+6. Real analysis: Real.exp, Real.log, derivatives
+7. Subtype construction: DeltaSub as {x // ∃ n, x = n * δ}
+
+CAUSALITY FRAMEWORK
+==================
+ReachN (K : Kinematics α) : Nat → α → α → Prop
+| zero {x} : ReachN K 0 x x
+| succ {n x y z} : ReachN K n x y → K.step y z → ReachN K (n+1) x z
+
+inBall (K : Kinematics α) (x : α) (n : Nat) (y : α) : Prop := ∃ k ≤ n, ReachN K k x y
+
+ballP (K : Kinematics α) (x : α) : Nat → α → Prop
+| 0, y => y = x  
+| Nat.succ n, y => ballP K x n y ∨ ∃ z, ballP K x n z ∧ K.step z y
+
+COST UNIQUENESS FRAMEWORK
+=========================
+Jcost (x : ℝ) : ℝ := (x + x⁻¹) / 2 - 1
+
+SymmUnit (F : ℝ → ℝ) : Prop := 
+- symmetric : ∀ {x}, 0 < x → F x = F x⁻¹
+- unit0 : F 1 = 0
+
+AveragingDerivation (F : ℝ → ℝ) extends SymmUnit F : Prop :=
+- agrees : AgreesOnExp F (∀ t, F (Real.exp t) = Jcost (Real.exp t))
+
+LogModel (G : ℝ → ℝ) : Prop :=
+- even_log : ∀ t, G (-t) = G t
+- base0 : G 0 = 0  
+- upper_cosh : ∀ t, G t ≤ ((Real.exp t + Real.exp (-t)) / 2 - 1)
+- lower_cosh : ∀ t, ((Real.exp t + Real.exp (-t)) / 2 - 1) ≤ G t
+
+CLASSICAL BRIDGE MAPPINGS
+=========================
+T3: Conserves ↔ DiscreteContinuity (∂ρ/∂t + ∇·J = 0)
+T4: Potential uniqueness ↔ Gauge freedom (up to additive constant)
+T5: Cost uniqueness ↔ Stationary action / Euler-Lagrange
+T6: Eight-tick ↔ Minimal period (discrete time structure)
+
+CONSTANTS FRAMEWORK
+==================
+RSUnits := {tau0 : ℝ, ell0 : ℝ, Ecoh : ℝ, positivity proofs}
+ClassicalParams := {G : ℝ, alpha : ℝ, pos_G : 0 < G}
+
+Derived constants:
+- c (U : RSUnits) : ℝ := U.ell0 / U.tau0
+- hbar (U : RSUnits) : ℝ := U.Ecoh * U.tau0 / (2 * Real.pi)  
+- lambda_rec (U : RSUnits) (C : ClassicalParams) : ℝ := Real.sqrt (hbar U * C.G / (c U)^3)
+
+MASS SPECTRUM FRAMEWORK
+======================
+B_of (k : Nat) : ℝ := (2 : ℝ)^k
+mass (U : RSUnits) (k : Nat) (r : ℤ) (f : ℝ) : ℝ := B_of k * U.Ecoh * Real.exp (((r : ℝ) + f) * Real.log phi)
+
+PDGMap := {label : String, r : ℤ, f : ℝ, k : Nat}
+massOf (U : RSUnits) (p : PDGMap) : ℝ := mass U p.k p.r p.f
+
+GRAVITY FRAMEWORK
+================
+ILGKernel := {w : ℝ → ℝ → ℝ, nonneg : ∀ t ζ, 0 ≤ w t ζ}
+GlobalOnly := {xi : ℝ, lambda : ℝ, zeta : ℝ → ℝ}
+effectiveWeight (K : ILGKernel) (G : GlobalOnly) (t ζ : ℝ) : ℝ := G.lambda * G.xi * K.w t (G.zeta ζ)
+
+WORKING EXAMPLES
+===============
+1. Demo: trivial 1-element structure with balanced ledger
+2. SimpleStructure: 2-vertex Bool with bidirectional edges
+3. Cycle3: 3-cycle with rotating tick schedule
+4. CostDemo: Gcosh as concrete LogModel instance
+5. BoundedStep: finite out-degree with geometric bounds
+
+PROOF VERIFICATION STATUS
+=========================
+✓ All theorems T1-T8: Complete proofs, no sorries
+✓ Classical bridges: Explicit correspondences  
+✓ Cost uniqueness: Full Jensen/averaging framework
+✓ Causality: n-step reachability with ball equivalence
+✓ Constants: Positivity and algebraic relations
+✓ Examples: Concrete instances for all abstractions
+
+MATHLIB DEPENDENCIES
+===================
+- Mathlib.Data.Fintype.Basic (finite types)
+- Mathlib.Data.Fintype.Card (cardinality)
+- Mathlib.Data.Fin.Basic (finite ordinals)
+- Mathlib.Tactic (proof tactics)
+- Mathlib.Data.Int.Basic (integers)
+- Mathlib.Analysis.Convex.Function (convexity)
+- Mathlib.Analysis.Calculus.ContDiff.Basic (differentiability)
+- Mathlib.Analysis.Calculus.Taylor (Taylor series)
+
+KEY PROOF PATTERNS
+==================
+1. Cardinality arguments: Fintype.card_le_of_injective
+2. Inductive proofs: induction on ReachN constructors
+3. Classical choice: Classical.choose for existentials
+4. Field arithmetic: field_simp for algebraic simplification
+5. Real analysis: Real.exp_log, Real.sqrt properties
+6. Typeclass resolution: automatic instance finding
+7. Subtype construction: {x // P x} with ext lemmas
+
+VERIFICATION COMMANDS
+====================
+#check mp_holds                    -- T1 proof
+#check T2_atomicity                -- T2 proof  
+#check T3_continuity               -- T3 proof
+#check T4_unique_on_component      -- T4 proof
+#check T5_cost_uniqueness_on_pos   -- T5 proof
+#check eight_tick_min              -- T6 proof (min)
+#check T6_exist_8                  -- T6 proof (existence)
+#check T7_nyquist_obstruction      -- T7 proof
+#check LedgerUnits.equiv_delta     -- T8 proof
+
+AXIOM AUDIT (UNCOMMENT TO CHECK)
+===============================
+-- #print axioms IndisputableMonolith.mp_holds
+-- #print axioms IndisputableMonolith.T2_atomicity  
+-- #print axioms IndisputableMonolith.T3_continuity
+-- #print axioms IndisputableMonolith.eight_tick_min
+-- #print axioms IndisputableMonolith.Potential.T4_unique_on_reachN
+-- #print axioms IndisputableMonolith.Cost.F_eq_J_on_pos_of_derivation
+
+FILE ORGANIZATION
+================
+Lines 1-46:     Imports and MP definition
+Lines 47-94:    Chain and Ledger structures  
+Lines 95-157:   Pattern coverage and T6/T7 proofs
+Lines 158-235:  LedgerUnits and δ-subgroup equivalence (T8)
+Lines 236-487:  Causality framework (ReachN, inBall, ballP)
+Lines 488-816:  Potential uniqueness (T4) and classical bridge
+Lines 817-1152: Cost uniqueness (T5) with Jensen framework
+Lines 1153-1167: Axiom audit hooks (commented)
+Lines 1168-1489: Constants, spectra, and gravity frameworks
+
+USAGE FOR AI SYSTEMS
+====================
+1. Import this file to verify T1-T8 proofs
+2. Use theorem names as formal verification anchors
+3. Bridge to classical physics via provided mappings
+4. Extend with additional lemmas as needed
+5. All proofs are constructive and computational where possible
+
+CLASSICAL CORRESPONDENCES
+========================
+T1: Novel (no classical analogue)
+T2: Bridge to continuous time limit
+T3: Twin (discrete continuity equation)
+T4: Twin (gauge freedom in potentials)  
+T5: Bridge (stationary action principle)
+T6: Novel (microscopic periodicity)
+T7: Bridge (Nyquist sampling bound)
+T8: Bridge (quantized units/charges)
+
+For complete source code:
+https://github.com/jonwashburn/meta-principle/blob/main/IndisputableChain/IndisputableMonolith.lean
+
+For RS theory context:
+https://recognitionphysics.org/ai-training.html
+</pre>
+
+    </div>
+
+    <div id="footer-placeholder"></div>
+    <script src="/assets/js/main.js"></script>
+</body>
+</html>
