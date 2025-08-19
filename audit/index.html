@@ -1640,6 +1640,15 @@ CONSEQUENCE: Universe.exe initialized.
         const lamDiff = Math.abs(lamIRum - lamIRcanon);
         items.push({name:'λ_IR = ħc/E_coh', pass:lamDiff < 1e-6, detail:`computed ${lamIRum} µm vs canon ${lamIRcanon} µm`});
 
+        // ħ calibration check: ħ ?= E_coh·τ0 (SI)
+        const tau0_fs = Number(canon?.constants?.tau0_fs);
+        const qe = 1.602176634e-19; // exact
+        const hbar = 1.054571817e-34; // CODATA 2018 exact
+        const EJ = E * qe;
+        const calc = EJ * (tau0_fs * 1e-15);
+        const relErr = Math.abs((calc - hbar) / hbar);
+        items.push({name:'ħ consistency (E·τ0)', pass:relErr < 1e-6, detail:`rel_err=${relErr}`});
+
         const pdg = masses?.pdg || {};
         const lr = masses?.leptons_ratios || {};
         if (pdg.electron_mass_MeV && pdg.muon_mass_MeV && pdg.tau_mass_MeV && lr.mu_over_e && lr.tau_over_mu && lr.tau_over_e) {
