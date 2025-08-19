@@ -1443,48 +1443,10 @@ a:hover {
   }
 }
 
-/* Machine Verified Badge - Next to Logo */
+/* Logo styles */
 .logo {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-}
-
-/* Tiny verified badge with controlled sizing */
-.verified-badge,
-a.verified-badge {
-  display: inline-block !important;
-  padding: 2px 6px !important;
-  background: #10b981 !important;
-  color: white !important;
-  text-decoration: none !important;
-  border-radius: 3px !important;
-  font-size: 10px !important;
-  font-weight: 600 !important;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-  line-height: 1.2 !important;
-  white-space: nowrap !important;
-  transition: background-color 0.15s ease !important;
-  cursor: pointer !important;
-  margin: 0 !important;
-  border: none !important;
-  vertical-align: baseline !important;
-  height: auto !important;
-  box-sizing: border-box !important;
-  position: relative !important;
-  z-index: 1 !important;
-}
-
-.verified-badge:hover,
-a.verified-badge:hover,
-.verified-badge:focus,
-a.verified-badge:focus {
-  background: #059669 !important;
-  color: white !important;
-  text-decoration: none !important;
-  transform: none !important;
-  outline: none !important;
-  cursor: pointer !important;
 }
 
 /* Prevent badge from affecting header height */
@@ -1521,43 +1483,60 @@ a.verified-badge:focus {
   height: 100%;
 }
 
-/* Ensure consistent logo and badge sizing */
+/* Ensure consistent logo sizing */
 .logo a:first-child {
   line-height: 1;
 }
 
-.verified-badge {
-  position: relative;
-  top: 0 !important; /* Remove vertical offset */
+/* Verified banner below pink banner */
+.verified-banner {
+  background: #f8f9fa;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid #e6e6e6;
+  text-align: center;
 }
 
-/* Ensure badge doesn't trigger layout shifts */
-.verified-badge {
-  flex-shrink: 0;
+.verified-badge-banner {
+  display: inline-block;
+  padding: 3px 10px;
+  background: #10b981;
+  color: white !important;
+  text-decoration: none !important;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.3;
+  transition: background-color 0.15s ease;
 }
 
-/* Mobile responsiveness for verified badge */
+.verified-badge-banner:hover {
+  background: #059669;
+  color: white !important;
+  text-decoration: none !important;
+}
+
+/* Mobile responsiveness */
 @media (max-width: 768px) {
-  .logo {
-    gap: 0.3rem;
-  }
-  
-  .verified-badge {
-    font-size: 9px !important;
-    padding: 2px 5px !important;
-    top: 0 !important;
-  }
-  
   .header-container {
     min-height: 50px;
     padding-top: 0.5rem !important;
     padding-bottom: 0.5rem !important;
   }
+  
+  .verified-banner {
+    padding: 0.2rem 0;
+  }
+  
+  .verified-badge-banner {
+    font-size: 10px;
+    padding: 2px 8px;
+  }
 }
 
 @media (max-width: 480px) {
-  .verified-badge {
-    font-size: 8px !important;
-    padding: 1px 4px !important;
+  .verified-badge-banner {
+    font-size: 9px;
+    padding: 2px 6px;
   }
 }
