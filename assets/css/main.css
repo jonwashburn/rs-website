@@ -1503,11 +1503,32 @@ a.verified-badge:focus {
 }
 
 /* Prevent header expansion on interaction */
-.site-header,
-.header-container,
+.site-header {
+  height: auto !important;
+  overflow: visible !important; /* Allow dropdowns to work */
+}
+
+.header-container {
+  min-height: 60px;
+  align-items: center;
+  padding-top: 0.75rem !important;
+  padding-bottom: 0.75rem !important;
+}
+
 .logo {
-  overflow: hidden;
-  max-height: none;
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+}
+
+/* Ensure consistent logo and badge sizing */
+.logo a:first-child {
+  line-height: 1;
+}
+
+.verified-badge {
+  position: relative;
+  top: 0 !important; /* Remove vertical offset */
 }
 
 /* Ensure badge doesn't trigger layout shifts */
@@ -1524,6 +1545,13 @@ a.verified-badge:focus {
   .verified-badge {
     font-size: 9px !important;
     padding: 2px 5px !important;
+    top: 0 !important;
+  }
+  
+  .header-container {
+    min-height: 50px;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
   }
 }
 
