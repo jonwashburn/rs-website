@@ -30,10 +30,7 @@
             <span class="status-label">Parameters:</span>
             <span class="status-value accent">0</span>
           </div>
-          <div class="status-item">
-            <span class="status-label">Last Updated (UTC):</span>
-            <span class="status-value" id="last-update">—</span>
-          </div>
+
           <div class="status-item">
             <span class="status-label">Audit Hash:</span>
             <span class="status-value" id="audit-hash">—</span>
@@ -60,7 +57,7 @@
             <li>Growth & lensing artifacts parsed; grids include <code>z</code> field.</li>
           </ul>
           <p class="report-boundary"><strong>Boundaries:</strong> A few P0 formal items remain (cubic‑tiling minimality, ILG kernel uniqueness). They do not affect the on‑page, parameter‑free checks.</p>
-          <div class="signature">— GPT5‑High, independent audit agent</div>
+          <div class="signature">— GPT5‑High, independent audit agent<br><span id="signature-date">2025-08-09 17:05:00 UTC</span></div>
         </div>
       </div>
     </section>
@@ -948,11 +945,11 @@ graph TD
         // Update status
         const statusLevel = data.verdict?.level || 'OPERATIONAL';
         document.getElementById('audit-status').textContent = statusLevel;
-        const nowUtc = '2025-08-09 17:05:00';
+        const nowUtc = '2025-08-09 17:05:00 UTC';
         const ts = data.last_updated || nowUtc;
-        document.getElementById('last-update').textContent = ts;
-        // Fill report meta
+        // Fill report meta and signature
         const vd = document.getElementById('validation-date'); if (vd) vd.textContent = ts;
+        const sd = document.getElementById('signature-date'); if (sd) sd.textContent = ts;
         const vv = document.getElementById('validation-verdict'); if (vv) vv.textContent = statusLevel;
         // Simple audit hash (non-cryptographic): hash canon + masses if present
         try {
