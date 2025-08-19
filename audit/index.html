@@ -378,6 +378,15 @@ python3 scripts/ilg_gates_check.py</code></pre>
       </div>
     </section>
 
+    <!-- Audit Checklist -->
+    <section class="template-section">
+      <div class="template-container">
+        <h2 class="template-section-title">Audit Checklist</h2>
+        <p class="section-subtitle">Programmatic verification of core identities derived from the canon.</p>
+        <ul id="audit-checklist-list"></ul>
+      </div>
+    </section>
+
     <!-- Framework Architecture -->
     <section class="template-section">
       <div class="template-container">
@@ -1534,6 +1543,7 @@ CONSEQUENCE: Universe.exe initialized.
         const canonRemote = await fetch('https://raw.githubusercontent.com/jonwashburn/audit/main/docs/canon.json').then(r=>r.ok?r.json():{}).catch(()=>({}));
         const canonLocal  = await fetch('/docs/canon.json').then(r=>r.ok?r.json():{}).catch(()=>({}));
         const canon = Object.keys(canonRemote).length ? canonRemote : canonLocal;
+        const massesLocal = await fetch('/docs/masses.json').then(r=>r.ok?r.json():{}).catch(()=>({}));
         
         // Update status
         document.getElementById('audit-status').textContent = data.verdict?.level || 'OPERATIONAL';
@@ -1588,6 +1598,9 @@ CONSEQUENCE: Universe.exe initialized.
           }
         }
 
+        // Render audit checklist
+        renderChecklist(canon, massesLocal, ciResponse);
+
         // Load study guide
         const guideResponse = await fetch('https://raw.githubusercontent.com/jonwashburn/audit/main/docs/Recognition-Science-Study-Guide.md');
         const guideText = await guideResponse.text();
@@ -1596,6 +1609,51 @@ CONSEQUENCE: Universe.exe initialized.
       } catch (error) {
         console.error('Error loading audit data:', error);
       }
+    }
+
+    function renderChecklist(canon, masses, ci) {
+      const list = document.getElementById('audit-checklist-list');
+      if (!list) return;
+      const items = [];
+      try {
+        const phi = Number(canon?.constants?.phi);
+        const E = Number(canon?.constants?.E_coh_eV);
+        const lamIRcanon = Number(canon?.constants?.lambda_IR_um);
+        const a = canon?.constants?.alpha || {};
+        const seed = Number(a.seed), fgap = Number(a.f_gap), dk = Number(a.delta_kappa), aInv = Number(a.inverse);
+        const aCalc = seed - fgap - dk;
+        const aPass = Math.abs(aCalc - aInv) < 5e-8;
+        items.push({name:'Fine-structure α', pass:aPass, detail:`computed ${aCalc.toFixed(11)} vs canon ${aInv}`});
+
+        const Ecalc = Math.pow(phi, -5);
+        const eRel = Math.abs((Ecalc - E)/E);
+        items.push({name:'E_coh = φ^-5', pass:eRel < 1e-9, detail:`computed ${Ecalc} eV vs canon ${E} eV`});
+
+        const hc_eVnm = 1239.841984;
+        const lamIRum = (hc_eVnm / E) / 1000;
+        const lamDiff = Math.abs(lamIRum - lamIRcanon);
+        items.push({name:'λ_IR = ħc/E_coh', pass:lamDiff < 1e-6, detail:`computed ${lamIRum} µm vs canon ${lamIRcanon} µm`});
+
+        const pdg = masses?.pdg || {};
+        const lr = masses?.leptons_ratios || {};
+        if (pdg.electron_mass_MeV && pdg.muon_mass_MeV && pdg.tau_mass_MeV && lr.mu_over_e && lr.tau_over_mu && lr.tau_over_e) {
+          const e = pdg.electron_mass_MeV, mu = pdg.muon_mass_MeV, tau = pdg.tau_mass_MeV;
+          const mu_e = mu/e, tau_mu = tau/mu, tau_e = tau/e;
+          const ppm = (x,y)=>Math.abs((x-y)/y)*1e6;
+          const p1 = ppm(lr.mu_over_e, mu_e), p2 = ppm(lr.tau_over_mu, tau_mu), p3 = ppm(lr.tau_over_e, tau_e);
+          const tol = 200; // ppm
+          items.push({name:'μ/e ratio (ppm)', pass:p1 < tol, detail:`Δ=${p1.toFixed(2)} ppm`});
+          items.push({name:'τ/μ ratio (ppm)', pass:p2 < tol, detail:`Δ=${p2.toFixed(2)} ppm`});
+          items.push({name:'τ/e ratio (ppm)', pass:p3 < tol, detail:`Δ=${p3.toFixed(2)} ppm`});
+        }
+
+        if (ci && ci.gates) items.push({name:'ILG gates', pass:!!ci.gates.passed, detail:ci.gates.stdout?ci.gates.stdout.split('\n')[0]:''});
+        if (ci && ci.cons_3d) items.push({name:'Conservation (3D)', pass:!!ci.cons_3d.passed, detail:''});
+        if (ci && ci.growth_json && ci.lensing_json) items.push({name:'Growth & Lensing', pass:!!(ci.growth_json.passed && ci.lensing_json.passed), detail:''});
+      } catch (e) {
+        items.push({name:'Checklist error', pass:false, detail:String(e)});
+      }
+      list.innerHTML = items.map(it=>`<li>${it.pass?'<span style="color:#10b981">PASS</span>':'<span style="color:#ef4444">FAIL</span>'} — ${it.name}${it.detail?` <code>${it.detail}</code>`:''}</li>`).join('');
     }
     
     // Initialize mermaid diagram
