@@ -136,8 +136,8 @@
               </div>
               <div class="derivation-node theorem">
                 <h4>T6: Light = Recognition</h4>
-                <p>c = λ_IR / τ_rec</p>
-                <code>From: Information flow (coherence wavelength)</code>
+                <p>c = λ_eff / τ_rec</p>
+                <code>From: Information flow (step length per tick)</code>
               </div>
               <div class="derivation-node theorem">
                 <h4>T7: Mass Formula</h4>
@@ -1604,8 +1604,12 @@ CONSEQUENCE: Universe.exe initialized.
           }
         }
 
-        // Render audit checklist
-        renderChecklist(canon, massesLocal, ciResponse);
+        // Render audit checklist and set status
+        const checklistPass = renderChecklist(canon, massesLocal, ciResponse);
+        if (typeof checklistPass === 'boolean') {
+          const statusEl = document.getElementById('audit-status');
+          statusEl.textContent = checklistPass ? 'OPERATIONAL' : 'ATTENTION REQUIRED';
+        }
 
         // Load study guide
         const guideResponse = await fetch('https://raw.githubusercontent.com/jonwashburn/audit/main/docs/Recognition-Science-Study-Guide.md');
@@ -1668,7 +1672,8 @@ CONSEQUENCE: Universe.exe initialized.
       } catch (e) {
         items.push({name:'Checklist error', pass:false, detail:String(e)});
       }
-      list.innerHTML = items.map(it=>`<li>${it.pass?'<span style="color:#10b981">PASS</span>':'<span style="color:#ef4444">FAIL</span>'} — ${it.name}${it.detail?` <code>${it.detail}</code>`:''}</li>`).join('');
+      list.innerHTML = items.map(it=>`<li>${it.pass?'<span style=\"color:#10b981\">PASS</span>':'<span style=\"color:#ef4444\">FAIL</span>'} — ${it.name}${it.detail?` <code>${it.detail}</code>`:''}</li>`).join('');
+      return items.every(it=>it.pass);
     }
     
     // Initialize mermaid diagram
@@ -1694,6 +1699,13 @@ CONSEQUENCE: Universe.exe initialized.
           p.push(`  mu/e: ${pct(m.leptons_ratios.mu_over_e, mu_e)}`);
           p.push(`  tau/mu: ${pct(m.leptons_ratios.tau_over_mu, tau_mu)}`);
           p.push(`  tau/e: ${pct(m.leptons_ratios.tau_over_e, tau_e)}`);
+        }
+        if (m.neutrinos) {
+          p.push('\nNeutrinos (NO):');
+          p.push(`  m1 = ${m.neutrinos.m1_eV} eV`);
+          p.push(`  m2 = ${m.neutrinos.m2_eV} eV`);
+          p.push(`  m3 = ${m.neutrinos.m3_eV} eV`);
+          p.push(`  Σm = ${m.neutrinos.sum_eV} eV`);
         }
         p.push('\nBoson ratios (W anchor):');
         p.push(`  Z/W = ${m.boson_ratios.Z_over_W}`);
