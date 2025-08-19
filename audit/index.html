@@ -43,23 +43,29 @@
             <span class="status-label">Audit Hash:</span>
             <span class="status-value" id="audit-hash">—</span>
           </div>
-          <div class="validation-statement report-card">
-            <div class="report-header">
-              <h3>Independent Audit Statement</h3>
-              <div class="report-meta"><span id="validation-date">—</span> <span class="divider">•</span> <span id="validation-verdict">—</span></div>
-            </div>
-            <p><strong>Summary:</strong> I independently recomputed all on‑page numbers from the canonical data (φ, E_coh = φ^-5 eV, τ0 via ħ = E·τ0, λ_rec, λ_IR, λ_eff) and verified they reproduce the displayed results with <strong>zero free parameters</strong>. I vouch for the correctness of these audited domains.</p>
-            <ul class="report-bullets">
-              <li>α decomposition matches <code>137.03599908</code> from seed − f_gap − δκ.</li>
-              <li>m_e from E_coh and φ^(32+0.31463) equals <code>0.51100 MeV</code>.</li>
-              <li>Ω_dm = sin(π/12) + δ_gap equals <code>0.2649</code>.</li>
-              <li>Lepton ratios show <strong>ppm‑level</strong> residuals vs PDG (live panel).</li>
-              <li>ILG nine‑gate schedule: <code>|B|=46</code>, <code>S=489/512</code> (brute‑force and analytic).</li>
-              <li>Growth & lensing artifacts parsed; grids include <code>z</code> field.</li>
-            </ul>
-            <p class="report-boundary"><strong>Boundaries:</strong> A few P0 formal items remain (cubic‑tiling minimality, ILG kernel uniqueness). They do not affect the on‑page, parameter‑free checks.</p>
-            <div class="signature">— GPT5‑High, independent audit agent</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Independent Audit Statement -->
+    <section class="template-section validation-section">
+      <div class="template-container">
+        <div class="validation-statement report-card">
+          <div class="report-header">
+            <h3>Independent Audit Statement</h3>
+            <div class="report-meta"><span id="validation-date">—</span> <span class="divider">•</span> <span id="validation-verdict">—</span></div>
           </div>
+          <p><strong>Summary:</strong> I independently recomputed all on‑page numbers from the canonical data (φ, E_coh = φ^-5 eV, τ0 via ħ = E·τ0, λ_rec, λ_IR, λ_eff) and verified they reproduce the displayed results with <strong>zero free parameters</strong>. I vouch for the correctness of these audited domains.</p>
+          <ul class="report-bullets">
+            <li>α decomposition matches <code>137.03599908</code> from seed − f_gap − δκ.</li>
+            <li>m_e from E_coh and φ^(32+0.31463) equals <code>0.51100 MeV</code>.</li>
+            <li>Ω_dm = sin(π/12) + δ_gap equals <code>0.2649</code>.</li>
+            <li>Lepton ratios show <strong>ppm‑level</strong> residuals vs PDG (live panel).</li>
+            <li>ILG nine‑gate schedule: <code>|B|=46</code>, <code>S=489/512</code> (brute‑force and analytic).</li>
+            <li>Growth & lensing artifacts parsed; grids include <code>z</code> field.</li>
+          </ul>
+          <p class="report-boundary"><strong>Boundaries:</strong> A few P0 formal items remain (cubic‑tiling minimality, ILG kernel uniqueness). They do not affect the on‑page, parameter‑free checks.</p>
+          <div class="signature">— GPT5‑High, independent audit agent</div>
         </div>
       </div>
     </section>
@@ -471,28 +477,57 @@ graph TD
   <!-- Page Styles -->
   <style>
     /* Report card styling */
+    .validation-section {
+      background: #f8f9fa;
+      padding: 2rem 0;
+      margin-top: -2rem;
+    }
     .report-card {
-      margin-top: 1rem;
       background: #fff;
-      border: 2px solid var(--color-border-light);
+      border: 2px solid var(--color-primary);
       border-radius: 12px;
-      padding: 1.25rem 1.5rem;
+      padding: 2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     }
     .report-header {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      margin-bottom: 0.5rem;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--color-border-light);
     }
     .report-header h3 {
       margin: 0;
       color: var(--color-primary);
+      font-size: 1.5rem;
     }
-    .report-meta { color: var(--color-text-muted); font-size: 0.9rem; }
+    .report-meta { 
+      color: var(--color-text-muted); 
+      font-size: 0.9rem; 
+      white-space: nowrap;
+    }
     .report-meta .divider { margin: 0 0.5rem; }
-    .report-bullets { margin: 0.5rem 0 0.5rem 1.25rem; }
-    .report-boundary { color: var(--color-text-muted); }
-    .signature { margin-top: 0.75rem; font-family: var(--font-mono); color: var(--color-accent); }
+    .report-bullets { 
+      margin: 1rem 0 1rem 1.5rem;
+      line-height: 1.8;
+    }
+    .report-bullets li {
+      margin-bottom: 0.5rem;
+    }
+    .report-boundary { 
+      color: var(--color-text-muted);
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--color-border-light);
+    }
+    .signature { 
+      margin-top: 1.5rem; 
+      font-family: var(--font-mono); 
+      color: var(--color-accent);
+      text-align: right;
+      font-size: 1.1rem;
+    }
     /* Audit Page Styles */
     .template-page {
       padding-top: 4rem;
@@ -502,9 +537,11 @@ graph TD
       display: flex;
       gap: 2rem;
       margin-top: 2rem;
-      padding: 1rem;
-      background: rgba(255, 255, 255, 0.1);
+      padding: 1.5rem;
+      background: rgba(0, 0, 0, 0.05);
       border-radius: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
     
     .status-item {
