@@ -1692,6 +1692,12 @@ CONSEQUENCE: Universe.exe initialized.
         p.push(`  W = ${m.anchored_absolutes.W_GeV} GeV`);
         p.push(`  Z = ${m.anchored_absolutes.Z_GeV} GeV`);
         p.push(`  H = ${m.anchored_absolutes.H_GeV} GeV`);
+        if (m.boson_rf && m.boson_paper && m.pdg_bosons_GeV) {
+          p.push('\nBoson cross-checks:');
+          const pct=(x,y)=>(((x-y)/y)*100).toFixed(3)+'%';
+          p.push(`  Z (rf) vs PDG: ${pct(m.boson_rf.anchored_GeV.Z, m.pdg_bosons_GeV.Z)}`);
+          p.push(`  H (paper) vs PDG: ${pct(m.boson_paper.anchored_GeV.H, m.pdg_bosons_GeV.H)}`);
+        }
         p.push('\nQuark ratios (phi-fixed):');
         Object.entries(m.quark_phi_fixed_ratios).forEach(([k,v])=>p.push(`  ${k.replaceAll('_','/')} = ${v}`));
         document.getElementById('masses-snapshot').textContent = p.join('\n');
