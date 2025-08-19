@@ -178,6 +178,11 @@
                 <span class="constant-derivation">Coherence wavelength ħc/E_coh</span>
               </div>
               <div class="constant-item">
+                <span class="constant-name">λ_eff</span>
+                <span class="constant-value" id="canon-lambda-eff">—</span>
+                <span class="constant-derivation">c·τ_rec (8-beat step size)</span>
+              </div>
+              <div class="constant-item">
                 <span class="constant-name">δ_gap</span>
                 <span class="constant-value">0.006115</span>
                 <span class="constant-derivation">From 45-gap incomputability</span>
@@ -1585,11 +1590,12 @@ CONSEQUENCE: Universe.exe initialized.
         
         // Populate canonical constants if available
         if (canon && canon.constants) {
-          const { E_coh_eV, tau0_fs, lambda_rec_m, lambda_IR_um, alpha } = canon.constants;
+          const { E_coh_eV, tau0_fs, lambda_rec_m, lambda_IR_um, lambda_eff_um, alpha } = canon.constants;
           if (E_coh_eV) document.getElementById('canon-ecoheV').textContent = `${E_coh_eV} eV`;
           if (tau0_fs) document.getElementById('canon-tau0').textContent = `${tau0_fs} fs`;
           if (lambda_rec_m) document.getElementById('canon-lambda-rec').textContent = `${lambda_rec_m} m`;
           if (lambda_IR_um) document.getElementById('canon-lambda-ir').textContent = `${lambda_IR_um} µm`;
+          if (lambda_eff_um) document.getElementById('canon-lambda-eff').textContent = `${lambda_eff_um} µm`;
           if (alpha) {
             if (alpha.seed) document.getElementById('alpha-seed').textContent = `= ${alpha.seed}`;
             if (alpha.f_gap) document.getElementById('alpha-fgap').textContent = `= ${alpha.f_gap}`;
