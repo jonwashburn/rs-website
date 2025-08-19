@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Force-refresh critical stylesheets across the site to avoid CDN/browser cache staleness
     function bumpStylesheetCache() {
         try {
-            const versionTag = 'v=20250819-badge-inline';
+            const versionTag = 'v=20250819-audit-fix';
             const targets = [
                 '/assets/css/main.css',
                 '/assets/css/site-template.css',
