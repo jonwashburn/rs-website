@@ -325,6 +325,10 @@
             </div>
           </div>
         </div>
+        <details>
+          <summary>Enumerated Constants (auto)</summary>
+          <ul id="constants-list"></ul>
+        </details>
       </div>
     </section>
 
@@ -354,9 +358,9 @@
               <span>Checking...</span>
             </div>
             <div class="verification-details">
-              <code>μ/e = +0.9715%</code>
-              <code>τ/μ = -0.0789%</code>
-              <code>τ/e = +0.9082%</code>
+              <code id="mr-mu-e">μ/e Δ = — ppm</code>
+              <code id="mr-tau-mu">τ/μ Δ = — ppm</code>
+              <code id="mr-tau-e">τ/e Δ = — ppm</code>
             </div>
           </div>
           
@@ -959,6 +963,25 @@ graph TD
             if (alpha.delta_kappa) document.getElementById('alpha-dkappa').textContent = `= ${alpha.delta_kappa}`;
             if (alpha.inverse) document.getElementById('alpha-result').textContent = `${alpha.inverse}`;
           }
+          // enumerate constants
+          const cl = document.getElementById('constants-list');
+          if (cl) {
+            const entries = [
+              ['φ','math fixed point', String(canon.constants.phi)],
+              ['E_coh','φ^-5 eV', `${E_coh_eV} eV`],
+              ['τ0','ħ=E·τ0', `${tau0_fs} fs`],
+              ['λ_rec','Planck', `${lambda_rec_m} m`],
+              ['λ_IR','ħc/E_coh', `${lambda_IR_um} µm`],
+              ['λ_eff','c·τ0', `${lambda_eff_um} µm`],
+              ['δ_gap','gap (cosmo)', `${delta_gap}`],
+              ['Ω_dm','sin(π/12)+δ_gap', `${omega_dm}`],
+              ['α seed','4π·11', `${alpha?.seed}`],
+              ['f_gap','gap (α)', `${alpha?.f_gap}`],
+              ['δκ','-103/(102·π^5)', `${alpha?.delta_kappa}`],
+              ['α^-1','result', `${alpha?.inverse}`]
+            ];
+            cl.innerHTML = entries.map(([k,src,v])=>`<li><code>${k}</code>: ${v} <span class="source">(${src})</span></li>`).join('');
+          }
         }
 
         // Render audit checklist and set status
@@ -972,6 +995,17 @@ graph TD
         const guideResponse = await fetch('https://raw.githubusercontent.com/jonwashburn/audit/main/docs/Recognition-Science-Study-Guide.md');
         const guideText = await guideResponse.text();
         document.getElementById('study-guide-content').innerHTML = marked.parse(guideText);
+        // Update mass ratio ppm residuals in the live panel
+        try {
+          const m = await fetch('/docs/masses.json').then(r=>r.json());
+          const e = m.pdg.electron_mass_MeV, mu = m.pdg.muon_mass_MeV, tau = m.pdg.tau_mass_MeV;
+          const mu_e = mu/e, tau_mu = tau/mu, tau_e = tau/e;
+          const ppm = (x,y)=>((x-y)/y)*1e6;
+          document.getElementById('mr-mu-e').textContent = `μ/e Δ = ${ppm(m.leptons_ratios.mu_over_e, mu_e).toFixed(2)} ppm`;
+          document.getElementById('mr-tau-mu').textContent = `τ/μ Δ = ${ppm(m.leptons_ratios.tau_over_mu, tau_mu).toFixed(2)} ppm`;
+          document.getElementById('mr-tau-e').textContent = `τ/e Δ = ${ppm(m.leptons_ratios.tau_over_e, tau_e).toFixed(2)} ppm`;
+          setStatus('mass-status', true);
+        } catch {}
         
       } catch (error) {
         console.error('Error loading audit data:', error);
