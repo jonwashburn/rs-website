@@ -36,8 +36,12 @@
             <span class="status-value accent">0</span>
           </div>
           <div class="status-item">
-            <span class="status-label">Last Updated:</span>
+            <span class="status-label">Last Updated (UTC):</span>
             <span class="status-value" id="last-update">—</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Audit Hash:</span>
+            <span class="status-value" id="audit-hash">—</span>
           </div>
           <div class="validation-statement">
             <h3>Validation Statement — 2025-08-19</h3>
@@ -227,6 +231,10 @@
                 <span>Free parameters: 0</span>
               </div>
             </div>
+            <details>
+              <summary>Derivation</summary>
+              <pre id="alpha-derivation">Loading…</pre>
+            </details>
           </div>
           
           <div class="parameter-card">
@@ -261,6 +269,10 @@
                 <span>Free parameters: 0</span>
               </div>
             </div>
+            <details>
+              <summary>Derivation</summary>
+              <pre id="me-derivation">Loading…</pre>
+            </details>
           </div>
           
           <div class="parameter-card">
@@ -285,6 +297,10 @@
                 <span>Free parameters: 0</span>
               </div>
             </div>
+            <details>
+              <summary>Derivation</summary>
+              <pre id="omega-derivation">Loading…</pre>
+            </details>
           </div>
         </div>
         
@@ -863,7 +879,16 @@ graph TD
         
         // Update status
         document.getElementById('audit-status').textContent = data.verdict?.level || 'OPERATIONAL';
-        document.getElementById('last-update').textContent = data.last_updated || new Date().toISOString().split('T')[0];
+        const nowUtc = new Date().toISOString().replace('T',' ').replace(/\..+/, ' UTC');
+        document.getElementById('last-update').textContent = data.last_updated || nowUtc;
+        // Simple audit hash (non-cryptographic): hash canon + masses if present
+        try {
+          const canonStr = JSON.stringify(canon);
+          const massesStr = await fetch('/docs/masses.json').then(r=>r.ok?r.text():'').catch(()=>'');
+          const src = canonStr + '|' + massesStr;
+          let h=0; for (let i=0;i<src.length;i++){ h=((h<<5)-h)+src.charCodeAt(i); h|=0; }
+          document.getElementById('audit-hash').textContent = ('h'+(h>>>0).toString(16)).padStart(9,'0');
+        } catch {}
         
         // Update verification statuses from ci_status when available
         function setStatus(elId, passed) {
@@ -907,12 +932,27 @@ graph TD
         // Populate canonical constants if available
         if (canon && canon.constants) {
           const { E_coh_eV, tau0_fs, lambda_rec_m, lambda_IR_um, lambda_eff_um, delta_gap, omega_dm, alpha } = canon.constants;
-          if (E_coh_eV) document.getElementById('canon-ecoheV').textContent = `${E_coh_eV} eV`;
+          if (E_coh_eV) document.getElementById('canon-ecoheV').textContent = `${E_coh_eV} eV (φ^-5)`;
           if (tau0_fs) document.getElementById('canon-tau0').textContent = `${tau0_fs} fs`;
           if (lambda_rec_m) document.getElementById('canon-lambda-rec').textContent = `${lambda_rec_m} m`;
           if (lambda_IR_um) document.getElementById('canon-lambda-ir').textContent = `${lambda_IR_um} µm`;
           if (lambda_eff_um) document.getElementById('canon-lambda-eff').textContent = `${lambda_eff_um} µm`;
           if (delta_gap && document.getElementById('canon-dgap')) document.getElementById('canon-dgap').textContent = `${delta_gap}`;
+          // Fill derivation drawers
+          try {
+            const alphaStr = `alpha^-1 = seed - f_gap - delta_kappa\nseed=4π·11=${alpha.seed}\nf_gap=${alpha.f_gap}\ndelta_kappa=${alpha.delta_kappa}\n=> ${alpha.inverse}`;
+            document.getElementById('alpha-derivation').textContent = alphaStr;
+          } catch {}
+          try {
+            const meVal = (E_coh_eV * Math.pow((1+Math.sqrt(5))/2, 32+0.31463))/1e6;
+            const meStr = `m_e = 1·E_coh·φ^(32+0.31463)\nE_coh=φ^-5=${E_coh_eV} eV\nφ=(1+√5)/2\n=> m_e ≈ ${meVal.toFixed(6)} MeV`;
+            document.getElementById('me-derivation').textContent = meStr;
+          } catch {}
+          try {
+            const omg = Math.sin(Math.PI/12) + (delta_gap||0);
+            const omgStr = `Ω_dm = sin(π/12)+δ_gap\nsin(π/12)=${Math.sin(Math.PI/12)}\nδ_gap=${delta_gap}\n=> Ω_dm ≈ ${omg}`;
+            document.getElementById('omega-derivation').textContent = omgStr;
+          } catch {}
           if (alpha) {
             if (alpha.seed) document.getElementById('alpha-seed').textContent = `= ${alpha.seed}`;
             if (alpha.f_gap) document.getElementById('alpha-fgap').textContent = `= ${alpha.f_gap}`;
