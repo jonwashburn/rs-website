@@ -7,202 +7,138 @@
   <link rel="stylesheet" href="/assets/css/main.css" />
   <link rel="stylesheet" href="/assets/css/site-template.css">
   <style>
-    /* Modern Constants Section */
-    .modern-constants-section {
+    /* Neo-brutalist Constants Section */
+    .brutal-constants-section,
+    .brutal-theorems-section {
       margin: 3rem 0;
+      padding: 0 1rem;
     }
     
-    .modern-constants-section .section-title,
-    .modern-theorems-section .section-title {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 0.75rem;
-      color: #1a1a1a;
-    }
-    
-    .modern-constants-section .section-intro,
-    .modern-theorems-section .section-intro {
-      font-size: 1.125rem;
-      color: #666;
-      margin-bottom: 2.5rem;
-      max-width: 700px;
-    }
-    
-    .constants-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
+    .brutal-constants-section h2,
+    .brutal-theorems-section h2 {
+      font-size: 1.5rem;
+      font-weight: 400;
       margin-bottom: 2rem;
-    }
-    
-    .constant-card {
-      background: #f8f9fa;
-      border-radius: 12px;
-      padding: 1.5rem;
-      transition: all 0.2s ease;
-      border: 1px solid #e9ecef;
-    }
-    
-    .constant-card:hover {
-      background: #fff;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      border-color: #dee2e6;
-    }
-    
-    .constant-header {
-      margin-bottom: 0.75rem;
-    }
-    
-    .constant-header h3 {
-      font-size: 1.75rem;
-      font-weight: 700;
-      color: #ff006e;
-      margin: 0 0 0.25rem 0;
-    }
-    
-    .constant-name {
-      font-size: 0.875rem;
-      color: #666;
-      font-weight: 500;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 2px;
+      border-bottom: 2px solid #000;
+      padding-bottom: 0.5rem;
     }
     
-    .constant-value {
-      font-size: 1.125rem;
-      font-weight: 600;
-      color: #1a1a1a;
-      margin-bottom: 0.75rem;
-      font-family: var(--font-mono);
+    .constants-list {
+      max-width: 800px;
     }
     
-    .constant-summary {
-      font-size: 0.95rem;
-      color: #555;
-      line-height: 1.5;
-      margin-bottom: 1rem;
-    }
-    
-    .expand-constant {
-      background: none;
-      border: none;
-      color: #ff006e;
-      font-size: 0.875rem;
-      font-weight: 500;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0;
-      transition: all 0.15s ease;
-    }
-    
-    .expand-constant:hover {
-      color: #cc0056;
-    }
-    
-    .expand-constant svg {
-      transition: transform 0.2s ease;
-    }
-    
-    .expand-constant[aria-expanded="true"] svg {
-      transform: rotate(180deg);
-    }
-    
-    .constants-links,
-    .theorems-links {
-      text-align: center;
-      margin-top: 2rem;
-      font-size: 0.95rem;
-    }
-    
-    .constants-links a,
-    .theorems-links a {
-      color: #ff006e;
-      text-decoration: none;
-      font-weight: 500;
-      margin: 0 0.5rem;
-    }
-    
-    .constants-links a:hover,
-    .theorems-links a:hover {
-      text-decoration: underline;
-    }
-    
-    /* Modern Theorems Section */
-    .modern-theorems-section {
-      margin: 3rem 0;
-    }
-    
-    .theorems-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1rem;
+    .constant-entry {
       margin-bottom: 2rem;
+      padding-left: 2rem;
+      border-left: 3px solid #ff006e;
     }
     
-    .theorem-card {
-      display: flex;
-      gap: 1rem;
-      padding: 1.25rem;
-      background: #fff;
-      border: 1px solid #e9ecef;
-      border-radius: 8px;
-      transition: all 0.2s ease;
+    .constant-symbol {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
     }
     
-    .theorem-card:hover {
-      background: #f8f9fa;
-      border-color: #dee2e6;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+    .constant-def {
+      font-size: 0.875rem;
+      color: #666;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
     
-    .theorem-number {
+    .constant-val {
+      font-family: monospace;
+      font-size: 1rem;
+      background: #f5f5f5;
+      padding: 0.25rem 0.5rem;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+      border: 1px solid #ddd;
+    }
+    
+    .constant-desc {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #333;
+    }
+    
+    .constants-footer,
+    .theorems-footer {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid #ddd;
+      font-size: 0.875rem;
+    }
+    
+    .constants-footer a,
+    .theorems-footer a {
+      color: #000;
+      text-decoration: underline;
+      margin-right: 1rem;
+    }
+    
+    .constants-footer a:hover,
+    .theorems-footer a:hover {
+      background: #ff006e;
+      color: #fff;
+      text-decoration: none;
+    }
+    
+    /* Theorems list */
+    .theorems-list {
+      counter-reset: theorem;
+      max-width: 800px;
+    }
+    
+    .theorem-entry {
+      counter-increment: theorem;
+      margin-bottom: 1.5rem;
+      padding-left: 3rem;
+      position: relative;
+    }
+    
+    .theorem-entry::before {
+      content: counter(theorem);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2rem;
+      height: 2rem;
+      background: #000;
+      color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 40px;
-      height: 40px;
-      background: #ff006e;
-      color: white;
       font-weight: 700;
-      font-size: 1.25rem;
-      border-radius: 50%;
-      flex-shrink: 0;
     }
     
-    .theorem-content h4 {
+    .theorem-title {
       font-size: 1.125rem;
-      font-weight: 600;
-      margin: 0 0 0.5rem 0;
-      color: #1a1a1a;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
     }
     
-    .theorem-content p {
+    .theorem-statement {
       font-size: 0.95rem;
-      color: #555;
       line-height: 1.5;
-      margin: 0;
+      color: #333;
     }
     
-    /* Mobile responsiveness */
     @media (max-width: 768px) {
-      .constants-grid {
-        grid-template-columns: 1fr;
+      .brutal-constants-section h2,
+      .brutal-theorems-section h2 {
+        font-size: 1.25rem;
       }
       
-      .theorems-grid {
-        grid-template-columns: 1fr;
+      .constant-entry {
+        padding-left: 1rem;
       }
       
-      .modern-constants-section .section-title,
-      .modern-theorems-section .section-title {
-        font-size: 1.5rem;
-      }
-      
-      .constant-header h3 {
-        font-size: 1.5rem;
+      .theorem-entry {
+        padding-left: 2.5rem;
       }
     }
   </style>
@@ -241,177 +177,115 @@
     <div class="template-container">
 
       <!-- Core Constants Section -->
-      <div class="modern-constants-section">
-        <h2 class="section-title">Recognition Constants</h2>
-        <p class="section-intro">Six fundamental constants emerge from the framework's logical structure. Each is derived, not fitted.</p>
+      <div class="brutal-constants-section">
+        <h2>Recognition Constants</h2>
         
-        <div class="constants-grid">
-          <div class="constant-card" data-constant="E_coh">
-            <div class="constant-header">
-              <h3>E<sub>coh</sub></h3>
-              <span class="constant-name">Coherence Energy</span>
-            </div>
-            <div class="constant-value">φ⁻⁵ ≈ 0.090 eV</div>
-            <p class="constant-summary">The minimal energy quantum for recognition. Sets the universal mass ladder.</p>
-            <button class="expand-constant" aria-expanded="false">
-              <span>Learn more</span>
-              <svg width="12" height="8" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-            </button>
-          </div>
-          
-          <div class="constant-card" data-constant="tau_rec">
-            <div class="constant-header">
-              <h3>τ<sub>rec</sub></h3>
-              <span class="constant-name">Recognition Time</span>
-            </div>
-            <div class="constant-value">7.33 × 10⁻¹⁵ s</div>
-            <p class="constant-summary">The fundamental tick of reality's clock. No process occurs faster than this.</p>
-            <button class="expand-constant" aria-expanded="false">
-              <span>Learn more</span>
-              <svg width="12" height="8" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-            </button>
-          </div>
-          
-          <div class="constant-card" data-constant="lambda_rec">
-            <div class="constant-header">
-              <h3>λ<sub>rec</sub></h3>
-              <span class="constant-name">Recognition Length</span>
-            </div>
-            <div class="constant-value">1.616 × 10⁻³⁵ m</div>
-            <p class="constant-summary">Reality's pixel size. The bridge from dimensionless math to physical units.</p>
-            <button class="expand-constant" aria-expanded="false">
-              <span>Learn more</span>
-              <svg width="12" height="8" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-            </button>
-          </div>
-          
-          <div class="constant-card" data-constant="A_L">
-            <div class="constant-header">
-              <h3>A<sub>L</sub></h3>
-              <span class="constant-name">Ledger Alphabet</span>
-            </div>
-            <div class="constant-value">{-4, -3, -2, -1, 0, 1, 2, 3, 4}</div>
-            <p class="constant-summary">The nine allowed cost states. Reality's fundamental "currency denominations."</p>
-            <button class="expand-constant" aria-expanded="false">
-              <span>Learn more</span>
-              <svg width="12" height="8" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-            </button>
-          </div>
-          
-          <div class="constant-card" data-constant="B_i">
-            <div class="constant-header">
-              <h3>B<sub>i</sub></h3>
-              <span class="constant-name">Sector Factors</span>
-            </div>
-            <div class="constant-value">1, 3, 12, ...</div>
-            <p class="constant-summary">Channel multiplicities for particles. Counts ledger paths through spacetime.</p>
-            <button class="expand-constant" aria-expanded="false">
-              <span>Learn more</span>
-              <svg width="12" height="8" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-            </button>
-          </div>
-          
-          <div class="constant-card" data-constant="delta_gap">
-            <div class="constant-header">
-              <h3>δ<sub>gap</sub></h3>
-              <span class="constant-name">Ledger Gap</span>
-            </div>
-            <div class="constant-value">ln φ ≈ 0.4812</div>
-            <p class="constant-summary">The universal correction term. Appears across all physics domains.</p>
-            <button class="expand-constant" aria-expanded="false">
-              <span>Learn more</span>
-              <svg width="12" height="8" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-            </button>
-          </div>
-        </div>
-        <!-- Expandable details for constants -->
-        <div class="constants-details-container">
-          <!-- Constants details will be loaded dynamically -->
-        </div>
+        <div class="constants-list">
+          <div class="constant-entry">
+            <div class="constant-symbol">E_coh</div>
+            <div class="constant-def">Coherence Energy</div>
+            <div class="constant-val">φ^-5 ≈ 0.090169943 eV</div>
+            <div class="constant-desc">The minimal energy quantum for recognition. Every particle mass is E_coh × φ^(integer + correction). Emerges from 5 degrees of freedom: 3 spatial + 1 temporal + 1 dual-balance.</div>
+                </div>
+                
+          <div class="constant-entry">
+            <div class="constant-symbol">τ_rec</div>
+            <div class="constant-def">Recognition Time</div>
+            <div class="constant-val">7.33 × 10^-15 s</div>
+            <div class="constant-desc">The fundamental tick of reality. No process occurs faster. Time emerges from sequential ledger posting: τ_rec = 2π/(8 ln φ).</div>
+                </div>
+                
+          <div class="constant-entry">
+            <div class="constant-symbol">λ_rec</div>
+            <div class="constant-def">Recognition Length</div>
+            <div class="constant-val">√(ħG/c³) ≈ 1.616 × 10^-35 m</div>
+            <div class="constant-desc">Reality's pixel size. The scale where information cost balances gravitational curvature. The single bridge from dimensionless math to SI units.</div>
+                </div>
+                
+          <div class="constant-entry">
+            <div class="constant-symbol">A_L</div>
+            <div class="constant-def">Ledger Alphabet</div>
+            <div class="constant-val">{-4, -3, -2, -1, 0, 1, 2, 3, 4}</div>
+            <div class="constant-desc">Nine allowed cost states. Range ±4 forced by: entropy minimization, dynamical stability, Planck density cutoff.</div>
+                </div>
+                
+          <div class="constant-entry">
+            <div class="constant-symbol">B_i</div>
+            <div class="constant-def">Sector Factors</div>
+            <div class="constant-val">B_e=1, B_q=3, B_W=12</div>
+            <div class="constant-desc">Channel multiplicities. Counts independent ledger paths: leptons (1), quarks (3), gauge bosons (12).</div>
+                </div>
+                
+          <div class="constant-entry">
+            <div class="constant-symbol">δ_gap</div>
+            <div class="constant-def">Ledger Gap</div>
+            <div class="constant-val">ln φ = 0.481211825...</div>
+            <div class="constant-desc">Universal correction from undecidability. Appears in fine structure, masses, cosmology, DNA. The "price of consciousness."</div>
+                </div>
+              </div>
         
-        <div class="constants-links">
-          <a href="/constants/">All constants</a> • <a href="/formulas/">Formulas</a> • <a href="/chain.html">Formal proofs</a>
-        </div>
-      </div>
+        <div class="constants-footer">
+          <a href="/constants/">ALL CONSTANTS</a>
+          <a href="/formulas/">FORMULAS</a>
+          <a href="/chain.html">FORMAL PROOFS</a>
+            </div>
+          </div>
 
       <!-- Eight Theorems Section -->
-      <div class="modern-theorems-section">
-        <h2 class="section-title">Eight Theorems → Classical Physics</h2>
-        <p class="section-intro">From a single tautology emerge eight theorems that construct all of physics. Each is inevitable.</p>
+      <div class="brutal-theorems-section">
+        <h2>Eight Theorems → Classical Physics</h2>
         
-        <div class="theorems-grid">
-          <div class="theorem-card">
-            <span class="theorem-number">1</span>
-            <div class="theorem-content">
-              <h4>Universal Ledger</h4>
-              <p>A globally conserved count of recognition events must exist to avoid contradiction.</p>
-            </div>
-          </div>
-          
-          <div class="theorem-card">
-            <span class="theorem-number">2</span>
-            <div class="theorem-content">
-              <h4>Golden-Ratio Scaling</h4>
-              <p>φ emerges as the unique self-similar fixed point of dual-balance cost.</p>
-            </div>
-          </div>
-          
-          <div class="theorem-card">
-            <span class="theorem-number">3</span>
-            <div class="theorem-content">
-              <h4>3+1 Spacetime</h4>
-              <p>Only three spatial dimensions with time allow stable, local recognition.</p>
-            </div>
-          </div>
-          
-          <div class="theorem-card">
-            <span class="theorem-number">4</span>
-            <div class="theorem-content">
-              <h4>Eight-Beat Cycle</h4>
-              <p>Complete 3D recognition requires exactly 2³ = 8 ordered ticks.</p>
-            </div>
-          </div>
-          
-          <div class="theorem-card">
-            <span class="theorem-number">5</span>
-            <div class="theorem-content">
-              <h4>Light as Recognition</h4>
-              <p>Photonic exchange implements ledger updates; c is the maximum rate.</p>
-            </div>
-          </div>
-          
-          <div class="theorem-card">
-            <span class="theorem-number">6</span>
-            <div class="theorem-content">
-              <h4>φ-Scaled Mass</h4>
-              <p>All masses follow m = B·E_coh·φ^(r+f) with integer rungs r.</p>
-            </div>
-          </div>
-          
-          <div class="theorem-card">
-            <span class="theorem-number">7</span>
-            <div class="theorem-content">
-              <h4>45-Gap</h4>
-              <p>A universal incomputability at 45° creates tiny, quantized corrections.</p>
-            </div>
-          </div>
-          
-          <div class="theorem-card">
-            <span class="theorem-number">8</span>
-            <div class="theorem-content">
-              <h4>Ledger Curvature</h4>
-              <p>Information density curves spacetime, constraining allowable updates.</p>
-            </div>
-          </div>
+        <div class="theorems-list">
+          <div class="theorem-entry">
+            <div class="theorem-title">Universal Ledger</div>
+            <div class="theorem-statement">Every recognition structure admits a unique positive, double-entry ledger. Conservation laws emerge.</div>
         </div>
+          
+          <div class="theorem-entry">
+            <div class="theorem-title">Golden-Ratio Scaling</div>
+            <div class="theorem-statement">Cost minimization uniquely selects k=1, yielding φ as the universal scaling constant.</div>
+      </div>
+
+          <div class="theorem-entry">
+            <div class="theorem-title">3+1 Spacetime</div>
+            <div class="theorem-statement">Stable non-trivial linking requires exactly three spatial dimensions; causality adds one temporal.</div>
+          </div>
+          
+          <div class="theorem-entry">
+            <div class="theorem-title">Eight-Beat Cycle</div>
+            <div class="theorem-statement">Complete recognition of a 3D voxel (8 vertices) requires exactly 8 ticks. Minimal Hamiltonian cycle.</div>
+        </div>
+          
+          <div class="theorem-entry">
+            <div class="theorem-title">Light as Recognition</div>
+            <div class="theorem-statement">Maximum information transfer rate between voxels defines universal speed c = λ_rec/τ_rec.</div>
+              </div>
+          
+          <div class="theorem-entry">
+            <div class="theorem-title">φ-Scaled Mass</div>
+            <div class="theorem-statement">All particle masses follow m = B·E_coh·φ^(r+f) with integer rungs r and calculable residues f.</div>
+              </div>
+          
+          <div class="theorem-entry">
+            <div class="theorem-title">45-Gap</div>
+            <div class="theorem-statement">Undecidability in the ledger produces universal corrections δ_gap = ln φ across all domains.</div>
+              </div>
+          
+          <div class="theorem-entry">
+            <div class="theorem-title">Ledger Curvature</div>
+            <div class="theorem-statement">Spacetime curvature emerges as the cost functional κ = ∂²S/∂R² on the ledger entropy.</div>
+              </div>
+              </div>
         
-        <div class="theorems-links">
-          <a href="/chain.html">Formal Lean proofs</a> • <a href="/theorems/">Detailed theorems</a> • <a href="/academic.html">Technical overview</a>
+        <div class="theorems-footer">
+          <a href="/chain.html">FORMAL LEAN PROOFS</a>
+          <a href="/theorems/">DETAILED THEOREMS</a>
+          <a href="/academic.html">TECHNICAL OVERVIEW</a>
         </div>
       </div>
 
-      <!-- What It Predicts -->
-      <div class="theory-section">
+      <!-- What It Predicts - HIDDEN -->
+      <!-- <div class="theory-section">
         <div class="theory-header predictions">
           <h3>Complete Reality Framework</h3>
           <div class="prediction-list-inline">
@@ -470,7 +344,7 @@
         </div>
       </div>
     </div>
-  </section>
+  </section> -->
 
   <!-- What It Is -->
   <section class="template-section">
