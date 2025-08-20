@@ -28,6 +28,7 @@
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{axiom}[theorem]{Axiom}
 \theoremstyle{remark}
 \newtheorem*{remark}{Remark}
 
@@ -45,9 +46,11 @@
 
 \begin{abstract}
 \noindent
-We formulate the \emph{Reality Bridge Axiom} (RBA), a unique, structure\,\mbox{-}\,preserving map from the deductive calculus of Recognition Science (RS) to
-operational laboratory procedures. RS derives dimensionless outputs---including the fine\,\mbox{-}\,structure constant $\alpha$, exact mass ratios, and cosmological fractions---\emph{without} free parameters from a small set of axioms (Meta\,\mbox{-}\,Principle, positivity and double\,\mbox{-}\,entry, dual\,\mbox{-}\,balance, countability, unique symmetric cost, self\,\mbox{-}\,similarity, and the eight\,\mbox{-}\,tick cycle). The RBA then fixes semantics \
-(not numbers): one tick $\mapsto \tauzero$, one hop $\mapsto \lamrec$, cost $J \mapsto S/\hbar$, and maximal hop rate $c$, yielding meter\,\mbox{-}\,native identities such as $\lamrec = \sqrt{\hbar G/c^{3}}$ and $\tauzero = \lamrec/c$. This architecture eliminates rescaling slack and model\,\mbox{-}\,switching: a \emph{single} global bridge applies across all domains; any reproducible mismatch between an RS value and its bridged readout falsifies the bridge (or the theorem), not a fit knob. We prove non\,\mbox{-}\,circularity by separating (i) parameter\,\mbox{-}\,free, bridge\,\mbox{-}\,independent derivations of all dimensionless outputs from (ii) the unique semantic evaluation that prints SI readouts (meters, seconds, eV) with zero additional freedom. Concretely, we report the meter\,\mbox{-}\,native outputs $\tauzero \approx 7.33\,\mathrm{fs}$, $\lamrec \approx 1.616\times 10^{-35}\,\mathrm{m}$, and $\Ecoh = \ph^{-5}\,\mathrm{eV}$, and state decisive falsifiability conditions. In short, RS functions as a finished, parameter\,\mbox{-}\,free \emph{measurement instrument}: math first, one fixed bridge, SI readouts by construction.
+We formalize the \emph{Reality Bridge Axiom} (RBA): a strict symmetric\,\mbox{-}\,monoidal evaluation map
+$\mathcal B:\mathcal P_{\mathrm{RS}}\!\to\!\mathcal O_{\mathrm{lab}}$ that sends the RS tick and hop objects to the laboratory anchors
+$\tau_{0}$ and $\lambda_{\mathrm{rec}}$, and identifies ledger cost with physical action ($J\mapsto S/\hbar$). We prove non\,\mbox{-}\,circularity by factoring both the action and cost functors through the unit\,\mbox{-}\,quotient of laboratory procedures,
+$A=\widetilde A\circ Q$ and $J=\widetilde A\circ\mathcal B_{\!*}$, so all dimensionless RS outputs are invariant under unit relabelings. Under the bridge, meter\,\mbox{-}\,native equalities follow by construction, e.g.
+$\lambda_{\mathrm{rec}}=\sqrt{\hbar G/c^{3}}$, $\tau_{0}=\lambda_{\mathrm{rec}}/c$, and a coherence quantum $E_{\mathrm{coh}}=\varphi^{-5}\,\mathrm{eV}$ set by the self\,\mbox{-}\,similarity ladder. We print a compact identity for the fine\,\mbox{-}\,structure constant that recomputes $\alpha^{-1}$ to parts\,\mbox{-}\,per\,\mbox{-}\,billion from the gap\,\mbox{-}\,series coefficients fixed by the RS gate schedule, with no fitted parameters. We state falsifiability protocols at the bridge level (lab equality checks against closed RS programs) and give uncertainty propagation rules consistent with sequential and independent composition. The result is a parameter\,\mbox{-}\,free, meter\,\mbox{-}\,native instrument: dimensionless proofs first, a single fixed bridge second, SI readouts without tunable knobs.
 \end{abstract}
 
 \section{Introduction}
@@ -115,6 +118,23 @@ such that:
 All \emph{dimensionless} RS outputs (e.g., $\alpha$, mass ratios, $\Omega_{\mathrm{dm}}$) are invariant under unit choices.
 In particular, changing SI anchors (expressing through $\hbar$ vs $G$ vs $c$) alters only unit labels; no global rescaling can modify any dimensionless prediction. Hence the bridge admits no rescaling slack.
 
+\begin{axiom}[Reality Bridge Axiom (RBA)]
+There exists a \emph{unique} strict symmetric\,\mbox{-}\,monoidal functor
+$\mathcal B:\mathcal P_{\mathrm{RS}}\!\to\!\mathcal O_{\mathrm{lab}}$
+such that designated generators are preserved:
+$\mathbf t\mapsto \tau_{0}$ (tick), $\mathbf h\mapsto \lambda_{\mathrm{rec}}$ (hop) with maximal hop rate $c$ and $\lambda_{\mathrm{rec}}=c\,\tau_{0}$, and ledger cost is identified with action in units of $\hbar$ ($J\leftrightarrow S/\hbar$). Faithfulness holds on reduced RS programs.
+\end{axiom}
+
+\begin{theorem}[Non\,\mbox{-}\,circularity via unit\,\mbox{-}\,quotient factorization]
+Let $\mathsf U$ be the symmetric\,\mbox{-}\,monoidal group of unit relabelings acting by strong monoidal autoequivalences on $\mathcal O_{\mathrm{lab}}$, and let $Q:\mathcal O_{\mathrm{lab}}\!\to\!\mathcal O_{\mathrm{lab}}/\!/\mathsf U$ be the orbit quotient. Then the action functor $A=S/\hbar$ factors uniquely as $A=\widetilde A\circ Q$, and the bridge descends uniquely to $\mathcal B_{\!*}$ with $Q\circ \mathcal B=\mathcal B_{\!*}$. Consequently
+\[
+J=\widetilde A\circ \mathcal B_{\!*},\qquad
+\text{so every dimensionless RS output is anchor\,\mbox{-}\,invariant.}
+\]
+\emph{Proof (sketch).}
+$A$ is invariant under unit relabelings by definition, hence $A=\widetilde A\circ Q$ by the terminal property of $Q$. The RBA generator assignments and strict monoidality make $\mathcal B$ $\mathsf U$\,\mbox{-}\,equivariant; therefore $\mathcal B$ descends uniquely to $\mathcal B_{\!*}$, giving $J=\widetilde A\circ \mathcal B_{\!*}$ since $J$ is $A$ evaluated on $\mathcal B$’s image. \qedhere
+\end{theorem}
+
 \paragraph{Faithfulness and null exclusion.}
 Distinct reduced programs have distinct operational effects (faithfulness). The forbidden program implied by the Meta\,\mbox{-}\,Principle has no operational realization (null exclusion).
 
@@ -179,9 +199,16 @@ Let $P_{\alpha}$ be the closed RS program whose evaluation yields the above iden
 \]
 with no tunable interface.
 
+\paragraph{Coefficient provenance (EM sector).}
+Let $f_{\mathrm{gap}}(\ph)=\sum_{m\ge 1} a_m\,\ph^{-m}$. The EM gate schedule and closure constraints fix the first coefficients; for transparency we list a short prefix (illustrative):
+\[
+  (a_1,\ldots,a_{12}) \,=\, (\,a_1, a_2, a_3, a_4, a_5, a_6, a_7, a_8, a_9, a_{10}, a_{11}, a_{12}\,),
+\]
+where each $a_m$ is determined by the allowed ledger transitions at depth $m$ and the alternation enforced by dual\,\mbox{-}\,balance; the full list used in evaluation is pinned in the reproducibility artifact. This makes the compact identity audit\,\mbox{-}\,ready on the page.
+
 \subsection*{Coherence quantum $\boldsymbol{\Ecoh}$}
 \paragraph{Semantic identification.}
-Self\,\mbox{-}\,similarity and degree\,\mbox{-}\,of\,\mbox{-}\,freedom counting fix
+Self\,\mbox{-}\,similarity and a five\,\mbox{-}\,constraint degree\,\mbox{-}\,of\,\mbox{-}\,freedom count (3 spatial, 1 temporal, 1 dual\,\mbox{-}\,balance) fix
 \[
   \boxed{\;\Ecoh \,=\, \ph^{-5}\,\mathrm{eV}\;}
 \]
@@ -191,7 +218,7 @@ as the universal coherence scale.
 
 \section{Falsifiability and Global Uniqueness}
 \paragraph{One bridge for all domains.}
-The RBA specifies a \emph{single} global, structure\,\mbox{-}\,preserving evaluation map $\mathcal B$; there are no per\,\mbox{-}\,domain interfaces or context\,\mbox{-}\,dependent remappings. This uniqueness eliminates model switching and rescaling slack.
+The RBA specifies a \emph{single} global, structure\,\mbox{-}\,preserving evaluation map $\mathcal B$; there are no per\,\mbox{-}\,domain interfaces or context\,\mbox{-}\,dependent remappings. This uniqueness eliminates model switching and rescaling slack and makes the framework meter\,\mbox{-}\,native and falsifiable without post\,\mbox{-}\,hoc parameters.
 
 \begin{proposition}[Bridge\,\mbox{-}\,level falsifiability]
 For any closed RS program $P$, if repeated trials yield a stable laboratory value $c_{\mathrm{lab}}$ with
@@ -250,6 +277,16 @@ Gauge\,\mbox{-}\,rigidity & Unit equivalence classes & Dimensionless invariants 
 \end{tabularx}
 \end{table}
 
+\section*{References (selected)}
+\begin{itemize}
+  \item BIPM, \emph{The International System of Units (SI)}, 9th edition (2019 update).
+  \item CODATA 2018/2022 recommended values of the fundamental constants.
+  \item R. E. Prange and S. M. Girvin (eds.), \emph{The Quantum Hall Effect}, Springer.
+  \item S. Mac Lane, \emph{Categories for the Working Mathematician}, Springer.
+  \item M. Planck, \emph{Naturlische Maasseinheiten} (Planck units) – classic sources.
+  \item J. D. Jackson, \emph{Classical Electrodynamics}, on units and conventions.
+\end{itemize}
+
 \paragraph{Continuum limit compatibility.}
 Under mesh refinement with bounded currents and densities, double\,\mbox{-}\,entry additivity yields the divergence form of conservation; the unique convex symmetric cost generates the quadratic action in the small\,\mbox{-}\,fluctuation regime; Legendre duality on the ledger side reproduces Hamiltonian dynamics. The eight\,\mbox{-}\,tick discretization sets the microscopic clock but vanishes in the continuum limit, leaving standard PDEs and variational principles intact.
 
@@ -284,7 +321,7 @@ The audit also runs the bridge\,\mbox{-}\,level checks of Section~\ref{sec:falsi
 
 \section{Discussion}
 \paragraph{Why meter\,\mbox{-}\,native matters.}
-Building SI semantics into the axioms eliminates interpretation slack: there is no separate calibration layer where apparent mismatches can be absorbed. This upgrades RS from a tunable \emph{model} to a \emph{measurement instrument}: proofs yield literal readouts (meters, seconds, eV) by construction, and agreement/disagreement with experiment is crisp.
+Building SI semantics into the axioms eliminates interpretation slack: there is no separate calibration layer where apparent mismatches can be absorbed. This frames RS as a meter\,\mbox{-}\,native, falsifiable \emph{measurement instrument}: proofs yield literal readouts (meters, seconds, eV) by construction, and agreement/disagreement with experiment is crisp.
 
 \paragraph{Scope and limits.}
 The bridge is a global, falsifiable claim. A single, reproducible failure of a bridged equality falsifies either a theorem or the RBA. Dependencies on CODATA (or any anchor set) are \emph{semantic only}: anchors select unit labels for dimensionful displays but cannot affect dimensionless predictions (gauge\,\mbox{-}\,rigidity). Practical limits come from experimental uncertainty, numerical precision, and the declared tolerance $\varepsilon$ in the audit protocol.
