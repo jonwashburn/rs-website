@@ -448,6 +448,191 @@
 
     <div id="footer-placeholder"></div>
     <script src="/assets/js/main.js"></script>
+    
+    <script>
+    // Interactive code viewer functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const codeContainer = document.getElementById('code');
+        const statusElement = document.getElementById('status');
+        
+        // Load the embedded source
+        const embeddedSource = document.getElementById('embedded-source');
+        if (embeddedSource && codeContainer) {
+            const source = embeddedSource.textContent;
+            
+            // Apply syntax highlighting and add interactive elements
+            const highlightedCode = highlightLeanCode(source);
+            codeContainer.innerHTML = highlightedCode;
+            
+            // Add click handlers to hotspots
+            addInteractiveHandlers();
+            
+            statusElement.textContent = 'Ready';
+        }
+        
+        // Quick navigation links
+        const quickLinks = document.querySelectorAll('.quick-links a');
+        quickLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    // Smooth scroll to element
+                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    // Highlight the target
+                    targetElement.classList.add('highlight-target');
+                    setTimeout(() => {
+                        targetElement.classList.remove('highlight-target');
+                    }, 2000);
+                }
+            });
+        });
+    });
+    
+    function highlightLeanCode(code) {
+        const lines = code.split('\n');
+        let highlighted = '';
+        
+        lines.forEach((line, index) => {
+            let processedLine = line
+                // Keywords
+                .replace(/\b(theorem|def|noncomputable|instance|structure|axiom|variable|namespace|end|import|open|local|sorry|exact|rfl|simp|intro|have|use|constructor|refine|omega|nlinarith|linarith|field_simp|ring|unfold|rw|cases|fin_cases|norm_num)\b/g, '<span class="lean-keyword">$1</span>')
+                // Theorem names (add interactive hotspots)
+                .replace(/\b(MetaPrinciple|T[1-8]_\w+|J_\w+|phi_\w+|x_k_\w+|k_equals_one|period_exactly_8|eight_tick_min)\b/g, '<span class="hotspot" id="$1" data-theorem="$1">$1</span>')
+                // Types
+                .replace(/\b(ℝ|ℕ|Prop|Type|Bool|Set|Fin)\b/g, '<span class="lean-type">$1</span>')
+                // Comments
+                .replace(/(\/\-!.*?\-\/|--.*$)/gm, '<span class="lean-comment">$1</span>')
+                // Important identifiers
+                .replace(/\b(J|φ|x_k|gray|Pattern|FluxLedger|RecLength)\b/g, '<span class="lean-def" id="$1_def">$1</span>');
+            
+            highlighted += `<div class="code-line" data-line="${index + 1}">${processedLine}</div>`;
+        });
+        
+        return highlighted;
+    }
+    
+    function addInteractiveHandlers() {
+        const hotspots = document.querySelectorAll('.hotspot');
+        const tooltip = createTooltip();
+        
+        hotspots.forEach(hotspot => {
+            hotspot.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const theorem = this.dataset.theorem;
+                showTheoremInfo(theorem, this, tooltip);
+            });
+            
+            hotspot.addEventListener('mouseenter', function() {
+                const theorem = this.dataset.theorem;
+                showTooltip(getTheoremSummary(theorem), this, tooltip);
+            });
+            
+            hotspot.addEventListener('mouseleave', function() {
+                hideTooltip(tooltip);
+            });
+        });
+        
+        // Click outside to close tooltip
+        document.addEventListener('click', function() {
+            hideTooltip(tooltip);
+            document.querySelectorAll('.hotspot.active').forEach(h => h.classList.remove('active'));
+        });
+    }
+    
+    function createTooltip() {
+        const tooltip = document.createElement('div');
+        tooltip.className = 'tooltip';
+        document.body.appendChild(tooltip);
+        return tooltip;
+    }
+    
+    function showTooltip(content, element, tooltip) {
+        tooltip.innerHTML = content;
+        const rect = element.getBoundingClientRect();
+        tooltip.style.left = rect.left + 'px';
+        tooltip.style.top = (rect.bottom + 10) + 'px';
+        tooltip.classList.add('active');
+    }
+    
+    function hideTooltip(tooltip) {
+        tooltip.classList.remove('active');
+    }
+    
+    function showTheoremInfo(theorem, element, tooltip) {
+        element.classList.add('active');
+        const info = getTheoremDetails(theorem);
+        showTooltip(info, element, tooltip);
+    }
+    
+    function getTheoremSummary(theorem) {
+        const summaries = {
+            'MetaPrinciple': 'The foundational tautology: nothing cannot recognize itself',
+            'T2_atomicity': 'Recognition events are discrete and atomic',
+            'T3_conservation': 'Ledger balance ensures conservation laws',
+            'J_def': 'The unique cost function J(x) = ½(x + 1/x)',
+            'phi_def': 'Golden ratio φ = (1+√5)/2 as the optimal scaling',
+            'x_k_eq_phi_at_one': 'At k=1, the fixed point equals φ',
+            'k_equals_one': 'Only k=1 minimizes the cost function',
+            'period_exactly_8': 'Complete 3D traversal requires exactly 8 ticks',
+            'eight_tick_min': 'No shorter period can visit all states'
+        };
+        return summaries[theorem] || 'Click for details';
+    }
+    
+    function getTheoremDetails(theorem) {
+        const details = {
+            'MetaPrinciple': '<strong>Meta-Principle</strong><br>The logical necessity that drives everything. If nothing could recognize itself, it would be something—a contradiction. This forces existence.',
+            'T2_atomicity': '<strong>Atomicity</strong><br>Recognition must happen in discrete units. Continuous recognition would require infinite information, violating finiteness.',
+            'T3_conservation': '<strong>Conservation</strong><br>The ledger\'s double-entry structure automatically enforces conservation. What goes in must come out.',
+            'J_def': '<strong>Cost Function</strong><br>J(x) = ½(x + 1/x) is the unique function that treats giving and receiving symmetrically while having a minimum.',
+            'phi_def': '<strong>Golden Ratio</strong><br>φ emerges as the unique self-similar fixed point where J(x) is minimized. Not chosen—derived.',
+            'k_equals_one': '<strong>k = 1 Uniqueness</strong><br>Among all possible self-similar scalings, only k=1 achieves the global minimum.',
+            'period_exactly_8': '<strong>Eight-Beat Cycle</strong><br>In 3D, visiting all 2³=8 vertices of a cube requires exactly 8 steps. This sets reality\'s clock.',
+            'eight_tick_min': '<strong>Minimality</strong><br>Mathematical proof that no shorter cycle can achieve complete recognition in 3D space.'
+        };
+        return details[theorem] || 'This theorem establishes a key constraint in the framework.';
+    }
+    </script>
+    
+    <style>
+    /* Highlight effect for navigation targets */
+    .highlight-target {
+        background-color: rgba(255, 0, 110, 0.1);
+        box-shadow: 0 0 0 3px rgba(255, 0, 110, 0.3);
+        transition: all 0.3s ease;
+    }
+    
+    /* Quick links styling */
+    .quick-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 1rem;
+    }
+    
+    .quick-links a {
+        padding: 0.5rem 1rem;
+        background: #f8f9fa;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        color: #1a1a1a;
+        text-decoration: none;
+        font-size: 0.875rem;
+        transition: all 0.15s ease;
+    }
+    
+    .quick-links a:hover {
+        background: #fff;
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    </style>
 
     <!-- Embedded fallback source -->
     <script type="text/x-lean" id="lean-source">
