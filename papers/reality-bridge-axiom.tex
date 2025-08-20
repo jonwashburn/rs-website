@@ -499,6 +499,78 @@ geometric closure; in the minimal presentation one convenient form is
 Because all terms are dimensionless, the evaluation is independent of SI anchors. A
 single\,\mbox{-}\,cell script in the repository recomputes the above digits from the identities.
 
+\bigskip
+\section*{Appendix D: Numeric Reproducibility (\texorpdfstring{$\tauzero$}{tau0}, \texorpdfstring{$\lamrec$}{lambda\_rec}, \texorpdfstring{$\Ecoh$}{E\_coh})}
+We list anchor sets and exact steps to reproduce the meter\,\mbox{-}\,native numbers. Under the 2019 SI,
+$c$, $e$, and $h$ are exact; thus $\hbar = h/(2\pi)$ is exact; $G$ carries the dominant uncertainty.
+
+\paragraph{Anchors.}
+\(c = 299\,792\,458\,\mathrm{m/s}\) (exact), $h = 6.626\,070\,15\times 10^{-34}\,\mathrm{J\,s}$ (exact),
+$\hbar = h/(2\pi)$, $e = 1.602\,176\,634\times 10^{-19}\,\mathrm{C}$ (exact), $G = 6.67430\times 10^{-11}\,\mathrm{m^{3}\,kg^{-1}\,s^{-2}}$.
+
+\paragraph{Coherence quantum $\Ecoh$ (RS\,\mbox{-}\,exact).}
+\(\Ecoh = \ph^{-5}\,\mathrm{eV}\). Numerically,
+\(\Ecoh \approx 0.090\,169\,943\,749\,474\,22\,\mathrm{eV}\).
+
+\paragraph{Atomic tick $\tauzero$ (from anchors).}
+Using the bridge identity $\tauzero = \hbar/\Ecoh$ with $\Ecoh$ expressed in Joules,
+\[
+  \tauzero \;=\; \frac{\hbar}{\Ecoh\,[\mathrm{J}]}
+  \;=\; \frac{\hbar}{\Ecoh\,[\mathrm{eV}]\cdot e}
+  \;\approx\; 7.299\,682\,457\,120\,812\times 10^{-15}\,\mathrm{s} \;=\; 7.29968\,\mathrm{fs}.
+\]
+
+\paragraph{Effective and infrared wavelengths.}
+\(\lambda_{\mathrm{eff}} = c\,\tauzero = \hbar c/\Ecoh\) gives
+\(\lambda_{\mathrm{eff}} \approx 2.188\,389\,746\,439\,728\,\mu\mathrm{m}\).
+Using $h$ instead of $\hbar$ yields the infrared coherence wavelength
+\(\lambda_{\mathrm{IR}} = h c/\Ecoh = 2\pi\,\lambda_{\mathrm{eff}} \approx 13.750\,058\,305\,955\,52\,\mu\mathrm{m}\).
+
+\paragraph{Recognition length $\lamrec$ (Planck pixel).}
+From anchors, $\lamrec = \sqrt{\hbar G / c^{3}}$. Numerically,
+\(\lamrec \approx 1.616\,255\times 10^{-35}\,\mathrm{m}\) (uncertainty dominated by $G$).
+
+\paragraph{Notes.}
+- With $h,e,c$ exact, $\tauzero$ and $\lambda_{\mathrm{eff}}$ are fixed once $\Ecoh$ is fixed by RS.
+- Display precision in audit artifacts follows a pinned significant\,\mbox{-}\,figure policy.
+
+\bigskip
+\section*{Appendix E: Falsifiability Protocols and Uncertainty Under Composition}
+We formalize bridge\,\mbox{-}\,level falsifiability and give uncertainty propagation rules compatible with the
+monoidal structure (sequential and independent composition).
+
+\paragraph{Protocol (lab equality checks).}
+For a closed RS program $P$ with dimensionless value $v = \mathrm{evaluate}(P)$:
+\begin{enumerate}
+  \item \textbf{Fix anchors once.} Choose a documented SI anchor set (e.g., CODATA) for any dimensionful displays.
+  \item \textbf{Evaluate} $v$ symbolically and numerically in RS units; for dimensionful displays apply the bridge.
+  \item \textbf{Measure} the corresponding quantity with a standard operational protocol (calibration and procedure pinned).
+  \item \textbf{Compare} using a predeclared tolerance $\varepsilon$ derived from experiment and anchor uncertainties.
+  \item \textbf{Decide.} If $|c_{\mathrm{lab}} - v| > \varepsilon$, a theorem used to build $P$ or the RBA is false (no tuning allowed).
+\end{enumerate}
+
+\paragraph{Uncertainty propagation (first order).}
+For $y=f(x_1,\dots,x_n)$ with independent inputs $x_i$ and standard uncertainties $\sigma_{x_i}$,
+\[
+  \sigma_y^2 \;\approx\; \sum_{i=1}^n \Bigl(\,\partial_{x_i} f\,\Bigr)^2 \sigma_{x_i}^2\,.
+\]
+Sequential composition ($\circ$) uses the chain rule; independent composition ($\otimes$) adds variances of independent legs.
+
+\paragraph{Worked tolerances.}
+- \textbf{$\lamrec = \sqrt{\hbar G/ c^3}$:} relative uncertainty
+\(\delta \lamrec / \lamrec = \tfrac{1}{2}\sqrt{(\delta\hbar/\hbar)^2 + (\delta G/G)^2 + 9(\delta c/c)^2}\). With $c$ exact and $h$ exact, this reduces to $\tfrac{1}{2}\,\delta G/G$.
+- \textbf{$\tauzero = \hbar/\Ecoh$:} with $\Ecoh$ fixed by RS and $\hbar$ exact, $\delta \tauzero$ is zero at the bridge level (display rounding aside).
+- \textbf{$\lambda_{\mathrm{eff}} = c\,\tauzero$:} inherits the same rule; $c$ exact.
+
+\paragraph{Acceptance bands.}
+Audit artifacts declare $\varepsilon$ per test based on published experimental uncertainty and any anchor uncertainties.
+Examples: ppb\,\mbox{-}\,level for $\alpha$, fractional $\sim 10^{-5}$ for $\lamrec$ (from $G$).
+
+\paragraph{Composition under the bridge.}
+If $P=Q\circ R$, then $v_P = v_Q\bigl(v_R\bigr)$ and $\sigma_{v_P}$ follows by the chain rule. If $P=Q\otimes R$ with
+independent readouts, $\sigma_{v_P}^2 = \sigma_{v_Q}^2 + \sigma_{v_R}^2$ at first order. These rules match the monoidal
+structure encoded by $J$'s additivity and the cost\,\mbox{-}\,action correspondence.
+
 \end{document}
 
 
