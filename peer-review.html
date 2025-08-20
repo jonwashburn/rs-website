@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Peer Review Tracker — Recognition Physics</title>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/site-template.css" />
+  <style>
+    /* Neo‑brutalist / plain text leaning */
+    body { background: #fff; color: #111; }
+    .container { max-width: 980px; margin: 0 auto; padding: 2rem 1.25rem; }
+    h1 { font-weight: 700; letter-spacing: 0.2px; margin: 0 0 0.5rem 0; }
+    .subtitle { color: #444; margin-bottom: 1.25rem; }
+    .legend { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace; font-size: 0.95rem; padding: 0.75rem 1rem; border: 2px solid #000; background: #fafafa; margin: 1rem 0 2rem; }
+    .table { width: 100%; border-collapse: collapse; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace; }
+    .table th, .table td { border: 2px solid #000; padding: 0.75rem; vertical-align: top; }
+    .table th { text-align: left; background: #f8f8f8; }
+    .note { color: #333; font-size: 0.95rem; line-height: 1.6; }
+    .status { font-weight: 700; }
+    .pending { color: #777; }
+    .links a { color: #000; text-decoration: underline; }
+    .links a:hover { background: #000; color: #fff; }
+    .updated { margin-top: 1rem; color: #666; font-size: 0.9rem; }
+    @media (max-width: 720px) {
+      .table th, .table td { font-size: 0.92rem; padding: 0.6rem; }
+    }
+  </style>
+</head>
+<body class="template-page">
+  <div id="header-placeholder"></div>
+
+  <main class="container">
+    <h1>Peer Review Tracker</h1>
+    <p class="subtitle">Internal tracking for papers under peer review. Minimal, public‑facing record of status and artifacts.</p>
+
+    <div class="legend">
+      Status legend: [Draft] → [Final] → [Submitted] → [In&nbsp;Review] → [Reviewed]
+    </div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th style="width: 28%">Paper</th>
+          <th style="width: 14%">Status</th>
+          <th style="width: 28%">Links (.tex / .pdf / HTML)</th>
+          <th style="width: 30%">Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <strong>Meta&nbsp;Principle</strong>
+          </td>
+          <td class="status">Draft</td>
+          <td class="links">
+            <span class="pending">.tex</span> &nbsp;|&nbsp;
+            <span class="pending">.pdf</span> &nbsp;|&nbsp;
+            <span class="pending">HTML</span>
+          </td>
+          <td class="note">Foundational paper: states and proves the Meta‑Principle and its immediate consequences for recognition‑based calculus. Links will be populated as artifacts are finalized.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="updated">Last updated: <span id="last-updated">—</span></p>
+  </main>
+
+  <div id="footer-placeholder"></div>
+  <script src="/assets/js/main.js"></script>
+  <script>
+    // Fill updated stamp in UTC for quick provenance
+    (function(){
+      var d = new Date();
+      var iso = new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().replace('T',' ').replace('Z',' UTC');
+      var el = document.getElementById('last-updated');
+      if (el) el.textContent = iso;
+    })();
+  </script>
+</body>
+</html>
+
+
