@@ -6,6 +6,206 @@
       <title>Recognition Physics | The Inevitable Framework of Reality ✓</title>
   <link rel="stylesheet" href="/assets/css/main.css" />
   <link rel="stylesheet" href="/assets/css/site-template.css">
+  <style>
+    /* Modern Constants Section */
+    .modern-constants-section {
+      margin: 3rem 0;
+    }
+    
+    .modern-constants-section .section-title,
+    .modern-theorems-section .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      color: #1a1a1a;
+    }
+    
+    .modern-constants-section .section-intro,
+    .modern-theorems-section .section-intro {
+      font-size: 1.125rem;
+      color: #666;
+      margin-bottom: 2.5rem;
+      max-width: 700px;
+    }
+    
+    .constants-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .constant-card {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: all 0.2s ease;
+      border: 1px solid #e9ecef;
+    }
+    
+    .constant-card:hover {
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-color: #dee2e6;
+    }
+    
+    .constant-header {
+      margin-bottom: 0.75rem;
+    }
+    
+    .constant-header h3 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #ff006e;
+      margin: 0 0 0.25rem 0;
+    }
+    
+    .constant-name {
+      font-size: 0.875rem;
+      color: #666;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .constant-value {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 0.75rem;
+      font-family: var(--font-mono);
+    }
+    
+    .constant-summary {
+      font-size: 0.95rem;
+      color: #555;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+    
+    .expand-constant {
+      background: none;
+      border: none;
+      color: #ff006e;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0;
+      transition: all 0.15s ease;
+    }
+    
+    .expand-constant:hover {
+      color: #cc0056;
+    }
+    
+    .expand-constant svg {
+      transition: transform 0.2s ease;
+    }
+    
+    .expand-constant[aria-expanded="true"] svg {
+      transform: rotate(180deg);
+    }
+    
+    .constants-links,
+    .theorems-links {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.95rem;
+    }
+    
+    .constants-links a,
+    .theorems-links a {
+      color: #ff006e;
+      text-decoration: none;
+      font-weight: 500;
+      margin: 0 0.5rem;
+    }
+    
+    .constants-links a:hover,
+    .theorems-links a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Modern Theorems Section */
+    .modern-theorems-section {
+      margin: 3rem 0;
+    }
+    
+    .theorems-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .theorem-card {
+      display: flex;
+      gap: 1rem;
+      padding: 1.25rem;
+      background: #fff;
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+    
+    .theorem-card:hover {
+      background: #f8f9fa;
+      border-color: #dee2e6;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+    }
+    
+    .theorem-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: #ff006e;
+      color: white;
+      font-weight: 700;
+      font-size: 1.25rem;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    
+    .theorem-content h4 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem 0;
+      color: #1a1a1a;
+    }
+    
+    .theorem-content p {
+      font-size: 0.95rem;
+      color: #555;
+      line-height: 1.5;
+      margin: 0;
+    }
+    
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      .constants-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .theorems-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .modern-constants-section .section-title,
+      .modern-theorems-section .section-title {
+        font-size: 1.5rem;
+      }
+      
+      .constant-header h3 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
 </head>
 <body class="template-page">
   <div id="header-placeholder"></div>
@@ -36,200 +236,177 @@
 
 
 
-  <!-- Theory Overview - HIDDEN
+  <!-- Core Constants and Theorems Section -->
   <section class="template-section theory-overview">
     <div class="template-container">
-      <h2 class="template-section-title">The Full Theory in 30 Seconds</h2>
-      <div class="critical-claim">
-        <p><strong>The Claim:</strong> We have a <span class="term" data-key="logically_derived">straightforward, logically derived</span> framework that predicts <span class="term" data-key="all_reality">all of reality</span>—every <span class="term" data-key="mass_derivation">particle mass</span>, every <span class="term" data-key="force_overview">force</span>, every <span class="term" data-key="constants_overview">constant</span>. <strong><span class="term" data-key="parameter_free">Zero adjustable parameters.</span></strong> <strong><span class="term" data-key="zero_fitting">Zero fitting to data.</span></strong> <span class="term" data-key="math_complete">The mathematics is complete</span> and the framework is <strong><span class="term" data-key="zero_parameter_framework">zero‑parameter</span></strong> (no tunable numbers—<span class="term" data-key="lambda_rec">λ_rec</span> maps the dimensionless to the dimensional). This is <span class="term" data-key="not_another_theory">not another foundational model</span>; it <span class="term" data-key="resolves_anomalies">resolves known anomalies</span> and matches observation with <strong><span class="term" data-key="perfect_agreement">100% agreement</span></strong>. If even <span class="term" data-key="predictions">one prediction</span> fails, the <span class="term" data-key="framework_dies">entire framework is falsified</span>. It is not a model—it's a <span class="term" data-key="measurement_inline">direct measurement</span> of what reality must be.</p>
-        <div class="expansion"></div>
-      </div>
 
-      <!-- Featured Audio (moved up under Claim) -->
-      <section class="featured-audio-section">
-        <div class="template-container">
-          <div class="featured-audio-card">
-            <div class="audio-badge-large">
-              <span class="audio-label">NEW AUDIO</span>
+      <!-- Core Constants Section -->
+      <div class="modern-constants-section">
+        <h2 class="section-title">Recognition Constants</h2>
+        <p class="section-intro">Six fundamental constants emerge from the framework's logical structure. Each is derived, not fitted.</p>
+        
+        <div class="constants-grid">
+          <div class="constant-card" data-constant="E_coh">
+            <div class="constant-header">
+              <h3>E<sub>coh</sub></h3>
+              <span class="constant-name">Coherence Energy</span>
             </div>
-            <h2 class="featured-audio-title">The Inevitable Framework of Reality: Reading the Universe's Source Code</h2>
-            <p class="featured-audio-description">
-              Discover the revolutionary difference between measuring reality and modeling it. This essential audio reveals how Recognition Physics reads the universe's source code rather than fitting parameters to observations.
-            </p>
-            <button class="featured-audio-btn" id="featuredAudioBtn" aria-pressed="false">
-              <svg class="audio-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polygon id="featuredPlay" points="8,5 19,12 8,19 8,5"></polygon>
-                <g id="featuredPause" style="display:none"><line x1="9" y1="5" x2="9" y2="19"></line><line x1="15" y1="5" x2="15" y2="19"></line></g>
-              </svg>
-              <span class="btn-text">Listen Now</span>
+            <div class="constant-value">φ⁻⁵ ≈ 0.090 eV</div>
+            <p class="constant-summary">The minimal energy quantum for recognition. Sets the universal mass ladder.</p>
+            <button class="expand-constant" aria-expanded="false">
+              <span>Learn more</span>
+              <svg width="12" height="8" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+            </button>
+          </div>
+          
+          <div class="constant-card" data-constant="tau_rec">
+            <div class="constant-header">
+              <h3>τ<sub>rec</sub></h3>
+              <span class="constant-name">Recognition Time</span>
+            </div>
+            <div class="constant-value">7.33 × 10⁻¹⁵ s</div>
+            <p class="constant-summary">The fundamental tick of reality's clock. No process occurs faster than this.</p>
+            <button class="expand-constant" aria-expanded="false">
+              <span>Learn more</span>
+              <svg width="12" height="8" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+            </button>
+          </div>
+          
+          <div class="constant-card" data-constant="lambda_rec">
+            <div class="constant-header">
+              <h3>λ<sub>rec</sub></h3>
+              <span class="constant-name">Recognition Length</span>
+            </div>
+            <div class="constant-value">1.616 × 10⁻³⁵ m</div>
+            <p class="constant-summary">Reality's pixel size. The bridge from dimensionless math to physical units.</p>
+            <button class="expand-constant" aria-expanded="false">
+              <span>Learn more</span>
+              <svg width="12" height="8" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+            </button>
+          </div>
+          
+          <div class="constant-card" data-constant="A_L">
+            <div class="constant-header">
+              <h3>A<sub>L</sub></h3>
+              <span class="constant-name">Ledger Alphabet</span>
+            </div>
+            <div class="constant-value">{-4, -3, -2, -1, 0, 1, 2, 3, 4}</div>
+            <p class="constant-summary">The nine allowed cost states. Reality's fundamental "currency denominations."</p>
+            <button class="expand-constant" aria-expanded="false">
+              <span>Learn more</span>
+              <svg width="12" height="8" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+            </button>
+          </div>
+          
+          <div class="constant-card" data-constant="B_i">
+            <div class="constant-header">
+              <h3>B<sub>i</sub></h3>
+              <span class="constant-name">Sector Factors</span>
+            </div>
+            <div class="constant-value">1, 3, 12, ...</div>
+            <p class="constant-summary">Channel multiplicities for particles. Counts ledger paths through spacetime.</p>
+            <button class="expand-constant" aria-expanded="false">
+              <span>Learn more</span>
+              <svg width="12" height="8" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+            </button>
+          </div>
+          
+          <div class="constant-card" data-constant="delta_gap">
+            <div class="constant-header">
+              <h3>δ<sub>gap</sub></h3>
+              <span class="constant-name">Ledger Gap</span>
+            </div>
+            <div class="constant-value">ln φ ≈ 0.4812</div>
+            <p class="constant-summary">The universal correction term. Appears across all physics domains.</p>
+            <button class="expand-constant" aria-expanded="false">
+              <span>Learn more</span>
+              <svg width="12" height="8" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2" fill="none"/></svg>
             </button>
           </div>
         </div>
-      </section>
-
+        <!-- Expandable details for constants -->
+        <div class="constants-details-container">
+          <!-- Constants details will be loaded dynamically -->
+        </div>
         
-      <!-- Core Constants -->
-      <div class="theory-section">
-        <div class="theory-header constants">
-          <h3>Recognition Constants</h3>
-          <div class="constant-list-inline">
-            <span class="term" data-key="E_coh" data-def="Universal coherence quantum; the minimal energy unit for a recognition update."><strong>E_coh</strong> (coherence energy)</span>
-            <span class="term" data-key="tau_rec" data-def="Tick duration for one recognition update—sets the universal clock."><strong>τ_rec</strong> (recognition time)</span>
-            <span class="term" data-key="lambda_rec" data-def="Minimal stable separation for recognition exchange—sets the spatial bandwidth."><strong>λ_rec</strong> (recognition length)</span>
-            <span class="term" data-key="alphabet" data-def="The nine-state, dual‑balanced set of allowable ledger cost symbols."><strong>A_L</strong> (ledger alphabet)</span>
-            <span class="term" data-key="sectors" data-def="Discrete multiplicity factors from path topology that scale composite masses."><strong>B_i</strong> (sector factors)</span>
-            <span class="term" data-key="delta_gap" data-def="Quantized incomputability that produces tiny, signed corrections across domains."><strong>δ_gap</strong> (ledger gap)</span>
-        </div>
-          <button class="theory-expand-btn" aria-expanded="false">
-            <span>Expand</span>
-            <svg class="expand-icon" width="12" height="12" viewBox="0 0 12 12">
-              <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="2" fill="none"/>
-            </svg>
-          </button>
-      </div>
-        <div class="theory-expansion" aria-hidden="true">
-          <div class="expansion-body">
-            <div class="constants-detail-area">
-              <div class="constant-details">
-                <div class="constant-item">
-                  <h4>E_coh (coherence energy)</h4>
-                  <p><strong>Value:</strong> φ⁻⁵ ≈ 0.090169943 eV</p>
-                  <p><strong>Derivation:</strong> The minimal non-zero energy scales down from the natural logical unit "1" by φ for each constraining degree of freedom. Recognition requires exactly 5 DOF: 3 spatial (for stable non-intersecting existence), 1 temporal (for dynamical arrow of time), and 1 dual-balance (for transaction pairing).</p>
-                  <p><strong>Physical role:</strong> Sets the fundamental energy ladder for all particles. Every mass in the Standard Model is E_coh × φ^(integer + small correction). This isn't fitted—it's the unique energy scale that emerges from the ledger's logical structure.</p>
-                  <p><strong>Why φ⁻⁵ specifically:</strong> Each degree of freedom constrains the system, reducing available energy by factor φ. With 5 constraints: 1/φ⁵ = φ⁻⁵. No other scaling preserves self-similarity under the cost functional J(x).</p>
-                  <p><strong>Connections:</strong> Related to Planck energy by E_coh = E_Planck × (λ_rec/λ_Planck)². Links quantum mechanics to gravity through the recognition length.</p>
-                </div>
-                
-                <div class="constant-item">
-                  <h4>τ_rec (recognition time)</h4>
-                  <p><strong>Value:</strong> 7.33 × 10⁻¹⁵ s (fundamental tick)</p>
-                  <p><strong>Derivation:</strong> Time emerges from the sequential posting of ledger entries. The minimal tick duration is set by the 8-beat cycle: τ_rec = 2π/(8 ln φ). The factor 2π comes from completing one full phase rotation, 8 from the spatial completeness requirement, ln φ from the self-similar scaling rate.</p>
-                  <p><strong>Physical role:</strong> The atomic unit of time—no process can occur faster than one recognition per tick. This discreteness is what makes quantum mechanics work: wave function collapse takes exactly one tick, preventing Zeno-style paradoxes.</p>
-                  <p><strong>Causality enforcement:</strong> The one-event-per-tick rule prevents temporal paradoxes. Multiple simultaneous events would create ledger ambiguities (which debit matches which credit?), violating double-entry accounting.</p>
-                  <p><strong>Experimental signatures:</strong> Sets the fundamental time scale for all quantum processes. Predicts specific delays in photon creation (4.11 attoseconds), quantum tunneling rates, and the universal clock underlying radioactive decay.</p>
-                </div>
-                
-                <div class="constant-item">
-                  <h4>λ_rec (recognition length)</h4>
-                  <p><strong>Value:</strong> √(ħG/c³) ≈ 1.616 × 10⁻³⁵ m</p>
-                  <p><strong>Historical significance:</strong> This was the final piece derived to make the framework truly parameter-free. Initially, the framework was anchored to G or other constants. λ_rec became the single bridge connecting dimensionless math to SI units.</p>
-                  <p><strong>Derivation:</strong> The scale where information cost balances gravitational curvature. When a recognition event's energy E_coh is localized to length λ_rec, the gravitational field it creates has curvature cost exactly equal to the recognition cost—perfect balance.</p>
-                  <p><strong>Physical meaning:</strong> Reality's fundamental pixel size. Below this scale, spacetime becomes discrete and granular. Above this scale, smooth geometry emerges as a statistical average. This is where quantum gravity meets information theory.</p>
-                  <p><strong>Connection to Planck scale:</strong> Related to Planck length by λ_rec = √π × λ_Planck, but derived independently from cost-curvature balance rather than dimensional analysis.</p>
-                  <p><strong>Implications:</strong> Sets the cutoff for all physical theories. Loop quantum gravity, string theory, and other quantum gravity approaches all implicitly assume some minimal length—this is that length, derived rather than assumed.</p>
-                </div>
-                
-                <div class="constant-item">
-                  <h4>A_L (ledger alphabet)</h4>
-                  <p><strong>Value:</strong> {+4, +3, +2, +1, 0, -1, -2, -3, -4} (9 states)</p>
-                  <p><strong>Why exactly 9 states:</strong> The range ±4 is forced by three independent constraints: (1) Entropy minimization requires the smallest alphabet spanning necessary interaction costs, (2) Dynamical stability—the Lyapunov exponent becomes positive beyond ±4, making the system chaotic, (3) Planck density cutoff—a fifth unit of unresolved cost would collapse the voxel gravitationally.</p>
-                  <p><strong>Physical interpretation:</strong> These are the allowed "charges" or "cost levels" that can be posted to any ledger entry. Think of them as the fundamental "currency denominations" of reality's accounting system.</p>
-                  <p><strong>Connection to particle physics:</strong> The ±4 range explains why there are exactly 4 fundamental forces (strong, weak, electromagnetic, gravity) and why certain particle multiplicities appear (quark colors, lepton families).</p>
-                  <p><strong>Information theory:</strong> 9 states = log₂(9) ≈ 3.17 bits per ledger entry. This information density is optimal for the framework's computational requirements—enough to encode necessary distinctions, not so much as to waste resources.</p>
-                </div>
-                
-                <div class="constant-item">
-                  <h4>B_i (sector factors)</h4>
-                  <p><strong>Values:</strong> B_e = 1 (leptons), B_q = 3 (quarks), B_W = 12 (gauge bosons)</p>
-                  <p><strong>Derivation principle:</strong> Counts the number of independent ledger channels for each particle type. For leptons: 1 channel (simple path). For quarks: 3 channels (color degrees of freedom). For gauge bosons: 12 channels (from SU(3)×SU(2)×U(1) structure).</p>
-                  <p><strong>Topological origin:</strong> These aren't arbitrary multipliers—they count real geometric paths through the ledger graph. Each path corresponds to a way the particle can be "constructed" from elementary recognition events.</p>
-                  <p><strong>Why these specific numbers:</strong> B = 2^(number of independent ledger channels). Leptons have 1 channel → B = 2⁰ = 1. Quarks have log₂(3) ≈ 1.58 channels → B ≈ 3. Gauge bosons have log₂(12) ≈ 3.58 channels → B = 12.</p>
-                  <p><strong>Mass formula role:</strong> In m = B·E_coh·φ^(r+f), the B factor accounts for the "width" of the particle in ledger space. Composite particles (hadrons) have their own B factors derived from constituent quarks plus binding corrections.</p>
-                  <p><strong>Experimental verification:</strong> These factors predict exact mass ratios between particle families. The proton-to-electron mass ratio, for instance, involves B_p/B_e = 12/1 = 12, modified by the φ^(r+f) terms.</p>
-                </div>
-                
-                <div class="constant-item">
-                  <h4>δ_gap (ledger gap)</h4>
-                  <p><strong>Value:</strong> ln φ = 0.481211825059603...</p>
-                  <p><strong>The universal correction:</strong> This single number appears as a correction term across every domain of physics—fine structure constant, particle masses, cosmological parameters, DNA geometry, muon g-2, and more. It's the signature of the framework's deep unity.</p>
-                  <p><strong>Mathematical origin:</strong> Comes from the undecidability-gap series: Σ((-1)^(m+1)/(m·φ^m)) = ln(1+1/φ) = ln φ. This series emerges from unresolved branches in the self-similar recurrence x_{n+1} = 1 + 1/x_n that defines φ.</p>
-                  <p><strong>Physical meaning:</strong> Represents the irreducible "incomputability" in any finite ledger system. Some recognition paths cannot be fully resolved in finite time, leaving this universal residue. It's the quantum of "unknowability" built into reality's structure.</p>
-                  <p><strong>Why it's not tunable:</strong> The series converges to ln φ by pure mathematics—no freedom to adjust. The same series that corrects α = 1/137.035999... also predicts the muon anomalous moment, resolves the Hubble tension, and fixes DNA's helical pitch. One function, multiple domains.</p>
-                  <p><strong>Falsifiability test:</strong> If any correction in any domain deviates from this value, the entire framework collapses. This over-constraint across unrelated phenomena is what makes the theory so powerful—and so vulnerable.</p>
-                  <p><strong>Deep significance:</strong> This gap represents the "price of consciousness"—the irreducible cost of any system observing itself. It connects information theory, quantum mechanics, and the measurement problem in a single number.</p>
-                </div>
-              </div>
-            </div>
-            <p class="tight" style="margin-top: 1.5rem;"><a href="/constants/">All constants</a> • <a href="/formulas/">Formulas</a> • <a href="/chain.html">Formal proofs</a></p>
-          </div>
+        <div class="constants-links">
+          <a href="/constants/">All constants</a> • <a href="/formulas/">Formulas</a> • <a href="/chain.html">Formal proofs</a>
         </div>
       </div>
 
-      <!-- Eight Theorems -->
-      <div class="theory-section">
-        <div class="theory-header theorems">
-          <h3>Eight Theorems → Classical Physics</h3>
-          <div class="theorem-list-inline">
-            <span class="term" data-key="T1" data-def="Existence of a globally conserved count of recognition events.">1. Universal Ledger</span>
-            <span class="term" data-key="T2" data-def="φ is the unique non‑trivial self‑similar fixed point of dual‑balance.">2. Golden‑Ratio Scaling</span>
-            <span class="term" data-key="T3" data-def="Only 3 spatial dimensions with a tick order admit stable, local recognition.">3. 3+1 Spacetime</span>
-            <span class="term" data-key="T4" data-def="A complete 3D recognition requires exactly 2³ = 8 ticks.">4. Eight‑Beat Cycle</span>
-            <span class="term" data-key="T5" data-def="Photonic exchange implements recognition across ledger voxels; c is the rate.">5. Light as Recognition</span>
-            <span class="term" data-key="T6" data-def="Masses scale as m = B · E_coh · φ^(r+f) with no free parameters.">6. φ‑Scaled Mass</span>
-            <span class="term" data-key="T7" data-def="A universal 45° incomputability gap yields tiny, signed corrections.">7. 45‑Gap</span>
-            <span class="term" data-key="T8" data-def="A curvature functional on the ledger constrains allowable updates.">8. Ledger Curvature</span>
+      <!-- Eight Theorems Section -->
+      <div class="modern-theorems-section">
+        <h2 class="section-title">Eight Theorems → Classical Physics</h2>
+        <p class="section-intro">From a single tautology emerge eight theorems that construct all of physics. Each is inevitable.</p>
+        
+        <div class="theorems-grid">
+          <div class="theorem-card">
+            <span class="theorem-number">1</span>
+            <div class="theorem-content">
+              <h4>Universal Ledger</h4>
+              <p>A globally conserved count of recognition events must exist to avoid contradiction.</p>
+            </div>
           </div>
-          <button class="theory-expand-btn" aria-expanded="false">
-            <span>Expand</span>
-            <svg class="expand-icon" width="12" height="12" viewBox="0 0 12 12">
-              <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="2" fill="none"/>
-            </svg>
-          </button>
+          
+          <div class="theorem-card">
+            <span class="theorem-number">2</span>
+            <div class="theorem-content">
+              <h4>Golden-Ratio Scaling</h4>
+              <p>φ emerges as the unique self-similar fixed point of dual-balance cost.</p>
+            </div>
+          </div>
+          
+          <div class="theorem-card">
+            <span class="theorem-number">3</span>
+            <div class="theorem-content">
+              <h4>3+1 Spacetime</h4>
+              <p>Only three spatial dimensions with time allow stable, local recognition.</p>
+            </div>
+          </div>
+          
+          <div class="theorem-card">
+            <span class="theorem-number">4</span>
+            <div class="theorem-content">
+              <h4>Eight-Beat Cycle</h4>
+              <p>Complete 3D recognition requires exactly 2³ = 8 ordered ticks.</p>
+            </div>
+          </div>
+          
+          <div class="theorem-card">
+            <span class="theorem-number">5</span>
+            <div class="theorem-content">
+              <h4>Light as Recognition</h4>
+              <p>Photonic exchange implements ledger updates; c is the maximum rate.</p>
+            </div>
+          </div>
+          
+          <div class="theorem-card">
+            <span class="theorem-number">6</span>
+            <div class="theorem-content">
+              <h4>φ-Scaled Mass</h4>
+              <p>All masses follow m = B·E_coh·φ^(r+f) with integer rungs r.</p>
+            </div>
+          </div>
+          
+          <div class="theorem-card">
+            <span class="theorem-number">7</span>
+            <div class="theorem-content">
+              <h4>45-Gap</h4>
+              <p>A universal incomputability at 45° creates tiny, quantized corrections.</p>
+            </div>
+          </div>
+          
+          <div class="theorem-card">
+            <span class="theorem-number">8</span>
+            <div class="theorem-content">
+              <h4>Ledger Curvature</h4>
+              <p>Information density curves spacetime, constraining allowable updates.</p>
+            </div>
+          </div>
         </div>
-        <div class="theory-expansion" aria-hidden="true">
-          <div class="expansion-body">
-            <div class="theorem-details">
-              <div class="theorem-item">
-                <h4>1. Universal Ledger</h4>
-                <p><strong>Statement:</strong> Every recognition structure satisfying MP + Composability + Finiteness admits a unique positive, double-entry ledger.</p>
-                <p><strong>Classical parallel:</strong> Conservation laws, state accounting, symmetries → conserved quantities (Noether's theorem).</p>
-              </div>
-              <div class="theorem-item">
-                <h4>2. Golden-Ratio Scaling</h4>
-                <p><strong>Statement:</strong> Cost minimization uniquely selects k=1, yielding the golden ratio φ as the universal scaling constant.</p>
-                <p><strong>Classical parallel:</strong> Renormalization group fixed points, scale invariance, critical phenomena.</p>
-              </div>
-              <div class="theorem-item">
-                <h4>3. 3+1 Spacetime</h4>
-                <p><strong>Statement:</strong> Stable non-trivial linking requires exactly three spatial dimensions; causality adds one temporal.</p>
-                <p><strong>Classical parallel:</strong> Spacetime dimensionality, topological constraints, knot theory applications.</p>
-              </div>
-              <div class="theorem-item">
-                <h4>4. Eight-Beat Cycle</h4>
-                <p><strong>Statement:</strong> Complete recognition of a 3D voxel (8 vertices) requires exactly 8 ticks—minimal Hamiltonian cycle.</p>
-                <p><strong>Classical parallel:</strong> Quantum phase cycles, Gray code traversals, discrete time evolution.</p>
-              </div>
-              <div class="theorem-item">
-                <h4>5. Light as Recognition</h4>
-                <p><strong>Statement:</strong> Maximum information transfer rate between voxels defines universal speed c = λ_rec/τ_rec.</p>
-                <p><strong>Classical parallel:</strong> Special relativity, causal structure, light cones and causality bounds.</p>
-              </div>
-              <div class="theorem-item">
-                <h4>6. φ-Scaled Mass</h4>
-                <p><strong>Statement:</strong> All particle masses follow m = B·E_coh·φ^(r+f) with integer rungs r and calculable residues f.</p>
-                <p><strong>Classical parallel:</strong> Mass generation mechanisms, Higgs mechanism, particle spectrum organization.</p>
-              </div>
-              <div class="theorem-item">
-                <h4>7. 45-Gap</h4>
-                <p><strong>Statement:</strong> Undecidability in the ledger produces universal corrections δ_gap = ln φ across all domains.</p>
-                <p><strong>Classical parallel:</strong> Quantum corrections, anomalous dimensions, higher-order effects in QFT.</p>
-              </div>
-              <div class="theorem-item">
-                <h4>8. Ledger Curvature</h4>
-                <p><strong>Statement:</strong> Spacetime curvature emerges as the cost functional κ = ∂²S/∂R² on the ledger entropy.</p>
-                <p><strong>Classical parallel:</strong> General relativity, Einstein field equations, geometry-matter coupling.</p>
-              </div>
-            </div>
-            <p class="tight" style="margin-top: 1.5rem;"><a href="/chain.html">Formal Lean proofs</a> • <a href="/theorems/">Detailed theorems</a> • <a href="/academic.html">Technical overview</a></p>
-            <div class="need-more">
-              <span>Need more clarity?</span>
-              <a href="#" class="deeper-toggle">See deeper explanation →</a>
-              <div class="deeper-content">
-                <p><strong>Why these eight?</strong> Each theorem represents a forced logical step. Change any one and the rest breaks—this over-constraint is what makes the framework falsifiable rather than flexible.</p>
-                <p><strong>Classical emergence:</strong> Standard physics appears as the macroscopic limit of these discrete, ledger-based rules. No new physics is added—classical laws are derived consequences.</p>
-              </div>
-            </div>
-          </div>
+        
+        <div class="theorems-links">
+          <a href="/chain.html">Formal Lean proofs</a> • <a href="/theorems/">Detailed theorems</a> • <a href="/academic.html">Technical overview</a>
         </div>
       </div>
 
@@ -294,7 +471,6 @@
       </div>
     </div>
   </section>
-  -->
 
   <!-- What It Is -->
   <section class="template-section">
