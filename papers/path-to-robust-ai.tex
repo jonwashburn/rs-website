@@ -1,16 +1,15 @@
 \documentclass[11pt,letterpaper]{article}
-\usepackage{times}
-\usepackage{helvet}
-\usepackage{courier}
+% \usepackage{times}\usepackage{helvet}\usepackage{courier} % disable non-default fonts to avoid missing TFM
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{tikz}
-\usepackage{pgfplots}
-\pgfplotsset{compat=1.17}
+% pgfplots disabled for PDF build portability
+% \usepackage{pgfplots}
+% \pgfplotsset{compat=1.17}
 \usepackage{graphicx}
 \usepackage{subcaption}
 \usepackage{booktabs}
-\usepackage{multirow}
+% \usepackage{multirow} % disabled for minimal build
 \usepackage{hyperref}
 \usepackage{listings}
 
@@ -339,7 +338,7 @@ The CA architecture would achieve this through:
 \begin{figure}[h]
 \centering
 \begin{tikzpicture}[scale=0.8]
-\begin{axis}[
+% \begin{axis}[
     xlabel={Problem Size (n)},
     ylabel={Computation Steps},
     legend pos=north west,
@@ -347,19 +346,19 @@ The CA architecture would achieve this through:
     ymode=log,
     xmode=log
 ]
-\addplot[color=blue,mark=*] coordinates {
-    (10, 13) (20, 18) (50, 26) (100, 33) (200, 42) (500, 52) (1000, 63)
-};
-\addlegendentry{CA Substrate (theoretical)}
+% \addplot[color=blue,mark=*] coordinates {
+%     (10, 13) (20, 18) (50, 26) (100, 33) (200, 42) (500, 52) (1000, 63)
+% };
+% \addlegendentry{CA Substrate (theoretical)}
 
-\addplot[color=red,mark=square*] coordinates {
-    (10, 100) (20, 400) (50, 2500) (100, 10000) (200, 40000)
-};
-\addlegendentry{LLM tokens (measured)}
+% \addplot[color=red,mark=square*] coordinates {
+%     (10, 100) (20, 400) (50, 2500) (100, 10000) (200, 40000)
+% };
+% \addlegendentry{LLM tokens (measured)}
 
-\addplot[domain=10:1000, samples=100, dashed] {10 * ln(x)/ln(10)};
-\addlegendentry{$O(\log n)$}
-\end{axis}
+% \addplot[domain=10:1000, samples=100, dashed] {10 * ln(x)/ln(10)};
+% \addlegendentry{$O(\log n)$}
+% \end{axis}
 \end{tikzpicture}
 \caption{Theoretical CA substrate scaling vs measured LLM token generation}
 \label{fig:scaling}

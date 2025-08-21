@@ -294,17 +294,31 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{tikz}
-\usepackage{pgfplots}
-\pgfplotsset{compat=1.16}
+% \usepackage{pgfplots} % disabled for minimal build
+% \pgfplotsset{compat=1.16}
 \usepackage{graphicx}
 \usepackage{subcaption}
 \usepackage{booktabs}
-\usepackage{multirow}
+% \usepackage{multirow} % disabled for minimal build
 \usepackage{listings}
-\usepackage[backend=biber,style=numeric,sorting=none]{biblatex}  
-\addbibresource{references.bib}  % Your .bib file WITH extension
+% \usepackage[backend=biber,style=numeric,sorting=none]{biblatex} % disabled for minimal build
+% \addbibresource{references.bib}  % disabled for minimal build
 \usepackage{hyperref}  % hyperref should come last
 \providecommand{\IFRrevstamp}{}
+
+% Theorem environments
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% Macros
+\providecommand{\lamrec}{\lambda_{\mathrm{rec}}}
 
 
 \title{\textbf{Recognition Science: The Empirical Measurement of Reality}\\[-1ex]
@@ -332,9 +346,9 @@ This work presents a theory of fundamental physics whose complete structure cons
 \subsection{The Crisis of Free Parameters in Modern Physics}
 The twentieth century stands as a monumental era in physics, culminating in two remarkably successful descriptive frameworks: the Standard Model of particle physics and the \(\Lambda\)CDM model of cosmology. Together, they account for nearly every fundamental observation, from the behavior of subatomic particles to the large-scale structure of the universe. Yet, this empirical triumph is shadowed by a profound conceptual crisis. Neither framework can be considered truly fundamental, as each is built upon a foundation of free parameters—constants that are not derived from theory but must be inserted by hand to match experimental measurements.
 
-The Standard Model requires at least nineteen such parameters, a list that includes the masses of the fundamental leptons and quarks, the gauge coupling constants, and the mixing angles of the CKM and PMNS matrices \parencite{PDG2024, Zyla2022}. Cosmology adds at least six more, such as the density of baryonic matter, dark matter, and the cosmological constant \parencite{Planck2018}. The precise values of these constants are known to extraordinary accuracy, but the theories themselves offer no explanation for \textit{why} they hold these specific values. They are, in essence, empirically determined dials that have been tuned to describe the universe we observe.
+The Standard Model requires at least nineteen such parameters, a list that includes the masses of the fundamental leptons and quarks, the gauge coupling constants, and the mixing angles of the CKM and PMNS matrices (PDG 2024; Zyla 2022). Cosmology adds at least six more, such as the density of baryonic matter, dark matter, and the cosmological constant (Planck 2018). The precise values of these constants are known to extraordinary accuracy, but the theories themselves offer no explanation for \textit{why} they hold these specific values. They are, in essence, empirically determined dials that have been tuned to describe the universe we observe.
 
-This reliance on external inputs signifies a deep incompleteness in our understanding of nature. A truly fundamental theory should not merely accommodate the constants of nature, but derive them as necessary consequences of its core principles. The proliferation of parameters suggests that our current theories are effective descriptions rather than the final word. Attempts to move beyond this impasse, such as string theory, have often exacerbated the problem by introducing vast "landscapes" of possible vacua, each with different physical laws, thereby trading a small set of unexplained constants for an astronomical number of possibilities, often requiring anthropic arguments to explain our specific reality \parencite{Susskind2003, Weinberg1987}.
+This reliance on external inputs signifies a deep incompleteness in our understanding of nature. A truly fundamental theory should not merely accommodate the constants of nature, but derive them as necessary consequences of its core principles. The proliferation of parameters suggests that our current theories are effective descriptions rather than the final word. Attempts to move beyond this impasse, such as string theory, have often exacerbated the problem by introducing vast "landscapes" of possible vacua, each with different physical laws, thereby trading a small set of unexplained constants for an astronomical number of possibilities, often requiring anthropic arguments to explain our specific reality \cite{Susskind2003, Weinberg1987}.
 
 This paper confronts this crisis directly. It asks whether it is possible to construct a framework for physical reality that is not only complete and self-consistent but is also entirely free of such parameters—a framework where the constants of nature are not inputs, but outputs of a single, logically necessary foundation.
 
@@ -517,7 +531,7 @@ This leads to the second necessary principle: every alteration that incurs a pos
 
 \subsection{The Necessity of Cost Minimization and the Derivation of the Cost Functional, \texorpdfstring{$J(x) = \frac{1}{2}(x + \frac{1}{x})$}{J(x) = 1/2(x + 1/x)}}
 
-The principles of dual-balance and finite cost lead to a further unavoidable consequence: the principle of cost minimization. In a system where multiple pathways for alteration exist, a reality bound by finiteness cannot be wasteful. Any process that expends more cost than necessary introduces an inefficiency that, over countless interactions, would lead to an unbounded accumulation of residual cost, once again violating the foundational requirement for a consistent, finite reality. Therefore, among all possible pathways a recognition event can take, the one that is physically realized must be the one that minimizes the total integrated cost, a direct parallel to the Principle of Least Action that underpins much of modern physics \parencite{Landau1976}.
+The principles of dual-balance and finite cost lead to a further unavoidable consequence: the principle of cost minimization. In a system where multiple pathways for alteration exist, a reality bound by finiteness cannot be wasteful. Any process that expends more cost than necessary introduces an inefficiency that, over countless interactions, would lead to an unbounded accumulation of residual cost, once again violating the foundational requirement for a consistent, finite reality. Therefore, among all possible pathways a recognition event can take, the one that is physically realized must be the one that minimizes the total integrated cost, a direct parallel to the Principle of Least Action that underpins much of modern physics \cite{Landau1976}.
 
 This principle of minimization, combined with the dual-balance symmetry, uniquely determines the mathematical form of the cost functional. A general form symmetric under \(x \leftrightarrow 1/x\) can be written as a series:
 \begin{equation}
@@ -546,11 +560,11 @@ Second, the principle of **Conservation of Cost Flow**. The principle of Dual-Ba
 \begin{equation}
 \frac{\partial\rho}{\partial t} + \nabla \cdot \mathbf{J} = 0
 \end{equation}
-where \(\rho\) is the density of ledger cost and \(\mathbf{J}\) is the cost current. This equation is the unavoidable mathematical statement of local balance, familiar from classical field theories \parencite{Jackson1999}. It guarantees that the ledger remains consistent at every point and at every moment, preventing the spontaneous appearance or disappearance of cost that would violate the foundational demand for a self-consistent reality.
+where \(\rho\) is the density of ledger cost and \(\mathbf{J}\) is the cost current. This equation is the unavoidable mathematical statement of local balance, familiar from classical field theories \cite{Jackson1999}. It guarantees that the ledger remains consistent at every point and at every moment, preventing the spontaneous appearance or disappearance of cost that would violate the foundational demand for a self-consistent reality.
 
 Together, countability and conservation establish the fundamental grammar of all interactions. Every event in the universe is a countable transaction, and the flow of cost in these transactions is strictly conserved, ensuring the ledger's perfect and perpetual balance.
 
-\subsection{The Necessity of Self-Similarity and the Emergence of the Golden Ratio, \texorpdfgamma{$ \varphi $}{phi}}
+\subsection{The Necessity of Self-Similarity and the Emergence of the Golden Ratio, $\varphi$}
 The principles established thus far must apply universally, regardless of the scale at which we observe reality. A framework whose rules change with scale would imply the existence of arbitrary, preferred scales, introducing a form of free parameter that violates the principle of a minimal, logically necessary reality. Therefore, the structure of the ledger and the dynamics of cost flow must be **self-similar**. The pattern of interactions that holds at one level of reality must repeat at all others.
 
 This requirement for self-similarity, when combined with the principles of duality and cost minimization, uniquely determines a universal scaling constant. Consider the simplest iterative process that respects dual-balance. An alteration from a balanced state (\(x=1\)) creates an imbalance (\(x\)). The dual-balancing response (\(k/x\)) and the return to the balanced state (\(+1\)) define a recurrence relation that governs how alterations propagate across scales: \(x_{n+1} = 1 + k/x_n\).
@@ -565,10 +579,10 @@ Rearranging this gives the quadratic equation \(x^2 - x - 1 = 0\). This equation
 \begin{equation}
 \varphi = \frac{1 + \sqrt{5}}{2} \approx 1.618...
 \end{equation}
-The golden ratio is not an arbitrary choice or an empirical input; it is the unique, inevitable scaling factor for any dynamical system that must satisfy the foundational requirements of dual-balance, cost minimization, and self-similarity \parencite{Livio2002}. Alternatives like the silver ratio (\(\sqrt{2}+1 \approx 2.414\)), which arises from \(k=2\), are ruled out as they correspond to a system with a non-minimal interaction strength, thus violating the principle of cost minimization.
+The golden ratio is not an arbitrary choice or an empirical input; it is the unique, inevitable scaling factor for any dynamical system that must satisfy the foundational requirements of dual-balance, cost minimization, and self-similarity \cite{Livio2002}. Alternatives like the silver ratio (\(\sqrt{2}+1 \approx 2.414\)), which arises from \(k=2\), are ruled out as they correspond to a system with a non-minimal interaction strength, thus violating the principle of cost minimization.
 
 %-----------------------------------------------------------------
-%  NEW MATERIAL — append to the end of §2.3 “Golden‑ratio fixed point”
+%  NEW MATERIAL — append to the end of §2.3 “Golden‑ratio fixed point”
 %-----------------------------------------------------------------
 \subsubsection*{Why the scaling constant \texorpdfstring{$k$}{k} must be the integer 1}
 
@@ -721,7 +735,7 @@ $\operatorname{Lk}(\gamma_{1},\gamma_{2})=\ell\in\mathbb Z$.
 Because a ledger hop that threads $\gamma_{2}$ through the
 disc bounded by $\gamma_{1}$ flips \emph{all nine} $\mathbb Z_{2}$
 parities listed in Lemma H.1,%
-\footnote{See Appendix H, Lemma H.1 for the parity list and
+\footnote{See Appendix H, Lemma H.1 for the parity list and
 Lemma H.4 for the path–cost isomorphism.}
 the minimal positive cost attached to that hop is the
 elementary bit cost $J_{\text{bit}}\!=\!\ln\varphi$.
@@ -787,7 +801,7 @@ knot‑theoretic argument are now fully aligned.
 
 *Interpretation.*  Physically, the requirement that positive ledger cost can neither accumulate indefinitely nor be wiped away forces reality to host at least one pair of “mutually inescapable” histories.  Geometry translates that requirement into the existence of a non‑trivial link, and topology then answers the dimensionality question in a single line: you need exactly three spatial directions to tie—even once—the simplest knot in the ledger.  No appeals to habitability, complexity, or anthropic reasoning are involved.
 
-By Theorem 3.1, the minimal spatial dimension is fixed at \(d_{\text{spatial}}=3\). A complete temporal recognition of the minimal spatial unit (a voxel with $2^3=8$ vertices) requires a cycle of 8 ticks. The full combinatorial proof, establishing $T=8$ as both necessary and minimal, is given in the Eight–Tick–Cycle Theorem in Appendix~G. This fixes the temporal period to \(N_{\text{ticks}}=2^{3}=8\).
+By Theorem 3.1, the minimal spatial dimension is fixed at \(d_{\text{spatial}}=3\). A complete temporal recognition of the minimal spatial unit (a voxel with $2^3=8$ vertices) requires a cycle of 8 ticks. The full combinatorial proof, establishing $T=8$ as both necessary and minimal, is given in the Eight–Tick–Cycle Theorem in Appendix~G. This fixes the temporal period to \(N_{\text{ticks}}=2^{3}=8\).
 
 \subsection{The Minimal Unit of Spatially-Complete Recognition: The Voxel and its 8 Vertices}
 Having established the necessity of three spatial dimensions, we must now consider the nature of a recognition event within this space. A truly fundamental recognition cannot be a dimensionless point, as a point lacks the structure to be distinguished from any other point without an external coordinate system. A complete recognition event must encompass the full structure of the smallest possible unit of distinct, stable space—a minimal volume. We call this irreducible unit of spatial recognition a **voxel**.
@@ -915,7 +929,7 @@ This constant \(c\) is not an arbitrary parameter but is fundamentally woven int
 
 The propagation of cost and recognition from one voxel to its neighbor defines the null interval, or light cone, of that voxel. Any event outside this cone is definitionally unreachable in a single tick. The metric of spacetime is thus implicitly defined with \(c\) as the conversion factor between space and time, making it an inevitable feature of a consistent, discrete, and self-similar reality. The specific numerical value of \(c\) is an empirical reality, but its existence as a finite, universal, and maximal speed is a direct and necessary consequence of the logical framework.
 
-\newcommand{\lamrec}{\lambda_{\text{rec}}}
+% duplicate macro removed
 
 \subsection{The Recognition Length \texorpdfstring{($\lamrec$)}{(lambda_rec)} as a Bridge between Bit-Cost and Curvature}
 With a universal speed \(c\) established, a fundamental length scale is required. This scale, the **recognition length** (\(\lamrec\)), is derived from the balance between the cost of a minimal recognition event and the cost of the spatial curvature it induces.
@@ -1103,12 +1117,12 @@ wave function
 $\psi(\mathbf r,t)=\int_{\gamma\,:\,x^{A}(t)=\mathbf r}\!\!d\mu(\gamma)$.
 Unitarity of ledger translations forces $\psi$ to satisfy a
 first-order differential equation whose unique positive functional
-solution for probabilities is \parencite{Landau1977}
+solution for probabilities is \cite{Landau1977}
 \[
   \boxed{\,P(\mathbf r,t)=|\psi(\mathbf r,t)|^{2}\,}.
 \]
 Hence the Born rule is not an \emph{extra} postulate; it is the only
-probability measure compatible with the ledger cost weight \parencite{Schlosshauer2005}.
+probability measure compatible with the ledger cost weight \cite{Schlosshauer2005}.
 
 \paragraph{2.  Exchange symmetry from recognition permutations.}
 Ledger hops act on the path endpoints by the \emph{permutation group}
@@ -1127,7 +1141,7 @@ Thus Bose–Fermi dichotomy is a direct consequence of ledger
 permutation invariance.
 
 \paragraph{3.  Ledger partition function.}
-In the grand-canonical ensemble, which describes systems in thermal equilibrium with a reservoir of heat and particles, the ledger weight becomes \parencite{Landau1980}:
+In the grand-canonical ensemble, which describes systems in thermal equilibrium with a reservoir of heat and particles, the ledger weight becomes \cite{Landau1980}:
 \[
   Z=\!\!\sum_{\{\gamma^{(n)}\}}
        e^{-C[\gamma^{(n)}]+\beta\mu N[\gamma^{(n)}]},
@@ -1175,7 +1189,7 @@ axioms that fix the mass spectrum, cosmology, and gravity.
 The framework established in the preceding sections is not merely a structural description of spacetime; it is a complete dynamical engine. The principles of a discrete, dual-balanced, and self-similar ledger, operating under the rules of the LNAL, are sufficient to derive the explicit forms of physical laws and the properties of the entities they govern. In this section, we demonstrate this predictive power by deriving the mass spectrum of fundamental particles, the emergent nature of gravity, and the Born rule as direct consequences of the framework's logic.
 
 \subsection{The Helical Structure of DNA}
-The iconic double helix structure of DNA, first proposed by Watson and Crick, is a logically necessary form for stable information storage \parencite{WatsonCrick1953}. The framework predicts two key parameters, with higher-order corrections from the undecidability-gap series bringing the values to exactness:
+The iconic double helix structure of DNA, first proposed by Watson and Crick, is a logically necessary form for stable information storage \cite{WatsonCrick1953}. The framework predicts two key parameters, with higher-order corrections from the undecidability-gap series bringing the values to exactness:
 \begin{itemize}
     \item \textbf{Helical Pitch:} The length of one turn is derived from the unitary phase cycle (\(\pi\)) and the dual nature of the strands (\(2\)), divided by the self-similar growth rate (\(\ln \varphi\)). This is corrected by a factor \( (1 + f_{\text{bio}}) \), where \(f_{\text{bio}} \approx 0.0414\) is a small residue from the gap series for biological systems. This yields a predicted pitch of \(\pi / (2 \ln \varphi) \times 1.0414 \approx 3.400\) nm, matching the measured value to <0.001%.
     \item \textbf{Bases per Turn:} A complete turn requires 10 base pairs, a number derived from the 8-beat cycle plus 2 for the dual strands (\(8+2=10\)).
@@ -1200,7 +1214,7 @@ Pitch per turn (nm) & \((\pi / (2 \ln \varphi)) \times 1.0414 \approx 3.400\) & 
 \label{tab:rh_zero}
 \begin{tabular}{lccc}
 \toprule
-\textbf{Parameter} & \textbf{Framework Prediction} & \textbf{Computed Value (\parencite{Riemann1859, Odlyzko2001})} & \textbf{Deviation} \\
+\textbf{Parameter} & \textbf{Framework Prediction} & \textbf{Computed Value (\cite{Riemann1859, Odlyzko2001})} & \textbf{Deviation} \\
 \midrule
 Im(\(\rho_6\)) & \(12\pi \approx 37.699\) & 37.586 & 0.3\% \\
 \bottomrule
@@ -1243,7 +1257,7 @@ with
   \tanh^{2}\!\bigl(\chi/(\sqrt6\,\varphi)\bigr)\;}
 \]
 forced by the eight Recognition Axioms and \emph{no additional
-parameters}. While derived here from first principles, this potential is functionally similar to the T-models found in \(\alpha\)-attractor theories of inflation \parencite{KalloshLinde2013}. The dimensionless constant
+parameters}. While derived here from first principles, this potential is functionally similar to the T-models found in \(\alpha\)-attractor theories of inflation \cite{KalloshLinde2013}. The dimensionless constant
 \(\varphi=(1+\sqrt5)/2\) is already fixed in Chap.~1.
 
 \paragraph{Inflationary solution.}
@@ -1280,7 +1294,7 @@ Taking \(N_{\star}=60\) for the mode \(k_{\star}=0.05\,Mpc^{-1}\) gives
   \boxed{\,r=\frac{12\,\varphi^{-2}}{N_{\star}^{2}}
           =1.27\times10^{-3}\,},
 \]
-both within current experimental bounds \parencite{Planck2018_inflation}.
+both within current experimental bounds \cite{Planck2018_inflation}.
 
 The scalar amplitude obeys
 \(\mathcal A_{s}=\frac{\mathcal V}{24\pi^{2}\varepsilon}
@@ -1302,7 +1316,7 @@ radiation bath at temperature
 \[
   T_{\text{reh}}=(30\mathcal V_{0}/\pi^{2}g_{\!*})^{1/4},
   \quad
-  g_{\!*}=106.75 \parencite{Dodelson2020}.
+  g_{\!*}=106.75 \cite{Dodelson2020}.
 \]
 \paragraph{Dark‑energy remnant.}
 Ledger running of the vacuum block obeys
@@ -1346,7 +1360,7 @@ asymmetry, and (iii) the observed late‑time vacuum energy—
 \section{Baryogenesis from Recognition‑Scalar Decay}
 \label{sec:baryogenesis}
 
-The framework provides a natural mechanism for generating the observed baryon asymmetry of the universe, satisfying the three necessary conditions first outlined by Sakharov \parencite{Sakharov1967}.
+The framework provides a natural mechanism for generating the observed baryon asymmetry of the universe, satisfying the three necessary conditions first outlined by Sakharov \cite{Sakharov1967}.
 
 \subsection{1.  Sakharov conditions within the Ledger}
 
@@ -1445,7 +1459,7 @@ highly suppressed:
   10^{37}\;{\rm yr},
 \]
 comfortably above the current Super‑Kamiokande bound
-\(\tau_{p}>5.9\times10^{33}\;{\rm yr}\) \parencite{SuperK2020}.
+\(\tau_{p}>5.9\times10^{33}\;{\rm yr}\) \cite{SuperK2020}.
 
 %-----------------------------------------------------------
 \paragraph{Outcome.}
@@ -1503,12 +1517,12 @@ $\varphi^{-5}$ spectrum from Chap.~7 gives
   \boxed{\,\sigma_{8}=0.792},
 \]
 in excellent agreement with the observed
-$\sigma_{8}=0.811\pm0.006$ \parencite{Planck2018}.  The scale‑dependent term
+$\sigma_{8}=0.811\pm0.006$ \cite{Planck2018}.  The scale‑dependent term
 suppresses growth by $\!\sim\!5\%$ at $k=1\,h\,\mathrm{Mpc}^{-1}$,
 alleviating the mild "$\sigma_{8}$ tension" between CMB and LSS data.
 
 \paragraph{Halo‑mass function.}
-Substituting $D(a,k)$ into the Sheth–Tormen mass function \parencite{ShethTormen1999} gives a
+Substituting $D(a,k)$ into the Sheth–Tormen mass function \cite{ShethTormen1999} gives a
 present‑day cluster abundance that matches the DESI Y1 counts for
 $M\gtrsim10^{14}M_{\odot}$ without invoking non‑baryonic dark matter.
 
@@ -1539,7 +1553,7 @@ The predictions summarized above are not merely theoretical; they are directly a
 
     \item \textbf{Nanoscale Gravity Tests:} The framework's emergent theory of gravity predicts a specific modification to the gravitational force at extremely small distances, governed by the formula:
     \[ G(r) = G_0 \exp(-r / (\varphi \lamrec)) \]
-    where \(G_0\) is the standard gravitational constant, \(r\) is the separation distance, \(\varphi\) is the golden ratio, and \(\lamrec \approx 1.616 \times 10^{-35}\,\mathrm{m}\) is the recognition length. This formula predicts a rapid decay of the gravitational interaction strength *below* the recognition scale. At laboratory scales (e.g., \(r \approx 35\,\mu\text{m}\)), the exponential term is vanishingly close to 1, meaning the framework predicts **no deviation** from standard gravity. This is fully consistent with the latest experimental bounds (e.g., the Vienna 2025 limit of \(G(r)/G_0 < 1.2 \times 10^5\) at \(35\,\mu\text{m}\) \parencite{ViennaGravity2025}), resolving any tension with existing data. Previous claims of a predicted enhancement were based on a misunderstanding of the theory.
+    where \(G_0\) is the standard gravitational constant, \(r\) is the separation distance, \(\varphi\) is the golden ratio, and \(\lamrec \approx 1.616 \times 10^{-35}\,\mathrm{m}\) is the recognition length. This formula predicts a rapid decay of the gravitational interaction strength *below* the recognition scale. At laboratory scales (e.g., \(r \approx 35\,\mu\text{m}\)), the exponential term is vanishingly close to 1, meaning the framework predicts **no deviation** from standard gravity. This is fully consistent with the latest experimental bounds (e.g., the Vienna 2025 limit of \(G(r)/G_0 < 1.2 \times 10^5\) at \(35\,\mu\text{m}\) \cite{ViennaGravity2025}), resolving any tension with existing data. Previous claims of a predicted enhancement were based on a misunderstanding of the theory.
 
     \item \textbf{Anomalous Magnetic Moment (\(g-2\)) Corrections:} The framework provides a parameter-free calculation of the anomalous magnetic moment of the muon, \(a_\mu\). The derivation, presented in full in Appendix~\ref{sec:g-2-derivation}, replaces the intractable multi-loop integrals of standard QED with a closed-form series derived from the ledger's dual-tour combinatorics. The resulting prediction, $\delta a_\mu = (2.34\pm0.07)\times10^{-9}$, when added to the Standard Model value, resolves the existing tension with the experimental measurement from Fermilab.
 
@@ -1585,7 +1599,7 @@ a_\ell \;=\; \frac{\alpha}{2\pi}\;+\;
            \!\int_{0}^{1}\!d\tau\;
            P_{m}(\tau)\;,
 \end{equation}
-where $P_{m}(\tau)$ is a dimensionless polynomial coming from the Feynman‑parameterised multi‑loop integral. In the usual SM calculation one proceeds to evaluate $P_{m}(\tau)$ numerically (Aoyama et al. 2020).
+where $P_{m}(\tau)$ is a dimensionless polynomial coming from the Feynman‑parameterised multi‑loop integral. In the usual SM calculation one proceeds to evaluate $P_{m}(\tau)$ numerically (Aoyama et al. 2020).
 
 \subsection*{2. Why the framework predicts a near-cancellation}
 The Recognition ledger interprets every virtual photon loop as a closed tour that must be balanced. The double-entry nature of the ledger forces two orientations for this tour: a "forward-time" path and a "backward-time" conjugate path, which is necessary to re-balance the ledger over a full 1024-tick "breath." These two paths generate contributions of opposite sign, leading to a near-total cancellation.
@@ -1731,7 +1745,7 @@ obeys
 \end{theorem}
 
 \begin{proof}
-The ratio bound (Lemma \ref{lem:ratio}) with $|z|\le1<\varphi$
+The ratio bound (Lemma \ref{lem:ratio}) with $|z|\le1<\varphi$
 gives absolute decay; the remainder bound is the standard tail of a
 dominating geometric series.
 \end{proof}
@@ -2005,7 +2019,7 @@ $J_{\text{bit}}=\ln\varphi$ be the elementary positive cost
   \mu([\gamma])\;:=\;J_{\text{bit}}\;\bigl|\Gamma\bigr|,
 \]
 where $\Gamma$ is the unique reduced representative of $[\gamma]$
-constructed in § H.3.
+constructed in § H.3.
 \end{definition}
 
 \begin{theorem}[Measure‑preserving isomorphism]\label{thm:isom}
@@ -2031,8 +2045,8 @@ Hence **path length and ledger cost are linearly proportional.**
 
 \begin{proof}
 Reduced words in the free product are concatenations of the
-primitive loops $(L_C,L_T,L_Y)$ established in Lemma H.2.
-The constructor (§ H.3) performs precisely this concatenation and
+primitive loops $(L_C,L_T,L_Y)$ established in Lemma H.2.
+The constructor (§ H.3) performs precisely this concatenation and
 then deletes all adjacent inverse pairs; the deletion does not affect
 cost because each $ee^{-1}$ carries cost
 $(+1)+(-1)=0$.  Therefore the cost of $\Gamma$ is
@@ -2486,7 +2500,7 @@ cycles form the Hopf link, i.e.\ have linking number $1$.
 Embed the hexahedral voxel as the unit cube inside $S^{3}$.
 Route $\gamma_{1}$ along the $(0,0,z)$ and $(1,1,z)$ edges with $z$
 varying, and $\gamma_{2}$ along $(0,1,z)$ and $(1,0,z)$.
-Standard isotopy shows the pair is a Hopf link, hence non‑trivial \parencite{Lickorish1997}.
+Standard isotopy shows the pair is a Hopf link, hence non‑trivial \cite{Lickorish1997}.
 \end{proof}
 
 Application of the Conway–Gordon theorem \cite[Thm.\,1]{ConwayGordon1983}
@@ -2663,7 +2677,7 @@ The general formula yields
         \varphi^{(98-8)/\varphi-11-1.834407+0.97990}
        = 0.93830\;\text{GeV},
 \]
-match PDG-2020 to 0.03 %.
+match PDG-2020 to 0.03 %.
 
 \paragraph{QED dressing rung (composite‑state ledger fix).}
 Lattice QCD alone gives
@@ -3855,6 +3869,6 @@ The following are falsifiable predictions for phenomena that are currently unmea
     \item \textbf{Rationale:} The framework's baseline prediction for bulk phonon damping is $Q \approx \varphi^{40}$. However, in the specific experimental setups that achieve record quality factors, several loss channels are suppressed. The framework accounts for this via the \textbf{Modal-Participation Ledger Rule}, where the total loss is a weighted sum over all dissipation mechanisms. For the cryogenic whispering-gallery modes used in these experiments, a detailed analysis reveals three key suppressions: (1) The three-phonon Umklapp process is kinematically forbidden, shifting the dominant loss to a less costly four-phonon process (a $\varphi^2$ gain in Q). (2) Cryogenic annealing creates large, coherent "super-domains," reducing the participation of bulk defects (a $\varphi^4$ gain). (3) The mode geometry and electrostatic trapping confine strain energy to the bulk, drastically reducing surface participation (a $\varphi^2$ gain). The combined effect is a multiplicative gain of $\varphi^2 \cdot \varphi^4 \cdot \varphi^2 = \varphi^8$ over the bulk limit, leading to the precise prediction of $Q_{\max} = \varphi^{48}$.
 \end{itemize}
 
-\printbibliography
+% \printbibliography
 
 \end{document} 

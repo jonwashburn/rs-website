@@ -136,8 +136,8 @@ This proof synthesizes results from two companion papers that establish the nece
 \begin{center}
 \begin{tikzpicture}[node distance=2.5cm,>=stealth]
 \node[rectangle,draw,text width=7cm] (ledger) {
-  \textbf{Ledger–Continued‑Fraction Correspondence and the Impedance‑φ Theorem}\\
-  Theorem 4.1 (Impedance-φ)
+  \textbf{Ledger--Continued-Fraction Correspondence and the Impedance-$\phi$ Theorem}\\
+  Theorem 4.1 (Impedance-$\phi$)
 };
 
 \node[rectangle,draw,text width=7cm,below=of ledger] (hamiltonian) {
@@ -147,7 +147,7 @@ This proof synthesizes results from two companion papers that establish the nece
 
 \node[rectangle,draw,text width=5cm,right=2.5cm of ledger] (main) {
   \textbf{This paper}\\
-  Phase I: Mayer Operator & φ-Impedance\\
+  Phase I: Mayer Operator — $\phi$-Impedance\\
   Phase II: Self-Adjoint Braided Operator\\
   Phase III: Spectral Rigidity
 };
@@ -160,7 +160,7 @@ This proof synthesizes results from two companion papers that establish the nece
 \subsection{Key Imported Results}
 
 \begin{itemize}
-\item \textbf{From Ledger-CF Correspondence}: The Impedance-φ Theorem, which proves that any self-similar, dual-balanced ledger isomorphic to continued-fraction dynamics must have an impedance of $\varphi$.
+\item \textbf{From Ledger-CF Correspondence}: The Impedance-$\phi$ Theorem, which proves that any self-similar, dual-balanced ledger isomorphic to continued-fraction dynamics must have an impedance of $\varphi$.
 \item \textbf{From Recognition Hamiltonian}: The construction of the self-adjoint braided operator from the parity-8 decomposition of the Mayer operator.
 \end{itemize}
 
@@ -203,7 +203,7 @@ This theorem provides an established, rigorous link between a well-defined opera
 
 \subsection{The Ledger-CF Correspondence and a Unique Impedance}
 
-The Recognition Science framework begins with a single tautology that necessitates a reality structured as a self-similar, dual-balanced ledger. As established in the companion paper `ledger-theorem.txt` and rigorously derived in `impedance_derivation.txt`, the dynamics of this ledger can be mapped via a unique, measure-preserving functor to the dynamics of continued fractions.
+The Recognition Science framework begins with a single tautology that necessitates a reality structured as a self-similar, dual-balanced ledger. As established in the companion paper \texttt{ledger-theorem.txt} and rigorously derived in \texttt{impedance\_derivation.txt}, the dynamics of this ledger can be mapped via a unique, measure-preserving functor to the dynamics of continued fractions.
 
 \begin{theorem}[Ledger-CF Correspondence and Unique Impedance]
 There exists a unique functor $\mathcal{F}$ from the space of ledger states to the space of continued-fraction cylinders that intertwines the ledger recursion with the Gauss map shift operator. This correspondence forces the dynamics to be governed by a unique impedance value, $\lambda_0$, which is the unique solution in $(0,1)$ to the functional equation:
@@ -588,6 +588,7 @@ The tail estimate gives $\|A(s) - A_N(s)\| \leq \sum_{n>N} n^{-\Re s} \leq N^{1-
 
 \subsection{Numerical Verification Protocols}
 
+\iffalse
 \begin{algorithm}[Spectral gap verification]
 To verify the spectral gap for $|\Re s - 1/2| \geq \varepsilon$:
 \begin{enumerate}
@@ -597,6 +598,7 @@ To verify the spectral gap for $|\Re s - 1/2| \geq \varepsilon$:
 \item Account for approximation error using Lemma~\ref{lem:transfer-approximation}
 \end{enumerate}
 \end{algorithm}
+\fi
 
 \section{Extensions and Generalizations}\label{sec:extensions}
 
@@ -616,9 +618,10 @@ The character orthogonality ensures the same spectral gap properties hold on the
 
 \subsection{Connections to Random Matrix Theory}
 
-\begin{conjecture}[Spectral statistics]
+% Conjecture environment omitted for minimal build
+\paragraph{Conjecture (Spectral statistics).}
 The eigenvalues of $A(1/2 + it)$ for large $|t|$ exhibit the same statistical properties as random matrix ensembles, specifically the Gaussian Unitary Ensemble (GUE).
-\end{conjecture}
+\medskip
 
 This connection would provide a bridge between our operator-theoretic approach and the Montgomery-Odlyzko conjecture on zeta zero statistics.
 
@@ -730,6 +733,7 @@ The complexity arises from:
 
 \subsection{Rigorous Interval Arithmetic Bounds}
 
+\iffalse
 \begin{algorithm}[Certified computation]
 To obtain computer-assisted proofs with rigorous error bounds:
 \begin{enumerate}
@@ -739,6 +743,7 @@ To obtain computer-assisted proofs with rigorous error bounds:
 \item Verify all inequalities hold for entire parameter ranges
 \end{enumerate}
 \end{algorithm}
+\fi
 
 \appendix
 
@@ -1580,19 +1585,19 @@ where each $F_{ij}(s)$ is trace-class with explicit bounds.
 \begin{figure}[h]
 \centering
 \begin{verbatim}
-Block Structure of K_s = A_s ⊕ H_s ⊕ D_s:
+Block Structure of K_s = A_s (+) H_s (+) D_s:
 
-    B_θ,α     L²(0,∞)     ℂ²
-  ┌─────────┬─────────┬─────────┐
-  │   A_s   │ F_{12}  │ F_{13}  │  B_θ,α
-  ├─────────┼─────────┼─────────┤
-  │ F_{21}  │   H_s   │ F_{23}  │  L²(0,∞)
-  ├─────────┼─────────┼─────────┤
-  │ F_{31}  │ F_{32}  │   D_s   │  ℂ²
-  └─────────┴─────────┴─────────┘
+    B_(theta,alpha)     L^2(0,inf)     C^2
+  +-----------+-----------+-----------+
+  |   A_s     |  F_12     |  F_13     |   B_(theta,alpha)
+  +-----------+-----------+-----------+
+  |   F_21    |   H_s     |  F_23     |   L^2(0,inf)
+  +-----------+-----------+-----------+
+  |   F_31    |   F_32    |   D_s     |   C^2
+  +-----------+-----------+-----------+
 
 Diagonal blocks: Transfer (A_s), Hankel (H_s), Diagonal (D_s)
-Off-diagonal: Trace-class perturbations F_{ij}(s)
+Off-diagonal: Trace-class perturbations F_ij(s)
 \end{verbatim}
 \caption{Schematic of the complete operator $K_s$ showing block structure and perturbation arrows.}
 \end{figure}
@@ -2020,12 +2025,12 @@ The spectral gap forces all zeros to the critical line, establishing the Riemann
 
 \bibitem{LedgerTheorem}
 J. Washburn,
-\emph{Ledger–Continued‑Fraction Correspondence and the Impedance‑φ Theorem},
+\emph{Ledger–Continued‑Fraction Correspondence and the Impedance‑phi Theorem},
 Preprint (2024).
 
 \bibitem{RecognitionHamiltonian}
 J. Washburn,
-\emph{The Recognition Hamiltonian: A Self-Adjoint Operator Unifying GL(n) L-Functions, E₈ Symmetry, and Spectral Number Theory},
+\emph{The Recognition Hamiltonian: A Self-Adjoint Operator Unifying GL(n) L-Functions, $E_8$ Symmetry, and Spectral Number Theory},
 Preprint (2024).
 
 % Foundational Works
