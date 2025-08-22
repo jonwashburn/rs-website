@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Geometric Framework for Finite Multi‑Loop Calculations in QFT — Full Paper (HTML)</title>
+  <meta name="description" content="Full HTML rendering of 'A Geometric Framework for Finite Multi‑Loop Calculations in QFT' with MathJax and site styling." />
+  <link rel="alternate" type="application/pdf" href="/papers/Geometric_Framework_for_Finite_Multi_Loop_Calculations_in_QFT.pdf" />
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/site-template.css" />
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        packages: {'[+]': ['ams','newcommand']}
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    .paper-wrap { max-width: 920px; margin: 0 auto; padding: 2rem 1.25rem; background: #fff; }
+    .paper-meta { text-align: center; margin-bottom: 1rem; }
+    .paper-title { font-size: 2rem; font-weight: 800; margin: 0.25rem 0 0.35rem; color: var(--color-primary); }
+    .paper-author { color: var(--color-text-muted); }
+    .paper-toolbar { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin: 0.75rem 0 1.5rem; }
+    .paper-abstract { background: var(--color-bg-subtle); border-left: 4px solid var(--color-accent); padding: 1rem; margin: 1rem 0 1.25rem; display:none; }
+    .paper-body h2 { margin-top: 2rem; color: var(--color-primary); }
+    .paper-body h3 { margin-top: 1.25rem; color: var(--color-primary); }
+    .env { background: #f7f7f9; border: 1px solid var(--color-border-light); border-radius: 6px; padding: 0.75rem 1rem; margin: 1rem 0; }
+    .env-title { font-weight: 700; color: var(--color-primary); margin-bottom: 0.5rem; }
+    .mjx-container { overflow-x: auto; max-width: 100%; }
+  </style>
+  <link rel="canonical" href="/geometric-framework-qft.html" />
+</head>
+<body class="template-page">
+  <div id="header-placeholder"></div>
+  <div id="sitewide-banner-placeholder"></div>
+
+  <main>
+    <section class="template-section">
+      <div class="paper-wrap">
+        <div class="paper-meta">
+          <h1 class="paper-title" id="paper-title">A Geometric Framework for Finite Multi‑Loop Calculations in QFT</h1>
+          <div class="paper-author" id="paper-author">Jonathan Washburn • <a href="mailto:washburn@recognitionphysics.org">washburn@recognitionphysics.org</a></div>
+          <div class="paper-toolbar">
+            <a class="template-btn" href="/papers/Geometric_Framework_for_Finite_Multi_Loop_Calculations_in_QFT.pdf" download>Download PDF</a>
+            <a class="template-btn" href="/papers/voxel_paper.tex" download>Download .tex</a>
+          </div>
+        </div>
+
+        <div id="paper-abstract" class="paper-abstract"></div>
+        <div id="paper-body" class="paper-body"></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <!-- Embed LaTeX source for HTML rendering via MathJax (kept minimal) -->
+  <script id="paper-tex" type="text/plain"></script>
+
+  <script>
+    // Fetch the .tex source and inject into the placeholder
+    (async function(){
+      try {
+        const resp = await fetch('/papers/voxel_paper.tex', { cache: 'no-store' });
+        if (!resp.ok) throw new Error('Fetch failed');
+        const tex = await resp.text();
+        document.getElementById('paper-tex').textContent = tex;
+        // Basic split: try to extract abstract and body heuristically
+        // For now, just show all content rendered by MathJax below toolbar.
+        const bodyEl = document.getElementById('paper-body');
+        const pre = document.createElement('pre');
+        pre.textContent = tex;
+        pre.style.whiteSpace = 'pre-wrap';
+        pre.style.wordBreak = 'break-word';
+        bodyEl.appendChild(pre);
+        if (window.MathJax) { window.MathJax.typesetPromise(); }
+      } catch (e) {
+        const bodyEl = document.getElementById('paper-body');
+        bodyEl.innerHTML = '<div class="env"><div class="env-title">Error</div>Could not load LaTeX source.</div>';
+      }
+    })();
+  </script>
+
+  <script src="/assets/js/main.js"></script>
+</body>
+</html>
+
+
