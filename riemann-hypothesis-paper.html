@@ -39,6 +39,7 @@
     .env { background: #f7f7f9; border: 1px solid var(--color-border-light); border-radius: 6px; padding: 0.75rem 1rem; margin: 1rem 0; }
     .env-title { font-weight: 700; color: var(--color-primary); margin-bottom: 0.5rem; }
     .mjx-container { overflow-x: auto; max-width: 100%; }
+    .proof-map pre { white-space: pre-wrap; word-break: break-word; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace; background: #fafafa; border: 1px solid #eee; padding: 0.75rem; border-radius: 6px; }
   </style>
   <link rel="canonical" href="/riemann-hypothesis-paper.html" />
 </head>
@@ -58,18 +59,13 @@
           </div>
         </div>
 
-        <!-- Proof Map block -->
+        <!-- Proof Map block (MathJax-rendered excerpt) -->
         <div class="rb-box" style="margin: 1rem 0 1.25rem;">
           <h2 style="margin: 0 0 0.5rem 0;">Proof Map (One‑Page Overview)</h2>
           <div class="template-btn-group" style="margin-bottom: 0.75rem;">
-            <a class="template-btn" href="/papers/Riemann_Proof_Map.pdf" target="_blank">Open Proof Map (PDF)</a>
             <a class="template-btn" href="/papers/Riemann_Proof_Map.tex" target="_blank">Download Proof Map .tex</a>
           </div>
-          <div style="border: 1px solid #ddd; overflow: auto; max-height: 70vh;">
-            <object data="/papers/Riemann_Proof_Map.pdf" type="application/pdf" width="100%" height="800px">
-              <p class="legal-note">Inline preview unavailable. Use the links above to open the proof map.</p>
-            </object>
-          </div>
+          <div id="proof-map" class="template-reading proof-map"></div>
         </div>
 
         <div id="paper-abstract" class="paper-abstract"></div>
@@ -2626,6 +2622,23 @@ Hence the hypothesis of Theorem~\ref{thm:certificate} holds (in fact with a marg
           setTimeout(typesetWhenReady, 250);
         } catch(_) {}
       }
+
+      // Fetch and render the Proof Map (MathJax-rendered, not a PDF viewer)
+      (function(){
+        const el = document.getElementById('proof-map');
+        if (!el) return;
+        fetch('/papers/Riemann_Proof_Map.tex', { cache: 'no-store' })
+          .then(resp => resp.ok ? resp.text() : '')
+          .then(tex => {
+            if (!tex) return;
+            try {
+              el.innerHTML = convert(tex);
+            } catch(_){ /* ignore */ }
+            typesetWhenReady();
+          })
+          .catch(() => {});
+      })();
+
       typesetWhenReady();
     })();
   </script>
