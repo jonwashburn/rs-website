@@ -2632,6 +2632,8 @@ Hence the hypothesis of Theorem~\ref{thm:certificate} holds (in fact with a marg
           .then(tex => {
             if (!tex) return;
             try {
+              // Remove size commands that can leak as plain text tokens
+              tex = tex.replace(/\\(tiny|scriptsize|footnotesize|small|normalsize|large|Large|LARGE|huge|Huge)\b/g, '');
               el.innerHTML = convert(tex);
             } catch(_){ /* ignore */ }
             typesetWhenReady();
