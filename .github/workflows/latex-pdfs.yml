@@ -28,13 +28,15 @@ jobs:
           sudo apt-get install -y --no-install-recommends \
             texlive-latex-recommended texlive-latex-extra \
             texlive-fonts-recommended texlive-fonts-extra \
-            texlive-science texlive-plain-generic lmodern latexmk
+            texlive-pictures texlive-bibtex-extra texlive-science \
+            texlive-plain-generic lmodern latexmk biber
 
       - name: Compile PDFs
         run: |
           set -e
           cd rs-website/papers
           latexmk -pdf -interaction=nonstopmode -halt-on-error Inevitable-framework.tex || true
+          rm -f references.bib || true
           latexmk -pdf -interaction=nonstopmode -halt-on-error empirical-measurement-of-reality.tex || true
 
       - name: Upload LaTeX logs (always)
