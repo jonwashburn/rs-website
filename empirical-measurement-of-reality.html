@@ -58,30 +58,7 @@
 
   <div id="footer-placeholder"></div>
 
-  <!-- Embed LaTeX source for HTML rendering via MathJax (kept minimal) -->
-  <script id="paper-tex" type="text/plain"></script>
-
-  <script>
-    // Fetch the .tex source and inject into the placeholder
-    (async function(){
-      try {
-        const resp = await fetch('/papers/empirical-measurement-of-reality.tex', { cache: 'no-store' });
-        if (!resp.ok) throw new Error('Fetch failed');
-        const tex = await resp.text();
-        document.getElementById('paper-tex').textContent = tex;
-        const bodyEl = document.getElementById('paper-body');
-        const pre = document.createElement('pre');
-        pre.textContent = tex;
-        pre.style.whiteSpace = 'pre-wrap';
-        pre.style.wordBreak = 'break-word';
-        bodyEl.appendChild(pre);
-        if (window.MathJax) { window.MathJax.typesetPromise(); }
-      } catch (e) {
-        const bodyEl = document.getElementById('paper-body');
-        bodyEl.innerHTML = '<div class="env"><div class="env-title">Error</div>Could not load LaTeX source.</div>';
-      }
-    })();
-  </script>
+  <!-- For parity with the RH page, do not render raw LaTeX inline. The PDF/.tex are available via toolbar. -->
 
   <script src="/assets/js/main.js"></script>
 </body>
