@@ -638,7 +638,91 @@
               <div class="constant-def">SECTOR FACTORS</div>
               <div class="constant-val">B_e=1, B_q=3, B_W=12</div>
             </summary>
-            <div class="constant-desc">Channel multiplicities. Counts independent ledger paths: leptons (1), quarks (3), gauge bosons (12).</div>
+            <div class="constant-desc">
+              <div class="constant-detail">
+                <strong>What B_i is</strong>
+                <em>Integer sector factor (channel multiplicity)</em>
+                <p>
+                  B_i counts the number of <em>independent recognition channels</em> that contribute linearly to a state’s mass at the structure‑only level. It is a <strong>dimensionless integer</strong> fixed by sector definitions and combinatorics — not a tunable constant.
+                </p>
+                <p>
+                  Examples of minimal sectors used on this site: leptons <span style="font-family: var(--font-mono);">B_e=1</span>, quarks <span style="font-family: var(--font-mono);">B_q=3</span> (color triplet), gauge sector exemplar <span style="font-family: var(--font-mono);">B_W=12</span> (aggregate multiplicity in the gauge block used for the spectra demonstrator).
+                </p>
+              </div>
+
+              <div class="constant-detail">
+                <strong>Where B_i comes from</strong>
+                <em>Channel counting from recognition registers and path topology</em>
+                <ul>
+                  <li><strong>Registers → channels:</strong> The recognition registers (e.g., color, isospin, polarization) enumerate independent ways cost can flow without interference within a sector.</li>
+                  <li><strong>Path topology:</strong> Each independent channel corresponds to a distinct minimal ledger path (or path class) contributing additively to the sector’s base multiplicity.</li>
+                  <li><strong>Minimal sectorization:</strong> We adopt the smallest sector set that is closed under the eight‑beat scheduler and dual balance; B_i is then the channel count within that sector.</li>
+                </ul>
+                <p>
+                  Result: B_i is <em>fixed by counting</em> (e.g., 3 for quark color), not by fitting. Changing B_i would violate either channel independence or sector minimality.
+                </p>
+              </div>
+
+              <div class="constant-detail">
+                <strong>How B_i enters the mass law</strong>
+                <em>Linear prefactor; no effect on same‑sector ratios</em>
+                <p style="font-family: var(--font-mono); background: #f8f9fa; padding: 0.6rem 0.8rem; border-radius: 4px; display: inline-block;">
+                  m = B_i · E_coh · φ^{r + f}
+                </p>
+                <ul>
+                  <li><strong>Linear:</strong> B_i multiplies the base energy E_coh; sector membership determines the overall scale.</li>
+                  <li><strong>Same‑sector ratios:</strong> For two states in the <em>same sector</em>, B_i cancels, so ratios depend only on φ‑exponents (and small residues if retained):
+                    <span style="font-family: var(--font-mono);">m_2/m_1 = 2^{Δk} · φ^{Δr}</span>.</li>
+                  <li><strong>Cross‑sector comparisons:</strong> Relative scales reflect both B_i and rung differences; this is an over‑constraint across families, not a knob.</li>
+                </ul>
+              </div>
+
+              <div class="constant-detail">
+                <strong>Worked examples (structure‑only)</strong>
+                <em>No residues, to highlight the sector role</em>
+                <ul>
+                  <li>
+                    <strong>Leptons:</strong> electron vs muon share <span style="font-family: var(--font-mono);">B_e=1</span>; their ratio is controlled by integer rungs (and, with residues on, small RG corrections), not by B_i.
+                  </li>
+                  <li>
+                    <strong>Quarks:</strong> up vs down share <span style="font-family: var(--font-mono);">B_q=3</span> (color triplet multiplicity); same‑sector cancellation of B_q holds in ratios.
+                  </li>
+                  <li>
+                    <strong>Gauge exemplar:</strong> states grouped under the gauge block use the same sector multiplicity <span style="font-family: var(--font-mono);">B_W</span> in the spectra demonstrator; same‑sector ratios again eliminate B_W.
+                  </li>
+                </ul>
+              </div>
+
+              <div class="constant-detail">
+                <strong>Non‑implications</strong>
+                <em>What B_i does not do</em>
+                <ul>
+                  <li>Does <strong>not</strong> encode rung (r) or RG residue (f); those come from minimal ledger paths and definite integrals, respectively.</li>
+                  <li>Is <strong>not</strong> a fit parameter; changing B_i globally rescales an entire sector and breaks cross‑checks with other sectors.</li>
+                  <li>Introduces <strong>no uncertainty</strong>; it is an exact integer (count).</li>
+                </ul>
+              </div>
+
+              <div class="constant-detail">
+                <strong>Audit checks</strong>
+                <em>Consistency tests you can run</em>
+                <ul>
+                  <li><strong>Same‑sector ratios:</strong> Verify empirically that sector‑internal mass ratios match φ‑ladder predictions independent of B_i.</li>
+                  <li><strong>Cross‑sector coherence:</strong> Check that a single E_coh with the published B_i values and rungs reproduces inter‑family scale offsets without tuning.</li>
+                  <li><strong>Channel count invariance:</strong> Confirm that alternative channel partitions either double‑count or violate independence, reinforcing the chosen B_i.</li>
+                </ul>
+              </div>
+
+              <div class="constant-detail">
+                <strong>Further reading</strong>
+                <em>Derivation pipeline and sectorization</em>
+                <ul>
+                  <li><a href="/particle-masses.html">Parameter‑Free Particle Masses</a> — sector factors, rungs, and residues together.</li>
+                  <li><a href="/encyclopedia/sector-factors.html">Sector Factors (encyclopedia)</a> — channel counting principles.</li>
+                  <li><a href="/from-proof-to-measurement.html">From Proof to Measurement</a> — structure‑only spectra demonstrator.</li>
+                </ul>
+              </div>
+            </div>
           </details>
                 
           <details class="constant-entry">
