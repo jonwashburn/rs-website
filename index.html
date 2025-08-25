@@ -363,7 +363,96 @@
               <div class="constant-def">RECOGNITION TIME</div>
               <div class="constant-val">7.33 × 10^-15 s</div>
             </summary>
-            <div class="constant-desc">The fundamental tick of reality. No process occurs faster. Time emerges from sequential ledger posting: τ_rec = 2π/(8 ln φ).</div>
+            <div class="constant-desc">
+              <div class="constant-detail">
+                <strong>What τ_rec is</strong>
+                <em>The atomic tick of the ledger</em>
+                <p>
+                  τ_rec is the minimal duration of a single recognition hand‑off — the shortest possible time to post one debit/credit pair on the ledger and advance a state. No physical process can complete one recognition step in less than τ_rec.
+                </p>
+              </div>
+
+              <div class="constant-detail">
+                <strong>Bridge semantics (meter‑native)</strong>
+                <em>Dimensionless clock factor × one time anchor</em>
+                <ul>
+                  <li><strong>Dimensionless layer:</strong> the universal clock factor is
+                    <span style="font-family: var(--font-mono);">f_τ = 2π / (8 ln φ)</span>, fixed by the eight‑beat cycle in 3D and the ledger gap ln φ.</li>
+                  <li><strong>Time‑first landing:</strong> the dimensionful tick is
+                    <span style="font-family: var(--font-mono);">τ_rec = τ_0 · f_τ</span>, where the single anchor τ_0 is compared to the SI second.</li>
+                  <li><strong>Length‑first landing:</strong> adopting
+                    <span style="font-family: var(--font-mono);">λ_rec = √(ħG/c³)</span>, the kinematic relation
+                    <span style="font-family: var(--font-mono);">τ_rec = λ_rec / c</span> yields the same tick within uncertainties.</li>
+                </ul>
+              </div>
+
+              <div class="constant-detail">
+                <strong>Why f_τ = 2π / (8 ln φ)</strong>
+                <em>Eight‑beat closure and log‑axis stationarity</em>
+                <ul>
+                  <li><strong>Eight‑beat cycle:</strong> complete recognition of the 3‑cube’s 8 vertices requires 8 ticks (minimal Hamiltonian traversal in D=3).</li>
+                  <li><strong>Ledger gap:</strong> the positive bit‑cost ln φ is the minimal non‑zero recognition increment; on the log axis, stationarity at the symmetric cost J(e^t)=cosh t−1 selects a 2π phase per full closure.</li>
+                  <li>Combining these gives a dimensionless cadence per atomic tick: f_τ = 2π/(8 ln φ).</li>
+                </ul>
+              </div>
+
+              <div class="constant-detail">
+                <strong>Two equivalent SI landings (and a check)</strong>
+                <em>They must agree within stated uncertainties</em>
+                <ul>
+                  <li><strong>Time‑first:</strong>
+                    <span style="font-family: var(--font-mono);">τ_rec = τ_0 · 2π/(8 ln φ)</span>, with u(τ_rec)=u(τ_0).</li>
+                  <li><strong>Length‑first:</strong>
+                    <span style="font-family: var(--font-mono);">τ_rec = √(ħG/c³)/c</span>, with u(τ_rec)=½·u(G) (ħ and c are exact in SI).</li>
+                  <li><strong>Consistency:</strong> compare
+                    <span style="font-family: var(--font-mono);">τ_rec(time)</span> vs
+                    <span style="font-family: var(--font-mono);">τ_rec(length)</span>; a deviation exceeding the combined standard uncertainty falsifies the bridge or a landing assumption.</li>
+                </ul>
+              </div>
+
+              <div class="constant-detail">
+                <strong>Relations and roles</strong>
+                <em>Connects speed and length scales</em>
+                <ul>
+                  <li><strong>Speed:</strong>
+                    <span style="font-family: var(--font-mono);">c = λ_rec / τ_rec</span> (null exchange is one hop per tick).</li>
+                  <li><strong>Length per tick (kinematic):</strong>
+                    <span style="font-family: var(--font-mono);">λ_kin = c · τ_rec</span>; agrees with the Planck‑form λ_rec within uncertainties.</li>
+                  <li><strong>Energy‑time link:</strong> with E_coh = (ħ/τ_0)·φ^{-5}, one has
+                    <span style="font-family: var(--font-mono);">E_coh · τ_rec = ħ · φ^{-5} · f_τ</span> (units check only; φ and f_τ dimensionless).</li>
+                </ul>
+              </div>
+
+              <div class="constant-detail">
+                <strong>Operational consequences</strong>
+                <em>What τ_rec enforces physically</em>
+                <ul>
+                  <li>No recognition‑complete step occurs in less than τ_rec.</li>
+                  <li>Any detector/readout chain built from recognition steps has a strict per‑stage cadence ≥ τ_rec.</li>
+                  <li>Coherent propagation over N hops has a minimal latency N·τ_rec (ideal null path).</li>
+                </ul>
+              </div>
+
+              <div class="constant-detail">
+                <strong>Uncertainty propagation (concise)</strong>
+                <em>Traceability, not tunability</em>
+                <p>
+                  Time‑first: <span style="font-family: var(--font-mono);">u(τ_rec)=u(τ_0)</span>.
+                  Length‑first: <span style="font-family: var(--font-mono);">u(τ_rec)=½·u(G)</span>.
+                  Publish u(τ_0) (or the consistency check against G) to close the metrology loop — there is no adjustable scale beyond these anchors.
+                </p>
+              </div>
+
+              <div class="constant-detail">
+                <strong>Further reading</strong>
+                <em>Derivation and audit points</em>
+                <ul>
+                  <li><a href="/from-proof-to-measurement.html">From Proof to Measurement</a> — bridge layer and SI landings.</li>
+                  <li><a href="/theorems/8-beat-cycle.html">Eight‑Beat Cycle</a> — minimal clock period in 3D.</li>
+                  <li><a href="/constants/">Constants index</a> — links among φ, λ_rec, τ_rec, and E_coh.</li>
+                </ul>
+              </div>
+            </div>
           </details>
                 
           <details class="constant-entry">
