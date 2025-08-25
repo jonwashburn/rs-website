@@ -128,6 +128,14 @@
       padding-left: 3rem;
       position: relative;
     }
+    /* Make theorems accordions clickable (details/summary) */
+    details.theorem-entry { border-left: 3px solid #ff006e; transition: border-left-color 0.2s ease, border-left-width 0.2s ease, background 0.2s ease; }
+    details.theorem-entry summary { cursor: pointer; list-style: none; position: relative; padding-right: 1.5rem; border-radius: 6px; display: block; }
+    details.theorem-entry summary::-webkit-details-marker { display: none; }
+    details.theorem-entry summary::after { content: '▸'; position: absolute; right: 0.25rem; top: 0.1rem; color: var(--color-text-muted, #6b7280); transition: transform 0.2s ease, color 0.2s ease; font-size: 0.9rem; }
+    details.theorem-entry summary:hover { background: rgba(255, 0, 110, 0.06); }
+    details.theorem-entry[open] { border-left-width: 5px; background: rgba(255, 0, 110, 0.03); }
+    details.theorem-entry[open] summary::after { transform: rotate(90deg); color: var(--color-accent, #ff006e); }
     
     .theorem-entry::before {
       content: counter(theorem);
@@ -840,10 +848,68 @@
         <h2>Eight Theorems → Classical Physics</h2>
         
         <div class="theorems-list">
-          <div class="theorem-entry">
-            <div class="theorem-title">Universal Ledger</div>
-            <div class="theorem-statement">Every recognition structure admits a unique positive, double-entry ledger. Conservation laws emerge.</div>
-        </div>
+          <details class="theorem-entry">
+            <summary>
+              <div class="theorem-title">Universal Ledger</div>
+              <div class="theorem-statement">Every recognition structure admits a unique positive, double-entry ledger with immutable generator δ; conservation on closed chains follows.</div>
+            </summary>
+            <div class="theorem-details">
+              <div class="theorem-item">
+                <h4>Formal statement</h4>
+                <p>Any recognition structure satisfying Meta‑Principle (MP: ¬(∅▷∅)), Composability, and Finiteness admits a <strong>unique (up to order‑isomorphism)</strong> positive, double‑entry ledger with an immutable generator δ &gt; 0. For every finite closed chain the posted sum telescopes to 0 (local conservation).</p>
+              </div>
+
+              <div class="theorem-item">
+                <h4>Plain language</h4>
+                <p>Reality keeps receipts. Every change has a matching counter‑change; you can’t mint credits from nowhere or change the coin size mid‑story. Under the minimal assumptions (no miracles, composable changes, no infinite rabbit‑holes), a two‑column ledger isn’t optional—it’s forced.</p>
+              </div>
+
+              <div class="theorem-item">
+                <h4>Hypotheses</h4>
+                <ul>
+                  <li><strong>MP:</strong> absolute nothing cannot recognise itself.</li>
+                  <li><strong>Composability:</strong> if a▷b and b▷c then a▷c.</li>
+                  <li><strong>Finiteness:</strong> no infinite strictly advancing chains; accumulated cost is finite on any finite process.</li>
+                </ul>
+              </div>
+
+              <div class="theorem-item">
+                <h4>Construction sketch</h4>
+                <ul>
+                  <li><strong>Free abelian book:</strong> Grothendieck completion of oriented recognitions modulo [a→b]+[b→a]=0.</li>
+                  <li><strong>Posting maps:</strong> define ι, κ with double‑entry ι(b)−κ(a)=δ for each a→b; choose δ&gt;0 to induce the positive cone.</li>
+                  <li><strong>Conservation:</strong> sums on closed chains telescope to 0 (dual‑balance).</li>
+                </ul>
+              </div>
+
+              <div class="theorem-item">
+                <h4>Key lemmas</h4>
+                <ul>
+                  <li><strong>Free abelian construction</strong> yields an ordered group hosting the ledger.</li>
+                  <li><strong>No rescaling automorphisms:</strong> σ(δ)=sδ with s≠1 violates finiteness (descending/ascending chains).</li>
+                  <li><strong>No k‑ary/mod‑m ledgers:</strong> k≥3 creates orphan costs; modulo m makes non‑trivial loops look free ⇒ breaks MP.</li>
+                </ul>
+              </div>
+
+              <div class="theorem-item">
+                <h4>Corollaries and use</h4>
+                <ul>
+                  <li><strong>Continuity law:</strong> conservation on chains ⇒ discrete continuity; under coarse‑graining gives ∂tρ+∇·J=0.</li>
+                  <li><strong>Countability/atomic tick:</strong> unit postings and sequential order underpin quantisation (see T2).</li>
+                  <li><strong>Gauge class:</strong> potentials unique up to a constant on components (used in classical bridges).</li>
+                </ul>
+              </div>
+
+              <div class="theorem-item">
+                <h4>Audit & links</h4>
+                <ul>
+                  <li><a href="/theorems/T1-ledger-necessity.html">Detailed theorem page (T1)</a></li>
+                  <li><a href="/meta-principle.html">Meta‑Principle</a> • <a href="/chain.html">Formal proofs index</a></li>
+                  <li>Lean hooks listed on the theorem page; see also <a href="/from-proof-to-measurement.html">From Proof to Measurement</a>.</li>
+                </ul>
+              </div>
+            </div>
+          </details>
           
           <div class="theorem-entry">
             <div class="theorem-title">Golden-Ratio Scaling</div>
