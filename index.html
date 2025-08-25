@@ -33,14 +33,28 @@
       margin-bottom: 2rem;
       padding-left: 2rem;
       border-left: 3px solid #ff006e;
+      transition: border-left-color 0.2s ease, border-left-width 0.2s ease, background 0.2s ease;
     }
     /* Make constants accordions clickable and readable */
-    .constant-entry summary { cursor: pointer; list-style: none; }
+    .constant-entry summary { cursor: pointer; list-style: none; position: relative; padding-right: 1.5rem; border-radius: 6px; }
     .constant-entry summary::-webkit-details-marker { display: none; }
     .constant-entry summary .constant-symbol,
     .constant-entry summary .constant-def,
     .constant-entry summary .constant-val { display: block; }
-    .constant-entry[open] { border-left-color: var(--color-accent, #ff006e); }
+    .constant-entry summary::after {
+      content: '▸';
+      position: absolute;
+      right: 0.25rem;
+      top: 0.25rem;
+      color: var(--color-text-muted, #6b7280);
+      transition: transform 0.2s ease, color 0.2s ease;
+      font-size: 0.9rem;
+    }
+    .constant-entry summary:hover { background: rgba(255, 0, 110, 0.06); }
+    .constant-entry summary:hover .constant-symbol { color: var(--color-accent, #ff006e); }
+    .constant-entry summary:focus-visible { outline: 2px solid var(--color-accent, #ff006e); outline-offset: 2px; }
+    .constant-entry[open] { border-left-color: var(--color-accent, #ff006e); border-left-width: 5px; background: rgba(255, 0, 110, 0.03); }
+    .constant-entry[open] summary::after { transform: rotate(90deg); color: var(--color-accent, #ff006e); }
     
     .constant-symbol {
       font-size: 1.25rem;
