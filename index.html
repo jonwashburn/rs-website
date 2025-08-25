@@ -558,7 +558,78 @@
               <div class="constant-def">LEDGER ALPHABET</div>
               <div class="constant-val">{-4, -3, -2, -1, 0, 1, 2, 3, 4}</div>
             </summary>
-            <div class="constant-desc">Nine allowed cost states. Range ±4 forced by: entropy minimization, dynamical stability, Planck density cutoff.</div>
+            <div class="constant-desc">
+              <div class="constant-detail">
+                <strong>What A_L is</strong>
+                <em>Nine‑state alphabet of discrete recognition cost</em>
+                <p>
+                  <span style="font-family: var(--font-mono);">A_L = {−4, −3, −2, −1, 0, +1, +2, +3, +4}</span> is the minimal signed alphabet used to post discrete recognition costs on the ledger. Each symbol represents one indivisible increment of cost (positive or negative), with 0 denoting a null posting.
+                </p>
+                <p>
+                  This alphabet is <em>dimensionless</em> and fixed at the proof layer; it does not introduce any tunable parameter.
+                </p>
+              </div>
+
+              <div class="constant-detail">
+                <strong>Why exactly nine symbols (±4 … 0)</strong>
+                <em>Three independent constraints force the ±4 bound</em>
+                <ul>
+                  <li><strong>Entropy minimization (complexity):</strong> The alphabet must be the smallest set that spans the dynamic range needed to complete an 8‑beat recognition cycle in 3D while preserving dual balance. Adding symbols beyond ±4 raises descriptive complexity (Kolmogorov cost) without enabling new necessary states.</li>
+                  <li><strong>Dynamical stability:</strong> Iterating the symmetric cost J(x)=½(x+1/x) over recognition steps remains stable for |symbol|≤4; allowing a ±5 symbol produces overshoot/instability (positive Lyapunov growth) in the discrete update, breaking ledger finiteness.</li>
+                  <li><strong>Planck‑density/curvature cutoff:</strong> Four units of unresolved cost saturate the curvature budget in one voxel step; a fifth would exceed the gravitational tolerance and collapse the voxel, contradicting sustainable recognition flow.</li>
+                </ul>
+                <p>
+                  Together these constraints eliminate all smaller alphabets (insufficient span) and all larger ones (instability/overhead), leaving the nine‑state set as unique and minimal.
+                </p>
+              </div>
+
+              <div class="constant-detail">
+                <strong>Operational semantics</strong>
+                <em>How the alphabet is used in recognition steps</em>
+                <ul>
+                  <li><strong>Signed postings:</strong> Positive symbols record realized cost; negative symbols record the dual counter‑posting required by balance. Zero is an explicit no‑op (keeps timing without cost change).</li>
+                  <li><strong>Composition:</strong> Multi‑step recognitions are finite strings over A_L. Conservation (double entry) holds symbol‑wise across strings; total cost is the signed sum.</li>
+                  <li><strong>Eight‑beat cadence:</strong> A complete spatially minimal recognition in 3D consumes exactly 8 symbols (one per tick), drawn from A_L and arranged to satisfy dual balance and closure.</li>
+                </ul>
+              </div>
+
+              <div class="constant-detail">
+                <strong>Relation to LNAL (Light‑Native Assembly Language)</strong>
+                <em>Alphabet → instructions → programs</em>
+                <p>
+                  A_L underlies the LNAL instruction set by providing the allowed per‑tick cost quanta that operations may emit or absorb. Programs are sequences of LNAL instructions whose underlying symbol stream over A_L respects dual balance and the eight‑beat scheduler.
+                </p>
+              </div>
+
+              <div class="constant-detail">
+                <strong>Implications and non‑implications</strong>
+                <em>What A_L does and does not control</em>
+                <ul>
+                  <li><strong>Does:</strong> Quantize per‑tick ledger updates; constrain admissible control flows; guarantee stability and bounded descriptive complexity.</li>
+                  <li><strong>Does not:</strong> Set sector factors B, integer rungs r, or residues f in the mass law. Those are determined by channel counting and path geometry (B, r) and by definite RG integrals (f).</li>
+                </ul>
+              </div>
+
+              <div class="constant-detail">
+                <strong>Audit checks</strong>
+                <em>Consistency tests you can apply</em>
+                <ul>
+                  <li><strong>Stability:</strong> Verify that symbol streams constrained to |symbol|≤4 maintain bounded cost under composition, whereas allowing ±5 admits divergent trajectories.</li>
+                  <li><strong>Minimality:</strong> Show that removing any non‑zero symbol forces illegal merges (loss of unit granularity) or prevents eight‑beat closure for generic flows.</li>
+                  <li><strong>Complexity:</strong> Confirm that larger alphabets increase program description length without enabling any additional necessary recognition states.</li>
+                </ul>
+              </div>
+
+              <div class="constant-detail">
+                <strong>Further reading</strong>
+                <em>Background and context</em>
+                <ul>
+                  <li><a href="/recognition-language.html">Recognition Language (overview)</a> — alphabet → instructions → programs.</li>
+                  <li><a href="/from-proof-to-measurement.html">From Proof to Measurement</a> — proof vs bridge separation and stability constraints.</li>
+                  <li><a href="/encyclopedia/recognition-operators.html">Recognition Operators</a> — operational semantics for postings.</li>
+                </ul>
+              </div>
+            </div>
           </details>
                 
           <details class="constant-entry">
